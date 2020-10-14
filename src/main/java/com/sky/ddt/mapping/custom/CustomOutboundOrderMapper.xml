@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomOutboundOrderMapper">
+    <resultMap id="listOutboundOrderMap"
+               type="com.sky.ddt.dto.outboundOrder.response.ListOutboundOrderResponse"
+               extends="com.sky.ddt.dao.generate.OutboundOrderMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+        <result column="outboundQuantityTotal" property="outboundQuantityTotal"/>
+    </resultMap>
+    <select id="listOutboundOrder" parameterType="com.sky.ddt.dto.outboundOrder.request.ListOutboundOrderRequest"
+            resultMap="listOutboundOrderMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.OutboundOrderMapper.Base_Column_List"/>
+        ,(select s.shop_name from shop s where oo.shop_id=s.shop_id) shop_name,
+        ifnull((select sum(ooss.outbound_quantity) from outbound_order_shop_sku ooss where ooss.outbound_order_id=oo.id),0) outboundQuantityTotal
+        from outbound_order oo
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopId != null">and shop_id =#{shopId}</if>
+                <if test="outboundTimeStart != null ">and outbound_time<![CDATA[>=]]> #{outboundTimeStart}</if>
+                <if test="outboundTimeEnd != null ">and outbound_time <![CDATA[<]]>
+                    DATE_ADD(date(#{outboundTimeEnd}),INTERVAL 1 DAY)
+                </if>
+                <if test="batchNumber != null and batchNumber != '' ">and batch_number like
+                    concat('%',#{batchNumber},'%')
+                </if>
+                <if test="fbaNo != null and fbaNo != '' ">and fba_no like
+                    concat('%',#{fbaNo},'%')
+                </if>
+                <if test="shopSku != null and shopSku != '' ">
+                    and exists (select 1 from outbound_order_shop_sku ooss,shop_sku ss where ooss.outbound_order_id=oo.id and ooss.shop_sku_id=ss.shop_sku_id
+                    and ss.shop_sku like concat('%',#{shopSku},'%'))
+                </if>
+                <if test="status != null">and status=#{status}</if>
+                <if test="type != null">and type=#{type}</if>
+            </trim>
+        </where>
+        order by oo.create_time desc
+    </select>
+</mapper>

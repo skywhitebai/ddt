@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomTransferOrderShopSkuMapper">
+    <resultMap id="listTransferOrderShopSkuMap"
+               type="com.sky.ddt.dto.transferOrderShopSku.response.ListTransferOrderShopSkuResponse"
+               extends="com.sky.ddt.dao.generate.TransferOrderShopSkuMapper.BaseResultMap">
+        <result column="shopNameFrom" property="shopNameFrom"/>
+        <result column="shopNameTo" property="shopNameTo"/>
+        <result column="sku" property="sku"/>
+        <result column="inventoryQuantity" property="inventoryQuantity"/>
+    </resultMap>
+    <select id="listTransferOrderShopSku"
+            parameterType="com.sky.ddt.dto.transferOrderShopSku.request.ListTransferOrderShopSkuRequest"
+            resultMap="listTransferOrderShopSkuMap">
+        select
+        toss.*
+        ,(select s.shop_name from shop s where tod.shop_id_from=s.shop_id) shopNameFrom
+        ,(select s.shop_name from shop s where tod.shop_id_to=s.shop_id) shopNameTo
+        ,ifnull(ssf.inventory_quantity,0) inventoryQuantity
+        ,ssf.shop_sku shopSkuFrom,sst.shop_sku shopSkuTo,sku.sku
+        from transfer_order_shop_sku toss
+        left JOIN transfer_order tod on tod.id=toss.transfer_order_id
+        left join shop_sku ssf on toss.shop_sku_id_from=ssf.shop_sku_id
+        left join shop_sku sst on toss.shop_sku_id_to=sst.shop_sku_id
+        left join sku on ssf.sku_id=sku.sku_id
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="transferOrderId != null">and tod.id =#{transferOrderId}</if>
+                <if test="sku != null and sku != ''">
+                    and sku.sku like concat('%',#{sku},'%')
+                </if>
+                <if test="shopSkuFrom != null and shopSkuFrom != '' ">
+                    and ssf.shop_sku like concat('%',#{shopSkuFrom},'%')
+                </if>
+                <if test="shopSkuTo != null and shopSkuTo != '' ">
+                    and sst.shop_sku like concat('%',#{shopSkuTo},'%')
+                </if>
+            </trim>
+        </where>
+        order by tod.create_time desc
+    </select>
+</mapper>

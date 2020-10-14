@@ -1,0 +1,2 @@
+#shop sku增加库存字段
+ALTER TABLE shop_sku ADD COLUMN inventory_quantity INT NULL DEFAULT 0 COMMENT '库存数量' AFTER  title;

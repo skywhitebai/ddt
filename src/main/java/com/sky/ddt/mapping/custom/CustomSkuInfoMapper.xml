@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomSkuInfoMapper">
+
+
+    <select id="selectBySellerSku" parameterType="java.util.List" resultType="com.sky.ddt.dto.skuinfo.response.SkuInfoResponse">
+        select
+        sku_seller skuSeller,sku_warehouse skuWarehouse,sku_supplier skuSupplier
+        from sku_info where sku_seller IN
+        <foreach close=")" collection="list" item="listItem" open="(" separator=",">
+            #{listItem}
+        </foreach>
+    </select>
+
+</mapper>

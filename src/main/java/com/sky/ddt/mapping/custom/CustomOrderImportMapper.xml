@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomOrderImportMapper">
+    <resultMap id="listOrderImportMap" type="com.sky.ddt.dto.orderImport.response.ListOrderImportResponse"
+               extends="com.sky.ddt.dao.generate.OrderImportMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+    </resultMap>
+    <select id="listOrderImport" parameterType="com.sky.ddt.dto.orderImport.request.ListOrderImportRequest"
+            resultMap="listOrderImportMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.OrderImportMapper.Base_Column_List"/>
+        ,(select shop_name from shop s where oi.shop_id=s.shop_id) shop_name
+        from order_import oi
+        <if test="_parameter != null">
+            <include refid="orderImport_Query_Where_Clause"/>
+        </if>
+        order by oi.purchase_date desc
+    </select>
+    <sql id="orderImport_Query_Where_Clause">
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopId != null">and oi.shop_id=#{shopId}</if>
+                <if test="amazonOrderId != null and amazonOrderId != '' ">and oi.amazon_order_id like
+                    concat('%',#{amazonOrderId},'%')
+                </if>
+                <if test="sku != null and sku != '' ">and oi.sku like concat('%',#{sku},'%')</if>
+                <if test="purchaseDateStart != null ">and purchase_date <![CDATA[>=]]> #{purchaseDateStart}</if>
+                <if test="purchaseDateEnd != null ">and purchase_date <![CDATA[<=]]> #{purchaseDateEnd}</if>
+                <if test="lastUpdateDateStart != null">and last_update_date <![CDATA[>=]]> #{lastUpdateDateStart}</if>
+                <if test="lastUpdateDateEnd != null">and last_update_date <![CDATA[<=]]> #{lastUpdateDateEnd}</if>
+                <if test="orderStatus != null and orderStatus != '' ">and orderStatus=#{orderStatus}</if>
+                <if test="userId != null ">and oi.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
+            </trim>
+        </where>
+    </sql>
+    <select id="listSalesCountDayResponse" parameterType="com.sky.ddt.dto.shopSku.request.SalesCountRequest"
+            resultType="com.sky.ddt.dto.shopSku.response.SalesCountDayResponse">
+        select
+        shop_sku_id shopSkuId,sum(quantity) quantity,date_format(purchase_date, '%Y-%m-%d') purchaseDate
+        from order_import oi
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="purchaseDateStart != null ">and purchase_date <![CDATA[>=]]> #{purchaseDateStart}</if>
+                <if test="purchaseDateEnd != null ">and purchase_date <![CDATA[<=]]> #{purchaseDateEnd}</if>
+                and shop_sku_id in
+                <foreach close=")" collection="shopSkuIdList" item="shopSkuId" open="(" separator=",">
+                    #{shopSkuId}
+                </foreach>
+            </trim>
+        </where>
+        group by shop_sku_id,DATE(purchase_date)
+    </select>
+    <select id="listSalesPriceDayResponse" parameterType="com.sky.ddt.dto.shopSku.request.SalesCountRequest"
+            resultType="com.sky.ddt.dto.shopSku.response.SalesPriceDayResponse">
+        select
+        shop_sku_id shopSkuId,round(sum(item_price)/sum(quantity),2) price,date_format(purchase_date, '%Y-%m-%d')
+        purchaseDate
+        from order_import oi
+        where oi.item_price is not null and oi.item_status!='Cancelled'
+        <if test="purchaseDateStart != null ">and purchase_date <![CDATA[>=]]> #{purchaseDateStart}</if>
+        <if test="purchaseDateEnd != null ">and purchase_date <![CDATA[<=]]> #{purchaseDateEnd}</if>
+        and shop_sku_id in
+        <foreach close=")" collection="shopSkuIdList" item="shopSkuId" open="(" separator=",">
+            #{shopSkuId}
+        </foreach>
+        group by shop_sku_id,DATE(purchase_date)
+    </select>
+    <select id="listSalesCountDayShopParentSkuResponse"
+            parameterType="com.sky.ddt.dto.shopSku.request.SalesCountRequest"
+            resultType="com.sky.ddt.dto.shopSku.response.SalesCountDayResponse">
+        select
+        ss.shop_parent_sku shopParentSku,sum(quantity) quantity,date_format(purchase_date, '%Y-%m-%d') purchaseDate
+        from order_import oi,shop_sku ss
+        where oi.shop_sku_id=ss.shop_sku_id
+        <if test="shopId != null">and ss.shop_id=#{shopId}</if>
+        <if test="purchaseDateStart != null ">and purchase_date <![CDATA[>=]]> #{purchaseDateStart}</if>
+        <if test="purchaseDateEnd != null ">and purchase_date <![CDATA[<=]]> #{purchaseDateEnd}</if>
+        and ss.shop_parent_sku in
+        <foreach close=")" collection="shopParentSkuList" item="shopParentSku" open="(" separator=",">
+            #{shopParentSku}
+        </foreach>
+        group by ss.shop_parent_sku,DATE(purchase_date)
+    </select>
+    <select id="listSalesPriceDayShopParentSkuResponse"
+            parameterType="com.sky.ddt.dto.shopSku.request.SalesCountRequest"
+            resultType="com.sky.ddt.dto.shopSku.response.SalesPriceDayResponse">
+        select
+        ss.shop_parent_sku shopParentSku,round(sum(item_price)/sum(quantity),2) price,date_format(purchase_date, '%Y-%m-%d')
+        purchaseDate
+        from order_import oi,shop_sku ss
+        where oi.shop_sku_id=ss.shop_sku_id and oi.item_price is not null and oi.item_status!='Cancelled'
+        <if test="shopId != null">and ss.shop_id=#{shopId}</if>
+        <if test="purchaseDateStart != null ">and purchase_date <![CDATA[>=]]> #{purchaseDateStart}</if>
+        <if test="purchaseDateEnd != null ">and purchase_date <![CDATA[<=]]> #{purchaseDateEnd}</if>
+        and ss.shop_parent_sku in
+        <foreach close=")" collection="shopParentSkuList" item="shopParentSku" open="(" separator=",">
+            #{shopParentSku}
+        </foreach>
+        group by ss.shop_parent_sku,DATE(purchase_date)
+    </select>
+</mapper>

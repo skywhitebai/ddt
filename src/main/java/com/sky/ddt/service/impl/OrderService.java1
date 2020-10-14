@@ -1,0 +1,327 @@
+package com.sky.ddt.service.impl;
+
+import com.alibaba.fastjson.JSON;
+import com.amazonservices.mws.orders._2013_09_01.model.Order;
+import com.amazonservices.mws.orders._2013_09_01.model.OrderItem;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.sky.ddt.common.constant.OrderConstant;
+import com.sky.ddt.dao.custom.CustomOrderAddressMapper;
+import com.sky.ddt.dao.custom.CustomOrderInfoMapper;
+import com.sky.ddt.dao.custom.CustomOrderItemMapper;
+import com.sky.ddt.dto.order.request.OrderListRequest;
+import com.sky.ddt.dto.order.response.OrderListResponse;
+import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.entity.*;
+import com.sky.ddt.service.IOrderService;
+import com.sky.ddt.util.DateUtil;
+import com.sky.ddt.util.ListTool;
+import com.sky.ddt.util.MathUtil;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@Service
+public class OrderService implements IOrderService {
+
+    @Autowired
+    CustomOrderInfoMapper customOrderInfoMapper;
+    @Autowired
+    CustomOrderAddressMapper customOrderAddressMapper;
+    @Autowired
+    CustomOrderItemMapper customOrderItemMapper;
+
+    /**
+     * 保存订单信息
+     *
+     * @param shopId
+     * @param orderJson
+     * @param orderItemsJson
+     * @return
+     */
+    @Override
+    public BaseResponse  saveOrder(Integer shopId, String orderJson, String orderItemsJson) {
+        if (StringUtils.isEmpty(orderJson)) {
+            return BaseResponse.failMessage(OrderConstant.ORDER_JSON_EMPTY);
+        }
+        if (shopId == null) {
+            return BaseResponse.failMessage(OrderConstant.SHOP_ID_EMPTY);
+        }
+        if (StringUtils.isEmpty(orderItemsJson)) {
+            return BaseResponse.failMessage(OrderConstant.ORDER_ITEMS_JSON_EMPTY);
+        }
+        Order orderRequest = new Order();
+        try {
+            orderRequest = JSON.parseObject(orderJson, Order.class);
+        } catch (Exception ex) {
+            return BaseResponse.failMessage(OrderConstant.ORDER_JSON_ERRO);
+        }
+        List<OrderItem> orderItemsRequest = new ArrayList<>();
+        try {
+            orderItemsRequest = JSON.parseArray(orderItemsJson, OrderItem.class);
+        } catch (Exception ex) {
+            return BaseResponse.failMessage(OrderConstant.ORDER_ITEMS_JSON_ERRO);
+        }
+        dealOrder(shopId, orderRequest);
+        dealOrderAddress(orderRequest);
+        dealOrderItems(orderRequest.getAmazonOrderId(),orderItemsRequest);
+        return BaseResponse.success();
+    }
+
+    /**
+     * 订单列表
+     *
+     * @param params
+     * @return
+     */
+    @Override
+    public PageInfo<OrderListResponse> list(OrderListRequest params) {
+        PageHelper.startPage(params.getPage(), params.getRows(), true);
+        List<OrderListResponse> list = customOrderInfoMapper.orderList(params);
+        PageInfo<OrderListResponse> page = new PageInfo<OrderListResponse>(list);
+        return page;
+    }
+
+    /**
+     * 处理订单产品
+     *
+     * @param amazonOrderId
+     * @param orderItemsRequest
+     */
+    private void dealOrderItems(String amazonOrderId, List<OrderItem> orderItemsRequest) {
+        if (CollectionUtils.isEmpty(orderItemsRequest)) {
+            return;
+        }
+        for (OrderItem orderItem : orderItemsRequest) {
+            dealOrderItem(amazonOrderId,orderItem);
+        }
+    }
+
+    /**
+     * 处理订单产品
+     *
+     * @param amazonOrderId
+     * @param orderItemRequest
+     */
+    private void dealOrderItem(String amazonOrderId, OrderItem orderItemRequest) {
+        if (orderItemRequest == null) {
+            return;
+        }
+        com.sky.ddt.entity.OrderItem orderItem = getOrderItemByOrderItemId(orderItemRequest.getOrderItemId());
+        String orderItemDealType = "update";
+        if (orderItem == null) {
+            orderItemDealType = "insert";
+        }
+        orderItem = convertOrderItem(orderItem, orderItemRequest);
+        orderItem.setAmazonOrderId(amazonOrderId);
+        if ("update".equals(orderItemDealType)) {
+            customOrderItemMapper.updateByPrimaryKeySelective(orderItem);
+        } else {
+            customOrderItemMapper.insertSelective(orderItem);
+        }
+    }
+
+    private com.sky.ddt.entity.OrderItem convertOrderItem(com.sky.ddt.entity.OrderItem orderItem, OrderItem orderItemRequest) {
+        if (orderItem == null) {
+            orderItem = new com.sky.ddt.entity.OrderItem();
+        }
+        orderItem.setAsin(orderItemRequest.getASIN());
+        orderItem.setSellerSku(orderItemRequest.getSellerSKU());
+        orderItem.setOrderItemId(orderItemRequest.getOrderItemId());
+        orderItem.setTitle(orderItemRequest.getTitle());
+        orderItem.setQuantityOrdered(orderItemRequest.getQuantityOrdered());
+        orderItem.setQuantityShipped(orderItemRequest.getQuantityShipped());
+        if(orderItemRequest.getItemPrice()!=null){
+            orderItem.setItemPriceCurrencyCode(orderItemRequest.getItemPrice().getCurrencyCode());
+            orderItem.setItemPriceAmount(MathUtil.strToBigDecimal(orderItemRequest.getItemPrice().getAmount()));
+        }
+        if(orderItemRequest.getShippingPrice()!=null){
+            orderItem.setShippingPriceCurrencyCode(orderItemRequest.getShippingPrice().getCurrencyCode());
+            orderItem.setShippingPriceAmount(MathUtil.strToBigDecimal(orderItemRequest.getShippingPrice().getAmount()));
+        }
+        if(orderItemRequest.getGiftWrapPrice()!=null){
+            orderItem.setGiftWrapPriceCurrencyCode(orderItemRequest.getGiftWrapPrice().getCurrencyCode());
+            orderItem.setGiftWrapPriceAmount(MathUtil.strToBigDecimal(orderItemRequest.getGiftWrapPrice().getAmount()));
+        }
+        if(orderItemRequest.getItemTax()!=null){
+            orderItem.setItemTaxCurrencyCode(orderItemRequest.getItemTax().getCurrencyCode());
+            orderItem.setItemTaxAmount(MathUtil.strToBigDecimal(orderItemRequest.getItemTax().getAmount()));
+        }
+        if(orderItemRequest.getShippingTax()!=null){
+            orderItem.setShippingTaxCurrencyCode(orderItemRequest.getShippingTax().getCurrencyCode());
+            orderItem.setShippingTaxAmount(MathUtil.strToBigDecimal(orderItemRequest.getShippingTax().getAmount()));
+        }
+        if(orderItemRequest.getGiftWrapTax()!=null){
+            orderItem.setGiftWrapTaxCurrencyCode(orderItemRequest.getGiftWrapTax().getCurrencyCode());
+            orderItem.setGiftWrapTaxAmount(MathUtil.strToBigDecimal(orderItemRequest.getGiftWrapTax().getAmount()));
+        }
+        if(orderItemRequest.getShippingDiscount()!=null){
+            orderItem.setShippingDiscountCurrencyCode(orderItemRequest.getShippingDiscount().getCurrencyCode());
+            orderItem.setShippingDiscountAmount(MathUtil.strToBigDecimal(orderItemRequest.getShippingDiscount().getAmount()));
+        }
+        if(orderItemRequest.getShippingDiscountTax()!=null){
+            orderItem.setShippingDiscountTaxCurrencyCode(orderItemRequest.getShippingDiscountTax().getCurrencyCode());
+            orderItem.setShippingDiscountTaxAmount(MathUtil.strToBigDecimal(orderItemRequest.getShippingDiscountTax().getAmount()));
+        }
+        if(orderItemRequest.getPromotionDiscount()!=null){
+            orderItem.setPromotionDiscountCurrencyCode(orderItemRequest.getPromotionDiscount().getCurrencyCode());
+            orderItem.setPromotionDiscountAmount(MathUtil.strToBigDecimal(orderItemRequest.getPromotionDiscount().getAmount()));
+        }
+        if(orderItemRequest.getPromotionDiscountTax()!=null){
+            orderItem.setPromotionDiscountTaxCurrencyCode(orderItemRequest.getPromotionDiscountTax().getCurrencyCode());
+            orderItem.setPromotionDiscountTaxAmount(MathUtil.strToBigDecimal(orderItemRequest.getPromotionDiscountTax().getAmount()));
+        }
+        orderItem.setPromotionIds(ListTool.listToStrByComma(orderItemRequest.getPromotionIds()));
+        if(orderItemRequest.getCODFee()!=null){
+            orderItem.setCodFeeCurrencyCode(orderItemRequest.getCODFee().getCurrencyCode());
+            orderItem.setCodFeeAmount(MathUtil.strToBigDecimal(orderItemRequest.getCODFee().getAmount()));
+        }
+        if(orderItemRequest.getCODFeeDiscount()!=null){
+            orderItem.setCodFeeDiscountCurrencyCode(orderItemRequest.getCODFeeDiscount().getCurrencyCode());
+            orderItem.setCodFeeDiscountAmount(MathUtil.strToBigDecimal(orderItemRequest.getCODFeeDiscount().getAmount()));
+        }
+        orderItem.setIsGift(orderItemRequest.getIsGift());
+        orderItem.setGiftMessageText(orderItemRequest.getGiftMessageText());
+        orderItem.setGiftWrapLevel(orderItemRequest.getGiftWrapLevel());
+        //忽略InvoiceData
+        orderItem.setConditionNote(orderItemRequest.getConditionNote());
+        orderItem.setConditionId(orderItemRequest.getConditionId());
+        orderItem.setConditionSubtypeId(orderItemRequest.getConditionSubtypeId());
+        orderItem.setScheduledDeliveryStartDate(orderItemRequest.getScheduledDeliveryStartDate());
+        orderItem.setScheduledDeliveryEndDate(orderItemRequest.getScheduledDeliveryEndDate());
+        orderItem.setPriceDesignation(orderItemRequest.getPriceDesignation());
+        //忽略BuyerCustomizedInfoDetail TaxCollection
+        orderItem.setSerialNumberRequired(orderItemRequest.getSerialNumberRequired());
+        orderItem.setIsRransparency(orderItemRequest.getIsTransparency());
+        return orderItem;
+    }
+
+    private com.sky.ddt.entity.OrderItem getOrderItemByOrderItemId(String orderItemId) {
+        OrderItemExample orderItemExample = new OrderItemExample();
+        orderItemExample.createCriteria().andOrderItemIdEqualTo(orderItemId);
+        List<com.sky.ddt.entity.OrderItem> orderItems = customOrderItemMapper.selectByExample(orderItemExample);
+        if (CollectionUtils.isEmpty(orderItems)) {
+            return null;
+        }
+        return orderItems.get(0);
+    }
+
+    private void dealOrderAddress(Order orderRequest) {
+        OrderAddress orderAddress = getOrderAddressByAmazonOrderId(orderRequest.getAmazonOrderId());
+        String orderAddressDealType = "update";
+        if (orderAddress == null) {
+            orderAddressDealType = "insert";
+        }
+        orderAddress = convertOrderAddress(orderAddress, orderRequest);
+        if(orderAddress==null){
+            return;
+        }
+        if ("update".equals(orderAddressDealType)) {
+            customOrderAddressMapper.updateByPrimaryKeySelective(orderAddress);
+        } else {
+            customOrderAddressMapper.insertSelective(orderAddress);
+        }
+    }
+
+    private OrderAddress convertOrderAddress(OrderAddress orderAddress, Order orderRequest) {
+        if (orderRequest.getShippingAddress() == null) {
+            return orderAddress;
+        }
+        if (orderAddress == null) {
+            orderAddress = new OrderAddress();
+        }
+        BeanUtils.copyProperties(orderRequest.getShippingAddress(), orderAddress);
+        orderAddress.setAmazonOrderId(orderRequest.getAmazonOrderId());
+        return orderAddress;
+    }
+
+    private void dealOrder(Integer shopId, Order orderRequest) {
+        OrderInfo orderInfo = getOrderByAmazonOrderId(orderRequest.getAmazonOrderId());
+        String orderDealType = "update";
+        if (orderInfo == null) {
+            orderDealType = "insert";
+        }
+        orderInfo = convertOrder(orderInfo, orderRequest);
+        orderInfo.setShopId(shopId);
+        if ("update".equals(orderDealType)) {
+            customOrderInfoMapper.updateByPrimaryKeySelective(orderInfo);
+        } else {
+            customOrderInfoMapper.insertSelective(orderInfo);
+        }
+    }
+
+    private OrderAddress getOrderAddressByAmazonOrderId(String amazonOrderId) {
+        OrderAddressExample orderAddressExample = new OrderAddressExample();
+        orderAddressExample.createCriteria().andAmazonOrderIdEqualTo(amazonOrderId);
+        List<OrderAddress> orderAddresses = customOrderAddressMapper.selectByExample(orderAddressExample);
+        if (CollectionUtils.isEmpty(orderAddresses)) {
+            return null;
+        }
+        return orderAddresses.get(0);
+    }
+
+    private OrderInfo convertOrder(OrderInfo order, Order orderRequest) {
+        if (order == null) {
+            order = new OrderInfo();
+        }
+        order.setAmazonOrderId(orderRequest.getAmazonOrderId());
+        order.setSellerOrderId(orderRequest.getSellerOrderId());
+        order.setPurchaseDate(DateUtil.xmlDate2Date(orderRequest.getPurchaseDate()));
+        order.setLastUpdateDate(DateUtil.xmlDate2Date(orderRequest.getLastUpdateDate()));
+        order.setOrderStatus(orderRequest.getOrderStatus());
+        order.setFulfillmentChannel(orderRequest.getFulfillmentChannel());
+        order.setSalesChannel(orderRequest.getSalesChannel());
+        order.setOrderChannel(orderRequest.getOrderChannel());
+        order.setShipServiceLevel(orderRequest.getShipServiceLevel());
+        //address
+        if (orderRequest.getOrderTotal() != null) {
+            order.setOrderTotalCurrencyCode(orderRequest.getOrderTotal().getCurrencyCode());
+            order.setOrderTotalAmount(MathUtil.strToBigDecimal(orderRequest.getOrderTotal().getAmount()));
+        }
+        order.setNumberOfItemsShipped(orderRequest.getNumberOfItemsShipped());
+        order.setNumberOfItemsUnshipped(orderRequest.getNumberOfItemsUnshipped());
+        //付款方式先不要了
+        order.setPaymentMethod(orderRequest.getPaymentMethod());
+        order.setPaymentMethodDetails(ListTool.listToStrByComma(orderRequest.getPaymentMethodDetails()));
+        order.setMarketplaceId(orderRequest.getMarketplaceId());
+        order.setBuyerEmail(orderRequest.getBuyerEmail());
+        order.setBuyerName(orderRequest.getBuyerName());
+        order.setBuyerCounty(orderRequest.getBuyerCounty());
+        //忽略BuyerTaxInfo
+        order.setShipmentServiceLevelCategory(orderRequest.getShipmentServiceLevelCategory());
+        order.setShippedByAmazonTfm(orderRequest.getShippedByAmazonTFM());
+        order.setTfmShipmentStatus(orderRequest.getTFMShipmentStatus());
+        order.setEasyShipShipmentStatus(orderRequest.getEasyShipShipmentStatus());
+        order.setCbaDisplayableShippingLabel(orderRequest.getCbaDisplayableShippingLabel());
+        order.setOrderType(orderRequest.getOrderType());
+        order.setEarliestShipDate(DateUtil.xmlDate2Date(orderRequest.getEarliestShipDate()));
+        order.setLatestShipDate(DateUtil.xmlDate2Date(orderRequest.getLatestShipDate()));
+        order.setEarliestDeliveryDate(DateUtil.xmlDate2Date(orderRequest.getEarliestDeliveryDate()));
+        order.setLatestDeliveryDate(DateUtil.xmlDate2Date(orderRequest.getLatestDeliveryDate()));
+        order.setIsBusinessOrder(orderRequest.getIsBusinessOrder());
+        order.setPurchaseOrderNumber(orderRequest.getPurchaseOrderNumber());
+        order.setIsPrime(orderRequest.getIsPrime());
+        order.setIsPremiumOrder(orderRequest.getIsPremiumOrder());
+        order.setReplacedOrderId(orderRequest.getReplacedOrderId());
+        order.setIsReplacementOrder(orderRequest.getIsReplacementOrder());
+        order.setIsEstimatedShipDateSet(orderRequest.getIsEstimatedShipDateSet());
+        return order;
+    }
+
+    private OrderInfo getOrderByAmazonOrderId(String amazonOrderId) {
+        OrderInfoExample orderInfoExample = new OrderInfoExample();
+        orderInfoExample.createCriteria().andAmazonOrderIdEqualTo(amazonOrderId);
+        List<OrderInfo> orders = customOrderInfoMapper.selectByExample(orderInfoExample);
+        if (CollectionUtils.isEmpty(orders)) {
+            return null;
+        }
+        return orders.get(0);
+    }
+
+
+}

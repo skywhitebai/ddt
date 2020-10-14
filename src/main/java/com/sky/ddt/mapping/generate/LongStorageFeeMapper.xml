@@ -1,0 +1,449 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.LongStorageFeeMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.LongStorageFee">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="finance_id" jdbcType="INTEGER" property="financeId" />
+    <result column="snapshot_date" jdbcType="TIMESTAMP" property="snapshotDate" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="shop_sku_id" jdbcType="INTEGER" property="shopSkuId" />
+    <result column="fnsku" jdbcType="VARCHAR" property="fnsku" />
+    <result column="asin" jdbcType="VARCHAR" property="asin" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="condition_type" jdbcType="VARCHAR" property="conditionType" />
+    <result column="qty_charged_12_mo_long_term_storage_fee" jdbcType="DECIMAL" property="qtyCharged12MoLongTermStorageFee" />
+    <result column="per_unit_volume" jdbcType="DECIMAL" property="perUnitVolume" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="mo_12_long_terms_storage_fee" jdbcType="DECIMAL" property="mo12LongTermsStorageFee" />
+    <result column="qty_charged_6_mo_long_term_storage_fee" jdbcType="DECIMAL" property="qtyCharged6MoLongTermStorageFee" />
+    <result column="mo_6_long_terms_storage_fee" jdbcType="DECIMAL" property="mo6LongTermsStorageFee" />
+    <result column="volume_unit" jdbcType="VARCHAR" property="volumeUnit" />
+    <result column="country" jdbcType="VARCHAR" property="country" />
+    <result column="enrolled_in_small_and_light" jdbcType="VARCHAR" property="enrolledInSmallAndLight" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, finance_id, snapshot_date, sku, shop_sku_id, fnsku, asin, product_name, condition_type, 
+    qty_charged_12_mo_long_term_storage_fee, per_unit_volume, currency, mo_12_long_terms_storage_fee, 
+    qty_charged_6_mo_long_term_storage_fee, mo_6_long_terms_storage_fee, volume_unit, 
+    country, enrolled_in_small_and_light, create_time, create_by
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.LongStorageFeeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from long_storage_fee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from long_storage_fee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from long_storage_fee
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.LongStorageFeeExample">
+    delete from long_storage_fee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.LongStorageFee">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into long_storage_fee (finance_id, snapshot_date, sku, 
+      shop_sku_id, fnsku, asin, 
+      product_name, condition_type, qty_charged_12_mo_long_term_storage_fee, 
+      per_unit_volume, currency, mo_12_long_terms_storage_fee, 
+      qty_charged_6_mo_long_term_storage_fee, mo_6_long_terms_storage_fee, 
+      volume_unit, country, enrolled_in_small_and_light, 
+      create_time, create_by)
+    values (#{financeId,jdbcType=INTEGER}, #{snapshotDate,jdbcType=TIMESTAMP}, #{sku,jdbcType=VARCHAR}, 
+      #{shopSkuId,jdbcType=INTEGER}, #{fnsku,jdbcType=VARCHAR}, #{asin,jdbcType=VARCHAR}, 
+      #{productName,jdbcType=VARCHAR}, #{conditionType,jdbcType=VARCHAR}, #{qtyCharged12MoLongTermStorageFee,jdbcType=DECIMAL}, 
+      #{perUnitVolume,jdbcType=DECIMAL}, #{currency,jdbcType=VARCHAR}, #{mo12LongTermsStorageFee,jdbcType=DECIMAL}, 
+      #{qtyCharged6MoLongTermStorageFee,jdbcType=DECIMAL}, #{mo6LongTermsStorageFee,jdbcType=DECIMAL}, 
+      #{volumeUnit,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{enrolledInSmallAndLight,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.LongStorageFee">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into long_storage_fee
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="financeId != null">
+        finance_id,
+      </if>
+      <if test="snapshotDate != null">
+        snapshot_date,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="shopSkuId != null">
+        shop_sku_id,
+      </if>
+      <if test="fnsku != null">
+        fnsku,
+      </if>
+      <if test="asin != null">
+        asin,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="conditionType != null">
+        condition_type,
+      </if>
+      <if test="qtyCharged12MoLongTermStorageFee != null">
+        qty_charged_12_mo_long_term_storage_fee,
+      </if>
+      <if test="perUnitVolume != null">
+        per_unit_volume,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="mo12LongTermsStorageFee != null">
+        mo_12_long_terms_storage_fee,
+      </if>
+      <if test="qtyCharged6MoLongTermStorageFee != null">
+        qty_charged_6_mo_long_term_storage_fee,
+      </if>
+      <if test="mo6LongTermsStorageFee != null">
+        mo_6_long_terms_storage_fee,
+      </if>
+      <if test="volumeUnit != null">
+        volume_unit,
+      </if>
+      <if test="country != null">
+        country,
+      </if>
+      <if test="enrolledInSmallAndLight != null">
+        enrolled_in_small_and_light,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="financeId != null">
+        #{financeId,jdbcType=INTEGER},
+      </if>
+      <if test="snapshotDate != null">
+        #{snapshotDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSkuId != null">
+        #{shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="fnsku != null">
+        #{fnsku,jdbcType=VARCHAR},
+      </if>
+      <if test="asin != null">
+        #{asin,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="conditionType != null">
+        #{conditionType,jdbcType=VARCHAR},
+      </if>
+      <if test="qtyCharged12MoLongTermStorageFee != null">
+        #{qtyCharged12MoLongTermStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="perUnitVolume != null">
+        #{perUnitVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="mo12LongTermsStorageFee != null">
+        #{mo12LongTermsStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyCharged6MoLongTermStorageFee != null">
+        #{qtyCharged6MoLongTermStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="mo6LongTermsStorageFee != null">
+        #{mo6LongTermsStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="volumeUnit != null">
+        #{volumeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null">
+        #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="enrolledInSmallAndLight != null">
+        #{enrolledInSmallAndLight,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.LongStorageFeeExample" resultType="java.lang.Long">
+    select count(*) from long_storage_fee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update long_storage_fee
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.financeId != null">
+        finance_id = #{record.financeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.snapshotDate != null">
+        snapshot_date = #{record.snapshotDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sku != null">
+        sku = #{record.sku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopSkuId != null">
+        shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.fnsku != null">
+        fnsku = #{record.fnsku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.asin != null">
+        asin = #{record.asin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productName != null">
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conditionType != null">
+        condition_type = #{record.conditionType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qtyCharged12MoLongTermStorageFee != null">
+        qty_charged_12_mo_long_term_storage_fee = #{record.qtyCharged12MoLongTermStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.perUnitVolume != null">
+        per_unit_volume = #{record.perUnitVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="record.currency != null">
+        currency = #{record.currency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mo12LongTermsStorageFee != null">
+        mo_12_long_terms_storage_fee = #{record.mo12LongTermsStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.qtyCharged6MoLongTermStorageFee != null">
+        qty_charged_6_mo_long_term_storage_fee = #{record.qtyCharged6MoLongTermStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.mo6LongTermsStorageFee != null">
+        mo_6_long_terms_storage_fee = #{record.mo6LongTermsStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.volumeUnit != null">
+        volume_unit = #{record.volumeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="record.country != null">
+        country = #{record.country,jdbcType=VARCHAR},
+      </if>
+      <if test="record.enrolledInSmallAndLight != null">
+        enrolled_in_small_and_light = #{record.enrolledInSmallAndLight,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update long_storage_fee
+    set id = #{record.id,jdbcType=INTEGER},
+      finance_id = #{record.financeId,jdbcType=INTEGER},
+      snapshot_date = #{record.snapshotDate,jdbcType=TIMESTAMP},
+      sku = #{record.sku,jdbcType=VARCHAR},
+      shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
+      fnsku = #{record.fnsku,jdbcType=VARCHAR},
+      asin = #{record.asin,jdbcType=VARCHAR},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      condition_type = #{record.conditionType,jdbcType=VARCHAR},
+      qty_charged_12_mo_long_term_storage_fee = #{record.qtyCharged12MoLongTermStorageFee,jdbcType=DECIMAL},
+      per_unit_volume = #{record.perUnitVolume,jdbcType=DECIMAL},
+      currency = #{record.currency,jdbcType=VARCHAR},
+      mo_12_long_terms_storage_fee = #{record.mo12LongTermsStorageFee,jdbcType=DECIMAL},
+      qty_charged_6_mo_long_term_storage_fee = #{record.qtyCharged6MoLongTermStorageFee,jdbcType=DECIMAL},
+      mo_6_long_terms_storage_fee = #{record.mo6LongTermsStorageFee,jdbcType=DECIMAL},
+      volume_unit = #{record.volumeUnit,jdbcType=VARCHAR},
+      country = #{record.country,jdbcType=VARCHAR},
+      enrolled_in_small_and_light = #{record.enrolledInSmallAndLight,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.LongStorageFee">
+    update long_storage_fee
+    <set>
+      <if test="financeId != null">
+        finance_id = #{financeId,jdbcType=INTEGER},
+      </if>
+      <if test="snapshotDate != null">
+        snapshot_date = #{snapshotDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSkuId != null">
+        shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="fnsku != null">
+        fnsku = #{fnsku,jdbcType=VARCHAR},
+      </if>
+      <if test="asin != null">
+        asin = #{asin,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="conditionType != null">
+        condition_type = #{conditionType,jdbcType=VARCHAR},
+      </if>
+      <if test="qtyCharged12MoLongTermStorageFee != null">
+        qty_charged_12_mo_long_term_storage_fee = #{qtyCharged12MoLongTermStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="perUnitVolume != null">
+        per_unit_volume = #{perUnitVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="mo12LongTermsStorageFee != null">
+        mo_12_long_terms_storage_fee = #{mo12LongTermsStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="qtyCharged6MoLongTermStorageFee != null">
+        qty_charged_6_mo_long_term_storage_fee = #{qtyCharged6MoLongTermStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="mo6LongTermsStorageFee != null">
+        mo_6_long_terms_storage_fee = #{mo6LongTermsStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="volumeUnit != null">
+        volume_unit = #{volumeUnit,jdbcType=VARCHAR},
+      </if>
+      <if test="country != null">
+        country = #{country,jdbcType=VARCHAR},
+      </if>
+      <if test="enrolledInSmallAndLight != null">
+        enrolled_in_small_and_light = #{enrolledInSmallAndLight,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.LongStorageFee">
+    update long_storage_fee
+    set finance_id = #{financeId,jdbcType=INTEGER},
+      snapshot_date = #{snapshotDate,jdbcType=TIMESTAMP},
+      sku = #{sku,jdbcType=VARCHAR},
+      shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
+      fnsku = #{fnsku,jdbcType=VARCHAR},
+      asin = #{asin,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      condition_type = #{conditionType,jdbcType=VARCHAR},
+      qty_charged_12_mo_long_term_storage_fee = #{qtyCharged12MoLongTermStorageFee,jdbcType=DECIMAL},
+      per_unit_volume = #{perUnitVolume,jdbcType=DECIMAL},
+      currency = #{currency,jdbcType=VARCHAR},
+      mo_12_long_terms_storage_fee = #{mo12LongTermsStorageFee,jdbcType=DECIMAL},
+      qty_charged_6_mo_long_term_storage_fee = #{qtyCharged6MoLongTermStorageFee,jdbcType=DECIMAL},
+      mo_6_long_terms_storage_fee = #{mo6LongTermsStorageFee,jdbcType=DECIMAL},
+      volume_unit = #{volumeUnit,jdbcType=VARCHAR},
+      country = #{country,jdbcType=VARCHAR},
+      enrolled_in_small_and_light = #{enrolledInSmallAndLight,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

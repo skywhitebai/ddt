@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomReportMapper">
+    <select id="listSalesReportByShopSku" parameterType="com.sky.ddt.dto.report.salesReport.request.ListSalesReportRequest"
+            resultType="com.sky.ddt.dto.report.salesReport.response.ListSalesReportResponse">
+        select base.shopName,base.asin,base.productName,base.shopParentSku,base.shopSku,base.shopSkuId,base.skuId,
+        today.quantityToday,today.netSalesToday,yesterday.quantityYesterday,yesterday.netSalesYesterday,sameDayLastWeek.quantitySameDayLastWeek,sameDayLastWeek.netSalesSameDayLastWeek,
+        fi.availableQuantity,fi.inboundQuantity,fi.reservedQuantity
+        from
+        (select s.`shop_name` shopName,ss.`asin`,p.`product_name` productName,ss.`shop_parent_sku`
+        shopParentSku,ss.`shop_sku` shopSku,ss.shop_sku_id shopSkuId,sku.sku_id skuId
+        from
+        `shop_sku` ss
+        left join shop s on ss.`shop_id`=s.`shop_id`
+        left join sku on ss.`sku_id`=sku.`sku_id`
+        left join product p on sku.`product_id`=p.`product_id`
+        where ss.shop_id=#{shopId}
+
+        <if test="asin!=null and asin!=''">
+            and ss.asin like CONCAT ('%',#{asin},'%')
+        </if>
+        <if test="shopSku!=null and shopSku!=''">
+            and ss.shop_sku like CONCAT ('%',#{shopSku},'%')
+        </if>
+        <if test="shopParentSku!=null and shopParentSku!=''">
+            and ss.shop_parent_sku like CONCAT ('%',#{shopParentSku},'%')
+        </if>
+        <if test="userId != null ">and ss.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
+        ) base
+        LEFT JOIN
+        (select oi.shop_sku_id,sum(quantity) quantityToday,sum(item_price)netSalesToday from `order_import` oi where
+        oi.purchase_date<![CDATA[>=]]>#{purchaseDate} AND oi.purchase_date<![CDATA[<]]>DATE_ADD(#{purchaseDate},INTERVAL
+        1 DAY)
+        and oi.shop_id=#{shopId} and oi.order_status !='Cancelled'
+        group by oi.shop_sku_id) today
+        on base.shopSkuId=today.shop_sku_id
+        left JOIN
+        (SELECT oi.shop_sku_id,SUM(quantity) quantityYesterday,SUM(item_price)netSalesYesterday FROM `order_import` oi
+        WHERE oi.purchase_date<![CDATA[>=]]>DATE_ADD(#{purchaseDate},INTERVAL -1 DAY) AND oi.purchase_date<![CDATA[<]]>
+        #{purchaseDate}
+        AND oi.shop_id=#{shopId} AND oi.order_status !='Cancelled'
+        GROUP BY oi.shop_sku_id) yesterday
+        ON base.shopSkuId=yesterday.shop_sku_id
+        LEFT JOIN
+        (SELECT oi.shop_sku_id,SUM(quantity) quantitySameDayLastWeek,SUM(item_price)netSalesSameDayLastWeek FROM
+        `order_import` oi WHERE oi.purchase_date<![CDATA[>=]]>DATE_ADD(#{purchaseDate},INTERVAL -7 DAY) AND
+        oi.purchase_date<![CDATA[<]]>DATE_ADD(#{purchaseDate},INTERVAL -6 DAY)
+        AND oi.shop_id=#{shopId} AND oi.order_status !='Cancelled'
+        GROUP BY oi.shop_sku_id) sameDayLastWeek
+        ON base.shopSkuId=sameDayLastWeek.shop_sku_id
+        left join
+        (select fi.`shop_sku_id`,sum(fi.`afn_fulfillable_quantity`)
+        availableQuantity,sum(fi.`afn_inbound_receiving_quantity`+fi.`afn_inbound_shipped_quantity`+fi.`afn_inbound_working_quantity`)
+        inboundQuantity,sum(fi.`afn_reserved_quantity`) reservedQuantity from `fba_import` fi where fi.`shop_id`=#{shopId}
+        group by fi.`shop_sku_id`) fi
+        ON base.shopSkuId=fi.shop_sku_id
+        where today.quantityToday!=0 or yesterday.quantityYesterday!=0 or sameDayLastWeek.quantitySameDayLastWeek!=0
+        order by today.quantityToday desc
+    </select>
+    <select id="listSalesReportByShopParentSku" parameterType="com.sky.ddt.dto.report.salesReport.request.ListSalesReportRequest"
+            resultType="com.sky.ddt.dto.report.salesReport.response.ListSalesReportResponse">
+        select * from
+        (select base.shopName,max(base.productName) productName,base.shopParentSku,max(base.shopSkuId) shopSkuId,max(base.skuId) skuId
+        ,sum(today.quantityToday) quantityToday,sum(today.netSalesToday) netSalesToday
+        ,sum(yesterday.quantityYesterday) quantityYesterday,sum(yesterday.netSalesYesterday) netSalesYesterday
+        ,sum(sameDayLastWeek.quantitySameDayLastWeek) quantitySameDayLastWeek,sum(sameDayLastWeek.netSalesSameDayLastWeek) netSalesSameDayLastWeek
+        ,sum(fi.availableQuantity) availableQuantity,sum(fi.inboundQuantity) inboundQuantity,sum(fi.reservedQuantity) reservedQuantity
+        from
+        (select s.`shop_name` shopName,ss.`asin`,p.`product_name` productName,ss.`shop_parent_sku`
+        shopParentSku,ss.`shop_sku` shopSku,ss.shop_sku_id shopSkuId,sku.sku_id skuId
+        from
+        `shop_sku` ss
+        left join shop s on ss.`shop_id`=s.`shop_id`
+        left join sku on ss.`sku_id`=sku.`sku_id`
+        left join product p on sku.`product_id`=p.`product_id`
+        where ss.shop_id=#{shopId}
+
+        <if test="asin!=null and asin!=''">
+            and ss.asin like CONCAT ('%',#{asin},'%')
+        </if>
+        <if test="shopSku!=null and shopSku!=''">
+            and ss.shop_sku like CONCAT ('%',#{shopSku},'%')
+        </if>
+        <if test="shopParentSku!=null and shopParentSku!=''">
+            and ss.shop_parent_sku like CONCAT ('%',#{shopParentSku},'%')
+        </if>
+        <if test="userId != null ">and ss.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
+        ) base
+        LEFT JOIN
+        (select oi.shop_sku_id,sum(quantity) quantityToday,sum(item_price)netSalesToday from `order_import` oi where
+        oi.purchase_date<![CDATA[>=]]>#{purchaseDate} AND oi.purchase_date<![CDATA[<]]>DATE_ADD(#{purchaseDate},INTERVAL
+        1 DAY)
+        and oi.shop_id=#{shopId} and oi.order_status !='Cancelled'
+        group by oi.shop_sku_id) today
+        on base.shopSkuId=today.shop_sku_id
+        left JOIN
+        (SELECT oi.shop_sku_id,SUM(quantity) quantityYesterday,SUM(item_price)netSalesYesterday FROM `order_import` oi
+        WHERE oi.purchase_date<![CDATA[>=]]>DATE_ADD(#{purchaseDate},INTERVAL -1 DAY) AND oi.purchase_date<![CDATA[<]]>
+        #{purchaseDate}
+        AND oi.shop_id=#{shopId} AND oi.order_status !='Cancelled'
+        GROUP BY oi.shop_sku_id) yesterday
+        ON base.shopSkuId=yesterday.shop_sku_id
+        LEFT JOIN
+        (SELECT oi.shop_sku_id,SUM(quantity) quantitySameDayLastWeek,SUM(item_price)netSalesSameDayLastWeek FROM
+        `order_import` oi WHERE oi.purchase_date<![CDATA[>=]]>DATE_ADD(#{purchaseDate},INTERVAL -7 DAY) AND
+        oi.purchase_date<![CDATA[<]]>DATE_ADD(#{purchaseDate},INTERVAL -6 DAY)
+        AND oi.shop_id=#{shopId} AND oi.order_status !='Cancelled'
+        GROUP BY oi.shop_sku_id) sameDayLastWeek
+        ON base.shopSkuId=sameDayLastWeek.shop_sku_id
+        left join
+        (select fi.`shop_sku_id`,sum(fi.`afn_fulfillable_quantity`)
+        availableQuantity,sum(fi.`afn_inbound_receiving_quantity`+fi.`afn_inbound_shipped_quantity`+fi.`afn_inbound_working_quantity`)
+        inboundQuantity,sum(fi.`afn_reserved_quantity`) reservedQuantity from `fba_import` fi where fi.`shop_id`=#{shopId}
+        group by fi.`shop_sku_id`) fi
+        ON base.shopSkuId=fi.shop_sku_id
+        group by base.shopParentSku) a
+        where a.quantityToday!=0 or a.quantityYesterday!=0 or a.quantitySameDayLastWeek!=0
+        order by a.quantityToday desc
+    </select>
+</mapper>

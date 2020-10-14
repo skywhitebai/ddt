@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomShopUserMapper">
+    <select id="getShopUserList" resultType="com.sky.ddt.dto.shopUser.response.ShopUserResponse">
+        SELECT su.shop_user_id shopUserId,su.user_id userId,su.`shop_id` shopId,u.`user_name` userName
+        FROM shop_user su,`user` u
+        WHERE su.`user_id`=u.`user_id` AND su.`shop_id`=#{shopId}
+        order by su.create_time desc
+    </select>
+</mapper>

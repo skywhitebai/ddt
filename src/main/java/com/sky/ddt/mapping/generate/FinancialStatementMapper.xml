@@ -1,0 +1,1510 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.FinancialStatementMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.FinancialStatement">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="finance_id" jdbcType="INTEGER" property="financeId" />
+    <result column="month" jdbcType="TIMESTAMP" property="month" />
+    <result column="shop_id" jdbcType="INTEGER" property="shopId" />
+    <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
+    <result column="developer_user_id" jdbcType="INTEGER" property="developerUserId" />
+    <result column="developer_user_name" jdbcType="VARCHAR" property="developerUserName" />
+    <result column="salesman_user_id" jdbcType="INTEGER" property="salesmanUserId" />
+    <result column="salesman_user_name" jdbcType="VARCHAR" property="salesmanUserName" />
+    <result column="shop_parent_sku" jdbcType="VARCHAR" property="shopParentSku" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="shop_sku" jdbcType="VARCHAR" property="shopSku" />
+    <result column="shop_sku_id" jdbcType="INTEGER" property="shopSkuId" />
+    <result column="product_code" jdbcType="VARCHAR" property="productCode" />
+    <result column="sale_quantity" jdbcType="INTEGER" property="saleQuantity" />
+    <result column="product_sales" jdbcType="DECIMAL" property="productSales" />
+    <result column="product_sales_tax" jdbcType="DECIMAL" property="productSalesTax" />
+    <result column="shipping_credits" jdbcType="DECIMAL" property="shippingCredits" />
+    <result column="shipping_credits_tax" jdbcType="DECIMAL" property="shippingCreditsTax" />
+    <result column="gift_wrap_credits" jdbcType="DECIMAL" property="giftWrapCredits" />
+    <result column="gift_wrap_credits_tax" jdbcType="DECIMAL" property="giftWrapCreditsTax" />
+    <result column="promotional_rebates" jdbcType="DECIMAL" property="promotionalRebates" />
+    <result column="promotional_rebates_tax" jdbcType="DECIMAL" property="promotionalRebatesTax" />
+    <result column="marketplace_withheld_tax" jdbcType="DECIMAL" property="marketplaceWithheldTax" />
+    <result column="selling_fees" jdbcType="DECIMAL" property="sellingFees" />
+    <result column="fba_fees" jdbcType="DECIMAL" property="fbaFees" />
+    <result column="other_transaction_fees" jdbcType="DECIMAL" property="otherTransactionFees" />
+    <result column="other" jdbcType="DECIMAL" property="other" />
+    <result column="total" jdbcType="DECIMAL" property="total" />
+    <result column="refund_sale_quantity" jdbcType="INTEGER" property="refundSaleQuantity" />
+    <result column="refund_product_sales" jdbcType="DECIMAL" property="refundProductSales" />
+    <result column="refund_product_sales_tax" jdbcType="DECIMAL" property="refundProductSalesTax" />
+    <result column="refund_shipping_credits" jdbcType="DECIMAL" property="refundShippingCredits" />
+    <result column="refund_shipping_credits_tax" jdbcType="DECIMAL" property="refundShippingCreditsTax" />
+    <result column="refund_gift_wrap_credits" jdbcType="DECIMAL" property="refundGiftWrapCredits" />
+    <result column="refund_gift_wrap_credits_tax" jdbcType="DECIMAL" property="refundGiftWrapCreditsTax" />
+    <result column="refund_promotional_rebates" jdbcType="DECIMAL" property="refundPromotionalRebates" />
+    <result column="refund_promotional_rebates_tax" jdbcType="DECIMAL" property="refundPromotionalRebatesTax" />
+    <result column="refund_marketplace_withheld_tax" jdbcType="DECIMAL" property="refundMarketplaceWithheldTax" />
+    <result column="refund_selling_fees" jdbcType="DECIMAL" property="refundSellingFees" />
+    <result column="refund_fba_fees" jdbcType="DECIMAL" property="refundFbaFees" />
+    <result column="refund_other_transaction_fees" jdbcType="DECIMAL" property="refundOtherTransactionFees" />
+    <result column="refund_other" jdbcType="DECIMAL" property="refundOther" />
+    <result column="refund_total" jdbcType="DECIMAL" property="refundTotal" />
+    <result column="sellerPayments_report_fee_subscription" jdbcType="DECIMAL" property="sellerpaymentsReportFeeSubscription" />
+    <result column="lightning_deal_fee" jdbcType="DECIMAL" property="lightningDealFee" />
+    <result column="cost_of_advertising" jdbcType="DECIMAL" property="costOfAdvertising" />
+    <result column="fba_inventory_reimbursement_customer_return" jdbcType="DECIMAL" property="fbaInventoryReimbursementCustomerReturn" />
+    <result column="fba_inventory_reimbursement_damaged_warehouse" jdbcType="DECIMAL" property="fbaInventoryReimbursementDamagedWarehouse" />
+    <result column="fba_inventory_reimbursement_customer_service_issue" jdbcType="DECIMAL" property="fbaInventoryReimbursementCustomerServiceIssue" />
+    <result column="fba_inventory_reimbursement_fee_correction" jdbcType="DECIMAL" property="fbaInventoryReimbursementFeeCorrection" />
+    <result column="fba_inventory_reimbursement_general_adjustment" jdbcType="DECIMAL" property="fbaInventoryReimbursementGeneralAdjustment" />
+    <result column="fba_inventory_reimbursement_lost_inbound" jdbcType="DECIMAL" property="fbaInventoryReimbursementLostInbound" />
+    <result column="fba_inventory_reimbursement_lost_warehouse" jdbcType="DECIMAL" property="fbaInventoryReimbursementLostWarehouse" />
+    <result column="non_subscription_fee_adjustment" jdbcType="DECIMAL" property="nonSubscriptionFeeAdjustment" />
+    <result column="fba_inventory_placement_service_fee" jdbcType="DECIMAL" property="fbaInventoryPlacementServiceFee" />
+    <result column="fba_customer_return_per_unit_fee" jdbcType="DECIMAL" property="fbaCustomerReturnPerUnitFee" />
+    <result column="fba_inventory_storage_fee" jdbcType="DECIMAL" property="fbaInventoryStorageFee" />
+    <result column="fba_long_term_storage_fee" jdbcType="DECIMAL" property="fbaLongTermStorageFee" />
+    <result column="fba_removal_order_disposal_fee" jdbcType="DECIMAL" property="fbaRemovalOrderDisposalFee" />
+    <result column="coupon_redemption_fee" jdbcType="DECIMAL" property="couponRedemptionFee" />
+    <result column="early_reviewer_program_fee" jdbcType="DECIMAL" property="earlyReviewerProgramFee" />
+    <result column="money_back" jdbcType="DECIMAL" property="moneyBack" />
+    <result column="money_back_rate" jdbcType="DECIMAL" property="moneyBackRate" />
+    <result column="main_business_income" jdbcType="DECIMAL" property="mainBusinessIncome" />
+    <result column="total_effective_receipts" jdbcType="DECIMAL" property="totalEffectiveReceipts" />
+    <result column="sellable_requested_quantity" jdbcType="INTEGER" property="sellableRequestedQuantity" />
+    <result column="sellable_cost" jdbcType="DECIMAL" property="sellableCost" />
+    <result column="unsellable_requested_quantity" jdbcType="INTEGER" property="unsellableRequestedQuantity" />
+    <result column="unsellable_cost" jdbcType="DECIMAL" property="unsellableCost" />
+    <result column="procurement_cost" jdbcType="DECIMAL" property="procurementCost" />
+    <result column="fba_head_trip_cost" jdbcType="DECIMAL" property="fbaHeadTripCost" />
+    <result column="head_deduction_fee" jdbcType="DECIMAL" property="headDeductionFee" />
+    <result column="main_business_profit" jdbcType="DECIMAL" property="mainBusinessProfit" />
+    <result column="gross_margin_on_sales" jdbcType="DECIMAL" property="grossMarginOnSales" />
+    <result column="roi" jdbcType="DECIMAL" property="roi" />
+    <result column="initial_quantity" jdbcType="INTEGER" property="initialQuantity" />
+    <result column="initial_inventory_cost" jdbcType="DECIMAL" property="initialInventoryCost" />
+    <result column="final_quantity" jdbcType="INTEGER" property="finalQuantity" />
+    <result column="final_inventory_cost" jdbcType="DECIMAL" property="finalInventoryCost" />
+    <result column="inventory_turnover" jdbcType="DECIMAL" property="inventoryTurnover" />
+    <result column="manual_adjustment" jdbcType="DECIMAL" property="manualAdjustment" />
+    <result column="new_product" jdbcType="INTEGER" property="newProduct" />
+    <result column="refund_rate" jdbcType="DECIMAL" property="refundRate" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, finance_id, month, shop_id, shop_name, developer_user_id, developer_user_name, 
+    salesman_user_id, salesman_user_name, shop_parent_sku, sku, shop_sku, shop_sku_id, 
+    product_code, sale_quantity, product_sales, product_sales_tax, shipping_credits, 
+    shipping_credits_tax, gift_wrap_credits, gift_wrap_credits_tax, promotional_rebates, 
+    promotional_rebates_tax, marketplace_withheld_tax, selling_fees, fba_fees, other_transaction_fees, 
+    other, total, refund_sale_quantity, refund_product_sales, refund_product_sales_tax, 
+    refund_shipping_credits, refund_shipping_credits_tax, refund_gift_wrap_credits, refund_gift_wrap_credits_tax, 
+    refund_promotional_rebates, refund_promotional_rebates_tax, refund_marketplace_withheld_tax, 
+    refund_selling_fees, refund_fba_fees, refund_other_transaction_fees, refund_other, 
+    refund_total, sellerPayments_report_fee_subscription, lightning_deal_fee, cost_of_advertising, 
+    fba_inventory_reimbursement_customer_return, fba_inventory_reimbursement_damaged_warehouse, 
+    fba_inventory_reimbursement_customer_service_issue, fba_inventory_reimbursement_fee_correction, 
+    fba_inventory_reimbursement_general_adjustment, fba_inventory_reimbursement_lost_inbound, 
+    fba_inventory_reimbursement_lost_warehouse, non_subscription_fee_adjustment, fba_inventory_placement_service_fee, 
+    fba_customer_return_per_unit_fee, fba_inventory_storage_fee, fba_long_term_storage_fee, 
+    fba_removal_order_disposal_fee, coupon_redemption_fee, early_reviewer_program_fee, 
+    money_back, money_back_rate, main_business_income, total_effective_receipts, sellable_requested_quantity, 
+    sellable_cost, unsellable_requested_quantity, unsellable_cost, procurement_cost, 
+    fba_head_trip_cost, head_deduction_fee, main_business_profit, gross_margin_on_sales, 
+    roi, initial_quantity, initial_inventory_cost, final_quantity, final_inventory_cost, 
+    inventory_turnover, manual_adjustment, new_product, refund_rate, create_time, create_by
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.FinancialStatementExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from financial_statement
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from financial_statement
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from financial_statement
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.FinancialStatementExample">
+    delete from financial_statement
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.FinancialStatement">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into financial_statement (finance_id, month, shop_id, 
+      shop_name, developer_user_id, developer_user_name, 
+      salesman_user_id, salesman_user_name, shop_parent_sku, 
+      sku, shop_sku, shop_sku_id, 
+      product_code, sale_quantity, product_sales, 
+      product_sales_tax, shipping_credits, shipping_credits_tax, 
+      gift_wrap_credits, gift_wrap_credits_tax, promotional_rebates, 
+      promotional_rebates_tax, marketplace_withheld_tax, 
+      selling_fees, fba_fees, other_transaction_fees, 
+      other, total, refund_sale_quantity, 
+      refund_product_sales, refund_product_sales_tax, 
+      refund_shipping_credits, refund_shipping_credits_tax, 
+      refund_gift_wrap_credits, refund_gift_wrap_credits_tax, 
+      refund_promotional_rebates, refund_promotional_rebates_tax, 
+      refund_marketplace_withheld_tax, refund_selling_fees, 
+      refund_fba_fees, refund_other_transaction_fees, 
+      refund_other, refund_total, sellerPayments_report_fee_subscription, 
+      lightning_deal_fee, cost_of_advertising, fba_inventory_reimbursement_customer_return, 
+      fba_inventory_reimbursement_damaged_warehouse, fba_inventory_reimbursement_customer_service_issue, 
+      fba_inventory_reimbursement_fee_correction, fba_inventory_reimbursement_general_adjustment, 
+      fba_inventory_reimbursement_lost_inbound, fba_inventory_reimbursement_lost_warehouse, 
+      non_subscription_fee_adjustment, fba_inventory_placement_service_fee, 
+      fba_customer_return_per_unit_fee, fba_inventory_storage_fee, 
+      fba_long_term_storage_fee, fba_removal_order_disposal_fee, 
+      coupon_redemption_fee, early_reviewer_program_fee, 
+      money_back, money_back_rate, main_business_income, 
+      total_effective_receipts, sellable_requested_quantity, 
+      sellable_cost, unsellable_requested_quantity, 
+      unsellable_cost, procurement_cost, fba_head_trip_cost, 
+      head_deduction_fee, main_business_profit, gross_margin_on_sales, 
+      roi, initial_quantity, initial_inventory_cost, 
+      final_quantity, final_inventory_cost, inventory_turnover, 
+      manual_adjustment, new_product, refund_rate, 
+      create_time, create_by)
+    values (#{financeId,jdbcType=INTEGER}, #{month,jdbcType=TIMESTAMP}, #{shopId,jdbcType=INTEGER}, 
+      #{shopName,jdbcType=VARCHAR}, #{developerUserId,jdbcType=INTEGER}, #{developerUserName,jdbcType=VARCHAR}, 
+      #{salesmanUserId,jdbcType=INTEGER}, #{salesmanUserName,jdbcType=VARCHAR}, #{shopParentSku,jdbcType=VARCHAR}, 
+      #{sku,jdbcType=VARCHAR}, #{shopSku,jdbcType=VARCHAR}, #{shopSkuId,jdbcType=INTEGER}, 
+      #{productCode,jdbcType=VARCHAR}, #{saleQuantity,jdbcType=INTEGER}, #{productSales,jdbcType=DECIMAL}, 
+      #{productSalesTax,jdbcType=DECIMAL}, #{shippingCredits,jdbcType=DECIMAL}, #{shippingCreditsTax,jdbcType=DECIMAL}, 
+      #{giftWrapCredits,jdbcType=DECIMAL}, #{giftWrapCreditsTax,jdbcType=DECIMAL}, #{promotionalRebates,jdbcType=DECIMAL}, 
+      #{promotionalRebatesTax,jdbcType=DECIMAL}, #{marketplaceWithheldTax,jdbcType=DECIMAL}, 
+      #{sellingFees,jdbcType=DECIMAL}, #{fbaFees,jdbcType=DECIMAL}, #{otherTransactionFees,jdbcType=DECIMAL}, 
+      #{other,jdbcType=DECIMAL}, #{total,jdbcType=DECIMAL}, #{refundSaleQuantity,jdbcType=INTEGER}, 
+      #{refundProductSales,jdbcType=DECIMAL}, #{refundProductSalesTax,jdbcType=DECIMAL}, 
+      #{refundShippingCredits,jdbcType=DECIMAL}, #{refundShippingCreditsTax,jdbcType=DECIMAL}, 
+      #{refundGiftWrapCredits,jdbcType=DECIMAL}, #{refundGiftWrapCreditsTax,jdbcType=DECIMAL}, 
+      #{refundPromotionalRebates,jdbcType=DECIMAL}, #{refundPromotionalRebatesTax,jdbcType=DECIMAL}, 
+      #{refundMarketplaceWithheldTax,jdbcType=DECIMAL}, #{refundSellingFees,jdbcType=DECIMAL}, 
+      #{refundFbaFees,jdbcType=DECIMAL}, #{refundOtherTransactionFees,jdbcType=DECIMAL}, 
+      #{refundOther,jdbcType=DECIMAL}, #{refundTotal,jdbcType=DECIMAL}, #{sellerpaymentsReportFeeSubscription,jdbcType=DECIMAL}, 
+      #{lightningDealFee,jdbcType=DECIMAL}, #{costOfAdvertising,jdbcType=DECIMAL}, #{fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL}, 
+      #{fbaInventoryReimbursementDamagedWarehouse,jdbcType=DECIMAL}, #{fbaInventoryReimbursementCustomerServiceIssue,jdbcType=DECIMAL}, 
+      #{fbaInventoryReimbursementFeeCorrection,jdbcType=DECIMAL}, #{fbaInventoryReimbursementGeneralAdjustment,jdbcType=DECIMAL}, 
+      #{fbaInventoryReimbursementLostInbound,jdbcType=DECIMAL}, #{fbaInventoryReimbursementLostWarehouse,jdbcType=DECIMAL}, 
+      #{nonSubscriptionFeeAdjustment,jdbcType=DECIMAL}, #{fbaInventoryPlacementServiceFee,jdbcType=DECIMAL}, 
+      #{fbaCustomerReturnPerUnitFee,jdbcType=DECIMAL}, #{fbaInventoryStorageFee,jdbcType=DECIMAL}, 
+      #{fbaLongTermStorageFee,jdbcType=DECIMAL}, #{fbaRemovalOrderDisposalFee,jdbcType=DECIMAL}, 
+      #{couponRedemptionFee,jdbcType=DECIMAL}, #{earlyReviewerProgramFee,jdbcType=DECIMAL}, 
+      #{moneyBack,jdbcType=DECIMAL}, #{moneyBackRate,jdbcType=DECIMAL}, #{mainBusinessIncome,jdbcType=DECIMAL}, 
+      #{totalEffectiveReceipts,jdbcType=DECIMAL}, #{sellableRequestedQuantity,jdbcType=INTEGER}, 
+      #{sellableCost,jdbcType=DECIMAL}, #{unsellableRequestedQuantity,jdbcType=INTEGER}, 
+      #{unsellableCost,jdbcType=DECIMAL}, #{procurementCost,jdbcType=DECIMAL}, #{fbaHeadTripCost,jdbcType=DECIMAL}, 
+      #{headDeductionFee,jdbcType=DECIMAL}, #{mainBusinessProfit,jdbcType=DECIMAL}, #{grossMarginOnSales,jdbcType=DECIMAL}, 
+      #{roi,jdbcType=DECIMAL}, #{initialQuantity,jdbcType=INTEGER}, #{initialInventoryCost,jdbcType=DECIMAL}, 
+      #{finalQuantity,jdbcType=INTEGER}, #{finalInventoryCost,jdbcType=DECIMAL}, #{inventoryTurnover,jdbcType=DECIMAL}, 
+      #{manualAdjustment,jdbcType=DECIMAL}, #{newProduct,jdbcType=INTEGER}, #{refundRate,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.FinancialStatement">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into financial_statement
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="financeId != null">
+        finance_id,
+      </if>
+      <if test="month != null">
+        month,
+      </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="shopName != null">
+        shop_name,
+      </if>
+      <if test="developerUserId != null">
+        developer_user_id,
+      </if>
+      <if test="developerUserName != null">
+        developer_user_name,
+      </if>
+      <if test="salesmanUserId != null">
+        salesman_user_id,
+      </if>
+      <if test="salesmanUserName != null">
+        salesman_user_name,
+      </if>
+      <if test="shopParentSku != null">
+        shop_parent_sku,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="shopSku != null">
+        shop_sku,
+      </if>
+      <if test="shopSkuId != null">
+        shop_sku_id,
+      </if>
+      <if test="productCode != null">
+        product_code,
+      </if>
+      <if test="saleQuantity != null">
+        sale_quantity,
+      </if>
+      <if test="productSales != null">
+        product_sales,
+      </if>
+      <if test="productSalesTax != null">
+        product_sales_tax,
+      </if>
+      <if test="shippingCredits != null">
+        shipping_credits,
+      </if>
+      <if test="shippingCreditsTax != null">
+        shipping_credits_tax,
+      </if>
+      <if test="giftWrapCredits != null">
+        gift_wrap_credits,
+      </if>
+      <if test="giftWrapCreditsTax != null">
+        gift_wrap_credits_tax,
+      </if>
+      <if test="promotionalRebates != null">
+        promotional_rebates,
+      </if>
+      <if test="promotionalRebatesTax != null">
+        promotional_rebates_tax,
+      </if>
+      <if test="marketplaceWithheldTax != null">
+        marketplace_withheld_tax,
+      </if>
+      <if test="sellingFees != null">
+        selling_fees,
+      </if>
+      <if test="fbaFees != null">
+        fba_fees,
+      </if>
+      <if test="otherTransactionFees != null">
+        other_transaction_fees,
+      </if>
+      <if test="other != null">
+        other,
+      </if>
+      <if test="total != null">
+        total,
+      </if>
+      <if test="refundSaleQuantity != null">
+        refund_sale_quantity,
+      </if>
+      <if test="refundProductSales != null">
+        refund_product_sales,
+      </if>
+      <if test="refundProductSalesTax != null">
+        refund_product_sales_tax,
+      </if>
+      <if test="refundShippingCredits != null">
+        refund_shipping_credits,
+      </if>
+      <if test="refundShippingCreditsTax != null">
+        refund_shipping_credits_tax,
+      </if>
+      <if test="refundGiftWrapCredits != null">
+        refund_gift_wrap_credits,
+      </if>
+      <if test="refundGiftWrapCreditsTax != null">
+        refund_gift_wrap_credits_tax,
+      </if>
+      <if test="refundPromotionalRebates != null">
+        refund_promotional_rebates,
+      </if>
+      <if test="refundPromotionalRebatesTax != null">
+        refund_promotional_rebates_tax,
+      </if>
+      <if test="refundMarketplaceWithheldTax != null">
+        refund_marketplace_withheld_tax,
+      </if>
+      <if test="refundSellingFees != null">
+        refund_selling_fees,
+      </if>
+      <if test="refundFbaFees != null">
+        refund_fba_fees,
+      </if>
+      <if test="refundOtherTransactionFees != null">
+        refund_other_transaction_fees,
+      </if>
+      <if test="refundOther != null">
+        refund_other,
+      </if>
+      <if test="refundTotal != null">
+        refund_total,
+      </if>
+      <if test="sellerpaymentsReportFeeSubscription != null">
+        sellerPayments_report_fee_subscription,
+      </if>
+      <if test="lightningDealFee != null">
+        lightning_deal_fee,
+      </if>
+      <if test="costOfAdvertising != null">
+        cost_of_advertising,
+      </if>
+      <if test="fbaInventoryReimbursementCustomerReturn != null">
+        fba_inventory_reimbursement_customer_return,
+      </if>
+      <if test="fbaInventoryReimbursementDamagedWarehouse != null">
+        fba_inventory_reimbursement_damaged_warehouse,
+      </if>
+      <if test="fbaInventoryReimbursementCustomerServiceIssue != null">
+        fba_inventory_reimbursement_customer_service_issue,
+      </if>
+      <if test="fbaInventoryReimbursementFeeCorrection != null">
+        fba_inventory_reimbursement_fee_correction,
+      </if>
+      <if test="fbaInventoryReimbursementGeneralAdjustment != null">
+        fba_inventory_reimbursement_general_adjustment,
+      </if>
+      <if test="fbaInventoryReimbursementLostInbound != null">
+        fba_inventory_reimbursement_lost_inbound,
+      </if>
+      <if test="fbaInventoryReimbursementLostWarehouse != null">
+        fba_inventory_reimbursement_lost_warehouse,
+      </if>
+      <if test="nonSubscriptionFeeAdjustment != null">
+        non_subscription_fee_adjustment,
+      </if>
+      <if test="fbaInventoryPlacementServiceFee != null">
+        fba_inventory_placement_service_fee,
+      </if>
+      <if test="fbaCustomerReturnPerUnitFee != null">
+        fba_customer_return_per_unit_fee,
+      </if>
+      <if test="fbaInventoryStorageFee != null">
+        fba_inventory_storage_fee,
+      </if>
+      <if test="fbaLongTermStorageFee != null">
+        fba_long_term_storage_fee,
+      </if>
+      <if test="fbaRemovalOrderDisposalFee != null">
+        fba_removal_order_disposal_fee,
+      </if>
+      <if test="couponRedemptionFee != null">
+        coupon_redemption_fee,
+      </if>
+      <if test="earlyReviewerProgramFee != null">
+        early_reviewer_program_fee,
+      </if>
+      <if test="moneyBack != null">
+        money_back,
+      </if>
+      <if test="moneyBackRate != null">
+        money_back_rate,
+      </if>
+      <if test="mainBusinessIncome != null">
+        main_business_income,
+      </if>
+      <if test="totalEffectiveReceipts != null">
+        total_effective_receipts,
+      </if>
+      <if test="sellableRequestedQuantity != null">
+        sellable_requested_quantity,
+      </if>
+      <if test="sellableCost != null">
+        sellable_cost,
+      </if>
+      <if test="unsellableRequestedQuantity != null">
+        unsellable_requested_quantity,
+      </if>
+      <if test="unsellableCost != null">
+        unsellable_cost,
+      </if>
+      <if test="procurementCost != null">
+        procurement_cost,
+      </if>
+      <if test="fbaHeadTripCost != null">
+        fba_head_trip_cost,
+      </if>
+      <if test="headDeductionFee != null">
+        head_deduction_fee,
+      </if>
+      <if test="mainBusinessProfit != null">
+        main_business_profit,
+      </if>
+      <if test="grossMarginOnSales != null">
+        gross_margin_on_sales,
+      </if>
+      <if test="roi != null">
+        roi,
+      </if>
+      <if test="initialQuantity != null">
+        initial_quantity,
+      </if>
+      <if test="initialInventoryCost != null">
+        initial_inventory_cost,
+      </if>
+      <if test="finalQuantity != null">
+        final_quantity,
+      </if>
+      <if test="finalInventoryCost != null">
+        final_inventory_cost,
+      </if>
+      <if test="inventoryTurnover != null">
+        inventory_turnover,
+      </if>
+      <if test="manualAdjustment != null">
+        manual_adjustment,
+      </if>
+      <if test="newProduct != null">
+        new_product,
+      </if>
+      <if test="refundRate != null">
+        refund_rate,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="financeId != null">
+        #{financeId,jdbcType=INTEGER},
+      </if>
+      <if test="month != null">
+        #{month,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null">
+        #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="developerUserId != null">
+        #{developerUserId,jdbcType=INTEGER},
+      </if>
+      <if test="developerUserName != null">
+        #{developerUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="salesmanUserId != null">
+        #{salesmanUserId,jdbcType=INTEGER},
+      </if>
+      <if test="salesmanUserName != null">
+        #{salesmanUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopParentSku != null">
+        #{shopParentSku,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSku != null">
+        #{shopSku,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSkuId != null">
+        #{shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="productCode != null">
+        #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="saleQuantity != null">
+        #{saleQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="productSales != null">
+        #{productSales,jdbcType=DECIMAL},
+      </if>
+      <if test="productSalesTax != null">
+        #{productSalesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingCredits != null">
+        #{shippingCredits,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingCreditsTax != null">
+        #{shippingCreditsTax,jdbcType=DECIMAL},
+      </if>
+      <if test="giftWrapCredits != null">
+        #{giftWrapCredits,jdbcType=DECIMAL},
+      </if>
+      <if test="giftWrapCreditsTax != null">
+        #{giftWrapCreditsTax,jdbcType=DECIMAL},
+      </if>
+      <if test="promotionalRebates != null">
+        #{promotionalRebates,jdbcType=DECIMAL},
+      </if>
+      <if test="promotionalRebatesTax != null">
+        #{promotionalRebatesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="marketplaceWithheldTax != null">
+        #{marketplaceWithheldTax,jdbcType=DECIMAL},
+      </if>
+      <if test="sellingFees != null">
+        #{sellingFees,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaFees != null">
+        #{fbaFees,jdbcType=DECIMAL},
+      </if>
+      <if test="otherTransactionFees != null">
+        #{otherTransactionFees,jdbcType=DECIMAL},
+      </if>
+      <if test="other != null">
+        #{other,jdbcType=DECIMAL},
+      </if>
+      <if test="total != null">
+        #{total,jdbcType=DECIMAL},
+      </if>
+      <if test="refundSaleQuantity != null">
+        #{refundSaleQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="refundProductSales != null">
+        #{refundProductSales,jdbcType=DECIMAL},
+      </if>
+      <if test="refundProductSalesTax != null">
+        #{refundProductSalesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="refundShippingCredits != null">
+        #{refundShippingCredits,jdbcType=DECIMAL},
+      </if>
+      <if test="refundShippingCreditsTax != null">
+        #{refundShippingCreditsTax,jdbcType=DECIMAL},
+      </if>
+      <if test="refundGiftWrapCredits != null">
+        #{refundGiftWrapCredits,jdbcType=DECIMAL},
+      </if>
+      <if test="refundGiftWrapCreditsTax != null">
+        #{refundGiftWrapCreditsTax,jdbcType=DECIMAL},
+      </if>
+      <if test="refundPromotionalRebates != null">
+        #{refundPromotionalRebates,jdbcType=DECIMAL},
+      </if>
+      <if test="refundPromotionalRebatesTax != null">
+        #{refundPromotionalRebatesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="refundMarketplaceWithheldTax != null">
+        #{refundMarketplaceWithheldTax,jdbcType=DECIMAL},
+      </if>
+      <if test="refundSellingFees != null">
+        #{refundSellingFees,jdbcType=DECIMAL},
+      </if>
+      <if test="refundFbaFees != null">
+        #{refundFbaFees,jdbcType=DECIMAL},
+      </if>
+      <if test="refundOtherTransactionFees != null">
+        #{refundOtherTransactionFees,jdbcType=DECIMAL},
+      </if>
+      <if test="refundOther != null">
+        #{refundOther,jdbcType=DECIMAL},
+      </if>
+      <if test="refundTotal != null">
+        #{refundTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sellerpaymentsReportFeeSubscription != null">
+        #{sellerpaymentsReportFeeSubscription,jdbcType=DECIMAL},
+      </if>
+      <if test="lightningDealFee != null">
+        #{lightningDealFee,jdbcType=DECIMAL},
+      </if>
+      <if test="costOfAdvertising != null">
+        #{costOfAdvertising,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryReimbursementCustomerReturn != null">
+        #{fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryReimbursementDamagedWarehouse != null">
+        #{fbaInventoryReimbursementDamagedWarehouse,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryReimbursementCustomerServiceIssue != null">
+        #{fbaInventoryReimbursementCustomerServiceIssue,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryReimbursementFeeCorrection != null">
+        #{fbaInventoryReimbursementFeeCorrection,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryReimbursementGeneralAdjustment != null">
+        #{fbaInventoryReimbursementGeneralAdjustment,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryReimbursementLostInbound != null">
+        #{fbaInventoryReimbursementLostInbound,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryReimbursementLostWarehouse != null">
+        #{fbaInventoryReimbursementLostWarehouse,jdbcType=DECIMAL},
+      </if>
+      <if test="nonSubscriptionFeeAdjustment != null">
+        #{nonSubscriptionFeeAdjustment,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryPlacementServiceFee != null">
+        #{fbaInventoryPlacementServiceFee,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaCustomerReturnPerUnitFee != null">
+        #{fbaCustomerReturnPerUnitFee,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryStorageFee != null">
+        #{fbaInventoryStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaLongTermStorageFee != null">
+        #{fbaLongTermStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaRemovalOrderDisposalFee != null">
+        #{fbaRemovalOrderDisposalFee,jdbcType=DECIMAL},
+      </if>
+      <if test="couponRedemptionFee != null">
+        #{couponRedemptionFee,jdbcType=DECIMAL},
+      </if>
+      <if test="earlyReviewerProgramFee != null">
+        #{earlyReviewerProgramFee,jdbcType=DECIMAL},
+      </if>
+      <if test="moneyBack != null">
+        #{moneyBack,jdbcType=DECIMAL},
+      </if>
+      <if test="moneyBackRate != null">
+        #{moneyBackRate,jdbcType=DECIMAL},
+      </if>
+      <if test="mainBusinessIncome != null">
+        #{mainBusinessIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="totalEffectiveReceipts != null">
+        #{totalEffectiveReceipts,jdbcType=DECIMAL},
+      </if>
+      <if test="sellableRequestedQuantity != null">
+        #{sellableRequestedQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="sellableCost != null">
+        #{sellableCost,jdbcType=DECIMAL},
+      </if>
+      <if test="unsellableRequestedQuantity != null">
+        #{unsellableRequestedQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="unsellableCost != null">
+        #{unsellableCost,jdbcType=DECIMAL},
+      </if>
+      <if test="procurementCost != null">
+        #{procurementCost,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaHeadTripCost != null">
+        #{fbaHeadTripCost,jdbcType=DECIMAL},
+      </if>
+      <if test="headDeductionFee != null">
+        #{headDeductionFee,jdbcType=DECIMAL},
+      </if>
+      <if test="mainBusinessProfit != null">
+        #{mainBusinessProfit,jdbcType=DECIMAL},
+      </if>
+      <if test="grossMarginOnSales != null">
+        #{grossMarginOnSales,jdbcType=DECIMAL},
+      </if>
+      <if test="roi != null">
+        #{roi,jdbcType=DECIMAL},
+      </if>
+      <if test="initialQuantity != null">
+        #{initialQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="initialInventoryCost != null">
+        #{initialInventoryCost,jdbcType=DECIMAL},
+      </if>
+      <if test="finalQuantity != null">
+        #{finalQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="finalInventoryCost != null">
+        #{finalInventoryCost,jdbcType=DECIMAL},
+      </if>
+      <if test="inventoryTurnover != null">
+        #{inventoryTurnover,jdbcType=DECIMAL},
+      </if>
+      <if test="manualAdjustment != null">
+        #{manualAdjustment,jdbcType=DECIMAL},
+      </if>
+      <if test="newProduct != null">
+        #{newProduct,jdbcType=INTEGER},
+      </if>
+      <if test="refundRate != null">
+        #{refundRate,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.FinancialStatementExample" resultType="java.lang.Long">
+    select count(*) from financial_statement
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update financial_statement
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.financeId != null">
+        finance_id = #{record.financeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.month != null">
+        month = #{record.month,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.shopId != null">
+        shop_id = #{record.shopId,jdbcType=INTEGER},
+      </if>
+      <if test="record.shopName != null">
+        shop_name = #{record.shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.developerUserId != null">
+        developer_user_id = #{record.developerUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.developerUserName != null">
+        developer_user_name = #{record.developerUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.salesmanUserId != null">
+        salesman_user_id = #{record.salesmanUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.salesmanUserName != null">
+        salesman_user_name = #{record.salesmanUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopParentSku != null">
+        shop_parent_sku = #{record.shopParentSku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sku != null">
+        sku = #{record.sku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopSku != null">
+        shop_sku = #{record.shopSku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopSkuId != null">
+        shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.productCode != null">
+        product_code = #{record.productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.saleQuantity != null">
+        sale_quantity = #{record.saleQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.productSales != null">
+        product_sales = #{record.productSales,jdbcType=DECIMAL},
+      </if>
+      <if test="record.productSalesTax != null">
+        product_sales_tax = #{record.productSalesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shippingCredits != null">
+        shipping_credits = #{record.shippingCredits,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shippingCreditsTax != null">
+        shipping_credits_tax = #{record.shippingCreditsTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.giftWrapCredits != null">
+        gift_wrap_credits = #{record.giftWrapCredits,jdbcType=DECIMAL},
+      </if>
+      <if test="record.giftWrapCreditsTax != null">
+        gift_wrap_credits_tax = #{record.giftWrapCreditsTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.promotionalRebates != null">
+        promotional_rebates = #{record.promotionalRebates,jdbcType=DECIMAL},
+      </if>
+      <if test="record.promotionalRebatesTax != null">
+        promotional_rebates_tax = #{record.promotionalRebatesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.marketplaceWithheldTax != null">
+        marketplace_withheld_tax = #{record.marketplaceWithheldTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sellingFees != null">
+        selling_fees = #{record.sellingFees,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fbaFees != null">
+        fba_fees = #{record.fbaFees,jdbcType=DECIMAL},
+      </if>
+      <if test="record.otherTransactionFees != null">
+        other_transaction_fees = #{record.otherTransactionFees,jdbcType=DECIMAL},
+      </if>
+      <if test="record.other != null">
+        other = #{record.other,jdbcType=DECIMAL},
+      </if>
+      <if test="record.total != null">
+        total = #{record.total,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundSaleQuantity != null">
+        refund_sale_quantity = #{record.refundSaleQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.refundProductSales != null">
+        refund_product_sales = #{record.refundProductSales,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundProductSalesTax != null">
+        refund_product_sales_tax = #{record.refundProductSalesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundShippingCredits != null">
+        refund_shipping_credits = #{record.refundShippingCredits,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundShippingCreditsTax != null">
+        refund_shipping_credits_tax = #{record.refundShippingCreditsTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundGiftWrapCredits != null">
+        refund_gift_wrap_credits = #{record.refundGiftWrapCredits,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundGiftWrapCreditsTax != null">
+        refund_gift_wrap_credits_tax = #{record.refundGiftWrapCreditsTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundPromotionalRebates != null">
+        refund_promotional_rebates = #{record.refundPromotionalRebates,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundPromotionalRebatesTax != null">
+        refund_promotional_rebates_tax = #{record.refundPromotionalRebatesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundMarketplaceWithheldTax != null">
+        refund_marketplace_withheld_tax = #{record.refundMarketplaceWithheldTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundSellingFees != null">
+        refund_selling_fees = #{record.refundSellingFees,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundFbaFees != null">
+        refund_fba_fees = #{record.refundFbaFees,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundOtherTransactionFees != null">
+        refund_other_transaction_fees = #{record.refundOtherTransactionFees,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundOther != null">
+        refund_other = #{record.refundOther,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundTotal != null">
+        refund_total = #{record.refundTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sellerpaymentsReportFeeSubscription != null">
+        sellerPayments_report_fee_subscription = #{record.sellerpaymentsReportFeeSubscription,jdbcType=DECIMAL},
+      </if>
+      <if test="record.lightningDealFee != null">
+        lightning_deal_fee = #{record.lightningDealFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.costOfAdvertising != null">
+        cost_of_advertising = #{record.costOfAdvertising,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fbaInventoryReimbursementCustomerReturn != null">
+        fba_inventory_reimbursement_customer_return = #{record.fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fbaInventoryReimbursementDamagedWarehouse != null">
+        fba_inventory_reimbursement_damaged_warehouse = #{record.fbaInventoryReimbursementDamagedWarehouse,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fbaInventoryReimbursementCustomerServiceIssue != null">
+        fba_inventory_reimbursement_customer_service_issue = #{record.fbaInventoryReimbursementCustomerServiceIssue,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fbaInventoryReimbursementFeeCorrection != null">
+        fba_inventory_reimbursement_fee_correction = #{record.fbaInventoryReimbursementFeeCorrection,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fbaInventoryReimbursementGeneralAdjustment != null">
+        fba_inventory_reimbursement_general_adjustment = #{record.fbaInventoryReimbursementGeneralAdjustment,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fbaInventoryReimbursementLostInbound != null">
+        fba_inventory_reimbursement_lost_inbound = #{record.fbaInventoryReimbursementLostInbound,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fbaInventoryReimbursementLostWarehouse != null">
+        fba_inventory_reimbursement_lost_warehouse = #{record.fbaInventoryReimbursementLostWarehouse,jdbcType=DECIMAL},
+      </if>
+      <if test="record.nonSubscriptionFeeAdjustment != null">
+        non_subscription_fee_adjustment = #{record.nonSubscriptionFeeAdjustment,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fbaInventoryPlacementServiceFee != null">
+        fba_inventory_placement_service_fee = #{record.fbaInventoryPlacementServiceFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fbaCustomerReturnPerUnitFee != null">
+        fba_customer_return_per_unit_fee = #{record.fbaCustomerReturnPerUnitFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fbaInventoryStorageFee != null">
+        fba_inventory_storage_fee = #{record.fbaInventoryStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fbaLongTermStorageFee != null">
+        fba_long_term_storage_fee = #{record.fbaLongTermStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fbaRemovalOrderDisposalFee != null">
+        fba_removal_order_disposal_fee = #{record.fbaRemovalOrderDisposalFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.couponRedemptionFee != null">
+        coupon_redemption_fee = #{record.couponRedemptionFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.earlyReviewerProgramFee != null">
+        early_reviewer_program_fee = #{record.earlyReviewerProgramFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.moneyBack != null">
+        money_back = #{record.moneyBack,jdbcType=DECIMAL},
+      </if>
+      <if test="record.moneyBackRate != null">
+        money_back_rate = #{record.moneyBackRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.mainBusinessIncome != null">
+        main_business_income = #{record.mainBusinessIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalEffectiveReceipts != null">
+        total_effective_receipts = #{record.totalEffectiveReceipts,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sellableRequestedQuantity != null">
+        sellable_requested_quantity = #{record.sellableRequestedQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.sellableCost != null">
+        sellable_cost = #{record.sellableCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.unsellableRequestedQuantity != null">
+        unsellable_requested_quantity = #{record.unsellableRequestedQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.unsellableCost != null">
+        unsellable_cost = #{record.unsellableCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.procurementCost != null">
+        procurement_cost = #{record.procurementCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.fbaHeadTripCost != null">
+        fba_head_trip_cost = #{record.fbaHeadTripCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.headDeductionFee != null">
+        head_deduction_fee = #{record.headDeductionFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.mainBusinessProfit != null">
+        main_business_profit = #{record.mainBusinessProfit,jdbcType=DECIMAL},
+      </if>
+      <if test="record.grossMarginOnSales != null">
+        gross_margin_on_sales = #{record.grossMarginOnSales,jdbcType=DECIMAL},
+      </if>
+      <if test="record.roi != null">
+        roi = #{record.roi,jdbcType=DECIMAL},
+      </if>
+      <if test="record.initialQuantity != null">
+        initial_quantity = #{record.initialQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.initialInventoryCost != null">
+        initial_inventory_cost = #{record.initialInventoryCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.finalQuantity != null">
+        final_quantity = #{record.finalQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.finalInventoryCost != null">
+        final_inventory_cost = #{record.finalInventoryCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.inventoryTurnover != null">
+        inventory_turnover = #{record.inventoryTurnover,jdbcType=DECIMAL},
+      </if>
+      <if test="record.manualAdjustment != null">
+        manual_adjustment = #{record.manualAdjustment,jdbcType=DECIMAL},
+      </if>
+      <if test="record.newProduct != null">
+        new_product = #{record.newProduct,jdbcType=INTEGER},
+      </if>
+      <if test="record.refundRate != null">
+        refund_rate = #{record.refundRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update financial_statement
+    set id = #{record.id,jdbcType=INTEGER},
+      finance_id = #{record.financeId,jdbcType=INTEGER},
+      month = #{record.month,jdbcType=TIMESTAMP},
+      shop_id = #{record.shopId,jdbcType=INTEGER},
+      shop_name = #{record.shopName,jdbcType=VARCHAR},
+      developer_user_id = #{record.developerUserId,jdbcType=INTEGER},
+      developer_user_name = #{record.developerUserName,jdbcType=VARCHAR},
+      salesman_user_id = #{record.salesmanUserId,jdbcType=INTEGER},
+      salesman_user_name = #{record.salesmanUserName,jdbcType=VARCHAR},
+      shop_parent_sku = #{record.shopParentSku,jdbcType=VARCHAR},
+      sku = #{record.sku,jdbcType=VARCHAR},
+      shop_sku = #{record.shopSku,jdbcType=VARCHAR},
+      shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
+      product_code = #{record.productCode,jdbcType=VARCHAR},
+      sale_quantity = #{record.saleQuantity,jdbcType=INTEGER},
+      product_sales = #{record.productSales,jdbcType=DECIMAL},
+      product_sales_tax = #{record.productSalesTax,jdbcType=DECIMAL},
+      shipping_credits = #{record.shippingCredits,jdbcType=DECIMAL},
+      shipping_credits_tax = #{record.shippingCreditsTax,jdbcType=DECIMAL},
+      gift_wrap_credits = #{record.giftWrapCredits,jdbcType=DECIMAL},
+      gift_wrap_credits_tax = #{record.giftWrapCreditsTax,jdbcType=DECIMAL},
+      promotional_rebates = #{record.promotionalRebates,jdbcType=DECIMAL},
+      promotional_rebates_tax = #{record.promotionalRebatesTax,jdbcType=DECIMAL},
+      marketplace_withheld_tax = #{record.marketplaceWithheldTax,jdbcType=DECIMAL},
+      selling_fees = #{record.sellingFees,jdbcType=DECIMAL},
+      fba_fees = #{record.fbaFees,jdbcType=DECIMAL},
+      other_transaction_fees = #{record.otherTransactionFees,jdbcType=DECIMAL},
+      other = #{record.other,jdbcType=DECIMAL},
+      total = #{record.total,jdbcType=DECIMAL},
+      refund_sale_quantity = #{record.refundSaleQuantity,jdbcType=INTEGER},
+      refund_product_sales = #{record.refundProductSales,jdbcType=DECIMAL},
+      refund_product_sales_tax = #{record.refundProductSalesTax,jdbcType=DECIMAL},
+      refund_shipping_credits = #{record.refundShippingCredits,jdbcType=DECIMAL},
+      refund_shipping_credits_tax = #{record.refundShippingCreditsTax,jdbcType=DECIMAL},
+      refund_gift_wrap_credits = #{record.refundGiftWrapCredits,jdbcType=DECIMAL},
+      refund_gift_wrap_credits_tax = #{record.refundGiftWrapCreditsTax,jdbcType=DECIMAL},
+      refund_promotional_rebates = #{record.refundPromotionalRebates,jdbcType=DECIMAL},
+      refund_promotional_rebates_tax = #{record.refundPromotionalRebatesTax,jdbcType=DECIMAL},
+      refund_marketplace_withheld_tax = #{record.refundMarketplaceWithheldTax,jdbcType=DECIMAL},
+      refund_selling_fees = #{record.refundSellingFees,jdbcType=DECIMAL},
+      refund_fba_fees = #{record.refundFbaFees,jdbcType=DECIMAL},
+      refund_other_transaction_fees = #{record.refundOtherTransactionFees,jdbcType=DECIMAL},
+      refund_other = #{record.refundOther,jdbcType=DECIMAL},
+      refund_total = #{record.refundTotal,jdbcType=DECIMAL},
+      sellerPayments_report_fee_subscription = #{record.sellerpaymentsReportFeeSubscription,jdbcType=DECIMAL},
+      lightning_deal_fee = #{record.lightningDealFee,jdbcType=DECIMAL},
+      cost_of_advertising = #{record.costOfAdvertising,jdbcType=DECIMAL},
+      fba_inventory_reimbursement_customer_return = #{record.fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL},
+      fba_inventory_reimbursement_damaged_warehouse = #{record.fbaInventoryReimbursementDamagedWarehouse,jdbcType=DECIMAL},
+      fba_inventory_reimbursement_customer_service_issue = #{record.fbaInventoryReimbursementCustomerServiceIssue,jdbcType=DECIMAL},
+      fba_inventory_reimbursement_fee_correction = #{record.fbaInventoryReimbursementFeeCorrection,jdbcType=DECIMAL},
+      fba_inventory_reimbursement_general_adjustment = #{record.fbaInventoryReimbursementGeneralAdjustment,jdbcType=DECIMAL},
+      fba_inventory_reimbursement_lost_inbound = #{record.fbaInventoryReimbursementLostInbound,jdbcType=DECIMAL},
+      fba_inventory_reimbursement_lost_warehouse = #{record.fbaInventoryReimbursementLostWarehouse,jdbcType=DECIMAL},
+      non_subscription_fee_adjustment = #{record.nonSubscriptionFeeAdjustment,jdbcType=DECIMAL},
+      fba_inventory_placement_service_fee = #{record.fbaInventoryPlacementServiceFee,jdbcType=DECIMAL},
+      fba_customer_return_per_unit_fee = #{record.fbaCustomerReturnPerUnitFee,jdbcType=DECIMAL},
+      fba_inventory_storage_fee = #{record.fbaInventoryStorageFee,jdbcType=DECIMAL},
+      fba_long_term_storage_fee = #{record.fbaLongTermStorageFee,jdbcType=DECIMAL},
+      fba_removal_order_disposal_fee = #{record.fbaRemovalOrderDisposalFee,jdbcType=DECIMAL},
+      coupon_redemption_fee = #{record.couponRedemptionFee,jdbcType=DECIMAL},
+      early_reviewer_program_fee = #{record.earlyReviewerProgramFee,jdbcType=DECIMAL},
+      money_back = #{record.moneyBack,jdbcType=DECIMAL},
+      money_back_rate = #{record.moneyBackRate,jdbcType=DECIMAL},
+      main_business_income = #{record.mainBusinessIncome,jdbcType=DECIMAL},
+      total_effective_receipts = #{record.totalEffectiveReceipts,jdbcType=DECIMAL},
+      sellable_requested_quantity = #{record.sellableRequestedQuantity,jdbcType=INTEGER},
+      sellable_cost = #{record.sellableCost,jdbcType=DECIMAL},
+      unsellable_requested_quantity = #{record.unsellableRequestedQuantity,jdbcType=INTEGER},
+      unsellable_cost = #{record.unsellableCost,jdbcType=DECIMAL},
+      procurement_cost = #{record.procurementCost,jdbcType=DECIMAL},
+      fba_head_trip_cost = #{record.fbaHeadTripCost,jdbcType=DECIMAL},
+      head_deduction_fee = #{record.headDeductionFee,jdbcType=DECIMAL},
+      main_business_profit = #{record.mainBusinessProfit,jdbcType=DECIMAL},
+      gross_margin_on_sales = #{record.grossMarginOnSales,jdbcType=DECIMAL},
+      roi = #{record.roi,jdbcType=DECIMAL},
+      initial_quantity = #{record.initialQuantity,jdbcType=INTEGER},
+      initial_inventory_cost = #{record.initialInventoryCost,jdbcType=DECIMAL},
+      final_quantity = #{record.finalQuantity,jdbcType=INTEGER},
+      final_inventory_cost = #{record.finalInventoryCost,jdbcType=DECIMAL},
+      inventory_turnover = #{record.inventoryTurnover,jdbcType=DECIMAL},
+      manual_adjustment = #{record.manualAdjustment,jdbcType=DECIMAL},
+      new_product = #{record.newProduct,jdbcType=INTEGER},
+      refund_rate = #{record.refundRate,jdbcType=DECIMAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.FinancialStatement">
+    update financial_statement
+    <set>
+      <if test="financeId != null">
+        finance_id = #{financeId,jdbcType=INTEGER},
+      </if>
+      <if test="month != null">
+        month = #{month,jdbcType=TIMESTAMP},
+      </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="shopName != null">
+        shop_name = #{shopName,jdbcType=VARCHAR},
+      </if>
+      <if test="developerUserId != null">
+        developer_user_id = #{developerUserId,jdbcType=INTEGER},
+      </if>
+      <if test="developerUserName != null">
+        developer_user_name = #{developerUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="salesmanUserId != null">
+        salesman_user_id = #{salesmanUserId,jdbcType=INTEGER},
+      </if>
+      <if test="salesmanUserName != null">
+        salesman_user_name = #{salesmanUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopParentSku != null">
+        shop_parent_sku = #{shopParentSku,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSku != null">
+        shop_sku = #{shopSku,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSkuId != null">
+        shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="productCode != null">
+        product_code = #{productCode,jdbcType=VARCHAR},
+      </if>
+      <if test="saleQuantity != null">
+        sale_quantity = #{saleQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="productSales != null">
+        product_sales = #{productSales,jdbcType=DECIMAL},
+      </if>
+      <if test="productSalesTax != null">
+        product_sales_tax = #{productSalesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingCredits != null">
+        shipping_credits = #{shippingCredits,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingCreditsTax != null">
+        shipping_credits_tax = #{shippingCreditsTax,jdbcType=DECIMAL},
+      </if>
+      <if test="giftWrapCredits != null">
+        gift_wrap_credits = #{giftWrapCredits,jdbcType=DECIMAL},
+      </if>
+      <if test="giftWrapCreditsTax != null">
+        gift_wrap_credits_tax = #{giftWrapCreditsTax,jdbcType=DECIMAL},
+      </if>
+      <if test="promotionalRebates != null">
+        promotional_rebates = #{promotionalRebates,jdbcType=DECIMAL},
+      </if>
+      <if test="promotionalRebatesTax != null">
+        promotional_rebates_tax = #{promotionalRebatesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="marketplaceWithheldTax != null">
+        marketplace_withheld_tax = #{marketplaceWithheldTax,jdbcType=DECIMAL},
+      </if>
+      <if test="sellingFees != null">
+        selling_fees = #{sellingFees,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaFees != null">
+        fba_fees = #{fbaFees,jdbcType=DECIMAL},
+      </if>
+      <if test="otherTransactionFees != null">
+        other_transaction_fees = #{otherTransactionFees,jdbcType=DECIMAL},
+      </if>
+      <if test="other != null">
+        other = #{other,jdbcType=DECIMAL},
+      </if>
+      <if test="total != null">
+        total = #{total,jdbcType=DECIMAL},
+      </if>
+      <if test="refundSaleQuantity != null">
+        refund_sale_quantity = #{refundSaleQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="refundProductSales != null">
+        refund_product_sales = #{refundProductSales,jdbcType=DECIMAL},
+      </if>
+      <if test="refundProductSalesTax != null">
+        refund_product_sales_tax = #{refundProductSalesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="refundShippingCredits != null">
+        refund_shipping_credits = #{refundShippingCredits,jdbcType=DECIMAL},
+      </if>
+      <if test="refundShippingCreditsTax != null">
+        refund_shipping_credits_tax = #{refundShippingCreditsTax,jdbcType=DECIMAL},
+      </if>
+      <if test="refundGiftWrapCredits != null">
+        refund_gift_wrap_credits = #{refundGiftWrapCredits,jdbcType=DECIMAL},
+      </if>
+      <if test="refundGiftWrapCreditsTax != null">
+        refund_gift_wrap_credits_tax = #{refundGiftWrapCreditsTax,jdbcType=DECIMAL},
+      </if>
+      <if test="refundPromotionalRebates != null">
+        refund_promotional_rebates = #{refundPromotionalRebates,jdbcType=DECIMAL},
+      </if>
+      <if test="refundPromotionalRebatesTax != null">
+        refund_promotional_rebates_tax = #{refundPromotionalRebatesTax,jdbcType=DECIMAL},
+      </if>
+      <if test="refundMarketplaceWithheldTax != null">
+        refund_marketplace_withheld_tax = #{refundMarketplaceWithheldTax,jdbcType=DECIMAL},
+      </if>
+      <if test="refundSellingFees != null">
+        refund_selling_fees = #{refundSellingFees,jdbcType=DECIMAL},
+      </if>
+      <if test="refundFbaFees != null">
+        refund_fba_fees = #{refundFbaFees,jdbcType=DECIMAL},
+      </if>
+      <if test="refundOtherTransactionFees != null">
+        refund_other_transaction_fees = #{refundOtherTransactionFees,jdbcType=DECIMAL},
+      </if>
+      <if test="refundOther != null">
+        refund_other = #{refundOther,jdbcType=DECIMAL},
+      </if>
+      <if test="refundTotal != null">
+        refund_total = #{refundTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sellerpaymentsReportFeeSubscription != null">
+        sellerPayments_report_fee_subscription = #{sellerpaymentsReportFeeSubscription,jdbcType=DECIMAL},
+      </if>
+      <if test="lightningDealFee != null">
+        lightning_deal_fee = #{lightningDealFee,jdbcType=DECIMAL},
+      </if>
+      <if test="costOfAdvertising != null">
+        cost_of_advertising = #{costOfAdvertising,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryReimbursementCustomerReturn != null">
+        fba_inventory_reimbursement_customer_return = #{fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryReimbursementDamagedWarehouse != null">
+        fba_inventory_reimbursement_damaged_warehouse = #{fbaInventoryReimbursementDamagedWarehouse,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryReimbursementCustomerServiceIssue != null">
+        fba_inventory_reimbursement_customer_service_issue = #{fbaInventoryReimbursementCustomerServiceIssue,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryReimbursementFeeCorrection != null">
+        fba_inventory_reimbursement_fee_correction = #{fbaInventoryReimbursementFeeCorrection,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryReimbursementGeneralAdjustment != null">
+        fba_inventory_reimbursement_general_adjustment = #{fbaInventoryReimbursementGeneralAdjustment,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryReimbursementLostInbound != null">
+        fba_inventory_reimbursement_lost_inbound = #{fbaInventoryReimbursementLostInbound,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryReimbursementLostWarehouse != null">
+        fba_inventory_reimbursement_lost_warehouse = #{fbaInventoryReimbursementLostWarehouse,jdbcType=DECIMAL},
+      </if>
+      <if test="nonSubscriptionFeeAdjustment != null">
+        non_subscription_fee_adjustment = #{nonSubscriptionFeeAdjustment,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryPlacementServiceFee != null">
+        fba_inventory_placement_service_fee = #{fbaInventoryPlacementServiceFee,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaCustomerReturnPerUnitFee != null">
+        fba_customer_return_per_unit_fee = #{fbaCustomerReturnPerUnitFee,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaInventoryStorageFee != null">
+        fba_inventory_storage_fee = #{fbaInventoryStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaLongTermStorageFee != null">
+        fba_long_term_storage_fee = #{fbaLongTermStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaRemovalOrderDisposalFee != null">
+        fba_removal_order_disposal_fee = #{fbaRemovalOrderDisposalFee,jdbcType=DECIMAL},
+      </if>
+      <if test="couponRedemptionFee != null">
+        coupon_redemption_fee = #{couponRedemptionFee,jdbcType=DECIMAL},
+      </if>
+      <if test="earlyReviewerProgramFee != null">
+        early_reviewer_program_fee = #{earlyReviewerProgramFee,jdbcType=DECIMAL},
+      </if>
+      <if test="moneyBack != null">
+        money_back = #{moneyBack,jdbcType=DECIMAL},
+      </if>
+      <if test="moneyBackRate != null">
+        money_back_rate = #{moneyBackRate,jdbcType=DECIMAL},
+      </if>
+      <if test="mainBusinessIncome != null">
+        main_business_income = #{mainBusinessIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="totalEffectiveReceipts != null">
+        total_effective_receipts = #{totalEffectiveReceipts,jdbcType=DECIMAL},
+      </if>
+      <if test="sellableRequestedQuantity != null">
+        sellable_requested_quantity = #{sellableRequestedQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="sellableCost != null">
+        sellable_cost = #{sellableCost,jdbcType=DECIMAL},
+      </if>
+      <if test="unsellableRequestedQuantity != null">
+        unsellable_requested_quantity = #{unsellableRequestedQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="unsellableCost != null">
+        unsellable_cost = #{unsellableCost,jdbcType=DECIMAL},
+      </if>
+      <if test="procurementCost != null">
+        procurement_cost = #{procurementCost,jdbcType=DECIMAL},
+      </if>
+      <if test="fbaHeadTripCost != null">
+        fba_head_trip_cost = #{fbaHeadTripCost,jdbcType=DECIMAL},
+      </if>
+      <if test="headDeductionFee != null">
+        head_deduction_fee = #{headDeductionFee,jdbcType=DECIMAL},
+      </if>
+      <if test="mainBusinessProfit != null">
+        main_business_profit = #{mainBusinessProfit,jdbcType=DECIMAL},
+      </if>
+      <if test="grossMarginOnSales != null">
+        gross_margin_on_sales = #{grossMarginOnSales,jdbcType=DECIMAL},
+      </if>
+      <if test="roi != null">
+        roi = #{roi,jdbcType=DECIMAL},
+      </if>
+      <if test="initialQuantity != null">
+        initial_quantity = #{initialQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="initialInventoryCost != null">
+        initial_inventory_cost = #{initialInventoryCost,jdbcType=DECIMAL},
+      </if>
+      <if test="finalQuantity != null">
+        final_quantity = #{finalQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="finalInventoryCost != null">
+        final_inventory_cost = #{finalInventoryCost,jdbcType=DECIMAL},
+      </if>
+      <if test="inventoryTurnover != null">
+        inventory_turnover = #{inventoryTurnover,jdbcType=DECIMAL},
+      </if>
+      <if test="manualAdjustment != null">
+        manual_adjustment = #{manualAdjustment,jdbcType=DECIMAL},
+      </if>
+      <if test="newProduct != null">
+        new_product = #{newProduct,jdbcType=INTEGER},
+      </if>
+      <if test="refundRate != null">
+        refund_rate = #{refundRate,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.FinancialStatement">
+    update financial_statement
+    set finance_id = #{financeId,jdbcType=INTEGER},
+      month = #{month,jdbcType=TIMESTAMP},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      shop_name = #{shopName,jdbcType=VARCHAR},
+      developer_user_id = #{developerUserId,jdbcType=INTEGER},
+      developer_user_name = #{developerUserName,jdbcType=VARCHAR},
+      salesman_user_id = #{salesmanUserId,jdbcType=INTEGER},
+      salesman_user_name = #{salesmanUserName,jdbcType=VARCHAR},
+      shop_parent_sku = #{shopParentSku,jdbcType=VARCHAR},
+      sku = #{sku,jdbcType=VARCHAR},
+      shop_sku = #{shopSku,jdbcType=VARCHAR},
+      shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
+      product_code = #{productCode,jdbcType=VARCHAR},
+      sale_quantity = #{saleQuantity,jdbcType=INTEGER},
+      product_sales = #{productSales,jdbcType=DECIMAL},
+      product_sales_tax = #{productSalesTax,jdbcType=DECIMAL},
+      shipping_credits = #{shippingCredits,jdbcType=DECIMAL},
+      shipping_credits_tax = #{shippingCreditsTax,jdbcType=DECIMAL},
+      gift_wrap_credits = #{giftWrapCredits,jdbcType=DECIMAL},
+      gift_wrap_credits_tax = #{giftWrapCreditsTax,jdbcType=DECIMAL},
+      promotional_rebates = #{promotionalRebates,jdbcType=DECIMAL},
+      promotional_rebates_tax = #{promotionalRebatesTax,jdbcType=DECIMAL},
+      marketplace_withheld_tax = #{marketplaceWithheldTax,jdbcType=DECIMAL},
+      selling_fees = #{sellingFees,jdbcType=DECIMAL},
+      fba_fees = #{fbaFees,jdbcType=DECIMAL},
+      other_transaction_fees = #{otherTransactionFees,jdbcType=DECIMAL},
+      other = #{other,jdbcType=DECIMAL},
+      total = #{total,jdbcType=DECIMAL},
+      refund_sale_quantity = #{refundSaleQuantity,jdbcType=INTEGER},
+      refund_product_sales = #{refundProductSales,jdbcType=DECIMAL},
+      refund_product_sales_tax = #{refundProductSalesTax,jdbcType=DECIMAL},
+      refund_shipping_credits = #{refundShippingCredits,jdbcType=DECIMAL},
+      refund_shipping_credits_tax = #{refundShippingCreditsTax,jdbcType=DECIMAL},
+      refund_gift_wrap_credits = #{refundGiftWrapCredits,jdbcType=DECIMAL},
+      refund_gift_wrap_credits_tax = #{refundGiftWrapCreditsTax,jdbcType=DECIMAL},
+      refund_promotional_rebates = #{refundPromotionalRebates,jdbcType=DECIMAL},
+      refund_promotional_rebates_tax = #{refundPromotionalRebatesTax,jdbcType=DECIMAL},
+      refund_marketplace_withheld_tax = #{refundMarketplaceWithheldTax,jdbcType=DECIMAL},
+      refund_selling_fees = #{refundSellingFees,jdbcType=DECIMAL},
+      refund_fba_fees = #{refundFbaFees,jdbcType=DECIMAL},
+      refund_other_transaction_fees = #{refundOtherTransactionFees,jdbcType=DECIMAL},
+      refund_other = #{refundOther,jdbcType=DECIMAL},
+      refund_total = #{refundTotal,jdbcType=DECIMAL},
+      sellerPayments_report_fee_subscription = #{sellerpaymentsReportFeeSubscription,jdbcType=DECIMAL},
+      lightning_deal_fee = #{lightningDealFee,jdbcType=DECIMAL},
+      cost_of_advertising = #{costOfAdvertising,jdbcType=DECIMAL},
+      fba_inventory_reimbursement_customer_return = #{fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL},
+      fba_inventory_reimbursement_damaged_warehouse = #{fbaInventoryReimbursementDamagedWarehouse,jdbcType=DECIMAL},
+      fba_inventory_reimbursement_customer_service_issue = #{fbaInventoryReimbursementCustomerServiceIssue,jdbcType=DECIMAL},
+      fba_inventory_reimbursement_fee_correction = #{fbaInventoryReimbursementFeeCorrection,jdbcType=DECIMAL},
+      fba_inventory_reimbursement_general_adjustment = #{fbaInventoryReimbursementGeneralAdjustment,jdbcType=DECIMAL},
+      fba_inventory_reimbursement_lost_inbound = #{fbaInventoryReimbursementLostInbound,jdbcType=DECIMAL},
+      fba_inventory_reimbursement_lost_warehouse = #{fbaInventoryReimbursementLostWarehouse,jdbcType=DECIMAL},
+      non_subscription_fee_adjustment = #{nonSubscriptionFeeAdjustment,jdbcType=DECIMAL},
+      fba_inventory_placement_service_fee = #{fbaInventoryPlacementServiceFee,jdbcType=DECIMAL},
+      fba_customer_return_per_unit_fee = #{fbaCustomerReturnPerUnitFee,jdbcType=DECIMAL},
+      fba_inventory_storage_fee = #{fbaInventoryStorageFee,jdbcType=DECIMAL},
+      fba_long_term_storage_fee = #{fbaLongTermStorageFee,jdbcType=DECIMAL},
+      fba_removal_order_disposal_fee = #{fbaRemovalOrderDisposalFee,jdbcType=DECIMAL},
+      coupon_redemption_fee = #{couponRedemptionFee,jdbcType=DECIMAL},
+      early_reviewer_program_fee = #{earlyReviewerProgramFee,jdbcType=DECIMAL},
+      money_back = #{moneyBack,jdbcType=DECIMAL},
+      money_back_rate = #{moneyBackRate,jdbcType=DECIMAL},
+      main_business_income = #{mainBusinessIncome,jdbcType=DECIMAL},
+      total_effective_receipts = #{totalEffectiveReceipts,jdbcType=DECIMAL},
+      sellable_requested_quantity = #{sellableRequestedQuantity,jdbcType=INTEGER},
+      sellable_cost = #{sellableCost,jdbcType=DECIMAL},
+      unsellable_requested_quantity = #{unsellableRequestedQuantity,jdbcType=INTEGER},
+      unsellable_cost = #{unsellableCost,jdbcType=DECIMAL},
+      procurement_cost = #{procurementCost,jdbcType=DECIMAL},
+      fba_head_trip_cost = #{fbaHeadTripCost,jdbcType=DECIMAL},
+      head_deduction_fee = #{headDeductionFee,jdbcType=DECIMAL},
+      main_business_profit = #{mainBusinessProfit,jdbcType=DECIMAL},
+      gross_margin_on_sales = #{grossMarginOnSales,jdbcType=DECIMAL},
+      roi = #{roi,jdbcType=DECIMAL},
+      initial_quantity = #{initialQuantity,jdbcType=INTEGER},
+      initial_inventory_cost = #{initialInventoryCost,jdbcType=DECIMAL},
+      final_quantity = #{finalQuantity,jdbcType=INTEGER},
+      final_inventory_cost = #{finalInventoryCost,jdbcType=DECIMAL},
+      inventory_turnover = #{inventoryTurnover,jdbcType=DECIMAL},
+      manual_adjustment = #{manualAdjustment,jdbcType=DECIMAL},
+      new_product = #{newProduct,jdbcType=INTEGER},
+      refund_rate = #{refundRate,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

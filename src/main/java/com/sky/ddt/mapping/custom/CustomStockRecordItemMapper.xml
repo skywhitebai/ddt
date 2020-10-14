@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomStockRecordItemMapper">
+    <resultMap id="listStockRecordItemMap" type="com.sky.ddt.dto.stockRecordItem.response.ListStockRecordItemResponse"
+               extends="com.sky.ddt.dao.generate.StockRecordItemMapper.BaseResultMap">
+        <result column="shop_sku" property="shopSku"/>
+        <result column="salesman_real_name" property="salesmanRealName"/>
+        <result column="sku" property="sku"/>
+        <result column="imgUrl" property="imgUrl"/>
+        <result column="sku_id" property="skuId"/>
+    </resultMap>
+    <sql id="Custom_Column_List">
+        sri.id, sri.stock_record_id, sri.shop_sku_id, sri.stock_quantity, sri.stock_quantity_ky, sri.stock_quantity_kp,
+        stock_quantity_hy, sri.production_quantity, sri.create_by, sri.create_time, sri.update_by, sri.update_time
+    </sql>
+    <select id="listStockRecordItem"
+            resultMap="listStockRecordItemMap">
+        SELECT
+        <include refid="Custom_Column_List"/>,
+        ss.shop_sku,sku.sku,ss.sku_id,
+        u.real_name salesman_real_name
+        from stock_record_item sri
+        left join shop_sku ss on ss.shop_sku_id=sri.shop_sku_id
+        left join sku on ss.sku_id=sku.sku_id
+        left JOIN user u on ss.salesman_user_id=u.user_id
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="stockRecordId != null ">and sri.stock_record_id=#{stockRecordId}</if>
+            </trim>
+            <if test="shopSku != null and shopSku!=''">
+                and  ss.shop_sku like concat('%',#{shopSku},'%')</if>
+            <if test="sku != null and sku!=''">
+                and sku.sku like concat('%',#{sku},'%')</if>
+        </where>
+        ORDER BY shop_sku asc
+    </select>
+</mapper>

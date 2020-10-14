@@ -1,0 +1,23 @@
+package com.sky.ddt.dao.custom;
+
+import com.sky.ddt.dao.generate.WarehousingOrderMapper;
+import com.sky.ddt.dto.warehousingOrder.request.ListWarehousingOrderRequest;
+import com.sky.ddt.dto.warehousingOrder.response.ListWarehousingOrderResponse;
+
+import java.util.List;
+
+/**
+ * @author baixueping
+ * @description 入库单管理
+ * @date 2020/4/10 9:16
+ */
+public interface CustomWarehousingOrderMapper extends WarehousingOrderMapper {
+    /**
+     * @param
+     * @return
+     * @description 分页查询入库单信息
+     * @author baixueping
+     * @date 2020/4/10 16:13
+     */
+    List<ListWarehousingOrderResponse> listWarehousingOrder(ListWarehousingOrderRequest listWarehousingOrderRequest);
+}

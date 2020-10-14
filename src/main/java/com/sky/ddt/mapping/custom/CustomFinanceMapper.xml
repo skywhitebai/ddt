@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomFinanceMapper">
+
+    <resultMap id="FinanceListMap" type="com.sky.ddt.dto.finance.response.FinanceListResponse"
+               extends="com.sky.ddt.dao.generate.FinanceMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+    </resultMap>
+    <select id="financeList" parameterType="com.sky.ddt.dto.finance.request.FinanceListRequest" resultMap="FinanceListMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.FinanceMapper.Base_Column_List"/>
+            ,(select shop_name FROM shop where shop.shop_id=f.shop_id) shop_name
+        from finance f
+        <if test="_parameter != null">
+            <include refid="finance_Query_Where_Clause" />
+        </if>
+        order by f.month desc
+    </select>
+    <sql id="finance_Query_Where_Clause">
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopId != null">and f.shop_id=#{shopId}</if>
+                <if test="monthDate != null ">and f.month=#{monthDate}</if>
+            </trim>
+        </where>
+    </sql>
+
+    <select id="listFbaCustomerReturnPerUnitFeeNotExistSkuResponse"  resultType="com.sky.ddt.dto.finance.response.FbaCustomerReturnPerUnitFeeNotExistSkuResponse">
+        SELECT order_id orderId,total,date_time dateTime FROM `monthly_sales` ms WHERE ms.`type`='FBA Customer Return Fee' AND ms.description='FBA Customer Return Per Unit Fee'
+
+        AND NOT EXISTS(SELECT 1 FROM monthly_sales ms2 WHERE ms2.`order_id`=ms.order_id AND ms2.`type`='refund') AND ms.finance_id=#{financeId}
+    </select>
+</mapper>

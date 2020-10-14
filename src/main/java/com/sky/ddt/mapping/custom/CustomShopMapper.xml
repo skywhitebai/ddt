@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomShopMapper">
+    <select id="getCurrentUserShop" resultMap="com.sky.ddt.dao.generate.ShopMapper.BaseResultMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.ShopMapper.Base_Column_List"/>
+        from shop s where s.shop_id in (select su.shop_id from shop_user su where  su.user_id=#{userId}) and s.status=1
+    </select>
+    <select id="getOrderLastUpdatedAfter" resultType="java.util.Date">
+        select order_last_updated_after
+        from shop s where s.shop_id=#{shop_id}
+     </select>
+    <resultMap id="ListShopMap" type="com.sky.ddt.dto.shop.response.ShopListResponse">
+        <result column="shop_id" property="shopId" />
+        <result column="shop_name" property="shopName" />
+        <result column="shop_url" property="shopUrl" />
+        <result column="type" property="type" />
+        <result column="seller_id" property="sellerId" />
+        <result column="shop_marketplace_id" property="shopMarketplaceId" />
+        <result column="status" property="status" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+        <result column="remark" property="remark" />
+        <result column="shopUserRealNames" property="shopUserRealNames" />
+
+        <association property="shopSenderAddress" javaType="com.sky.ddt.entity.ShopSenderAddress">
+            <id column="shop_id" jdbcType="INTEGER" property="shopId" />
+            <result column="ship_to_country" jdbcType="VARCHAR" property="shipToCountry" />
+            <result column="address_name" jdbcType="VARCHAR" property="addressName" />
+            <result column="address_field_one" jdbcType="VARCHAR" property="addressFieldOne" />
+            <result column="address_field_two" jdbcType="VARCHAR" property="addressFieldTwo" />
+            <result column="address_city" jdbcType="VARCHAR" property="addressCity" />
+            <result column="address_country_code" jdbcType="VARCHAR" property="addressCountryCode" />
+            <result column="address_state_or_region" jdbcType="VARCHAR" property="addressStateOrRegion" />
+            <result column="address_postal_code" jdbcType="VARCHAR" property="addressPostalCode" />
+            <result column="address_district" jdbcType="VARCHAR" property="addressDistrict" />
+        </association>
+    </resultMap>
+    <select id="listShop" parameterType="com.sky.ddt.dto.shop.request.ShopListRequest" resultMap="ListShopMap">
+        select
+        s.shop_id,s.shop_name,s.shop_url,s.seller_id,s.shop_marketplace_id,s.status,s.create_time,s.update_time,s.remark,s.type,
+        ssa.ship_to_country, ssa.address_name, ssa.address_field_one, ssa.address_field_two, ssa.address_city,
+        ssa.address_country_code, ssa.address_state_or_region,ssa.address_postal_code, ssa.address_district,
+        (SELECT GROUP_CONCAT(u.real_name SEPARATOR ',') shopUserRealNames FROM `user` u,`shop_user` su WHERE u.user_id=su.user_id AND su.shop_id=s.shop_id) shopUserRealNames
+        from shop s
+        left join shop_sender_address ssa on s.shop_id=ssa.shop_id
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopName != null and shopName != '' ">and s.shop_name like concat('%',#{shopName},'%')</if>
+                <if test="sellerId != null and sellerId != '' ">and s.seller_id = #{sellerId}</if>
+                <if test="shopMarketplaceId != null and shopMarketplaceId != ''">and s.shop_marketplace_id
+                    =#{shopMarketplaceId}
+                </if>
+                <if test="status != null ">and s.status = #{status}</if>
+            </trim>
+        </where>
+        order by s.create_time
+    </select>
+    <select id="comboboxlist" resultType="com.sky.ddt.dto.shop.response.ShopComboboxResponse">
+        select shop_id shopId,shop_name shopName
+        from shop s
+        order by s.create_time
+    </select>
+    <select id="userShopComboboxlist" resultType="com.sky.ddt.dto.shop.response.ShopComboboxResponse">
+        select shop_id shopId,shop_name shopName
+        from shop s
+        where s.shop_id in(select shop_id from shop_user where user_id =#{userId})
+        order by s.create_time
+    </select>
+</mapper>

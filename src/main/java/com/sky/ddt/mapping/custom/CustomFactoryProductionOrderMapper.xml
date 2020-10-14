@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomFactoryProductionOrderMapper">
+    <resultMap id="listFactoryProductionOrderMap" type="com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderResponse"
+               extends="com.sky.ddt.dao.generate.FactoryProductionOrderMapper.BaseResultMap">
+        <result column="shopName" property="shopName"/>
+    </resultMap>
+    <select id="listFactoryProductionOrder"
+            resultMap="listFactoryProductionOrderMap">
+        SELECT
+        <include refid="com.sky.ddt.dao.generate.FactoryProductionOrderMapper.Base_Column_List"/>,
+        (select shop_name from shop s where s.shop_id=fpo.shop_id ) shopName
+        from factory_production_order fpo where fpo.shop_id in (select su.shop_id from shop_user su where su.user_id=#{currentUserId})
+        <if test="shopId != null ">and fpo.shop_id=#{shopId}</if>
+        <if test="id != null ">and fpo.id=#{id}</if>
+        <if test="stockRecordId != null ">and fpo.stock_record_id=#{stockRecordId}</if>
+        <if test="shopSku != null and shopSku!=''">
+            and EXISTS (select 1 from factory_production_order_shop_sku fposs,shop_sku ss where fposs.shop_sku_id=ss.shop_sku_id and ss.shop_sku like concat('%',#{shopSku},'%') and fposs.factory_production_order_id=fpo.id)</if>
+        <if test="sku != null and sku!=''">
+            and EXISTS (select 1 from factory_production_order_shop_sku fposs,shop_sku ss,sku where fposs.shop_sku_id=ss.shop_sku_id and ss.sku_id=sku.sku_id and sku.sku like concat('%',#{sku},'%') and fposs.factory_production_order_id=fpo.id)</if>
+        ORDER BY fpo.create_time desc
+    </select>
+
+</mapper>

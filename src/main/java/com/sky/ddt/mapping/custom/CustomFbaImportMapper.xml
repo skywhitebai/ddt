@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomFbaImportMapper">
+    <resultMap id="listFbaImportMap" type="com.sky.ddt.dto.fbaImport.response.ListFbaImportResponse"
+               extends="com.sky.ddt.dao.generate.FbaImportMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+    </resultMap>
+    <select id="listFbaImport" parameterType="com.sky.ddt.dto.fbaImport.request.ListFbaImportRequest" resultMap="listFbaImportMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.FbaImportMapper.Base_Column_List"/>
+        ,(select shop_name from shop s where fi.shop_id=s.shop_id) shop_name
+        from fba_import fi
+        <if test="_parameter != null">
+            <include refid="fbaImport_Query_Where_Clause" />
+        </if>
+        order by fi.sku
+    </select>
+
+    <sql id="fbaImport_Query_Where_Clause">
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopId != null">and fi.shop_id=#{shopId}</if>
+                <if test="sku != null and sku != '' ">and fi.sku like concat('%',#{sku},'%')</if>
+                <if test="fnsku != null and fnsku != '' ">and fi.fnsku like concat('%',#{fnsku},'%')</if>
+                <if test="asin != null and asin != '' ">and fi.asin like concat('%',#{asin},'%')</if>
+                <if test="userId != null ">and fi.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
+            </trim>
+        </where>
+    </sql>
+
+</mapper>

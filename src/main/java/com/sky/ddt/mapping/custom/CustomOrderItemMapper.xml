@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomOrderItemMapper" >
+    <select id="listByAmazonOrderId" parameterType="com.sky.ddt.dto.orderitem.request.OrderItemListByAmazonOrderIdRequest" resultMap="com.sky.ddt.dao.generate.OrderItemMapper.BaseResultMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.OrderItemMapper.Base_Column_List" />
+        from order_item oi
+        where amazon_order_id = #{amazonOrderId}
+    </select>
+</mapper>

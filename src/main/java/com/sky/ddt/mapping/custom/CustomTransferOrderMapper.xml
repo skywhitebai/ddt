@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomTransferOrderMapper">
+    <resultMap id="listTransferOrderMap"
+               type="com.sky.ddt.dto.transferOrder.response.ListTransferOrderResponse"
+               extends="com.sky.ddt.dao.generate.TransferOrderMapper.BaseResultMap">
+        <result column="shopNameFrom" property="shopNameFrom"/>
+        <result column="shopNameTo" property="shopNameTo"/>
+        <result column="transferQuantityTotal" property="transferQuantityTotal"/>
+    </resultMap>
+    <select id="listTransferOrder" parameterType="com.sky.ddt.dto.transferOrder.request.ListTransferOrderRequest"
+            resultMap="listTransferOrderMap">
+        select
+        tod.*
+        ,(select s.shop_name from shop s where tod.shop_id_from=s.shop_id) shopNameFrom
+        ,(select s.shop_name from shop s where tod.shop_id_to=s.shop_id) shopNameTo
+        ,ifnull((select sum(toss.transfer_quantity) from transfer_order_shop_sku toss where toss.transfer_order_id=tod.id),0) transferQuantityTotal
+        from transfer_order tod
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopIdFrom != null">and tod.shop_id_from =#{shopIdFrom}</if>
+                <if test="shopIdTo != null">and tod.shop_id_to =#{shopIdTo}</if>
+                <if test="createTimeStart != null ">and tod.create_time<![CDATA[>=]]> #{createTimeStart}</if>
+                <if test="createTimeEnd != null ">and tod.create_time <![CDATA[<]]>
+                    DATE_ADD(date(#{createTimeEnd}),INTERVAL 1 DAY)
+                </if>
+                <if test="transferTimeStart != null ">and tod.transfer_time<![CDATA[>=]]> #{transferTimeStart}</if>
+                <if test="transferTimeEnd != null ">and tod.transfer_time <![CDATA[<]]>
+                    DATE_ADD(date(#{transferTimeEnd}),INTERVAL 1 DAY)
+                </if>
+                <if test="batchNumber != null and batchNumber != '' ">and batch_number like
+                    concat('%',#{batchNumber},'%')
+                </if>
+                <if test="sku != null and sku != '' ">and
+                    EXISTS (select 1 from transfer_order_shop_sku toss,shop_sku ss,sku
+                    where toss.transfer_order_id=tod.id and toss.shop_sku_id_from=ss.shop_sku_id and ss.sku_id=sku.sku_id and sku.sku like concat('%',#{sku},'%'))
+                </if>
+                <if test="shopSkuFrom != null and shopSkuFrom != '' ">
+                    and exists (select 1 from transfer_order_shop_sku toss,shop_sku ss where toss.transfer_order_id=tod.id and toss.shop_sku_id_from=ss.shop_sku_id
+                    and ss.shop_sku like concat('%',#{shopSkuFrom},'%'))
+                </if>
+                <if test="shopSkuTo != null and shopSkuTo != '' ">
+                    and exists (select 1 from transfer_order_shop_sku toss,shop_sku ss where toss.transfer_order_id=tod.id and toss.shop_sku_id_to=ss.shop_sku_id
+                    and ss.shop_sku like concat('%',#{shopSkuTo},'%'))
+                </if>
+            </trim>
+        </where>
+        order by tod.update_time desc
+    </select>
+</mapper>

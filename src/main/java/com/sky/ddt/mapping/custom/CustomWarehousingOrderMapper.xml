@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomWarehousingOrderMapper">
+    <resultMap id="listWarehousingOrderMap"
+               type="com.sky.ddt.dto.warehousingOrder.response.ListWarehousingOrderResponse"
+               extends="com.sky.ddt.dao.generate.WarehousingOrderMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+        <result column="produceOrderBatchNumber" property="produceOrderBatchNumber"/>
+        <result column="warehousingQuantityTotal" property="warehousingQuantityTotal"/>
+    </resultMap>
+    <select id="listWarehousingOrder" parameterType="com.sky.ddt.dto.warehousingOrder.request.ListWarehousingOrderRequest"
+            resultMap="listWarehousingOrderMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.WarehousingOrderMapper.Base_Column_List"/>
+        ,(select s.shop_name from shop s where wo.shop_id=s.shop_id) shop_name
+        ,case when wo.produce_order_id is not null then(select batch_number from produce_order po WHERE
+        po.id=wo.produce_order_id) else null end produceOrderBatchNumber,
+        ifnull((select sum(woss.warehousing_quantity) from warehousing_order_shop_sku woss where woss.warehousing_order_id=wo.id),0) warehousingQuantityTotal
+        from warehousing_order wo
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopId != null">and shop_id =#{shopId}</if>
+                <if test="warehousingTimeStart != null ">and production_time<![CDATA[>=]]> #{productionTimeStart}</if>
+                <if test="warehousingTimeEnd != null ">and production_time <![CDATA[<]]>
+                    DATE_ADD(date(#{productionTimeEnd}),INTERVAL 1 DAY)
+                </if>
+                <if test="batchNumber != null and batchNumber != '' ">and batch_number like
+                    concat('%',#{batchNumber},'%')
+                </if>
+                <if test="shopSku != null and shopSku != '' ">
+                    and exists (select 1 from warehousing_order_shop_sku woss where woss.warehousing_order_id=wo.id and
+                    woss.shop_sku like concat('%',#{shopSku},'%'))
+                </if>
+                <if test="produceOrderBatchNumber != null and produceOrderBatchNumber != '' ">
+                    and exists (select 1 from produce_order po where wo.produce_order_id=po.id and po.batch_number like
+                    concat('%',#{produceOrderBatchNumber},'%'))
+                </if>
+                <if test="status != null">and status=#{status}</if>
+            </trim>
+        </where>
+        order by wo.create_time desc
+    </select>
+</mapper>

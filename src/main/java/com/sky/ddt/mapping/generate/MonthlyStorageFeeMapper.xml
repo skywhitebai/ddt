@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.MonthlyStorageFeeMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.MonthlyStorageFee">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="finance_id" jdbcType="INTEGER" property="financeId" />
+    <result column="asin" jdbcType="VARCHAR" property="asin" />
+    <result column="fnsku" jdbcType="VARCHAR" property="fnsku" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="shop_sku_id" jdbcType="INTEGER" property="shopSkuId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="fulfillment_center" jdbcType="VARCHAR" property="fulfillmentCenter" />
+    <result column="country_code" jdbcType="VARCHAR" property="countryCode" />
+    <result column="longest_side" jdbcType="DECIMAL" property="longestSide" />
+    <result column="median_side" jdbcType="DECIMAL" property="medianSide" />
+    <result column="shortest_side" jdbcType="DECIMAL" property="shortestSide" />
+    <result column="measurement_units" jdbcType="VARCHAR" property="measurementUnits" />
+    <result column="weight" jdbcType="DECIMAL" property="weight" />
+    <result column="weight_units" jdbcType="VARCHAR" property="weightUnits" />
+    <result column="item_volume" jdbcType="DECIMAL" property="itemVolume" />
+    <result column="volume_units" jdbcType="VARCHAR" property="volumeUnits" />
+    <result column="product_size_tier" jdbcType="VARCHAR" property="productSizeTier" />
+    <result column="average_quantity_on_hand" jdbcType="DECIMAL" property="averageQuantityOnHand" />
+    <result column="average_quantity_pending_removal" jdbcType="DECIMAL" property="averageQuantityPendingRemoval" />
+    <result column="estimated_total_item_volume" jdbcType="DECIMAL" property="estimatedTotalItemVolume" />
+    <result column="month_of_charge" jdbcType="VARCHAR" property="monthOfCharge" />
+    <result column="storage_rate" jdbcType="DECIMAL" property="storageRate" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="estimated_monthly_storage_fee" jdbcType="DECIMAL" property="estimatedMonthlyStorageFee" />
+    <result column="dangerous_goods_storage_type" jdbcType="VARCHAR" property="dangerousGoodsStorageType" />
+    <result column="eligible_for_inventory_discount" jdbcType="BIT" property="eligibleForInventoryDiscount" />
+    <result column="qualifies_for_inventory_discount" jdbcType="BIT" property="qualifiesForInventoryDiscount" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, finance_id, asin, fnsku, sku, shop_sku_id, product_name, fulfillment_center, 
+    country_code, longest_side, median_side, shortest_side, measurement_units, weight, 
+    weight_units, item_volume, volume_units, product_size_tier, average_quantity_on_hand, 
+    average_quantity_pending_removal, estimated_total_item_volume, month_of_charge, storage_rate, 
+    currency, estimated_monthly_storage_fee, dangerous_goods_storage_type, eligible_for_inventory_discount, 
+    qualifies_for_inventory_discount, create_time, create_by
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.MonthlyStorageFeeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from monthly_storage_fee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from monthly_storage_fee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from monthly_storage_fee
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.MonthlyStorageFeeExample">
+    delete from monthly_storage_fee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.MonthlyStorageFee">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into monthly_storage_fee (finance_id, asin, fnsku, 
+      sku, shop_sku_id, product_name, 
+      fulfillment_center, country_code, longest_side, 
+      median_side, shortest_side, measurement_units, 
+      weight, weight_units, item_volume, 
+      volume_units, product_size_tier, average_quantity_on_hand, 
+      average_quantity_pending_removal, estimated_total_item_volume, 
+      month_of_charge, storage_rate, currency, 
+      estimated_monthly_storage_fee, dangerous_goods_storage_type, 
+      eligible_for_inventory_discount, qualifies_for_inventory_discount, 
+      create_time, create_by)
+    values (#{financeId,jdbcType=INTEGER}, #{asin,jdbcType=VARCHAR}, #{fnsku,jdbcType=VARCHAR}, 
+      #{sku,jdbcType=VARCHAR}, #{shopSkuId,jdbcType=INTEGER}, #{productName,jdbcType=VARCHAR}, 
+      #{fulfillmentCenter,jdbcType=VARCHAR}, #{countryCode,jdbcType=VARCHAR}, #{longestSide,jdbcType=DECIMAL}, 
+      #{medianSide,jdbcType=DECIMAL}, #{shortestSide,jdbcType=DECIMAL}, #{measurementUnits,jdbcType=VARCHAR}, 
+      #{weight,jdbcType=DECIMAL}, #{weightUnits,jdbcType=VARCHAR}, #{itemVolume,jdbcType=DECIMAL}, 
+      #{volumeUnits,jdbcType=VARCHAR}, #{productSizeTier,jdbcType=VARCHAR}, #{averageQuantityOnHand,jdbcType=DECIMAL}, 
+      #{averageQuantityPendingRemoval,jdbcType=DECIMAL}, #{estimatedTotalItemVolume,jdbcType=DECIMAL}, 
+      #{monthOfCharge,jdbcType=VARCHAR}, #{storageRate,jdbcType=DECIMAL}, #{currency,jdbcType=VARCHAR}, 
+      #{estimatedMonthlyStorageFee,jdbcType=DECIMAL}, #{dangerousGoodsStorageType,jdbcType=VARCHAR}, 
+      #{eligibleForInventoryDiscount,jdbcType=BIT}, #{qualifiesForInventoryDiscount,jdbcType=BIT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.MonthlyStorageFee">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into monthly_storage_fee
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="financeId != null">
+        finance_id,
+      </if>
+      <if test="asin != null">
+        asin,
+      </if>
+      <if test="fnsku != null">
+        fnsku,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="shopSkuId != null">
+        shop_sku_id,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="fulfillmentCenter != null">
+        fulfillment_center,
+      </if>
+      <if test="countryCode != null">
+        country_code,
+      </if>
+      <if test="longestSide != null">
+        longest_side,
+      </if>
+      <if test="medianSide != null">
+        median_side,
+      </if>
+      <if test="shortestSide != null">
+        shortest_side,
+      </if>
+      <if test="measurementUnits != null">
+        measurement_units,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="weightUnits != null">
+        weight_units,
+      </if>
+      <if test="itemVolume != null">
+        item_volume,
+      </if>
+      <if test="volumeUnits != null">
+        volume_units,
+      </if>
+      <if test="productSizeTier != null">
+        product_size_tier,
+      </if>
+      <if test="averageQuantityOnHand != null">
+        average_quantity_on_hand,
+      </if>
+      <if test="averageQuantityPendingRemoval != null">
+        average_quantity_pending_removal,
+      </if>
+      <if test="estimatedTotalItemVolume != null">
+        estimated_total_item_volume,
+      </if>
+      <if test="monthOfCharge != null">
+        month_of_charge,
+      </if>
+      <if test="storageRate != null">
+        storage_rate,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="estimatedMonthlyStorageFee != null">
+        estimated_monthly_storage_fee,
+      </if>
+      <if test="dangerousGoodsStorageType != null">
+        dangerous_goods_storage_type,
+      </if>
+      <if test="eligibleForInventoryDiscount != null">
+        eligible_for_inventory_discount,
+      </if>
+      <if test="qualifiesForInventoryDiscount != null">
+        qualifies_for_inventory_discount,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="financeId != null">
+        #{financeId,jdbcType=INTEGER},
+      </if>
+      <if test="asin != null">
+        #{asin,jdbcType=VARCHAR},
+      </if>
+      <if test="fnsku != null">
+        #{fnsku,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSkuId != null">
+        #{shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="fulfillmentCenter != null">
+        #{fulfillmentCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="countryCode != null">
+        #{countryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="longestSide != null">
+        #{longestSide,jdbcType=DECIMAL},
+      </if>
+      <if test="medianSide != null">
+        #{medianSide,jdbcType=DECIMAL},
+      </if>
+      <if test="shortestSide != null">
+        #{shortestSide,jdbcType=DECIMAL},
+      </if>
+      <if test="measurementUnits != null">
+        #{measurementUnits,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="weightUnits != null">
+        #{weightUnits,jdbcType=VARCHAR},
+      </if>
+      <if test="itemVolume != null">
+        #{itemVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="volumeUnits != null">
+        #{volumeUnits,jdbcType=VARCHAR},
+      </if>
+      <if test="productSizeTier != null">
+        #{productSizeTier,jdbcType=VARCHAR},
+      </if>
+      <if test="averageQuantityOnHand != null">
+        #{averageQuantityOnHand,jdbcType=DECIMAL},
+      </if>
+      <if test="averageQuantityPendingRemoval != null">
+        #{averageQuantityPendingRemoval,jdbcType=DECIMAL},
+      </if>
+      <if test="estimatedTotalItemVolume != null">
+        #{estimatedTotalItemVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="monthOfCharge != null">
+        #{monthOfCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="storageRate != null">
+        #{storageRate,jdbcType=DECIMAL},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="estimatedMonthlyStorageFee != null">
+        #{estimatedMonthlyStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="dangerousGoodsStorageType != null">
+        #{dangerousGoodsStorageType,jdbcType=VARCHAR},
+      </if>
+      <if test="eligibleForInventoryDiscount != null">
+        #{eligibleForInventoryDiscount,jdbcType=BIT},
+      </if>
+      <if test="qualifiesForInventoryDiscount != null">
+        #{qualifiesForInventoryDiscount,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.MonthlyStorageFeeExample" resultType="java.lang.Long">
+    select count(*) from monthly_storage_fee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update monthly_storage_fee
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.financeId != null">
+        finance_id = #{record.financeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.asin != null">
+        asin = #{record.asin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fnsku != null">
+        fnsku = #{record.fnsku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sku != null">
+        sku = #{record.sku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopSkuId != null">
+        shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.productName != null">
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fulfillmentCenter != null">
+        fulfillment_center = #{record.fulfillmentCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="record.countryCode != null">
+        country_code = #{record.countryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.longestSide != null">
+        longest_side = #{record.longestSide,jdbcType=DECIMAL},
+      </if>
+      <if test="record.medianSide != null">
+        median_side = #{record.medianSide,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shortestSide != null">
+        shortest_side = #{record.shortestSide,jdbcType=DECIMAL},
+      </if>
+      <if test="record.measurementUnits != null">
+        measurement_units = #{record.measurementUnits,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weight != null">
+        weight = #{record.weight,jdbcType=DECIMAL},
+      </if>
+      <if test="record.weightUnits != null">
+        weight_units = #{record.weightUnits,jdbcType=VARCHAR},
+      </if>
+      <if test="record.itemVolume != null">
+        item_volume = #{record.itemVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="record.volumeUnits != null">
+        volume_units = #{record.volumeUnits,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productSizeTier != null">
+        product_size_tier = #{record.productSizeTier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.averageQuantityOnHand != null">
+        average_quantity_on_hand = #{record.averageQuantityOnHand,jdbcType=DECIMAL},
+      </if>
+      <if test="record.averageQuantityPendingRemoval != null">
+        average_quantity_pending_removal = #{record.averageQuantityPendingRemoval,jdbcType=DECIMAL},
+      </if>
+      <if test="record.estimatedTotalItemVolume != null">
+        estimated_total_item_volume = #{record.estimatedTotalItemVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="record.monthOfCharge != null">
+        month_of_charge = #{record.monthOfCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="record.storageRate != null">
+        storage_rate = #{record.storageRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.currency != null">
+        currency = #{record.currency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.estimatedMonthlyStorageFee != null">
+        estimated_monthly_storage_fee = #{record.estimatedMonthlyStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="record.dangerousGoodsStorageType != null">
+        dangerous_goods_storage_type = #{record.dangerousGoodsStorageType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.eligibleForInventoryDiscount != null">
+        eligible_for_inventory_discount = #{record.eligibleForInventoryDiscount,jdbcType=BIT},
+      </if>
+      <if test="record.qualifiesForInventoryDiscount != null">
+        qualifies_for_inventory_discount = #{record.qualifiesForInventoryDiscount,jdbcType=BIT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update monthly_storage_fee
+    set id = #{record.id,jdbcType=INTEGER},
+      finance_id = #{record.financeId,jdbcType=INTEGER},
+      asin = #{record.asin,jdbcType=VARCHAR},
+      fnsku = #{record.fnsku,jdbcType=VARCHAR},
+      sku = #{record.sku,jdbcType=VARCHAR},
+      shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      fulfillment_center = #{record.fulfillmentCenter,jdbcType=VARCHAR},
+      country_code = #{record.countryCode,jdbcType=VARCHAR},
+      longest_side = #{record.longestSide,jdbcType=DECIMAL},
+      median_side = #{record.medianSide,jdbcType=DECIMAL},
+      shortest_side = #{record.shortestSide,jdbcType=DECIMAL},
+      measurement_units = #{record.measurementUnits,jdbcType=VARCHAR},
+      weight = #{record.weight,jdbcType=DECIMAL},
+      weight_units = #{record.weightUnits,jdbcType=VARCHAR},
+      item_volume = #{record.itemVolume,jdbcType=DECIMAL},
+      volume_units = #{record.volumeUnits,jdbcType=VARCHAR},
+      product_size_tier = #{record.productSizeTier,jdbcType=VARCHAR},
+      average_quantity_on_hand = #{record.averageQuantityOnHand,jdbcType=DECIMAL},
+      average_quantity_pending_removal = #{record.averageQuantityPendingRemoval,jdbcType=DECIMAL},
+      estimated_total_item_volume = #{record.estimatedTotalItemVolume,jdbcType=DECIMAL},
+      month_of_charge = #{record.monthOfCharge,jdbcType=VARCHAR},
+      storage_rate = #{record.storageRate,jdbcType=DECIMAL},
+      currency = #{record.currency,jdbcType=VARCHAR},
+      estimated_monthly_storage_fee = #{record.estimatedMonthlyStorageFee,jdbcType=DECIMAL},
+      dangerous_goods_storage_type = #{record.dangerousGoodsStorageType,jdbcType=VARCHAR},
+      eligible_for_inventory_discount = #{record.eligibleForInventoryDiscount,jdbcType=BIT},
+      qualifies_for_inventory_discount = #{record.qualifiesForInventoryDiscount,jdbcType=BIT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.MonthlyStorageFee">
+    update monthly_storage_fee
+    <set>
+      <if test="financeId != null">
+        finance_id = #{financeId,jdbcType=INTEGER},
+      </if>
+      <if test="asin != null">
+        asin = #{asin,jdbcType=VARCHAR},
+      </if>
+      <if test="fnsku != null">
+        fnsku = #{fnsku,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSkuId != null">
+        shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="fulfillmentCenter != null">
+        fulfillment_center = #{fulfillmentCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="countryCode != null">
+        country_code = #{countryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="longestSide != null">
+        longest_side = #{longestSide,jdbcType=DECIMAL},
+      </if>
+      <if test="medianSide != null">
+        median_side = #{medianSide,jdbcType=DECIMAL},
+      </if>
+      <if test="shortestSide != null">
+        shortest_side = #{shortestSide,jdbcType=DECIMAL},
+      </if>
+      <if test="measurementUnits != null">
+        measurement_units = #{measurementUnits,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="weightUnits != null">
+        weight_units = #{weightUnits,jdbcType=VARCHAR},
+      </if>
+      <if test="itemVolume != null">
+        item_volume = #{itemVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="volumeUnits != null">
+        volume_units = #{volumeUnits,jdbcType=VARCHAR},
+      </if>
+      <if test="productSizeTier != null">
+        product_size_tier = #{productSizeTier,jdbcType=VARCHAR},
+      </if>
+      <if test="averageQuantityOnHand != null">
+        average_quantity_on_hand = #{averageQuantityOnHand,jdbcType=DECIMAL},
+      </if>
+      <if test="averageQuantityPendingRemoval != null">
+        average_quantity_pending_removal = #{averageQuantityPendingRemoval,jdbcType=DECIMAL},
+      </if>
+      <if test="estimatedTotalItemVolume != null">
+        estimated_total_item_volume = #{estimatedTotalItemVolume,jdbcType=DECIMAL},
+      </if>
+      <if test="monthOfCharge != null">
+        month_of_charge = #{monthOfCharge,jdbcType=VARCHAR},
+      </if>
+      <if test="storageRate != null">
+        storage_rate = #{storageRate,jdbcType=DECIMAL},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="estimatedMonthlyStorageFee != null">
+        estimated_monthly_storage_fee = #{estimatedMonthlyStorageFee,jdbcType=DECIMAL},
+      </if>
+      <if test="dangerousGoodsStorageType != null">
+        dangerous_goods_storage_type = #{dangerousGoodsStorageType,jdbcType=VARCHAR},
+      </if>
+      <if test="eligibleForInventoryDiscount != null">
+        eligible_for_inventory_discount = #{eligibleForInventoryDiscount,jdbcType=BIT},
+      </if>
+      <if test="qualifiesForInventoryDiscount != null">
+        qualifies_for_inventory_discount = #{qualifiesForInventoryDiscount,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.MonthlyStorageFee">
+    update monthly_storage_fee
+    set finance_id = #{financeId,jdbcType=INTEGER},
+      asin = #{asin,jdbcType=VARCHAR},
+      fnsku = #{fnsku,jdbcType=VARCHAR},
+      sku = #{sku,jdbcType=VARCHAR},
+      shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
+      product_name = #{productName,jdbcType=VARCHAR},
+      fulfillment_center = #{fulfillmentCenter,jdbcType=VARCHAR},
+      country_code = #{countryCode,jdbcType=VARCHAR},
+      longest_side = #{longestSide,jdbcType=DECIMAL},
+      median_side = #{medianSide,jdbcType=DECIMAL},
+      shortest_side = #{shortestSide,jdbcType=DECIMAL},
+      measurement_units = #{measurementUnits,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DECIMAL},
+      weight_units = #{weightUnits,jdbcType=VARCHAR},
+      item_volume = #{itemVolume,jdbcType=DECIMAL},
+      volume_units = #{volumeUnits,jdbcType=VARCHAR},
+      product_size_tier = #{productSizeTier,jdbcType=VARCHAR},
+      average_quantity_on_hand = #{averageQuantityOnHand,jdbcType=DECIMAL},
+      average_quantity_pending_removal = #{averageQuantityPendingRemoval,jdbcType=DECIMAL},
+      estimated_total_item_volume = #{estimatedTotalItemVolume,jdbcType=DECIMAL},
+      month_of_charge = #{monthOfCharge,jdbcType=VARCHAR},
+      storage_rate = #{storageRate,jdbcType=DECIMAL},
+      currency = #{currency,jdbcType=VARCHAR},
+      estimated_monthly_storage_fee = #{estimatedMonthlyStorageFee,jdbcType=DECIMAL},
+      dangerous_goods_storage_type = #{dangerousGoodsStorageType,jdbcType=VARCHAR},
+      eligible_for_inventory_discount = #{eligibleForInventoryDiscount,jdbcType=BIT},
+      qualifies_for_inventory_discount = #{qualifiesForInventoryDiscount,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

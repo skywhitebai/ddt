@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomCheckOrderShopSkuMapper">
+    <resultMap id="ListCheckOrderShopSkuMap"
+               type="com.sky.ddt.dto.checkOrderShopSku.response.ListCheckOrderShopSkuResponse"
+               extends="com.sky.ddt.dao.generate.CheckOrderShopSkuMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+        <result column="sku" property="sku"/>
+    </resultMap>
+    <select id="listCheckOrderShopSku"
+            parameterType="com.sky.ddt.dto.checkOrderShopSku.request.ListCheckOrderShopSkuRequest"
+            resultMap="ListCheckOrderShopSkuMap">
+        select
+        coss.id, coss.check_order_id, coss.shop_sku_id, coss.shop_sku, coss.inventory_quantity_new,coss.remark, coss.create_time, coss.create_by, coss.update_time, coss.update_by
+        ,s.shop_name
+        ,sku.sku
+        from check_order_shop_sku coss
+        left join check_order co on coss.check_order_id=co.id
+        left join shop_sku ss on coss.shop_sku_id=ss.shop_sku_id
+        left join sku on sku.sku_id=ss.sku_id
+        left join shop s on co.shop_id=s.shop_id
+        where coss.check_order_id=#{checkOrderId}
+        order by coss.shop_sku
+    </select>
+</mapper>

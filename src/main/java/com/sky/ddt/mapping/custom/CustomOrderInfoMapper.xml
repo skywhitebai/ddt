@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomOrderInfoMapper" >
+    <resultMap id="OrderListMap" type="com.sky.ddt.dto.order.response.OrderListResponse" extends="com.sky.ddt.dao.generate.OrderInfoMapper.BaseResultMap">
+        <result column="shop_name" property="shopName" />
+    </resultMap>
+    <select id="orderList" parameterType="com.sky.ddt.dto.order.request.OrderListRequest" resultMap="OrderListMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.OrderInfoMapper.Base_Column_List" />
+        ,(select GROUP_CONCAT(seller_SKU)  from order_item oit where oit.amazon_order_id=oi.amazon_order_id group by amazon_order_id)sellerSku,(select s.shop_name from shop s where oi.shop_id=s.id) shop_name
+        from order_info oi
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopId != null">and shop_id =#{shopId}</if>
+                <if test="amazonOrderId != null and amazonOrderId != '' ">and amazon_order_id = #{amazonOrderId}</if>
+                <if test="purchaseDateStart != null ">and  purchase_date <![CDATA[>=]]> #{purchaseDateStart}</if>
+                <if test="purchaseDateEnd != null ">and  purchase_date <![CDATA[<=]]> #{purchaseDateEnd}</if>
+                <if test="lastUpdateDateStart != null">and  last_update_date <![CDATA[>=]]> #{lastUpdateDateStart}</if>
+                <if test="lastUpdateDateEnd != null">and  last_update_date <![CDATA[<=]]> #{lastUpdateDateEnd}</if>
+                <if test="orderStatus != null and orderStatus != '' ">and  orderStatus=#{orderStatus}</if>
+                <if test="marketplaceId != null and marketplaceId != '' ">and  marketplace_id=#{marketplaceId}</if>
+                <if test="buyerName != null and buyerName != '' ">and  buyer_name=#{buyerName}</if>
+            </trim>
+        </where>
+        order by oi.last_update_date desc
+    </select>
+</mapper>

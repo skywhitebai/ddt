@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomStockRecordMapper">
+    <resultMap id="listStockRecordMap" type="com.sky.ddt.dto.stockRecord.response.ListStockRecordResponse"
+               extends="com.sky.ddt.dao.generate.StockRecordMapper.BaseResultMap">
+        <result column="shopName" property="shopName"/>
+    </resultMap>
+    <select id="listStockRecord"
+            resultMap="listStockRecordMap">
+        SELECT
+        <include refid="com.sky.ddt.dao.generate.StockRecordMapper.Base_Column_List"/>,
+        (select shop_name from shop s where s.shop_id=sr.shop_id ) shopName
+        from stock_record sr where sr.shop_id in (select su.shop_id from shop_user su where su.user_id=#{userId})
+        <if test="shopId != null ">and sr.shop_id=#{shopId}</if>
+        <if test="id != null ">and sr.id=#{id}</if>
+        <if test="shopSku != null and shopSku!=''">
+            and EXISTS (select 1 from stock_record_item sri,shop_sku ss where sri.shop_sku_id=ss.shop_sku_id and ss.shop_sku like concat('%',#{shopSku},'%') and sri.stock_record_id=sr.id)</if>
+        <if test="sku != null and sku!=''">
+            and EXISTS (select 1 from stock_record_item sri,shop_sku ss,sku where sri.shop_sku_id=ss.shop_sku_id and ss.sku_id=sku.sku_id and sku.sku like concat('%',#{sku},'%') and sri.stock_record_id=sr.id)</if>
+        ORDER BY sr.create_time desc
+    </select>
+    <select id="listExportStockRecord"
+            resultType="com.sky.ddt.dto.stockRecord.response.ExportStockRecordResponse">
+        SELECT
+        ss.shop_sku shopSku,sku.sku,
+        case #{type} when 'ky' then sri.stock_quantity_ky when 'kp' then sri.stock_quantity_kp when 'hy' then sri.stock_quantity_hy when 'production' then sri.production_quantity else  sri.stock_quantity end stockQuantity
+        from stock_record_item sri left join shop_sku ss on sri.shop_sku_id=ss.shop_sku_id
+        left join sku on ss.sku_id=sku.sku_id
+        where sri.stock_record_id=#{stockRecordId}
+        <if test="type!=null and type=='ky'">and sri.stock_quantity_ky!=0</if>
+        <if test="type!=null and type=='kp'">and sri.stock_quantity_kp!=0</if>
+        <if test="type!=null and type=='hy'">and sri.stock_quantity_hy!=0</if>
+        <if test="type!=null and type=='production'">and sri.production_quantity!=0</if>
+        <if test="type==null or type==''">and sri.stock_quantity!=0</if>
+        order by ss.shop_sku
+    </select>
+
+</mapper>

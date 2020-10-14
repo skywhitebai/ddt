@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomInventoryChangeRecordMapper">
+    <resultMap id="listInventoryChangeRecordMap"
+               type="com.sky.ddt.dto.inventoryChangeRecord.response.ListInventoryChangeRecordResponse"
+               extends="com.sky.ddt.dao.generate.InventoryChangeRecordMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+        <result column="shop_sku" property="shopSku"/>
+        <result column="createByRealName" property="createByRealName"/>
+        <result column="batch_number" property="batchNumber"/>
+    </resultMap>
+    <select id="listInventoryChangeRecord" parameterType="com.sky.ddt.dto.inventoryChangeRecord.request.ListInventoryChangeRecordRequest"
+            resultMap="listInventoryChangeRecordMap">
+        select
+        icr.id, icr.shop_sku_id, icr.inventory_quantity_old, icr.inventory_quantity_new, icr.modified_quantity, icr.
+        change_type, icr.entity_id, icr.remark, icr.create_time, icr.create_by, icr.update_time, icr.update_by
+        ,s.shop_name,u.real_name createByRealName,ss.shop_sku,
+        case change_type when 1 then (select batch_number from warehousing_order wo where wo.id=icr.main_entity_id)
+        when 2 then (select batch_number from check_order co where co.id=icr.main_entity_id)
+        when 4 then (select batch_number from transfer_order tod where tod.id=icr.main_entity_id)
+        when 5 then (select batch_number from transfer_order tod where tod.id=icr.main_entity_id)
+        when 3 then (select batch_number from outbound_order oo where oo.id=icr.main_entity_id) end batch_number
+        from inventory_change_record icr
+        left JOIN shop_sku ss on icr.shop_sku_id=ss.shop_sku_id
+        left JOIN shop s on ss.shop_id=s.shop_id
+        left join `user` u on u.user_id=icr.create_by
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopId != null">and s.shop_id =#{shopId}</if>
+                <if test="createTimeStart != null ">and create_time<![CDATA[>=]]> #{createTimeStart}</if>
+                <if test="createTimeEnd != null ">and create_time <![CDATA[<]]>
+                    DATE_ADD(date(#{createTimeEnd}),INTERVAL 1 DAY)
+                </if>
+                <if test="shopSku != null and shopSku != '' ">
+                    and ss.shop_sku like concat('%',#{shopSku},'%')
+                </if>
+                <if test="createBy != null">and create_by=#{createBy}</if>
+            </trim>
+        </where>
+        order by icr.create_time desc
+    </select>
+</mapper>

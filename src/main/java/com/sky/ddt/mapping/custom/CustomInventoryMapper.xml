@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomInventoryMapper">
+    <resultMap id="InventoryListMap" type="com.sky.ddt.dto.inventory.response.InventoryListResponse"
+               extends="com.sky.ddt.dao.generate.InventoryMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+    </resultMap>
+    <select id="inventoryList" parameterType="com.sky.ddt.dto.inventory.request.InventoryListRequest"
+            resultMap="InventoryListMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.InventoryMapper.Base_Column_List"/>
+        ,(select s.shop_name from shop s where it.shop_id=s.shop_id) shop_name
+        from inventory it
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopId != null">and shop_id =#{shopId}</if>
+                <if test="sellerSku != null and sellerSku != '' ">and seller_sku=#{sellerSku}</if>
+            </trim>
+        </where>
+    </select>
+    <select id="listShopInventoryInfo" parameterType="com.sky.ddt.dto.inventory.request.InventoryListRequest"
+            resultType="com.sky.ddt.dto.inventory.response.ShopInventoryInfoResponse">
+        SELECT (SELECT shop_name FROM `shop` WHERE id=#{shopId}) shopName,sku.sku_warehouse skuWarehouse, i.`seller_sku`
+        sellerSku ,IFNULL(salesForTheLast7Days,0) salesForTheLast7Days,IFNULL(salesForTheLast14Days,0)
+        salesForTheLast14Days,IFNULL(salesForTheLast21Days,0) salesForTheLast21Days,IFNULL(salesForTheLast28Days,0)
+        salesForTheLast28Days,IFNULL(i.total_supply_quantity,0)
+        totalSupplyQuantity
+        FROM `inventory` i LEFT JOIN
+        (SELECT item.seller_sku,SUM(CASE WHEN oi.purchase_date>=DATE_SUB(DATE(NOW()),INTERVAL 8 DAY) THEN
+        item.quantity_ordered ELSE 0 END) salesForTheLast7Days
+        ,SUM(CASE WHEN oi.purchase_date>=DATE_SUB(DATE(NOW()),INTERVAL 15 DAY) THEN item.quantity_ordered ELSE 0 END)
+        salesForTheLast14Days
+        ,SUM(CASE WHEN oi.purchase_date>=DATE_SUB(DATE(NOW()),INTERVAL 22 DAY) THEN item.quantity_ordered ELSE 0 END)
+        salesForTheLast21Days
+        ,SUM(CASE WHEN oi.purchase_date>=DATE_SUB(DATE(NOW()),INTERVAL 29 DAY) THEN item.quantity_ordered ELSE 0 END)
+        salesForTheLast28Days
+        FROM order_info oi ,`order_item` item
+        WHERE oi.`amazon_order_id`=item.amazon_order_id AND oi.`shop_id`=#{shopId}
+        <if test="sellerSku != null and sellerSku != ''">and item.seller_sku =#{sellerSku}</if>
+        AND oi.purchase_date>=DATE_SUB(DATE(NOW()),INTERVAL 29 DAY) AND oi.purchase_date<![CDATA[<]]>
+        DATE_SUB(DATE(NOW()),INTERVAL 1 DAY)
+        GROUP BY item.seller_sku) sellerInfo
+        ON i.seller_sku=sellerInfo.seller_sku
+        LEFT JOIN `sku_info` sku ON i.seller_sku=sku.sku_seller
+        WHERE i.`shop_id`=#{shopId}
+        order by i.seller_sku
+    </select>
+</mapper>

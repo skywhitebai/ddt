@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomSkuCostPriceHisMapper">
+    <resultMap id="listMap" type="com.sky.ddt.dto.skuCostPriceHis.response.ListSkuCostPriceHisResponse"
+               extends="com.sky.ddt.dao.generate.SkuCostPriceHisMapper.BaseResultMap">
+        <result column="createUserName" property="createUserName"/>
+        <result column="sku" property="sku"/>
+    </resultMap>
+    <select id="list" parameterType="com.sky.ddt.dto.skuCostPriceHis.request.ListSkuCostPriceHisRequest" resultMap="listMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.SkuCostPriceHisMapper.Base_Column_List" />,(select u.real_name from user u where scph.create_by=u.user_id )createUserName,(select sku from sku where sku.sku_id=scph.sku_id) sku
+        from sku_cost_price_his scph
+        where scph.sku_id=#{skuId}
+        order by scph.create_time desc
+    </select>
+
+</mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomRightMapper">
+    <select id="userHasMenu" resultType="java.lang.Boolean">
+        SELECT case when EXISTS
+        (SELECT 1 FROM `sys_user_role` ur,`sys_role_right` rr ,`sys_right` r
+WHERE ur.`role_id`=rr.`role_id` AND rr.`right_id`=r.`id` AND ur.`user_id`=#{userId} AND r.`right_str`=#{right}) then 1 else 0 end;
+    </select>
+    <select id="userRightList" resultType="java.lang.String">
+        SELECT DISTINCT right_str rightStr
+        FROM `sys_user_role` ur,`sys_role_right` rr ,`sys_right` r
+        WHERE ur.`role_id`=rr.`role_id` AND rr.`right_id`=r.`id` AND ur.`user_id`=#{userId}
+        <if test="rightStrList != null and rightStrList.size()>0">
+            and r.right_str in
+            <foreach close=")" collection="rightStrList" item="rightStr" open="(" separator=",">
+                #{rightStr}
+            </foreach>
+        </if>
+    </select>
+
+</mapper>

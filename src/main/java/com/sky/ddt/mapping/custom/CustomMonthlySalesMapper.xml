@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomMonthlySalesMapper">
+    <select id="listFbaCustomerReturnFee" resultType="com.sky.ddt.dto.finance.response.FbaCustomerReturnFeeResponse">
+        SELECT ms.order_id orderId,ms.total
+        FROM `monthly_sales` ms WHERE ms.`finance_id`=#{financeId} AND ms.`type`='FBA Customer Return Fee' AND ms.description='FBA Customer Return Per Unit Fee'
+    </select>
+    <select id="listFbaCustomerReturnFeeSku" resultType="com.sky.ddt.dto.finance.response.FbaCustomerReturnSkuResponse">
+        SELECT ms.`order_id` orderId,ms.`shop_sku_id` shopSkuId,ms.`sku` shopSku FROM monthly_sales ms,`shop_sku`ss WHERE
+        ms.`shop_sku_id`=ss.shop_sku_id AND ss.shop_id=#{shopId} AND ms.`type`='refund' and
+        EXISTS(SELECT 1 FROM monthly_sales ms2 WHERE ms2.`type`='FBA Customer Return Fee' AND ms2.description='FBA Customer Return Per Unit Fee' AND ms2.`order_id`=ms.`order_id` AND ms2.`finance_id`=#{financeId} )
+    </select>
+
+</mapper>

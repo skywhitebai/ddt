@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomInventoryDetailsMapper">
+
+    <select id="listShopSkuInventoryDetails"
+            resultType="com.sky.ddt.dto.shopHeadTripCost.response.ShopSkuInventoryDetails">
+            select shop_sku_id shopSkuId,afn_total_quantity-afn_inbound_working_quantity quantity
+            from inventory_details
+            where finance_id=#{financeId}
+            order by shop_sku_id
+    </select>
+</mapper>

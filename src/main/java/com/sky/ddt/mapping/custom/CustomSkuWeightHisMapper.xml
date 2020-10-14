@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomSkuWeightHisMapper">
+    <resultMap id="listMap" type="com.sky.ddt.dto.skuWeightHis.response.ListSkuWeightHisResponse"
+               extends="com.sky.ddt.dao.generate.SkuWeightHisMapper.BaseResultMap">
+        <result column="createUserName" property="createUserName"/>
+        <result column="sku" property="sku"/>
+    </resultMap>
+    <select id="list" parameterType="com.sky.ddt.dto.skuWeightHis.request.ListSkuWeightHisRequest"
+            resultMap="listMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.SkuWeightHisMapper.Base_Column_List"/>,(select u.real_name from user u
+        where swh.create_by=u.user_id )createUserName,(select sku from sku where sku.sku_id=swh.sku_id) sku
+        from sku_weight_his swh
+        where swh.sku_id=#{skuId}
+        order by swh.create_time desc
+    </select>
+
+</mapper>

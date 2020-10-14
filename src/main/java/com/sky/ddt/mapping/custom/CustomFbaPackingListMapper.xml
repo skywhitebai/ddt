@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomFbaPackingListMapper">
+    <resultMap id="listFbaPackingListMap" type="com.sky.ddt.dto.fbaPackingList.response.ListFbaPackingListResponse"
+               extends="com.sky.ddt.dao.generate.FbaPackingListMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+        <result column="outbound_order_status" property="outboundOrderStatus"/>
+    </resultMap>
+    <select id="listFbaPackingList" parameterType="com.sky.ddt.dto.fbaPackingList.request.ListFbaPackingListRequest"
+            resultMap="listFbaPackingListMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.FbaPackingListMapper.Base_Column_List"/>
+        ,(select shop_name from shop s where fpl.shop_id=s.shop_id) shop_name,
+        CASE WHEN EXISTS(SELECT 1 FROM `outbound_order` oo WHERE oo.fba_packing_list_id=fpl.id and oo.status!=0) THEN 1 ELSE 0 END outbound_order_status
+        from fba_packing_list fpl
+        <if test="_parameter != null">
+            <include refid="fbaPackingList_Query_Where_Clause"/>
+        </if>
+        order by fpl.create_time desc
+    </select>
+
+    <sql id="fbaPackingList_Query_Where_Clause">
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopId != null">and fpl.shop_id=#{shopId}</if>
+                <if test="shipmentId != null">and fpl.shipment_Id like concat('%',#{shipmentId},'%')</if>
+                <if test="shopSku != null and shopSku != '' ">
+                    and EXISTS (select 1 from fba_packing_list_shop_sku fplss,shop_sku ss
+                    where fplss.fba_packing_list_id=fpl.id and fplss.shop_sku_id=ss.shop_sku_id and ss.shop_sku like concat('%',#{shopSku},'%'))
+                </if>
+                <if test="userId != null ">and fpl.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
+            </trim>
+        </where>
+    </sql>
+
+    <select id="listInvoiceInfo" parameterType="com.sky.ddt.dto.fbaPackingList.request.ListInvoiceInfoRequest"
+            resultType="com.sky.ddt.dto.fbaPackingList.response.ListInvoiceInfoResponse">
+        select #{fbaPackingListId} fbaPackingListId,iont.internal_order_number_id internalOrderNumberId,ion.`order_number` orderNumber,
+        (select transport_type_name from `transport_type` tt where tt.id=ion.transport_type_id) transportTypeName,
+        count(distinct(iont.`fba_shipment_id_short`)) fbaShipmentIdCount,
+        count(distinct(fplss.`shop_sku_id`)) shopSkuCount,
+        sum(fplss.`quantity`) shopSkuQuantity
+        from
+        `fba_packing_list_shop_sku` fplss,`internal_order_number_transport` iont,`internal_order_number` ion
+        where fplss.`fba_shipment_id`=iont.`fba_shipment_id_short` AND fplss.`fba_packing_list_id`=#{fbaPackingListId}
+        and ion.`id`=iont.`internal_order_number_id`
+        <if test="orderNumber != null and orderNumber!=''">and ion.order_number like concat('%',#{orderNumber},'%')</if>
+        group by iont.internal_order_number_id
+        order by ion.`order_number`
+    </select>
+    <select id="listInvoiceSkuInfo"
+            resultType="com.sky.ddt.dto.deliverGoods.request.InvoiceSkuInfo">
+        SELECT fplss.shop_sku_id shopSkuId,fplss.`fba_shipment_id` containerNo,fplss.`quantity` FROM
+        `fba_packing_list_shop_sku` fplss,`internal_order_number_transport` iont,`internal_order_number` ion
+        WHERE fplss.`fba_shipment_id`=iont.`fba_shipment_id_short` AND fplss.`fba_packing_list_id`=#{fbaPackingListId}
+        AND ion.`id`=iont.`internal_order_number_id`
+        AND ion.order_number=#{orderNumber}
+    </select>
+
+</mapper>

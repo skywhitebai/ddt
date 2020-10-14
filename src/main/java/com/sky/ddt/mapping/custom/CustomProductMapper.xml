@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomProductMapper" >
+    <!--查询订单-->
+    <resultMap id="listProductMap" type="com.sky.ddt.dto.product.response.ProductListResponse" extends="com.sky.ddt.dao.generate.ProductMapper.BaseResultMap">
+        <result column="imgUrl" property="imgUrl"/>
+        <result column="cost_price_min" property="costPriceMin" />
+        <result column="cost_price_max" property="costPriceMax" />
+        <result column="head_trip_cost_min" property="headTripCostMin" />
+        <result column="head_trip_cost_max" property="headTripCostMax" />
+        <result column="developer_user_name" property="developerUserName" />
+    </resultMap>
+    <select id="listProduct" resultMap="listProductMap" parameterType="com.sky.ddt.dto.product.request.ProductListRequest" >
+        select
+        <include refid="com.sky.ddt.dao.generate.ProductMapper.Base_Column_List" />,
+        (SELECT  MAX(img.`img_url`) FROM `sku`,`img` WHERE img.`entity_id`=sku.`sku_id` AND img.`img_type`='sku.sku_img' AND sku.product_id=p.product_id) imgUrl,
+        (SELECT  MIN(sku.`cost_price`) FROM `sku` WHERE sku.product_id=p.product_id) cost_price_min,
+        (SELECT  MAX(sku.`cost_price`) FROM `sku` WHERE sku.product_id=p.product_id) cost_price_max,
+        (SELECT  MIN(sku.`head_trip_cost`) FROM `sku` WHERE sku.product_id=p.product_id) head_trip_cost_min,
+        (SELECT  MAX(sku.`head_trip_cost`) FROM `sku` WHERE sku.product_id=p.product_id) head_trip_cost_max,
+        (select user_name from user where user.user_id=p.developer_user_id) developer_user_name
+        from product p
+        <if test="_parameter != null">
+            <include refid="product_Query_Where_Clause" />
+        </if>
+        order by p.product_code
+    </select>
+    <select id="listProductExportInfo" resultType="com.sky.ddt.dto.product.response.ProductExportInfoResponse" parameterType="com.sky.ddt.dto.product.request.ProductListRequest" >
+        select
+        product_name productName,product_code productCode,chinese_product_name chineseProductName,english_product_name englishProductName,description,remark
+        from product p
+        <if test="_parameter != null">
+            <include refid="product_Query_Where_Clause" />
+        </if>
+        order by p.product_code
+    </select>
+    <sql id="product_Query_Where_Clause">
+        <where >
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="productName != null and productName != ''">
+                    and product_name like concat('%',#{productName},'%')
+                </if>
+                <if test="productCode != null and productCode != ''">
+                    and product_code like concat('%',#{productCode},'%')
+                </if>
+            </trim>
+        </where>
+    </sql>
+
+</mapper>

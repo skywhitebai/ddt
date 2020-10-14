@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomShopSkuHeadTripCostHisMapper">
+    <resultMap id="listShopSkuHeadTripCostHisMap"
+               type="com.sky.ddt.dto.shopSkuHeadTripCostHis.response.ListShopSkuHeadTripCostHisResponse"
+               extends="com.sky.ddt.dao.generate.ShopSkuHeadTripCostHisMapper.BaseResultMap">
+        <result column="shop_sku" property="shopSku"/>
+    </resultMap>
+    <select id="listShopSkuHeadTripCostHis"
+            parameterType="com.sky.ddt.dto.shopSkuHeadTripCostHis.request.ListShopSkuHeadTripCostHisRequest"
+            resultMap="listShopSkuHeadTripCostHisMap">
+        select
+        sshtch.*,
+        ss.shop_sku
+        from shop_sku_head_trip_cost_his sshtch
+        left join shop_sku ss on sshtch.shop_sku_id=ss.shop_sku_id
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <trim prefix="(" suffix=")" prefixOverrides="and">
+                    <if test="shopHeadTripCostId != null">and sshtch.shop_head_trip_cost_id=#{shopHeadTripCostId}</if>
+                    <if test="shopSku != null ">and ss.shop_sku like concat('%',#{shopSku},'%')</if>
+                </trim>
+            </trim>
+        </where>
+        order by sshtch.create_time desc
+    </select>
+</mapper>

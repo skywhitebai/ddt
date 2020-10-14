@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomCheckOrderMapper">
+    <resultMap id="listCheckOrderMap"
+               type="com.sky.ddt.dto.checkOrder.response.ListCheckOrderResponse"
+               extends="com.sky.ddt.dao.generate.CheckOrderMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+        <result column="inventoryQuantityNewTotal" property="inventoryQuantityNewTotal"/>
+    </resultMap>
+    <select id="listCheckOrder" parameterType="com.sky.ddt.dto.checkOrder.request.ListCheckOrderRequest"
+            resultMap="listCheckOrderMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.CheckOrderMapper.Base_Column_List"/>
+        ,(select s.shop_name from shop s where co.shop_id=s.shop_id) shop_name,
+        ifnull((select sum(coss.inventory_quantity_new) from check_order_shop_sku coss where coss.check_order_id=co.id),0) inventoryQuantityNewTotal
+        from check_order co
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopId != null">and shop_id =#{shopId}</if>
+                <if test="checkTimeStart != null ">and check_time<![CDATA[>=]]> #{checkTimeStart}</if>
+                <if test="checkTimeEnd != null ">and check_time <![CDATA[<]]>
+                    DATE_ADD(date(#{checkTimeEnd}),INTERVAL 1 DAY)
+                </if>
+                <if test="batchNumber != null and batchNumber != '' ">and batch_number like
+                    concat('%',#{batchNumber},'%')
+                </if>
+                <if test="shopSku != null and shopSku != '' ">
+                    and exists (select 1 from check_order_shop_sku coss where coss.check_order_id=co.id and
+                    coss.shop_sku like concat('%',#{shopSku},'%'))
+                </if>
+                <if test="status != null">and status=#{status}</if>
+            </trim>
+        </where>
+        order by co.create_time desc
+    </select>
+</mapper>

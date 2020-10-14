@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.OrderAddressMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.OrderAddress">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="address_type" jdbcType="VARCHAR" property="addressType" />
+    <result column="amazon_order_id" jdbcType="VARCHAR" property="amazonOrderId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="address_line1" jdbcType="VARCHAR" property="addressLine1" />
+    <result column="address_line2" jdbcType="VARCHAR" property="addressLine2" />
+    <result column="address_line3" jdbcType="VARCHAR" property="addressLine3" />
+    <result column="city" jdbcType="VARCHAR" property="city" />
+    <result column="county" jdbcType="VARCHAR" property="county" />
+    <result column="district" jdbcType="VARCHAR" property="district" />
+    <result column="state_or_region" jdbcType="VARCHAR" property="stateOrRegion" />
+    <result column="postal_code" jdbcType="VARCHAR" property="postalCode" />
+    <result column="country_code" jdbcType="VARCHAR" property="countryCode" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="BIGINT" property="createBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_by" jdbcType="BIGINT" property="updateBy" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, address_type, amazon_order_id, name, address_line1, address_line2, address_line3, 
+    city, county, district, state_or_region, postal_code, country_code, phone, create_time, 
+    create_by, update_time, update_by
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.OrderAddressExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from order_address
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_address
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from order_address
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.OrderAddressExample">
+    delete from order_address
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.OrderAddress">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into order_address (address_type, amazon_order_id, name, 
+      address_line1, address_line2, address_line3, 
+      city, county, district, 
+      state_or_region, postal_code, country_code, 
+      phone, create_time, create_by, 
+      update_time, update_by)
+    values (#{addressType,jdbcType=VARCHAR}, #{amazonOrderId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
+      #{addressLine1,jdbcType=VARCHAR}, #{addressLine2,jdbcType=VARCHAR}, #{addressLine3,jdbcType=VARCHAR}, 
+      #{city,jdbcType=VARCHAR}, #{county,jdbcType=VARCHAR}, #{district,jdbcType=VARCHAR}, 
+      #{stateOrRegion,jdbcType=VARCHAR}, #{postalCode,jdbcType=VARCHAR}, #{countryCode,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=BIGINT}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.OrderAddress">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into order_address
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="addressType != null">
+        address_type,
+      </if>
+      <if test="amazonOrderId != null">
+        amazon_order_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="addressLine1 != null">
+        address_line1,
+      </if>
+      <if test="addressLine2 != null">
+        address_line2,
+      </if>
+      <if test="addressLine3 != null">
+        address_line3,
+      </if>
+      <if test="city != null">
+        city,
+      </if>
+      <if test="county != null">
+        county,
+      </if>
+      <if test="district != null">
+        district,
+      </if>
+      <if test="stateOrRegion != null">
+        state_or_region,
+      </if>
+      <if test="postalCode != null">
+        postal_code,
+      </if>
+      <if test="countryCode != null">
+        country_code,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="addressType != null">
+        #{addressType,jdbcType=VARCHAR},
+      </if>
+      <if test="amazonOrderId != null">
+        #{amazonOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="addressLine1 != null">
+        #{addressLine1,jdbcType=VARCHAR},
+      </if>
+      <if test="addressLine2 != null">
+        #{addressLine2,jdbcType=VARCHAR},
+      </if>
+      <if test="addressLine3 != null">
+        #{addressLine3,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null">
+        #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="stateOrRegion != null">
+        #{stateOrRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="postalCode != null">
+        #{postalCode,jdbcType=VARCHAR},
+      </if>
+      <if test="countryCode != null">
+        #{countryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.OrderAddressExample" resultType="java.lang.Long">
+    select count(*) from order_address
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update order_address
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.addressType != null">
+        address_type = #{record.addressType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.amazonOrderId != null">
+        amazon_order_id = #{record.amazonOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null">
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addressLine1 != null">
+        address_line1 = #{record.addressLine1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addressLine2 != null">
+        address_line2 = #{record.addressLine2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addressLine3 != null">
+        address_line3 = #{record.addressLine3,jdbcType=VARCHAR},
+      </if>
+      <if test="record.city != null">
+        city = #{record.city,jdbcType=VARCHAR},
+      </if>
+      <if test="record.county != null">
+        county = #{record.county,jdbcType=VARCHAR},
+      </if>
+      <if test="record.district != null">
+        district = #{record.district,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stateOrRegion != null">
+        state_or_region = #{record.stateOrRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="record.postalCode != null">
+        postal_code = #{record.postalCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.countryCode != null">
+        country_code = #{record.countryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phone != null">
+        phone = #{record.phone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=BIGINT},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=BIGINT},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update order_address
+    set id = #{record.id,jdbcType=INTEGER},
+      address_type = #{record.addressType,jdbcType=VARCHAR},
+      amazon_order_id = #{record.amazonOrderId,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      address_line1 = #{record.addressLine1,jdbcType=VARCHAR},
+      address_line2 = #{record.addressLine2,jdbcType=VARCHAR},
+      address_line3 = #{record.addressLine3,jdbcType=VARCHAR},
+      city = #{record.city,jdbcType=VARCHAR},
+      county = #{record.county,jdbcType=VARCHAR},
+      district = #{record.district,jdbcType=VARCHAR},
+      state_or_region = #{record.stateOrRegion,jdbcType=VARCHAR},
+      postal_code = #{record.postalCode,jdbcType=VARCHAR},
+      country_code = #{record.countryCode,jdbcType=VARCHAR},
+      phone = #{record.phone,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=BIGINT},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=BIGINT}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.OrderAddress">
+    update order_address
+    <set>
+      <if test="addressType != null">
+        address_type = #{addressType,jdbcType=VARCHAR},
+      </if>
+      <if test="amazonOrderId != null">
+        amazon_order_id = #{amazonOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="addressLine1 != null">
+        address_line1 = #{addressLine1,jdbcType=VARCHAR},
+      </if>
+      <if test="addressLine2 != null">
+        address_line2 = #{addressLine2,jdbcType=VARCHAR},
+      </if>
+      <if test="addressLine3 != null">
+        address_line3 = #{addressLine3,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null">
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null">
+        county = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="district != null">
+        district = #{district,jdbcType=VARCHAR},
+      </if>
+      <if test="stateOrRegion != null">
+        state_or_region = #{stateOrRegion,jdbcType=VARCHAR},
+      </if>
+      <if test="postalCode != null">
+        postal_code = #{postalCode,jdbcType=VARCHAR},
+      </if>
+      <if test="countryCode != null">
+        country_code = #{countryCode,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null">
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.OrderAddress">
+    update order_address
+    set address_type = #{addressType,jdbcType=VARCHAR},
+      amazon_order_id = #{amazonOrderId,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      address_line1 = #{addressLine1,jdbcType=VARCHAR},
+      address_line2 = #{addressLine2,jdbcType=VARCHAR},
+      address_line3 = #{addressLine3,jdbcType=VARCHAR},
+      city = #{city,jdbcType=VARCHAR},
+      county = #{county,jdbcType=VARCHAR},
+      district = #{district,jdbcType=VARCHAR},
+      state_or_region = #{stateOrRegion,jdbcType=VARCHAR},
+      postal_code = #{postalCode,jdbcType=VARCHAR},
+      country_code = #{countryCode,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=BIGINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

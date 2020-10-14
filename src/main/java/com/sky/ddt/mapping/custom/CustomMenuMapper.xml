@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomMenuMapper">
+    <select id="userMenuIdList" resultMap="com.sky.ddt.dao.generate.MenuMapper.BaseResultMap">
+        SELECT DISTINCT   m.id, m.menu_name, m.url, m.parent_menu_id, m.status, m.sort, m.create_time, m.create_by, m.update_time,
+    m.update_by FROM
+        `sys_user_role` ur,`sys_role_menu` rm,`sys_menu` m
+        WHERE ur.`role_id`=rm.`role_id` AND m.`id`=rm.`menu_id` AND m.`status`=1 AND ur.`user_id`=#{userId}
+        ORDER BY m.parent_menu_id asc,m.sort asc
+    </select>
+
+    <select id="userMenuUrlList" resultType="java.lang.String">
+        SELECT DISTINCT    m.url FROM
+        `sys_user_role` ur,`sys_role_menu` rm,`sys_menu` m
+        WHERE ur.`role_id`=rm.`role_id` AND m.`id`=rm.`menu_id` AND m.`status`=1 AND ur.`user_id`=#{userId}
+    </select>
+    <select id="userHasMenu" resultType="java.lang.Boolean">
+        SELECT case when EXISTS
+        (SELECT 1 FROM `sys_user_role` ur,`sys_role_menu` rm ,`sys_menu` m
+WHERE ur.`role_id`=rm.`role_id` AND rm.`menu_id`=m.`id` AND ur.`user_id`=#{userId} AND m.`url`=#{menu}) then 1 else 0 end;
+    </select>
+</mapper>

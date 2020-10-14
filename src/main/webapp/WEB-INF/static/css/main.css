@@ -1,0 +1,26 @@
+/* 半透明的遮罩层 */
+#cover {
+    background: #000;
+    filter: alpha(opacity=50); /* IE的透明度 */
+    opacity: 0.4; /* 透明度 */
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 100000; /* 此处的图层要大于页面 */
+    display: none;
+}
+
+#coverMsg {
+    width: 100px;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    display: none;
+    z-index: 100001; /* 此处的图层要遮盖层 */
+    transform: translate(-50%,-50%);
+}
+.a_hide{
+    display: none;
+}

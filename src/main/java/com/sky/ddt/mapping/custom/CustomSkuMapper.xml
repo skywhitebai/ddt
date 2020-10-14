@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomSkuMapper">
+
+    <resultMap id="SkuListMap" type="com.sky.ddt.dto.sku.response.SkuListResponse"
+               extends="com.sky.ddt.dao.generate.SkuMapper.BaseResultMap">
+        <result column="product_code" property="productCode"/>
+        <result column="productProductName" property="productProductName"/>
+        <result column="img_url" property="imgUrl"/>
+    </resultMap>
+    <sql id="Custom_Column_List">
+         s.sku_id, s.product_id, s.sku, s.colour,s.colour_number, s.size,s.weight,s.cost_price,s.head_trip_cost head_trip_cost,s.head_trip_cost_min,
+         s.remark, s.create_time, s.create_by, s.update_time, s.update_by,s.second_sku, s.brand, s.product_name, s.material,s.inventory_quantity,s.grade, s.executive_standard,
+         s.security_category, s.inspector, s.suggested_retail_price
+    </sql>
+    <select id="listSku" parameterType="com.sky.ddt.dto.sku.request.SkuListRequest" resultMap="SkuListMap">
+        select
+        <include refid="Custom_Column_List"/>
+        ,p.product_code,p.product_name productProductName
+        from sku s
+        left join product p on s.product_id=p.product_id
+        <if test="_parameter != null">
+            <include refid="sku_Query_Where_Clause"/>
+        </if>
+        order by p.product_code,s.sku
+    </select>
+
+    <select id="listSkuExportInfo" parameterType="com.sky.ddt.dto.sku.request.SkuListRequest"
+            resultType="com.sky.ddt.dto.sku.response.SkuExportInfoResponse">
+        select
+        p.product_name productName,p.product_code productCode,s.sku, s.colour,s.colour_number colourNumber,s.size,s.weight, s.cost_price costPrice,
+        s.head_trip_cost headTripCost, s.inventory_quantity inventoryQuantity,s.remark
+        from sku s
+        left join product p on s.product_id=p.product_id
+        <if test="_parameter != null">
+            <include refid="sku_Query_Where_Clause"/>
+        </if>
+        order by p.product_code,s.sku
+    </select>
+    <sql id="sku_Query_Where_Clause">
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="sku != null and sku != '' ">and s.sku like concat('%',#{sku},'%')</if>
+                <if test="productCode != null and productCode != '' ">and p.product_code like
+                    concat('%',#{productCode},'%')
+                </if>
+                <if test="productName != null and productName != '' ">and p.product_name like
+                    concat('%',#{productName},'%')
+                </if>
+            </trim>
+        </where>
+    </sql>
+    <select id="getPrintTmallSku" parameterType="com.sky.ddt.dto.sku.request.GetPrintTmallSkuRequest"
+            resultType="com.sky.ddt.dto.sku.response.GetPrintTmallSkuResponse">
+        select
+        s.brand,s.second_sku secondSku,s.product_name productName,p.product_code productCode,s.material, s.grade, s.executive_standard
+        executiveStandard,s.security_category securityCategory,s.inspector, s.suggested_retail_price suggestedRetailPrice,s.size,s.colour
+        from sku s
+        left join product p on s.product_id=p.product_id
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="sku != null and sku != '' ">and s.sku = #{sku}</if>
+                <if test="secondSku != null and secondSku != '' ">and s.second_sku =#{secondSku}</if>
+            </trim>
+        </where>
+
+    </select>
+</mapper>

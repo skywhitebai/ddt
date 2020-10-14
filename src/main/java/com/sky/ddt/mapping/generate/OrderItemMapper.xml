@@ -1,0 +1,902 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.OrderItemMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.OrderItem">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="amazon_order_id" jdbcType="VARCHAR" property="amazonOrderId" />
+    <result column="asin" jdbcType="VARCHAR" property="asin" />
+    <result column="seller_SKU" jdbcType="VARCHAR" property="sellerSku" />
+    <result column="order_item_id" jdbcType="VARCHAR" property="orderItemId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="quantity_ordered" jdbcType="INTEGER" property="quantityOrdered" />
+    <result column="quantity_shipped" jdbcType="INTEGER" property="quantityShipped" />
+    <result column="item_price_currency_code" jdbcType="VARCHAR" property="itemPriceCurrencyCode" />
+    <result column="item_price_amount" jdbcType="DECIMAL" property="itemPriceAmount" />
+    <result column="shipping_price_currency_code" jdbcType="VARCHAR" property="shippingPriceCurrencyCode" />
+    <result column="shipping_price_amount" jdbcType="DECIMAL" property="shippingPriceAmount" />
+    <result column="gift_wrap_price_currency_code" jdbcType="VARCHAR" property="giftWrapPriceCurrencyCode" />
+    <result column="gift_wrap_price_amount" jdbcType="DECIMAL" property="giftWrapPriceAmount" />
+    <result column="item_tax_currency_code" jdbcType="VARCHAR" property="itemTaxCurrencyCode" />
+    <result column="item_tax_amount" jdbcType="DECIMAL" property="itemTaxAmount" />
+    <result column="shipping_tax_currency_code" jdbcType="VARCHAR" property="shippingTaxCurrencyCode" />
+    <result column="shipping_tax_amount" jdbcType="DECIMAL" property="shippingTaxAmount" />
+    <result column="gift_wrap_tax_currency_code" jdbcType="VARCHAR" property="giftWrapTaxCurrencyCode" />
+    <result column="gift_wrap_tax_amount" jdbcType="DECIMAL" property="giftWrapTaxAmount" />
+    <result column="shipping_discount_currency_code" jdbcType="VARCHAR" property="shippingDiscountCurrencyCode" />
+    <result column="shipping_discount_amount" jdbcType="DECIMAL" property="shippingDiscountAmount" />
+    <result column="shipping_discount_tax_currency_code" jdbcType="VARCHAR" property="shippingDiscountTaxCurrencyCode" />
+    <result column="shipping_discount_tax_amount" jdbcType="DECIMAL" property="shippingDiscountTaxAmount" />
+    <result column="promotion_discount_currency_code" jdbcType="VARCHAR" property="promotionDiscountCurrencyCode" />
+    <result column="promotion_discount_amount" jdbcType="DECIMAL" property="promotionDiscountAmount" />
+    <result column="promotion_discount_tax_currency_code" jdbcType="VARCHAR" property="promotionDiscountTaxCurrencyCode" />
+    <result column="promotion_discount_tax_amount" jdbcType="DECIMAL" property="promotionDiscountTaxAmount" />
+    <result column="promotion_ids" jdbcType="VARCHAR" property="promotionIds" />
+    <result column="is_gift" jdbcType="BIT" property="isGift" />
+    <result column="gift_message_text" jdbcType="VARCHAR" property="giftMessageText" />
+    <result column="gift_wrap_level" jdbcType="VARCHAR" property="giftWrapLevel" />
+    <result column="condition_note" jdbcType="VARCHAR" property="conditionNote" />
+    <result column="condition_id" jdbcType="VARCHAR" property="conditionId" />
+    <result column="condition_subtype_id" jdbcType="VARCHAR" property="conditionSubtypeId" />
+    <result column="scheduled_delivery_start_date" jdbcType="VARCHAR" property="scheduledDeliveryStartDate" />
+    <result column="scheduled_delivery_end_date" jdbcType="VARCHAR" property="scheduledDeliveryEndDate" />
+    <result column="serial_number_required" jdbcType="BIT" property="serialNumberRequired" />
+    <result column="is_rransparency" jdbcType="BIT" property="isRransparency" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="ceate_by" jdbcType="INTEGER" property="ceateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_by" jdbcType="INTEGER" property="updateBy" />
+    <result column="cod_fee_currency_code" jdbcType="VARCHAR" property="codFeeCurrencyCode" />
+    <result column="cod_fee_amount" jdbcType="DECIMAL" property="codFeeAmount" />
+    <result column="cod_fee_discount_currency_code" jdbcType="VARCHAR" property="codFeeDiscountCurrencyCode" />
+    <result column="cod_fee_discount_amount" jdbcType="DECIMAL" property="codFeeDiscountAmount" />
+    <result column="price_designation" jdbcType="VARCHAR" property="priceDesignation" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, amazon_order_id, asin, seller_SKU, order_item_id, title, quantity_ordered, quantity_shipped, 
+    item_price_currency_code, item_price_amount, shipping_price_currency_code, shipping_price_amount, 
+    gift_wrap_price_currency_code, gift_wrap_price_amount, item_tax_currency_code, item_tax_amount, 
+    shipping_tax_currency_code, shipping_tax_amount, gift_wrap_tax_currency_code, gift_wrap_tax_amount, 
+    shipping_discount_currency_code, shipping_discount_amount, shipping_discount_tax_currency_code, 
+    shipping_discount_tax_amount, promotion_discount_currency_code, promotion_discount_amount, 
+    promotion_discount_tax_currency_code, promotion_discount_tax_amount, promotion_ids, 
+    is_gift, gift_message_text, gift_wrap_level, condition_note, condition_id, condition_subtype_id, 
+    scheduled_delivery_start_date, scheduled_delivery_end_date, serial_number_required, 
+    is_rransparency, create_time, ceate_by, update_time, update_by, cod_fee_currency_code, 
+    cod_fee_amount, cod_fee_discount_currency_code, cod_fee_discount_amount, price_designation
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.OrderItemExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from order_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_item
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from order_item
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.OrderItemExample">
+    delete from order_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.OrderItem">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into order_item (amazon_order_id, asin, seller_SKU, 
+      order_item_id, title, quantity_ordered, 
+      quantity_shipped, item_price_currency_code, 
+      item_price_amount, shipping_price_currency_code, 
+      shipping_price_amount, gift_wrap_price_currency_code, 
+      gift_wrap_price_amount, item_tax_currency_code, 
+      item_tax_amount, shipping_tax_currency_code, 
+      shipping_tax_amount, gift_wrap_tax_currency_code, 
+      gift_wrap_tax_amount, shipping_discount_currency_code, 
+      shipping_discount_amount, shipping_discount_tax_currency_code, 
+      shipping_discount_tax_amount, promotion_discount_currency_code, 
+      promotion_discount_amount, promotion_discount_tax_currency_code, 
+      promotion_discount_tax_amount, promotion_ids, 
+      is_gift, gift_message_text, gift_wrap_level, 
+      condition_note, condition_id, condition_subtype_id, 
+      scheduled_delivery_start_date, scheduled_delivery_end_date, 
+      serial_number_required, is_rransparency, create_time, 
+      ceate_by, update_time, update_by, 
+      cod_fee_currency_code, cod_fee_amount, cod_fee_discount_currency_code, 
+      cod_fee_discount_amount, price_designation)
+    values (#{amazonOrderId,jdbcType=VARCHAR}, #{asin,jdbcType=VARCHAR}, #{sellerSku,jdbcType=VARCHAR}, 
+      #{orderItemId,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{quantityOrdered,jdbcType=INTEGER}, 
+      #{quantityShipped,jdbcType=INTEGER}, #{itemPriceCurrencyCode,jdbcType=VARCHAR}, 
+      #{itemPriceAmount,jdbcType=DECIMAL}, #{shippingPriceCurrencyCode,jdbcType=VARCHAR}, 
+      #{shippingPriceAmount,jdbcType=DECIMAL}, #{giftWrapPriceCurrencyCode,jdbcType=VARCHAR}, 
+      #{giftWrapPriceAmount,jdbcType=DECIMAL}, #{itemTaxCurrencyCode,jdbcType=VARCHAR}, 
+      #{itemTaxAmount,jdbcType=DECIMAL}, #{shippingTaxCurrencyCode,jdbcType=VARCHAR}, 
+      #{shippingTaxAmount,jdbcType=DECIMAL}, #{giftWrapTaxCurrencyCode,jdbcType=VARCHAR}, 
+      #{giftWrapTaxAmount,jdbcType=DECIMAL}, #{shippingDiscountCurrencyCode,jdbcType=VARCHAR}, 
+      #{shippingDiscountAmount,jdbcType=DECIMAL}, #{shippingDiscountTaxCurrencyCode,jdbcType=VARCHAR}, 
+      #{shippingDiscountTaxAmount,jdbcType=DECIMAL}, #{promotionDiscountCurrencyCode,jdbcType=VARCHAR}, 
+      #{promotionDiscountAmount,jdbcType=DECIMAL}, #{promotionDiscountTaxCurrencyCode,jdbcType=VARCHAR}, 
+      #{promotionDiscountTaxAmount,jdbcType=DECIMAL}, #{promotionIds,jdbcType=VARCHAR}, 
+      #{isGift,jdbcType=BIT}, #{giftMessageText,jdbcType=VARCHAR}, #{giftWrapLevel,jdbcType=VARCHAR}, 
+      #{conditionNote,jdbcType=VARCHAR}, #{conditionId,jdbcType=VARCHAR}, #{conditionSubtypeId,jdbcType=VARCHAR}, 
+      #{scheduledDeliveryStartDate,jdbcType=VARCHAR}, #{scheduledDeliveryEndDate,jdbcType=VARCHAR}, 
+      #{serialNumberRequired,jdbcType=BIT}, #{isRransparency,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{ceateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
+      #{codFeeCurrencyCode,jdbcType=VARCHAR}, #{codFeeAmount,jdbcType=DECIMAL}, #{codFeeDiscountCurrencyCode,jdbcType=VARCHAR}, 
+      #{codFeeDiscountAmount,jdbcType=DECIMAL}, #{priceDesignation,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.OrderItem">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into order_item
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="amazonOrderId != null">
+        amazon_order_id,
+      </if>
+      <if test="asin != null">
+        asin,
+      </if>
+      <if test="sellerSku != null">
+        seller_SKU,
+      </if>
+      <if test="orderItemId != null">
+        order_item_id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="quantityOrdered != null">
+        quantity_ordered,
+      </if>
+      <if test="quantityShipped != null">
+        quantity_shipped,
+      </if>
+      <if test="itemPriceCurrencyCode != null">
+        item_price_currency_code,
+      </if>
+      <if test="itemPriceAmount != null">
+        item_price_amount,
+      </if>
+      <if test="shippingPriceCurrencyCode != null">
+        shipping_price_currency_code,
+      </if>
+      <if test="shippingPriceAmount != null">
+        shipping_price_amount,
+      </if>
+      <if test="giftWrapPriceCurrencyCode != null">
+        gift_wrap_price_currency_code,
+      </if>
+      <if test="giftWrapPriceAmount != null">
+        gift_wrap_price_amount,
+      </if>
+      <if test="itemTaxCurrencyCode != null">
+        item_tax_currency_code,
+      </if>
+      <if test="itemTaxAmount != null">
+        item_tax_amount,
+      </if>
+      <if test="shippingTaxCurrencyCode != null">
+        shipping_tax_currency_code,
+      </if>
+      <if test="shippingTaxAmount != null">
+        shipping_tax_amount,
+      </if>
+      <if test="giftWrapTaxCurrencyCode != null">
+        gift_wrap_tax_currency_code,
+      </if>
+      <if test="giftWrapTaxAmount != null">
+        gift_wrap_tax_amount,
+      </if>
+      <if test="shippingDiscountCurrencyCode != null">
+        shipping_discount_currency_code,
+      </if>
+      <if test="shippingDiscountAmount != null">
+        shipping_discount_amount,
+      </if>
+      <if test="shippingDiscountTaxCurrencyCode != null">
+        shipping_discount_tax_currency_code,
+      </if>
+      <if test="shippingDiscountTaxAmount != null">
+        shipping_discount_tax_amount,
+      </if>
+      <if test="promotionDiscountCurrencyCode != null">
+        promotion_discount_currency_code,
+      </if>
+      <if test="promotionDiscountAmount != null">
+        promotion_discount_amount,
+      </if>
+      <if test="promotionDiscountTaxCurrencyCode != null">
+        promotion_discount_tax_currency_code,
+      </if>
+      <if test="promotionDiscountTaxAmount != null">
+        promotion_discount_tax_amount,
+      </if>
+      <if test="promotionIds != null">
+        promotion_ids,
+      </if>
+      <if test="isGift != null">
+        is_gift,
+      </if>
+      <if test="giftMessageText != null">
+        gift_message_text,
+      </if>
+      <if test="giftWrapLevel != null">
+        gift_wrap_level,
+      </if>
+      <if test="conditionNote != null">
+        condition_note,
+      </if>
+      <if test="conditionId != null">
+        condition_id,
+      </if>
+      <if test="conditionSubtypeId != null">
+        condition_subtype_id,
+      </if>
+      <if test="scheduledDeliveryStartDate != null">
+        scheduled_delivery_start_date,
+      </if>
+      <if test="scheduledDeliveryEndDate != null">
+        scheduled_delivery_end_date,
+      </if>
+      <if test="serialNumberRequired != null">
+        serial_number_required,
+      </if>
+      <if test="isRransparency != null">
+        is_rransparency,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="ceateBy != null">
+        ceate_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="codFeeCurrencyCode != null">
+        cod_fee_currency_code,
+      </if>
+      <if test="codFeeAmount != null">
+        cod_fee_amount,
+      </if>
+      <if test="codFeeDiscountCurrencyCode != null">
+        cod_fee_discount_currency_code,
+      </if>
+      <if test="codFeeDiscountAmount != null">
+        cod_fee_discount_amount,
+      </if>
+      <if test="priceDesignation != null">
+        price_designation,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="amazonOrderId != null">
+        #{amazonOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="asin != null">
+        #{asin,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerSku != null">
+        #{sellerSku,jdbcType=VARCHAR},
+      </if>
+      <if test="orderItemId != null">
+        #{orderItemId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="quantityOrdered != null">
+        #{quantityOrdered,jdbcType=INTEGER},
+      </if>
+      <if test="quantityShipped != null">
+        #{quantityShipped,jdbcType=INTEGER},
+      </if>
+      <if test="itemPriceCurrencyCode != null">
+        #{itemPriceCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemPriceAmount != null">
+        #{itemPriceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingPriceCurrencyCode != null">
+        #{shippingPriceCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingPriceAmount != null">
+        #{shippingPriceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="giftWrapPriceCurrencyCode != null">
+        #{giftWrapPriceCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="giftWrapPriceAmount != null">
+        #{giftWrapPriceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="itemTaxCurrencyCode != null">
+        #{itemTaxCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemTaxAmount != null">
+        #{itemTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingTaxCurrencyCode != null">
+        #{shippingTaxCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingTaxAmount != null">
+        #{shippingTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="giftWrapTaxCurrencyCode != null">
+        #{giftWrapTaxCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="giftWrapTaxAmount != null">
+        #{giftWrapTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingDiscountCurrencyCode != null">
+        #{shippingDiscountCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingDiscountAmount != null">
+        #{shippingDiscountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingDiscountTaxCurrencyCode != null">
+        #{shippingDiscountTaxCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingDiscountTaxAmount != null">
+        #{shippingDiscountTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="promotionDiscountCurrencyCode != null">
+        #{promotionDiscountCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="promotionDiscountAmount != null">
+        #{promotionDiscountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="promotionDiscountTaxCurrencyCode != null">
+        #{promotionDiscountTaxCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="promotionDiscountTaxAmount != null">
+        #{promotionDiscountTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="promotionIds != null">
+        #{promotionIds,jdbcType=VARCHAR},
+      </if>
+      <if test="isGift != null">
+        #{isGift,jdbcType=BIT},
+      </if>
+      <if test="giftMessageText != null">
+        #{giftMessageText,jdbcType=VARCHAR},
+      </if>
+      <if test="giftWrapLevel != null">
+        #{giftWrapLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="conditionNote != null">
+        #{conditionNote,jdbcType=VARCHAR},
+      </if>
+      <if test="conditionId != null">
+        #{conditionId,jdbcType=VARCHAR},
+      </if>
+      <if test="conditionSubtypeId != null">
+        #{conditionSubtypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="scheduledDeliveryStartDate != null">
+        #{scheduledDeliveryStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="scheduledDeliveryEndDate != null">
+        #{scheduledDeliveryEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumberRequired != null">
+        #{serialNumberRequired,jdbcType=BIT},
+      </if>
+      <if test="isRransparency != null">
+        #{isRransparency,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ceateBy != null">
+        #{ceateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="codFeeCurrencyCode != null">
+        #{codFeeCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="codFeeAmount != null">
+        #{codFeeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="codFeeDiscountCurrencyCode != null">
+        #{codFeeDiscountCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="codFeeDiscountAmount != null">
+        #{codFeeDiscountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="priceDesignation != null">
+        #{priceDesignation,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.OrderItemExample" resultType="java.lang.Long">
+    select count(*) from order_item
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update order_item
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.amazonOrderId != null">
+        amazon_order_id = #{record.amazonOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.asin != null">
+        asin = #{record.asin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sellerSku != null">
+        seller_SKU = #{record.sellerSku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderItemId != null">
+        order_item_id = #{record.orderItemId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.title != null">
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.quantityOrdered != null">
+        quantity_ordered = #{record.quantityOrdered,jdbcType=INTEGER},
+      </if>
+      <if test="record.quantityShipped != null">
+        quantity_shipped = #{record.quantityShipped,jdbcType=INTEGER},
+      </if>
+      <if test="record.itemPriceCurrencyCode != null">
+        item_price_currency_code = #{record.itemPriceCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.itemPriceAmount != null">
+        item_price_amount = #{record.itemPriceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shippingPriceCurrencyCode != null">
+        shipping_price_currency_code = #{record.shippingPriceCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shippingPriceAmount != null">
+        shipping_price_amount = #{record.shippingPriceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.giftWrapPriceCurrencyCode != null">
+        gift_wrap_price_currency_code = #{record.giftWrapPriceCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.giftWrapPriceAmount != null">
+        gift_wrap_price_amount = #{record.giftWrapPriceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.itemTaxCurrencyCode != null">
+        item_tax_currency_code = #{record.itemTaxCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.itemTaxAmount != null">
+        item_tax_amount = #{record.itemTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shippingTaxCurrencyCode != null">
+        shipping_tax_currency_code = #{record.shippingTaxCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shippingTaxAmount != null">
+        shipping_tax_amount = #{record.shippingTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.giftWrapTaxCurrencyCode != null">
+        gift_wrap_tax_currency_code = #{record.giftWrapTaxCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.giftWrapTaxAmount != null">
+        gift_wrap_tax_amount = #{record.giftWrapTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shippingDiscountCurrencyCode != null">
+        shipping_discount_currency_code = #{record.shippingDiscountCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shippingDiscountAmount != null">
+        shipping_discount_amount = #{record.shippingDiscountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shippingDiscountTaxCurrencyCode != null">
+        shipping_discount_tax_currency_code = #{record.shippingDiscountTaxCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shippingDiscountTaxAmount != null">
+        shipping_discount_tax_amount = #{record.shippingDiscountTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.promotionDiscountCurrencyCode != null">
+        promotion_discount_currency_code = #{record.promotionDiscountCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.promotionDiscountAmount != null">
+        promotion_discount_amount = #{record.promotionDiscountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.promotionDiscountTaxCurrencyCode != null">
+        promotion_discount_tax_currency_code = #{record.promotionDiscountTaxCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.promotionDiscountTaxAmount != null">
+        promotion_discount_tax_amount = #{record.promotionDiscountTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.promotionIds != null">
+        promotion_ids = #{record.promotionIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isGift != null">
+        is_gift = #{record.isGift,jdbcType=BIT},
+      </if>
+      <if test="record.giftMessageText != null">
+        gift_message_text = #{record.giftMessageText,jdbcType=VARCHAR},
+      </if>
+      <if test="record.giftWrapLevel != null">
+        gift_wrap_level = #{record.giftWrapLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conditionNote != null">
+        condition_note = #{record.conditionNote,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conditionId != null">
+        condition_id = #{record.conditionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conditionSubtypeId != null">
+        condition_subtype_id = #{record.conditionSubtypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scheduledDeliveryStartDate != null">
+        scheduled_delivery_start_date = #{record.scheduledDeliveryStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.scheduledDeliveryEndDate != null">
+        scheduled_delivery_end_date = #{record.scheduledDeliveryEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.serialNumberRequired != null">
+        serial_number_required = #{record.serialNumberRequired,jdbcType=BIT},
+      </if>
+      <if test="record.isRransparency != null">
+        is_rransparency = #{record.isRransparency,jdbcType=BIT},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ceateBy != null">
+        ceate_by = #{record.ceateBy,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="record.codFeeCurrencyCode != null">
+        cod_fee_currency_code = #{record.codFeeCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.codFeeAmount != null">
+        cod_fee_amount = #{record.codFeeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.codFeeDiscountCurrencyCode != null">
+        cod_fee_discount_currency_code = #{record.codFeeDiscountCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.codFeeDiscountAmount != null">
+        cod_fee_discount_amount = #{record.codFeeDiscountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.priceDesignation != null">
+        price_designation = #{record.priceDesignation,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update order_item
+    set id = #{record.id,jdbcType=INTEGER},
+      amazon_order_id = #{record.amazonOrderId,jdbcType=VARCHAR},
+      asin = #{record.asin,jdbcType=VARCHAR},
+      seller_SKU = #{record.sellerSku,jdbcType=VARCHAR},
+      order_item_id = #{record.orderItemId,jdbcType=VARCHAR},
+      title = #{record.title,jdbcType=VARCHAR},
+      quantity_ordered = #{record.quantityOrdered,jdbcType=INTEGER},
+      quantity_shipped = #{record.quantityShipped,jdbcType=INTEGER},
+      item_price_currency_code = #{record.itemPriceCurrencyCode,jdbcType=VARCHAR},
+      item_price_amount = #{record.itemPriceAmount,jdbcType=DECIMAL},
+      shipping_price_currency_code = #{record.shippingPriceCurrencyCode,jdbcType=VARCHAR},
+      shipping_price_amount = #{record.shippingPriceAmount,jdbcType=DECIMAL},
+      gift_wrap_price_currency_code = #{record.giftWrapPriceCurrencyCode,jdbcType=VARCHAR},
+      gift_wrap_price_amount = #{record.giftWrapPriceAmount,jdbcType=DECIMAL},
+      item_tax_currency_code = #{record.itemTaxCurrencyCode,jdbcType=VARCHAR},
+      item_tax_amount = #{record.itemTaxAmount,jdbcType=DECIMAL},
+      shipping_tax_currency_code = #{record.shippingTaxCurrencyCode,jdbcType=VARCHAR},
+      shipping_tax_amount = #{record.shippingTaxAmount,jdbcType=DECIMAL},
+      gift_wrap_tax_currency_code = #{record.giftWrapTaxCurrencyCode,jdbcType=VARCHAR},
+      gift_wrap_tax_amount = #{record.giftWrapTaxAmount,jdbcType=DECIMAL},
+      shipping_discount_currency_code = #{record.shippingDiscountCurrencyCode,jdbcType=VARCHAR},
+      shipping_discount_amount = #{record.shippingDiscountAmount,jdbcType=DECIMAL},
+      shipping_discount_tax_currency_code = #{record.shippingDiscountTaxCurrencyCode,jdbcType=VARCHAR},
+      shipping_discount_tax_amount = #{record.shippingDiscountTaxAmount,jdbcType=DECIMAL},
+      promotion_discount_currency_code = #{record.promotionDiscountCurrencyCode,jdbcType=VARCHAR},
+      promotion_discount_amount = #{record.promotionDiscountAmount,jdbcType=DECIMAL},
+      promotion_discount_tax_currency_code = #{record.promotionDiscountTaxCurrencyCode,jdbcType=VARCHAR},
+      promotion_discount_tax_amount = #{record.promotionDiscountTaxAmount,jdbcType=DECIMAL},
+      promotion_ids = #{record.promotionIds,jdbcType=VARCHAR},
+      is_gift = #{record.isGift,jdbcType=BIT},
+      gift_message_text = #{record.giftMessageText,jdbcType=VARCHAR},
+      gift_wrap_level = #{record.giftWrapLevel,jdbcType=VARCHAR},
+      condition_note = #{record.conditionNote,jdbcType=VARCHAR},
+      condition_id = #{record.conditionId,jdbcType=VARCHAR},
+      condition_subtype_id = #{record.conditionSubtypeId,jdbcType=VARCHAR},
+      scheduled_delivery_start_date = #{record.scheduledDeliveryStartDate,jdbcType=VARCHAR},
+      scheduled_delivery_end_date = #{record.scheduledDeliveryEndDate,jdbcType=VARCHAR},
+      serial_number_required = #{record.serialNumberRequired,jdbcType=BIT},
+      is_rransparency = #{record.isRransparency,jdbcType=BIT},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      ceate_by = #{record.ceateBy,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=INTEGER},
+      cod_fee_currency_code = #{record.codFeeCurrencyCode,jdbcType=VARCHAR},
+      cod_fee_amount = #{record.codFeeAmount,jdbcType=DECIMAL},
+      cod_fee_discount_currency_code = #{record.codFeeDiscountCurrencyCode,jdbcType=VARCHAR},
+      cod_fee_discount_amount = #{record.codFeeDiscountAmount,jdbcType=DECIMAL},
+      price_designation = #{record.priceDesignation,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.OrderItem">
+    update order_item
+    <set>
+      <if test="amazonOrderId != null">
+        amazon_order_id = #{amazonOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="asin != null">
+        asin = #{asin,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerSku != null">
+        seller_SKU = #{sellerSku,jdbcType=VARCHAR},
+      </if>
+      <if test="orderItemId != null">
+        order_item_id = #{orderItemId,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="quantityOrdered != null">
+        quantity_ordered = #{quantityOrdered,jdbcType=INTEGER},
+      </if>
+      <if test="quantityShipped != null">
+        quantity_shipped = #{quantityShipped,jdbcType=INTEGER},
+      </if>
+      <if test="itemPriceCurrencyCode != null">
+        item_price_currency_code = #{itemPriceCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemPriceAmount != null">
+        item_price_amount = #{itemPriceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingPriceCurrencyCode != null">
+        shipping_price_currency_code = #{shippingPriceCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingPriceAmount != null">
+        shipping_price_amount = #{shippingPriceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="giftWrapPriceCurrencyCode != null">
+        gift_wrap_price_currency_code = #{giftWrapPriceCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="giftWrapPriceAmount != null">
+        gift_wrap_price_amount = #{giftWrapPriceAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="itemTaxCurrencyCode != null">
+        item_tax_currency_code = #{itemTaxCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemTaxAmount != null">
+        item_tax_amount = #{itemTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingTaxCurrencyCode != null">
+        shipping_tax_currency_code = #{shippingTaxCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingTaxAmount != null">
+        shipping_tax_amount = #{shippingTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="giftWrapTaxCurrencyCode != null">
+        gift_wrap_tax_currency_code = #{giftWrapTaxCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="giftWrapTaxAmount != null">
+        gift_wrap_tax_amount = #{giftWrapTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingDiscountCurrencyCode != null">
+        shipping_discount_currency_code = #{shippingDiscountCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingDiscountAmount != null">
+        shipping_discount_amount = #{shippingDiscountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingDiscountTaxCurrencyCode != null">
+        shipping_discount_tax_currency_code = #{shippingDiscountTaxCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shippingDiscountTaxAmount != null">
+        shipping_discount_tax_amount = #{shippingDiscountTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="promotionDiscountCurrencyCode != null">
+        promotion_discount_currency_code = #{promotionDiscountCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="promotionDiscountAmount != null">
+        promotion_discount_amount = #{promotionDiscountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="promotionDiscountTaxCurrencyCode != null">
+        promotion_discount_tax_currency_code = #{promotionDiscountTaxCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="promotionDiscountTaxAmount != null">
+        promotion_discount_tax_amount = #{promotionDiscountTaxAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="promotionIds != null">
+        promotion_ids = #{promotionIds,jdbcType=VARCHAR},
+      </if>
+      <if test="isGift != null">
+        is_gift = #{isGift,jdbcType=BIT},
+      </if>
+      <if test="giftMessageText != null">
+        gift_message_text = #{giftMessageText,jdbcType=VARCHAR},
+      </if>
+      <if test="giftWrapLevel != null">
+        gift_wrap_level = #{giftWrapLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="conditionNote != null">
+        condition_note = #{conditionNote,jdbcType=VARCHAR},
+      </if>
+      <if test="conditionId != null">
+        condition_id = #{conditionId,jdbcType=VARCHAR},
+      </if>
+      <if test="conditionSubtypeId != null">
+        condition_subtype_id = #{conditionSubtypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="scheduledDeliveryStartDate != null">
+        scheduled_delivery_start_date = #{scheduledDeliveryStartDate,jdbcType=VARCHAR},
+      </if>
+      <if test="scheduledDeliveryEndDate != null">
+        scheduled_delivery_end_date = #{scheduledDeliveryEndDate,jdbcType=VARCHAR},
+      </if>
+      <if test="serialNumberRequired != null">
+        serial_number_required = #{serialNumberRequired,jdbcType=BIT},
+      </if>
+      <if test="isRransparency != null">
+        is_rransparency = #{isRransparency,jdbcType=BIT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ceateBy != null">
+        ceate_by = #{ceateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="codFeeCurrencyCode != null">
+        cod_fee_currency_code = #{codFeeCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="codFeeAmount != null">
+        cod_fee_amount = #{codFeeAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="codFeeDiscountCurrencyCode != null">
+        cod_fee_discount_currency_code = #{codFeeDiscountCurrencyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="codFeeDiscountAmount != null">
+        cod_fee_discount_amount = #{codFeeDiscountAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="priceDesignation != null">
+        price_designation = #{priceDesignation,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.OrderItem">
+    update order_item
+    set amazon_order_id = #{amazonOrderId,jdbcType=VARCHAR},
+      asin = #{asin,jdbcType=VARCHAR},
+      seller_SKU = #{sellerSku,jdbcType=VARCHAR},
+      order_item_id = #{orderItemId,jdbcType=VARCHAR},
+      title = #{title,jdbcType=VARCHAR},
+      quantity_ordered = #{quantityOrdered,jdbcType=INTEGER},
+      quantity_shipped = #{quantityShipped,jdbcType=INTEGER},
+      item_price_currency_code = #{itemPriceCurrencyCode,jdbcType=VARCHAR},
+      item_price_amount = #{itemPriceAmount,jdbcType=DECIMAL},
+      shipping_price_currency_code = #{shippingPriceCurrencyCode,jdbcType=VARCHAR},
+      shipping_price_amount = #{shippingPriceAmount,jdbcType=DECIMAL},
+      gift_wrap_price_currency_code = #{giftWrapPriceCurrencyCode,jdbcType=VARCHAR},
+      gift_wrap_price_amount = #{giftWrapPriceAmount,jdbcType=DECIMAL},
+      item_tax_currency_code = #{itemTaxCurrencyCode,jdbcType=VARCHAR},
+      item_tax_amount = #{itemTaxAmount,jdbcType=DECIMAL},
+      shipping_tax_currency_code = #{shippingTaxCurrencyCode,jdbcType=VARCHAR},
+      shipping_tax_amount = #{shippingTaxAmount,jdbcType=DECIMAL},
+      gift_wrap_tax_currency_code = #{giftWrapTaxCurrencyCode,jdbcType=VARCHAR},
+      gift_wrap_tax_amount = #{giftWrapTaxAmount,jdbcType=DECIMAL},
+      shipping_discount_currency_code = #{shippingDiscountCurrencyCode,jdbcType=VARCHAR},
+      shipping_discount_amount = #{shippingDiscountAmount,jdbcType=DECIMAL},
+      shipping_discount_tax_currency_code = #{shippingDiscountTaxCurrencyCode,jdbcType=VARCHAR},
+      shipping_discount_tax_amount = #{shippingDiscountTaxAmount,jdbcType=DECIMAL},
+      promotion_discount_currency_code = #{promotionDiscountCurrencyCode,jdbcType=VARCHAR},
+      promotion_discount_amount = #{promotionDiscountAmount,jdbcType=DECIMAL},
+      promotion_discount_tax_currency_code = #{promotionDiscountTaxCurrencyCode,jdbcType=VARCHAR},
+      promotion_discount_tax_amount = #{promotionDiscountTaxAmount,jdbcType=DECIMAL},
+      promotion_ids = #{promotionIds,jdbcType=VARCHAR},
+      is_gift = #{isGift,jdbcType=BIT},
+      gift_message_text = #{giftMessageText,jdbcType=VARCHAR},
+      gift_wrap_level = #{giftWrapLevel,jdbcType=VARCHAR},
+      condition_note = #{conditionNote,jdbcType=VARCHAR},
+      condition_id = #{conditionId,jdbcType=VARCHAR},
+      condition_subtype_id = #{conditionSubtypeId,jdbcType=VARCHAR},
+      scheduled_delivery_start_date = #{scheduledDeliveryStartDate,jdbcType=VARCHAR},
+      scheduled_delivery_end_date = #{scheduledDeliveryEndDate,jdbcType=VARCHAR},
+      serial_number_required = #{serialNumberRequired,jdbcType=BIT},
+      is_rransparency = #{isRransparency,jdbcType=BIT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      ceate_by = #{ceateBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      cod_fee_currency_code = #{codFeeCurrencyCode,jdbcType=VARCHAR},
+      cod_fee_amount = #{codFeeAmount,jdbcType=DECIMAL},
+      cod_fee_discount_currency_code = #{codFeeDiscountCurrencyCode,jdbcType=VARCHAR},
+      cod_fee_discount_amount = #{codFeeDiscountAmount,jdbcType=DECIMAL},
+      price_designation = #{priceDesignation,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

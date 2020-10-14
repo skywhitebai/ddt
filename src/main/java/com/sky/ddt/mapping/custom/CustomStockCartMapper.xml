@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomStockCartMapper">
+
+    <select id="listStock" parameterType="com.sky.ddt.dto.stock.request.ListStockRequest"
+            resultType="com.sky.ddt.dto.stock.response.ListStockResponse">
+        SELECT ss.shop_sku_id shopSkuId,ss.`shop_id` shopId,s.`shop_name` shopName,ss.`shop_sku` shopSku,
+        SUM(CASE WHEN oi.purchase_date>=DATE_SUB(DATE(NOW()),INTERVAL 8 DAY) THEN oi.`quantity` ELSE 0 END)
+        salesForTheLast7Days,
+        SUM(CASE WHEN oi.purchase_date>=DATE_SUB(DATE(NOW()),INTERVAL 15 DAY) THEN oi.`quantity` ELSE 0 END)
+        salesForTheLast14Days,
+        SUM(CASE WHEN oi.purchase_date>=DATE_SUB(DATE(NOW()),INTERVAL 22 DAY) THEN oi.`quantity` ELSE 0 END)
+        salesForTheLast21Days,
+        SUM(CASE WHEN oi.purchase_date>=DATE_SUB(DATE(NOW()),INTERVAL 29 DAY) THEN oi.`quantity` ELSE 0 END)
+        salesForTheLast28Days,
+        SUM(CASE WHEN oi.purchase_date>=DATE_SUB(DATE(NOW()),INTERVAL 35 DAY) THEN oi.`quantity` ELSE 0 END)
+        salesForTheLast35Days,
+        IFNULL(fi.`afn_total_quantity`,0)-IFNULL(fi.`afn_unsellable_quantity`,0) fbaTotalCanSaleQuantity,
+        IFNULL(ss.`inventory_quantity`,0) inventoryQuantity,
+        IFNULL((select sum(sso.inventory_quantity) from shop_sku sso,shop so WHERE sso.shop_id=so.shop_id and so.type=1 AND
+        sso.sku_id=ss.sku_id and sso.shop_sku_id!=ss.shop_sku_id),0)  inventoryQuantityOtherShop,
+        IFNULL((select sum(ssw.inventory_quantity) from shop_sku ssw,shop sw WHERE ssw.shop_id=sw.shop_id and sw.type=2 AND
+        ssw.sku_id=ss.sku_id and ssw.shop_sku_id!=ss.shop_sku_id),0) inventoryQuantityWarehouse,
+        IFNULL(sc.`stock_quantity`,0) stockQuantity,
+        IFNULL(sc.`stock_quantity_ky`,0) stockQuantityKy,
+        IFNULL(sc.`stock_quantity_kp`,0) stockQuantityKp,
+        IFNULL(sc.`stock_quantity_hy`,0) stockQuantityHy,
+        sc.`create_time` createTime,
+        sc.`update_time` updateTime,
+        IFNULL(fi.afn_fulfillable_quantity,0) afnFulfillableQuantity,
+        IFNULL(fi.`afn_reserved_quantity`,0)+ IFNULL(fi.`afn_inbound_working_quantity`,0)+ IFNULL(fi.`afn_inbound_shipped_quantity`,0)+ IFNULL(fi.`afn_inbound_receiving_quantity`,0) onTheWayQuantity,
+        IFNULL(fi.afn_reserved_quantity,0) afnReservedQuantity,
+        IFNULL(fi.afn_inbound_working_quantity,0) afnInboundWorkingQuantity,
+        IFNULL(fi.afn_inbound_shipped_quantity,0) afnInboundShippedQuantity,
+        IFNULL(fi.afn_inbound_receiving_quantity,0) afnInboundReceivingQuantity,
+        IFNULL(scp.production_quantity,0) productionQuantity,
+        u.real_name salesmanRealName,
+        IFNULL((select sum(poss.production_quantity) produceOrderShopSkuProductionQuantity from
+        produce_order po,produce_order_shop_sku poss
+        where po.id=poss.produce_order_id and po.shop_id=ss.shop_id and poss.shop_sku_id=ss.shop_sku_id and po.status in(1,2)
+        ),0) produceOrderShopSkuProductionQuantity
+        FROM
+        shop_sku ss
+        LEFT JOIN `order_import` oi ON ss.`shop_sku_id`=oi.`shop_sku_id` and
+        oi.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 36 DAY) AND oi.purchase_date<![CDATA[<]]>
+        DATE_SUB(DATE(NOW()),INTERVAL 1 DAY) AND oi.order_status!='Cancelled' AND oi.sales_channel='Amazon.com'
+        and oi.item_price is not null
+        AND oi.`quantity`>0
+        LEFT JOIN `fba_import` fi ON ss.`shop_sku_id`=fi.shop_sku_id
+        LEFT JOIN stock_cart sc ON ss.`shop_sku_id`=sc.`shop_sku_id` and sc.type=1
+        LEFT JOIN stock_cart scp ON ss.`shop_sku_id`=scp.`shop_sku_id` and sc.type=2
+        LEFT JOIN shop s ON ss.`shop_id`=s.`shop_id`
+        LEFT JOIN USER u on u.user_id=ss.salesman_user_id
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                and ss.status=1
+                <if test="shopId != null ">and ss.shop_id=#{shopId}</if>
+                <if test="shopSku != null and shopSku != '' ">and ss.shop_sku like concat('%',#{shopSku},'%')</if>
+                <if test="shopParentSku != null and shopParentSku!= '' ">and ss.shop_parent_sku like
+                    concat('%',#{shopParentSku},'%')
+                </if>
+                <if test="salesmanUserId != null">and ss.salesman_user_id=#{salesmanUserId}
+                </if>
+                <if test="showType != null and showType==2 ">
+                    and (exists(select 1 from shop_sku ss2,fba_import fi2 WHERE fi2.shop_sku_id=ss2.shop_sku_id and
+                    (IFNULL(fi2.`afn_total_quantity`,0)-IFNULL(fi2.`afn_unsellable_quantity`,0))>0 and
+                    ss2.shop_parent_sku=ss.shop_parent_sku )
+                    or exists(select 1 from shop_sku ss2,order_import oi2 WHERE oi2.shop_sku_id=ss2.shop_sku_id and
+                    oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 36 DAY) AND oi2.purchase_date<![CDATA[<]]>
+                    DATE_SUB(DATE(NOW()),INTERVAL 1 DAY) AND oi.order_status!='Cancelled' AND oi.sales_channel='Amazon.com'
+                    and oi.item_price is not null
+                    AND oi2.`quantity`>0 and
+                    ss2.shop_parent_sku=ss.shop_parent_sku )
+                    )
+                </if>
+                <if test="userId != null ">and ss.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
+            </trim>
+        </where>
+        GROUP BY ss.`shop_sku`
+        ORDER BY ss.`shop_parent_sku`,ss.`shop_sku`
+    </select>
+</mapper>

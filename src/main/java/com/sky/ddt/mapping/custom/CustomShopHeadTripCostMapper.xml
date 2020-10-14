@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomShopHeadTripCostMapper">
+    <resultMap id="listShopHeadTripCostMap"
+               type="com.sky.ddt.dto.shopHeadTripCost.response.ListShopHeadTripCostResponse"
+               extends="com.sky.ddt.dao.generate.ShopHeadTripCostMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+    </resultMap>
+    <select id="listShopHeadTripCost"
+            parameterType="com.sky.ddt.dto.shopHeadTripCost.request.ListShopHeadTripCostRequest"
+            resultMap="listShopHeadTripCostMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.ShopHeadTripCostMapper.Base_Column_List"/>,
+        (select shop_name from shop s where s.shop_id=shtc.shop_id)shop_name
+        from shop_head_trip_cost shtc
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <trim prefix="(" suffix=")" prefixOverrides="and">
+                    <if test="shopId != null">and shtc.shop_id=#{shopId}</if>
+                    <if test="monthDate != null ">and shtc.month=#{monthDate}</if>
+                    <if test="userId != null ">and shtc.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
+                </trim>
+            </trim>
+        </where>
+        order by shtc.create_time desc
+    </select>
+</mapper>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomOutboundOrderShopSkuMapper">
+    <resultMap id="ListOutboundOrderShopSkuMap"
+               type="com.sky.ddt.dto.outboundOrderShopSku.response.ListOutboundOrderShopSkuResponse"
+               extends="com.sky.ddt.dao.generate.OutboundOrderShopSkuMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+        <result column="shop_sku" property="shopSku"/>
+        <result column="sku" property="sku"/>
+        <result column="inventory_quantity" property="inventoryQuantity"/>
+        <result column="inventory_quantity_other_shop" property="inventoryQuantityOtherShop"/>
+        <result column="inventory_quantity_warehouse" property="inventoryQuantityWarehouse"/>
+    </resultMap>
+    <select id="listOutboundOrderShopSku"
+            parameterType="com.sky.ddt.dto.outboundOrderShopSku.request.ListOutboundOrderShopSkuRequest"
+            resultMap="ListOutboundOrderShopSkuMap">
+        select
+        ooss.id, ooss.outbound_order_id, ooss.shop_sku_id, ooss.outbound_quantity,ooss.remark, ooss.create_time,
+        ooss.create_by, ooss.update_time, ooss.update_by
+        ,s.shop_name,
+        ss.shop_sku
+        ,sku.sku,
+        ss.inventory_quantity,
+        IFNULL((select sum(sso.inventory_quantity) from shop_sku sso,shop so WHERE sso.shop_id=so.shop_id and so.type=1 AND
+        sso.sku_id=ss.sku_id and sso.shop_sku_id!=ss.shop_sku_id),0) inventory_quantity_other_shop,
+        IFNULL((select sum(ssw.inventory_quantity) from shop_sku ssw,shop sw WHERE ssw.shop_id=sw.shop_id and sw.type=2 AND
+        ssw.sku_id=ss.sku_id and ssw.shop_sku_id!=ss.shop_sku_id),0) inventory_quantity_warehouse
+
+        from outbound_order_shop_sku ooss
+        left join shop_sku ss on ooss.shop_sku_id=ss.shop_sku_id
+        left join sku on sku.sku_id=ss.sku_id
+        left join outbound_order oo on ooss.outbound_order_id=oo.id
+        left join shop s on oo.shop_id=s.shop_id
+        where ooss.outbound_order_id=#{outboundOrderId}
+        <if test="shopSku != null and shopSku != '' ">
+            and ss.shop_sku like concat('%',#{shopSku},'%')
+        </if>
+        <if test="sku != null and sku != '' ">
+            and sku.sku like concat('%',#{sku},'%')
+        </if>
+        order by ss.shop_sku
+    </select>
+    <insert id="generateOutboundOrderShopSku">
+        insert into `outbound_order_shop_sku`(outbound_order_id,shop_sku_id,outbound_quantity,create_by,create_time)
+        select #{outboundOrderId} outbound_order_id,fplss.`shop_sku_id`,sum(fplss.quantity) outbound_quantity ,#{dealUserId} create_by,now() create_time from `fba_packing_list_shop_sku` fplss
+        where fplss.`fba_packing_list_id`=#{fbaPackingListId}
+        group by fplss.`shop_sku_id`
+    </insert>
+</mapper>

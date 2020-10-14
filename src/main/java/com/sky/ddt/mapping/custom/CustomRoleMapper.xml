@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomRoleMapper">
+
+    <select id="comboboxlist" resultType="com.sky.ddt.entity.Role">
+        select id Id,role_name roleName
+        from sys_role
+        order by create_time
+    </select>
+
+</mapper>

@@ -1,0 +1,528 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.SkuMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.Sku">
+    <id column="sku_id" jdbcType="INTEGER" property="skuId" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="colour" jdbcType="VARCHAR" property="colour" />
+    <result column="colour_number" jdbcType="VARCHAR" property="colourNumber" />
+    <result column="size" jdbcType="VARCHAR" property="size" />
+    <result column="weight" jdbcType="DECIMAL" property="weight" />
+    <result column="cost_price" jdbcType="DECIMAL" property="costPrice" />
+    <result column="head_trip_cost" jdbcType="DECIMAL" property="headTripCost" />
+    <result column="head_trip_cost_min" jdbcType="DECIMAL" property="headTripCostMin" />
+    <result column="inventory_quantity" jdbcType="INTEGER" property="inventoryQuantity" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_by" jdbcType="INTEGER" property="updateBy" />
+    <result column="second_sku" jdbcType="VARCHAR" property="secondSku" />
+    <result column="brand" jdbcType="VARCHAR" property="brand" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="material" jdbcType="VARCHAR" property="material" />
+    <result column="grade" jdbcType="VARCHAR" property="grade" />
+    <result column="executive_standard" jdbcType="VARCHAR" property="executiveStandard" />
+    <result column="security_category" jdbcType="VARCHAR" property="securityCategory" />
+    <result column="inspector" jdbcType="VARCHAR" property="inspector" />
+    <result column="suggested_retail_price" jdbcType="VARCHAR" property="suggestedRetailPrice" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    sku_id, product_id, sku, colour, colour_number, size, weight, cost_price, head_trip_cost, 
+    head_trip_cost_min, inventory_quantity, remark, create_time, create_by, update_time, 
+    update_by, second_sku, brand, product_name, material, grade, executive_standard, 
+    security_category, inspector, suggested_retail_price
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.SkuExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sku
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sku
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.SkuExample">
+    delete from sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.Sku">
+    <selectKey keyProperty="skuId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sku (product_id, sku, colour, 
+      colour_number, size, weight, 
+      cost_price, head_trip_cost, head_trip_cost_min, 
+      inventory_quantity, remark, create_time, 
+      create_by, update_time, update_by, 
+      second_sku, brand, product_name, 
+      material, grade, executive_standard, 
+      security_category, inspector, suggested_retail_price
+      )
+    values (#{productId,jdbcType=INTEGER}, #{sku,jdbcType=VARCHAR}, #{colour,jdbcType=VARCHAR}, 
+      #{colourNumber,jdbcType=VARCHAR}, #{size,jdbcType=VARCHAR}, #{weight,jdbcType=DECIMAL}, 
+      #{costPrice,jdbcType=DECIMAL}, #{headTripCost,jdbcType=DECIMAL}, #{headTripCostMin,jdbcType=DECIMAL}, 
+      #{inventoryQuantity,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
+      #{secondSku,jdbcType=VARCHAR}, #{brand,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
+      #{material,jdbcType=VARCHAR}, #{grade,jdbcType=VARCHAR}, #{executiveStandard,jdbcType=VARCHAR}, 
+      #{securityCategory,jdbcType=VARCHAR}, #{inspector,jdbcType=VARCHAR}, #{suggestedRetailPrice,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.Sku">
+    <selectKey keyProperty="skuId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sku
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="colour != null">
+        colour,
+      </if>
+      <if test="colourNumber != null">
+        colour_number,
+      </if>
+      <if test="size != null">
+        size,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="costPrice != null">
+        cost_price,
+      </if>
+      <if test="headTripCost != null">
+        head_trip_cost,
+      </if>
+      <if test="headTripCostMin != null">
+        head_trip_cost_min,
+      </if>
+      <if test="inventoryQuantity != null">
+        inventory_quantity,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="secondSku != null">
+        second_sku,
+      </if>
+      <if test="brand != null">
+        brand,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="material != null">
+        material,
+      </if>
+      <if test="grade != null">
+        grade,
+      </if>
+      <if test="executiveStandard != null">
+        executive_standard,
+      </if>
+      <if test="securityCategory != null">
+        security_category,
+      </if>
+      <if test="inspector != null">
+        inspector,
+      </if>
+      <if test="suggestedRetailPrice != null">
+        suggested_retail_price,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="colour != null">
+        #{colour,jdbcType=VARCHAR},
+      </if>
+      <if test="colourNumber != null">
+        #{colourNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        #{size,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="costPrice != null">
+        #{costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="headTripCost != null">
+        #{headTripCost,jdbcType=DECIMAL},
+      </if>
+      <if test="headTripCostMin != null">
+        #{headTripCostMin,jdbcType=DECIMAL},
+      </if>
+      <if test="inventoryQuantity != null">
+        #{inventoryQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="secondSku != null">
+        #{secondSku,jdbcType=VARCHAR},
+      </if>
+      <if test="brand != null">
+        #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="material != null">
+        #{material,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null">
+        #{grade,jdbcType=VARCHAR},
+      </if>
+      <if test="executiveStandard != null">
+        #{executiveStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="securityCategory != null">
+        #{securityCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="inspector != null">
+        #{inspector,jdbcType=VARCHAR},
+      </if>
+      <if test="suggestedRetailPrice != null">
+        #{suggestedRetailPrice,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.SkuExample" resultType="java.lang.Long">
+    select count(*) from sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sku
+    <set>
+      <if test="record.skuId != null">
+        sku_id = #{record.skuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.productId != null">
+        product_id = #{record.productId,jdbcType=INTEGER},
+      </if>
+      <if test="record.sku != null">
+        sku = #{record.sku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.colour != null">
+        colour = #{record.colour,jdbcType=VARCHAR},
+      </if>
+      <if test="record.colourNumber != null">
+        colour_number = #{record.colourNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.size != null">
+        size = #{record.size,jdbcType=VARCHAR},
+      </if>
+      <if test="record.weight != null">
+        weight = #{record.weight,jdbcType=DECIMAL},
+      </if>
+      <if test="record.costPrice != null">
+        cost_price = #{record.costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.headTripCost != null">
+        head_trip_cost = #{record.headTripCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.headTripCostMin != null">
+        head_trip_cost_min = #{record.headTripCostMin,jdbcType=DECIMAL},
+      </if>
+      <if test="record.inventoryQuantity != null">
+        inventory_quantity = #{record.inventoryQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="record.secondSku != null">
+        second_sku = #{record.secondSku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brand != null">
+        brand = #{record.brand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productName != null">
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.material != null">
+        material = #{record.material,jdbcType=VARCHAR},
+      </if>
+      <if test="record.grade != null">
+        grade = #{record.grade,jdbcType=VARCHAR},
+      </if>
+      <if test="record.executiveStandard != null">
+        executive_standard = #{record.executiveStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="record.securityCategory != null">
+        security_category = #{record.securityCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inspector != null">
+        inspector = #{record.inspector,jdbcType=VARCHAR},
+      </if>
+      <if test="record.suggestedRetailPrice != null">
+        suggested_retail_price = #{record.suggestedRetailPrice,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sku
+    set sku_id = #{record.skuId,jdbcType=INTEGER},
+      product_id = #{record.productId,jdbcType=INTEGER},
+      sku = #{record.sku,jdbcType=VARCHAR},
+      colour = #{record.colour,jdbcType=VARCHAR},
+      colour_number = #{record.colourNumber,jdbcType=VARCHAR},
+      size = #{record.size,jdbcType=VARCHAR},
+      weight = #{record.weight,jdbcType=DECIMAL},
+      cost_price = #{record.costPrice,jdbcType=DECIMAL},
+      head_trip_cost = #{record.headTripCost,jdbcType=DECIMAL},
+      head_trip_cost_min = #{record.headTripCostMin,jdbcType=DECIMAL},
+      inventory_quantity = #{record.inventoryQuantity,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=INTEGER},
+      second_sku = #{record.secondSku,jdbcType=VARCHAR},
+      brand = #{record.brand,jdbcType=VARCHAR},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      material = #{record.material,jdbcType=VARCHAR},
+      grade = #{record.grade,jdbcType=VARCHAR},
+      executive_standard = #{record.executiveStandard,jdbcType=VARCHAR},
+      security_category = #{record.securityCategory,jdbcType=VARCHAR},
+      inspector = #{record.inspector,jdbcType=VARCHAR},
+      suggested_retail_price = #{record.suggestedRetailPrice,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.Sku">
+    update sku
+    <set>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="colour != null">
+        colour = #{colour,jdbcType=VARCHAR},
+      </if>
+      <if test="colourNumber != null">
+        colour_number = #{colourNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="size != null">
+        size = #{size,jdbcType=VARCHAR},
+      </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="costPrice != null">
+        cost_price = #{costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="headTripCost != null">
+        head_trip_cost = #{headTripCost,jdbcType=DECIMAL},
+      </if>
+      <if test="headTripCostMin != null">
+        head_trip_cost_min = #{headTripCostMin,jdbcType=DECIMAL},
+      </if>
+      <if test="inventoryQuantity != null">
+        inventory_quantity = #{inventoryQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="secondSku != null">
+        second_sku = #{secondSku,jdbcType=VARCHAR},
+      </if>
+      <if test="brand != null">
+        brand = #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="material != null">
+        material = #{material,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null">
+        grade = #{grade,jdbcType=VARCHAR},
+      </if>
+      <if test="executiveStandard != null">
+        executive_standard = #{executiveStandard,jdbcType=VARCHAR},
+      </if>
+      <if test="securityCategory != null">
+        security_category = #{securityCategory,jdbcType=VARCHAR},
+      </if>
+      <if test="inspector != null">
+        inspector = #{inspector,jdbcType=VARCHAR},
+      </if>
+      <if test="suggestedRetailPrice != null">
+        suggested_retail_price = #{suggestedRetailPrice,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.Sku">
+    update sku
+    set product_id = #{productId,jdbcType=INTEGER},
+      sku = #{sku,jdbcType=VARCHAR},
+      colour = #{colour,jdbcType=VARCHAR},
+      colour_number = #{colourNumber,jdbcType=VARCHAR},
+      size = #{size,jdbcType=VARCHAR},
+      weight = #{weight,jdbcType=DECIMAL},
+      cost_price = #{costPrice,jdbcType=DECIMAL},
+      head_trip_cost = #{headTripCost,jdbcType=DECIMAL},
+      head_trip_cost_min = #{headTripCostMin,jdbcType=DECIMAL},
+      inventory_quantity = #{inventoryQuantity,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      second_sku = #{secondSku,jdbcType=VARCHAR},
+      brand = #{brand,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      material = #{material,jdbcType=VARCHAR},
+      grade = #{grade,jdbcType=VARCHAR},
+      executive_standard = #{executiveStandard,jdbcType=VARCHAR},
+      security_category = #{securityCategory,jdbcType=VARCHAR},
+      inspector = #{inspector,jdbcType=VARCHAR},
+      suggested_retail_price = #{suggestedRetailPrice,jdbcType=VARCHAR}
+    where sku_id = #{skuId,jdbcType=INTEGER}
+  </update>
+</mapper>

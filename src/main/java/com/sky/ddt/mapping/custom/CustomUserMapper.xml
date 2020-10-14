@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomUserMapper">
+
+    <select id="comboboxlist" resultType="com.sky.ddt.dto.user.response.UserComboboxResponse">
+        SELECT user_id userId,`user_name` userName,`real_name` realName
+        FROM user
+        order by real_name desc
+    </select>
+    <resultMap id="listUserMap" type="com.sky.ddt.dto.user.response.UserListResponse"
+               extends="com.sky.ddt.dao.generate.UserMapper.BaseResultMap">
+        <result column="roleNames" property="roleNames"/>
+    </resultMap>
+    <select id="listUser" resultMap="listUserMap">
+        SELECT
+        <include refid="com.sky.ddt.dao.generate.UserMapper.Base_Column_List"/>
+        ,(SELECT GROUP_CONCAT(r.role_name SEPARATOR ',') roleNames
+        FROM `sys_role` r,`sys_user_role` ur WHERE r.`id`=ur.`role_id` AND ur.`user_id`=u.user_id) roleNames
+        FROM user u
+        <if test="_parameter != null">
+            <include refid="user_Query_Where_Clause" />
+        </if>
+        order by status desc,user_name asc
+    </select>
+    <sql id="user_Query_Where_Clause">
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="userName != null and userName != '' ">and user_name like concat('%',#{userName},'%')</if>
+                <if test="mobile != null and mobile != '' ">and mobile like concat('%',#{mobile},'%')</if>
+                <if test="realName != null and realName != '' ">and real_name like concat('%',#{realName},'%')</if>
+                <if test="gender != null ">and gender=#{gender}</if>
+                <if test="email != null and email != '' ">and email like concat('%',#{email},'%')</if>
+                <if test="status != null ">and status=#{status}</if>
+            </trim>
+        </where>
+    </sql>
+</mapper>

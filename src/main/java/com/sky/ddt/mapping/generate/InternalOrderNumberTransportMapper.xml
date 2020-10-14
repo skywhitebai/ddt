@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.InternalOrderNumberTransportMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.InternalOrderNumberTransport">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="internal_order_number_id" jdbcType="INTEGER" property="internalOrderNumberId" />
+    <result column="sub_order_number" jdbcType="VARCHAR" property="subOrderNumber" />
+    <result column="fba_shipment_id" jdbcType="VARCHAR" property="fbaShipmentId" />
+    <result column="fba_shipment_id_short" jdbcType="VARCHAR" property="fbaShipmentIdShort" />
+    <result column="shipment_id" jdbcType="VARCHAR" property="shipmentId" />
+    <result column="transfer_order_no" jdbcType="VARCHAR" property="transferOrderNo" />
+    <result column="transport_type_id" jdbcType="INTEGER" property="transportTypeId" />
+    <result column="head_trip_cost_rate" jdbcType="DECIMAL" property="headTripCostRate" />
+    <result column="lock_head_trip_cost_rate" jdbcType="INTEGER" property="lockHeadTripCostRate" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_by" jdbcType="INTEGER" property="updateBy" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, internal_order_number_id, sub_order_number, fba_shipment_id, fba_shipment_id_short, 
+    shipment_id, transfer_order_no, transport_type_id, head_trip_cost_rate, lock_head_trip_cost_rate, 
+    create_time, create_by, update_time, update_by
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.InternalOrderNumberTransportExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from internal_order_number_transport
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from internal_order_number_transport
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from internal_order_number_transport
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.InternalOrderNumberTransportExample">
+    delete from internal_order_number_transport
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.InternalOrderNumberTransport">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into internal_order_number_transport (internal_order_number_id, sub_order_number, 
+      fba_shipment_id, fba_shipment_id_short, shipment_id, 
+      transfer_order_no, transport_type_id, head_trip_cost_rate, 
+      lock_head_trip_cost_rate, create_time, create_by, 
+      update_time, update_by)
+    values (#{internalOrderNumberId,jdbcType=INTEGER}, #{subOrderNumber,jdbcType=VARCHAR}, 
+      #{fbaShipmentId,jdbcType=VARCHAR}, #{fbaShipmentIdShort,jdbcType=VARCHAR}, #{shipmentId,jdbcType=VARCHAR}, 
+      #{transferOrderNo,jdbcType=VARCHAR}, #{transportTypeId,jdbcType=INTEGER}, #{headTripCostRate,jdbcType=DECIMAL}, 
+      #{lockHeadTripCostRate,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.InternalOrderNumberTransport">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into internal_order_number_transport
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="internalOrderNumberId != null">
+        internal_order_number_id,
+      </if>
+      <if test="subOrderNumber != null">
+        sub_order_number,
+      </if>
+      <if test="fbaShipmentId != null">
+        fba_shipment_id,
+      </if>
+      <if test="fbaShipmentIdShort != null">
+        fba_shipment_id_short,
+      </if>
+      <if test="shipmentId != null">
+        shipment_id,
+      </if>
+      <if test="transferOrderNo != null">
+        transfer_order_no,
+      </if>
+      <if test="transportTypeId != null">
+        transport_type_id,
+      </if>
+      <if test="headTripCostRate != null">
+        head_trip_cost_rate,
+      </if>
+      <if test="lockHeadTripCostRate != null">
+        lock_head_trip_cost_rate,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="internalOrderNumberId != null">
+        #{internalOrderNumberId,jdbcType=INTEGER},
+      </if>
+      <if test="subOrderNumber != null">
+        #{subOrderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="fbaShipmentId != null">
+        #{fbaShipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="fbaShipmentIdShort != null">
+        #{fbaShipmentIdShort,jdbcType=VARCHAR},
+      </if>
+      <if test="shipmentId != null">
+        #{shipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="transferOrderNo != null">
+        #{transferOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="transportTypeId != null">
+        #{transportTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="headTripCostRate != null">
+        #{headTripCostRate,jdbcType=DECIMAL},
+      </if>
+      <if test="lockHeadTripCostRate != null">
+        #{lockHeadTripCostRate,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.InternalOrderNumberTransportExample" resultType="java.lang.Long">
+    select count(*) from internal_order_number_transport
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update internal_order_number_transport
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.internalOrderNumberId != null">
+        internal_order_number_id = #{record.internalOrderNumberId,jdbcType=INTEGER},
+      </if>
+      <if test="record.subOrderNumber != null">
+        sub_order_number = #{record.subOrderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fbaShipmentId != null">
+        fba_shipment_id = #{record.fbaShipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fbaShipmentIdShort != null">
+        fba_shipment_id_short = #{record.fbaShipmentIdShort,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipmentId != null">
+        shipment_id = #{record.shipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transferOrderNo != null">
+        transfer_order_no = #{record.transferOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.transportTypeId != null">
+        transport_type_id = #{record.transportTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.headTripCostRate != null">
+        head_trip_cost_rate = #{record.headTripCostRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.lockHeadTripCostRate != null">
+        lock_head_trip_cost_rate = #{record.lockHeadTripCostRate,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update internal_order_number_transport
+    set id = #{record.id,jdbcType=INTEGER},
+      internal_order_number_id = #{record.internalOrderNumberId,jdbcType=INTEGER},
+      sub_order_number = #{record.subOrderNumber,jdbcType=VARCHAR},
+      fba_shipment_id = #{record.fbaShipmentId,jdbcType=VARCHAR},
+      fba_shipment_id_short = #{record.fbaShipmentIdShort,jdbcType=VARCHAR},
+      shipment_id = #{record.shipmentId,jdbcType=VARCHAR},
+      transfer_order_no = #{record.transferOrderNo,jdbcType=VARCHAR},
+      transport_type_id = #{record.transportTypeId,jdbcType=INTEGER},
+      head_trip_cost_rate = #{record.headTripCostRate,jdbcType=DECIMAL},
+      lock_head_trip_cost_rate = #{record.lockHeadTripCostRate,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.InternalOrderNumberTransport">
+    update internal_order_number_transport
+    <set>
+      <if test="internalOrderNumberId != null">
+        internal_order_number_id = #{internalOrderNumberId,jdbcType=INTEGER},
+      </if>
+      <if test="subOrderNumber != null">
+        sub_order_number = #{subOrderNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="fbaShipmentId != null">
+        fba_shipment_id = #{fbaShipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="fbaShipmentIdShort != null">
+        fba_shipment_id_short = #{fbaShipmentIdShort,jdbcType=VARCHAR},
+      </if>
+      <if test="shipmentId != null">
+        shipment_id = #{shipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="transferOrderNo != null">
+        transfer_order_no = #{transferOrderNo,jdbcType=VARCHAR},
+      </if>
+      <if test="transportTypeId != null">
+        transport_type_id = #{transportTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="headTripCostRate != null">
+        head_trip_cost_rate = #{headTripCostRate,jdbcType=DECIMAL},
+      </if>
+      <if test="lockHeadTripCostRate != null">
+        lock_head_trip_cost_rate = #{lockHeadTripCostRate,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.InternalOrderNumberTransport">
+    update internal_order_number_transport
+    set internal_order_number_id = #{internalOrderNumberId,jdbcType=INTEGER},
+      sub_order_number = #{subOrderNumber,jdbcType=VARCHAR},
+      fba_shipment_id = #{fbaShipmentId,jdbcType=VARCHAR},
+      fba_shipment_id_short = #{fbaShipmentIdShort,jdbcType=VARCHAR},
+      shipment_id = #{shipmentId,jdbcType=VARCHAR},
+      transfer_order_no = #{transferOrderNo,jdbcType=VARCHAR},
+      transport_type_id = #{transportTypeId,jdbcType=INTEGER},
+      head_trip_cost_rate = #{headTripCostRate,jdbcType=DECIMAL},
+      lock_head_trip_cost_rate = #{lockHeadTripCostRate,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

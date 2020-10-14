@@ -1,0 +1,766 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.OrderImportMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.OrderImport">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="shop_id" jdbcType="INTEGER" property="shopId" />
+    <result column="amazon_order_id" jdbcType="VARCHAR" property="amazonOrderId" />
+    <result column="merchant_order_id" jdbcType="VARCHAR" property="merchantOrderId" />
+    <result column="purchase_date" jdbcType="TIMESTAMP" property="purchaseDate" />
+    <result column="last_updated_date" jdbcType="TIMESTAMP" property="lastUpdatedDate" />
+    <result column="order_status" jdbcType="VARCHAR" property="orderStatus" />
+    <result column="fulfillment_channel" jdbcType="VARCHAR" property="fulfillmentChannel" />
+    <result column="sales_channel" jdbcType="VARCHAR" property="salesChannel" />
+    <result column="order_channel" jdbcType="VARCHAR" property="orderChannel" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="ship_service_level" jdbcType="VARCHAR" property="shipServiceLevel" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="shop_sku_id" jdbcType="INTEGER" property="shopSkuId" />
+    <result column="asin" jdbcType="VARCHAR" property="asin" />
+    <result column="item_status" jdbcType="VARCHAR" property="itemStatus" />
+    <result column="quantity" jdbcType="INTEGER" property="quantity" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="item_price" jdbcType="DECIMAL" property="itemPrice" />
+    <result column="item_tax" jdbcType="DECIMAL" property="itemTax" />
+    <result column="shipping_price" jdbcType="DECIMAL" property="shippingPrice" />
+    <result column="shipping_tax" jdbcType="DECIMAL" property="shippingTax" />
+    <result column="gift_wrap_price" jdbcType="DECIMAL" property="giftWrapPrice" />
+    <result column="gift_wrap_tax" jdbcType="DECIMAL" property="giftWrapTax" />
+    <result column="item_promotion_discount" jdbcType="DECIMAL" property="itemPromotionDiscount" />
+    <result column="ship_promotion_discount" jdbcType="DECIMAL" property="shipPromotionDiscount" />
+    <result column="ship_city" jdbcType="VARCHAR" property="shipCity" />
+    <result column="ship_state" jdbcType="VARCHAR" property="shipState" />
+    <result column="ship_postal_code" jdbcType="VARCHAR" property="shipPostalCode" />
+    <result column="ship_country" jdbcType="VARCHAR" property="shipCountry" />
+    <result column="promotion_ids" jdbcType="VARCHAR" property="promotionIds" />
+    <result column="is_business_order" jdbcType="VARCHAR" property="isBusinessOrder" />
+    <result column="purchase_order_number" jdbcType="INTEGER" property="purchaseOrderNumber" />
+    <result column="price_designation" jdbcType="VARCHAR" property="priceDesignation" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_by" jdbcType="INTEGER" property="updateBy" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, shop_id, amazon_order_id, merchant_order_id, purchase_date, last_updated_date, 
+    order_status, fulfillment_channel, sales_channel, order_channel, url, ship_service_level, 
+    product_name, sku, shop_sku_id, asin, item_status, quantity, currency, item_price, 
+    item_tax, shipping_price, shipping_tax, gift_wrap_price, gift_wrap_tax, item_promotion_discount, 
+    ship_promotion_discount, ship_city, ship_state, ship_postal_code, ship_country, promotion_ids, 
+    is_business_order, purchase_order_number, price_designation, remark, create_time, 
+    create_by, update_time, update_by
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.OrderImportExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from order_import
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from order_import
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from order_import
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.OrderImportExample">
+    delete from order_import
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.OrderImport">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into order_import (shop_id, amazon_order_id, merchant_order_id, 
+      purchase_date, last_updated_date, order_status, 
+      fulfillment_channel, sales_channel, order_channel, 
+      url, ship_service_level, product_name, 
+      sku, shop_sku_id, asin, 
+      item_status, quantity, currency, 
+      item_price, item_tax, shipping_price, 
+      shipping_tax, gift_wrap_price, gift_wrap_tax, 
+      item_promotion_discount, ship_promotion_discount, 
+      ship_city, ship_state, ship_postal_code, 
+      ship_country, promotion_ids, is_business_order, 
+      purchase_order_number, price_designation, 
+      remark, create_time, create_by, 
+      update_time, update_by)
+    values (#{shopId,jdbcType=INTEGER}, #{amazonOrderId,jdbcType=VARCHAR}, #{merchantOrderId,jdbcType=VARCHAR}, 
+      #{purchaseDate,jdbcType=TIMESTAMP}, #{lastUpdatedDate,jdbcType=TIMESTAMP}, #{orderStatus,jdbcType=VARCHAR}, 
+      #{fulfillmentChannel,jdbcType=VARCHAR}, #{salesChannel,jdbcType=VARCHAR}, #{orderChannel,jdbcType=VARCHAR}, 
+      #{url,jdbcType=VARCHAR}, #{shipServiceLevel,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
+      #{sku,jdbcType=VARCHAR}, #{shopSkuId,jdbcType=INTEGER}, #{asin,jdbcType=VARCHAR}, 
+      #{itemStatus,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{currency,jdbcType=VARCHAR}, 
+      #{itemPrice,jdbcType=DECIMAL}, #{itemTax,jdbcType=DECIMAL}, #{shippingPrice,jdbcType=DECIMAL}, 
+      #{shippingTax,jdbcType=DECIMAL}, #{giftWrapPrice,jdbcType=DECIMAL}, #{giftWrapTax,jdbcType=DECIMAL}, 
+      #{itemPromotionDiscount,jdbcType=DECIMAL}, #{shipPromotionDiscount,jdbcType=DECIMAL}, 
+      #{shipCity,jdbcType=VARCHAR}, #{shipState,jdbcType=VARCHAR}, #{shipPostalCode,jdbcType=VARCHAR}, 
+      #{shipCountry,jdbcType=VARCHAR}, #{promotionIds,jdbcType=VARCHAR}, #{isBusinessOrder,jdbcType=VARCHAR}, 
+      #{purchaseOrderNumber,jdbcType=INTEGER}, #{priceDesignation,jdbcType=VARCHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.OrderImport">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into order_import
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="shopId != null">
+        shop_id,
+      </if>
+      <if test="amazonOrderId != null">
+        amazon_order_id,
+      </if>
+      <if test="merchantOrderId != null">
+        merchant_order_id,
+      </if>
+      <if test="purchaseDate != null">
+        purchase_date,
+      </if>
+      <if test="lastUpdatedDate != null">
+        last_updated_date,
+      </if>
+      <if test="orderStatus != null">
+        order_status,
+      </if>
+      <if test="fulfillmentChannel != null">
+        fulfillment_channel,
+      </if>
+      <if test="salesChannel != null">
+        sales_channel,
+      </if>
+      <if test="orderChannel != null">
+        order_channel,
+      </if>
+      <if test="url != null">
+        url,
+      </if>
+      <if test="shipServiceLevel != null">
+        ship_service_level,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="shopSkuId != null">
+        shop_sku_id,
+      </if>
+      <if test="asin != null">
+        asin,
+      </if>
+      <if test="itemStatus != null">
+        item_status,
+      </if>
+      <if test="quantity != null">
+        quantity,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="itemPrice != null">
+        item_price,
+      </if>
+      <if test="itemTax != null">
+        item_tax,
+      </if>
+      <if test="shippingPrice != null">
+        shipping_price,
+      </if>
+      <if test="shippingTax != null">
+        shipping_tax,
+      </if>
+      <if test="giftWrapPrice != null">
+        gift_wrap_price,
+      </if>
+      <if test="giftWrapTax != null">
+        gift_wrap_tax,
+      </if>
+      <if test="itemPromotionDiscount != null">
+        item_promotion_discount,
+      </if>
+      <if test="shipPromotionDiscount != null">
+        ship_promotion_discount,
+      </if>
+      <if test="shipCity != null">
+        ship_city,
+      </if>
+      <if test="shipState != null">
+        ship_state,
+      </if>
+      <if test="shipPostalCode != null">
+        ship_postal_code,
+      </if>
+      <if test="shipCountry != null">
+        ship_country,
+      </if>
+      <if test="promotionIds != null">
+        promotion_ids,
+      </if>
+      <if test="isBusinessOrder != null">
+        is_business_order,
+      </if>
+      <if test="purchaseOrderNumber != null">
+        purchase_order_number,
+      </if>
+      <if test="priceDesignation != null">
+        price_designation,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="shopId != null">
+        #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="amazonOrderId != null">
+        #{amazonOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantOrderId != null">
+        #{merchantOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseDate != null">
+        #{purchaseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdatedDate != null">
+        #{lastUpdatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderStatus != null">
+        #{orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="fulfillmentChannel != null">
+        #{fulfillmentChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="salesChannel != null">
+        #{salesChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="orderChannel != null">
+        #{orderChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="shipServiceLevel != null">
+        #{shipServiceLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSkuId != null">
+        #{shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="asin != null">
+        #{asin,jdbcType=VARCHAR},
+      </if>
+      <if test="itemStatus != null">
+        #{itemStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="itemPrice != null">
+        #{itemPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="itemTax != null">
+        #{itemTax,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingPrice != null">
+        #{shippingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingTax != null">
+        #{shippingTax,jdbcType=DECIMAL},
+      </if>
+      <if test="giftWrapPrice != null">
+        #{giftWrapPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="giftWrapTax != null">
+        #{giftWrapTax,jdbcType=DECIMAL},
+      </if>
+      <if test="itemPromotionDiscount != null">
+        #{itemPromotionDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="shipPromotionDiscount != null">
+        #{shipPromotionDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="shipCity != null">
+        #{shipCity,jdbcType=VARCHAR},
+      </if>
+      <if test="shipState != null">
+        #{shipState,jdbcType=VARCHAR},
+      </if>
+      <if test="shipPostalCode != null">
+        #{shipPostalCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shipCountry != null">
+        #{shipCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="promotionIds != null">
+        #{promotionIds,jdbcType=VARCHAR},
+      </if>
+      <if test="isBusinessOrder != null">
+        #{isBusinessOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseOrderNumber != null">
+        #{purchaseOrderNumber,jdbcType=INTEGER},
+      </if>
+      <if test="priceDesignation != null">
+        #{priceDesignation,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.OrderImportExample" resultType="java.lang.Long">
+    select count(*) from order_import
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update order_import
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.shopId != null">
+        shop_id = #{record.shopId,jdbcType=INTEGER},
+      </if>
+      <if test="record.amazonOrderId != null">
+        amazon_order_id = #{record.amazonOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.merchantOrderId != null">
+        merchant_order_id = #{record.merchantOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.purchaseDate != null">
+        purchase_date = #{record.purchaseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdatedDate != null">
+        last_updated_date = #{record.lastUpdatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orderStatus != null">
+        order_status = #{record.orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fulfillmentChannel != null">
+        fulfillment_channel = #{record.fulfillmentChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.salesChannel != null">
+        sales_channel = #{record.salesChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.orderChannel != null">
+        order_channel = #{record.orderChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.url != null">
+        url = #{record.url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipServiceLevel != null">
+        ship_service_level = #{record.shipServiceLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productName != null">
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sku != null">
+        sku = #{record.sku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopSkuId != null">
+        shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.asin != null">
+        asin = #{record.asin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.itemStatus != null">
+        item_status = #{record.itemStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.quantity != null">
+        quantity = #{record.quantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.currency != null">
+        currency = #{record.currency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.itemPrice != null">
+        item_price = #{record.itemPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.itemTax != null">
+        item_tax = #{record.itemTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shippingPrice != null">
+        shipping_price = #{record.shippingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shippingTax != null">
+        shipping_tax = #{record.shippingTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.giftWrapPrice != null">
+        gift_wrap_price = #{record.giftWrapPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.giftWrapTax != null">
+        gift_wrap_tax = #{record.giftWrapTax,jdbcType=DECIMAL},
+      </if>
+      <if test="record.itemPromotionDiscount != null">
+        item_promotion_discount = #{record.itemPromotionDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shipPromotionDiscount != null">
+        ship_promotion_discount = #{record.shipPromotionDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.shipCity != null">
+        ship_city = #{record.shipCity,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipState != null">
+        ship_state = #{record.shipState,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipPostalCode != null">
+        ship_postal_code = #{record.shipPostalCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shipCountry != null">
+        ship_country = #{record.shipCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="record.promotionIds != null">
+        promotion_ids = #{record.promotionIds,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isBusinessOrder != null">
+        is_business_order = #{record.isBusinessOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="record.purchaseOrderNumber != null">
+        purchase_order_number = #{record.purchaseOrderNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.priceDesignation != null">
+        price_designation = #{record.priceDesignation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update order_import
+    set id = #{record.id,jdbcType=INTEGER},
+      shop_id = #{record.shopId,jdbcType=INTEGER},
+      amazon_order_id = #{record.amazonOrderId,jdbcType=VARCHAR},
+      merchant_order_id = #{record.merchantOrderId,jdbcType=VARCHAR},
+      purchase_date = #{record.purchaseDate,jdbcType=TIMESTAMP},
+      last_updated_date = #{record.lastUpdatedDate,jdbcType=TIMESTAMP},
+      order_status = #{record.orderStatus,jdbcType=VARCHAR},
+      fulfillment_channel = #{record.fulfillmentChannel,jdbcType=VARCHAR},
+      sales_channel = #{record.salesChannel,jdbcType=VARCHAR},
+      order_channel = #{record.orderChannel,jdbcType=VARCHAR},
+      url = #{record.url,jdbcType=VARCHAR},
+      ship_service_level = #{record.shipServiceLevel,jdbcType=VARCHAR},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      sku = #{record.sku,jdbcType=VARCHAR},
+      shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
+      asin = #{record.asin,jdbcType=VARCHAR},
+      item_status = #{record.itemStatus,jdbcType=VARCHAR},
+      quantity = #{record.quantity,jdbcType=INTEGER},
+      currency = #{record.currency,jdbcType=VARCHAR},
+      item_price = #{record.itemPrice,jdbcType=DECIMAL},
+      item_tax = #{record.itemTax,jdbcType=DECIMAL},
+      shipping_price = #{record.shippingPrice,jdbcType=DECIMAL},
+      shipping_tax = #{record.shippingTax,jdbcType=DECIMAL},
+      gift_wrap_price = #{record.giftWrapPrice,jdbcType=DECIMAL},
+      gift_wrap_tax = #{record.giftWrapTax,jdbcType=DECIMAL},
+      item_promotion_discount = #{record.itemPromotionDiscount,jdbcType=DECIMAL},
+      ship_promotion_discount = #{record.shipPromotionDiscount,jdbcType=DECIMAL},
+      ship_city = #{record.shipCity,jdbcType=VARCHAR},
+      ship_state = #{record.shipState,jdbcType=VARCHAR},
+      ship_postal_code = #{record.shipPostalCode,jdbcType=VARCHAR},
+      ship_country = #{record.shipCountry,jdbcType=VARCHAR},
+      promotion_ids = #{record.promotionIds,jdbcType=VARCHAR},
+      is_business_order = #{record.isBusinessOrder,jdbcType=VARCHAR},
+      purchase_order_number = #{record.purchaseOrderNumber,jdbcType=INTEGER},
+      price_designation = #{record.priceDesignation,jdbcType=VARCHAR},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.OrderImport">
+    update order_import
+    <set>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
+      <if test="amazonOrderId != null">
+        amazon_order_id = #{amazonOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="merchantOrderId != null">
+        merchant_order_id = #{merchantOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseDate != null">
+        purchase_date = #{purchaseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdatedDate != null">
+        last_updated_date = #{lastUpdatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderStatus != null">
+        order_status = #{orderStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="fulfillmentChannel != null">
+        fulfillment_channel = #{fulfillmentChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="salesChannel != null">
+        sales_channel = #{salesChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="orderChannel != null">
+        order_channel = #{orderChannel,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="shipServiceLevel != null">
+        ship_service_level = #{shipServiceLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSkuId != null">
+        shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="asin != null">
+        asin = #{asin,jdbcType=VARCHAR},
+      </if>
+      <if test="itemStatus != null">
+        item_status = #{itemStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="quantity != null">
+        quantity = #{quantity,jdbcType=INTEGER},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="itemPrice != null">
+        item_price = #{itemPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="itemTax != null">
+        item_tax = #{itemTax,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingPrice != null">
+        shipping_price = #{shippingPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="shippingTax != null">
+        shipping_tax = #{shippingTax,jdbcType=DECIMAL},
+      </if>
+      <if test="giftWrapPrice != null">
+        gift_wrap_price = #{giftWrapPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="giftWrapTax != null">
+        gift_wrap_tax = #{giftWrapTax,jdbcType=DECIMAL},
+      </if>
+      <if test="itemPromotionDiscount != null">
+        item_promotion_discount = #{itemPromotionDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="shipPromotionDiscount != null">
+        ship_promotion_discount = #{shipPromotionDiscount,jdbcType=DECIMAL},
+      </if>
+      <if test="shipCity != null">
+        ship_city = #{shipCity,jdbcType=VARCHAR},
+      </if>
+      <if test="shipState != null">
+        ship_state = #{shipState,jdbcType=VARCHAR},
+      </if>
+      <if test="shipPostalCode != null">
+        ship_postal_code = #{shipPostalCode,jdbcType=VARCHAR},
+      </if>
+      <if test="shipCountry != null">
+        ship_country = #{shipCountry,jdbcType=VARCHAR},
+      </if>
+      <if test="promotionIds != null">
+        promotion_ids = #{promotionIds,jdbcType=VARCHAR},
+      </if>
+      <if test="isBusinessOrder != null">
+        is_business_order = #{isBusinessOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="purchaseOrderNumber != null">
+        purchase_order_number = #{purchaseOrderNumber,jdbcType=INTEGER},
+      </if>
+      <if test="priceDesignation != null">
+        price_designation = #{priceDesignation,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.OrderImport">
+    update order_import
+    set shop_id = #{shopId,jdbcType=INTEGER},
+      amazon_order_id = #{amazonOrderId,jdbcType=VARCHAR},
+      merchant_order_id = #{merchantOrderId,jdbcType=VARCHAR},
+      purchase_date = #{purchaseDate,jdbcType=TIMESTAMP},
+      last_updated_date = #{lastUpdatedDate,jdbcType=TIMESTAMP},
+      order_status = #{orderStatus,jdbcType=VARCHAR},
+      fulfillment_channel = #{fulfillmentChannel,jdbcType=VARCHAR},
+      sales_channel = #{salesChannel,jdbcType=VARCHAR},
+      order_channel = #{orderChannel,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      ship_service_level = #{shipServiceLevel,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      sku = #{sku,jdbcType=VARCHAR},
+      shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
+      asin = #{asin,jdbcType=VARCHAR},
+      item_status = #{itemStatus,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=INTEGER},
+      currency = #{currency,jdbcType=VARCHAR},
+      item_price = #{itemPrice,jdbcType=DECIMAL},
+      item_tax = #{itemTax,jdbcType=DECIMAL},
+      shipping_price = #{shippingPrice,jdbcType=DECIMAL},
+      shipping_tax = #{shippingTax,jdbcType=DECIMAL},
+      gift_wrap_price = #{giftWrapPrice,jdbcType=DECIMAL},
+      gift_wrap_tax = #{giftWrapTax,jdbcType=DECIMAL},
+      item_promotion_discount = #{itemPromotionDiscount,jdbcType=DECIMAL},
+      ship_promotion_discount = #{shipPromotionDiscount,jdbcType=DECIMAL},
+      ship_city = #{shipCity,jdbcType=VARCHAR},
+      ship_state = #{shipState,jdbcType=VARCHAR},
+      ship_postal_code = #{shipPostalCode,jdbcType=VARCHAR},
+      ship_country = #{shipCountry,jdbcType=VARCHAR},
+      promotion_ids = #{promotionIds,jdbcType=VARCHAR},
+      is_business_order = #{isBusinessOrder,jdbcType=VARCHAR},
+      purchase_order_number = #{purchaseOrderNumber,jdbcType=INTEGER},
+      price_designation = #{priceDesignation,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

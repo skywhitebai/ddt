@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomShopClientHisMapper" >
+    <select id="clientExistsOtherShop" resultType="java.lang.Boolean">
+        select case when EXISTS (select 1
+        from shop_client_his sch
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="or">
+                <if test="ip != null">
+                    client_ip=#{ip}
+                </if>
+                <if test="macAddress != null and macAddress != ''">
+                    and client_mac_address =#{macAddress}
+                </if>
+            </trim>
+            <if test="shopId != null and shopId != ''">
+                and shop_id !=#{shopId}
+            </if>
+        </where>)
+        then 1 else 0 end;
+    </select>
+</mapper>

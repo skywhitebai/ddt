@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomProduceOrderMapper" >
+    <resultMap id="ListProduceOrderMap" type="com.sky.ddt.dto.produceOrder.response.ListProduceOrderResponse" extends="com.sky.ddt.dao.generate.ProduceOrderMapper.BaseResultMap">
+        <result column="shop_name" property="shopName" />
+        <result column="productionQuantityTotal" property="productionQuantityTotal" />
+    </resultMap>
+    <select id="listProduceOrder" parameterType="com.sky.ddt.dto.produceOrder.request.ListProduceOrderRequest" resultMap="ListProduceOrderMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.ProduceOrderMapper.Base_Column_List" />
+        ,(select s.shop_name from shop s where po.shop_id=s.shop_id) shop_name,
+        ifnull((select sum(poss.production_Quantity) from produce_order_shop_sku poss where poss.produce_order_id=po.id),0) productionQuantityTotal
+        from produce_order po
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopId != null">and shop_id =#{shopId}</if>
+                <if test="productionTimeStart != null ">and  production_time<![CDATA[>=]]> #{productionTimeStart}</if>
+                <if test="productionTimeEnd != null ">and  production_time <![CDATA[<=]]> #{productionTimeEnd}</if>
+                <if test="batchNumber != null and batchNumber != '' ">and  batch_number like concat('%',#{batchNumber},'%')</if>
+                <if test="shopSku != null and shopSku != '' ">
+                    and exists (select 1 from produce_order_shop_sku poss where poss.produce_order_id=po.id and poss.shop_sku like concat('%',#{shopSku},'%'))
+                </if>
+                <if test="status != null">and  status=#{status}</if>
+            </trim>
+        </where>
+        order by po.create_time desc
+    </select>
+</mapper>

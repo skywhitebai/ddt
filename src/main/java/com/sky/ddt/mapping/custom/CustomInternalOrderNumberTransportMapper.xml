@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomInternalOrderNumberTransportMapper">
+    <resultMap id="listInternalOrderNumberTransportMap"
+               type="com.sky.ddt.dto.internalOrderNumberTransport.response.ListInternalOrderNumberTransportResponse"
+               extends="com.sky.ddt.dao.generate.InternalOrderNumberTransportMapper.BaseResultMap">
+        <result column="transport_type_name" property="transportTypeName"/>
+        <result column="order_number" property="orderNumber"/>
+        <result column="existFbaShipmentIdShort" property="existFbaShipmentIdShort"/>
+    </resultMap>
+    <select id="listInternalOrderNumberTransport"
+            parameterType="com.sky.ddt.dto.internalOrderNumberTransport.request.ListInternalOrderNumberTransportRequest"
+            resultMap="listInternalOrderNumberTransportMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.InternalOrderNumberTransportMapper.Base_Column_List"/>,
+        (select transport_type_name from transport_type tt where tt.id=iont.transport_type_id) transport_type_name,
+        (select order_number from internal_order_number ion where ion.id=iont.internal_order_number_id) order_number,
+        case when exists(select 1 from fba_packing_list_shop_sku fplss where fplss.fba_shipment_id=iont.fba_shipment_id_short) then 1 else 0 end existFbaShipmentIdShort
+        from internal_order_number_transport iont
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="orderNumber != null and orderNumber != '' ">and iont.sub_order_number like
+                    concat('%',#{orderNumber},'%')
+                </if>
+                <if test="subOrderNumber != null and subOrderNumber != '' ">and iont.sub_order_number like
+                    concat('%',#{subOrderNumber},'%')
+                </if>
+                <if test="fbaShipmentId != null and fbaShipmentId != '' ">and iont.fba_shipment_id like
+                    concat('%',#{fbaShipmentId},'%')
+                </if>
+                <if test="transferOrderNo != null and transferOrderNo != '' ">and iont.transfer_order_no like
+                    concat('%',#{transferOrderNo},'%')
+                </if>
+                <if test="transportTypeId != null ">and iont.transport_type_id= #{transportTypeId}</if>
+                <if test="createTimeStart != null ">and iont.create_time<![CDATA[>=]]> #{createTimeStart}</if>
+                <if test="createTimeEnd != null ">and iont.create_time <![CDATA[<]]>
+                    DATE_ADD(date(#{createTimeEnd}),INTERVAL 1 DAY)
+                </if>
+                <if test="existFbaShipmentIdShort != null and existFbaShipmentIdShort==1">
+                    and exists(select 1 from fba_packing_list_shop_sku fplss where fplss.fba_shipment_id=iont.fba_shipment_id_short)
+                </if>
+                <if test="existFbaShipmentIdShort != null and existFbaShipmentIdShort==0">
+                    and not exists(select 1 from fba_packing_list_shop_sku fplss where fplss.fba_shipment_id=iont.fba_shipment_id_short)
+                </if>
+                <if test="lockHeadTripCostRate != null ">and iont.lock_head_trip_cost_rate = #{lockHeadTripCostRate}</if>
+            </trim>
+        </where>
+        order by iont.create_time desc
+    </select>
+    <select id="existHeadTripCostRateNull" resultType="java.lang.Long">
+        select count(0) from`fba_packing_list` fpl,`internal_order_number_transport` iont
+        where fpl.`shop_id`=#{shopId} and iont.`shipment_id` = fpl.`shipment_id`
+        and iont.`create_time`<![CDATA[>=]]>#{month} and iont.`create_time`<![CDATA[<]]>date_add(#{month}, interval 1 MONTH)
+        and head_trip_cost_rate is null
+    </select>
+    <update id="lockHeadTripCostRate" >
+        update `fba_packing_list` fpl,`internal_order_number_transport` iont
+        set iont.lock_head_trip_cost_rate=1
+        where fpl.`shop_id`=#{shopId} and iont.`shipment_id` = fpl.`shipment_id`
+        and iont.`create_time`<![CDATA[>=]]>#{month} and iont.`create_time`<![CDATA[<]]>date_add(#{month}, interval 1 MONTH)
+        and head_trip_cost_rate is not null
+    </update>
+</mapper>

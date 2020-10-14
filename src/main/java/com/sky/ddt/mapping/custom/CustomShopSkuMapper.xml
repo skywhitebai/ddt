@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomShopSkuMapper">
+    <resultMap id="ShopSkuListMap" type="com.sky.ddt.dto.shopSku.response.ListShopSkuResponse"
+               extends="com.sky.ddt.dao.generate.ShopSkuMapper.BaseResultMap">
+        <result column="product_code" property="productCode"/>
+        <result column="product_name" property="productName"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="salesmanUserName" property="salesmanUserName"/>
+        <result column="chinese_product_name" property="chineseProductName"/>
+        <result column="english_product_name" property="englishProductName"/>
+        <result column="imgUrl" property="imgUrl"/>
+        <result column="colour" property="colour"/>
+        <result column="colour_number" property="colourNumber"/>
+    </resultMap>
+    <select id="listShopSku" parameterType="com.sky.ddt.dto.shopSku.request.ListShopSkuRequest"
+            resultMap="ShopSkuListMap">
+        select
+        ss.*
+        ,p.product_code,p.product_name,p.chinese_product_name,
+        p.english_product_name,sku.sku,sku.colour,sku.colour_number,s.shop_name,u.user_name
+        salesmanUserName
+        from shop_sku ss
+        left join sku on ss.sku_id=sku.sku_id
+        left join product p on sku.product_id=p.product_id
+        left join shop s on ss.shop_id=s.shop_id
+        left join user u on u.user_id=ss.salesman_user_id
+        <if test="_parameter != null">
+            <include refid="shopSku_Query_Where_Clause"/>
+        </if>
+        order by p.product_code,sku.sku
+    </select>
+    <sql id="shopSku_Query_Where_Clause">
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopId != null">and ss.shop_id=#{shopId}</if>
+                <if test="productCode != null and productCode != '' ">and p.product_code like
+                    concat('%',#{productCode},'%')
+                </if>
+                <if test="shopSku != null and shopSku != '' ">and ss.shop_sku like concat('%',#{shopSku},'%')</if>
+                <if test="shopParentSku != null and shopParentSku != '' ">and ss.shop_parent_sku like
+                    concat('%',#{shopParentSku},'%')
+                </if>
+                <if test="asin != null and asin != '' ">and ss.asin like concat('%',#{asin},'%')</if>
+                <if test="parentAsin != null and parentAsin != '' ">and ss.parent_asin like
+                    concat('%',#{parentAsin},'%')
+                </if>
+                <if test="sku != null and sku != '' ">and sku.sku like concat('%',#{sku},'%')</if>
+                <if test="productName != null and productName != '' ">and p.product_name like
+                    concat('%',#{productName},'%')
+                </if>
+                <if test="userId != null ">and ss.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
+                <if test="status != null">and ss.status=#{status}</if>
+            </trim>
+        </where>
+    </sql>
+    <select id="listExportShopSku" parameterType="com.sky.ddt.dto.shopSku.request.ListShopSkuRequest"
+            resultType="com.sky.ddt.dto.shopSku.response.ExportShopSkuResponse">
+        select
+        s.shop_name shopName,sku.sku,ss.shop_sku shopSku,ss.shop_parent_sku
+        shopParentSku,ss.head_trip_cost headTripCost,ss.fnsku,ss.asin,ss.parent_asin parentAsin,ss.title,case ss.status when 1 then '启用' else '停用' end
+        status,ss.storage_location storageLocation,ss.remark
+        from shop_sku ss
+        left join sku on ss.sku_id=sku.sku_id
+        left join product p on sku.product_id=p.product_id
+        left join shop s on ss.shop_id=s.shop_id
+        <if test="_parameter != null">
+            <include refid="shopSku_Query_Where_Clause"/>
+        </if>
+        order by p.product_code,sku.sku
+    </select>
+    <select id="selectByShopSku" parameterType="java.util.List"
+            resultType="com.sky.ddt.dto.shopSku.response.TranformShopSkuInfoResponse">
+        select
+        p.product_code productCode,s.sku,ss.shop_sku shopSku
+        from shop_sku ss
+        left join sku s on ss.sku_id=s.sku_id
+        left join product p on s.product_id=p.product_id
+        where ss.shop_sku IN
+        <foreach close=")" collection="list" item="listItem" open="(" separator=",">
+            #{listItem}
+        </foreach>
+    </select>
+    <select id="getPrintShopSkuResponse" parameterType="com.sky.ddt.dto.shopSku.request.GetPrintShopSkuRequest"
+            resultType="com.sky.ddt.dto.shopSku.response.GetPrintShopSkuResponse">
+        select
+        ss.title,s.sku,ss.shop_parent_sku shopParentSku,ss.status,ss.fnsku,(SELECT MAX(img.`img_url`) FROM `sku`,`img`
+        WHERE img.`entity_id`=ss.sku_id AND img.`img_type`='sku.sku_img') imgUrl,s.colour_number colourNumber
+        from shop_sku ss
+        left join sku s on ss.sku_id=s.sku_id
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopSku != null and shopSku != '' ">and ss.shop_sku=#{shopSku}</if>
+                <if test="fnsku != null and fnsku != '' ">and ss.fnsku=#{fnsku}</if>
+            </trim>
+        </where>
+    </select>
+    <select id="listSelectSalesCountShopSku" parameterType="com.sky.ddt.dto.shopSku.request.SalesCountRequest"
+            resultType="com.sky.ddt.dto.shopSku.response.SalesCountResponse">
+        select
+        ss.shop_sku_id shopSkuId,ss.shop_sku shopSku,ss.shop_parent_sku shopParentSku,p.product_name
+        productName,p.product_code productCode,
+        s.shop_name shopName
+        from shop_sku ss
+        left join sku on ss.sku_id=sku.sku_id
+        left join product p on sku.product_id=p.product_id
+        left join shop s on ss.shop_id=s.shop_id
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopId != null">and ss.shop_id=#{shopId}</if>
+                <if test="productCode != null and productCode != '' ">and p.product_code like
+                    concat('%',#{productCode},'%')
+                </if>
+                <if test="shopSku != null and shopSku != '' ">and ss.shop_sku like concat('%',#{shopSku},'%')</if>
+                <if test="sku != null and sku != '' ">and sku.sku like concat('%',#{sku},'%')</if>
+                <if test="productName != null and productName != '' ">and p.product_name like
+                    concat('%',#{productName},'%')
+                </if>
+                <if test="shopParentSku != null and shopParentSku != '' ">and ss.shop_parent_sku like
+                    concat('%',#{shopParentSku},'%')
+                </if>
+                <if test="userId != null ">and ss.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
+            </trim>
+        </where>
+        <if test="searchType != null and searchType == 'shopParentSku' ">
+            group by ss.shop_parent_sku
+        </if>
+        order by p.product_code,sku.sku
+    </select>
+
+    <select id="getSkuInventoryQuantity"
+            resultType="java.lang.Integer">
+        select sum(inventory_quantity) from shop_sku ss WHERE ss.sku_id=#{skuId}
+    </select>
+
+    <insert id="initWareHouseShopSku">
+INSERT INTO shop_sku(shop_sku,sku_id,shop_id,create_by)
+SELECT CONCAT( #{shopId},s.`sku`) shop_sku,s.sku_id,#{shopId} shop_id,#{createBy} FROM sku s
+WHERE NOT EXISTS (SELECT 1 FROM shop_sku ss WHERE ss.`shop_sku`= CONCAT( #{shopId},s.`sku`) )
+    </insert>
+    <insert id="insertWarehouseShopSku" parameterType="com.sky.ddt.entity.Sku">
+INSERT INTO shop_sku(shop_sku,sku_id,shop_id,create_by)
+SELECT CONCAT( s.`shop_id`,#{sku}) shop_sku,#{skuId} sku_id,s.`shop_id`,#{createBy}
+from
+shop  s where s.type=2
+    </insert>
+
+    <select id="listShopSkuFullProductName" resultType="com.sky.ddt.dto.shopSku.response.ShopSkuFullProductName">
+        select
+        ss.shop_sku_id shopSkuId,ss.shop_sku shopSku,p.chinese_product_name chineseProductName, p.english_product_name
+        englishProductName
+        from shop_sku ss,sku,product p
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                ss.sku_id=sku.sku_id and sku.product_id=p.product_id
+                and shop_sku in
+                <foreach close=")" collection="shopSkuList" item="shopSku" open="(" separator=",">
+                    #{shopSku}
+                </foreach>
+            </trim>
+        </where>
+    </select>
+
+    <select id="listShopSkuFullProductNameByShopSkuId"
+            resultType="com.sky.ddt.dto.shopSku.response.ShopSkuFullProductName">
+        select
+        ss.shop_sku_id shopSkuId,ss.shop_sku shopSku,p.chinese_product_name chineseProductName, p.english_product_name
+        englishProductName
+        from shop_sku ss,sku,product p
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                ss.sku_id=sku.sku_id and sku.product_id=p.product_id
+                and shop_sku_id in
+                <foreach close=")" collection="shopSkuIdList" item="shopSkuId" open="(" separator=",">
+                    #{shopSkuId}
+                </foreach>
+            </trim>
+        </where>
+    </select>
+    <select id="listNotExistShopSkuHeadTripCost"
+            resultType="com.sky.ddt.dto.shopHeadTripCost.response.ShopSkuHeadTripCostInfo">
+        SELECT ss.shop_sku_id shopSkuId,ss.head_trip_cost headTripCost,s.weight
+        FROM shop_sku ss,sku s
+        WHERE
+        ss.shop_id=#{shopId} and ss.sku_id=s.sku_id
+        AND NOT EXISTS (SELECT 1 FROM `shop_head_trip_cost` shtc,`shop_sku_head_trip_cost_his` sshtch
+        WHERE shtc.`month`=#{month} AND sshtch.`shop_head_trip_cost_id`=shtc.`id` AND sshtch.`shop_sku_id`=ss.`shop_sku_id`)
+        order by ss.shop_sku_id
+        LIMIT 1000
+    </select>
+    <select id="existWithoutWeightShopSku" resultType="java.lang.Long">
+        SELECT count(0)
+        FROM shop_sku ss,sku s
+        WHERE
+        ss.shop_id=#{shopId} and ss.sku_id=s.sku_id
+        and (s.weight is null or s.weight>=1000)
+    </select>
+    <select id="getShopSkuBySkuShopId" resultMap="com.sky.ddt.dao.generate.ShopSkuMapper.BaseResultMap">
+        SELECT ss.*
+        FROM shop_sku ss,sku s
+        WHERE
+        ss.shop_id=#{shopId} and ss.sku_id=s.sku_id
+        and s.sku=#{sku}
+    </select>
+
+</mapper>

@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.JdSkuMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.JdSku">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="jd_sku" jdbcType="VARCHAR" property="jdSku" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="jd_pop_code" jdbcType="VARCHAR" property="jdPopCode" />
+    <result column="category" jdbcType="VARCHAR" property="category" />
+    <result column="brand" jdbcType="VARCHAR" property="brand" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="spec" jdbcType="VARCHAR" property="spec" />
+    <result column="material" jdbcType="VARCHAR" property="material" />
+    <result column="criteria" jdbcType="VARCHAR" property="criteria" />
+    <result column="security_categories" jdbcType="VARCHAR" property="securityCategories" />
+    <result column="quality_grade" jdbcType="VARCHAR" property="qualityGrade" />
+    <result column="inspector" jdbcType="VARCHAR" property="inspector" />
+    <result column="manufacturer" jdbcType="VARCHAR" property="manufacturer" />
+    <result column="production_address" jdbcType="VARCHAR" property="productionAddress" />
+    <result column="print_template" jdbcType="INTEGER" property="printTemplate" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_by" jdbcType="INTEGER" property="updateBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, jd_sku, product_name, jd_pop_code, category, brand, model, spec, material, criteria, 
+    security_categories, quality_grade, inspector, manufacturer, production_address, 
+    print_template, remark, create_by, create_time, update_by, update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.JdSkuExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from jd_sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from jd_sku
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from jd_sku
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.JdSkuExample">
+    delete from jd_sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.JdSku">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jd_sku (jd_sku, product_name, jd_pop_code, 
+      category, brand, model, 
+      spec, material, criteria, 
+      security_categories, quality_grade, inspector, 
+      manufacturer, production_address, print_template, 
+      remark, create_by, create_time, 
+      update_by, update_time)
+    values (#{jdSku,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, #{jdPopCode,jdbcType=VARCHAR}, 
+      #{category,jdbcType=VARCHAR}, #{brand,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
+      #{spec,jdbcType=VARCHAR}, #{material,jdbcType=VARCHAR}, #{criteria,jdbcType=VARCHAR}, 
+      #{securityCategories,jdbcType=VARCHAR}, #{qualityGrade,jdbcType=VARCHAR}, #{inspector,jdbcType=VARCHAR}, 
+      #{manufacturer,jdbcType=VARCHAR}, #{productionAddress,jdbcType=VARCHAR}, #{printTemplate,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.JdSku">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into jd_sku
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jdSku != null">
+        jd_sku,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="jdPopCode != null">
+        jd_pop_code,
+      </if>
+      <if test="category != null">
+        category,
+      </if>
+      <if test="brand != null">
+        brand,
+      </if>
+      <if test="model != null">
+        model,
+      </if>
+      <if test="spec != null">
+        spec,
+      </if>
+      <if test="material != null">
+        material,
+      </if>
+      <if test="criteria != null">
+        criteria,
+      </if>
+      <if test="securityCategories != null">
+        security_categories,
+      </if>
+      <if test="qualityGrade != null">
+        quality_grade,
+      </if>
+      <if test="inspector != null">
+        inspector,
+      </if>
+      <if test="manufacturer != null">
+        manufacturer,
+      </if>
+      <if test="productionAddress != null">
+        production_address,
+      </if>
+      <if test="printTemplate != null">
+        print_template,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="jdSku != null">
+        #{jdSku,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="jdPopCode != null">
+        #{jdPopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null">
+        #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="brand != null">
+        #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null">
+        #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="spec != null">
+        #{spec,jdbcType=VARCHAR},
+      </if>
+      <if test="material != null">
+        #{material,jdbcType=VARCHAR},
+      </if>
+      <if test="criteria != null">
+        #{criteria,jdbcType=VARCHAR},
+      </if>
+      <if test="securityCategories != null">
+        #{securityCategories,jdbcType=VARCHAR},
+      </if>
+      <if test="qualityGrade != null">
+        #{qualityGrade,jdbcType=VARCHAR},
+      </if>
+      <if test="inspector != null">
+        #{inspector,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturer != null">
+        #{manufacturer,jdbcType=VARCHAR},
+      </if>
+      <if test="productionAddress != null">
+        #{productionAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="printTemplate != null">
+        #{printTemplate,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.JdSkuExample" resultType="java.lang.Long">
+    select count(*) from jd_sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update jd_sku
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.jdSku != null">
+        jd_sku = #{record.jdSku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productName != null">
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.jdPopCode != null">
+        jd_pop_code = #{record.jdPopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.category != null">
+        category = #{record.category,jdbcType=VARCHAR},
+      </if>
+      <if test="record.brand != null">
+        brand = #{record.brand,jdbcType=VARCHAR},
+      </if>
+      <if test="record.model != null">
+        model = #{record.model,jdbcType=VARCHAR},
+      </if>
+      <if test="record.spec != null">
+        spec = #{record.spec,jdbcType=VARCHAR},
+      </if>
+      <if test="record.material != null">
+        material = #{record.material,jdbcType=VARCHAR},
+      </if>
+      <if test="record.criteria != null">
+        criteria = #{record.criteria,jdbcType=VARCHAR},
+      </if>
+      <if test="record.securityCategories != null">
+        security_categories = #{record.securityCategories,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qualityGrade != null">
+        quality_grade = #{record.qualityGrade,jdbcType=VARCHAR},
+      </if>
+      <if test="record.inspector != null">
+        inspector = #{record.inspector,jdbcType=VARCHAR},
+      </if>
+      <if test="record.manufacturer != null">
+        manufacturer = #{record.manufacturer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productionAddress != null">
+        production_address = #{record.productionAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.printTemplate != null">
+        print_template = #{record.printTemplate,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update jd_sku
+    set id = #{record.id,jdbcType=INTEGER},
+      jd_sku = #{record.jdSku,jdbcType=VARCHAR},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      jd_pop_code = #{record.jdPopCode,jdbcType=VARCHAR},
+      category = #{record.category,jdbcType=VARCHAR},
+      brand = #{record.brand,jdbcType=VARCHAR},
+      model = #{record.model,jdbcType=VARCHAR},
+      spec = #{record.spec,jdbcType=VARCHAR},
+      material = #{record.material,jdbcType=VARCHAR},
+      criteria = #{record.criteria,jdbcType=VARCHAR},
+      security_categories = #{record.securityCategories,jdbcType=VARCHAR},
+      quality_grade = #{record.qualityGrade,jdbcType=VARCHAR},
+      inspector = #{record.inspector,jdbcType=VARCHAR},
+      manufacturer = #{record.manufacturer,jdbcType=VARCHAR},
+      production_address = #{record.productionAddress,jdbcType=VARCHAR},
+      print_template = #{record.printTemplate,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_by = #{record.createBy,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.JdSku">
+    update jd_sku
+    <set>
+      <if test="jdSku != null">
+        jd_sku = #{jdSku,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="jdPopCode != null">
+        jd_pop_code = #{jdPopCode,jdbcType=VARCHAR},
+      </if>
+      <if test="category != null">
+        category = #{category,jdbcType=VARCHAR},
+      </if>
+      <if test="brand != null">
+        brand = #{brand,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null">
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="spec != null">
+        spec = #{spec,jdbcType=VARCHAR},
+      </if>
+      <if test="material != null">
+        material = #{material,jdbcType=VARCHAR},
+      </if>
+      <if test="criteria != null">
+        criteria = #{criteria,jdbcType=VARCHAR},
+      </if>
+      <if test="securityCategories != null">
+        security_categories = #{securityCategories,jdbcType=VARCHAR},
+      </if>
+      <if test="qualityGrade != null">
+        quality_grade = #{qualityGrade,jdbcType=VARCHAR},
+      </if>
+      <if test="inspector != null">
+        inspector = #{inspector,jdbcType=VARCHAR},
+      </if>
+      <if test="manufacturer != null">
+        manufacturer = #{manufacturer,jdbcType=VARCHAR},
+      </if>
+      <if test="productionAddress != null">
+        production_address = #{productionAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="printTemplate != null">
+        print_template = #{printTemplate,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.JdSku">
+    update jd_sku
+    set jd_sku = #{jdSku,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      jd_pop_code = #{jdPopCode,jdbcType=VARCHAR},
+      category = #{category,jdbcType=VARCHAR},
+      brand = #{brand,jdbcType=VARCHAR},
+      model = #{model,jdbcType=VARCHAR},
+      spec = #{spec,jdbcType=VARCHAR},
+      material = #{material,jdbcType=VARCHAR},
+      criteria = #{criteria,jdbcType=VARCHAR},
+      security_categories = #{securityCategories,jdbcType=VARCHAR},
+      quality_grade = #{qualityGrade,jdbcType=VARCHAR},
+      inspector = #{inspector,jdbcType=VARCHAR},
+      manufacturer = #{manufacturer,jdbcType=VARCHAR},
+      production_address = #{productionAddress,jdbcType=VARCHAR},
+      print_template = #{printTemplate,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

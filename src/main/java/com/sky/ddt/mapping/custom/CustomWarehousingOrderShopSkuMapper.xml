@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomWarehousingOrderShopSkuMapper">
+    <resultMap id="ListWarehousingOrderShopSkuMap"
+               type="com.sky.ddt.dto.warehousingOrderShopSku.response.ListWarehousingOrderShopSkuResponse"
+               extends="com.sky.ddt.dao.generate.WarehousingOrderShopSkuMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+        <result column="sku" property="sku"/>
+        <result column="productionQuantity" property="productionQuantity"/>
+    </resultMap>
+
+    <select id="listWarehousingOrderShopSku"
+            parameterType="com.sky.ddt.dto.warehousingOrderShopSku.request.ListWarehousingOrderShopSkuRequest"
+            resultMap="ListWarehousingOrderShopSkuMap">
+        select
+        woss.id, woss.warehousing_order_id, woss.shop_sku_id, woss.shop_sku, woss.warehousing_quantity, woss.remark, woss.create_time, woss.
+    create_by, woss.update_time, woss.update_by
+        ,s.shop_name
+        ,sku.sku,(select production_quantity from produce_order_shop_sku poss,produce_order po WHERE
+        po.id=poss.produce_order_id and po.id=wo.produce_order_id and
+        woss.shop_sku_id=poss.shop_sku_id) productionQuantity
+        from warehousing_order_shop_sku woss
+        left join warehousing_order wo on woss.warehousing_order_id=wo.id
+        left join shop_sku ss on woss.shop_sku_id=ss.shop_sku_id
+        left join sku on sku.sku_id=ss.sku_id
+        left join shop s on wo.shop_id=s.shop_id
+        where woss.warehousing_order_id=#{warehousingOrderId}
+        order by woss.shop_sku
+    </select>
+    <select id="existProduceOrderShopSku" resultType="java.lang.Boolean">
+        SELECT CASE WHEN
+EXISTS(SELECT 1 FROM warehousing_order wo,warehousing_order_shop_sku woss
+WHERE wo.type=1 AND wo.produce_order_id=#{produceOrderId} AND wo.id=woss.warehousing_order_id AND woss.shop_sku=#{shopSku}) THEN TRUE
+ELSE FALSE END
+    </select>
+</mapper>

@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.MonthlyAdvertisingFeeMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.MonthlyAdvertisingFee">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="finance_id" jdbcType="INTEGER" property="financeId" />
+    <result column="start_date" jdbcType="DATE" property="startDate" />
+    <result column="end_date" jdbcType="DATE" property="endDate" />
+    <result column="ad_mix_name" jdbcType="VARCHAR" property="adMixName" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="ad_name" jdbcType="VARCHAR" property="adName" />
+    <result column="ad_group_name" jdbcType="VARCHAR" property="adGroupName" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="shop_sku_id" jdbcType="INTEGER" property="shopSkuId" />
+    <result column="asin" jdbcType="VARCHAR" property="asin" />
+    <result column="display_quantity" jdbcType="INTEGER" property="displayQuantity" />
+    <result column="click_quantity" jdbcType="INTEGER" property="clickQuantity" />
+    <result column="click_through_rate" jdbcType="DECIMAL" property="clickThroughRate" />
+    <result column="cost_per_click" jdbcType="DECIMAL" property="costPerClick" />
+    <result column="cost" jdbcType="DECIMAL" property="cost" />
+    <result column="total_sales_in_7_days" jdbcType="DECIMAL" property="totalSalesIn7Days" />
+    <result column="advertising_cost_sales_ratio" jdbcType="DECIMAL" property="advertisingCostSalesRatio" />
+    <result column="input_output_ratio" jdbcType="DECIMAL" property="inputOutputRatio" />
+    <result column="total_orders_in_7_days" jdbcType="INTEGER" property="totalOrdersIn7Days" />
+    <result column="total_sales_quantity_in_7_days" jdbcType="INTEGER" property="totalSalesQuantityIn7Days" />
+    <result column="conversion_in_7_days" jdbcType="DECIMAL" property="conversionIn7Days" />
+    <result column="ad_sku_sales_quantity_in_7_days" jdbcType="INTEGER" property="adSkuSalesQuantityIn7Days" />
+    <result column="other_sku_sales_quantity_in_7_days" jdbcType="INTEGER" property="otherSkuSalesQuantityIn7Days" />
+    <result column="ad_sku_sales_in_7_days" jdbcType="DECIMAL" property="adSkuSalesIn7Days" />
+    <result column="other_sku_sales_in_7_days" jdbcType="DECIMAL" property="otherSkuSalesIn7Days" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, finance_id, start_date, end_date, ad_mix_name, currency, ad_name, ad_group_name, 
+    sku, shop_sku_id, asin, display_quantity, click_quantity, click_through_rate, cost_per_click, 
+    cost, total_sales_in_7_days, advertising_cost_sales_ratio, input_output_ratio, total_orders_in_7_days, 
+    total_sales_quantity_in_7_days, conversion_in_7_days, ad_sku_sales_quantity_in_7_days, 
+    other_sku_sales_quantity_in_7_days, ad_sku_sales_in_7_days, other_sku_sales_in_7_days, 
+    create_time, create_by
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.MonthlyAdvertisingFeeExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from monthly_advertising_fee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from monthly_advertising_fee
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from monthly_advertising_fee
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.MonthlyAdvertisingFeeExample">
+    delete from monthly_advertising_fee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.MonthlyAdvertisingFee">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into monthly_advertising_fee (finance_id, start_date, end_date, 
+      ad_mix_name, currency, ad_name, 
+      ad_group_name, sku, shop_sku_id, 
+      asin, display_quantity, click_quantity, 
+      click_through_rate, cost_per_click, cost, 
+      total_sales_in_7_days, advertising_cost_sales_ratio, 
+      input_output_ratio, total_orders_in_7_days, total_sales_quantity_in_7_days, 
+      conversion_in_7_days, ad_sku_sales_quantity_in_7_days, 
+      other_sku_sales_quantity_in_7_days, ad_sku_sales_in_7_days, 
+      other_sku_sales_in_7_days, create_time, create_by
+      )
+    values (#{financeId,jdbcType=INTEGER}, #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, 
+      #{adMixName,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}, #{adName,jdbcType=VARCHAR}, 
+      #{adGroupName,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, #{shopSkuId,jdbcType=INTEGER}, 
+      #{asin,jdbcType=VARCHAR}, #{displayQuantity,jdbcType=INTEGER}, #{clickQuantity,jdbcType=INTEGER}, 
+      #{clickThroughRate,jdbcType=DECIMAL}, #{costPerClick,jdbcType=DECIMAL}, #{cost,jdbcType=DECIMAL}, 
+      #{totalSalesIn7Days,jdbcType=DECIMAL}, #{advertisingCostSalesRatio,jdbcType=DECIMAL}, 
+      #{inputOutputRatio,jdbcType=DECIMAL}, #{totalOrdersIn7Days,jdbcType=INTEGER}, #{totalSalesQuantityIn7Days,jdbcType=INTEGER}, 
+      #{conversionIn7Days,jdbcType=DECIMAL}, #{adSkuSalesQuantityIn7Days,jdbcType=INTEGER}, 
+      #{otherSkuSalesQuantityIn7Days,jdbcType=INTEGER}, #{adSkuSalesIn7Days,jdbcType=DECIMAL}, 
+      #{otherSkuSalesIn7Days,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.MonthlyAdvertisingFee">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into monthly_advertising_fee
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="financeId != null">
+        finance_id,
+      </if>
+      <if test="startDate != null">
+        start_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="adMixName != null">
+        ad_mix_name,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="adName != null">
+        ad_name,
+      </if>
+      <if test="adGroupName != null">
+        ad_group_name,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="shopSkuId != null">
+        shop_sku_id,
+      </if>
+      <if test="asin != null">
+        asin,
+      </if>
+      <if test="displayQuantity != null">
+        display_quantity,
+      </if>
+      <if test="clickQuantity != null">
+        click_quantity,
+      </if>
+      <if test="clickThroughRate != null">
+        click_through_rate,
+      </if>
+      <if test="costPerClick != null">
+        cost_per_click,
+      </if>
+      <if test="cost != null">
+        cost,
+      </if>
+      <if test="totalSalesIn7Days != null">
+        total_sales_in_7_days,
+      </if>
+      <if test="advertisingCostSalesRatio != null">
+        advertising_cost_sales_ratio,
+      </if>
+      <if test="inputOutputRatio != null">
+        input_output_ratio,
+      </if>
+      <if test="totalOrdersIn7Days != null">
+        total_orders_in_7_days,
+      </if>
+      <if test="totalSalesQuantityIn7Days != null">
+        total_sales_quantity_in_7_days,
+      </if>
+      <if test="conversionIn7Days != null">
+        conversion_in_7_days,
+      </if>
+      <if test="adSkuSalesQuantityIn7Days != null">
+        ad_sku_sales_quantity_in_7_days,
+      </if>
+      <if test="otherSkuSalesQuantityIn7Days != null">
+        other_sku_sales_quantity_in_7_days,
+      </if>
+      <if test="adSkuSalesIn7Days != null">
+        ad_sku_sales_in_7_days,
+      </if>
+      <if test="otherSkuSalesIn7Days != null">
+        other_sku_sales_in_7_days,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="financeId != null">
+        #{financeId,jdbcType=INTEGER},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="adMixName != null">
+        #{adMixName,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="adName != null">
+        #{adName,jdbcType=VARCHAR},
+      </if>
+      <if test="adGroupName != null">
+        #{adGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSkuId != null">
+        #{shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="asin != null">
+        #{asin,jdbcType=VARCHAR},
+      </if>
+      <if test="displayQuantity != null">
+        #{displayQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="clickQuantity != null">
+        #{clickQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="clickThroughRate != null">
+        #{clickThroughRate,jdbcType=DECIMAL},
+      </if>
+      <if test="costPerClick != null">
+        #{costPerClick,jdbcType=DECIMAL},
+      </if>
+      <if test="cost != null">
+        #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="totalSalesIn7Days != null">
+        #{totalSalesIn7Days,jdbcType=DECIMAL},
+      </if>
+      <if test="advertisingCostSalesRatio != null">
+        #{advertisingCostSalesRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="inputOutputRatio != null">
+        #{inputOutputRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="totalOrdersIn7Days != null">
+        #{totalOrdersIn7Days,jdbcType=INTEGER},
+      </if>
+      <if test="totalSalesQuantityIn7Days != null">
+        #{totalSalesQuantityIn7Days,jdbcType=INTEGER},
+      </if>
+      <if test="conversionIn7Days != null">
+        #{conversionIn7Days,jdbcType=DECIMAL},
+      </if>
+      <if test="adSkuSalesQuantityIn7Days != null">
+        #{adSkuSalesQuantityIn7Days,jdbcType=INTEGER},
+      </if>
+      <if test="otherSkuSalesQuantityIn7Days != null">
+        #{otherSkuSalesQuantityIn7Days,jdbcType=INTEGER},
+      </if>
+      <if test="adSkuSalesIn7Days != null">
+        #{adSkuSalesIn7Days,jdbcType=DECIMAL},
+      </if>
+      <if test="otherSkuSalesIn7Days != null">
+        #{otherSkuSalesIn7Days,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.MonthlyAdvertisingFeeExample" resultType="java.lang.Long">
+    select count(*) from monthly_advertising_fee
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update monthly_advertising_fee
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.financeId != null">
+        finance_id = #{record.financeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.startDate != null">
+        start_date = #{record.startDate,jdbcType=DATE},
+      </if>
+      <if test="record.endDate != null">
+        end_date = #{record.endDate,jdbcType=DATE},
+      </if>
+      <if test="record.adMixName != null">
+        ad_mix_name = #{record.adMixName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currency != null">
+        currency = #{record.currency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adName != null">
+        ad_name = #{record.adName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adGroupName != null">
+        ad_group_name = #{record.adGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sku != null">
+        sku = #{record.sku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopSkuId != null">
+        shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.asin != null">
+        asin = #{record.asin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.displayQuantity != null">
+        display_quantity = #{record.displayQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.clickQuantity != null">
+        click_quantity = #{record.clickQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.clickThroughRate != null">
+        click_through_rate = #{record.clickThroughRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.costPerClick != null">
+        cost_per_click = #{record.costPerClick,jdbcType=DECIMAL},
+      </if>
+      <if test="record.cost != null">
+        cost = #{record.cost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalSalesIn7Days != null">
+        total_sales_in_7_days = #{record.totalSalesIn7Days,jdbcType=DECIMAL},
+      </if>
+      <if test="record.advertisingCostSalesRatio != null">
+        advertising_cost_sales_ratio = #{record.advertisingCostSalesRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="record.inputOutputRatio != null">
+        input_output_ratio = #{record.inputOutputRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalOrdersIn7Days != null">
+        total_orders_in_7_days = #{record.totalOrdersIn7Days,jdbcType=INTEGER},
+      </if>
+      <if test="record.totalSalesQuantityIn7Days != null">
+        total_sales_quantity_in_7_days = #{record.totalSalesQuantityIn7Days,jdbcType=INTEGER},
+      </if>
+      <if test="record.conversionIn7Days != null">
+        conversion_in_7_days = #{record.conversionIn7Days,jdbcType=DECIMAL},
+      </if>
+      <if test="record.adSkuSalesQuantityIn7Days != null">
+        ad_sku_sales_quantity_in_7_days = #{record.adSkuSalesQuantityIn7Days,jdbcType=INTEGER},
+      </if>
+      <if test="record.otherSkuSalesQuantityIn7Days != null">
+        other_sku_sales_quantity_in_7_days = #{record.otherSkuSalesQuantityIn7Days,jdbcType=INTEGER},
+      </if>
+      <if test="record.adSkuSalesIn7Days != null">
+        ad_sku_sales_in_7_days = #{record.adSkuSalesIn7Days,jdbcType=DECIMAL},
+      </if>
+      <if test="record.otherSkuSalesIn7Days != null">
+        other_sku_sales_in_7_days = #{record.otherSkuSalesIn7Days,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update monthly_advertising_fee
+    set id = #{record.id,jdbcType=INTEGER},
+      finance_id = #{record.financeId,jdbcType=INTEGER},
+      start_date = #{record.startDate,jdbcType=DATE},
+      end_date = #{record.endDate,jdbcType=DATE},
+      ad_mix_name = #{record.adMixName,jdbcType=VARCHAR},
+      currency = #{record.currency,jdbcType=VARCHAR},
+      ad_name = #{record.adName,jdbcType=VARCHAR},
+      ad_group_name = #{record.adGroupName,jdbcType=VARCHAR},
+      sku = #{record.sku,jdbcType=VARCHAR},
+      shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
+      asin = #{record.asin,jdbcType=VARCHAR},
+      display_quantity = #{record.displayQuantity,jdbcType=INTEGER},
+      click_quantity = #{record.clickQuantity,jdbcType=INTEGER},
+      click_through_rate = #{record.clickThroughRate,jdbcType=DECIMAL},
+      cost_per_click = #{record.costPerClick,jdbcType=DECIMAL},
+      cost = #{record.cost,jdbcType=DECIMAL},
+      total_sales_in_7_days = #{record.totalSalesIn7Days,jdbcType=DECIMAL},
+      advertising_cost_sales_ratio = #{record.advertisingCostSalesRatio,jdbcType=DECIMAL},
+      input_output_ratio = #{record.inputOutputRatio,jdbcType=DECIMAL},
+      total_orders_in_7_days = #{record.totalOrdersIn7Days,jdbcType=INTEGER},
+      total_sales_quantity_in_7_days = #{record.totalSalesQuantityIn7Days,jdbcType=INTEGER},
+      conversion_in_7_days = #{record.conversionIn7Days,jdbcType=DECIMAL},
+      ad_sku_sales_quantity_in_7_days = #{record.adSkuSalesQuantityIn7Days,jdbcType=INTEGER},
+      other_sku_sales_quantity_in_7_days = #{record.otherSkuSalesQuantityIn7Days,jdbcType=INTEGER},
+      ad_sku_sales_in_7_days = #{record.adSkuSalesIn7Days,jdbcType=DECIMAL},
+      other_sku_sales_in_7_days = #{record.otherSkuSalesIn7Days,jdbcType=DECIMAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.MonthlyAdvertisingFee">
+    update monthly_advertising_fee
+    <set>
+      <if test="financeId != null">
+        finance_id = #{financeId,jdbcType=INTEGER},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="adMixName != null">
+        ad_mix_name = #{adMixName,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="adName != null">
+        ad_name = #{adName,jdbcType=VARCHAR},
+      </if>
+      <if test="adGroupName != null">
+        ad_group_name = #{adGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSkuId != null">
+        shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="asin != null">
+        asin = #{asin,jdbcType=VARCHAR},
+      </if>
+      <if test="displayQuantity != null">
+        display_quantity = #{displayQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="clickQuantity != null">
+        click_quantity = #{clickQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="clickThroughRate != null">
+        click_through_rate = #{clickThroughRate,jdbcType=DECIMAL},
+      </if>
+      <if test="costPerClick != null">
+        cost_per_click = #{costPerClick,jdbcType=DECIMAL},
+      </if>
+      <if test="cost != null">
+        cost = #{cost,jdbcType=DECIMAL},
+      </if>
+      <if test="totalSalesIn7Days != null">
+        total_sales_in_7_days = #{totalSalesIn7Days,jdbcType=DECIMAL},
+      </if>
+      <if test="advertisingCostSalesRatio != null">
+        advertising_cost_sales_ratio = #{advertisingCostSalesRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="inputOutputRatio != null">
+        input_output_ratio = #{inputOutputRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="totalOrdersIn7Days != null">
+        total_orders_in_7_days = #{totalOrdersIn7Days,jdbcType=INTEGER},
+      </if>
+      <if test="totalSalesQuantityIn7Days != null">
+        total_sales_quantity_in_7_days = #{totalSalesQuantityIn7Days,jdbcType=INTEGER},
+      </if>
+      <if test="conversionIn7Days != null">
+        conversion_in_7_days = #{conversionIn7Days,jdbcType=DECIMAL},
+      </if>
+      <if test="adSkuSalesQuantityIn7Days != null">
+        ad_sku_sales_quantity_in_7_days = #{adSkuSalesQuantityIn7Days,jdbcType=INTEGER},
+      </if>
+      <if test="otherSkuSalesQuantityIn7Days != null">
+        other_sku_sales_quantity_in_7_days = #{otherSkuSalesQuantityIn7Days,jdbcType=INTEGER},
+      </if>
+      <if test="adSkuSalesIn7Days != null">
+        ad_sku_sales_in_7_days = #{adSkuSalesIn7Days,jdbcType=DECIMAL},
+      </if>
+      <if test="otherSkuSalesIn7Days != null">
+        other_sku_sales_in_7_days = #{otherSkuSalesIn7Days,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.MonthlyAdvertisingFee">
+    update monthly_advertising_fee
+    set finance_id = #{financeId,jdbcType=INTEGER},
+      start_date = #{startDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      ad_mix_name = #{adMixName,jdbcType=VARCHAR},
+      currency = #{currency,jdbcType=VARCHAR},
+      ad_name = #{adName,jdbcType=VARCHAR},
+      ad_group_name = #{adGroupName,jdbcType=VARCHAR},
+      sku = #{sku,jdbcType=VARCHAR},
+      shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
+      asin = #{asin,jdbcType=VARCHAR},
+      display_quantity = #{displayQuantity,jdbcType=INTEGER},
+      click_quantity = #{clickQuantity,jdbcType=INTEGER},
+      click_through_rate = #{clickThroughRate,jdbcType=DECIMAL},
+      cost_per_click = #{costPerClick,jdbcType=DECIMAL},
+      cost = #{cost,jdbcType=DECIMAL},
+      total_sales_in_7_days = #{totalSalesIn7Days,jdbcType=DECIMAL},
+      advertising_cost_sales_ratio = #{advertisingCostSalesRatio,jdbcType=DECIMAL},
+      input_output_ratio = #{inputOutputRatio,jdbcType=DECIMAL},
+      total_orders_in_7_days = #{totalOrdersIn7Days,jdbcType=INTEGER},
+      total_sales_quantity_in_7_days = #{totalSalesQuantityIn7Days,jdbcType=INTEGER},
+      conversion_in_7_days = #{conversionIn7Days,jdbcType=DECIMAL},
+      ad_sku_sales_quantity_in_7_days = #{adSkuSalesQuantityIn7Days,jdbcType=INTEGER},
+      other_sku_sales_quantity_in_7_days = #{otherSkuSalesQuantityIn7Days,jdbcType=INTEGER},
+      ad_sku_sales_in_7_days = #{adSkuSalesIn7Days,jdbcType=DECIMAL},
+      other_sku_sales_in_7_days = #{otherSkuSalesIn7Days,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
