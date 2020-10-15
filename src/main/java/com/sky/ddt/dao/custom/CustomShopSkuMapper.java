@@ -101,4 +101,6 @@ public interface CustomShopSkuMapper extends ShopSkuMapper {
     Long existWithoutWeightShopSku(Integer shopId);
 
     ShopSku getShopSkuBySkuShopId(@Param("shopId")Integer shopId,@Param("sku") String sku);
+
+    List<ShopSku> getShopSkuByShopParentSkuAndSize(@Param("shopParentSku") String shopParentSku,@Param("size")  String size,@Param("colour")  String colour);
 }

@@ -202,5 +202,12 @@ shop  s where s.type=2
         ss.shop_id=#{shopId} and ss.sku_id=s.sku_id
         and s.sku=#{sku}
     </select>
+    <select id="getShopSkuByShopParentSkuAndSize" resultMap="com.sky.ddt.dao.generate.ShopSkuMapper.BaseResultMap">
+        SELECT ss.*
+        FROM shop_sku ss,sku s
+        WHERE
+        ss.shop_parent_sku=#{shopParentSku} and ss.sku_id=s.sku_id
+        and s.size=#{size} and s.colour=#{colour}
+    </select>
 
 </mapper>

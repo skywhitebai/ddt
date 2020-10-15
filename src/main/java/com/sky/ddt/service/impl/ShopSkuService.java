@@ -1256,7 +1256,10 @@ public class ShopSkuService implements IShopSkuService {
         example.createCriteria().andSkuIdIn(skuIds);
         return customShopSkuMapper.countByExample(example)>0;
     }
-
+    @Override
+    public List<ShopSku> getShopSkuByShopParentSkuAndSize(String shopParentSku, String size, String colour){
+        return customShopSkuMapper.getShopSkuByShopParentSkuAndSize(shopParentSku,size,colour);
+    }
     /**
      * @param
      * @return

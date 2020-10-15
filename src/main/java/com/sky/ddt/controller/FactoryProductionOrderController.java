@@ -3,15 +3,15 @@ package com.sky.ddt.controller;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
-import com.sky.ddt.dto.factoryProductionOrder.request.ListFactoryProductionOrderPrdocutRequest;
-import com.sky.ddt.dto.factoryProductionOrder.request.ListFactoryProductionOrderRequest;
-import com.sky.ddt.dto.factoryProductionOrder.request.SaveFactoryProductionOrderRemark;
-import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderPrdocutResponse;
+import com.sky.ddt.dto.factoryProductionOrder.request.*;
+import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderInfoResponse;
+import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderShopParentSkuResponse;
 import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.service.IFactoryProductionOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -50,11 +50,11 @@ public class FactoryProductionOrderController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return factoryProductionOrderService.saveFactoryProductionOrderRemark(params, dealUserId);
     }
-    @RequestMapping("/listFactoryProductionOrderPrdocut")
+    @RequestMapping("/listFactoryProductionOrderShopParentSku")
     @MenuAnnotation("factoryProductionOrder/index")
     @ResponseBody
-    public DataGridResponse listFactoryProductionOrderPrdocut(ListFactoryProductionOrderPrdocutRequest params) {
-        PageInfo<ListFactoryProductionOrderPrdocutResponse> page = factoryProductionOrderService.listFactoryProductionOrderPrdocut(params);
+    public DataGridResponse listFactoryProductionOrderShopParentSku(@Validated  ListFactoryProductionOrderShopParentSkuRequest params) {
+        PageInfo<ListFactoryProductionOrderShopParentSkuResponse> page = factoryProductionOrderService.listFactoryProductionOrderShopParentSku(params);
         DataGridResponse dataGridResponse = new DataGridResponse();
         dataGridResponse.setTotal(page.getTotal());
         dataGridResponse.setRows(page.getList());
@@ -64,11 +64,19 @@ public class FactoryProductionOrderController extends SuperController {
     @RequestMapping("/listFactoryProductionOrderInfo")
     @MenuAnnotation("factoryProductionOrder/index")
     @ResponseBody
-    public DataGridResponse listFactoryProductionOrderInfo(ListFactoryProductionOrderPrdocutRequest params) {
-        PageInfo<ListFactoryProductionOrderPrdocutResponse> page = factoryProductionOrderService.listFactoryProductionOrderPrdocut(params);
+    public DataGridResponse listFactoryProductionOrderInfo(@Validated  ListFactoryProductionOrderInfoRequest params) {
+        PageInfo<ListFactoryProductionOrderInfoResponse> page = factoryProductionOrderService.listFactoryProductionOrderInfo(params);
         DataGridResponse dataGridResponse = new DataGridResponse();
         dataGridResponse.setTotal(page.getTotal());
         dataGridResponse.setRows(page.getList());
         return dataGridResponse;
+    }
+
+    @RequestMapping("/saveProductionQuantity")
+    @ResponseBody
+    @MenuAnnotation("factoryProductionOrder/index")
+    public BaseResponse saveProductionQuantity(SaveProductionQuantityRequest params) {
+        Integer dealUserId = getCurrentUserId();
+        return factoryProductionOrderService.saveProductionQuantity(params, dealUserId);
     }
 }

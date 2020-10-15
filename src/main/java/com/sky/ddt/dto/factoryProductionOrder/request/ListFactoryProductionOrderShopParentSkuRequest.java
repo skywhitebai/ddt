@@ -11,8 +11,8 @@ import javax.validation.constraints.NotNull;
  * @date 2020/10/15 16:41
  */
 @Data
-public class ListFactoryProductionOrderPrdocutRequest extends DataGridRequest {
+public class ListFactoryProductionOrderShopParentSkuRequest extends DataGridRequest {
     @NotNull(message = "工厂生产单id不能为空")
     Integer factoryProductionOrderId;
-    String productCode;
+    String shopParentSku;
 }

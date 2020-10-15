@@ -1,10 +1,9 @@
 package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
-import com.sky.ddt.dto.factoryProductionOrder.request.ListFactoryProductionOrderPrdocutRequest;
-import com.sky.ddt.dto.factoryProductionOrder.request.ListFactoryProductionOrderRequest;
-import com.sky.ddt.dto.factoryProductionOrder.request.SaveFactoryProductionOrderRemark;
-import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderPrdocutResponse;
+import com.sky.ddt.dto.factoryProductionOrder.request.*;
+import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderInfoResponse;
+import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderShopParentSkuResponse;
 import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.StockCart;
@@ -52,5 +51,23 @@ public interface IFactoryProductionOrderService {
      * @author baixueping
      * @date 2020/10/15 16:46
      */
-    PageInfo<ListFactoryProductionOrderPrdocutResponse> listFactoryProductionOrderPrdocut(ListFactoryProductionOrderPrdocutRequest params);
+    PageInfo<ListFactoryProductionOrderShopParentSkuResponse> listFactoryProductionOrderShopParentSku(ListFactoryProductionOrderShopParentSkuRequest params);
+
+    /**
+     * @param
+     * @return
+     * @description 获取父sku生产数量
+     * @author baixueping
+     * @date 2020/10/15 19:04
+     */
+    PageInfo<ListFactoryProductionOrderInfoResponse> listFactoryProductionOrderInfo(ListFactoryProductionOrderInfoRequest params);
+
+    /**
+     * @param
+     * @return
+     * @description 保存生产数量
+     * @author baixueping
+     * @date 2020/10/15 20:04
+     */
+    BaseResponse saveProductionQuantity(SaveProductionQuantityRequest params, Integer dealUserId);
 }

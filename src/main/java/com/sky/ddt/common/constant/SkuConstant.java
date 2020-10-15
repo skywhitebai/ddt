@@ -1,5 +1,7 @@
 package com.sky.ddt.common.constant;
 
+import lombok.Getter;
+
 import java.math.BigDecimal;
 
 /**
@@ -26,4 +28,17 @@ public class SkuConstant {
     //fba头程费
     public static final BigDecimal HEAD_TRIP_COST_RATE= BigDecimal.valueOf(0.055);
     public static final BigDecimal HEAD_TRIP_COST_MIN_RATE= BigDecimal.valueOf(0.04);
+    @Getter
+    public enum SkuSizeEnum {
+        S("S"),
+        M("M"),
+        L("L"),
+        XL("XL"),
+        XXL("2XL");
+        private String size;
+
+        SkuSizeEnum(String size) {
+            this.size = size;
+        }
+    }
 }

@@ -3,20 +3,23 @@ package com.sky.ddt.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.FactoryProductionOrderConstant;
+import com.sky.ddt.common.constant.SbErroEntity;
+import com.sky.ddt.common.constant.SkuConstant;
 import com.sky.ddt.dao.custom.CustomFactoryProductionOrderMapper;
 import com.sky.ddt.dao.custom.CustomFactoryProductionOrderShopSkuMapper;
-import com.sky.ddt.dto.factoryProductionOrder.request.ListFactoryProductionOrderPrdocutRequest;
-import com.sky.ddt.dto.factoryProductionOrder.request.ListFactoryProductionOrderRequest;
-import com.sky.ddt.dto.factoryProductionOrder.request.SaveFactoryProductionOrderRemark;
-import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderPrdocutResponse;
+import com.sky.ddt.dto.factoryProductionOrder.request.*;
+import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderInfoResponse;
+import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderShopParentSkuResponse;
 import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderResponse;
+import com.sky.ddt.dto.factoryProductionOrder.response.ShopSkuProductionQuantityDto;
 import com.sky.ddt.dto.response.BaseResponse;
-import com.sky.ddt.entity.FactoryProductionOrder;
-import com.sky.ddt.entity.FactoryProductionOrderShopSku;
-import com.sky.ddt.entity.StockCart;
+import com.sky.ddt.entity.*;
 import com.sky.ddt.service.IFactoryProductionOrderService;
+import com.sky.ddt.service.IShopSkuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -32,6 +35,9 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
     CustomFactoryProductionOrderMapper customFactoryProductionOrderMapper;
     @Autowired
     CustomFactoryProductionOrderShopSkuMapper customFactoryProductionOrderShopSkuMapper;
+    @Autowired
+    IShopSkuService shopSkuService;
+
     /**
      * @param stockCartList 店铺sku及数量
      * @param stockRecordId 补货记录id
@@ -43,7 +49,7 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
      */
     @Override
     public void createFactoryProductionOrder(List<StockCart> stockCartList, Integer stockRecordId, Integer shopId, String title, Integer currentUserId) {
-        FactoryProductionOrder factoryProductionOrder=new FactoryProductionOrder();
+        FactoryProductionOrder factoryProductionOrder = new FactoryProductionOrder();
         factoryProductionOrder.setStatus(FactoryProductionOrderConstant.StatusEnum.UNCONFIRMED.getStatus());
         factoryProductionOrder.setTitle(title);
         factoryProductionOrder.setShopId(shopId);
@@ -51,8 +57,8 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         factoryProductionOrder.setCreateTime(new Date());
         customFactoryProductionOrderMapper.insertSelective(factoryProductionOrder);
         //生成生产单店铺sku
-        for(StockCart stockCart:stockCartList){
-            FactoryProductionOrderShopSku factoryProductionOrderShopSku=new FactoryProductionOrderShopSku();
+        for (StockCart stockCart : stockCartList) {
+            FactoryProductionOrderShopSku factoryProductionOrderShopSku = new FactoryProductionOrderShopSku();
             factoryProductionOrderShopSku.setCreateBy(currentUserId);
             factoryProductionOrderShopSku.setCreateTime(new Date());
             factoryProductionOrderShopSku.setProductionQuantity(stockCart.getProductionQuantity());
@@ -86,7 +92,7 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
      */
     @Override
     public BaseResponse saveFactoryProductionOrderRemark(SaveFactoryProductionOrderRemark params, Integer dealUserId) {
-        FactoryProductionOrder factoryProductionOrder=new FactoryProductionOrder();
+        FactoryProductionOrder factoryProductionOrder = new FactoryProductionOrder();
         factoryProductionOrder.setId(params.getId());
         factoryProductionOrder.setRemark(params.getRemark());
         factoryProductionOrder.setUpdateBy(dealUserId);
@@ -102,10 +108,115 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
      * @date 2020/10/15 16:46
      */
     @Override
-    public PageInfo<ListFactoryProductionOrderPrdocutResponse> listFactoryProductionOrderPrdocut(ListFactoryProductionOrderPrdocutRequest params) {
+    public PageInfo<ListFactoryProductionOrderShopParentSkuResponse> listFactoryProductionOrderShopParentSku(ListFactoryProductionOrderShopParentSkuRequest params) {
         PageHelper.startPage(params.getPage(), params.getRows(), true);
-        List<ListFactoryProductionOrderPrdocutResponse> list = customFactoryProductionOrderMapper.listFactoryProductionOrderPrdocut(params);
-        PageInfo<ListFactoryProductionOrderPrdocutResponse> page = new PageInfo<>(list);
+        List<ListFactoryProductionOrderShopParentSkuResponse> list = customFactoryProductionOrderMapper.listFactoryProductionOrderShopParentSku(params);
+        PageInfo<ListFactoryProductionOrderShopParentSkuResponse> page = new PageInfo<>(list);
         return page;
+    }
+
+    /**
+     * @param params@return
+     * @description 获取父sku生产数量
+     * @author baixueping
+     * @date 2020/10/15 19:04
+     */
+    @Override
+    public PageInfo<ListFactoryProductionOrderInfoResponse> listFactoryProductionOrderInfo(ListFactoryProductionOrderInfoRequest params) {
+        PageHelper.startPage(params.getPage(), params.getRows(), true);
+        List<ListFactoryProductionOrderInfoResponse> list = customFactoryProductionOrderMapper.listColourByShopParentSku(params);
+        List<ShopSkuProductionQuantityDto> shopSkuProductionQuantityDtoList = customFactoryProductionOrderMapper.listShopSkuProductionQuantity(params);
+        for (ListFactoryProductionOrderInfoResponse listFactoryProductionOrderInfoResponse :
+                list) {
+            if (listFactoryProductionOrderInfoResponse.getColour() == null) {
+                listFactoryProductionOrderInfoResponse.setRemark("存在颜色为空的产品sku，请完善颜色");
+                continue;
+            }
+            SbErroEntity sbErroEntity = new SbErroEntity(";");
+            for (ShopSkuProductionQuantityDto shopSkuProductionQuantityDto : shopSkuProductionQuantityDtoList) {
+                if (listFactoryProductionOrderInfoResponse.getColour().equals(shopSkuProductionQuantityDto.getColour())) {
+                    if (StringUtils.isEmpty(shopSkuProductionQuantityDto.getSize())) {
+                        sbErroEntity.append("店铺sku："+shopSkuProductionQuantityDto.getShopSku()+",尺码为空，请完善尺码");
+                        shopSkuProductionQuantityDtoList.remove(shopSkuProductionQuantityDto);
+                        continue;
+                    }
+                    if(SkuConstant.SkuSizeEnum.S.equals(shopSkuProductionQuantityDto.getSize().toUpperCase())){
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityS(shopSkuProductionQuantityDto.getProductionQuantity());
+                    }else  if(SkuConstant.SkuSizeEnum.M.equals(shopSkuProductionQuantityDto.getSize().toUpperCase())){
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityM(shopSkuProductionQuantityDto.getProductionQuantity());
+                    }else  if(SkuConstant.SkuSizeEnum.L.equals(shopSkuProductionQuantityDto.getSize().toUpperCase())){
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityL(shopSkuProductionQuantityDto.getProductionQuantity());
+                    }else  if(SkuConstant.SkuSizeEnum.XL.equals(shopSkuProductionQuantityDto.getSize().toUpperCase())){
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityXL(shopSkuProductionQuantityDto.getProductionQuantity());
+                    }else  if(SkuConstant.SkuSizeEnum.XXL.equals(shopSkuProductionQuantityDto.getSize().toUpperCase())){
+                        listFactoryProductionOrderInfoResponse.setProductionQuantity2XL(shopSkuProductionQuantityDto.getProductionQuantity());
+                    }else  {
+                        sbErroEntity.append("店铺sku："+shopSkuProductionQuantityDto.getShopSku()+",尺码错误，请修改尺码");
+                    }
+                    shopSkuProductionQuantityDtoList.remove(shopSkuProductionQuantityDto);
+                }
+            }
+        }
+        PageInfo<ListFactoryProductionOrderInfoResponse> page = new PageInfo<>(list);
+        return page;
+    }
+
+    /**
+     * @param params
+     * @param dealUserId
+     * @return
+     * @description 保存生产数量
+     * @author baixueping
+     * @date 2020/10/15 20:04
+     */
+    @Override
+    public BaseResponse saveProductionQuantity(SaveProductionQuantityRequest params, Integer dealUserId) {
+        //获取生产单
+        FactoryProductionOrder factoryProductionOrder=customFactoryProductionOrderMapper.selectByPrimaryKey(params.getFactoryProductionOrderId());
+        if(factoryProductionOrder==null){
+            return BaseResponse.failMessage("工厂生产单id不存在");
+        }
+        List<ShopSku> shopSkuList=shopSkuService.getShopSkuByShopParentSkuAndSize(params.getShopParentSku(),params.getSize(),params.getColour());
+        if(CollectionUtils.isEmpty(shopSkuList)){
+            return BaseResponse.failMessage("该尺码颜色的店铺sku不存在");
+        }
+        if(shopSkuList.size()>1){
+            return BaseResponse.failMessage("该尺码颜色的店铺sku有多个");
+        }
+        ShopSku shopSku=shopSkuList.get(0);
+        FactoryProductionOrderShopSku factoryProductionOrderShopSku=getFactoryProductionOrderShopSku(params.getFactoryProductionOrderId(),shopSku.getShopSkuId());
+        if(factoryProductionOrderShopSku==null){
+            if(params.getProductionQuantity()==0){
+                return BaseResponse.success();
+            }
+            factoryProductionOrderShopSku=new FactoryProductionOrderShopSku();
+            factoryProductionOrderShopSku.setFactoryProductionOrderId(params.getFactoryProductionOrderId());
+            factoryProductionOrderShopSku.setProductionQuantity(params.getProductionQuantity());
+            factoryProductionOrderShopSku.setShopSkuId(shopSku.getShopSkuId());
+            factoryProductionOrderShopSku.setCreateBy(dealUserId);
+            factoryProductionOrderShopSku.setCreateTime(new Date());
+            customFactoryProductionOrderShopSkuMapper.insertSelective(factoryProductionOrderShopSku);
+            return BaseResponse.success();
+        }else{
+            if(params.getProductionQuantity()==0){
+                customFactoryProductionOrderShopSkuMapper.deleteByPrimaryKey(factoryProductionOrderShopSku.getId());
+                return BaseResponse.success();
+            }
+            factoryProductionOrderShopSku.setProductionQuantity(params.getProductionQuantity());
+            factoryProductionOrderShopSku.setUpdateBy(dealUserId);
+            factoryProductionOrderShopSku.setUpdateTime(new Date());
+            customFactoryProductionOrderShopSkuMapper.updateByPrimaryKeySelective(factoryProductionOrderShopSku);
+            return BaseResponse.success();
+        }
+    }
+
+    private FactoryProductionOrderShopSku getFactoryProductionOrderShopSku(Integer factoryProductionOrderId, Integer shopSkuId) {
+        FactoryProductionOrderShopSkuExample example=new FactoryProductionOrderShopSkuExample();
+        example.createCriteria().andFactoryProductionOrderIdEqualTo(factoryProductionOrderId).andShopSkuIdEqualTo(shopSkuId);
+        List<FactoryProductionOrderShopSku> factoryProductionOrderShopSkuList=customFactoryProductionOrderShopSkuMapper.selectByExample(example);
+        if(CollectionUtils.isEmpty(factoryProductionOrderShopSkuList)){
+            return null;
+        }
+        return factoryProductionOrderShopSkuList.get(0);
     }
 }

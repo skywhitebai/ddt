@@ -8,8 +8,7 @@ import lombok.Data;
  * @date 2020/10/15 16:44
  */
 @Data
-public class ListFactoryProductionOrderPrdocutResponse {
-    Integer productId;
-    String productCode;
+public class ListFactoryProductionOrderShopParentSkuResponse {
+    String shopParentSku;
     Integer productionQuantity;
 }
