@@ -264,7 +264,7 @@
             <b>调拨单店铺sku导入</b>
             <hr/>
             模板下载：
-            <a href="${pageContext.request.contextPath }/static/template/transferOrder/transferOrderShopSkuImportTemplate.xlsx"
+            <a href="${pageContext.request.contextPath }/static/template/transferOrder/transferOrderShopSkuImportTemplate.xlsx?20201015"
                target="_blank">模板下载</a>
         </div>
         <form id="frm_importTransferOrderShopSku" method="post" novalidate="novalidate" enctype="multipart/form-data">

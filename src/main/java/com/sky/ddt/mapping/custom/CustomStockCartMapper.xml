@@ -33,7 +33,7 @@
         IFNULL(fi.afn_inbound_working_quantity,0) afnInboundWorkingQuantity,
         IFNULL(fi.afn_inbound_shipped_quantity,0) afnInboundShippedQuantity,
         IFNULL(fi.afn_inbound_receiving_quantity,0) afnInboundReceivingQuantity,
-        IFNULL(scp.production_quantity,0) productionQuantity,
+        IFNULL(sc.production_quantity,0) productionQuantity,
         u.real_name salesmanRealName,
         IFNULL((select sum(poss.production_quantity) produceOrderShopSkuProductionQuantity from
         produce_order po,produce_order_shop_sku poss
@@ -48,7 +48,7 @@
         AND oi.`quantity`>0
         LEFT JOIN `fba_import` fi ON ss.`shop_sku_id`=fi.shop_sku_id
         LEFT JOIN stock_cart sc ON ss.`shop_sku_id`=sc.`shop_sku_id` and sc.type=1
-        LEFT JOIN stock_cart scp ON ss.`shop_sku_id`=scp.`shop_sku_id` and sc.type=2
+        /*LEFT JOIN stock_cart scp ON ss.`shop_sku_id`=scp.`shop_sku_id` and scp.type=2*/
         LEFT JOIN shop s ON ss.`shop_id`=s.`shop_id`
         LEFT JOIN USER u on u.user_id=ss.salesman_user_id
         <where>

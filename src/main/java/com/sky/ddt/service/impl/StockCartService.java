@@ -133,7 +133,7 @@ public class StockCartService implements IStockCartService {
         if (!shopUserService.exisShopUser(shopSku.getShopId(), currentUserId)) {
             return BaseResponse.failMessage(StockRecordConstant.USER_NO_SHOP_RIGHT);
         }
-        StockCart stockCart = getStockCartByShopSkuId(params.getShopSkuId(),StockConsatnt.TypeEnum.FACTORY_PRODUCTION.getType());
+        StockCart stockCart = getStockCartByShopSkuId(params.getShopSkuId(),StockConsatnt.TypeEnum.REPLENISHMENT.getType());
         if (stockCart == null) {
             if (params.getProductionQuantity() == 0) {
                 return BaseResponse.success();
@@ -141,7 +141,7 @@ public class StockCartService implements IStockCartService {
             stockCart = new StockCart();
             stockCart.setCreateBy(currentUserId);
             stockCart.setCreateTime(new Date());
-            stockCart.setType(StockConsatnt.TypeEnum.FACTORY_PRODUCTION.getType());
+            stockCart.setType(StockConsatnt.TypeEnum.REPLENISHMENT.getType());
             stockCart.setShopId(shopSku.getShopId());
             stockCart.setShopSkuId(params.getShopSkuId());
             stockCart.setProductionQuantity(params.getProductionQuantity());
