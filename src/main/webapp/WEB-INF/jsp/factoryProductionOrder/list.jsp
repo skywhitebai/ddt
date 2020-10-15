@@ -44,7 +44,42 @@
 <table id="dg" style="width: 100%; height: auto">
 </table>
 
-
+<!--工厂生产单产品信息-->
+<div id="dlgFactoryProductionOrderShopSku" class="easyui-dialog" style="width: 800px; height: 660px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, align:'center'">
+    <div>
+        <input type="hidden" id="s_factoryProductionOrderShopSku_factoryProductionOrderId">
+        货号
+        <input class="easyui-validatebox textbox" id="s_factoryProductionOrderShopSku_productCode">
+        <a href="javascript:void(0)" onclick="bindFactoryProductionOrderShopSkuData()" class="easyui-linkbutton"
+           data-options="iconCls:'icon-search'"
+           style="width: 80px">查 询</a>
+    </div>
+    <table id="dgFactoryProductionOrderShopSku" style="width: 100%; height: auto">
+    </table>
+    <div style="text-align:center;">
+        <a href="javascript:void(0)" class="easyui-linkbutton"
+           data-options="iconCls:'icon-cancel'" onclick="closeDlgFactoryProductionOrderShopSku()">关闭</a>
+    </div>
+</div>
+<!--工厂生产单详情-->
+<div id="dlgFactoryProductionOrderInfo" class="easyui-dialog" style="width: 800px; height: 660px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, align:'center'">
+    <div>
+        <input type="hidden" id="s_factoryProductionOrderInfo_productId">
+        货号
+        <input class="easyui-validatebox textbox" id="s_factoryProductionOrderInfo_productCode" data-options="disable:true">
+        <a href="javascript:void(0)" onclick="bindFactoryProductionOrderShopSkuData()" class="easyui-linkbutton"
+           data-options="iconCls:'icon-search'"
+           style="width: 80px">查 询</a>
+    </div>
+    <table id="dgFactoryProductionOrderInfo" style="width: 100%; height: auto">
+    </table>
+    <div style="text-align:center;">
+        <a href="javascript:void(0)" class="easyui-linkbutton"
+           data-options="iconCls:'icon-cancel'" onclick="closeDlgFactoryProductionOrderInfo()">关闭</a>
+    </div>
+</div>
 </body>
 <script type="text/javascript">
     bindShop();
@@ -105,7 +140,7 @@
                     title: '备注', field: 'remark', width: 288,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
-                            return '<input class="easyui-textbox " style="width:100%"  onchange="saveFactoryProductionOrderRemark(this,' + row.id + ')">';
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveFactoryProductionOrderRemark(this,' + row.id + ')">';
                         } else {
                             return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveFactoryProductionOrderRemark(this,' + row.id + ')">';
                         }
@@ -115,7 +150,8 @@
                 {
                     title: '操作', field: 'stockRecordId', width: 600,
                     formatter: function (value, row, rowIndex) {
-                        return '<a href="javascript:void(0)" onclick="downFactoryProductionOrder(' + row.id + ')" class="easyui-linkbutton" >下载工厂生产单</a>';
+                        return '<a href="javascript:void(0)" onclick="showDlgFactoryProductionOrderShopSku(' + row.id + ',\'' + row.title + '\')" class="easyui-linkbutton" >查看生产单店铺sku</a>'
+                            + '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="downFactoryProductionOrder(' + row.id + ')" class="easyui-linkbutton" >下载工厂生产单</a>';
                     }
                 }
             ]],
@@ -145,6 +181,174 @@
                 $.messager.alert("提示", data.message);
             }
         });
+    }
+    function showDlgFactoryProductionOrderShopSku(factoryProductionOrderId,title){
+        $("#s_factoryProductionOrderShopSku_factoryProductionOrderId").val(factoryProductionOrderId);
+        $('#dlgFactoryProductionOrderShopSku').dialog('open').dialog('setTitle', title + '-工厂生产单详情');
+        bindFactoryProductionOrderShopSkuData();
+    }
+    function bindFactoryProductionOrderShopSkuData() {
+        dg = '#dgFactoryProductionOrderShopSku';
+        url = "${pageContext.request.contextPath }/factoryProductionOrder/listFactoryProductionOrderPrdocut";
+        title = "工厂生产单产品信息";
+        queryParams = {
+            factoryProductionOrderId: $("#s_factoryProductionOrderShopSku_factoryProductionOrderId").val(),
+            productCode:$("#s_factoryProductionOrderShopSku_productCode").val()
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: true,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            singleSelect: true,
+            pageSize: 15,
+            pageList: [10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'id',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '货号', field: 'productCode', width: 150},
+                {title: '产品名称', field: 'productName', width: 150},
+                {title: '生产数量', field: 'productionQuantity', width: 90},
+                {
+                    title: '操作', field: 'shopSkuId', width: 150,
+                    formatter: function (value, row, rowIndex) {
+                        return '<a href="javascript:void(0)" onclick="showDlgFactoryProductionOrderInfo(' + row.productId+',\'' + row.productName + '\')" class="easyui-linkbutton" >生产数量管理</a>';
+                    }
+                }
+            ]],
+            toolbar: [{
+                id: 'btnReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        //$(dg).datagrid('clearSelections');
+    }
+    function closeDlgFactoryProductionOrderShopSku() {
+        $('#dlgFactoryProductionOrderShopSku').dialog('close');
+    }
+    function showDlgFactoryProductionOrderInfo(productId,title) {
+        $("#s_factoryProductionOrderInfo_productId").val(productId);
+        $('#dlgFactoryProductionOrderInfo').dialog('open').dialog('setTitle', title + '-生产数量管理');
+        bindFactoryProductionOrderInfoData();
+    }
+    function bindFactoryProductionOrderInfoData() {
+        dg = '#dg';
+        url = "${pageContext.request.contextPath }/factoryProductionOrder/listFactoryProductionOrderInfo";
+        title = "工厂生产单生产数量管理";
+        queryParams = {
+            productId: $("#s_factoryProductionOrderInfo_productId").val(),
+            factoryProductionOrderId: $("#s_factoryProductionOrderShopSku_factoryProductionOrderId").val()
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: false,
+            striped: true,
+            collapsible: true,
+            pagination: false,
+            singleSelect: true,
+            pageSize: 15,
+            pageList: [10, 15, 20, 30, 50, 100, 200, 500],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'id',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: 'S', field: 'productionQuantityS', width: 20,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,' + row.productId + ',\'S\')">';
+                        } else {
+                            return '<input class="easyui-numberbox " min="0" precision="0" value="' + value + '" onchange="saveProductionQuantity(this,' + row.productId + ',\'S\')">';
+                        }
+                    }
+                },
+                {title: 'M', field: 'productionQuantityM', width: 20,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,' + row.productId + ',\'M\')">';
+                        } else {
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,' + row.productId + ',\'M\')">';
+                        }
+                    }
+                },
+                {title: 'L', field: 'productionQuantityL', width: 20,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,' + row.productId + ',\'L\')">';
+                        } else {
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,' + row.productId + ',\'L\')">';
+                        }
+                    }
+                },
+                {title: 'XL', field: 'productionQuantityXL', width: 20,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,' + row.productId + ',\'XL\')">';
+                        } else {
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,' + row.productId + ',\'XL\')">';
+                        }
+                    }
+                },
+                {title: '2XL', field: 'productionQuantity2XL', width: 20,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,' + row.productId + ',\'2XL\')">';
+                        } else {
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,' + row.productId + ',\'2XL\')">';
+                        }
+                    }
+                }
+            ]],
+            toolbar: [{
+                id: 'btnReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        $(dg).datagrid('clearSelections');
+    }
+    function saveProductionQuantity(input,productId) {
+        var productionQuantity = $(input).val();
+        $.post('${pageContext.request.contextPath }/factoryProductionOrder/saveProductionQuantity', {
+            productId: productId,
+            productionQuantity: productionQuantity,
+            factoryProductionOrderId: $("#s_factoryProductionOrderShopSku_factoryProductionOrderId").val()
+        }, function (data) {
+            if (data.code == '200') {
+                $.messager.alert("提示", "修改成功");
+                bindData();
+            }
+            else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+    function closeDlgFactoryProductionOrderInfo() {
+        $('#dlgFactoryProductionOrderInfo').dialog('close');
     }
 </script>
 </html>

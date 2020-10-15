@@ -1,8 +1,10 @@
 package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
+import com.sky.ddt.dto.factoryProductionOrder.request.ListFactoryProductionOrderPrdocutRequest;
 import com.sky.ddt.dto.factoryProductionOrder.request.ListFactoryProductionOrderRequest;
 import com.sky.ddt.dto.factoryProductionOrder.request.SaveFactoryProductionOrderRemark;
+import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderPrdocutResponse;
 import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.StockCart;
@@ -42,4 +44,13 @@ public interface IFactoryProductionOrderService {
      * @date 2020/10/12 16:34
      */
     BaseResponse saveFactoryProductionOrderRemark(SaveFactoryProductionOrderRemark params, Integer dealUserId);
+
+    /**
+     * @param
+     * @return
+     * @description 获取工厂生产单产品信息
+     * @author baixueping
+     * @date 2020/10/15 16:46
+     */
+    PageInfo<ListFactoryProductionOrderPrdocutResponse> listFactoryProductionOrderPrdocut(ListFactoryProductionOrderPrdocutRequest params);
 }

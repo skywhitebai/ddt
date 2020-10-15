@@ -5,8 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.FactoryProductionOrderConstant;
 import com.sky.ddt.dao.custom.CustomFactoryProductionOrderMapper;
 import com.sky.ddt.dao.custom.CustomFactoryProductionOrderShopSkuMapper;
+import com.sky.ddt.dto.factoryProductionOrder.request.ListFactoryProductionOrderPrdocutRequest;
 import com.sky.ddt.dto.factoryProductionOrder.request.ListFactoryProductionOrderRequest;
 import com.sky.ddt.dto.factoryProductionOrder.request.SaveFactoryProductionOrderRemark;
+import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderPrdocutResponse;
 import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.FactoryProductionOrder;
@@ -91,5 +93,19 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         factoryProductionOrder.setUpdateTime(new Date());
         customFactoryProductionOrderMapper.updateByPrimaryKeySelective(factoryProductionOrder);
         return BaseResponse.success();
+    }
+
+    /**
+     * @param params @return
+     * @description 获取工厂生产单产品信息
+     * @author baixueping
+     * @date 2020/10/15 16:46
+     */
+    @Override
+    public PageInfo<ListFactoryProductionOrderPrdocutResponse> listFactoryProductionOrderPrdocut(ListFactoryProductionOrderPrdocutRequest params) {
+        PageHelper.startPage(params.getPage(), params.getRows(), true);
+        List<ListFactoryProductionOrderPrdocutResponse> list = customFactoryProductionOrderMapper.listFactoryProductionOrderPrdocut(params);
+        PageInfo<ListFactoryProductionOrderPrdocutResponse> page = new PageInfo<>(list);
+        return page;
     }
 }

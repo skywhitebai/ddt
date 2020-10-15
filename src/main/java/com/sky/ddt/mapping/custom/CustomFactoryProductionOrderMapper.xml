@@ -21,4 +21,17 @@
         ORDER BY fpo.create_time desc
     </select>
 
+    <select id="listFactoryProductionOrderPrdocut"
+            resultType="com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderPrdocutResponse">
+        SELECT SUM(production_quantity) productionQuantity,p.`product_name` productName,p.`product_code` productCode,p.`product_id` productId
+        FROM factory_production_order_shop_sku fposs
+        LEFT JOIN `shop_sku` ss ON fposs.`shop_sku_id`=ss.`shop_sku_id`
+        LEFT JOIN sku s ON ss.`sku_id`=s.`sku_id`
+        LEFT JOIN product p ON s.`product_id`=p.`product_id`
+        <where>
+            <if test="factoryProductionOrderId != null ">and fposs.id=#{factoryProductionOrderId}</if>
+            <if test="productCode != null and productCode!=''">and p.product_code like concat('%',#{productCode},'%')</if>
+        </where>
+        GROUP BY p.`product_id` ORDER BY p.`product_code`
+    </select>
 </mapper>

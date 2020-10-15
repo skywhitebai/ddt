@@ -3,8 +3,10 @@ package com.sky.ddt.controller;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
+import com.sky.ddt.dto.factoryProductionOrder.request.ListFactoryProductionOrderPrdocutRequest;
 import com.sky.ddt.dto.factoryProductionOrder.request.ListFactoryProductionOrderRequest;
 import com.sky.ddt.dto.factoryProductionOrder.request.SaveFactoryProductionOrderRemark;
+import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderPrdocutResponse;
 import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.service.IFactoryProductionOrderService;
@@ -47,5 +49,26 @@ public class FactoryProductionOrderController extends SuperController {
     public BaseResponse saveFactoryProductionOrderRemark(SaveFactoryProductionOrderRemark params) {
         Integer dealUserId = getCurrentUserId();
         return factoryProductionOrderService.saveFactoryProductionOrderRemark(params, dealUserId);
+    }
+    @RequestMapping("/listFactoryProductionOrderPrdocut")
+    @MenuAnnotation("factoryProductionOrder/index")
+    @ResponseBody
+    public DataGridResponse listFactoryProductionOrderPrdocut(ListFactoryProductionOrderPrdocutRequest params) {
+        PageInfo<ListFactoryProductionOrderPrdocutResponse> page = factoryProductionOrderService.listFactoryProductionOrderPrdocut(params);
+        DataGridResponse dataGridResponse = new DataGridResponse();
+        dataGridResponse.setTotal(page.getTotal());
+        dataGridResponse.setRows(page.getList());
+        return dataGridResponse;
+    }
+
+    @RequestMapping("/listFactoryProductionOrderInfo")
+    @MenuAnnotation("factoryProductionOrder/index")
+    @ResponseBody
+    public DataGridResponse listFactoryProductionOrderInfo(ListFactoryProductionOrderPrdocutRequest params) {
+        PageInfo<ListFactoryProductionOrderPrdocutResponse> page = factoryProductionOrderService.listFactoryProductionOrderPrdocut(params);
+        DataGridResponse dataGridResponse = new DataGridResponse();
+        dataGridResponse.setTotal(page.getTotal());
+        dataGridResponse.setRows(page.getList());
+        return dataGridResponse;
     }
 }
