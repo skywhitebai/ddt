@@ -66,10 +66,9 @@
 <div id="dlgFactoryProductionOrderInfo" class="easyui-dialog" style="width: 800px; height: 660px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true, align:'center'">
     <div>
-        <input type="hidden" id="s_factoryProductionOrderInfo_shopParentSku">
-        货号
-        <input class="easyui-validatebox textbox" id="s_factoryProductionOrderInfo_productCode" data-options="disable:true">
-        <a href="javascript:void(0)" onclick="bindFactoryProductionOrderShopSkuData()" class="easyui-linkbutton"
+        店铺父sku
+        <input class="easyui-validatebox textbox" id="s_factoryProductionOrderInfo_shopParentSku" data-options="disable:true">
+        <a href="javascript:void(0)" onclick="bindFactoryProductionOrderInfoData()" class="easyui-linkbutton"
            data-options="iconCls:'icon-search'"
            style="width: 80px">查 询</a>
     </div>
@@ -125,7 +124,7 @@
                 {field: 'ck', checkbox: true},   //选择
                 {title: '工厂生产单id', field: 'id', width: 88},
                 {title: '店铺名', field: 'shopName', width: 120},
-                {title: '标题', field: 'title', width: 130},
+                {title: '标题', field: 'title', width: 180},
                 {
                     title: '状态', field: 'status', width: 130,
                     formatter: function (value, row, rowIndex) {
@@ -220,7 +219,7 @@
                 {
                     title: '操作', field: 'deal', width: 150,
                     formatter: function (value, row, rowIndex) {
-                        return '<a href="javascript:void(0)" onclick="showDlgFactoryProductionOrderInfo(,\'' + row.shopParentSku + '\')" class="easyui-linkbutton" >生产数量管理</a>';
+                        return '<a href="javascript:void(0)" onclick="showDlgFactoryProductionOrderInfo(\'' + row.shopParentSku + '\')" class="easyui-linkbutton" >生产数量管理</a>';
                     }
                 }
             ]],
@@ -249,7 +248,7 @@
         bindFactoryProductionOrderInfoData();
     }
     function bindFactoryProductionOrderInfoData() {
-        dg = '#dg';
+        dg = '#dgFactoryProductionOrderInfo';
         url = "${pageContext.request.contextPath }/factoryProductionOrder/listFactoryProductionOrderInfo";
         title = "工厂生产单生产数量管理";
         queryParams = {
@@ -276,7 +275,9 @@
             queryParams: queryParams,  //异步查询的参数
             columns: [[
                 {field: 'ck', checkbox: true},   //选择
-                {title: 'S', field: 'productionQuantityS', width: 20,
+                 {title: '店铺父sku', field: 'shopParentSku', width: 150},
+                {title: '颜色', field: 'colour', width: 100},
+                {title: 'S', field: 'productionQuantityS', width: 80,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
                             return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\''+row.colour+'\',\'S\')">';
@@ -285,7 +286,7 @@
                         }
                     }
                 },
-                {title: 'M', field: 'productionQuantityM', width: 20,
+                {title: 'M', field: 'productionQuantityM', width: 80,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
                             return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\''+row.colour+'\',\'M\')">';
@@ -294,7 +295,7 @@
                         }
                     }
                 },
-                {title: 'L', field: 'productionQuantityL', width: 20,
+                {title: 'L', field: 'productionQuantityL', width: 80,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
                             return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\''+row.colour+'\',\'L\')">';
@@ -303,7 +304,7 @@
                         }
                     }
                 },
-                {title: 'XL', field: 'productionQuantityXL', width: 20,
+                {title: 'XL', field: 'productionQuantityXL', width: 80,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
                             return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku +'\',\''+row.colour+ '\',\'XL\')">';
@@ -312,7 +313,7 @@
                         }
                     }
                 },
-                {title: '2XL', field: 'productionQuantity2XL', width: 20,
+                {title: '2XL', field: 'productionQuantity2XL', width: 80,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
                             return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku +'\',\''+row.colour+ '\',\'2XL\')">';
@@ -349,6 +350,7 @@
             }
             else {
                 $.messager.alert("提示", data.message);
+                $(input).val("");
             }
         });
     }

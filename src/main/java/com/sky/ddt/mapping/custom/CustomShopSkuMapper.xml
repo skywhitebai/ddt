@@ -207,7 +207,7 @@ shop  s where s.type=2
         FROM shop_sku ss,sku s
         WHERE
         ss.shop_parent_sku=#{shopParentSku} and ss.sku_id=s.sku_id
-        and s.size=#{size} and s.colour=#{colour}
+        and s.size=#{size} and s.colour=#{colour} and ss.shop_id=#{shopId}
     </select>
 
 </mapper>

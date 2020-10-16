@@ -128,6 +128,7 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         List<ShopSkuProductionQuantityDto> shopSkuProductionQuantityDtoList = customFactoryProductionOrderMapper.listShopSkuProductionQuantity(params);
         for (ListFactoryProductionOrderInfoResponse listFactoryProductionOrderInfoResponse :
                 list) {
+            listFactoryProductionOrderInfoResponse.setShopParentSku(params.getShopParentSku());
             if (listFactoryProductionOrderInfoResponse.getColour() == null) {
                 listFactoryProductionOrderInfoResponse.setRemark("存在颜色为空的产品sku，请完善颜色");
                 continue;
@@ -137,7 +138,6 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
                 if (listFactoryProductionOrderInfoResponse.getColour().equals(shopSkuProductionQuantityDto.getColour())) {
                     if (StringUtils.isEmpty(shopSkuProductionQuantityDto.getSize())) {
                         sbErroEntity.append("店铺sku："+shopSkuProductionQuantityDto.getShopSku()+",尺码为空，请完善尺码");
-                        shopSkuProductionQuantityDtoList.remove(shopSkuProductionQuantityDto);
                         continue;
                     }
                     if(SkuConstant.SkuSizeEnum.S.equals(shopSkuProductionQuantityDto.getSize().toUpperCase())){
@@ -153,7 +153,6 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
                     }else  {
                         sbErroEntity.append("店铺sku："+shopSkuProductionQuantityDto.getShopSku()+",尺码错误，请修改尺码");
                     }
-                    shopSkuProductionQuantityDtoList.remove(shopSkuProductionQuantityDto);
                 }
             }
         }
@@ -176,12 +175,12 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         if(factoryProductionOrder==null){
             return BaseResponse.failMessage("工厂生产单id不存在");
         }
-        List<ShopSku> shopSkuList=shopSkuService.getShopSkuByShopParentSkuAndSize(params.getShopParentSku(),params.getSize(),params.getColour());
+        List<ShopSku> shopSkuList=shopSkuService.getShopSkuByShopParentSkuAndSize(params.getShopParentSku(),params.getSize(),params.getColour(),factoryProductionOrder.getShopId());
         if(CollectionUtils.isEmpty(shopSkuList)){
-            return BaseResponse.failMessage("该尺码颜色的店铺sku不存在");
+            return BaseResponse.failMessage(String.format("店铺父sku：%s,颜色：%s，尺码：%s的店铺sku不存在",params.getShopParentSku(),params.getColour(),params.getSize()));
         }
         if(shopSkuList.size()>1){
-            return BaseResponse.failMessage("该尺码颜色的店铺sku有多个");
+            return BaseResponse.failMessage(String.format("店铺父sku：%s,颜色：%s，尺码：%s的店铺sku有多个",params.getShopParentSku(),params.getColour(),params.getSize()));
         }
         ShopSku shopSku=shopSkuList.get(0);
         FactoryProductionOrderShopSku factoryProductionOrderShopSku=getFactoryProductionOrderShopSku(params.getFactoryProductionOrderId(),shopSku.getShopSkuId());

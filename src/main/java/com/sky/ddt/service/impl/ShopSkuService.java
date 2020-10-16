@@ -1257,8 +1257,8 @@ public class ShopSkuService implements IShopSkuService {
         return customShopSkuMapper.countByExample(example)>0;
     }
     @Override
-    public List<ShopSku> getShopSkuByShopParentSkuAndSize(String shopParentSku, String size, String colour){
-        return customShopSkuMapper.getShopSkuByShopParentSkuAndSize(shopParentSku,size,colour);
+    public List<ShopSku> getShopSkuByShopParentSkuAndSize(String shopParentSku, String size, String colour, Integer shopId){
+        return customShopSkuMapper.getShopSkuByShopParentSkuAndSize(shopParentSku,size,colour,shopId);
     }
     /**
      * @param
