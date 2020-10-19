@@ -10,13 +10,13 @@
     </resultMap>
     <sql id="Custom_Column_List">
          s.sku_id, s.product_id, s.sku, s.colour,s.colour_number, s.size,s.weight,s.cost_price,s.head_trip_cost head_trip_cost,s.head_trip_cost_min,
-         s.remark, s.create_time, s.create_by, s.update_time, s.update_by,s.second_sku, s.brand, s.product_name, s.material,s.inventory_quantity,s.grade, s.executive_standard,
+         s.remark, s.create_time, s.create_by, s.update_time, s.update_by,s.second_sku, s.brand, s.product_name, s.material,s.grade, s.executive_standard,
          s.security_category, s.inspector, s.suggested_retail_price
     </sql>
     <select id="listSku" parameterType="com.sky.ddt.dto.sku.request.SkuListRequest" resultMap="SkuListMap">
         select
         <include refid="Custom_Column_List"/>
-        ,p.product_code,p.product_name productProductName
+        ,p.product_code,p.product_name productProductName,(select sum(ss.inventory_quantity) from shop_sku ss where ss.sku_id=s.sku_id) inventory_quantity
         from sku s
         left join product p on s.product_id=p.product_id
         <if test="_parameter != null">
@@ -29,7 +29,7 @@
             resultType="com.sky.ddt.dto.sku.response.SkuExportInfoResponse">
         select
         p.product_name productName,p.product_code productCode,s.sku, s.colour,s.colour_number colourNumber,s.size,s.weight, s.cost_price costPrice,
-        s.head_trip_cost headTripCost, s.inventory_quantity inventoryQuantity,s.remark
+        s.head_trip_cost headTripCost, (select sum(ss.inventory_quantity) from shop_sku ss where ss.sku_id=s.sku_id) inventoryQuantity,s.remark
         from sku s
         left join product p on s.product_id=p.product_id
         <if test="_parameter != null">

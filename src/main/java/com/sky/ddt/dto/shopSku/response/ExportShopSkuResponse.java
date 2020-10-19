@@ -20,6 +20,7 @@ public class ExportShopSkuResponse {
     String parentAsin;
     String title;
     String status;
+    Integer inventoryQuantity;
     String storageLocation;
     BigDecimal headTripCost;
     String remark;
