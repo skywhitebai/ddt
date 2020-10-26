@@ -33,7 +33,7 @@ public class ProduceOrderController extends SuperController {
         return "produceOrder/list";
     }
 
-    @RequestMapping("listProduceOrder")
+    @RequestMapping("/listProduceOrder")
     @ResponseBody
     @MenuAnnotation("produceOrder/index")
     public DataGridResponse listProduceOrder(ListProduceOrderRequest listProduceOrderRequest) {
