@@ -23,7 +23,7 @@
     <script type="text/javascript"
             src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.5.5.4/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript"
-            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20200929"></script>
+            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20201028"></script>
     <title>工厂生产单管理</title>
 </head>
 <body>
@@ -222,7 +222,7 @@
                 {title: '店铺父sku', field: 'shopParentSku', width: 150},
                 {title: '生产数量', field: 'productionQuantity', width: 90},
                 {
-                    title: '操作', field: 'deal', width: 150,
+                    title: '操作', field: 'deal', width: 200,
                     formatter: function (value, row, rowIndex) {
                         return '<a href="javascript:void(0)" onclick="showDlgFactoryProductionOrderInfo(\'' + row.shopParentSku + '\')" class="easyui-linkbutton" >生产数量管理</a>'
                             + '&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="javascript:void(0)" onclick="downFactoryProductionOrderByShopParentSku(\'' + row.shopParentSku + '\')" class="easyui-linkbutton" >下载工厂生产单</a>';
@@ -335,6 +335,16 @@
                             return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'2XL\')">';
                         }
                     }
+                },
+                {
+                    title: '3XL', field: 'productionQuantity2XL', width: 80,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'3XL\')">';
+                        } else {
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'3XL\')">';
+                        }
+                    }
                 }
             ]],
             toolbar: [{
@@ -360,7 +370,6 @@
             factoryProductionOrderId: $("#s_factoryProductionOrderShopSku_factoryProductionOrderId").val()
         }, function (data) {
             if (data.code == '200') {
-                $.messager.alert("提示", "修改成功");
                 bindData();
             }
             else {
@@ -375,7 +384,8 @@
     }
 
     function downFactoryProductionOrderByShopParentSku(shopParentSku) {
-        var url = '${pageContext.request.contextPath }/factoryProductionOrder/downFactoryProductionOrderByShopParentSku?shopParentSku=' + shopParentSku;
+        factoryProductionOrderId=$("#s_factoryProductionOrderShopSku_factoryProductionOrderId").val()
+        var url = '${pageContext.request.contextPath }/factoryProductionOrder/downFactoryProductionOrderByShopParentSku?shopParentSku=' + shopParentSku+"&factoryProductionOrderId="+factoryProductionOrderId+"&t="+getTimestamp();
         window.open(url);
     }
 

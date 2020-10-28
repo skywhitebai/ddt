@@ -6,10 +6,8 @@ import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrde
 import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderShopParentSkuResponse;
 import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderResponse;
 import com.sky.ddt.dto.response.BaseResponse;
-import com.sky.ddt.entity.StockCart;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  * @author baixueping
@@ -73,10 +71,11 @@ public interface IFactoryProductionOrderService {
 
     /**
      * @param
+     * @param factoryProductionOrderId
      * @return
      * @description 下载工厂生产单
      * @author baixueping
      * @date 2020/10/28 19:23
      */
-    BaseResponse downFactoryProductionOrderByShopParentSku(String shopParentSku, HttpServletResponse response);
+    BaseResponse downFactoryProductionOrderByShopParentSku(String shopParentSku, Integer factoryProductionOrderId, HttpServletResponse response);
 }

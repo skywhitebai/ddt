@@ -16,5 +16,6 @@ public class ListFactoryProductionOrderInfoResponse {
     Integer productionQuantityL;
     Integer productionQuantityXL;
     Integer productionQuantity2XL;
+    Integer productionQuantity3XL;
     String remark;
 }

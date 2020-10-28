@@ -18,6 +18,11 @@ import com.sky.ddt.service.IShopSkuService;
 import com.sky.ddt.service.IShopUserService;
 import com.sky.ddt.service.IStockRecordService;
 import com.sky.ddt.util.DateUtil;
+import com.sky.ddt.util.ExcelUtil;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -117,21 +122,21 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
             for (ShopSkuProductionQuantityDto shopSkuProductionQuantityDto : shopSkuProductionQuantityDtoList) {
                 if (listFactoryProductionOrderInfoResponse.getColour().equals(shopSkuProductionQuantityDto.getColour())) {
                     if (StringUtils.isEmpty(shopSkuProductionQuantityDto.getSize())) {
-                        sbErroEntity.append("店铺sku："+shopSkuProductionQuantityDto.getShopSku()+",尺码为空，请完善尺码");
+                        sbErroEntity.append("店铺sku：" + shopSkuProductionQuantityDto.getShopSku() + ",尺码为空，请完善尺码");
                         continue;
                     }
-                    if(SkuConstant.SkuSizeEnum.S.equals(shopSkuProductionQuantityDto.getSize().toUpperCase())){
+                    if (SkuConstant.SkuSizeEnum.S.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
                         listFactoryProductionOrderInfoResponse.setProductionQuantityS(shopSkuProductionQuantityDto.getProductionQuantity());
-                    }else  if(SkuConstant.SkuSizeEnum.M.equals(shopSkuProductionQuantityDto.getSize().toUpperCase())){
+                    } else if (SkuConstant.SkuSizeEnum.M.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
                         listFactoryProductionOrderInfoResponse.setProductionQuantityM(shopSkuProductionQuantityDto.getProductionQuantity());
-                    }else  if(SkuConstant.SkuSizeEnum.L.equals(shopSkuProductionQuantityDto.getSize().toUpperCase())){
+                    } else if (SkuConstant.SkuSizeEnum.L.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
                         listFactoryProductionOrderInfoResponse.setProductionQuantityL(shopSkuProductionQuantityDto.getProductionQuantity());
-                    }else  if(SkuConstant.SkuSizeEnum.XL.equals(shopSkuProductionQuantityDto.getSize().toUpperCase())){
+                    } else if (SkuConstant.SkuSizeEnum.XL.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
                         listFactoryProductionOrderInfoResponse.setProductionQuantityXL(shopSkuProductionQuantityDto.getProductionQuantity());
-                    }else  if(SkuConstant.SkuSizeEnum.XXL.equals(shopSkuProductionQuantityDto.getSize().toUpperCase())){
+                    } else if (SkuConstant.SkuSizeEnum.XXXL.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
                         listFactoryProductionOrderInfoResponse.setProductionQuantity2XL(shopSkuProductionQuantityDto.getProductionQuantity());
-                    }else  {
-                        sbErroEntity.append("店铺sku："+shopSkuProductionQuantityDto.getShopSku()+",尺码错误，请修改尺码");
+                    } else {
+                        sbErroEntity.append("店铺sku：" + shopSkuProductionQuantityDto.getShopSku() + ",尺码错误，请修改尺码");
                     }
                 }
             }
@@ -151,24 +156,24 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
     @Override
     public BaseResponse saveProductionQuantity(SaveProductionQuantityRequest params, Integer dealUserId) {
         //获取生产单
-        FactoryProductionOrder factoryProductionOrder=customFactoryProductionOrderMapper.selectByPrimaryKey(params.getFactoryProductionOrderId());
-        if(factoryProductionOrder==null){
+        FactoryProductionOrder factoryProductionOrder = customFactoryProductionOrderMapper.selectByPrimaryKey(params.getFactoryProductionOrderId());
+        if (factoryProductionOrder == null) {
             return BaseResponse.failMessage("工厂生产单id不存在");
         }
-        List<ShopSku> shopSkuList=shopSkuService.getShopSkuByShopParentSkuAndSize(params.getShopParentSku(),params.getSize(),params.getColour(),factoryProductionOrder.getShopId());
-        if(CollectionUtils.isEmpty(shopSkuList)){
-            return BaseResponse.failMessage(String.format("店铺父sku：%s,颜色：%s，尺码：%s的店铺sku不存在",params.getShopParentSku(),params.getColour(),params.getSize()));
+        List<ShopSku> shopSkuList = shopSkuService.getShopSkuByShopParentSkuAndSize(params.getShopParentSku(), params.getSize(), params.getColour(), factoryProductionOrder.getShopId());
+        if (CollectionUtils.isEmpty(shopSkuList)) {
+            return BaseResponse.failMessage(String.format("店铺父sku：%s,颜色：%s，尺码：%s的店铺sku不存在", params.getShopParentSku(), params.getColour(), params.getSize()));
         }
-        if(shopSkuList.size()>1){
-            return BaseResponse.failMessage(String.format("店铺父sku：%s,颜色：%s，尺码：%s的店铺sku有多个",params.getShopParentSku(),params.getColour(),params.getSize()));
+        if (shopSkuList.size() > 1) {
+            return BaseResponse.failMessage(String.format("店铺父sku：%s,颜色：%s，尺码：%s的店铺sku有多个", params.getShopParentSku(), params.getColour(), params.getSize()));
         }
-        ShopSku shopSku=shopSkuList.get(0);
-        FactoryProductionOrderShopSku factoryProductionOrderShopSku=getFactoryProductionOrderShopSku(params.getFactoryProductionOrderId(),shopSku.getShopSkuId());
-        if(factoryProductionOrderShopSku==null){
-            if(params.getProductionQuantity()==0){
+        ShopSku shopSku = shopSkuList.get(0);
+        FactoryProductionOrderShopSku factoryProductionOrderShopSku = getFactoryProductionOrderShopSku(params.getFactoryProductionOrderId(), shopSku.getShopSkuId());
+        if (factoryProductionOrderShopSku == null) {
+            if (params.getProductionQuantity() == 0) {
                 return BaseResponse.success();
             }
-            factoryProductionOrderShopSku=new FactoryProductionOrderShopSku();
+            factoryProductionOrderShopSku = new FactoryProductionOrderShopSku();
             factoryProductionOrderShopSku.setFactoryProductionOrderId(params.getFactoryProductionOrderId());
             factoryProductionOrderShopSku.setProductionQuantity(params.getProductionQuantity());
             factoryProductionOrderShopSku.setShopSkuId(shopSku.getShopSkuId());
@@ -176,8 +181,8 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
             factoryProductionOrderShopSku.setCreateTime(new Date());
             customFactoryProductionOrderShopSkuMapper.insertSelective(factoryProductionOrderShopSku);
             return BaseResponse.success();
-        }else{
-            if(params.getProductionQuantity()==0){
+        } else {
+            if (params.getProductionQuantity() == 0) {
                 customFactoryProductionOrderShopSkuMapper.deleteByPrimaryKey(factoryProductionOrderShopSku.getId());
                 return BaseResponse.success();
             }
@@ -206,15 +211,15 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
             return BaseResponse.failMessage(StockRecordConstant.USER_NO_SHOP_RIGHT);
         }
         List<StockCart> stockCartList = stockRecordService.getStockCartListByShopId(shopId, StockConsatnt.TypeEnum.FACTORY_PRODUCTION.getType());
-        if(CollectionUtils.isEmpty(stockCartList)){
+        if (CollectionUtils.isEmpty(stockCartList)) {
             return BaseResponse.failMessage(StockRecordConstant.STOCK_CART_LIST_EMPTY);
         }
         //生成补货记录
-        Shop shop=customShopMapper.selectByPrimaryKey(shopId);
-        if(shop==null){
+        Shop shop = customShopMapper.selectByPrimaryKey(shopId);
+        if (shop == null) {
             return BaseResponse.failMessage(StockRecordConstant.SHOP_ID_NOT_EXIST);
         }
-        String  title=shop.getShopName()+"工厂生产单"+ DateUtil.getFormatDateStr(new Date());
+        String title = shop.getShopName() + "工厂生产单" + DateUtil.getFormatDateStr(new Date());
         FactoryProductionOrder factoryProductionOrder = new FactoryProductionOrder();
         factoryProductionOrder.setStatus(FactoryProductionOrderConstant.StatusEnum.UNCONFIRMED.getStatus());
         factoryProductionOrder.setTitle(title);
@@ -232,28 +237,83 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
             factoryProductionOrderShopSku.setFactoryProductionOrderId(factoryProductionOrder.getId());
             customFactoryProductionOrderShopSkuMapper.insertSelective(factoryProductionOrderShopSku);
         }
-        stockRecordService.deleteStockCartListByShopId(shopId,StockConsatnt.TypeEnum.FACTORY_PRODUCTION.getType());
+        stockRecordService.deleteStockCartListByShopId(shopId, StockConsatnt.TypeEnum.FACTORY_PRODUCTION.getType());
         return BaseResponse.success();
     }
 
     /**
      * @param shopParentSku
-     * @param response
-     * @return
+     * @param factoryProductionOrderId
+     * @param response                 @return
      * @description 下载工厂生产单
      * @author baixueping
      * @date 2020/10/28 19:23
      */
     @Override
-    public BaseResponse downFactoryProductionOrderByShopParentSku(String shopParentSku, HttpServletResponse response) {
-        return null;
+    public BaseResponse downFactoryProductionOrderByShopParentSku(String shopParentSku, Integer factoryProductionOrderId, HttpServletResponse response) {
+        if (StringUtils.isEmpty(shopParentSku)) {
+            return BaseResponse.failMessage("店铺父sku不能为空");
+        }
+        if (factoryProductionOrderId == null) {
+            return BaseResponse.failMessage("工厂生产单id不能为空");
+        }
+        FactoryProductionOrder factoryProductionOrder = customFactoryProductionOrderMapper.selectByPrimaryKey(factoryProductionOrderId);
+        if (factoryProductionOrder == null) {
+            return BaseResponse.failMessage("工厂生产单id不存在");
+        }
+        ListFactoryProductionOrderInfoRequest productionOrderInfoRequest = new ListFactoryProductionOrderInfoRequest();
+        productionOrderInfoRequest.setFactoryProductionOrderId(factoryProductionOrderId);
+        productionOrderInfoRequest.setShopParentSku(shopParentSku);
+        productionOrderInfoRequest.setPage(1);
+        productionOrderInfoRequest.setRows(Integer.MAX_VALUE);
+        PageInfo<ListFactoryProductionOrderInfoResponse> pageInfo = listFactoryProductionOrderInfo(productionOrderInfoRequest);
+        List<ListFactoryProductionOrderInfoResponse> list = pageInfo.getList();
+        if (CollectionUtils.isEmpty(list)) {
+            return BaseResponse.failMessage("店铺父sku的工厂生产单数据为空");
+        }
+        //读取模板
+        String path = FactoryProductionOrderService.class.getClassLoader().getResource("template/factoryProduction/factoryProductionTemplate.xlsx").getPath();
+        Workbook wb = ExcelUtil.readExcel(path);
+        Sheet sheet = wb.getSheetAt(0);
+        setFactoryProductionOrderByShopParentSkuInfo(list, sheet);
+        String fileName = factoryProductionOrder.getTitle() + "-" + shopParentSku;
+        return ExcelUtil.exportExcel(response, wb, fileName);
+    }
+
+    private void setFactoryProductionOrderByShopParentSkuInfo(List<ListFactoryProductionOrderInfoResponse> list, Sheet sheet) {
+        Row row0 = sheet.getRow(0);
+        row0.getCell(0).setCellValue(DateUtil.getFormatDateStrBySlash(new Date()));
+        int contentIndex = 8;
+        for (int i = 0; i < list.size(); i++) {
+            ListFactoryProductionOrderInfoResponse listFactoryProductionOrderInfoResponse = list.get(i);
+            Row rowContent = sheet.getRow(contentIndex + i);
+            setCellValue(rowContent.getCell(3), listFactoryProductionOrderInfoResponse.getColour());
+            setCellValue(rowContent.getCell(5), listFactoryProductionOrderInfoResponse.getProductionQuantityS());
+            setCellValue(rowContent.getCell(6), listFactoryProductionOrderInfoResponse.getProductionQuantityM());
+            setCellValue(rowContent.getCell(7), listFactoryProductionOrderInfoResponse.getProductionQuantityL());
+            setCellValue(rowContent.getCell(8), listFactoryProductionOrderInfoResponse.getProductionQuantityXL());
+            setCellValue(rowContent.getCell(9), listFactoryProductionOrderInfoResponse.getProductionQuantity2XL());
+            setCellValue(rowContent.getCell(10), listFactoryProductionOrderInfoResponse.getProductionQuantity3XL());
+        }
+    }
+
+    private void setCellValue(Cell cell, Integer a) {
+        if (a != null && cell != null) {
+            cell.setCellValue(a);
+        }
+    }
+
+    private void setCellValue(Cell cell, String str) {
+        if (str != null && cell != null) {
+            cell.setCellValue(str);
+        }
     }
 
     private FactoryProductionOrderShopSku getFactoryProductionOrderShopSku(Integer factoryProductionOrderId, Integer shopSkuId) {
-        FactoryProductionOrderShopSkuExample example=new FactoryProductionOrderShopSkuExample();
+        FactoryProductionOrderShopSkuExample example = new FactoryProductionOrderShopSkuExample();
         example.createCriteria().andFactoryProductionOrderIdEqualTo(factoryProductionOrderId).andShopSkuIdEqualTo(shopSkuId);
-        List<FactoryProductionOrderShopSku> factoryProductionOrderShopSkuList=customFactoryProductionOrderShopSkuMapper.selectByExample(example);
-        if(CollectionUtils.isEmpty(factoryProductionOrderShopSkuList)){
+        List<FactoryProductionOrderShopSku> factoryProductionOrderShopSkuList = customFactoryProductionOrderShopSkuMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(factoryProductionOrderShopSkuList)) {
             return null;
         }
         return factoryProductionOrderShopSkuList.get(0);

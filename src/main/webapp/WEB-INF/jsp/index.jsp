@@ -24,7 +24,7 @@
     <script type="text/javascript"
             src="${pageContext.request.contextPath }/static/js/common/cookieUtil.js?t=20200928"></script>
     <script type="text/javascript"
-            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20200929"></script>
+            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20201028"></script>
     <style>
         #d_left {
             width: 280px;

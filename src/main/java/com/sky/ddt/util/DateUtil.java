@@ -79,7 +79,18 @@ public class DateUtil {
         String formatStr = formatter.format(date);
         return formatStr;
     }
-
+    /**
+     * @param date
+     * @return
+     */
+    public static String getFormatDateStrBySlash(Date date) {
+        if (date == null) {
+            return null;
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+        String formatStr = formatter.format(date);
+        return formatStr;
+    }
     /**
      * 指定日期加上小时后的日期
      *

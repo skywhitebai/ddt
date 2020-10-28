@@ -162,3 +162,7 @@ function hasRight(rightStr){
     }
     return false;
 }
+
+function getTimestamp() {
+    return new Date().getTime();
+}

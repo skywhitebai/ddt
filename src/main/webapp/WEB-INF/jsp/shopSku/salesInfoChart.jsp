@@ -22,7 +22,7 @@
     <script type="text/javascript"
             src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.7.0/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript"
-            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20200929"></script>
+            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20201028"></script>
 
     <script src="${pageContext.request.contextPath }/static/js/highcharts/highcharts.js"></script>
     <script src="${pageContext.request.contextPath }/static/js/highcharts/modules/exporting.js"></script>

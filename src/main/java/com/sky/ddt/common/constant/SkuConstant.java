@@ -34,7 +34,8 @@ public class SkuConstant {
         M("M"),
         L("L"),
         XL("XL"),
-        XXL("2XL");
+        XXL("2XL"),
+        XXXL("3XL");
         private String size;
 
         SkuSizeEnum(String size) {

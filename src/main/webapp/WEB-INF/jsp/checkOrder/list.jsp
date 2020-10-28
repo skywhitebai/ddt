@@ -26,7 +26,7 @@
             src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.5.5.4/locale/easyui-lang-zh_CN.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath }/static/css/main.css?t=20200928" type="text/css">
     <script type="text/javascript"
-            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20200929"></script>
+            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20201028"></script>
     <script type="text/javascript"
             src="${pageContext.request.contextPath }/static/js/common/selectShopSku.js"></script>
     <title>盘点单</title>
