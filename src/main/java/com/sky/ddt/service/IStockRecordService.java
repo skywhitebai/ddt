@@ -6,6 +6,7 @@ import com.sky.ddt.dto.stockRecord.request.ListStockRecordRequest;
 import com.sky.ddt.dto.stockRecord.request.SaveStockRecordRemarkRequest;
 import com.sky.ddt.dto.stockRecord.response.ExportStockRecordResponse;
 import com.sky.ddt.dto.stockRecord.response.ListStockRecordResponse;
+import com.sky.ddt.entity.StockCart;
 import com.sky.ddt.entity.StockRecord;
 
 import java.util.List;
@@ -54,4 +55,15 @@ public interface IStockRecordService {
      * @date 2020/4/24 15:14
      */
     BaseResponse saveStockRecordRemark(SaveStockRecordRemarkRequest params, Integer dealUserId);
+
+    /**
+     * @param
+     * @return
+     * @description 获取补货车数据
+     * @author baixueping
+     * @date 2020/10/28 17:12
+     */
+    List<StockCart> getStockCartListByShopId(Integer shopId, Integer type);
+
+    void deleteStockCartListByShopId(Integer shopId, Integer type);
 }

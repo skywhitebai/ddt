@@ -48,6 +48,9 @@
     <a href="javascript:void(0)" onclick="createStockRecord()" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">生成补货单</a>
+    <a href="javascript:void(0)" onclick="createFactoryProduction()" class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'"
+       style="">生成工厂生产单</a>
     <a href="javascript:void(0)" onclick="openThisView()" class="easyui-linkbutton">全屏显示</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
@@ -484,6 +487,30 @@
                         $('#dlg').dialog('close');
                         //跳转到补货单列表页
                         $.messager.alert("提示", "生成补货单数据成功，请到补货单记录管理查看");
+                        bindData();
+                    }
+                    else {
+                        $.messager.alert("提示", data.message);
+                    }
+                });
+            }
+        });
+    }
+
+    function createFactoryProduction() {
+        var shopId = $("#s_shopId").combobox('getValue');
+        if (isEmpty(shopId)) {
+            $.messager.alert("提示", "请选择店铺.");
+            return;
+        }
+        var shopName = $("#s_shopId").combobox('getText');
+        $.messager.confirm('提示', '确认生成店铺' + shopName + '的工厂生产单数据吗？', function (r) {
+            if (r) {
+                $.post('${pageContext.request.contextPath }/factoryProductionOrder/createFactoryProductionOrder', {shopId: shopId}, function (data) {
+                    if (data.code == '200') {
+                        $('#dlg').dialog('close');
+                        //跳转到补货单列表页
+                        $.messager.alert("提示", "生成工厂生产单数据成功，请到工厂生产单管理查看");
                         bindData();
                     }
                     else {

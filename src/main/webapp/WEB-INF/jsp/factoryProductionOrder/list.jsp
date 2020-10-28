@@ -50,7 +50,8 @@
     <div>
         <input type="hidden" id="s_factoryProductionOrderShopSku_factoryProductionOrderId">
         店铺父sku
-        <input class="easyui-validatebox textbox" id="s_factoryProductionOrderShopSku_shopParentSku" data-options="disable:true">
+        <input class="easyui-validatebox textbox" id="s_factoryProductionOrderShopSku_shopParentSku"
+               data-options="disable:true">
         <a href="javascript:void(0)" onclick="bindFactoryProductionOrderShopSkuData()" class="easyui-linkbutton"
            data-options="iconCls:'icon-search'"
            style="width: 80px">查 询</a>
@@ -67,7 +68,8 @@
      data-options="closed:true, resizable:true, modal:true, align:'center'">
     <div>
         店铺父sku
-        <input class="easyui-validatebox textbox" id="s_factoryProductionOrderInfo_shopParentSku" data-options="disable:true">
+        <input class="easyui-validatebox textbox" id="s_factoryProductionOrderInfo_shopParentSku"
+               data-options="disable:true">
         <a href="javascript:void(0)" onclick="bindFactoryProductionOrderInfoData()" class="easyui-linkbutton"
            data-options="iconCls:'icon-search'"
            style="width: 80px">查 询</a>
@@ -166,6 +168,7 @@
         })
         $(dg).datagrid('clearSelections');
     }
+
     function saveFactoryProductionOrderRemark(input, id) {
         var remark = $(input).val();
         $.post('${pageContext.request.contextPath }/factoryProductionOrder/saveFactoryProductionOrderRemark', {
@@ -181,18 +184,20 @@
             }
         });
     }
-    function showDlgFactoryProductionOrderShopSku(factoryProductionOrderId,title){
+
+    function showDlgFactoryProductionOrderShopSku(factoryProductionOrderId, title) {
         $("#s_factoryProductionOrderShopSku_factoryProductionOrderId").val(factoryProductionOrderId);
         $('#dlgFactoryProductionOrderShopSku').dialog('open').dialog('setTitle', title + '-工厂生产单详情');
         bindFactoryProductionOrderShopSkuData();
     }
+
     function bindFactoryProductionOrderShopSkuData() {
         dg = '#dgFactoryProductionOrderShopSku';
         url = "${pageContext.request.contextPath }/factoryProductionOrder/listFactoryProductionOrderShopParentSku";
         title = "工厂生产单产品信息";
         queryParams = {
             factoryProductionOrderId: $("#s_factoryProductionOrderShopSku_factoryProductionOrderId").val(),
-            shopParentSku:$("#s_factoryProductionOrderShopSku_shopParentSku").val()
+            shopParentSku: $("#s_factoryProductionOrderShopSku_shopParentSku").val()
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -219,7 +224,8 @@
                 {
                     title: '操作', field: 'deal', width: 150,
                     formatter: function (value, row, rowIndex) {
-                        return '<a href="javascript:void(0)" onclick="showDlgFactoryProductionOrderInfo(\'' + row.shopParentSku + '\')" class="easyui-linkbutton" >生产数量管理</a>';
+                        return '<a href="javascript:void(0)" onclick="showDlgFactoryProductionOrderInfo(\'' + row.shopParentSku + '\')" class="easyui-linkbutton" >生产数量管理</a>'
+                            + '&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="javascript:void(0)" onclick="downFactoryProductionOrderByShopParentSku(\'' + row.shopParentSku + '\')" class="easyui-linkbutton" >下载工厂生产单</a>';
                     }
                 }
             ]],
@@ -235,11 +241,13 @@
         })
         //$(dg).datagrid('clearSelections');
     }
+
     function closeDlgFactoryProductionOrderShopSku() {
         $('#dlgFactoryProductionOrderShopSku').dialog('close');
     }
+
     function showDlgFactoryProductionOrderInfo(shopParentSku) {
-        if(isEmpty(shopParentSku)){
+        if (isEmpty(shopParentSku)) {
             $.messager.alert("提示", "店铺父sku为空，请晚上店铺sku信息");
             return;
         }
@@ -247,6 +255,7 @@
         $('#dlgFactoryProductionOrderInfo').dialog('open').dialog('setTitle', shopParentSku + '-生产数量管理');
         bindFactoryProductionOrderInfoData();
     }
+
     function bindFactoryProductionOrderInfoData() {
         dg = '#dgFactoryProductionOrderInfo';
         url = "${pageContext.request.contextPath }/factoryProductionOrder/listFactoryProductionOrderInfo";
@@ -275,50 +284,55 @@
             queryParams: queryParams,  //异步查询的参数
             columns: [[
                 {field: 'ck', checkbox: true},   //选择
-                 {title: '店铺父sku', field: 'shopParentSku', width: 150},
+                {title: '店铺父sku', field: 'shopParentSku', width: 150},
                 {title: '颜色', field: 'colour', width: 100},
-                {title: 'S', field: 'productionQuantityS', width: 80,
+                {
+                    title: 'S', field: 'productionQuantityS', width: 80,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\''+row.colour+'\',\'S\')">';
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'S\')">';
                         } else {
-                            return '<input class="easyui-numberbox " min="0" precision="0" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku +'\',\''+row.colour+ '\',\'S\')">';
+                            return '<input class="easyui-numberbox " min="0" precision="0" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'S\')">';
                         }
                     }
                 },
-                {title: 'M', field: 'productionQuantityM', width: 80,
+                {
+                    title: 'M', field: 'productionQuantityM', width: 80,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\''+row.colour+'\',\'M\')">';
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'M\')">';
                         } else {
-                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku +'\',\''+row.colour+ '\',\'M\')">';
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'M\')">';
                         }
                     }
                 },
-                {title: 'L', field: 'productionQuantityL', width: 80,
+                {
+                    title: 'L', field: 'productionQuantityL', width: 80,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\''+row.colour+'\',\'L\')">';
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'L\')">';
                         } else {
-                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku +'\',\''+row.colour+ '\',\'L\')">';
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'L\')">';
                         }
                     }
                 },
-                {title: 'XL', field: 'productionQuantityXL', width: 80,
+                {
+                    title: 'XL', field: 'productionQuantityXL', width: 80,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku +'\',\''+row.colour+ '\',\'XL\')">';
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'XL\')">';
                         } else {
-                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\''+row.colour+'\',\'XL\')">';
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'XL\')">';
                         }
                     }
                 },
-                {title: '2XL', field: 'productionQuantity2XL', width: 80,
+                {
+                    title: '2XL', field: 'productionQuantity2XL', width: 80,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku +'\',\''+row.colour+ '\',\'2XL\')">';
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'2XL\')">';
                         } else {
-                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku +'\',\''+row.colour+ '\',\'2XL\')">';
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'2XL\')">';
                         }
                     }
                 }
@@ -335,13 +349,14 @@
         })
         $(dg).datagrid('clearSelections');
     }
-    function saveProductionQuantity(input,shopParentSku,colour,size) {
+
+    function saveProductionQuantity(input, shopParentSku, colour, size) {
         var productionQuantity = $(input).val();
         $.post('${pageContext.request.contextPath }/factoryProductionOrder/saveProductionQuantity', {
             shopParentSku: shopParentSku,
             productionQuantity: productionQuantity,
-            size:size,
-            colour:colour,
+            size: size,
+            colour: colour,
             factoryProductionOrderId: $("#s_factoryProductionOrderShopSku_factoryProductionOrderId").val()
         }, function (data) {
             if (data.code == '200') {
@@ -354,8 +369,18 @@
             }
         });
     }
+
     function closeDlgFactoryProductionOrderInfo() {
         $('#dlgFactoryProductionOrderInfo').dialog('close');
+    }
+
+    function downFactoryProductionOrderByShopParentSku(shopParentSku) {
+        var url = '${pageContext.request.contextPath }/factoryProductionOrder/downFactoryProductionOrderByShopParentSku?shopParentSku=' + shopParentSku;
+        window.open(url);
+    }
+
+    function downFactoryProductionOrder(shopParentSku) {
+
     }
 </script>
 </html>

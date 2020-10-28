@@ -79,4 +79,17 @@ public class FactoryProductionOrderController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return factoryProductionOrderService.saveProductionQuantity(params, dealUserId);
     }
+    @RequestMapping("/createFactoryProductionOrder")
+    @ResponseBody
+    @MenuAnnotation("factoryProductionOrder/index")
+    public BaseResponse createFactoryProductionOrder(Integer shopId) {
+        Integer dealUserId = getCurrentUserId();
+        return factoryProductionOrderService.createFactoryProductionOrder(shopId, dealUserId);
+    }
+    @RequestMapping("/downFactoryProductionOrderByShopParentSku")
+    @ResponseBody
+    @MenuAnnotation("factoryProductionOrder/index")
+    public BaseResponse downFactoryProductionOrderByShopParentSku(String shopParentSku){
+        return factoryProductionOrderService.downFactoryProductionOrderByShopParentSku(shopParentSku,response);
+    }
 }

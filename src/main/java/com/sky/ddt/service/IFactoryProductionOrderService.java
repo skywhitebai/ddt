@@ -8,6 +8,7 @@ import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrde
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.StockCart;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -16,16 +17,6 @@ import java.util.List;
  * @date 2020/10/10 10:12
  */
 public interface IFactoryProductionOrderService {
-    /**
-     * @param
-     * @param shopId
-     * @param title  @return
-     * @description 生成工厂生产单
-     * @author baixueping
-     * @date 2020/10/10 14:32
-     */
-    void createFactoryProductionOrder(List<StockCart> stockCartList, Integer id, Integer shopId, String title, Integer currentUserId);
-
     /**
      * @param
      * @return
@@ -70,4 +61,22 @@ public interface IFactoryProductionOrderService {
      * @date 2020/10/15 20:04
      */
     BaseResponse saveProductionQuantity(SaveProductionQuantityRequest params, Integer dealUserId);
+
+    /**
+     * @param
+     * @return
+     * @description 创建工厂生产单
+     * @author baixueping
+     * @date 2020/10/28 17:02
+     */
+    BaseResponse createFactoryProductionOrder(Integer shopId, Integer dealUserId);
+
+    /**
+     * @param
+     * @return
+     * @description 下载工厂生产单
+     * @author baixueping
+     * @date 2020/10/28 19:23
+     */
+    BaseResponse downFactoryProductionOrderByShopParentSku(String shopParentSku, HttpServletResponse response);
 }

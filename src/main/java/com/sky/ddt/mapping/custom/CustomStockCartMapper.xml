@@ -48,7 +48,7 @@
         AND oi.`quantity`>0
         LEFT JOIN `fba_import` fi ON ss.`shop_sku_id`=fi.shop_sku_id
         LEFT JOIN stock_cart sc ON ss.`shop_sku_id`=sc.`shop_sku_id` and sc.type=1
-        LEFT JOIN stock_cart scp ON ss.`shop_sku_id`=scp.`shop_sku_id` and sc.type=2
+        LEFT JOIN stock_cart scp ON ss.`shop_sku_id`=scp.`shop_sku_id` and scp.type=2
         LEFT JOIN shop s ON ss.`shop_id`=s.`shop_id`
         LEFT JOIN USER u on u.user_id=ss.salesman_user_id
         <where>

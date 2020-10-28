@@ -63,25 +63,25 @@ public class StockRecordService implements IStockRecordService {
         if (!shopUserService.exisShopUser(shopId, currentUserId)) {
             return BaseResponse.failMessage(StockRecordConstant.USER_NO_SHOP_RIGHT);
         }
-        List<StockCart> stockCartList = getStockCartListByShopId(shopId,StockConsatnt.TypeEnum.REPLENISHMENT.getType());
-        if(CollectionUtils.isEmpty(stockCartList)){
+        List<StockCart> stockCartList = getStockCartListByShopId(shopId, StockConsatnt.TypeEnum.REPLENISHMENT.getType());
+        if (CollectionUtils.isEmpty(stockCartList)) {
             return BaseResponse.failMessage(StockRecordConstant.STOCK_CART_LIST_EMPTY);
         }
         //生成补货记录
-        Shop shop=customShopMapper.selectByPrimaryKey(shopId);
-        if(shop==null){
+        Shop shop = customShopMapper.selectByPrimaryKey(shopId);
+        if (shop == null) {
             return BaseResponse.failMessage(StockRecordConstant.SHOP_ID_NOT_EXIST);
         }
-        String  title=shop.getShopName()+"补货单"+DateUtil.getFormatDateStr(new Date());
-        StockRecord stockRecord=new StockRecord();
+        String title = shop.getShopName() + "补货单" + DateUtil.getFormatDateStr(new Date());
+        StockRecord stockRecord = new StockRecord();
         stockRecord.setShopId(shopId);
         stockRecord.setCreateBy(currentUserId);
         stockRecord.setCreateTime(new Date());
         stockRecord.setTitle(title);
         customStockRecordMapper.insertSelective(stockRecord);
         //生成补货记录内容
-        for(StockCart stockCart:stockCartList){
-            StockRecordItem stockRecordItem=new StockRecordItem();
+        for (StockCart stockCart : stockCartList) {
+            StockRecordItem stockRecordItem = new StockRecordItem();
             stockRecordItem.setCreateBy(currentUserId);
             stockRecordItem.setCreateTime(new Date());
             stockRecordItem.setStockQuantity(stockCart.getStockQuantity());
@@ -94,7 +94,7 @@ public class StockRecordService implements IStockRecordService {
             customStockRecordItemMapper.insertSelective(stockRecordItem);
         }
         //删除补货购物车信息
-        deleteStockCartListByShopId(shopId);
+        deleteStockCartListByShopId(shopId,StockConsatnt.TypeEnum.REPLENISHMENT.getType());
         return BaseResponse.success();
     }
 
@@ -114,7 +114,7 @@ public class StockRecordService implements IStockRecordService {
      */
     @Override
     public StockRecord getStockRecordById(Integer stockRecordId) {
-        if(stockRecordId==null){
+        if (stockRecordId == null) {
             return null;
         }
         return customStockRecordMapper.selectByPrimaryKey(stockRecordId);
@@ -127,11 +127,11 @@ public class StockRecordService implements IStockRecordService {
      * @date 2019/8/23 11:27
      */
     @Override
-    public List<ExportStockRecordResponse> listExportStockRecord(Integer stockRecordId,String type) {
-        if(stockRecordId==null){
+    public List<ExportStockRecordResponse> listExportStockRecord(Integer stockRecordId, String type) {
+        if (stockRecordId == null) {
             return new ArrayList<ExportStockRecordResponse>();
         }
-        return customStockRecordMapper.listExportStockRecord(stockRecordId,type);
+        return customStockRecordMapper.listExportStockRecord(stockRecordId, type);
     }
 
     /**
@@ -144,21 +144,23 @@ public class StockRecordService implements IStockRecordService {
      */
     @Override
     public BaseResponse saveStockRecordRemark(SaveStockRecordRemarkRequest params, Integer dealUserId) {
-        StockRecord stockRecord=new StockRecord();
+        StockRecord stockRecord = new StockRecord();
         stockRecord.setId(params.getStockRecordId());
         stockRecord.setRemark(params.getRemark());
         customStockRecordMapper.updateByPrimaryKeySelective(stockRecord);
         return BaseResponse.success();
     }
 
-    private void deleteStockCartListByShopId(Integer shopId) {
-        StockCartExample example=new StockCartExample();
-        example.createCriteria().andShopIdEqualTo(shopId);
+    @Override
+    public void deleteStockCartListByShopId(Integer shopId, Integer type) {
+        StockCartExample example = new StockCartExample();
+        example.createCriteria().andShopIdEqualTo(shopId).andTypeEqualTo(type);
         customStockCartMapper.deleteByExample(example);
     }
 
-    List<StockCart> getStockCartListByShopId(Integer shopId, Integer type) {
-        StockCartExample example=new StockCartExample();
+    @Override
+    public List<StockCart> getStockCartListByShopId(Integer shopId, Integer type) {
+        StockCartExample example = new StockCartExample();
         example.createCriteria().andShopIdEqualTo(shopId).andTypeEqualTo(type);
         return customStockCartMapper.selectByExample(example);
     }

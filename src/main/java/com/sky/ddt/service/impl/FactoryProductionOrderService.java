@@ -2,11 +2,10 @@ package com.sky.ddt.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sky.ddt.common.constant.FactoryProductionOrderConstant;
-import com.sky.ddt.common.constant.SbErroEntity;
-import com.sky.ddt.common.constant.SkuConstant;
+import com.sky.ddt.common.constant.*;
 import com.sky.ddt.dao.custom.CustomFactoryProductionOrderMapper;
 import com.sky.ddt.dao.custom.CustomFactoryProductionOrderShopSkuMapper;
+import com.sky.ddt.dao.custom.CustomShopMapper;
 import com.sky.ddt.dto.factoryProductionOrder.request.*;
 import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderInfoResponse;
 import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderShopParentSkuResponse;
@@ -16,11 +15,15 @@ import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.*;
 import com.sky.ddt.service.IFactoryProductionOrderService;
 import com.sky.ddt.service.IShopSkuService;
+import com.sky.ddt.service.IShopUserService;
+import com.sky.ddt.service.IStockRecordService;
+import com.sky.ddt.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
@@ -37,36 +40,13 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
     CustomFactoryProductionOrderShopSkuMapper customFactoryProductionOrderShopSkuMapper;
     @Autowired
     IShopSkuService shopSkuService;
+    @Autowired
+    IShopUserService shopUserService;
+    @Autowired
+    IStockRecordService stockRecordService;
+    @Autowired
+    CustomShopMapper customShopMapper;
 
-    /**
-     * @param stockCartList 店铺sku及数量
-     * @param stockRecordId 补货记录id
-     * @param shopId
-     * @param title
-     * @param currentUserId @return  @description 生成工厂生产单
-     * @author baixueping
-     * @date 2020/10/10 14:32
-     */
-    @Override
-    public void createFactoryProductionOrder(List<StockCart> stockCartList, Integer stockRecordId, Integer shopId, String title, Integer currentUserId) {
-        FactoryProductionOrder factoryProductionOrder = new FactoryProductionOrder();
-        factoryProductionOrder.setStatus(FactoryProductionOrderConstant.StatusEnum.UNCONFIRMED.getStatus());
-        factoryProductionOrder.setTitle(title);
-        factoryProductionOrder.setShopId(shopId);
-        factoryProductionOrder.setCreateBy(currentUserId);
-        factoryProductionOrder.setCreateTime(new Date());
-        customFactoryProductionOrderMapper.insertSelective(factoryProductionOrder);
-        //生成生产单店铺sku
-        for (StockCart stockCart : stockCartList) {
-            FactoryProductionOrderShopSku factoryProductionOrderShopSku = new FactoryProductionOrderShopSku();
-            factoryProductionOrderShopSku.setCreateBy(currentUserId);
-            factoryProductionOrderShopSku.setCreateTime(new Date());
-            factoryProductionOrderShopSku.setProductionQuantity(stockCart.getProductionQuantity());
-            factoryProductionOrderShopSku.setShopSkuId(stockCart.getShopSkuId());
-            factoryProductionOrderShopSku.setFactoryProductionOrderId(factoryProductionOrder.getId());
-            customFactoryProductionOrderShopSkuMapper.insertSelective(factoryProductionOrderShopSku);
-        }
-    }
 
     /**
      * @param params@return
@@ -207,6 +187,66 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
             customFactoryProductionOrderShopSkuMapper.updateByPrimaryKeySelective(factoryProductionOrderShopSku);
             return BaseResponse.success();
         }
+    }
+
+    /**
+     * @param shopId
+     * @param currentUserId
+     * @return
+     * @description 创建工厂生产单
+     * @author baixueping
+     * @date 2020/10/28 17:02
+     */
+    @Override
+    public BaseResponse createFactoryProductionOrder(Integer shopId, Integer currentUserId) {
+        if (shopId == null) {
+            return BaseResponse.failMessage(StockRecordConstant.SHOP_ID_EMPTY);
+        }
+        if (!shopUserService.exisShopUser(shopId, currentUserId)) {
+            return BaseResponse.failMessage(StockRecordConstant.USER_NO_SHOP_RIGHT);
+        }
+        List<StockCart> stockCartList = stockRecordService.getStockCartListByShopId(shopId, StockConsatnt.TypeEnum.FACTORY_PRODUCTION.getType());
+        if(CollectionUtils.isEmpty(stockCartList)){
+            return BaseResponse.failMessage(StockRecordConstant.STOCK_CART_LIST_EMPTY);
+        }
+        //生成补货记录
+        Shop shop=customShopMapper.selectByPrimaryKey(shopId);
+        if(shop==null){
+            return BaseResponse.failMessage(StockRecordConstant.SHOP_ID_NOT_EXIST);
+        }
+        String  title=shop.getShopName()+"工厂生产单"+ DateUtil.getFormatDateStr(new Date());
+        FactoryProductionOrder factoryProductionOrder = new FactoryProductionOrder();
+        factoryProductionOrder.setStatus(FactoryProductionOrderConstant.StatusEnum.UNCONFIRMED.getStatus());
+        factoryProductionOrder.setTitle(title);
+        factoryProductionOrder.setShopId(shopId);
+        factoryProductionOrder.setCreateBy(currentUserId);
+        factoryProductionOrder.setCreateTime(new Date());
+        customFactoryProductionOrderMapper.insertSelective(factoryProductionOrder);
+        //生成生产单店铺sku
+        for (StockCart stockCart : stockCartList) {
+            FactoryProductionOrderShopSku factoryProductionOrderShopSku = new FactoryProductionOrderShopSku();
+            factoryProductionOrderShopSku.setCreateBy(currentUserId);
+            factoryProductionOrderShopSku.setCreateTime(new Date());
+            factoryProductionOrderShopSku.setProductionQuantity(stockCart.getProductionQuantity());
+            factoryProductionOrderShopSku.setShopSkuId(stockCart.getShopSkuId());
+            factoryProductionOrderShopSku.setFactoryProductionOrderId(factoryProductionOrder.getId());
+            customFactoryProductionOrderShopSkuMapper.insertSelective(factoryProductionOrderShopSku);
+        }
+        stockRecordService.deleteStockCartListByShopId(shopId,StockConsatnt.TypeEnum.FACTORY_PRODUCTION.getType());
+        return BaseResponse.success();
+    }
+
+    /**
+     * @param shopParentSku
+     * @param response
+     * @return
+     * @description 下载工厂生产单
+     * @author baixueping
+     * @date 2020/10/28 19:23
+     */
+    @Override
+    public BaseResponse downFactoryProductionOrderByShopParentSku(String shopParentSku, HttpServletResponse response) {
+        return null;
     }
 
     private FactoryProductionOrderShopSku getFactoryProductionOrderShopSku(Integer factoryProductionOrderId, Integer shopSkuId) {
