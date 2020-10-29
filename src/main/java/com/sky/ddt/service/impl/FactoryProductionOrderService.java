@@ -284,19 +284,47 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         Row row0 = sheet.getRow(0);
         row0.getCell(0).setCellValue(DateUtil.getFormatDateStrBySlash(new Date()));
         int contentIndex = 8;
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = 0; i < 100/*list.size()*/; i++) {
             ListFactoryProductionOrderInfoResponse listFactoryProductionOrderInfoResponse = list.get(i);
-            Row rowContent = sheet.getRow(contentIndex + i);
-            setCellValue(rowContent.getCell(3), listFactoryProductionOrderInfoResponse.getColour());
-            setCellValue(rowContent.getCell(5), listFactoryProductionOrderInfoResponse.getProductionQuantityS());
-            setCellValue(rowContent.getCell(6), listFactoryProductionOrderInfoResponse.getProductionQuantityM());
-            setCellValue(rowContent.getCell(7), listFactoryProductionOrderInfoResponse.getProductionQuantityL());
-            setCellValue(rowContent.getCell(8), listFactoryProductionOrderInfoResponse.getProductionQuantityXL());
-            setCellValue(rowContent.getCell(9), listFactoryProductionOrderInfoResponse.getProductionQuantity2XL());
-            setCellValue(rowContent.getCell(10), listFactoryProductionOrderInfoResponse.getProductionQuantity3XL());
+
+            if(i>=20){
+                sheet.shiftRows( contentIndex+i, sheet.getLastRowNum(), 1, true, false);
+            }
+            Row rowContent =sheet.getRow(contentIndex + i);
+            if(rowContent==null){
+                rowContent=sheet.createRow(contentIndex+i);
+            }
+            setCellValue(rowContent,3,listFactoryProductionOrderInfoResponse.getColour());
+            setCellValue(rowContent,5, listFactoryProductionOrderInfoResponse.getProductionQuantityS());
+            setCellValue(rowContent,6, listFactoryProductionOrderInfoResponse.getProductionQuantityM());
+            setCellValue(rowContent,7, listFactoryProductionOrderInfoResponse.getProductionQuantityL());
+            setCellValue(rowContent,8, listFactoryProductionOrderInfoResponse.getProductionQuantityXL());
+            setCellValue(rowContent,9, listFactoryProductionOrderInfoResponse.getProductionQuantity2XL());
+            setCellValue(rowContent,10, listFactoryProductionOrderInfoResponse.getProductionQuantity3XL());
+
         }
     }
 
+    private void setCellValue(Row row, Integer cellIndex, String str) {
+        if(StringUtils.isEmpty(str)||row==null||cellIndex==null||cellIndex<0){
+            return;
+        }
+        Cell cell=row.getCell(cellIndex);
+        if(cell==null){
+            cell=row.createCell(cellIndex);
+        }
+        cell.setCellValue(str);
+    }
+    private void setCellValue(Row row, Integer cellIndex, Integer a) {
+        if(a==null||row==null||cellIndex==null||cellIndex<0){
+            return;
+        }
+        Cell cell=row.getCell(cellIndex);
+        if(cell==null){
+            cell=row.createCell(cellIndex);
+        }
+        cell.setCellValue(a);
+    }
     private void setCellValue(Cell cell, Integer a) {
         if (a != null && cell != null) {
             cell.setCellValue(a);

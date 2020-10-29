@@ -35,7 +35,7 @@
         FROM factory_production_order_shop_sku fposs
         LEFT JOIN `shop_sku` ss ON fposs.`shop_sku_id`=ss.`shop_sku_id`
         <where>
-            <if test="factoryProductionOrderId != null ">and fposs.id=#{factoryProductionOrderId}</if>
+            <if test="factoryProductionOrderId != null ">and fposs.factory_production_order_id=#{factoryProductionOrderId}</if>
             <if test="shopParentSku != null and shopParentSku!=''">and ss.shop_parent_sku like
                 concat('%',#{shopParentSku},'%')
             </if>
