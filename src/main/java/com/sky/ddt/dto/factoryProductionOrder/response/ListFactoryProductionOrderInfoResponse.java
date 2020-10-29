@@ -11,11 +11,15 @@ import lombok.Data;
 public class ListFactoryProductionOrderInfoResponse {
     String shopParentSku;
     String colour;
+    Integer productionQuantityXS;
     Integer productionQuantityS;
     Integer productionQuantityM;
     Integer productionQuantityL;
     Integer productionQuantityXL;
     Integer productionQuantity2XL;
     Integer productionQuantity3XL;
+    Integer productionQuantity4XL;
+    Integer productionQuantity5XL;
+    Integer productionQuantity6XL;
     String remark;
 }

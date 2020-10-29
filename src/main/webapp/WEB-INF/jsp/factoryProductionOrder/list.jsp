@@ -64,7 +64,7 @@
     </div>
 </div>
 <!--工厂生产单详情-->
-<div id="dlgFactoryProductionOrderInfo" class="easyui-dialog" style="width: 800px; height: 660px; padding: 10px 20px"
+<div id="dlgFactoryProductionOrderInfo" class="easyui-dialog" style="width: 1200px; height: 660px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true, align:'center'">
     <div>
         店铺父sku
@@ -287,7 +287,17 @@
                 {title: '店铺父sku', field: 'shopParentSku', width: 150},
                 {title: '颜色', field: 'colour', width: 100},
                 {
-                    title: 'S', field: 'productionQuantityS', width: 80,
+                    title: 'XS', field: 'productionQuantityXS', width: 60,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'XS\')">';
+                        } else {
+                            return '<input class="easyui-numberbox " min="0" precision="0" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'XS\')">';
+                        }
+                    }
+                },
+                {
+                    title: 'S', field: 'productionQuantityS', width: 60,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
                             return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'S\')">';
@@ -297,7 +307,7 @@
                     }
                 },
                 {
-                    title: 'M', field: 'productionQuantityM', width: 80,
+                    title: 'M', field: 'productionQuantityM', width: 60,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
                             return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'M\')">';
@@ -307,7 +317,7 @@
                     }
                 },
                 {
-                    title: 'L', field: 'productionQuantityL', width: 80,
+                    title: 'L', field: 'productionQuantityL', width: 60,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
                             return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'L\')">';
@@ -317,7 +327,7 @@
                     }
                 },
                 {
-                    title: 'XL', field: 'productionQuantityXL', width: 80,
+                    title: 'XL', field: 'productionQuantityXL', width: 60,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
                             return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'XL\')">';
@@ -327,7 +337,7 @@
                     }
                 },
                 {
-                    title: '2XL', field: 'productionQuantity2XL', width: 80,
+                    title: '2XL', field: 'productionQuantity2XL', width: 60,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
                             return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'2XL\')">';
@@ -337,12 +347,42 @@
                     }
                 },
                 {
-                    title: '3XL', field: 'productionQuantity2XL', width: 80,
+                    title: '3XL', field: 'productionQuantity3XL', width: 60,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
                             return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'3XL\')">';
                         } else {
                             return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'3XL\')">';
+                        }
+                    }
+                },
+                {
+                    title: '4XL', field: 'productionQuantity4XL', width: 60,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'4XL\')">';
+                        } else {
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'4XL\')">';
+                        }
+                    }
+                },
+                {
+                    title: '5XL', field: 'productionQuantity5XL', width: 60,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'5XL\')">';
+                        } else {
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'5XL\')">';
+                        }
+                    }
+                },
+                {
+                    title: '6XL', field: 'productionQuantity6XL', width: 60,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'6XL\')">';
+                        } else {
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'6XL\')">';
                         }
                     }
                 }

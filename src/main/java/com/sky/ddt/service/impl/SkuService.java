@@ -146,6 +146,8 @@ public class SkuService implements ISkuService {
             }
             if (StringUtils.isEmpty(map.get("尺码"))) {
                 sbErroItem.append(",").append(SkuConstant.SIZE_EMPTY);
+            } else if (!SkuConstant.SkuSizeEnum.containSize(map.get("尺码").toUpperCase())) {
+                sbErroItem.append(",").append(SkuConstant.SIZE_ERRO);
             }
             if (StringUtils.isEmpty(map.get("重量"))) {
                 sbErroItem.append(",").append(SkuConstant.WEIGHT_EMPTY);
@@ -218,7 +220,7 @@ public class SkuService implements ISkuService {
         sku.setProductId(MathUtil.strToInteger(map.get("productId")));
         sku.setColour(map.get("颜色"));
         sku.setColourNumber(map.get("色号"));
-        sku.setSize(map.get("尺码"));
+        sku.setSize(map.get("尺码").toUpperCase());
         sku.setWeight(MathUtil.strToBigDecimal(map.get("重量")));
         sku.setCostPrice(MathUtil.strToBigDecimal(map.get("成本价")));
         sku.setInventoryQuantity(MathUtil.strToInteger(map.get("库存数量")));
@@ -247,7 +249,10 @@ public class SkuService implements ISkuService {
         sku.setSku(params.getSku());
         sku.setColour(params.getColour());
         sku.setColourNumber(params.getColourNumber());
-        sku.setSize(params.getSize());
+        if (!SkuConstant.SkuSizeEnum.containSize(params.getSize().toUpperCase())) {
+            return BaseResponse.failMessage(SkuConstant.SIZE_ERRO);
+        }
+        sku.setSize(params.getSize().toUpperCase());
         sku.setWeight(params.getWeight());
         sku.setCostPrice(params.getCostPrice());
         sku.setHeadTripCost(getHeadTripCost(params.getWeight()));
@@ -309,7 +314,7 @@ public class SkuService implements ISkuService {
             return BaseResponse.success();
         }
         //判断是否有店铺sku，如果有，则不允许删除
-        if(shopSkuService.existShopSku(skuIds)){
+        if (shopSkuService.existShopSku(skuIds)) {
             return BaseResponse.failMessage("已存在店铺或仓库sku，不允许删除,如需删除，请联系管理员");
         }
         SkuExample example = new SkuExample();
@@ -776,11 +781,11 @@ public class SkuService implements ISkuService {
 
     @Override
     public boolean existSku(List<Integer> productIds) {
-        if(CollectionUtils.isEmpty(productIds)){
+        if (CollectionUtils.isEmpty(productIds)) {
             return false;
         }
-        SkuExample example=new SkuExample();
+        SkuExample example = new SkuExample();
         example.createCriteria().andProductIdIn(productIds);
-        return customSkuMapper.countByExample(example)>0;
+        return customSkuMapper.countByExample(example) > 0;
     }
 }
