@@ -168,6 +168,9 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         if (factoryProductionOrder == null) {
             return BaseResponse.failMessage("工厂生产单id不存在");
         }
+        if(!FactoryProductionOrderConstant.StatusEnum.PENDING_CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())){
+            return BaseResponse.failMessage("只有待确认的工厂生产单允许修改数量");
+        }
         List<ShopSku> shopSkuList = shopSkuService.getShopSkuByShopParentSkuAndSize(params.getShopParentSku(), params.getSize(), params.getColour(), factoryProductionOrder.getShopId());
         if (CollectionUtils.isEmpty(shopSkuList)) {
             return BaseResponse.failMessage(String.format("店铺父sku：%s,颜色：%s，尺码：%s的店铺sku不存在", params.getShopParentSku(), params.getColour(), params.getSize()));
@@ -220,7 +223,7 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         }
         List<StockCart> stockCartList = stockRecordService.getStockCartListByShopId(shopId, StockConsatnt.TypeEnum.FACTORY_PRODUCTION.getType());
         if (CollectionUtils.isEmpty(stockCartList)) {
-            return BaseResponse.failMessage(StockRecordConstant.STOCK_CART_LIST_EMPTY);
+            return BaseResponse.failMessage("没有设置要生产的数据");
         }
         //生成补货记录
         Shop shop = customShopMapper.selectByPrimaryKey(shopId);
@@ -229,7 +232,7 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         }
         String title = shop.getShopName() + "工厂生产单" + DateUtil.getFormatDateStr(new Date());
         FactoryProductionOrder factoryProductionOrder = new FactoryProductionOrder();
-        factoryProductionOrder.setStatus(FactoryProductionOrderConstant.StatusEnum.UNCONFIRMED.getStatus());
+        factoryProductionOrder.setStatus(FactoryProductionOrderConstant.StatusEnum.PENDING_CONFIRM.getStatus());
         factoryProductionOrder.setTitle(title);
         factoryProductionOrder.setShopId(shopId);
         factoryProductionOrder.setCreateBy(currentUserId);
@@ -269,6 +272,10 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         if (factoryProductionOrder == null) {
             return BaseResponse.failMessage("工厂生产单id不存在");
         }
+
+        if(!FactoryProductionOrderConstant.StatusEnum.CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())){
+            return BaseResponse.failMessage("只有已确认的工厂生产单允许下载");
+        }
         ListFactoryProductionOrderInfoRequest productionOrderInfoRequest = new ListFactoryProductionOrderInfoRequest();
         productionOrderInfoRequest.setFactoryProductionOrderId(factoryProductionOrderId);
         productionOrderInfoRequest.setShopParentSku(shopParentSku);
@@ -286,6 +293,64 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         setFactoryProductionOrderByShopParentSkuInfo(list, sheet);
         String fileName = factoryProductionOrder.getTitle() + "-" + shopParentSku;
         return ExcelUtil.exportExcel(response, wb, fileName);
+    }
+
+    /**
+     * @param id
+     * @param dealUserId
+     * @return
+     * @description 确认工厂生产单
+     * @author baixueping
+     * @date 2020/10/29 19:46
+     */
+    @Override
+    public BaseResponse confirmFactoryProductionOrder(Integer id, Integer dealUserId) {
+        if(id==null){
+            return BaseResponse.failMessage("工厂生产单id不能为空");
+        }
+        FactoryProductionOrder factoryProductionOrder=customFactoryProductionOrderMapper.selectByPrimaryKey(id);
+        if(factoryProductionOrder==null){
+            return BaseResponse.failMessage("工厂生产单id不存在");
+        }
+        if(!FactoryProductionOrderConstant.StatusEnum.PENDING_CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())){
+            return BaseResponse.failMessage("只有待确认的生产单允许确认");
+        }
+        FactoryProductionOrder factoryProductionOrderUpdate=new FactoryProductionOrder();
+        factoryProductionOrderUpdate.setId(id);
+        factoryProductionOrderUpdate.setStatus(FactoryProductionOrderConstant.StatusEnum.CONFIRM.getStatus());
+        factoryProductionOrderUpdate.setUpdateBy(dealUserId);
+        factoryProductionOrderUpdate.setUpdateTime(new Date());
+        customFactoryProductionOrderMapper.updateByPrimaryKeySelective(factoryProductionOrderUpdate);
+        return BaseResponse.success();
+    }
+
+    /**
+     * @param id
+     * @param dealUserId
+     * @return
+     * @description 取消工厂生产单
+     * @author baixueping
+     * @date 2020/10/29 19:47
+     */
+    @Override
+    public BaseResponse cancelFactoryProductionOrder(Integer id, Integer dealUserId) {
+        if(id==null){
+            return BaseResponse.failMessage("工厂生产单id不能为空");
+        }
+        FactoryProductionOrder factoryProductionOrder=customFactoryProductionOrderMapper.selectByPrimaryKey(id);
+        if(factoryProductionOrder==null){
+            return BaseResponse.failMessage("工厂生产单id不存在");
+        }
+        if(!FactoryProductionOrderConstant.StatusEnum.PENDING_CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())){
+            return BaseResponse.failMessage("只有待确认的生产单允许取消");
+        }
+        FactoryProductionOrder factoryProductionOrderUpdate=new FactoryProductionOrder();
+        factoryProductionOrderUpdate.setId(id);
+        factoryProductionOrderUpdate.setStatus(FactoryProductionOrderConstant.StatusEnum.CANCEL.getStatus());
+        factoryProductionOrderUpdate.setUpdateBy(dealUserId);
+        factoryProductionOrderUpdate.setUpdateTime(new Date());
+        customFactoryProductionOrderMapper.updateByPrimaryKeySelective(factoryProductionOrderUpdate);
+        return BaseResponse.success();
     }
 
     private void setFactoryProductionOrderByShopParentSkuInfo(List<ListFactoryProductionOrderInfoResponse> list, Sheet sheet) {

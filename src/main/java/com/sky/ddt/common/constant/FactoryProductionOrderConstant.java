@@ -10,8 +10,9 @@ import lombok.Getter;
 public class FactoryProductionOrderConstant {
     @Getter
     public enum StatusEnum {
-        UNCONFIRMED(0,"待确认"),
-        CONFIRMED(0,"已确认");
+        PENDING_CONFIRM(1, "待确认"),
+        CONFIRM(2, "已确认"),
+        CANCEL(0, "取消"),;
         Integer status;
         String statusName;
 

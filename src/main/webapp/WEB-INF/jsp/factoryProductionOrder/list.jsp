@@ -38,6 +38,13 @@
     <input class="easyui-validatebox textbox" id="s_shopSku">
     产品sku
     <input class="easyui-validatebox textbox" id="s_sku">
+    状态：
+    <select class="easyui-combobox" id="s_status" style="width:100px;">
+        <option value="">全部</option>
+        <option value="1">待确认</option>
+        <option value="2">已确认</option>
+        <option value="0">取消</option>
+    </select>
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
 </div>
@@ -64,7 +71,7 @@
     </div>
 </div>
 <!--工厂生产单详情-->
-<div id="dlgFactoryProductionOrderInfo" class="easyui-dialog" style="width: 1200px; height: 660px; padding: 10px 20px"
+<div id="dlgFactoryProductionOrderInfo" class="easyui-dialog" style="width: 1100px; height: 660px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true, align:'center'">
     <div>
         店铺父sku
@@ -164,6 +171,20 @@
                     //实现刷新栏目中的数据
                     $(dg).datagrid("reload");
                 }
+            }, '-', {
+                id: 'btnConfirm',
+                text: '确认',
+                iconCls: 'icon-edit',
+                handler: function () {
+                    confirmFactoryProductionOrder();
+                }
+            }, '-', {
+                id: 'btnDelete',
+                text: '取消',
+                iconCls: 'icon-remove',
+                handler: function () {
+                    cancelFactoryProductionOrder();
+                }
             }]
         })
         $(dg).datagrid('clearSelections');
@@ -222,7 +243,7 @@
                 {title: '店铺父sku', field: 'shopParentSku', width: 150},
                 {title: '生产数量', field: 'productionQuantity', width: 90},
                 {
-                    title: '操作', field: 'deal', width: 200,
+                    title: '操作', field: 'deal', width: 300,
                     formatter: function (value, row, rowIndex) {
                         return '<a href="javascript:void(0)" onclick="showDlgFactoryProductionOrderInfo(\'' + row.shopParentSku + '\')" class="easyui-linkbutton" >生产数量管理</a>'
                             + '&nbsp;&nbsp;&nbsp;&nbsp;' + '<a href="javascript:void(0)" onclick="downFactoryProductionOrderByShopParentSku(\'' + row.shopParentSku + '\')" class="easyui-linkbutton" >下载工厂生产单</a>';
@@ -424,13 +445,57 @@
     }
 
     function downFactoryProductionOrderByShopParentSku(shopParentSku) {
-        factoryProductionOrderId=$("#s_factoryProductionOrderShopSku_factoryProductionOrderId").val()
-        var url = '${pageContext.request.contextPath }/factoryProductionOrder/downFactoryProductionOrderByShopParentSku?shopParentSku=' + shopParentSku+"&factoryProductionOrderId="+factoryProductionOrderId+"&t="+getTimestamp();
+        factoryProductionOrderId = $("#s_factoryProductionOrderShopSku_factoryProductionOrderId").val()
+        var url = '${pageContext.request.contextPath }/factoryProductionOrder/downFactoryProductionOrderByShopParentSku?shopParentSku=' + shopParentSku + "&factoryProductionOrderId=" + factoryProductionOrderId + "&t=" + getTimestamp();
         window.open(url);
     }
 
-    function downFactoryProductionOrder(shopParentSku) {
-
+    function downFactoryProductionOrder(factoryProductionOrderId) {
+        var url = '${pageContext.request.contextPath }/factoryProductionOrder/downFactoryProductionOrder?factoryProductionOrderId=' + factoryProductionOrderId + "&t=" + getTimestamp();
+        window.open(url);
+    }
+    //确认
+    function confirmFactoryProductionOrder() {
+        var rows = $('#dg').datagrid('getSelections');
+        if (rows && rows.length == 1) {
+            //添加二次确认
+            $.messager.confirm('提示', '确认要设置店铺[' + rows[0].shopName + ']的工厂生产单为已确认吗？确认后不允许修改数量', function (r) {
+                if (r) {
+                    confirmFactoryProductionOrderById(rows[0].id);
+                }
+            });
+        } else {
+            $.messager.alert("提示", "请选择一条记录.");
+        }
+    }
+    function confirmFactoryProductionOrderById() {
+        $.post('${pageContext.request.contextPath }/factoryProductionOrder/confirmFactoryProductionOrder', {id: id}, function (data) {
+            if (data.code == '200') {
+                bindData();
+            }
+            else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+    function cancelFactoryProductionOrder() {
+        var rows = $('#dg').datagrid('getSelections');
+        if (rows && rows.length == 1) {
+            $.messager.confirm('提示', '确认废除店铺[' + rows[0].shopName + ']的工厂生产单吗？', function (r) {
+                if (r) {
+                    $.post('${pageContext.request.contextPath }/factoryProductionOrder/cancelFactoryProductionOrder', {id: rows[0].id}, function (data) {
+                        if (data.code == '200') {
+                            bindData();
+                        }
+                        else {
+                            $.messager.alert("提示", data.message);
+                        }
+                    });
+                }
+            });
+        } else {
+            $.messager.alert("提示", "请选择一条记录.");
+        }
     }
 </script>
 </html>

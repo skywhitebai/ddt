@@ -43,6 +43,7 @@ public class FactoryProductionOrderController extends SuperController {
         dataGridResponse.setRows(page.getList());
         return dataGridResponse;
     }
+
     @RequestMapping("/saveFactoryProductionOrderRemark")
     @ResponseBody
     @MenuAnnotation("factoryProductionOrder/index")
@@ -50,10 +51,11 @@ public class FactoryProductionOrderController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return factoryProductionOrderService.saveFactoryProductionOrderRemark(params, dealUserId);
     }
+
     @RequestMapping("/listFactoryProductionOrderShopParentSku")
     @MenuAnnotation("factoryProductionOrder/index")
     @ResponseBody
-    public DataGridResponse listFactoryProductionOrderShopParentSku(@Validated  ListFactoryProductionOrderShopParentSkuRequest params) {
+    public DataGridResponse listFactoryProductionOrderShopParentSku(@Validated ListFactoryProductionOrderShopParentSkuRequest params) {
         PageInfo<ListFactoryProductionOrderShopParentSkuResponse> page = factoryProductionOrderService.listFactoryProductionOrderShopParentSku(params);
         DataGridResponse dataGridResponse = new DataGridResponse();
         dataGridResponse.setTotal(page.getTotal());
@@ -64,7 +66,7 @@ public class FactoryProductionOrderController extends SuperController {
     @RequestMapping("/listFactoryProductionOrderInfo")
     @MenuAnnotation("factoryProductionOrder/index")
     @ResponseBody
-    public DataGridResponse listFactoryProductionOrderInfo(@Validated  ListFactoryProductionOrderInfoRequest params) {
+    public DataGridResponse listFactoryProductionOrderInfo(@Validated ListFactoryProductionOrderInfoRequest params) {
         PageInfo<ListFactoryProductionOrderInfoResponse> page = factoryProductionOrderService.listFactoryProductionOrderInfo(params);
         DataGridResponse dataGridResponse = new DataGridResponse();
         dataGridResponse.setTotal(page.getTotal());
@@ -79,6 +81,7 @@ public class FactoryProductionOrderController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return factoryProductionOrderService.saveProductionQuantity(params, dealUserId);
     }
+
     @RequestMapping("/createFactoryProductionOrder")
     @ResponseBody
     @MenuAnnotation("factoryProductionOrder/index")
@@ -86,10 +89,27 @@ public class FactoryProductionOrderController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return factoryProductionOrderService.createFactoryProductionOrder(shopId, dealUserId);
     }
+
     @RequestMapping("/downFactoryProductionOrderByShopParentSku")
     @ResponseBody
     @MenuAnnotation("factoryProductionOrder/index")
-    public BaseResponse downFactoryProductionOrderByShopParentSku(String shopParentSku,Integer factoryProductionOrderId){
-        return factoryProductionOrderService.downFactoryProductionOrderByShopParentSku(shopParentSku,factoryProductionOrderId,response);
+    public BaseResponse downFactoryProductionOrderByShopParentSku(String shopParentSku, Integer factoryProductionOrderId) {
+        return factoryProductionOrderService.downFactoryProductionOrderByShopParentSku(shopParentSku, factoryProductionOrderId, response);
+    }
+
+    @RequestMapping("/confirmFactoryProductionOrder")
+    @ResponseBody
+    @MenuAnnotation("factoryProductionOrder/index")
+    public BaseResponse confirmFactoryProductionOrder(Integer id) {
+        Integer dealUserId = getCurrentUserId();
+        return factoryProductionOrderService.confirmFactoryProductionOrder(id, dealUserId);
+    }
+
+    @RequestMapping("/cancelFactoryProductionOrder")
+    @ResponseBody
+    @MenuAnnotation("factoryProductionOrder/index")
+    public BaseResponse cancelFactoryProductionOrder(Integer id) {
+        Integer dealUserId = getCurrentUserId();
+        return factoryProductionOrderService.cancelFactoryProductionOrder(id, dealUserId);
     }
 }

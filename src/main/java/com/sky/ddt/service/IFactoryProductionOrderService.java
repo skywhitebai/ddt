@@ -78,4 +78,22 @@ public interface IFactoryProductionOrderService {
      * @date 2020/10/28 19:23
      */
     BaseResponse downFactoryProductionOrderByShopParentSku(String shopParentSku, Integer factoryProductionOrderId, HttpServletResponse response);
+
+    /**
+     * @param
+     * @return
+     * @description 确认工厂生产单
+     * @author baixueping
+     * @date 2020/10/29 19:46
+     */
+    BaseResponse confirmFactoryProductionOrder(Integer id, Integer dealUserId);
+
+    /**
+     * @param
+     * @return
+     * @description 取消工厂生产单
+     * @author baixueping
+     * @date 2020/10/29 19:47
+     */
+    BaseResponse cancelFactoryProductionOrder(Integer id, Integer dealUserId);
 }
