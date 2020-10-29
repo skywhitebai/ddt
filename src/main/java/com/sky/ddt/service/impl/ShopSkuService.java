@@ -642,7 +642,7 @@ public class ShopSkuService implements IShopSkuService {
         sbJson.append(",\"rows\":[");
         if (!CollectionUtils.isEmpty(page.getList())) {
             String salesInfo = null;
-            if ("shopParentSku".equals(params.getShopParentSku())) {
+            if ("shopParentSku".equals(params.getSearchType())) {
                 salesInfo = getSalesInfoShopParentSku(page.getList(), params);
             } else {
                 salesInfo = getSalesInfo(page.getList(), params);

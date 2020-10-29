@@ -46,6 +46,8 @@
     <input class="easyui-validatebox textbox" id="s_batchNumber">
     店铺sku：
     <input class="easyui-validatebox textbox" id="s_shopSku">
+    产品sku：
+    <input class="easyui-validatebox textbox" id="s_sku">
     状态：
     <select class="easyui-combobox" id="s_status" style="width:100px;">
         <option value="">全部</option>
@@ -300,6 +302,7 @@
             productionTimeEnd: $("#s_productionTimeEnd").val(),
             batchNumber: $("#s_batchNumber").val(),
             shopSku: $("#s_shopSku").val(),
+            sku: $("#s_sku").val(),
             status: $("#s_status").val()
         };
         return queryParams;

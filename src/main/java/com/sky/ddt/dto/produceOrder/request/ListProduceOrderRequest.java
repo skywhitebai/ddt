@@ -20,5 +20,6 @@ public class ListProduceOrderRequest extends DataGridRequest{
     Date productionTimeEnd;
     String batchNumber;
     String shopSku;
+    String sku;
     Integer status;
 }
