@@ -410,6 +410,8 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         if (CollectionUtils.isEmpty(list)) {
             return;
         }
+        Row row3=sheet.getRow(3);
+        setCellValue(row3,1,shopParentSku);
         setFactoryProductionOrderByShopParentSkuInfo(list, sheet);
     }
 
