@@ -151,7 +151,7 @@
                     title: '备注', field: 'remark', width: 288,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveFactoryProductionOrderRemark(this,' + row.id + ')">';
+                            return '<input class="easyui-textbox" style="width:100%"  onchange="saveFactoryProductionOrderRemark(this,' + row.id + ')">';
                         } else {
                             return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveFactoryProductionOrderRemark(this,' + row.id + ')">';
                         }

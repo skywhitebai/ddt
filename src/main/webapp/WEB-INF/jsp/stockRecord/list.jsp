@@ -114,9 +114,9 @@
                 {field: 'ck', checkbox: true},   //选择
                 {title: '补货记录id', field: 'id', width: 88},
                 {title: '店铺名', field: 'shopName', width: 120},
-                {title: '标题', field: 'title', width: 130},
+                {title: '标题', field: 'title', width: 320},
                 {
-                    title: '备注', field: 'remark', width: 288,
+                    title: '备注', field: 'remark', width: 300,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
                             return '<input class="easyui-textbox " style="width:100%"  onchange="saveStockRecordRemark(this,' + row.id + ')">';
