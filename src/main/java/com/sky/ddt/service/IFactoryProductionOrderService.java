@@ -96,4 +96,13 @@ public interface IFactoryProductionOrderService {
      * @date 2020/10/29 19:47
      */
     BaseResponse cancelFactoryProductionOrder(Integer id, Integer dealUserId);
+
+    /**
+     * @param
+     * @return
+     * @description 下载工厂生产单
+     * @author baixueping
+     * @date 2020/10/29 20:12
+     */
+    BaseResponse downFactoryProductionOrder(Integer factoryProductionOrderId, HttpServletResponse response);
 }

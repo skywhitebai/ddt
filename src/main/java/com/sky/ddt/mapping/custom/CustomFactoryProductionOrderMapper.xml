@@ -15,6 +15,7 @@
         su.user_id=#{currentUserId})
         <if test="shopId != null ">and fpo.shop_id=#{shopId}</if>
         <if test="id != null ">and fpo.id=#{id}</if>
+        <if test="status != null ">and fpo.status=#{status}</if>
         <if test="stockRecordId != null ">and fpo.stock_record_id=#{stockRecordId}</if>
         <if test="shopSku != null and shopSku!=''">
             and EXISTS (select 1 from factory_production_order_shop_sku fposs,shop_sku ss where

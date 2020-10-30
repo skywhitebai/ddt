@@ -109,7 +109,8 @@
             shopId: $("#s_shopId").combobox('getValue'),
             id: $("#s_id").val(),
             shopSku: $("#s_shopSku").val(),
-            sku: $("#s_sku").val()
+            sku: $("#s_sku").val(),
+            status: $("#s_status").val()
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -138,8 +139,10 @@
                     title: '状态', field: 'status', width: 130,
                     formatter: function (value, row, rowIndex) {
                         if (value == 0) {
-                            return "待确认";
+                            return "取消";
                         } else if (value == 1) {
+                            return "待确认";
+                        } else if (value == 2) {
                             return "已确认";
                         }
                     }
@@ -468,7 +471,7 @@
             $.messager.alert("提示", "请选择一条记录.");
         }
     }
-    function confirmFactoryProductionOrderById() {
+    function confirmFactoryProductionOrderById(id) {
         $.post('${pageContext.request.contextPath }/factoryProductionOrder/confirmFactoryProductionOrder', {id: id}, function (data) {
             if (data.code == '200') {
                 bindData();

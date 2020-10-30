@@ -96,7 +96,12 @@ public class FactoryProductionOrderController extends SuperController {
     public BaseResponse downFactoryProductionOrderByShopParentSku(String shopParentSku, Integer factoryProductionOrderId) {
         return factoryProductionOrderService.downFactoryProductionOrderByShopParentSku(shopParentSku, factoryProductionOrderId, response);
     }
-
+    @RequestMapping("/downFactoryProductionOrder")
+    @ResponseBody
+    @MenuAnnotation("factoryProductionOrder/index")
+    public BaseResponse downFactoryProductionOrder( Integer factoryProductionOrderId) {
+        return factoryProductionOrderService.downFactoryProductionOrder(factoryProductionOrderId, response);
+    }
     @RequestMapping("/confirmFactoryProductionOrder")
     @ResponseBody
     @MenuAnnotation("factoryProductionOrder/index")

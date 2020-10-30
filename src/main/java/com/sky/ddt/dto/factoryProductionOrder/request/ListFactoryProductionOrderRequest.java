@@ -16,4 +16,5 @@ public class ListFactoryProductionOrderRequest extends DataGridRequest{
     String sku;
     Integer stockRecordId;
     Integer currentUserId;
+    Integer status;
 }

@@ -1,7 +1,11 @@
 package com.sky.ddt.util;
 
 import com.sky.ddt.dto.response.BaseResponse;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.Region;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -256,6 +260,28 @@ public class ExcelUtil {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8") + com.sky.ddt.util.DateUtil.getFormatStryyyyMMddHHmmss(new Date()) + ".xlsx");//默认Excel名称
+            wb.write(outputStream);
+            ByteArrayInputStream tempIn = new ByteArrayInputStream(outputStream.toByteArray());
+            response.setHeader("Content-Length", String.valueOf(tempIn.available()));
+            OutputStream out = response.getOutputStream();
+            byte[] buffer = new byte[1024];
+            int a;
+            while ((a = tempIn.read(buffer)) != -1) {
+                out.write(buffer, 0, a);
+            }
+            out.flush();
+            out.close();
+            return BaseResponse.success();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return BaseResponse.fail();
+        }
+    }
+
+    public static BaseResponse exportExcelXls(HttpServletResponse response, Workbook wb, String fileName) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8") + com.sky.ddt.util.DateUtil.getFormatStryyyyMMddHHmmss(new Date()) + ".xls");//默认Excel名称
             wb.write(outputStream);
             ByteArrayInputStream tempIn = new ByteArrayInputStream(outputStream.toByteArray());
             response.setHeader("Content-Length", String.valueOf(tempIn.available()));

@@ -18,11 +18,17 @@ import com.sky.ddt.service.IShopSkuService;
 import com.sky.ddt.service.IShopUserService;
 import com.sky.ddt.service.IStockRecordService;
 import com.sky.ddt.util.DateUtil;
+import com.sky.ddt.util.ExcelCopySheetUtil;
+import com.sky.ddt.util.ExcelCopySheetUtil2;
 import com.sky.ddt.util.ExcelUtil;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -168,7 +174,7 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         if (factoryProductionOrder == null) {
             return BaseResponse.failMessage("工厂生产单id不存在");
         }
-        if(!FactoryProductionOrderConstant.StatusEnum.PENDING_CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())){
+        if (!FactoryProductionOrderConstant.StatusEnum.PENDING_CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())) {
             return BaseResponse.failMessage("只有待确认的工厂生产单允许修改数量");
         }
         List<ShopSku> shopSkuList = shopSkuService.getShopSkuByShopParentSkuAndSize(params.getShopParentSku(), params.getSize(), params.getColour(), factoryProductionOrder.getShopId());
@@ -273,24 +279,14 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
             return BaseResponse.failMessage("工厂生产单id不存在");
         }
 
-        if(!FactoryProductionOrderConstant.StatusEnum.CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())){
+        if (!FactoryProductionOrderConstant.StatusEnum.CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())) {
             return BaseResponse.failMessage("只有已确认的工厂生产单允许下载");
-        }
-        ListFactoryProductionOrderInfoRequest productionOrderInfoRequest = new ListFactoryProductionOrderInfoRequest();
-        productionOrderInfoRequest.setFactoryProductionOrderId(factoryProductionOrderId);
-        productionOrderInfoRequest.setShopParentSku(shopParentSku);
-        productionOrderInfoRequest.setPage(1);
-        productionOrderInfoRequest.setRows(Integer.MAX_VALUE);
-        PageInfo<ListFactoryProductionOrderInfoResponse> pageInfo = listFactoryProductionOrderInfo(productionOrderInfoRequest);
-        List<ListFactoryProductionOrderInfoResponse> list = pageInfo.getList();
-        if (CollectionUtils.isEmpty(list)) {
-            return BaseResponse.failMessage("店铺父sku的工厂生产单数据为空");
         }
         //读取模板
         String path = FactoryProductionOrderService.class.getClassLoader().getResource("template/factoryProduction/factoryProductionTemplate.xlsx").getPath();
         Workbook wb = ExcelUtil.readExcel(path);
         Sheet sheet = wb.getSheetAt(0);
-        setFactoryProductionOrderByShopParentSkuInfo(list, sheet);
+        setSheetInfo(sheet,factoryProductionOrderId,shopParentSku);
         String fileName = factoryProductionOrder.getTitle() + "-" + shopParentSku;
         return ExcelUtil.exportExcel(response, wb, fileName);
     }
@@ -305,17 +301,17 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
      */
     @Override
     public BaseResponse confirmFactoryProductionOrder(Integer id, Integer dealUserId) {
-        if(id==null){
+        if (id == null) {
             return BaseResponse.failMessage("工厂生产单id不能为空");
         }
-        FactoryProductionOrder factoryProductionOrder=customFactoryProductionOrderMapper.selectByPrimaryKey(id);
-        if(factoryProductionOrder==null){
+        FactoryProductionOrder factoryProductionOrder = customFactoryProductionOrderMapper.selectByPrimaryKey(id);
+        if (factoryProductionOrder == null) {
             return BaseResponse.failMessage("工厂生产单id不存在");
         }
-        if(!FactoryProductionOrderConstant.StatusEnum.PENDING_CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())){
+        if (!FactoryProductionOrderConstant.StatusEnum.PENDING_CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())) {
             return BaseResponse.failMessage("只有待确认的生产单允许确认");
         }
-        FactoryProductionOrder factoryProductionOrderUpdate=new FactoryProductionOrder();
+        FactoryProductionOrder factoryProductionOrderUpdate = new FactoryProductionOrder();
         factoryProductionOrderUpdate.setId(id);
         factoryProductionOrderUpdate.setStatus(FactoryProductionOrderConstant.StatusEnum.CONFIRM.getStatus());
         factoryProductionOrderUpdate.setUpdateBy(dealUserId);
@@ -334,23 +330,87 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
      */
     @Override
     public BaseResponse cancelFactoryProductionOrder(Integer id, Integer dealUserId) {
-        if(id==null){
+        if (id == null) {
             return BaseResponse.failMessage("工厂生产单id不能为空");
         }
-        FactoryProductionOrder factoryProductionOrder=customFactoryProductionOrderMapper.selectByPrimaryKey(id);
-        if(factoryProductionOrder==null){
+        FactoryProductionOrder factoryProductionOrder = customFactoryProductionOrderMapper.selectByPrimaryKey(id);
+        if (factoryProductionOrder == null) {
             return BaseResponse.failMessage("工厂生产单id不存在");
         }
-        if(!FactoryProductionOrderConstant.StatusEnum.PENDING_CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())){
+        if (!FactoryProductionOrderConstant.StatusEnum.PENDING_CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())) {
             return BaseResponse.failMessage("只有待确认的生产单允许取消");
         }
-        FactoryProductionOrder factoryProductionOrderUpdate=new FactoryProductionOrder();
+        FactoryProductionOrder factoryProductionOrderUpdate = new FactoryProductionOrder();
         factoryProductionOrderUpdate.setId(id);
         factoryProductionOrderUpdate.setStatus(FactoryProductionOrderConstant.StatusEnum.CANCEL.getStatus());
         factoryProductionOrderUpdate.setUpdateBy(dealUserId);
         factoryProductionOrderUpdate.setUpdateTime(new Date());
         customFactoryProductionOrderMapper.updateByPrimaryKeySelective(factoryProductionOrderUpdate);
         return BaseResponse.success();
+    }
+
+    /**
+     * @param factoryProductionOrderId
+     * @param response
+     * @return
+     * @description 下载工厂生产单
+     * @author baixueping
+     * @date 2020/10/29 20:12
+     */
+    @Override
+    public BaseResponse downFactoryProductionOrder(Integer factoryProductionOrderId, HttpServletResponse response) {
+        if (factoryProductionOrderId == null) {
+            return BaseResponse.failMessage("工厂生产单id不能为空");
+        }
+        FactoryProductionOrder factoryProductionOrder = customFactoryProductionOrderMapper.selectByPrimaryKey(factoryProductionOrderId);
+        if (factoryProductionOrder == null) {
+            return BaseResponse.failMessage("工厂生产单id不存在");
+        }
+
+        if (!FactoryProductionOrderConstant.StatusEnum.CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())) {
+            return BaseResponse.failMessage("只有已确认的工厂生产单允许下载");
+        }
+        //获取工厂生产单所有店铺父sku
+        ListFactoryProductionOrderShopParentSkuRequest params = new ListFactoryProductionOrderShopParentSkuRequest();
+        params.setFactoryProductionOrderId(factoryProductionOrderId);
+        List<ListFactoryProductionOrderShopParentSkuResponse> listShopParentSku = customFactoryProductionOrderMapper.listFactoryProductionOrderShopParentSku(params);
+        if (CollectionUtils.isEmpty(listShopParentSku)) {
+            return BaseResponse.failMessage("店铺父sku列表为空");
+        }
+        //获取店铺sku生产单sheet
+        //读取模板
+        String path = FactoryProductionOrderService.class.getClassLoader().getResource("template/factoryProduction/factoryProductionTemplate.xls").getPath();
+        Workbook wb = ExcelUtil.readExcel(path);
+        HSSFSheet sheetFirst = (HSSFSheet) wb.getSheetAt(0);
+        //创建新的sheet
+        for(int i=1;i<listShopParentSku.size();i++){
+            HSSFSheet sheetNew= (HSSFSheet) wb.createSheet(listShopParentSku.get(i).getShopParentSku());
+            ExcelCopySheetUtil2.copySheets(sheetFirst,sheetNew);
+        }
+        for(int i=0;i<listShopParentSku.size();i++){
+            Sheet sheet=wb.getSheetAt(i);
+            wb.setSheetName(i, listShopParentSku.get(i).getShopParentSku());
+            setSheetInfo(sheet,factoryProductionOrderId,listShopParentSku.get(i).getShopParentSku());
+        }
+
+        //组装一个excel
+        //下载excel
+        String fileName = factoryProductionOrder.getTitle();
+        return ExcelUtil.exportExcelXls(response, wb, fileName);
+    }
+
+    private void setSheetInfo(Sheet sheet, Integer factoryProductionOrderId, String shopParentSku) {
+        ListFactoryProductionOrderInfoRequest productionOrderInfoRequest = new ListFactoryProductionOrderInfoRequest();
+        productionOrderInfoRequest.setFactoryProductionOrderId(factoryProductionOrderId);
+        productionOrderInfoRequest.setShopParentSku(shopParentSku);
+        productionOrderInfoRequest.setPage(1);
+        productionOrderInfoRequest.setRows(Integer.MAX_VALUE);
+        PageInfo<ListFactoryProductionOrderInfoResponse> pageInfo = listFactoryProductionOrderInfo(productionOrderInfoRequest);
+        List<ListFactoryProductionOrderInfoResponse> list = pageInfo.getList();
+        if (CollectionUtils.isEmpty(list)) {
+            return;
+        }
+        setFactoryProductionOrderByShopParentSkuInfo(list, sheet);
     }
 
     private void setFactoryProductionOrderByShopParentSkuInfo(List<ListFactoryProductionOrderInfoResponse> list, Sheet sheet) {
@@ -360,48 +420,50 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         for (int i = 0; i < list.size(); i++) {
             ListFactoryProductionOrderInfoResponse listFactoryProductionOrderInfoResponse = list.get(i);
 
-            if(i>=20){
-                sheet.shiftRows( contentIndex+i, sheet.getLastRowNum(), 1, true, false);
+            if (i >= 20) {
+                sheet.shiftRows(contentIndex + i, sheet.getLastRowNum(), 1, true, false);
             }
-            Row rowContent =sheet.getRow(contentIndex + i);
-            if(rowContent==null){
-                rowContent=sheet.createRow(contentIndex+i);
+            Row rowContent = sheet.getRow(contentIndex + i);
+            if (rowContent == null) {
+                rowContent = sheet.createRow(contentIndex + i);
             }
-            setCellValue(rowContent,3,listFactoryProductionOrderInfoResponse.getColour());
-            setCellValue(rowContent,5, listFactoryProductionOrderInfoResponse.getProductionQuantityXS());
-            setCellValue(rowContent,6, listFactoryProductionOrderInfoResponse.getProductionQuantityS());
-            setCellValue(rowContent,7, listFactoryProductionOrderInfoResponse.getProductionQuantityM());
-            setCellValue(rowContent,8, listFactoryProductionOrderInfoResponse.getProductionQuantityL());
-            setCellValue(rowContent,9, listFactoryProductionOrderInfoResponse.getProductionQuantityXL());
-            setCellValue(rowContent,10, listFactoryProductionOrderInfoResponse.getProductionQuantity2XL());
-            setCellValue(rowContent,11, listFactoryProductionOrderInfoResponse.getProductionQuantity3XL());
-            setCellValue(rowContent,12, listFactoryProductionOrderInfoResponse.getProductionQuantity4XL());
-            setCellValue(rowContent,13, listFactoryProductionOrderInfoResponse.getProductionQuantity5XL());
-            setCellValue(rowContent,14, listFactoryProductionOrderInfoResponse.getProductionQuantity6XL());
+            setCellValue(rowContent, 3, listFactoryProductionOrderInfoResponse.getColour());
+            setCellValue(rowContent, 5, listFactoryProductionOrderInfoResponse.getProductionQuantityXS());
+            setCellValue(rowContent, 6, listFactoryProductionOrderInfoResponse.getProductionQuantityS());
+            setCellValue(rowContent, 7, listFactoryProductionOrderInfoResponse.getProductionQuantityM());
+            setCellValue(rowContent, 8, listFactoryProductionOrderInfoResponse.getProductionQuantityL());
+            setCellValue(rowContent, 9, listFactoryProductionOrderInfoResponse.getProductionQuantityXL());
+            setCellValue(rowContent, 10, listFactoryProductionOrderInfoResponse.getProductionQuantity2XL());
+            setCellValue(rowContent, 11, listFactoryProductionOrderInfoResponse.getProductionQuantity3XL());
+            setCellValue(rowContent, 12, listFactoryProductionOrderInfoResponse.getProductionQuantity4XL());
+            setCellValue(rowContent, 13, listFactoryProductionOrderInfoResponse.getProductionQuantity5XL());
+            setCellValue(rowContent, 14, listFactoryProductionOrderInfoResponse.getProductionQuantity6XL());
 
         }
     }
 
     private void setCellValue(Row row, Integer cellIndex, String str) {
-        if(StringUtils.isEmpty(str)||row==null||cellIndex==null||cellIndex<0){
+        if (StringUtils.isEmpty(str) || row == null || cellIndex == null || cellIndex < 0) {
             return;
         }
-        Cell cell=row.getCell(cellIndex);
-        if(cell==null){
-            cell=row.createCell(cellIndex);
+        Cell cell = row.getCell(cellIndex);
+        if (cell == null) {
+            cell = row.createCell(cellIndex);
         }
         cell.setCellValue(str);
     }
+
     private void setCellValue(Row row, Integer cellIndex, Integer a) {
-        if(a==null||row==null||cellIndex==null||cellIndex<0){
+        if (a == null || row == null || cellIndex == null || cellIndex < 0) {
             return;
         }
-        Cell cell=row.getCell(cellIndex);
-        if(cell==null){
-            cell=row.createCell(cellIndex);
+        Cell cell = row.getCell(cellIndex);
+        if (cell == null) {
+            cell = row.createCell(cellIndex);
         }
         cell.setCellValue(a);
     }
+
     private void setCellValue(Cell cell, Integer a) {
         if (a != null && cell != null) {
             cell.setCellValue(a);
