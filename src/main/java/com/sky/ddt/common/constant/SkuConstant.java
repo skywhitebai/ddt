@@ -15,7 +15,7 @@ public class SkuConstant {
     public static final String COLOR_EMPTY = "颜色不能为空";
     public static final String SIZE_EMPTY = "尺码不能为空";
     public static final String COST_PRICE_EMPTY = "成本价不能为空";
-    public static final String PRODUCT_CODE_NOT_EXIST = "产品sku不存在";
+    public static final String PRODUCT_CODE_NOT_EXIST = "产品编码不存在";
     public static final String COST_PRICE_ERRO = "成本价必须为大于0的数字";
     public static final String SKU_ID_NOT_EXIST = "skuId不存在";
     public static final String[] EXPORT_SKU_HEAD = {"产品名称","产品编码", "sku", "颜色", "色号","尺码", "重量", "成本价", "头程费用", "库存数量", "备注"};

@@ -165,12 +165,6 @@ public class SkuService implements ISkuService {
                     sbErroItem.append(",").append(SkuConstant.COST_PRICE_ERRO);
                 }
             }
-            if (!StringUtils.isEmpty(map.get("库存数量"))) {
-                Integer inventoryQuantity = MathUtil.strToInteger(map.get("库存数量"));
-                if (inventoryQuantity == null || inventoryQuantity < 0) {
-                    sbErroItem.append(",").append(SkuConstant.INVENTORY_QUANTITY_ERRO);
-                }
-            }
             if (sbErroItem.length() > 0) {
                 sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
             }
@@ -223,7 +217,6 @@ public class SkuService implements ISkuService {
         sku.setSize(map.get("尺码").toUpperCase());
         sku.setWeight(MathUtil.strToBigDecimal(map.get("重量")));
         sku.setCostPrice(MathUtil.strToBigDecimal(map.get("成本价")));
-        sku.setInventoryQuantity(MathUtil.strToInteger(map.get("库存数量")));
         sku.setRemark(map.get("备注"));
         sku.setHeadTripCost(getHeadTripCost(sku.getWeight()));
         sku.setHeadTripCostMin(getHeadTripCostMin(sku.getWeight()));
