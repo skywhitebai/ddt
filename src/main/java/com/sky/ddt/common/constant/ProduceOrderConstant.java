@@ -56,4 +56,34 @@ public class ProduceOrderConstant {
             return null;
         }
     }
+    @Getter
+    public enum TypeEnum {
+        MANUAL(1, "手工生产单"),
+        FACTORY_PRODUCTION_ORDER(2, "工厂生产单"),;
+        Integer type;
+        String typeName;
+
+        TypeEnum(Integer type, String typeName) {
+            this.type = type;
+            this.typeName = typeName;
+        }
+
+        public static boolean contains(Integer type) {
+            for (TypeEnum typeEnum : TypeEnum.values()) {
+                if (typeEnum.type.equals(type)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static String getTypeName(Integer type) {
+            for (TypeEnum typeEnum : TypeEnum.values()) {
+                if (typeEnum.type.equals(type)) {
+                    return typeEnum.typeName;
+                }
+            }
+            return null;
+        }
+    }
 }

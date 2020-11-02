@@ -24,10 +24,11 @@ public interface CustomWarehousingOrderShopSkuMapper extends WarehousingOrderSho
 
     /**
      * @param
+     * @param shopSkuId
      * @return
      * @description 判断是否存在生产单店铺sku
      * @author baixueping
      * @date 2020/4/28 10:46
      */
-    boolean existProduceOrderShopSku(@Param("produceOrderId")Integer produceOrderId, @Param("shopSku") String shopSku);
+    boolean existProduceOrderShopSku(@Param("produceOrderId")Integer produceOrderId, @Param("shopSkuId") Integer shopSkuId);
 }

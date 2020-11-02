@@ -164,7 +164,7 @@ public class ProduceOrderShopSkuService implements IProduceOrderShopSkuService {
             }
         }
         //判断入库单是否有此生产单的店铺sku
-        if (warehousingOrderShopSkuService.existProduceOrderShopSku(produceOrderShopSku.getProduceOrderId(), produceOrderShopSku.getShopSku())) {
+        if (warehousingOrderShopSkuService.existProduceOrderShopSku(produceOrderShopSku.getProduceOrderId(), produceOrderShopSku.getShopSkuId())) {
             return BaseResponse.failMessage(ProduceOrderShopSkuConstant.PRODUCE_ORDER_SHOP_SKU_WAREHOUSING_NOT_ALLOW_DELETE);
         }
         customProduceOrderShopSkuMapper.deleteByPrimaryKey(id);
@@ -271,7 +271,6 @@ public class ProduceOrderShopSkuService implements IProduceOrderShopSkuService {
             } else {
                 produceOrderShopSku.setProduceOrderId(produceOrderId);
                 produceOrderShopSku.setShopSkuId(shopSkuId);
-                produceOrderShopSku.setShopSku(map.get("店铺sku"));
                 produceOrderShopSku.setCreateBy(dealUserId);
                 produceOrderShopSku.setCreateTime(new Date());
                 customProduceOrderShopSkuMapper.insertSelective(produceOrderShopSku);

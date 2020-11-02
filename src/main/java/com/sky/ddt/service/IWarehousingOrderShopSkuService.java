@@ -46,12 +46,13 @@ public interface IWarehousingOrderShopSkuService {
 
     /**
      * @param
+     * @param shopSkuId
      * @return
      * @description 判断入库单是否包含生产单店铺sku
      * @author baixueping
      * @date 2020/4/28 10:23
      */
-    boolean existProduceOrderShopSku(Integer produceOrderId, String shopSku);
+    boolean existProduceOrderShopSku(Integer produceOrderId, Integer shopSkuId);
 
     /**
      * @param

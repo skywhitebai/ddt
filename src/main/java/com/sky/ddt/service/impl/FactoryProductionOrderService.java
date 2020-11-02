@@ -13,10 +13,7 @@ import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrde
 import com.sky.ddt.dto.factoryProductionOrder.response.ShopSkuProductionQuantityDto;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.*;
-import com.sky.ddt.service.IFactoryProductionOrderService;
-import com.sky.ddt.service.IShopSkuService;
-import com.sky.ddt.service.IShopUserService;
-import com.sky.ddt.service.IStockRecordService;
+import com.sky.ddt.service.*;
 import com.sky.ddt.util.DateUtil;
 import com.sky.ddt.util.ExcelCopySheetUtil;
 import com.sky.ddt.util.ExcelCopySheetUtil2;
@@ -57,6 +54,8 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
     IStockRecordService stockRecordService;
     @Autowired
     CustomShopMapper customShopMapper;
+    @Autowired
+    IProduceOrderService produceOrderService;
 
 
     /**
@@ -141,6 +140,8 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
                         listFactoryProductionOrderInfoResponse.setProductionQuantityL(shopSkuProductionQuantityDto.getProductionQuantity());
                     } else if (SkuConstant.SkuSizeEnum.XL.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
                         listFactoryProductionOrderInfoResponse.setProductionQuantityXL(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.XXL.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantity2XL(shopSkuProductionQuantityDto.getProductionQuantity());
                     } else if (SkuConstant.SkuSizeEnum.XXXL.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
                         listFactoryProductionOrderInfoResponse.setProductionQuantity3XL(shopSkuProductionQuantityDto.getProductionQuantity());
                     } else if (SkuConstant.SkuSizeEnum.XXXXL.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
@@ -286,7 +287,7 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         String path = FactoryProductionOrderService.class.getClassLoader().getResource("template/factoryProduction/factoryProductionTemplate.xlsx").getPath();
         Workbook wb = ExcelUtil.readExcel(path);
         Sheet sheet = wb.getSheetAt(0);
-        setSheetInfo(sheet,factoryProductionOrderId,shopParentSku);
+        setSheetInfo(sheet, factoryProductionOrderId, shopParentSku);
         String fileName = factoryProductionOrder.getTitle() + "-" + shopParentSku;
         return ExcelUtil.exportExcel(response, wb, fileName);
     }
@@ -317,6 +318,8 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         factoryProductionOrderUpdate.setUpdateBy(dealUserId);
         factoryProductionOrderUpdate.setUpdateTime(new Date());
         customFactoryProductionOrderMapper.updateByPrimaryKeySelective(factoryProductionOrderUpdate);
+        //生成生产单
+        produceOrderService.createProduceOrder(factoryProductionOrder, dealUserId);
         return BaseResponse.success();
     }
 
@@ -383,14 +386,14 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         Workbook wb = ExcelUtil.readExcel(path);
         HSSFSheet sheetFirst = (HSSFSheet) wb.getSheetAt(0);
         //创建新的sheet
-        for(int i=1;i<listShopParentSku.size();i++){
-            HSSFSheet sheetNew= (HSSFSheet) wb.createSheet(listShopParentSku.get(i).getShopParentSku());
-            ExcelCopySheetUtil2.copySheets(sheetFirst,sheetNew);
+        for (int i = 1; i < listShopParentSku.size(); i++) {
+            HSSFSheet sheetNew = (HSSFSheet) wb.createSheet(listShopParentSku.get(i).getShopParentSku());
+            ExcelCopySheetUtil2.copySheets(sheetFirst, sheetNew);
         }
-        for(int i=0;i<listShopParentSku.size();i++){
-            Sheet sheet=wb.getSheetAt(i);
+        for (int i = 0; i < listShopParentSku.size(); i++) {
+            Sheet sheet = wb.getSheetAt(i);
             wb.setSheetName(i, listShopParentSku.get(i).getShopParentSku());
-            setSheetInfo(sheet,factoryProductionOrderId,listShopParentSku.get(i).getShopParentSku());
+            setSheetInfo(sheet, factoryProductionOrderId, listShopParentSku.get(i).getShopParentSku());
         }
 
         //组装一个excel
@@ -410,8 +413,8 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         if (CollectionUtils.isEmpty(list)) {
             return;
         }
-        Row row3=sheet.getRow(3);
-        setCellValue(row3,1,shopParentSku);
+        Row row3 = sheet.getRow(3);
+        setCellValue(row3, 1, shopParentSku);
         setFactoryProductionOrderByShopParentSkuInfo(list, sheet);
     }
 

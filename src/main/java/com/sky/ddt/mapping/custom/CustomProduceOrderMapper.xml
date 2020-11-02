@@ -23,7 +23,8 @@
                 <if test="sku != null and sku != '' ">
                     and exists (select 1 from produce_order_shop_sku poss,shop_sku ss,sku s where poss.produce_order_id=po.id and poss.shop_sku_id=ss.shop_sku_id and ss.sku_id=s.sku_id and s.sku like concat('%',#{sku},'%'))
                 </if>
-                <if test="status != null">and  status=#{status}</if>
+                <if test="status != null">and  po.status=#{status}</if>
+                <if test="type != null">and  po.type=#{type}</if>
             </trim>
         </where>
         order by po.create_time desc

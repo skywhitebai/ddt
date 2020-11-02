@@ -7,6 +7,8 @@
     <result column="batch_number" jdbcType="VARCHAR" property="batchNumber" />
     <result column="shop_id" jdbcType="INTEGER" property="shopId" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="entity_id" jdbcType="INTEGER" property="entityId" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
@@ -72,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, production_time, batch_number, shop_id, status, remark, create_time, create_by, 
-    update_time, update_by
+    id, production_time, batch_number, shop_id, status, type, entity_id, remark, create_time, 
+    create_by, update_time, update_by
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.ProduceOrderExample" resultMap="BaseResultMap">
     select
@@ -110,13 +112,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into produce_order (production_time, batch_number, shop_id, 
-      status, remark, create_time, 
-      create_by, update_time, update_by
-      )
+      status, type, entity_id, 
+      remark, create_time, create_by, 
+      update_time, update_by)
     values (#{productionTime,jdbcType=TIMESTAMP}, #{batchNumber,jdbcType=VARCHAR}, #{shopId,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}
-      )
+      #{status,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{entityId,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.ProduceOrder">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -135,6 +137,12 @@
       </if>
       <if test="status != null">
         status,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="entityId != null">
+        entity_id,
       </if>
       <if test="remark != null">
         remark,
@@ -164,6 +172,12 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="entityId != null">
+        #{entityId,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -206,6 +220,12 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.entityId != null">
+        entity_id = #{record.entityId,jdbcType=INTEGER},
+      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -233,6 +253,8 @@
       batch_number = #{record.batchNumber,jdbcType=VARCHAR},
       shop_id = #{record.shopId,jdbcType=INTEGER},
       status = #{record.status,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=INTEGER},
+      entity_id = #{record.entityId,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER},
@@ -256,6 +278,12 @@
       </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="entityId != null">
+        entity_id = #{entityId,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -281,6 +309,8 @@
       batch_number = #{batchNumber,jdbcType=VARCHAR},
       shop_id = #{shopId,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      entity_id = #{entityId,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER},

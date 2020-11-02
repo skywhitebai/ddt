@@ -22,4 +22,5 @@ public class ListProduceOrderRequest extends DataGridRequest{
     String shopSku;
     String sku;
     Integer status;
+    Integer type;
 }

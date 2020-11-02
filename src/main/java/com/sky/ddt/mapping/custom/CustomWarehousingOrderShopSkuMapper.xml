@@ -30,7 +30,7 @@
     <select id="existProduceOrderShopSku" resultType="java.lang.Boolean">
         SELECT CASE WHEN
 EXISTS(SELECT 1 FROM warehousing_order wo,warehousing_order_shop_sku woss
-WHERE wo.type=1 AND wo.produce_order_id=#{produceOrderId} AND wo.id=woss.warehousing_order_id AND woss.shop_sku=#{shopSku}) THEN TRUE
+WHERE wo.type=1 AND wo.produce_order_id=#{produceOrderId} AND wo.id=woss.warehousing_order_id AND woss.shop_sku_id=#{shopSkuId}) THEN TRUE
 ELSE FALSE END
     </select>
 </mapper>

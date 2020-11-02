@@ -176,7 +176,7 @@
                 }
             }, '-', {
                 id: 'btnConfirm',
-                text: '确认',
+                text: '确认并生成生产单',
                 iconCls: 'icon-edit',
                 handler: function () {
                     confirmFactoryProductionOrder();
@@ -462,7 +462,7 @@
         var rows = $('#dg').datagrid('getSelections');
         if (rows && rows.length == 1) {
             //添加二次确认
-            $.messager.confirm('提示', '确认要设置店铺[' + rows[0].shopName + ']的工厂生产单为已确认吗？确认后不允许修改数量', function (r) {
+            $.messager.confirm('提示', '确认要设置店铺[' + rows[0].shopName + ']的工厂生产单为已确认并生成生产单吗？确认后不允许修改数量', function (r) {
                 if (r) {
                     confirmFactoryProductionOrderById(rows[0].id);
                 }

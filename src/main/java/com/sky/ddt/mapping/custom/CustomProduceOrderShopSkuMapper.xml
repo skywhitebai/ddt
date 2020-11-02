@@ -5,6 +5,7 @@
                type="com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuResponse"
                extends="com.sky.ddt.dao.generate.ProduceOrderShopSkuMapper.BaseResultMap">
         <result column="shop_name" property="shopName"/>
+        <result column="shop_sku" property="shopSku"/>
         <result column="sku" property="sku"/>
         <result column="warehousingQuantity" property="warehousingQuantity"/>
     </resultMap>
@@ -13,10 +14,9 @@
             parameterType="com.sky.ddt.dto.produceOrderShopSku.request.ListProduceOrderShopSkuRequest"
             resultMap="ListProduceOrderShopSkuMap">
         select
-        poss.id, poss.produce_order_id, poss.shop_sku_id,  poss.production_quantity, poss.remark, poss.create_time, poss.
-    create_by, poss.update_time, poss.update_by
+        poss.*
         ,(select s.shop_name from shop s where po.shop_id=s.shop_id) shop_name,
-        (select ss.shop_sku from shop_sku ss where poss.shop_sku_id=ss.shop_sku_id) shop_sku
+        ss.shop_sku
         ,sku.sku,
         (select sum(warehousing_quantity) from warehousing_order_shop_sku woss,warehousing_order wo WHERE
         wo.id=woss.warehousing_order_id and wo.status=2 and wo.type=1 and wo.produce_order_id=poss.produce_order_id and

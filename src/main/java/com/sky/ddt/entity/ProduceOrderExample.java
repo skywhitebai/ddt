@@ -415,6 +415,126 @@ public class ProduceOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andTypeIsNull() {
+            addCriterion("type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIsNotNull() {
+            addCriterion("type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeEqualTo(Integer value) {
+            addCriterion("type =", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotEqualTo(Integer value) {
+            addCriterion("type <>", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThan(Integer value) {
+            addCriterion("type >", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeGreaterThanOrEqualTo(Integer value) {
+            addCriterion("type >=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThan(Integer value) {
+            addCriterion("type <", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeLessThanOrEqualTo(Integer value) {
+            addCriterion("type <=", value, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeIn(List<Integer> values) {
+            addCriterion("type in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotIn(List<Integer> values) {
+            addCriterion("type not in", values, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeBetween(Integer value1, Integer value2) {
+            addCriterion("type between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andTypeNotBetween(Integer value1, Integer value2) {
+            addCriterion("type not between", value1, value2, "type");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntityIdIsNull() {
+            addCriterion("entity_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntityIdIsNotNull() {
+            addCriterion("entity_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntityIdEqualTo(Integer value) {
+            addCriterion("entity_id =", value, "entityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntityIdNotEqualTo(Integer value) {
+            addCriterion("entity_id <>", value, "entityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntityIdGreaterThan(Integer value) {
+            addCriterion("entity_id >", value, "entityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntityIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("entity_id >=", value, "entityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntityIdLessThan(Integer value) {
+            addCriterion("entity_id <", value, "entityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntityIdLessThanOrEqualTo(Integer value) {
+            addCriterion("entity_id <=", value, "entityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntityIdIn(List<Integer> values) {
+            addCriterion("entity_id in", values, "entityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntityIdNotIn(List<Integer> values) {
+            addCriterion("entity_id not in", values, "entityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntityIdBetween(Integer value1, Integer value2) {
+            addCriterion("entity_id between", value1, value2, "entityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntityIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("entity_id not between", value1, value2, "entityId");
+            return (Criteria) this;
+        }
+
         public Criteria andRemarkIsNull() {
             addCriterion("remark is null");
             return (Criteria) this;

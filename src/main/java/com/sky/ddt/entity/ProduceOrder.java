@@ -13,6 +13,10 @@ public class ProduceOrder {
 
     private Integer status;
 
+    private Integer type;
+
+    private Integer entityId;
+
     private String remark;
 
     private Date createTime;
@@ -61,6 +65,22 @@ public class ProduceOrder {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getEntityId() {
+        return entityId;
+    }
+
+    public void setEntityId(Integer entityId) {
+        this.entityId = entityId;
     }
 
     public String getRemark() {

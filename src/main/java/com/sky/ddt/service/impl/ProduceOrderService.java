@@ -46,6 +46,8 @@ public class ProduceOrderService implements IProduceOrderService {
     IShopSkuService shopSkuService;
     @Autowired
     CustomProduceOrderShopSkuMapper customProduceOrderShopSkuMapper;
+    @Autowired
+    IFactoryProductionOrderShopSkuService factoryProductionOrderShopSkuService;
 
     /**
      * @param listProduceOrderRequest@return
@@ -107,6 +109,7 @@ public class ProduceOrderService implements IProduceOrderService {
             produceOrder.setBatchNumber(getBatchNumber());
             produceOrder.setProductionTime(new Date());
             produceOrder.setStatus(ProduceOrderConstant.StatusEnum.PENDING_STORAGE.getStatus());
+            produceOrder.setType(ProduceOrderConstant.TypeEnum.MANUAL.getType());
             produceOrder.setCreateBy(dealUserId);
             produceOrder.setCreateTime(new Date());
             customProduceOrderMapper.insertSelective(produceOrder);
@@ -331,7 +334,6 @@ public class ProduceOrderService implements IProduceOrderService {
         for (Map<String, String> map :
                 list) {
             ProduceOrderShopSku produceOrderShopSku = new ProduceOrderShopSku();
-            produceOrderShopSku.setShopSku(map.get("店铺sku"));
             produceOrderShopSku.setProduceOrderId(produceOrder.getId());
             produceOrderShopSku.setShopSkuId(MathUtil.strToInteger(map.get("shopSkuId")));
             produceOrderShopSku.setProductionQuantity(MathUtil.strToInteger(map.get("生产数量")));
@@ -341,6 +343,40 @@ public class ProduceOrderService implements IProduceOrderService {
             customProduceOrderShopSkuMapper.insertSelective(produceOrderShopSku);
         }
         return BaseResponse.success();
+    }
+
+    /**
+     * @param factoryProductionOrder
+     * @param dealUserId
+     * @return
+     * @description 通过工厂生产单创建生产单
+     * @author baixueping
+     * @date 2020/11/2 9:16
+     */
+    @Override
+    public void createProduceOrder(FactoryProductionOrder factoryProductionOrder, Integer dealUserId) {
+        ProduceOrder produceOrder=new ProduceOrder();
+        produceOrder.setShopId(factoryProductionOrder.getShopId());
+        produceOrder.setEntityId(factoryProductionOrder.getId());
+        produceOrder.setBatchNumber(getBatchNumber());
+        produceOrder.setProductionTime(new Date());
+        produceOrder.setStatus(ProduceOrderConstant.StatusEnum.PENDING_STORAGE.getStatus());
+        produceOrder.setCreateBy(dealUserId);
+        produceOrder.setCreateTime(new Date());
+        produceOrder.setType(ProduceOrderConstant.TypeEnum.FACTORY_PRODUCTION_ORDER.getType());
+        customProduceOrderMapper.insertSelective(produceOrder);
+        List<FactoryProductionOrderShopSku> factoryProductionOrderShopSkuList=factoryProductionOrderShopSkuService.listFactoryProductionOrderShopSku(factoryProductionOrder.getId());
+        //添加生产单店铺sku
+        for (FactoryProductionOrderShopSku factoryProductionOrderShopSku :
+                factoryProductionOrderShopSkuList) {
+            ProduceOrderShopSku produceOrderShopSku = new ProduceOrderShopSku();
+            produceOrderShopSku.setProduceOrderId(produceOrder.getId());
+            produceOrderShopSku.setShopSkuId(factoryProductionOrderShopSku.getShopSkuId());
+            produceOrderShopSku.setProductionQuantity(factoryProductionOrderShopSku.getProductionQuantity());
+            produceOrderShopSku.setCreateTime(new Date());
+            produceOrderShopSku.setCreateBy(dealUserId);
+            customProduceOrderShopSkuMapper.insertSelective(produceOrderShopSku);
+        }
     }
 
     private boolean repeatShopSku(String shopSkuStr, List<Map<String, String>> list) {

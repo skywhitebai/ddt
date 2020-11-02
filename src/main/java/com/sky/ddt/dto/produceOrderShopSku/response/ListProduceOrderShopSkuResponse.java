@@ -11,6 +11,7 @@ import lombok.Data;
 @Data
 public class ListProduceOrderShopSkuResponse extends ProduceOrderShopSku {
     String shopName;
+    String shopSku;
     String sku;
     Integer warehousingQuantity;
 }

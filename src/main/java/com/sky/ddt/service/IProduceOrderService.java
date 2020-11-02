@@ -5,6 +5,7 @@ import com.sky.ddt.dto.produceOrder.request.ListProduceOrderRequest;
 import com.sky.ddt.dto.produceOrder.request.SaveProduceOrderRequest;
 import com.sky.ddt.dto.produceOrder.response.ListProduceOrderResponse;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.entity.FactoryProductionOrder;
 import com.sky.ddt.entity.FbaPackingList;
 import com.sky.ddt.entity.ProduceOrder;
 import org.springframework.web.multipart.MultipartFile;
@@ -87,4 +88,12 @@ public interface IProduceOrderService {
      */
     BaseResponse importProduceOrder(MultipartFile file, Integer dealUserId);
 
+    /**
+     * @param
+     * @return
+     * @description 通过工厂生产单创建生产单
+     * @author baixueping
+     * @date 2020/11/2 9:16
+     */
+    void createProduceOrder(FactoryProductionOrder factoryProductionOrder, Integer dealUserId);
 }

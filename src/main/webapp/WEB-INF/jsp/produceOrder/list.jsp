@@ -48,6 +48,12 @@
     <input class="easyui-validatebox textbox" id="s_shopSku">
     产品sku：
     <input class="easyui-validatebox textbox" id="s_sku">
+    类型：
+    <select class="easyui-combobox" id="s_type" style="width:100px;">
+        <option value="">全部</option>
+        <option value="1">手工生产单</option>
+        <option value="2">工厂生产单</option>
+    </select>
     状态：
     <select class="easyui-combobox" id="s_status" style="width:100px;">
         <option value="">全部</option>
@@ -303,7 +309,8 @@
             batchNumber: $("#s_batchNumber").val(),
             shopSku: $("#s_shopSku").val(),
             sku: $("#s_sku").val(),
-            status: $("#s_status").val()
+            status: $("#s_status").val(),
+            type: $("#s_type").val()
         };
         return queryParams;
     }

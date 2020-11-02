@@ -5,9 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.SbErroEntity;
 import com.sky.ddt.common.constant.WarehousingOrderConstant;
 import com.sky.ddt.common.constant.WarehousingOrderShopSkuConstant;
-import com.sky.ddt.dao.custom.CustomWarehousingOrderMapper;
 import com.sky.ddt.dao.custom.CustomWarehousingOrderShopSkuMapper;
-import com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.warehousingOrderShopSku.request.ListWarehousingOrderShopSkuRequest;
 import com.sky.ddt.dto.warehousingOrderShopSku.request.SaveWarehousingOrderShopSkuRequest;
@@ -154,18 +152,18 @@ public class WarehousingOrderShopSkuService implements IWarehousingOrderShopSkuS
 
     /**
      * @param produceOrderId
-     * @param shopSku
+     * @param shopSkuId
      * @return
      * @description 判断入库单是否包含生产单店铺sku
      * @author baixueping
      * @date 2020/4/28 10:23
      */
     @Override
-    public boolean existProduceOrderShopSku(Integer produceOrderId, String shopSku) {
-        if (produceOrderId == null || StringUtils.isEmpty(shopSku)) {
+    public boolean existProduceOrderShopSku(Integer produceOrderId, Integer shopSkuId) {
+        if (produceOrderId == null || shopSkuId==null) {
             return false;
         }
-        return customWarehousingOrderShopSkuMapper.existProduceOrderShopSku(produceOrderId, shopSku);
+        return customWarehousingOrderShopSkuMapper.existProduceOrderShopSku(produceOrderId, shopSkuId);
     }
 
     /**
