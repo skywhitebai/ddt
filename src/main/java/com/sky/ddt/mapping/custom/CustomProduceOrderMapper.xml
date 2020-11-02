@@ -18,7 +18,7 @@
                 <if test="productionTimeEnd != null ">and  production_time <![CDATA[<=]]> #{productionTimeEnd}</if>
                 <if test="batchNumber != null and batchNumber != '' ">and  batch_number like concat('%',#{batchNumber},'%')</if>
                 <if test="shopSku != null and shopSku != '' ">
-                    and exists (select 1 from produce_order_shop_sku poss where poss.produce_order_id=po.id and poss.shop_sku like concat('%',#{shopSku},'%'))
+                    and exists (select 1 from produce_order_shop_sku poss,shop_sku ss where poss.produce_order_id=po.id and poss.shop_sku_id=ss.shop_sku_id and ss.shop_sku like concat('%',#{shopSku},'%'))
                 </if>
                 <if test="sku != null and sku != '' ">
                     and exists (select 1 from produce_order_shop_sku poss,shop_sku ss,sku s where poss.produce_order_id=po.id and poss.shop_sku_id=ss.shop_sku_id and ss.sku_id=s.sku_id and s.sku like concat('%',#{sku},'%'))

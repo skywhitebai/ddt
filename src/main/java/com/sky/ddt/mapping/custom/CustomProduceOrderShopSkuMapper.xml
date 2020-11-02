@@ -26,7 +26,7 @@
         left join shop_sku ss on poss.shop_sku_id=ss.shop_sku_id
         left join sku on sku.sku_id=ss.sku_id
         where poss.produce_order_id=#{produceOrderId}
-        order by poss.shop_sku
+        order by ss.shop_sku
     </select>
 
 
