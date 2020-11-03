@@ -5335,6 +5335,126 @@ public class FinancialStatementExample {
             addCriterion("create_by not between", value1, value2, "createBy");
             return (Criteria) this;
         }
+
+        public Criteria andAdvertisingSalesPercentageIsNull() {
+            addCriterion("advertising_sales_percentage is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageIsNotNull() {
+            addCriterion("advertising_sales_percentage is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageEqualTo(BigDecimal value) {
+            addCriterion("advertising_sales_percentage =", value, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageNotEqualTo(BigDecimal value) {
+            addCriterion("advertising_sales_percentage <>", value, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageGreaterThan(BigDecimal value) {
+            addCriterion("advertising_sales_percentage >", value, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("advertising_sales_percentage >=", value, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageLessThan(BigDecimal value) {
+            addCriterion("advertising_sales_percentage <", value, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("advertising_sales_percentage <=", value, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageIn(List<BigDecimal> values) {
+            addCriterion("advertising_sales_percentage in", values, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageNotIn(List<BigDecimal> values) {
+            addCriterion("advertising_sales_percentage not in", values, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("advertising_sales_percentage between", value1, value2, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("advertising_sales_percentage not between", value1, value2, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductMonthIsNull() {
+            addCriterion("product_month is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductMonthIsNotNull() {
+            addCriterion("product_month is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductMonthEqualTo(Integer value) {
+            addCriterion("product_month =", value, "productMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductMonthNotEqualTo(Integer value) {
+            addCriterion("product_month <>", value, "productMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductMonthGreaterThan(Integer value) {
+            addCriterion("product_month >", value, "productMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductMonthGreaterThanOrEqualTo(Integer value) {
+            addCriterion("product_month >=", value, "productMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductMonthLessThan(Integer value) {
+            addCriterion("product_month <", value, "productMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductMonthLessThanOrEqualTo(Integer value) {
+            addCriterion("product_month <=", value, "productMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductMonthIn(List<Integer> values) {
+            addCriterion("product_month in", values, "productMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductMonthNotIn(List<Integer> values) {
+            addCriterion("product_month not in", values, "productMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductMonthBetween(Integer value1, Integer value2) {
+            addCriterion("product_month between", value1, value2, "productMonth");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductMonthNotBetween(Integer value1, Integer value2) {
+            addCriterion("product_month not between", value1, value2, "productMonth");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -1,6 +1,8 @@
 package com.sky.ddt.controller.finance;
 
 import com.github.pagehelper.PageInfo;
+import com.sky.ddt.common.annotation.Action;
+import com.sky.ddt.common.annotation.LogRequest;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.controller.SuperController;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
@@ -66,6 +68,7 @@ public class FinanceController extends SuperController {
     @RequestMapping("/importFinance")
     @ResponseBody
     @MenuAnnotation("finance/index")
+    @LogRequest(action = Action.Skip)
     public BaseResponse importFinance(ImportFinanceRequest params) {
         Integer dealUserId = getCurrentUserId();
         return financeService.importFinance(params, dealUserId);

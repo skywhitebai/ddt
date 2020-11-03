@@ -176,6 +176,10 @@ public class FinancialStatement {
 
     private Integer createBy;
 
+    private BigDecimal advertisingSalesPercentage;
+
+    private Integer productMonth;
+
     public Integer getId() {
         return id;
     }
@@ -862,5 +866,21 @@ public class FinancialStatement {
 
     public void setCreateBy(Integer createBy) {
         this.createBy = createBy;
+    }
+
+    public BigDecimal getAdvertisingSalesPercentage() {
+        return advertisingSalesPercentage;
+    }
+
+    public void setAdvertisingSalesPercentage(BigDecimal advertisingSalesPercentage) {
+        this.advertisingSalesPercentage = advertisingSalesPercentage;
+    }
+
+    public Integer getProductMonth() {
+        return productMonth;
+    }
+
+    public void setProductMonth(Integer productMonth) {
+        this.productMonth = productMonth;
     }
 }

@@ -88,6 +88,8 @@
     <result column="refund_rate" jdbcType="DECIMAL" property="refundRate" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="advertising_sales_percentage" jdbcType="DECIMAL" property="advertisingSalesPercentage" />
+    <result column="product_month" jdbcType="INTEGER" property="productMonth" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -168,7 +170,8 @@
     sellable_cost, unsellable_requested_quantity, unsellable_cost, procurement_cost, 
     fba_head_trip_cost, head_deduction_fee, main_business_profit, gross_margin_on_sales, 
     roi, initial_quantity, initial_inventory_cost, final_quantity, final_inventory_cost, 
-    inventory_turnover, manual_adjustment, new_product, refund_rate, create_time, create_by
+    inventory_turnover, manual_adjustment, new_product, refund_rate, create_time, create_by, 
+    advertising_sales_percentage, product_month
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FinancialStatementExample" resultMap="BaseResultMap">
     select
@@ -237,7 +240,8 @@
       roi, initial_quantity, initial_inventory_cost, 
       final_quantity, final_inventory_cost, inventory_turnover, 
       manual_adjustment, new_product, refund_rate, 
-      create_time, create_by)
+      create_time, create_by, advertising_sales_percentage, 
+      product_month)
     values (#{financeId,jdbcType=INTEGER}, #{month,jdbcType=TIMESTAMP}, #{shopId,jdbcType=INTEGER}, 
       #{shopName,jdbcType=VARCHAR}, #{developerUserId,jdbcType=INTEGER}, #{developerUserName,jdbcType=VARCHAR}, 
       #{salesmanUserId,jdbcType=INTEGER}, #{salesmanUserName,jdbcType=VARCHAR}, #{shopParentSku,jdbcType=VARCHAR}, 
@@ -271,7 +275,8 @@
       #{roi,jdbcType=DECIMAL}, #{initialQuantity,jdbcType=INTEGER}, #{initialInventoryCost,jdbcType=DECIMAL}, 
       #{finalQuantity,jdbcType=INTEGER}, #{finalInventoryCost,jdbcType=DECIMAL}, #{inventoryTurnover,jdbcType=DECIMAL}, 
       #{manualAdjustment,jdbcType=DECIMAL}, #{newProduct,jdbcType=INTEGER}, #{refundRate,jdbcType=DECIMAL}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER})
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{advertisingSalesPercentage,jdbcType=DECIMAL}, 
+      #{productMonth,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.FinancialStatement">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -534,6 +539,12 @@
       <if test="createBy != null">
         create_by,
       </if>
+      <if test="advertisingSalesPercentage != null">
+        advertising_sales_percentage,
+      </if>
+      <if test="productMonth != null">
+        product_month,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="financeId != null">
@@ -790,6 +801,12 @@
       </if>
       <if test="createBy != null">
         #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="advertisingSalesPercentage != null">
+        #{advertisingSalesPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="productMonth != null">
+        #{productMonth,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -1060,6 +1077,12 @@
       <if test="record.createBy != null">
         create_by = #{record.createBy,jdbcType=INTEGER},
       </if>
+      <if test="record.advertisingSalesPercentage != null">
+        advertising_sales_percentage = #{record.advertisingSalesPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="record.productMonth != null">
+        product_month = #{record.productMonth,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -1152,7 +1175,9 @@
       new_product = #{record.newProduct,jdbcType=INTEGER},
       refund_rate = #{record.refundRate,jdbcType=DECIMAL},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      create_by = #{record.createBy,jdbcType=INTEGER}
+      create_by = #{record.createBy,jdbcType=INTEGER},
+      advertising_sales_percentage = #{record.advertisingSalesPercentage,jdbcType=DECIMAL},
+      product_month = #{record.productMonth,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -1415,6 +1440,12 @@
       <if test="createBy != null">
         create_by = #{createBy,jdbcType=INTEGER},
       </if>
+      <if test="advertisingSalesPercentage != null">
+        advertising_sales_percentage = #{advertisingSalesPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="productMonth != null">
+        product_month = #{productMonth,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -1504,7 +1535,9 @@
       new_product = #{newProduct,jdbcType=INTEGER},
       refund_rate = #{refundRate,jdbcType=DECIMAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      create_by = #{createBy,jdbcType=INTEGER}
+      create_by = #{createBy,jdbcType=INTEGER},
+      advertising_sales_percentage = #{advertisingSalesPercentage,jdbcType=DECIMAL},
+      product_month = #{productMonth,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

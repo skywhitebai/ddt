@@ -79,8 +79,8 @@
         IFNULL(idf.finalQuantity,0) finalQuantity,
         IFNULL(idf.finalQuantity,0)*(IFNULL(sku.`cost_price`,0)+IFNULL(ss.`head_trip_cost`,0)) finalInventoryCost,
         IFNULL(ma.manualAdjustment,0) manualAdjustment,
-        case when ss.create_time is null then 0 when DATE_ADD(ss.create_time,INTERVAL 14 month)<![CDATA[  > ]]>f.month then 1 else 0 end newProduct
-
+        case when ss.create_time is null then 0 when DATE_ADD(ss.create_time,INTERVAL 14 month)<![CDATA[  > ]]>f.month then 1 else 0 end newProduct,
+        TIMESTAMPDIFF(MONTH,ss.create_time,f.month) productMonth
         FROM `finance` f
         INNER JOIN shop s ON f.`shop_id`=s.`shop_id`
         INNER JOIN  shop_sku ss ON f.`shop_id`=ss.`shop_id`

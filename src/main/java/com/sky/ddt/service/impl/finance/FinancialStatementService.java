@@ -147,6 +147,20 @@ public class FinancialStatementService implements IFinancialStatementService {
                     financialStatementResponse.setRefundRate(BigDecimal.ZERO);
                 }
             }
+            if(financialStatementResponse.getCostOfAdvertising().compareTo(BigDecimal.ZERO)==0){
+                financialStatementResponse.setAdvertisingSalesPercentage(BigDecimal.ZERO);
+            }else{
+                if(BigDecimal.ZERO.compareTo(financialStatementResponse.getProductSales())==0){
+                    financialStatementResponse.setAdvertisingSalesPercentage(new BigDecimal(10000));
+                }else{
+                    BigDecimal advertisingSalesPercentage=MathUtil.divide(financialStatementResponse.getCostOfAdvertising().multiply(new BigDecimal(-1)),financialStatementResponse.getProductSales(),4);
+                    if(advertisingSalesPercentage!=null){
+                        financialStatementResponse.setAdvertisingSalesPercentage(advertisingSalesPercentage);
+                    }else{
+                        financialStatementResponse.setAdvertisingSalesPercentage(BigDecimal.ZERO);
+                    }
+                }
+            }
         }
         Finance finance = financeService.getFinance(financeId);
         if (finance == null) {
@@ -595,6 +609,8 @@ public class FinancialStatementService implements IFinancialStatementService {
             row.createCell(104).setCellValue(financialStatement.getInventoryTurnover().doubleValue());
             row.createCell(105).setCellValue(financialStatement.getRefundRate().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP)+"%");
             row.createCell(106).setCellValue(financialStatement.getNewProduct()==1?"是":"否");
+            row.createCell(107).setCellValue(financialStatement.getAdvertisingSalesPercentage().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP)+"%");
+            row.createCell(108).setCellValue(financialStatement.getProductMonth());
             rowIndex++;
         }
     }

@@ -39,7 +39,7 @@
         <!--<table tableName="sys_right" domainObjectName="Right">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        <table tableName="produce_order_shop_sku" >
+        <table tableName="financial_statement" >
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
