@@ -383,6 +383,7 @@ public class FinancialStatementService implements IFinancialStatementService {
             row.createCell(102).setCellValue(financialStatement.getFinalInventoryCost().doubleValue());
             row.createCell(103).setCellValue(financialStatement.getInventoryTurnover().doubleValue());
             row.createCell(104).setCellValue(financialStatement.getRefundRate().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP)+"%");
+            row.createCell(105).setCellValue(financialStatement.getAdvertisingSalesPercentage().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP)+"%");
             rowIndex++;
         }
     }
@@ -464,7 +465,6 @@ public class FinancialStatementService implements IFinancialStatementService {
             financialStatementShopParentSku.setFinalQuantity(MathUtil.addInteger(financialStatementShopParentSku.getFinalQuantity(),financialStatement.getFinalQuantity()));
             financialStatementShopParentSku.setFinalInventoryCost(MathUtil.addBigDecimal(financialStatementShopParentSku.getFinalInventoryCost(),financialStatement.getFinalInventoryCost()));
             financialStatementShopParentSku.setManualAdjustment(MathUtil.addBigDecimal(financialStatementShopParentSku.getManualAdjustment(),financialStatement.getManualAdjustment()));
-
         }
         List<FinancialStatement>financialStatementShopParentSkuList=new ArrayList<>();
         for (Map.Entry<String,FinancialStatement> map:financialStatementMap.entrySet()) {
@@ -507,6 +507,20 @@ public class FinancialStatementService implements IFinancialStatementService {
                     financialStatement.setRefundRate(new BigDecimal(refundRate));
                 }else{
                     financialStatement.setRefundRate(BigDecimal.ZERO);
+                }
+            }
+            if(financialStatement.getCostOfAdvertising().compareTo(BigDecimal.ZERO)==0){
+                financialStatement.setAdvertisingSalesPercentage(BigDecimal.ZERO);
+            }else{
+                if(BigDecimal.ZERO.compareTo(financialStatement.getProductSales())==0){
+                    financialStatement.setAdvertisingSalesPercentage(new BigDecimal(10000));
+                }else{
+                    BigDecimal advertisingSalesPercentage=MathUtil.divide(financialStatement.getCostOfAdvertising().multiply(new BigDecimal(-1)),financialStatement.getProductSales(),4);
+                    if(advertisingSalesPercentage!=null){
+                        financialStatement.setAdvertisingSalesPercentage(advertisingSalesPercentage);
+                    }else{
+                        financialStatement.setAdvertisingSalesPercentage(BigDecimal.ZERO);
+                    }
                 }
             }
             financialStatementShopParentSkuList.add(financialStatement);
