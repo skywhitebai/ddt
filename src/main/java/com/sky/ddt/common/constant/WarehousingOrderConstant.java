@@ -1,6 +1,10 @@
 package com.sky.ddt.common.constant;
 
+import com.sky.ddt.common.excel.ExcelField;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author baixueping
@@ -32,6 +36,18 @@ public class WarehousingOrderConstant {
     public static final String PRODUCE_ORDER_NOT_EXIST ="生产单不存在，不允许入库" ;
     public static final String PRODUCE_ORDER_STATUS_NOT_ALLOW_WAREHOUSING ="只有待入库、部分入库的生产单允许入库" ;
     public static final String SHOP_SKU_ID_NOT_EXIST ="店铺sku[%s]不存在" ;
+    public static List<ExcelField> exportWarehousingOrderFieldList=new ArrayList<>();
+    static {
+        exportWarehousingOrderFieldList.add(new ExcelField("shopName", "店铺名", ExcelField.FieldTypeEnum.STRING));
+        exportWarehousingOrderFieldList.add(new ExcelField("createTime", "创建时间", ExcelField.FieldTypeEnum.DATE_TIME));
+        exportWarehousingOrderFieldList.add(new ExcelField("warehousingTime", "入库时间", ExcelField.FieldTypeEnum.DATE_TIME));
+        exportWarehousingOrderFieldList.add(new ExcelField("typeName", "入库类型", ExcelField.FieldTypeEnum.STRING));
+        exportWarehousingOrderFieldList.add(new ExcelField("statusName", "状态", ExcelField.FieldTypeEnum.STRING));
+        exportWarehousingOrderFieldList.add(new ExcelField("produceOrderBatchNumber", "生产批次号", ExcelField.FieldTypeEnum.STRING));
+        exportWarehousingOrderFieldList.add(new ExcelField("sku", "产品sku", ExcelField.FieldTypeEnum.STRING));
+        exportWarehousingOrderFieldList.add(new ExcelField("shopSku", "店铺sku", ExcelField.FieldTypeEnum.STRING));
+        exportWarehousingOrderFieldList.add(new ExcelField("warehousingquantity", "入库数量", ExcelField.FieldTypeEnum.STRING));
+    }
 
     @Getter
     public enum StatusEnum {

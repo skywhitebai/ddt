@@ -12,7 +12,7 @@ function getUrlParams(queryParams) {
     var urlParams = "";
     for (i in queryParams) {
         if (!isEmpty(queryParams[i])) {
-            urlParams += i + "=" + queryParams[i] + "&";
+            urlParams += i + "=" + queryParams[i] + "&tt="+getTimestamp();
         }
     }
     if (!isEmpty(urlParams)) {

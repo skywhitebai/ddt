@@ -64,6 +64,8 @@
     </select>
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
+    <a href="javascript:void(0)" onclick="exportWarehousingOrder()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+       style="width: 80px">查 询</a>
 </div>
 <!--入库单列表-->
 <table id="dg" style="width: 100%; height: auto">
@@ -477,6 +479,10 @@
         $(dg).datagrid('clearSelections');
     }
 
+    function exportWarehousingOrder() {
+        var url = "${pageContext.request.contextPath }/warehousingOrder/exportWarehousingOrder"+getUrlParams(getQueryParams());
+        window.open(url);
+    }
     //入库
     function warehousing() {
         var rows = $('#dg').datagrid('getSelections');

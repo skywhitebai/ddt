@@ -2,17 +2,22 @@ package com.sky.ddt.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.annotation.MenuAnnotation;
+import com.sky.ddt.common.constant.WarehousingOrderConstant;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.warehousingOrder.request.ListWarehousingOrderRequest;
 import com.sky.ddt.dto.warehousingOrder.request.SaveWarehousingOrderRequest;
+import com.sky.ddt.dto.warehousingOrder.response.ExportWarehousingOrderResponse;
 import com.sky.ddt.dto.warehousingOrder.response.ListWarehousingOrderResponse;
 import com.sky.ddt.service.IWarehousingOrderService;
+import com.sky.ddt.util.ExcelExportByExcelFieldUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * @author baixueping
@@ -71,5 +76,15 @@ public class WarehousingOrderController extends SuperController {
     public BaseResponse warehousing(Integer id) {
         Integer dealUserId = getCurrentUserId();
         return warehousingOrderService.warehousing(id, dealUserId);
+    }
+    ///
+    @RequestMapping("/exportWarehousingOrder")
+    @ResponseBody
+    @MenuAnnotation("warehousingOrder/index")
+    public BaseResponse exportWarehousingOrder(ListWarehousingOrderRequest params) {
+        Integer dealUserId = getCurrentUserId();
+        List<ExportWarehousingOrderResponse> list=warehousingOrderService.listExportWarehousingOrder(params);
+        BaseResponse exportResponse = new ExcelExportByExcelFieldUtil().export(response, list, WarehousingOrderConstant.exportWarehousingOrderFieldList, "入库单");
+        return exportResponse;
     }
 }

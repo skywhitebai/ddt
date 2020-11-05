@@ -4,8 +4,12 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.warehousingOrder.request.ListWarehousingOrderRequest;
 import com.sky.ddt.dto.warehousingOrder.request.SaveWarehousingOrderRequest;
+import com.sky.ddt.dto.warehousingOrder.response.ExportWarehousingOrderResponse;
 import com.sky.ddt.dto.warehousingOrder.response.ListWarehousingOrderResponse;
 import com.sky.ddt.entity.WarehousingOrder;
+
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @author baixueping
@@ -66,4 +70,12 @@ public interface IWarehousingOrderService {
      * @date 2020/5/8 16:31
      */
     boolean existPendingStoragewarehousingOrder(Integer produceOrderId);
+    /**
+     * @param
+     * @return
+     * @description 查询导出的入库单信息
+     * @author baixueping
+     * @date 2020/11/5 14:19
+     */
+    List<ExportWarehousingOrderResponse> listExportWarehousingOrder(ListWarehousingOrderRequest params);
 }

@@ -14,6 +14,7 @@ import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.shopSku.request.UpdateShopSkuInventoryQuantityRequest;
 import com.sky.ddt.dto.warehousingOrder.request.ListWarehousingOrderRequest;
 import com.sky.ddt.dto.warehousingOrder.request.SaveWarehousingOrderRequest;
+import com.sky.ddt.dto.warehousingOrder.response.ExportWarehousingOrderResponse;
 import com.sky.ddt.dto.warehousingOrder.response.ListWarehousingOrderResponse;
 import com.sky.ddt.entity.*;
 import com.sky.ddt.service.*;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
 
@@ -313,6 +315,24 @@ public class WarehousingOrderService implements IWarehousingOrderService {
                 .andTypeEqualTo(WarehousingOrderConstant.TypeEnum.PRODUCTION_ORDER_WAREHOUSING.getType())
                 .andStatusEqualTo(WarehousingOrderConstant.StatusEnum.PENDING_STORAGE.getStatus());
         return customWarehousingOrderMapper.countByExample(warehousingOrderExample)>0;
+    }
+
+    /**
+     * @param params@return
+     * @description 查询导出的入库单信息
+     * @author baixueping
+     * @date 2020/11/5 14:19
+     */
+    @Override
+    public List<ExportWarehousingOrderResponse> listExportWarehousingOrder(ListWarehousingOrderRequest params) {
+        List<ExportWarehousingOrderResponse> list=customWarehousingOrderMapper.listExportWarehousingOrder(params);
+        if (!CollectionUtils.isEmpty(list)) {
+            for (ExportWarehousingOrderResponse exportWarehousingOrderResponse : list) {
+                exportWarehousingOrderResponse.setStatusName(WarehousingOrderConstant.StatusEnum.getStatusName(exportWarehousingOrderResponse.getStatus()));
+                exportWarehousingOrderResponse.setTypeName(WarehousingOrderConstant.TypeEnum.getTypeName(exportWarehousingOrderResponse.getType()));
+            }
+        }
+        return list;
     }
 
     private void updateWarehousingOrderWarehousing(Integer id, Integer dealUserId) {
