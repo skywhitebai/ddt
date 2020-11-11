@@ -65,7 +65,7 @@
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
     <a href="javascript:void(0)" onclick="exportWarehousingOrder()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
-       style="width: 80px">查 询</a>
+       style="width: 80px">下载生产单</a>
 </div>
 <!--入库单列表-->
 <table id="dg" style="width: 100%; height: auto">
