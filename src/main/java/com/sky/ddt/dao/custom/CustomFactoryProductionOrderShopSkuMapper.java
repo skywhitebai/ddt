@@ -2,6 +2,7 @@ package com.sky.ddt.dao.custom;
 
 import com.sky.ddt.dao.generate.FactoryProductionOrderShopSkuMapper;
 import com.sky.ddt.dto.factoryProductionOrder.request.ListFactoryProductionOrderInfoRequest;
+import com.sky.ddt.dto.factoryProductionOrderShopSku.response.ListFactoryProductionOrderShopSkuResponse;
 import com.sky.ddt.entity.FactoryProductionOrderShopSku;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface CustomFactoryProductionOrderShopSkuMapper extends FactoryProduc
      * @date 2020/10/15 19:31
      */
     List<FactoryProductionOrderShopSku> listByShopParentSku(ListFactoryProductionOrderInfoRequest params);
+
+    List<ListFactoryProductionOrderShopSkuResponse> listFactoryProductionOrderShopSku(Integer factoryProductionOrderId);
 }

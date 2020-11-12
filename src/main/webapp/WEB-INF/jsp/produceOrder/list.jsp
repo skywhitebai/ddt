@@ -343,6 +343,15 @@
                     {title: '店铺名', field: 'shopName', width: 120},
                     {title: '批号', field: 'batchNumber', width: 140},
                     {title: '状态', field: 'statusName', width: 50},
+                    {
+                        title: '生产类型', field: 'type', width: 80, formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return '手工生产单';
+                        } else if (value == 2) {
+                            return '工厂生产单';
+                        }
+                    }
+                    },
                     {title: '生产数量', field: 'productionQuantityTotal', width: 66},
                     {title: '创建时间', field: 'createTime', width: 180},
                     {title: '修改时间', field: 'updateTime', width: 180},

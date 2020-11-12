@@ -1,6 +1,6 @@
 package com.sky.ddt.service;
 
-import com.sky.ddt.entity.FactoryProductionOrderShopSku;
+import com.sky.ddt.dto.factoryProductionOrderShopSku.response.ListFactoryProductionOrderShopSkuResponse;
 
 import java.util.List;
 
@@ -17,5 +17,5 @@ public interface IFactoryProductionOrderShopSkuService {
      * @author baixueping
      * @date 2020/11/2 9:49
     */
-    List<FactoryProductionOrderShopSku> listFactoryProductionOrderShopSku(Integer factoryProductionOrderId);
+    List<ListFactoryProductionOrderShopSkuResponse> listFactoryProductionOrderShopSku(Integer factoryProductionOrderId);
 }

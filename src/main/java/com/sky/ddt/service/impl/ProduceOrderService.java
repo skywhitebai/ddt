@@ -7,6 +7,8 @@ import com.sky.ddt.common.constant.ProduceOrderShopSkuConstant;
 import com.sky.ddt.common.constant.SbErroEntity;
 import com.sky.ddt.dao.custom.CustomProduceOrderMapper;
 import com.sky.ddt.dao.custom.CustomProduceOrderShopSkuMapper;
+import com.sky.ddt.dto.factoryProductionOrder.response.ShopSkuProductionQuantityDto;
+import com.sky.ddt.dto.factoryProductionOrderShopSku.response.ListFactoryProductionOrderShopSkuResponse;
 import com.sky.ddt.dto.produceOrder.request.ListProduceOrderRequest;
 import com.sky.ddt.dto.produceOrder.request.SaveProduceOrderRequest;
 import com.sky.ddt.dto.produceOrder.response.ListProduceOrderResponse;
@@ -26,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author baixueping
@@ -347,14 +350,22 @@ public class ProduceOrderService implements IProduceOrderService {
 
     /**
      * @param factoryProductionOrder
-     * @param dealUserId
-     * @return
+     *@param dealUserId  @return
      * @description 通过工厂生产单创建生产单
      * @author baixueping
      * @date 2020/11/2 9:16
      */
     @Override
     public void createProduceOrder(FactoryProductionOrder factoryProductionOrder, Integer dealUserId) {
+        List<ListFactoryProductionOrderShopSkuResponse> list=factoryProductionOrderShopSkuService.listFactoryProductionOrderShopSku(factoryProductionOrder.getId());
+        Map<String, List<ListFactoryProductionOrderShopSkuResponse>> collect = list.stream()
+                .collect(Collectors.groupingBy(ListFactoryProductionOrderShopSkuResponse::getShopParentSku));
+        collect.forEach((key, value) -> {
+            createProduceOrder(factoryProductionOrder,value,dealUserId);
+        });
+    }
+
+    private void createProduceOrder(FactoryProductionOrder factoryProductionOrder, List<ListFactoryProductionOrderShopSkuResponse> listFactoryProductionOrderShopSkuResponseList, Integer dealUserId) {
         ProduceOrder produceOrder=new ProduceOrder();
         produceOrder.setShopId(factoryProductionOrder.getShopId());
         produceOrder.setEntityId(factoryProductionOrder.getId());
@@ -364,15 +375,13 @@ public class ProduceOrderService implements IProduceOrderService {
         produceOrder.setCreateBy(dealUserId);
         produceOrder.setCreateTime(new Date());
         produceOrder.setType(ProduceOrderConstant.TypeEnum.FACTORY_PRODUCTION_ORDER.getType());
-        customProduceOrderMapper.insertSelective(produceOrder);
-        List<FactoryProductionOrderShopSku> factoryProductionOrderShopSkuList=factoryProductionOrderShopSkuService.listFactoryProductionOrderShopSku(factoryProductionOrder.getId());
-        //添加生产单店铺sku
-        for (FactoryProductionOrderShopSku factoryProductionOrderShopSku :
-                factoryProductionOrderShopSkuList) {
+        customProduceOrderMapper.insertSelective(produceOrder);//添加生产单店铺sku
+        for (ListFactoryProductionOrderShopSkuResponse listFactoryProductionOrderShopSkuResponse :
+                listFactoryProductionOrderShopSkuResponseList) {
             ProduceOrderShopSku produceOrderShopSku = new ProduceOrderShopSku();
             produceOrderShopSku.setProduceOrderId(produceOrder.getId());
-            produceOrderShopSku.setShopSkuId(factoryProductionOrderShopSku.getShopSkuId());
-            produceOrderShopSku.setProductionQuantity(factoryProductionOrderShopSku.getProductionQuantity());
+            produceOrderShopSku.setShopSkuId(listFactoryProductionOrderShopSkuResponse.getShopSkuId());
+            produceOrderShopSku.setProductionQuantity(listFactoryProductionOrderShopSkuResponse.getProductionQuantity());
             produceOrderShopSku.setCreateTime(new Date());
             produceOrderShopSku.setCreateBy(dealUserId);
             customProduceOrderShopSkuMapper.insertSelective(produceOrderShopSku);

@@ -11,6 +11,7 @@ import lombok.Data;
 public class ShopSkuProductionQuantityDto {
     String shopParentSku;
     String shopSku;
+    Integer shopSkuId;
     String colour;
     String size;
     Integer productionQuantity;

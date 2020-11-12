@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomFactoryProductionOrderShopSkuMapper">
+    <resultMap id="listFactoryProductionOrderShopSkuMap"
+               type="com.sky.ddt.dto.factoryProductionOrderShopSku.response.ListFactoryProductionOrderShopSkuResponse"
+               extends="com.sky.ddt.dao.generate.FactoryProductionOrderShopSkuMapper.BaseResultMap">
+        <result column="shop_parent_sku" property="shopParentSku"/>
+    </resultMap>
+    <select id="listFactoryProductionOrderShopSku"
+            resultMap="listFactoryProductionOrderShopSkuMap">
+        SELECT
+                fposs.*,ss.shop_parent_sku
+        from factory_production_order_shop_sku fposs,shop_sku ss
+        where fposs.factory_production_order_id=#{factoryProductionOrderId}
+        and fposs.shop_sku_id=ss.shop_sku_id
+    </select>
+
+</mapper>

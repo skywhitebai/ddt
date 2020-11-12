@@ -51,7 +51,7 @@
     </select>
     <select id="listShopSkuProductionQuantity"
             resultType="com.sky.ddt.dto.factoryProductionOrder.response.ShopSkuProductionQuantityDto">
-        SELECT SUM(fposs.`production_quantity`) productionQuantity,ss.`shop_parent_sku` shopParentSku,ss.shop_sku shopSku,s.`colour`,s.size FROM `factory_production_order_shop_sku` fposs,`shop_sku` ss,sku s
+        SELECT SUM(fposs.`production_quantity`) productionQuantity,ss.`shop_parent_sku` shopParentSku,ss.shop_sku shopSku,ss.shop_sku_id shopSkuId,s.`colour`,s.size FROM `factory_production_order_shop_sku` fposs,`shop_sku` ss,sku s
 WHERE fposs.`factory_production_order_id`=#{factoryProductionOrderId} AND fposs.`shop_sku_id`=ss.`shop_sku_id` AND ss.`sku_id`=s.`sku_id` AND ss.`shop_parent_sku`=#{shopParentSku}
 GROUP BY s.`colour`,s.size
 order by s.`colour`

@@ -1,14 +1,16 @@
 package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
+import com.sky.ddt.dto.factoryProductionOrder.response.ShopSkuProductionQuantityDto;
 import com.sky.ddt.dto.produceOrder.request.ListProduceOrderRequest;
 import com.sky.ddt.dto.produceOrder.request.SaveProduceOrderRequest;
 import com.sky.ddt.dto.produceOrder.response.ListProduceOrderResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.FactoryProductionOrder;
-import com.sky.ddt.entity.FbaPackingList;
 import com.sky.ddt.entity.ProduceOrder;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @author baixueping
@@ -95,5 +97,5 @@ public interface IProduceOrderService {
      * @author baixueping
      * @date 2020/11/2 9:16
      */
-    void createProduceOrder(FactoryProductionOrder factoryProductionOrder, Integer dealUserId);
+    void createProduceOrder(FactoryProductionOrder factoryProductionOrder,  Integer dealUserId);
 }
