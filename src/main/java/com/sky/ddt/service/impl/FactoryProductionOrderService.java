@@ -127,7 +127,7 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
             }
             SbErroEntity sbErroEntity = new SbErroEntity(";");
             for (ShopSkuProductionQuantityDto shopSkuProductionQuantityDto : shopSkuProductionQuantityDtoList) {
-                if (listFactoryProductionOrderInfoResponse.getColour().equals(shopSkuProductionQuantityDto.getColour())) {
+                if (equlaColourInfo(listFactoryProductionOrderInfoResponse, shopSkuProductionQuantityDto)) {
                     if (StringUtils.isEmpty(shopSkuProductionQuantityDto.getSize())) {
                         sbErroEntity.append("店铺sku：" + shopSkuProductionQuantityDto.getShopSku() + ",尺码为空，请完善尺码");
                         continue;
@@ -162,6 +162,19 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         return page;
     }
 
+    private boolean equlaColourInfo(ListFactoryProductionOrderInfoResponse listFactoryProductionOrderInfoResponse, ShopSkuProductionQuantityDto shopSkuProductionQuantityDto) {
+        if (!listFactoryProductionOrderInfoResponse.getColour().equals(shopSkuProductionQuantityDto.getColour())) {
+            return false;
+        }
+        if(StringUtils.isEmpty(listFactoryProductionOrderInfoResponse.getColourNumber())&&StringUtils.isEmpty(shopSkuProductionQuantityDto.getColourNumber())){
+            return true;
+        }
+        if(listFactoryProductionOrderInfoResponse.getColourNumber().equals(shopSkuProductionQuantityDto.getColourNumber())){
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @param params
      * @param dealUserId
@@ -180,7 +193,7 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         if (!FactoryProductionOrderConstant.StatusEnum.PENDING_CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())) {
             return BaseResponse.failMessage("只有待确认的工厂生产单允许修改数量");
         }
-        List<ShopSku> shopSkuList = shopSkuService.getShopSkuByShopParentSkuAndSize(params.getShopParentSku(), params.getSize(), params.getColour(), factoryProductionOrder.getShopId());
+        List<ShopSku> shopSkuList = shopSkuService.getShopSkuByShopParentSkuAndSize(params.getShopParentSku(), params.getSize(), params.getColour(), params.getColourNumber(), factoryProductionOrder.getShopId());
         if (CollectionUtils.isEmpty(shopSkuList)) {
             return BaseResponse.failMessage(String.format("店铺父sku：%s,颜色：%s，尺码：%s的店铺sku不存在", params.getShopParentSku(), params.getColour(), params.getSize()));
         }
@@ -286,12 +299,12 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
             return BaseResponse.failMessage("只有已确认的工厂生产单允许下载");
         }
         //读取模板
-        String path = FactoryProductionOrderService.class.getClassLoader().getResource("template/factoryProduction/factoryProductionTemplate.xlsx").getPath();
+        String path = FactoryProductionOrderService.class.getClassLoader().getResource("template/factoryProduction/factoryProductionTemplate.xls").getPath();
         Workbook wb = ExcelUtil.readExcel(path);
         Sheet sheet = wb.getSheetAt(0);
         setSheetInfo(sheet, factoryProductionOrderId, shopParentSku);
         String fileName = factoryProductionOrder.getTitle() + "-" + shopParentSku;
-        return ExcelUtil.exportExcel(response, wb, fileName);
+        return ExcelUtil.exportExcelXls(response, wb, fileName);
     }
 
     /**
@@ -434,7 +447,7 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
             if (rowContent == null) {
                 rowContent = sheet.createRow(contentIndex + i);
             }
-            setCellValue(rowContent, 3, listFactoryProductionOrderInfoResponse.getColour());
+            setCellValue(rowContent, 3, listFactoryProductionOrderInfoResponse.getColourInfo());
             setCellValue(rowContent, 5, listFactoryProductionOrderInfoResponse.getProductionQuantityXS());
             setCellValue(rowContent, 6, listFactoryProductionOrderInfoResponse.getProductionQuantityS());
             setCellValue(rowContent, 7, listFactoryProductionOrderInfoResponse.getProductionQuantityM());

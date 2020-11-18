@@ -13,6 +13,7 @@ public class ShopSkuProductionQuantityDto {
     String shopSku;
     Integer shopSkuId;
     String colour;
+    String colourNumber;
     String size;
     Integer productionQuantity;
 }

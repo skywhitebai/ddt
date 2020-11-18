@@ -309,7 +309,7 @@
             columns: [[
                 {field: 'ck', checkbox: true},   //选择
                 {title: '店铺父sku', field: 'shopParentSku', width: 150},
-                {title: '颜色', field: 'colour', width: 100},
+                {title: '颜色', field: 'colourInfo', width: 150},
                 {
                     title: 'XS', field: 'productionQuantityXS', width: 60,
                     formatter: function (value, row, rowIndex) {

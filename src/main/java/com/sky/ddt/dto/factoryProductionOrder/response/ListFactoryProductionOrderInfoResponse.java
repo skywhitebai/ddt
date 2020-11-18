@@ -1,6 +1,7 @@
 package com.sky.ddt.dto.factoryProductionOrder.response;
 
 import lombok.Data;
+import org.springframework.util.StringUtils;
 
 /**
  * @author baixueping
@@ -11,6 +12,7 @@ import lombok.Data;
 public class ListFactoryProductionOrderInfoResponse {
     String shopParentSku;
     String colour;
+    String colourNumber;
     Integer productionQuantityXS;
     Integer productionQuantityS;
     Integer productionQuantityM;
@@ -22,4 +24,16 @@ public class ListFactoryProductionOrderInfoResponse {
     Integer productionQuantity5XL;
     Integer productionQuantity6XL;
     String remark;
+
+    public String getColourInfo() {
+        String colourInfo=colour;
+        if(!StringUtils.isEmpty(colourNumber)){
+            if(!StringUtils.isEmpty(colourInfo)){
+                colourInfo=colour+"/"+colourNumber;
+            }else{
+                colourInfo=colourNumber;
+            }
+        }
+        return colourInfo;
+    }
 }

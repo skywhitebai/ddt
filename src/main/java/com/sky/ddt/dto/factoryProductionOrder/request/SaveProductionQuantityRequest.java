@@ -24,4 +24,5 @@ public class SaveProductionQuantityRequest {
     String size;
     @NotBlank(message = "颜色不能为空")
     String colour;
+    String colourNumber;
 }
