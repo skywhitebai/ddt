@@ -12,6 +12,7 @@ import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrde
 import com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderResponse;
 import com.sky.ddt.dto.factoryProductionOrder.response.ShopSkuProductionQuantityDto;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.dto.shopSku.request.GetShopSkuByShopParentSkuAndSizeRequest;
 import com.sky.ddt.entity.*;
 import com.sky.ddt.service.*;
 import com.sky.ddt.util.DateUtil;
@@ -26,6 +27,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -193,7 +195,10 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         if (!FactoryProductionOrderConstant.StatusEnum.PENDING_CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())) {
             return BaseResponse.failMessage("只有待确认的工厂生产单允许修改数量");
         }
-        List<ShopSku> shopSkuList = shopSkuService.getShopSkuByShopParentSkuAndSize(params.getShopParentSku(), params.getSize(), params.getColour(), params.getColourNumber(), factoryProductionOrder.getShopId());
+        GetShopSkuByShopParentSkuAndSizeRequest getShopSkuByShopParentSkuAndSizeRequest=new GetShopSkuByShopParentSkuAndSizeRequest();
+        BeanUtils.copyProperties(params,getShopSkuByShopParentSkuAndSizeRequest);
+        getShopSkuByShopParentSkuAndSizeRequest.setShopId(factoryProductionOrder.getShopId());
+        List<ShopSku> shopSkuList = shopSkuService.getShopSkuByShopParentSkuAndSize(getShopSkuByShopParentSkuAndSizeRequest);
         if (CollectionUtils.isEmpty(shopSkuList)) {
             return BaseResponse.failMessage(String.format("店铺父sku：%s,颜色：%s，尺码：%s的店铺sku不存在", params.getShopParentSku(), params.getColour(), params.getSize()));
         }

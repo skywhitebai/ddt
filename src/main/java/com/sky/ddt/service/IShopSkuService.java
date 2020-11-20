@@ -234,5 +234,6 @@ public interface IShopSkuService {
 
     boolean existShopSku(List<Integer> skuIds);
 
-    List<ShopSku> getShopSkuByShopParentSkuAndSize(String shopParentSku, String size, String colour, String colourNumber, Integer shopId);
+
+    List<ShopSku> getShopSkuByShopParentSkuAndSize(GetShopSkuByShopParentSkuAndSizeRequest getShopSkuByShopParentSkuAndSizeRequest);
 }
