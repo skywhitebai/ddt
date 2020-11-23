@@ -3,10 +3,7 @@ package com.sky.ddt.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sky.ddt.common.constant.InventoryChangeRecordConstant;
-import com.sky.ddt.common.constant.ShopSkuConstant;
-import com.sky.ddt.common.constant.SkuConstant;
-import com.sky.ddt.common.constant.WarehousingOrderConstant;
+import com.sky.ddt.common.constant.*;
 import com.sky.ddt.common.exception.NoticeException;
 import com.sky.ddt.dao.custom.CustomOrderImportMapper;
 import com.sky.ddt.dao.custom.CustomShopSkuMapper;
@@ -93,6 +90,18 @@ public class ShopSkuService implements IShopSkuService {
         StringBuilder sbErro = new StringBuilder();
         List<String> shopNameList = new ArrayList<>();
         List<Sku> skuList = new ArrayList<>();
+        BaseResponse repeatShopSku = checkRepeat(list, "店铺sku");
+        if(!repeatShopSku.isSuccess()){
+            return repeatShopSku;
+        }
+        BaseResponse repeatFnsku = checkRepeat(list, "FNSKU");
+        if(!repeatFnsku.isSuccess()){
+            return repeatFnsku;
+        }
+        BaseResponse repeatAsin = checkRepeat(list, "ASIN");
+        if(!repeatAsin.isSuccess()){
+            return repeatAsin;
+        }
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
             //忽略空行
@@ -189,6 +198,35 @@ public class ShopSkuService implements IShopSkuService {
             }
         }
         return BaseResponse.success();
+    }
+
+    private BaseResponse checkRepeat(List<Map<String, String>> list, String type) {
+        if (CollectionUtils.isEmpty(list)) {
+            return BaseResponse.success();
+        }
+        List<String> repeatList=new ArrayList<>();
+        for(int i=0;i<list.size();i++){
+            Map<String, String> map=list.get(i);
+            String value=map.get(type);
+            if(StringUtils.isEmpty(value)){
+                continue;
+            }
+            if(repeatList.contains(value)){
+                continue;
+            }
+            for(int j=i+1;j<list.size();j++){
+                if(value.equals(list.get(j).get(type))){
+                    repeatList.add(value);
+                    break;
+                }
+            }
+        }
+        if(repeatList.size()==0){
+            return BaseResponse.success();
+        }
+        SbErroEntity sbErroEntity=new SbErroEntity();
+        sbErroEntity.append(type).append("存在重复数据："+String.join(",", repeatList));
+        return sbErroEntity.getResponse();
     }
 
     private BigDecimal getHeadTripCost(Integer skuId, List<Sku> skuList) {
@@ -815,7 +853,7 @@ public class ShopSkuService implements IShopSkuService {
         if (sbErro.length() > 0) {
             return BaseResponse.failMessage(sbErro.substring(1));
         }
-        BaseResponse res ;
+        BaseResponse res;
         if ("shopParentSku".equals(params.getSearchType())) {
             return getShopParentSkuRes(params);
         } else {
@@ -940,7 +978,7 @@ public class ShopSkuService implements IShopSkuService {
         sbSeries.append("]");
 
 
-        String res = "{\"categories\":" + categories + ",\"series\":" + sbSeries.toString() +  "}";
+        String res = "{\"categories\":" + categories + ",\"series\":" + sbSeries.toString() + "}";
         return BaseResponse.successData(res);
     }
 
@@ -1249,17 +1287,19 @@ public class ShopSkuService implements IShopSkuService {
 
     @Override
     public boolean existShopSku(List<Integer> skuIds) {
-        if(CollectionUtils.isEmpty(skuIds)){
+        if (CollectionUtils.isEmpty(skuIds)) {
             return false;
         }
-        ShopSkuExample example=new ShopSkuExample();
+        ShopSkuExample example = new ShopSkuExample();
         example.createCriteria().andSkuIdIn(skuIds);
-        return customShopSkuMapper.countByExample(example)>0;
+        return customShopSkuMapper.countByExample(example) > 0;
     }
+
     @Override
-    public List<ShopSku> getShopSkuByShopParentSkuAndSize(GetShopSkuByShopParentSkuAndSizeRequest getShopSkuByShopParentSkuAndSizeRequest){
+    public List<ShopSku> getShopSkuByShopParentSkuAndSize(GetShopSkuByShopParentSkuAndSizeRequest getShopSkuByShopParentSkuAndSizeRequest) {
         return customShopSkuMapper.getShopSkuByShopParentSkuAndSize(getShopSkuByShopParentSkuAndSizeRequest);
     }
+
     /**
      * @param
      * @return
