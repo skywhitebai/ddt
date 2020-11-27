@@ -25,6 +25,9 @@
             src="${pageContext.request.contextPath }/static/js/common/cookieUtil.js?t=20200928"></script>
     <script type="text/javascript"
             src="${pageContext.request.contextPath }/static/js/common/common.js?t=20201028"></script>
+    <script src="${pageContext.request.contextPath }/static/js/highcharts/highcharts.js"></script>
+    <script src="${pageContext.request.contextPath }/static/js/highcharts/modules/exporting.js"></script>
+    <script src="${pageContext.request.contextPath }/static/js/highcharts/modules/export-data.js"></script>
     <style>
         #d_left {
             width: 280px;
@@ -37,6 +40,7 @@
             overflow: hidden;
             margin-left: 280px; /*==等于左边栏宽度==*/
         }
+
         #d_top {
             height: 10px;
             margin-left: 280px; /*==等于左边栏宽度==*/
@@ -72,8 +76,32 @@
 <div data-options="region:'center',title:'',iconCls:''">
     <div class="easyui-tabs" fit="true" border="false" id="tabs">
         <div title="首页">
-           <%-- <div align="center" style="padding-top: 100px;"><font color="red" size="8">欢迎使用点点通</font></div>
-            <div align="center"><font color="red" size="8">请使用IE9,谷歌，火狐，不支持IE低版本</font></div>--%>
+            <!--查询条件-->
+            <div class="easyui-panel" id="search">
+                创建订单时间
+                <input class="easyui-datebox" id="s_purchaseDateStart">
+                -
+                <input class="easyui-datebox" id="s_purchaseDateEnd">
+                <a href="javascript:void(0)" onclick="last7()"
+                   class="easyui-linkbutton"
+                   data-options="iconCls:'icon-search'"
+                >最近7天</a>
+                <a href="javascript:void(0)" onclick="last30()" class="easyui-linkbutton"
+                   data-options="iconCls:'icon-search'"
+                >最近30天</a>
+                <a href="javascript:void(0)" onclick="last60()" class="easyui-linkbutton"
+                   data-options="iconCls:'icon-search'"
+                >最近60天</a>
+                <a href="javascript:void(0)" onclick="last90()" class="easyui-linkbutton"
+                   data-options="iconCls:'icon-search'"
+                >最近90天</a>
+                <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton"
+                   data-options="iconCls:'icon-search'"
+                >查 询</a>
+            </div>
+            <div id="container" style="min-width:400px;height:600px"></div>
+
+
         </div>
     </div>
 </div>
@@ -92,13 +120,15 @@
             <tr>
                 <td>旧密码：</td>
                 <td>
-                    <input class="easyui-validatebox textbox" type="password" name="oldPassword" data-options="required:true">
+                    <input class="easyui-validatebox textbox" type="password" name="oldPassword"
+                           data-options="required:true">
                 </td>
             </tr>
             <tr>
                 <td>新密码：</td>
                 <td>
-                    <input class="easyui-validatebox textbox" type="password" name="password" data-options="required:true">
+                    <input class="easyui-validatebox textbox" type="password" name="password"
+                           data-options="required:true">
                 </td>
             </tr>
             <tr>
@@ -130,7 +160,7 @@
                 }
             }
         });
-
+        initSalesmanReportChart();
     });
 
     // 新增Tab
@@ -147,6 +177,7 @@
             });
         }
     };
+
     function getAnnouncement() {
         $.post('${pageContext.request.contextPath }/announcement/list', {status: 1, rows: 100}, function (data) {
             if (data.rows.length > 0) {
@@ -157,43 +188,50 @@
             }
         });
     }
+
     var intervalId;
     $(document).ready(function () {
         getAnnouncement();
         getCurrentUserInfo();
     });
-    function announcementTurn(){
-        intervalId=setInterval(function () {
+
+    function announcementTurn() {
+        intervalId = setInterval(function () {
             $('#announcement').children().first().clone(true).appendTo('#announcement');
             $('#announcement>:first').remove();
         }, 2000);
     }
+
     function announcementStop() {
         clearInterval(intervalId);
     }
+
     $('#announcement')[0].addEventListener("mouseenter", function () {
         announcementStop();
-    },false);
+    }, false);
     $('#announcement')[0].addEventListener("mouseleave", function () {
         announcementTurn();
-    },false);
+    }, false);
 
     function getCurrentUserInfo() {
         $.post('${pageContext.request.contextPath }/account/getCurrentUser', function (data) {
-            if (data.code=='200') {
+            if (data.code == '200') {
                 $("#userName").html(data.data.userName);
-            }else{
+            } else {
 
             }
         });
     }
-    function  showChangePassword() {
+
+    function showChangePassword() {
         $('#dlg').dialog('open').dialog('setTitle', '修改密码');
         $('#frm').form('clear');
     }
+
     function closeDialog() {
         $('#dlg').dialog('close');
     }
+
     function save() {
         //防止重复点击
         var oldPassword = $("div#dlg input[name='oldPassword']").val();
@@ -211,7 +249,7 @@
             $.messager.alert("提示", '请填写确认密码');
             return;
         }
-        if(password!=confirmPassword){
+        if (password != confirmPassword) {
             $.messager.alert("提示", '新密码确认密码不一致');
             return;
         }
@@ -233,15 +271,133 @@
             }
         });
     }
-    function  logOut() {
+
+    function logOut() {
         $.post('${pageContext.request.contextPath }/account/logOut', function (data) {
-            if (data.code=='200') {
+            if (data.code == '200') {
                 delCookie("loginUserName");
-               window.location.href="${pageContext.request.contextPath }/account/login";
-            }else{
-                window.location.href="${pageContext.request.contextPath }/account/login";
+                window.location.href = "${pageContext.request.contextPath }/account/login";
+            } else {
+                window.location.href = "${pageContext.request.contextPath }/account/login";
             }
         });
+    }
+
+    function initSalesmanReportChart() {
+        last7();
+    }
+    function bindSalesmanReportChart() {
+        var purchaseDateStart = $("#s_purchaseDateStart").val();
+        var purchaseDateEnd = $("#s_purchaseDateEnd").val();
+        if (isEmpty(purchaseDateStart) || isEmpty(purchaseDateEnd)) {
+            $.messager.alert("提示", "请选择创建订单时间.");
+            return;
+        }
+        var purchaseDateStartDate = new Date(purchaseDateStart);
+        var purchaseDateEndDate = new Date(purchaseDateEnd);
+        if (purchaseDateStartDate > purchaseDateEndDate) {
+            $.messager.alert("提示", "创建订单开始时间必须小于等于结束时间");
+            return false;
+        }
+        if (dayDiff(purchaseDateStartDate, purchaseDateEndDate) > 90) {
+            $.messager.alert("提示", "创建订单开始时间、结束时间相差不能超过90天");
+            return false;
+        }
+        queryParams = {
+            purchaseDateStart: purchaseDateStart,
+            purchaseDateEnd: purchaseDateEnd
+        };
+        $.post('${pageContext.request.contextPath }/report/salesmanReportChart', queryParams, function (data) {
+            if (data.code == '200') {
+                bindChart( eval('(' + data.data + ')'));
+            }
+            else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+    function bindChart( data) {
+        Highcharts.chart('container', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: "销售业绩统计"
+            },
+            subtitle: {
+                text: '销售业绩统计'
+            },
+            xAxis: {
+                categories: data.categories
+            },
+            yAxis: [{
+                title: {
+                    text: '订单数（个）'
+                },
+                allowDecimals: false
+            }, {
+                title: {
+                    text: '销售件数（个）'
+                },
+                allowDecimals: false
+            }, {
+                title: {
+                    text: '销售额（美元）'
+                }
+            }, {
+                title: {
+                    text: '客单价（美元）'
+                }
+            }
+            ],
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        // 开启数据标签
+                        enabled: true
+                    }
+                }
+            },
+            series: data.series,
+            credits: {
+                enabled: false
+            }
+        });
+    }
+    function last7() {
+        var startDate = new Date(new Date().setDate(new Date().getDate() - 8));
+        var endDate = new Date(new Date().setDate(new Date().getDate() - 1));
+        $("#s_purchaseDateStart").datebox('setValue', dateToString(startDate));
+        $("#s_purchaseDateEnd").datebox('setValue', dateToString(endDate));
+        bindSalesmanReportChart();
+    }
+    function last30() {
+        var startDate = new Date(new Date().setDate(new Date().getDate() - 31));
+        var endDate = new Date(new Date().setDate(new Date().getDate() - 1));
+        $("#s_purchaseDateStart").datebox('setValue', dateToString(startDate));
+        $("#s_purchaseDateEnd").datebox('setValue', dateToString(endDate));
+        bindSalesmanReportChart();
+    }
+
+    function last60() {
+        var startDate = new Date(new Date().setDate(new Date().getDate() - 61));
+        var endDate = new Date(new Date().setDate(new Date().getDate() - 1));
+        $("#s_purchaseDateStart").datebox('setValue', dateToString(startDate));
+        $("#s_purchaseDateEnd").datebox('setValue', dateToString(endDate));
+        bindSalesmanReportChart();
+    }
+
+    function last90() {
+        var startDate = new Date(new Date().setDate(new Date().getDate() - 91));
+        var endDate = new Date(new Date().setDate(new Date().getDate() - 1));
+        $("#s_purchaseDateStart").datebox('setValue', dateToString(startDate));
+        $("#s_purchaseDateEnd").datebox('setValue', dateToString(endDate));
+        bindSalesmanReportChart();
     }
 </script>
 </body>

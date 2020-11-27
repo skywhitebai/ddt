@@ -121,6 +121,7 @@ public class MathUtil {
         }
         return new BigDecimal((float) a / b).setScale(digits, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
+
     public static BigDecimal divide(BigDecimal a, BigDecimal b, Integer digits) {
         if (a == null || b == null) {
             return null;
@@ -132,6 +133,19 @@ public class MathUtil {
             return a.divide(b);
         }
         return a.divide(b,digits, BigDecimal.ROUND_HALF_UP);
+    }
+    public static BigDecimal divide(BigDecimal a, Integer b, Integer digits) {
+        if (a == null || b == null) {
+            return null;
+        }
+        if(b==0){
+            return null;
+        }
+        BigDecimal bb=new BigDecimal(b);
+        if (digits == null || digits < 0) {
+            return a.divide(bb);
+        }
+        return a.divide(bb,digits, BigDecimal.ROUND_HALF_UP);
     }
     public static BigDecimal divideBigDecimalInteger(BigDecimal a, Integer b, Integer digits) {
         if (a == null || b == null) {

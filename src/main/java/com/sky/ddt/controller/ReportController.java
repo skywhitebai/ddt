@@ -4,13 +4,15 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.report.salesReport.request.ListSalesReportRequest;
+import com.sky.ddt.dto.report.salesReport.request.ListSalesmanReportRequest;
 import com.sky.ddt.dto.report.salesReport.response.ListSalesReportResponse;
+import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.service.IReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author baixueping
@@ -40,5 +42,10 @@ public class ReportController extends SuperController {
         dataGridResponse.setTotal(page.getTotal());
         dataGridResponse.setRows(page.getList());
         return dataGridResponse;
+    }
+    @RequestMapping("/salesmanReportChart")
+    @ResponseBody
+    public BaseResponse salesmanReportChart(@Validated  ListSalesmanReportRequest params) {
+        return reportService.salesmanReportChart(params);
     }
 }

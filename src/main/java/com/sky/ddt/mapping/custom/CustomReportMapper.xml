@@ -117,4 +117,19 @@
         where a.quantityToday!=0 or a.quantityYesterday!=0 or a.quantitySameDayLastWeek!=0
         order by a.quantityToday desc
     </select>
+
+    <select id="listSalesmanReport" parameterType="com.sky.ddt.dto.report.salesReport.request.ListSalesmanReportRequest"
+            resultType="com.sky.ddt.dto.report.salesReport.response.ListSalesmanReportResponse">
+        SELECT COUNT(0) orderQuantityTotal,SUM(oi.quantity) quantityTotal,SUM(oi.item_price) itemPriceTotal,ss.`salesman_user_id` salesmanUserId,u.`user_name` userName,u.`real_name` realName FROM `order_import` oi,`shop_sku` ss,`user` u
+        WHERE oi.`shop_sku_id`=ss.`shop_sku_id` AND ss.`salesman_user_id`=u.`user_id`
+        <if test="purchaseDateStart!=null" >
+             AND oi.purchase_date>=#{purchaseDateStart}
+        </if>
+        <if test="purchaseDateEnd!=null" >
+            AND oi.purchase_date<![CDATA[<]]>#{purchaseDateEnd}
+        </if>
+        AND oi.`quantity`!=0 AND oi.`item_price` IS NOT NULL
+        GROUP BY u.`user_name`,u.`real_name`
+        order by SUM(oi.item_price) desc
+    </select>
 </mapper>
