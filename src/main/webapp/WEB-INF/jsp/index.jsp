@@ -95,7 +95,7 @@
                 <a href="javascript:void(0)" onclick="last90()" class="easyui-linkbutton"
                    data-options="iconCls:'icon-search'"
                 >最近90天</a>
-                <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton"
+                <a href="javascript:void(0)" onclick="bindSalesmanReportChart()" class="easyui-linkbutton"
                    data-options="iconCls:'icon-search'"
                 >查 询</a>
             </div>
@@ -299,10 +299,10 @@
             $.messager.alert("提示", "创建订单开始时间必须小于等于结束时间");
             return false;
         }
-        if (dayDiff(purchaseDateStartDate, purchaseDateEndDate) > 90) {
+      /*  if (dayDiff(purchaseDateStartDate, purchaseDateEndDate) > 90) {
             $.messager.alert("提示", "创建订单开始时间、结束时间相差不能超过90天");
             return false;
-        }
+        }*/
         queryParams = {
             purchaseDateStart: purchaseDateStart,
             purchaseDateEnd: purchaseDateEnd
