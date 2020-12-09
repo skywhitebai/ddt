@@ -31,7 +31,11 @@ public class ReportController extends SuperController {
     public String salesReport() {
         return "report/salesReport";
     }
-
+    @RequestMapping("/salesmanReport")
+    @MenuAnnotation("report/salesmanReport")
+    public String salesmanReport() {
+        return "report/salesmanReport";
+    }
     @RequestMapping("listSalesReport")
     @ResponseBody
     @MenuAnnotation("report/salesReport")
