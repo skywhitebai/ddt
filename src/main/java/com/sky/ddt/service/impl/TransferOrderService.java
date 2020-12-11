@@ -202,15 +202,12 @@ public class TransferOrderService implements ITransferOrderService {
             return BaseResponse.failMessage(TransferOrderConstant.NOT_EXIST_SHOP_SKU_NOT_ALLOW_TRANSFER);
         }
         List<Integer> shopSkuIdFromList = transferOrderShopSkuList.stream().map(TransferOrderShopSku -> TransferOrderShopSku.getShopSkuIdFrom()).collect(Collectors.toList());
-        List<ShopSku> shopSkuFromList = shopSkuService.listShopSku(shopSkuIdFromList);
-        List<Integer> shopSkuIdToList = transferOrderShopSkuList.stream().map(TransferOrderShopSku -> TransferOrderShopSku.getShopSkuIdTo()).collect(Collectors.toList());
-        List<ShopSku> shopSkuToList = shopSkuService.listShopSku(shopSkuIdToList);
         //校验库存是否满足调拨条件
         SbErroEntity sbErroEntity = new SbErroEntity();
         List<UpdateShopSkuInventoryQuantityRequest> updateShopSkuInventoryQuantityRequestList = new ArrayList<>();
         for (TransferOrderShopSku transferOrderShopSku:
                 transferOrderShopSkuList) {
-            ShopSku shopSkuFrom = getShopSku(transferOrderShopSku.getShopSkuIdFrom(), shopSkuFromList);
+            ShopSku shopSkuFrom =shopSkuService.getShopSku(transferOrderShopSku.getShopSkuIdFrom());;
             if (shopSkuFrom == null) {
                 sbErroEntity.append("店铺skuId：" + transferOrderShopSku.getShopSkuIdFrom() + "不存在");
                 continue;
@@ -220,7 +217,7 @@ public class TransferOrderService implements ITransferOrderService {
                 sbErroEntity.append(String.format("出库失败，店铺sku[%s]库存不足", shopSkuFrom.getShopSku()));
                 continue;
             }
-            ShopSku shopSkuTo= getShopSku(transferOrderShopSku.getShopSkuIdTo(), shopSkuToList);
+            ShopSku shopSkuTo= shopSkuService.getShopSku(transferOrderShopSku.getShopSkuIdTo());;
             if (shopSkuTo == null) {
                 sbErroEntity.append("店铺skuId：" + transferOrderShopSku.getShopSkuIdTo() + "不存在");
                 continue;
@@ -269,15 +266,5 @@ public class TransferOrderService implements ITransferOrderService {
         transferOrder.setUpdateTime(new Date());
         transferOrder.setUpdateBy(dealUserId);
         customTransferOrderMapper.updateByPrimaryKeySelective(transferOrder);
-    }
-
-    private ShopSku getShopSku(Integer shopSkuId, List<ShopSku> shopSkuList) {
-        for (ShopSku shopSku :
-                shopSkuList) {
-            if (shopSku.getShopSkuId().equals(shopSkuId)) {
-                return shopSku;
-            }
-        }
-        return null;
     }
 }
