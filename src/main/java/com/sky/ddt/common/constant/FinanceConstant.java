@@ -79,4 +79,16 @@ public class FinanceConstant {
         String statusName;
         Integer status;
     }
+
+    @Getter
+    public enum FinanceUserType {
+        DEVELOPER("developer"),
+        SALESMAN("salesman"),;
+
+        FinanceUserType(String type) {
+            this.type = type;
+        }
+
+        String type;
+    }
 }

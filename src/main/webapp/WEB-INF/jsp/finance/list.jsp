@@ -55,7 +55,8 @@
     <a href="javascript:void(0)" onclick="showDlgImport('manualAdjustment',null)" class="easyui-linkbutton">导入人工核准</a>
     <br>
     <a href="javascript:void(0)" onclick="exportFbaCustomerReturnPerUnitFeeNotExistSku()" class="easyui-linkbutton">导出退款操作费找不到sku的订单号</a>
-
+    <a href="javascript:void(0)" onclick="exportDeveloperFinancialStatement()" class="easyui-linkbutton">导出开发人员财务报表</a>
+    <a href="javascript:void(0)" onclick="exportSalesmanFinancialStatement()" class="easyui-linkbutton">导出销售人员财务报表</a>
     <br>
 </div>
 <table id="dg" style="width: 100%; height: auto">
@@ -231,15 +232,15 @@
                     }
                 }
                 },
-               /* {
-                    title: '头程抵扣', field: 'headDeduction', width: 80, formatter: function (value, row, index) {
-                    if (value) {
-                        return "<a href='#' onclick=\"showDlgImport('headDeduction','" + row.month + "')\"' title='更新头程抵扣' >已导入</a>";
-                    } else {
-                        return "<a href='#' onclick=\"showDlgImport('headDeduction','" + row.month + "')\"' title='导入头程抵扣' >未导入</a>";
-                    }
-                }
-                },*/
+                /* {
+                     title: '头程抵扣', field: 'headDeduction', width: 80, formatter: function (value, row, index) {
+                     if (value) {
+                         return "<a href='#' onclick=\"showDlgImport('headDeduction','" + row.month + "')\"' title='更新头程抵扣' >已导入</a>";
+                     } else {
+                         return "<a href='#' onclick=\"showDlgImport('headDeduction','" + row.month + "')\"' title='导入头程抵扣' >未导入</a>";
+                     }
+                 }
+                 },*/
                 {
                     title: '人工核准', field: 'manualAdjustment', width: 80, formatter: function (value, row, index) {
                     if (value) {
@@ -417,17 +418,22 @@
             }
         });
     }
+
     function exportFbaCustomerReturnPerUnitFeeNotExistSku() {
         var rows = $('#dg').datagrid('getSelections');
         if (rows && rows.length == 1) {
             window.open('${pageContext.request.contextPath }/finance/exportFbaCustomerReturnPerUnitFeeNotExistSku?financeId=' + rows[0].id);
         } else {
             $.messager.alert("提示", "请选择一条记录.");
-        }        
+        }
     }
-    function saveFinanceRemark(input,financeId) {
+
+    function saveFinanceRemark(input, financeId) {
         var remark = $(input).val();
-        $.post('${pageContext.request.contextPath }/finance/saveFinanceRemark', {financeId: financeId,remark:remark}, function (data) {
+        $.post('${pageContext.request.contextPath }/finance/saveFinanceRemark', {
+            financeId: financeId,
+            remark: remark
+        }, function (data) {
             if (data.code == '200') {
                 $.messager.alert("提示", "修改成功");
                 bindData();
@@ -436,6 +442,24 @@
                 $.messager.alert("提示", data.message);
             }
         });
+    }
+
+    function exportDeveloperFinancialStatement() {
+        var month = $("#s_month").val();
+        if(isEmpty(month)){
+            $.messager.alert("提示", "请选择月份");
+            return;
+        }
+        window.open('${pageContext.request.contextPath }/financialStatement/exportDeveloperFinancialStatement?month=' + month);
+    }
+
+    function exportSalesmanFinancialStatement() {
+        var month = $("#s_month").val();
+        if(isEmpty(month)){
+            $.messager.alert("提示", "请选择月份");
+            return;
+        }
+        window.open('${pageContext.request.contextPath }/financialStatement/exportSalesmanFinancialStatement?month=' + month);
     }
 </script>
 </html>

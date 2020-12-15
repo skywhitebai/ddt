@@ -34,4 +34,16 @@ public class FinancialStatementController extends SuperController {
     public BaseResponse exportFinancialStatement(Integer financeId) {
         return financialStatementService.exportFinancialStatement(response,financeId);
     }
+    @RequestMapping("/exportDeveloperFinancialStatement")
+    @ResponseBody
+    @MenuAnnotation("finance/index")
+    public BaseResponse exportDeveloperFinancialStatement(String month) {
+        return financialStatementService.exportFinancialStatement(response,month,"developer");
+    }
+    @RequestMapping("/exportSalesmanFinancialStatement")
+    @ResponseBody
+    @MenuAnnotation("finance/index")
+    public BaseResponse exportSalesmanFinancialStatement(String month) {
+        return financialStatementService.exportFinancialStatement(response,month,"salesman");
+    }
 }

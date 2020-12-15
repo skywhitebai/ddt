@@ -28,4 +28,13 @@ public interface IFinancialStatementService {
      * @date 2019/12/25 9:48
      */
     BaseResponse exportFinancialStatement(HttpServletResponse response, Integer financeId);
+
+    /**
+     * @param
+     * @return
+     * @description 导出制定月份财务数据
+     * @author baixueping
+     * @date 2020/12/15 14:42
+     */
+    BaseResponse exportFinancialStatement(HttpServletResponse response, String month, String type);
 }

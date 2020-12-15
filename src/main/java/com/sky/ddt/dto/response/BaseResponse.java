@@ -71,12 +71,14 @@ public class BaseResponse<T> implements Serializable {
         baseResponse.setMessage(ResponseConstant.SUCCESS_MESSAGE);
         return baseResponse;
     }
+
     public static BaseResponse successMessage(String message) {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setCode(SUCCESS_CODE);
         baseResponse.setMessage(message);
         return baseResponse;
     }
+
     public static BaseResponse success(String message, Object data) {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setCode(SUCCESS_CODE);
@@ -84,6 +86,7 @@ public class BaseResponse<T> implements Serializable {
         baseResponse.setData(data);
         return baseResponse;
     }
+
     public static BaseResponse successData(Object data) {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setCode(SUCCESS_CODE);
@@ -91,6 +94,7 @@ public class BaseResponse<T> implements Serializable {
         baseResponse.setData(data);
         return baseResponse;
     }
+
     public static BaseResponse fail() {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setCode(ResponseConstant.FAIL_CODE);
@@ -111,13 +115,15 @@ public class BaseResponse<T> implements Serializable {
         baseResponse.setMessage(message);
         return baseResponse;
     }
+
     public static BaseResponse baseEnum(IResponseBaseEnum baseEnum) {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setCode(baseEnum.getCode());
         baseResponse.setMessage(baseEnum.getMessage());
         return baseResponse;
     }
-    public static BaseResponse baseEnum(IResponseBaseEnum baseEnum,Object data) {
+
+    public static BaseResponse baseEnum(IResponseBaseEnum baseEnum, Object data) {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setCode(baseEnum.getCode());
         baseResponse.setMessage(baseEnum.getMessage());
@@ -128,9 +134,9 @@ public class BaseResponse<T> implements Serializable {
     public static BaseResponse fail(List<ErroResponse> errolist) {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setCode(ResponseConstant.FAIL_CODE);
-        if(errolist.size()>0){
+        if (errolist.size() > 0) {
             baseResponse.setMessage(errolist.get(0).getMessage());
-        }else{
+        } else {
             baseResponse.setMessage(ResponseConstant.FAIL_MESSAGE);
         }
         baseResponse.setErroList(errolist);
@@ -139,5 +145,9 @@ public class BaseResponse<T> implements Serializable {
 
     public boolean isSuccess() {
         return SUCCESS_CODE.equals(this.getCode());
+    }
+
+    public boolean isFail() {
+        return !isSuccess();
     }
 }
