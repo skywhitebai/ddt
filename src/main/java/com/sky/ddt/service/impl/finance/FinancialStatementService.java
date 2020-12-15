@@ -290,18 +290,10 @@ public class FinancialStatementService implements IFinancialStatementService {
             shopName = "";
         }
         //读取模板
-        String path = FinancialStatementService.class.getClassLoader().getResource("template/finance/financialStatementTemplate.xlsx").getPath();
-        Workbook wb = ExcelUtil.readExcel(path);
-        Sheet sheet = wb.getSheetAt(0);
         String excelTitle = month + "-" + shopName + "各SKU利润表";
-        setExcelTitle(sheet, month, shopName);
-        setFinancialStatement(sheet, financialStatementList);
-        Sheet sheetShopParentSku = wb.getSheetAt(1);
-        setExcelTitle(sheetShopParentSku, month, shopName);
-        setFinancialStatementShopParentSku(sheetShopParentSku, financialStatementList);
-
+        Workbook workbook =getWorkbook(financialStatementList, excelTitle);
         String fileName = financialStatement.getShopName() + "-" + month + "财务报表";
-        return ExcelUtil.exportExcel(response, wb, fileName);
+        return ExcelUtil.exportExcel(response, workbook, fileName);
     }
 
     /**
