@@ -37,6 +37,6 @@
                 <if test="createBy != null">and create_by=#{createBy}</if>
             </trim>
         </where>
-        order by icr.create_time desc
+        order by icr.create_time desc,icr.id desc
     </select>
 </mapper>
