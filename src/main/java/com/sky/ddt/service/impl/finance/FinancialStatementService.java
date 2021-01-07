@@ -491,7 +491,7 @@ public class FinancialStatementService implements IFinancialStatementService {
         for (int i = 0; i < financialStatementShopParentSkuList.size(); i++) {
             FinancialStatement financialStatement = financialStatementShopParentSkuList.get(i);
             Row row = sheet.createRow(rowIndex);
-            row.createCell(7).setCellValue(i + 1);
+            row.createCell(6).setCellValue(i + 1);
             row.createCell(0).setCellValue(financialStatement.getShopName());
             row.createCell(1).setCellValue(financialStatement.getDeveloperUserName());
             row.createCell(2).setCellValue(financialStatement.getSalesmanUserName());
@@ -568,6 +568,8 @@ public class FinancialStatementService implements IFinancialStatementService {
             row.createCell(103).setCellValue(financialStatement.getInventoryTurnover().doubleValue());
             row.createCell(104).setCellValue(financialStatement.getRefundRate().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
             row.createCell(105).setCellValue(financialStatement.getAdvertisingSalesPercentage().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
+            row.createCell(106).setCellValue("");
+            row.createCell(107).setCellValue("");
             rowIndex++;
         }
     }
