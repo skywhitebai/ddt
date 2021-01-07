@@ -368,7 +368,9 @@
                 {field: 'ck', checkbox: true},   //选择
                 {title: '店铺sku', field: 'shopSku', width: 160},
                 {title: 'FBA Shipment ID', field: 'fbaShipmentId', width: 180},
-                {title: '数量', field: 'quantity', width: 80}
+                {title: '数量', field: 'quantity', width: 80},
+                {title: '创建时间', field: 'createTime', width: 180},
+                {title: '修改时间', field: 'updateTime', width: 180}
             ]],
             toolbar: [{
                 id: 'btnReload',

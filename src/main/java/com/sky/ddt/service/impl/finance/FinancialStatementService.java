@@ -460,7 +460,7 @@ public class FinancialStatementService implements IFinancialStatementService {
         if ("developer".equals(type)) {
             userNameList = financialStatementList.stream().map(FinancialStatement::getDeveloperUserName).distinct().collect(Collectors.toList());
         } else if ("salesman".equals(type)) {
-            userNameList = financialStatementList.stream().map(FinancialStatement::getDeveloperUserName).distinct().collect(Collectors.toList());
+            userNameList = financialStatementList.stream().map(FinancialStatement::getSalesmanUserName).distinct().collect(Collectors.toList());
         }
         return userNameList;
     }
