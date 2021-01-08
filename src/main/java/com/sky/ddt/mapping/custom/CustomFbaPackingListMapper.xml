@@ -50,9 +50,10 @@
     </select>
     <select id="listInvoiceSkuInfo"
             resultType="com.sky.ddt.dto.deliverGoods.request.InvoiceSkuInfo">
-        SELECT fplss.shop_sku_id shopSkuId,fplss.`fba_shipment_id` containerNo,fplss.`quantity` FROM
-        `fba_packing_list_shop_sku` fplss,`internal_order_number_transport` iont,`internal_order_number` ion
+        SELECT fplss.shop_sku_id shopSkuId,fplss.`fba_shipment_id` containerNo,fplss.`quantity`,round(sku.weight/1000,2) weight FROM
+        `fba_packing_list_shop_sku` fplss,`internal_order_number_transport` iont,`internal_order_number` ion,sku,shop_sku ss
         WHERE fplss.`fba_shipment_id`=iont.`fba_shipment_id_short` AND fplss.`fba_packing_list_id`=#{fbaPackingListId}
+        and fplss.shop_sku_id=ss.shop_sku_id and sku.sku_id=ss.sku_id
         AND ion.`id`=iont.`internal_order_number_id`
         AND ion.order_number=#{orderNumber}
     </select>

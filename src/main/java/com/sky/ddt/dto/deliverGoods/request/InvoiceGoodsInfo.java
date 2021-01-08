@@ -9,11 +9,14 @@ import lombok.Data;
  */
 @Data
 public class InvoiceGoodsInfo {
+
+    Integer numberOfBoxes;
     String goodsName;
     String material;
     String purpose;
     String brand;
     Integer quantity;
+    Double weight;
     Double unitPrice;
     Double totalPrice;
 }

@@ -148,7 +148,7 @@ shop  s where s.type=2
     <select id="listShopSkuFullProductName" resultType="com.sky.ddt.dto.shopSku.response.ShopSkuFullProductName">
         select
         ss.shop_sku_id shopSkuId,ss.shop_sku shopSku,p.chinese_product_name chineseProductName, p.english_product_name
-        englishProductName
+        englishProductName,round(sku.weight/1000,2) weight
         from shop_sku ss,sku,product p
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
@@ -165,7 +165,7 @@ shop  s where s.type=2
             resultType="com.sky.ddt.dto.shopSku.response.ShopSkuFullProductName">
         select
         ss.shop_sku_id shopSkuId,ss.shop_sku shopSku,p.chinese_product_name chineseProductName, p.english_product_name
-        englishProductName
+        englishProductName,round(sku.weight/1000,2) weight
         from shop_sku ss,sku,product p
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">

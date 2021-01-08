@@ -13,4 +13,5 @@ public class ShopSkuFullProductName {
     private String shopSku;
     private String chineseProductName;
     private String englishProductName;
+    private Double weight;
 }

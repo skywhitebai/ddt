@@ -534,7 +534,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         if (StringUtils.isEmpty(fbaNo)) {
             return BaseResponse.failMessage(DeliverGoodsConstant.FBA_NO_EMPTY);
         }
-        if(StockConsatnt.StockQuantityTypeEnum.getStockQuantityTypeEnum(type)==null){
+        if (StockConsatnt.StockQuantityTypeEnum.getStockQuantityTypeEnum(type) == null) {
             return BaseResponse.failMessage("发票类型错误");
         }
         //读取数据
@@ -542,19 +542,22 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         if (!invoiceInfoBaseResponse.isSuccess()) {
             return invoiceInfoBaseResponse;
         }
-        InvoiceInfo invoiceInfo=invoiceInfoBaseResponse.getData();
+        InvoiceInfo invoiceInfo = invoiceInfoBaseResponse.getData();
         invoiceInfo.setFbaNo(fbaNo);
-        return generateInvoiceByType(invoiceInfo,type,response);
+        return generateInvoiceByType(invoiceInfo, type, response);
     }
-    BaseResponse generateInvoiceByType(InvoiceInfo invoiceInfo,String type,HttpServletResponse response){
+
+    BaseResponse generateInvoiceByType(InvoiceInfo invoiceInfo, String type, HttpServletResponse response) {
         if (StockConsatnt.StockQuantityTypeEnum.KY.getType().equals(type)) {
             return generateInvoiceKy(invoiceInfo, response);
         } else if (StockConsatnt.StockQuantityTypeEnum.KP.getType().equals(type)) {
             return generateInvoiceKp(invoiceInfo, response);
-        }else if (StockConsatnt.StockQuantityTypeEnum.HY.getType().equals(type)) {
+        } else if (StockConsatnt.StockQuantityTypeEnum.HY.getType().equals(type)) {
             return generateInvoiceHy(invoiceInfo, response);
-        }else if (StockConsatnt.StockQuantityTypeEnum.HY2.getType().equals(type)) {
+        } else if (StockConsatnt.StockQuantityTypeEnum.HY2.getType().equals(type)) {
             return generateInvoiceHy2(invoiceInfo, response);
+        } else if (StockConsatnt.StockQuantityTypeEnum.DL.getType().equals(type)) {
+            return generateInvoiceDl(invoiceInfo, response);
         }
         return BaseResponse.failMessage("暂未实现");
     }
@@ -570,8 +573,71 @@ public class DeliverGoodsService implements IDeliverGoodsService {
      */
     @Override
     public BaseResponse generateInvoice(InvoiceInfo invoiceInfo, List<InvoiceSkuInfo> invoiceSkuInfoList, String type, HttpServletResponse response) {
-        invoiceInfo=getInvoiceInfo(invoiceInfo,invoiceSkuInfoList);
-        return generateInvoiceByType(invoiceInfo,type,response);
+        invoiceInfo = getInvoiceInfo(invoiceInfo, invoiceSkuInfoList);
+        return generateInvoiceByType(invoiceInfo, type, response);
+    }
+
+
+    private BaseResponse generateInvoiceDl(InvoiceInfo invoiceInfo, HttpServletResponse response) {
+        //读取模板
+        String path = DeliverGoodsService.class.getClassLoader().getResource("template/invoice/invoiceTemplateDl.xlsx").getPath();
+        Workbook wb = ExcelUtil.readExcel(path);
+        Sheet sheetInovice = wb.getSheetAt(0);
+        Sheet sheetPacking = wb.getSheetAt(1);
+        CellStyle priceStyle = getPriceStyle(wb);
+        updateSheetInoviceDl(sheetInovice, invoiceInfo, priceStyle);
+        updateSheetPackingDl(sheetPacking, invoiceInfo, priceStyle);
+        //导出
+        String fileName = invoiceInfo.getShopName() + "-" + invoiceInfo.getFbaNo() + "-" + invoiceInfo.getNumberOfBoxes() + "箱DL海运发票";
+        return exportExcel(response, wb, fileName);
+    }
+
+    private void updateSheetPackingDl(Sheet sheetPacking, InvoiceInfo invoiceInfo, CellStyle priceStyle) {
+        //设置每箱信息
+        for (int i = 0; i < invoiceInfo.getInvoicePackingInfoList().size(); i++) {
+            Row rowGoodsInfo = sheetPacking.createRow(5 + i);
+            InvoicePackingInfo invoicePackingInfo = invoiceInfo.getInvoicePackingInfoList().get(i);
+            rowGoodsInfo.createCell(0).setCellValue(invoicePackingInfo.getContainerNo());
+            rowGoodsInfo.createCell(1).setCellValue(invoicePackingInfo.getGoodsName());
+            rowGoodsInfo.createCell(2).setCellValue(1);
+            rowGoodsInfo.createCell(3).setCellValue(invoicePackingInfo.getQuantity());
+            rowGoodsInfo.createCell(4).setCellValue(invoicePackingInfo.getWeight());
+            rowGoodsInfo.createCell(5).setCellValue(invoicePackingInfo.getWeight());
+            rowGoodsInfo.createCell(6).setCellValue(0.19*invoicePackingInfo.getQuantity());
+            rowGoodsInfo.createCell(7).setCellValue(0.19*invoicePackingInfo.getQuantity());
+            rowGoodsInfo.createCell(8).setCellValue("37x52x54");
+        }
+    }
+
+    private void updateSheetInoviceDl(Sheet sheetInovice, InvoiceInfo invoiceInfo, CellStyle priceStyle) {
+        //设置客户订单号
+        Row rowFbaNo = sheetInovice.getRow(2);
+        rowFbaNo.getCell(1).setCellValue("FBA 号： " + invoiceInfo.getFbaNo());
+        //设置地址
+        Row rowShippingAddress = sheetInovice.getRow(5);
+        rowShippingAddress.getCell(1).setCellValue("Consignee（complete name and address)    收货人公司名地址，电话\n" + invoiceInfo.getShipTo());
+        //设置产品信息
+        int contentIndex = 8;
+        for (int i = 0; i < invoiceInfo.getInvoiceGoodsInfoList().size(); i++) {
+            if (i >= 2) {
+                sheetInovice.shiftRows(contentIndex + i, sheetInovice.getLastRowNum(), 1, true, false);
+            }
+            Row rowGoodsInfo = sheetInovice.getRow(contentIndex + i);
+            if (rowGoodsInfo == null) {
+                rowGoodsInfo = sheetInovice.createRow(contentIndex + i);
+            }
+            InvoiceGoodsInfo invoiceGoodsInfo = invoiceInfo.getInvoiceGoodsInfoList().get(i);
+            rowGoodsInfo.createCell(3).setCellValue(invoiceGoodsInfo.getGoodsName());
+            rowGoodsInfo.createCell(4).setCellValue("无");
+            rowGoodsInfo.createCell(5).setCellValue("无");
+            rowGoodsInfo.createCell(6).setCellValue(invoiceGoodsInfo.getMaterial());
+            rowGoodsInfo.createCell(7).setCellValue(invoiceGoodsInfo.getPurpose());
+            rowGoodsInfo.createCell(8).setCellValue(invoiceGoodsInfo.getNumberOfBoxes());
+            rowGoodsInfo.createCell(9).setCellValue(invoiceGoodsInfo.getQuantity());
+            rowGoodsInfo.createCell(10).setCellValue(invoiceGoodsInfo.getWeight()+"kg");
+            rowGoodsInfo.createCell(11).setCellValue(invoiceGoodsInfo.getUnitPrice());
+            rowGoodsInfo.getCell(11).setCellStyle(priceStyle);
+        }
     }
 
     private BaseResponse generateInvoiceHy2(InvoiceInfo invoiceInfo, HttpServletResponse response) {
@@ -580,7 +646,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         Workbook wb = ExcelUtil.readExcel(path);
         Sheet sheetInovice = wb.getSheetAt(0);
         CellStyle priceStyle = getPriceStyle(wb);
-        updateSheetInoviceHy2(sheetInovice, invoiceInfo,priceStyle);
+        updateSheetInoviceHy2(sheetInovice, invoiceInfo, priceStyle);
         //导出
         String fileName = invoiceInfo.getShopName() + "-" + invoiceInfo.getFbaNo() + "-" + invoiceInfo.getNumberOfBoxes() + "箱海运红单发票";
         return exportExcel(response, wb, fileName);
@@ -591,13 +657,13 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         Row rowFbaNo = sheetInovice.getRow(1);
         rowFbaNo.getCell(3).setCellValue(invoiceInfo.getFbaNo());
         //设置重量
-        Row rowWeight= sheetInovice.getRow(2);
+        Row rowWeight = sheetInovice.getRow(2);
         rowWeight.getCell(3).setCellValue(50);
         //设置Shipment ID
         Row rowShipmentID = sheetInovice.getRow(3);
         rowShipmentID.getCell(3).setCellValue(invoiceInfo.getFbaNo());
         //设置地址
-        Row rowAddress=sheetInovice.getRow(10);
+        Row rowAddress = sheetInovice.getRow(10);
         rowAddress.getCell(3).setCellValue(invoiceInfo.getShipTo());
         //设置邮编
         Row rowPostalCode = sheetInovice.getRow(12);
@@ -633,7 +699,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         Sheet sheetInovice = wb.getSheetAt(0);
         Sheet sheetPacking = wb.getSheetAt(1);
         CellStyle priceStyle = getPriceStyle(wb);
-        updateSheetInoviceHy(sheetInovice, invoiceInfo,priceStyle);
+        updateSheetInoviceHy(sheetInovice, invoiceInfo, priceStyle);
         updateSheetPackingKp(sheetPacking, invoiceInfo, priceStyle);
         //导出
         String fileName = invoiceInfo.getShopName() + "-" + invoiceInfo.getFbaNo() + "-" + invoiceInfo.getNumberOfBoxes() + "箱海运红单发票";
@@ -660,7 +726,8 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             rowGoodsInfo.getCell(6).setCellStyle(priceStyle);
             rowGoodsInfo.createCell(7).setCellValue(invoiceGoodsInfo.getTotalPrice());
             rowGoodsInfo.getCell(7).setCellStyle(priceStyle);
-        } //设置箱数
+        }
+        //设置箱数
         Row rowGoodsInfoFirst = sheetInovice.getRow(5);
         rowGoodsInfoFirst.createCell(0).setCellValue(invoiceInfo.getNumberOfBoxes());
         if (invoiceInfo.getInvoiceGoodsInfoList().size() > 1) {
@@ -668,7 +735,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             sheetInovice.addMergedRegion(region);
         }
         //设置总价
-        Row rowTotalPrice = sheetInovice.createRow(5+invoiceInfo.getInvoiceGoodsInfoList().size());
+        Row rowTotalPrice = sheetInovice.createRow(5 + invoiceInfo.getInvoiceGoodsInfoList().size());
         rowTotalPrice.createCell(0).setCellValue("TOTAL:");
         rowTotalPrice.createCell(5).setCellValue(invoiceInfo.getTotalQuantity());
         rowTotalPrice.createCell(7).setCellValue(invoiceInfo.getTotalPrice());
@@ -689,7 +756,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         Sheet sheetInovice = wb.getSheetAt(0);
         Sheet sheetPacking = wb.getSheetAt(1);
         CellStyle priceStyle = getPriceStyle(wb);
-        updateSheetInoviceKp(sheetInovice, invoiceInfo,priceStyle);
+        updateSheetInoviceKp(sheetInovice, invoiceInfo, priceStyle);
         updateSheetPackingKp(sheetPacking, invoiceInfo, priceStyle);
         //导出
         String fileName = invoiceInfo.getShopName() + "-" + invoiceInfo.getFbaNo() + "-" + invoiceInfo.getNumberOfBoxes() + "箱空派发票";
@@ -722,7 +789,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         //设置日期 FBA单号
         Row rowFbaNo = sheetInovice.getRow(1);
         rowFbaNo.getCell(1).setCellValue(DateUtil.getFormatDateStr(invoiceInfo.getDate(), "yyyy/MM/dd"));
-        rowFbaNo.getCell(3).setCellValue("FBA No.: "+invoiceInfo.getShipmentId());
+        rowFbaNo.getCell(3).setCellValue("FBA No.: " + invoiceInfo.getShipmentId());
         //设置地址
         Row rowAddress = sheetInovice.getRow(3);
         rowAddress.getCell(3).setCellValue(invoiceInfo.getShipTo());
@@ -746,7 +813,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             sheetInovice.addMergedRegion(region);
         }
         //设置总价
-        Row rowTotalPrice = sheetInovice.createRow(5+invoiceInfo.getInvoiceGoodsInfoList().size());
+        Row rowTotalPrice = sheetInovice.createRow(5 + invoiceInfo.getInvoiceGoodsInfoList().size());
         rowTotalPrice.createCell(0).setCellValue("TOTAL:");
         rowTotalPrice.createCell(5).setCellValue(invoiceInfo.getTotalQuantity());
         rowTotalPrice.createCell(7).setCellValue(invoiceInfo.getTotalPrice());
@@ -989,10 +1056,11 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         if (!updateInvoiceSkuInfoListResponse.isSuccess()) {
             return updateInvoiceSkuInfoListResponse;
         }
-        invoiceInfo=getInvoiceInfo(invoiceInfo,invoiceSkuInfoList);
+        invoiceInfo = getInvoiceInfo(invoiceInfo, invoiceSkuInfoList);
         return BaseResponse.successData(invoiceInfo);
     }
-    private InvoiceInfo getInvoiceInfo(InvoiceInfo invoiceInfo,List<InvoiceSkuInfo> invoiceSkuInfoList){
+
+    private InvoiceInfo getInvoiceInfo(InvoiceInfo invoiceInfo, List<InvoiceSkuInfo> invoiceSkuInfoList) {
         Double unitPrice = 0.7;
         setNumberOfBoxesAndTotalQuantityAndTotalPrice(invoiceInfo, invoiceSkuInfoList, unitPrice);
         List<InvoicePackingInfo> invoicePackingInfoList = getInvoicePackingInfoList(invoiceSkuInfoList, unitPrice);
@@ -1004,6 +1072,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         updateShopName(invoiceInfo, invoiceSkuInfoList);
         return invoiceInfo;
     }
+
     private String getContainerNo(String columnName) {
         String containerNo = columnName.split(" ")[0];
         String containerNoUno = RegexUtil.getFirstStr(containerNo, "U[0-9]{3}$");
@@ -1015,14 +1084,22 @@ public class DeliverGoodsService implements IDeliverGoodsService {
 
     private List<InvoiceGoodsInfo> getInvoiceGoodsInfoList(List<InvoicePackingInfo> invoicePackingInfoList, Double unitPrice) {
         List<InvoiceGoodsInfo> invoiceGoodsInfoList = new ArrayList<>();
+        Map<String, Set<String>> mapContainerNo = new HashMap<>();
         for (InvoicePackingInfo invoicePackingInfo : invoicePackingInfoList) {
             InvoiceGoodsInfo invoiceGoodsInfo = getInvoiceGoodsInfo(invoiceGoodsInfoList, invoicePackingInfo.getGoodsName());
+            Set<String> containerNoSet = mapContainerNo.get(invoicePackingInfo.getGoodsName());
+            if (containerNoSet == null) {
+                containerNoSet = new HashSet<>();
+            }
+            containerNoSet.add(invoicePackingInfo.getContainerNo());
+            mapContainerNo.put(invoicePackingInfo.getGoodsName(), containerNoSet);
             if (invoiceGoodsInfo == null) {
                 invoiceGoodsInfo = new InvoiceGoodsInfo();
                 invoiceGoodsInfo.setGoodsName(invoicePackingInfo.getGoodsName());
                 invoiceGoodsInfo.setMaterial("混棉/Mixed cotton缎纹80%涤纶，10%氨纶，10%棉");
                 invoiceGoodsInfo.setPurpose("穿/Wear");
                 invoiceGoodsInfo.setBrand("无");
+                invoiceGoodsInfo.setWeight(invoicePackingInfo.getWeight());
                 invoiceGoodsInfo.setQuantity(invoicePackingInfo.getQuantity());
                 invoiceGoodsInfo.setUnitPrice(unitPrice);
                 invoiceGoodsInfo.setTotalPrice(invoiceGoodsInfo.getQuantity() * unitPrice);
@@ -1031,6 +1108,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
                 invoiceGoodsInfo.setQuantity(invoiceGoodsInfo.getQuantity() + invoicePackingInfo.getQuantity());
                 invoiceGoodsInfo.setTotalPrice(invoiceGoodsInfo.getQuantity() * unitPrice);
             }
+            invoiceGoodsInfo.setNumberOfBoxes(mapContainerNo.size());
         }
         return invoiceGoodsInfoList;
     }
@@ -1076,9 +1154,9 @@ public class DeliverGoodsService implements IDeliverGoodsService {
                 invoicePackingInfo.setGoodsName(invoiceSkuInfo.getEnglishProductName() + " " + invoiceSkuInfo.getChineseProductName());
                 invoicePackingInfo.setQuantity(invoiceSkuInfo.getQuantity());
                 invoicePackingInfo.setLength(50.0);
-                invoicePackingInfo.setWeight(35.0);
+                invoicePackingInfo.setWidth(35.0);
                 invoicePackingInfo.setHeight(50.0);
-                invoicePackingInfo.setWeight(21.0);
+                invoicePackingInfo.setWeight(invoiceSkuInfo.getWeight());
                 invoicePackingInfo.setMaterial("混棉/Mixed cotton缎纹80%涤纶，10%氨纶，10%棉");
                 invoicePackingInfo.setPurpose("穿/Wear");
                 invoicePackingInfo.setUnitPrice(unitPrice);
@@ -1098,11 +1176,11 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         return invoicePackingInfoList;
     }
 
-    private InvoicePackingInfo getInvoicePackingInfo(List<InvoicePackingInfo> invoicePackingInfoList,InvoiceSkuInfo invoiceSkuInfo) {
+    private InvoicePackingInfo getInvoicePackingInfo(List<InvoicePackingInfo> invoicePackingInfoList, InvoiceSkuInfo invoiceSkuInfo) {
         for (InvoicePackingInfo invoicePackingInfo : invoicePackingInfoList) {
             if (invoicePackingInfo.getContainerNo().equals(invoiceSkuInfo.getContainerNo())
-                    &&invoicePackingInfo.getChineseProductName().equals(invoiceSkuInfo.getChineseProductName())
-                    &&invoicePackingInfo.getEnglishProductName().equals(invoiceSkuInfo.getEnglishProductName())) {
+                    && invoicePackingInfo.getChineseProductName().equals(invoiceSkuInfo.getChineseProductName())
+                    && invoicePackingInfo.getEnglishProductName().equals(invoiceSkuInfo.getEnglishProductName())) {
                 return invoicePackingInfo;
             }
         }
@@ -1152,6 +1230,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
                 if (shopSkuFullProductName.getShopSku().equals(invoiceSkuInfo.getShopSku())) {
                     invoiceSkuInfo.setChineseProductName(shopSkuFullProductName.getChineseProductName());
                     invoiceSkuInfo.setEnglishProductName(shopSkuFullProductName.getEnglishProductName());
+                    invoiceSkuInfo.setWeight(shopSkuFullProductName.getWeight());
                 }
             }
             if (StringUtils.isEmpty(invoiceSkuInfo.getChineseProductName()) || StringUtils.isEmpty(invoiceSkuInfo.getEnglishProductName())) {

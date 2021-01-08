@@ -150,7 +150,7 @@
 </div>
 
 <!--编辑页面-->
-<div id="dlg_InvoiceInfo" class="easyui-dialog" style="width: 900px; height: 500px; padding: 10px 20px"
+<div id="dlg_InvoiceInfo" class="easyui-dialog" style="width: 1000px; height: 500px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', align:'center'">
     <input type="hidden" id="dlg_InvoiceInfo_fbaPackingListId">
     <!--查询条件-->
@@ -438,12 +438,13 @@
                 {title: 'sku数量', field: 'shopSkuCount', width: 50},
                 {title: '商品数量', field: 'shopSkuQuantity', width: 50},
                 {
-                    title: '操作', field: 'deal', width: 400,
+                    title: '操作', field: 'deal', width: 500,
                     formatter: function (value, row, index) {
                         return '<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'ky\')" title="生成空运发票">生成空运发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'kp\')" title="生成空派发票">生成空派发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'hy\')" title="生成海运发票">生成海运发票</a>'
-                            + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'hy2\')" title="生成新的海运发票">生成新的海运发票</a>';
+                            + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'hy2\')" title="生成新的海运发票">生成新的海运发票</a>'
+                            + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'dl\')" title="生成DL海运发票">生成DL海运发票</a>';
                     }
                 }
             ]],
