@@ -10,4 +10,5 @@ public class DeliverGoodsConstant {
     public static final String QUANTITY_ERRO ="补货数量必须大于0" ;
     public static final String INVOICE_TYPE_ERRO ="发票类型错误" ;
     public static final String FBA_NO_EMPTY ="FBA单号不能为空" ;
+    public static final String SHIPMENT_ID_EMPTY ="shipment id不能为空" ;
 }

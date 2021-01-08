@@ -531,9 +531,9 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         if (StockConsatnt.StockQuantityTypeEnum.getStockQuantityTypeEnum(type) == null) {
             return BaseResponse.failMessage(DeliverGoodsConstant.INVOICE_TYPE_ERRO);
         }
-        if (StringUtils.isEmpty(fbaNo)) {
+        /*if (StringUtils.isEmpty(fbaNo)) {
             return BaseResponse.failMessage(DeliverGoodsConstant.FBA_NO_EMPTY);
-        }
+        }*/
         if (StockConsatnt.StockQuantityTypeEnum.getStockQuantityTypeEnum(type) == null) {
             return BaseResponse.failMessage("发票类型错误");
         }
@@ -543,7 +543,11 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             return invoiceInfoBaseResponse;
         }
         InvoiceInfo invoiceInfo = invoiceInfoBaseResponse.getData();
-        invoiceInfo.setFbaNo(fbaNo);
+        if (StringUtils.isEmpty(invoiceInfo.getShipmentId())) {
+            return BaseResponse.failMessage(DeliverGoodsConstant.SHIPMENT_ID_EMPTY);
+        }
+        //FBA单号对应 shipment id
+        invoiceInfo.setFbaNo(invoiceInfo.getShipmentId());
         return generateInvoiceByType(invoiceInfo, type, response);
     }
 
@@ -603,8 +607,8 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             rowGoodsInfo.createCell(3).setCellValue(invoicePackingInfo.getQuantity());
             rowGoodsInfo.createCell(4).setCellValue(invoicePackingInfo.getWeight());
             rowGoodsInfo.createCell(5).setCellValue(invoicePackingInfo.getWeight());
-            rowGoodsInfo.createCell(6).setCellValue(0.19*invoicePackingInfo.getQuantity());
-            rowGoodsInfo.createCell(7).setCellValue(0.19*invoicePackingInfo.getQuantity());
+            rowGoodsInfo.createCell(6).setCellValue(invoicePackingInfo.getWeight() * invoicePackingInfo.getQuantity());
+            rowGoodsInfo.createCell(7).setCellValue(invoicePackingInfo.getWeight() * invoicePackingInfo.getQuantity());
             rowGoodsInfo.createCell(8).setCellValue("37x52x54");
         }
     }
@@ -634,7 +638,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             rowGoodsInfo.createCell(7).setCellValue(invoiceGoodsInfo.getPurpose());
             rowGoodsInfo.createCell(8).setCellValue(invoiceGoodsInfo.getNumberOfBoxes());
             rowGoodsInfo.createCell(9).setCellValue(invoiceGoodsInfo.getQuantity());
-            rowGoodsInfo.createCell(10).setCellValue(invoiceGoodsInfo.getWeight()+"kg");
+            rowGoodsInfo.createCell(10).setCellValue(invoiceGoodsInfo.getWeight() + "kg");
             rowGoodsInfo.createCell(11).setCellValue(invoiceGoodsInfo.getUnitPrice());
             rowGoodsInfo.getCell(11).setCellStyle(priceStyle);
         }
