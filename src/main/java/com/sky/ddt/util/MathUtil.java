@@ -122,6 +122,16 @@ public class MathUtil {
         return new BigDecimal((float) a / b).setScale(digits, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
+    public static Double divide(Double a, Integer b, Integer digits) {
+        if (a == null || b == null) {
+            return null;
+        }
+        if (digits == null || digits < 0) {
+            return new Double(a / b);
+        }
+        return new BigDecimal(a / b).setScale(digits, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
     public static BigDecimal divide(BigDecimal a, BigDecimal b, Integer digits) {
         if (a == null || b == null) {
             return null;

@@ -20,8 +20,8 @@ public class InvoiceSkuInfo {
     String englishProductName;
 
     public Double getWeight() {
-        if (weight == null || weight <= 0||weight>=1000) {
-            return 21.0;
+        if (weight == null || weight <= 0||weight>=1) {
+            return 0.21;
         }
         return weight;
     }

@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author baixueping
@@ -585,6 +586,8 @@ public class DeliverGoodsService implements IDeliverGoodsService {
     private BaseResponse generateInvoiceDl(InvoiceInfo invoiceInfo, HttpServletResponse response) {
         //读取模板
         String path = DeliverGoodsService.class.getClassLoader().getResource("template/invoice/invoiceTemplateDl.xlsx").getPath();
+        updateInvoiceInfoPackageMax(invoiceInfo);
+
         Workbook wb = ExcelUtil.readExcel(path);
         Sheet sheetInovice = wb.getSheetAt(0);
         Sheet sheetPacking = wb.getSheetAt(1);
@@ -596,6 +599,32 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         return exportExcel(response, wb, fileName);
     }
 
+    /**
+     * @param
+     * @return
+     * @description 分箱操作
+     * @author baixueping
+     * @date 2021/1/8 15:47
+     */
+    private void updateInvoiceInfoPackageMax(InvoiceInfo invoiceInfo) {
+        updateInvoiceInfoPackageInfoList(invoiceInfo);
+        List<InvoiceGoodsInfo> invoiceGoodsInfoList = getInvoiceGoodsInfoList(invoiceInfo.getInvoicePackingInfoList(), 0.7);
+        invoiceInfo.setInvoiceGoodsInfoList(invoiceGoodsInfoList);
+    }
+
+    private void updateInvoiceInfoPackageInfoList(InvoiceInfo invoiceInfo) {
+        List<InvoicePackingInfo> invoicePackingInfoList = new ArrayList<>();
+        Map<String, InvoicePackingInfo> invoicePackingInfoMap = invoiceInfo.getInvoicePackingInfoList().parallelStream().collect(Collectors.groupingBy(InvoicePackingInfo::getContainerNo, Collectors.collectingAndThen(Collectors.reducing((c1, c2) -> c1.getQuantity() >= c2.getQuantity() ? c1 : c2), Optional::get)));
+        for (String containerNo : invoicePackingInfoMap.keySet()) {
+            InvoicePackingInfo invoicePackingInfo = invoicePackingInfoMap.get(containerNo);
+            Integer quantity = invoiceInfo.getInvoicePackingInfoList().parallelStream().filter(item -> item.getContainerNo().equals(containerNo)).mapToInt(InvoicePackingInfo::getQuantity).sum();
+            invoicePackingInfo.setQuantity(quantity);
+            invoicePackingInfoList.add(invoicePackingInfo);
+        }
+        invoicePackingInfoList.sort((c1,c2)->c1.getContainerNo().compareTo(c2.getContainerNo()));
+        invoiceInfo.setInvoicePackingInfoList(invoicePackingInfoList);
+    }
+
     private void updateSheetPackingDl(Sheet sheetPacking, InvoiceInfo invoiceInfo, CellStyle priceStyle) {
         //设置每箱信息
         for (int i = 0; i < invoiceInfo.getInvoicePackingInfoList().size(); i++) {
@@ -605,10 +634,18 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             rowGoodsInfo.createCell(1).setCellValue(invoicePackingInfo.getGoodsName());
             rowGoodsInfo.createCell(2).setCellValue(1);
             rowGoodsInfo.createCell(3).setCellValue(invoicePackingInfo.getQuantity());
-            rowGoodsInfo.createCell(4).setCellValue(invoicePackingInfo.getWeight());
-            rowGoodsInfo.createCell(5).setCellValue(invoicePackingInfo.getWeight());
-            rowGoodsInfo.createCell(6).setCellValue(invoicePackingInfo.getWeight() * invoicePackingInfo.getQuantity());
-            rowGoodsInfo.createCell(7).setCellValue(invoicePackingInfo.getWeight() * invoicePackingInfo.getQuantity());
+
+            Double totalWeight=invoicePackingInfo.getWeight() * invoicePackingInfo.getQuantity();
+            Double weight=invoicePackingInfo.getWeight();
+            if(totalWeight>21){
+                totalWeight=21.0;
+                weight=MathUtil.divide(totalWeight,invoicePackingInfo.getQuantity(),2);
+            }
+            rowGoodsInfo.createCell(4).setCellValue(weight);
+            rowGoodsInfo.createCell(5).setCellValue(weight);
+            rowGoodsInfo.createCell(6).setCellValue(totalWeight);
+            rowGoodsInfo.createCell(7).setCellValue(totalWeight);
+
             rowGoodsInfo.createCell(8).setCellValue("37x52x54");
         }
     }
@@ -1112,7 +1149,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
                 invoiceGoodsInfo.setQuantity(invoiceGoodsInfo.getQuantity() + invoicePackingInfo.getQuantity());
                 invoiceGoodsInfo.setTotalPrice(invoiceGoodsInfo.getQuantity() * unitPrice);
             }
-            invoiceGoodsInfo.setNumberOfBoxes(mapContainerNo.size());
+            invoiceGoodsInfo.setNumberOfBoxes(containerNoSet.size());
         }
         return invoiceGoodsInfoList;
     }
