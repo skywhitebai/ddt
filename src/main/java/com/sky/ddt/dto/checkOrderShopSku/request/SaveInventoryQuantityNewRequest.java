@@ -16,6 +16,6 @@ public class SaveInventoryQuantityNewRequest {
     @NotNull(message = CheckOrderShopSkuConstant.ID_EMPTY)
     Integer id;
     @NotNull(message = CheckOrderShopSkuConstant.INVENTORY_QUANTITY_NEW_EMPTY)
-    @Min(value = 1, message = CheckOrderShopSkuConstant.INVENTORY_QUANTITY_NEW_ERRO)
+    @Min(value = 0, message = CheckOrderShopSkuConstant.INVENTORY_QUANTITY_NEW_ERRO)
     Integer inventoryQuantityNew;
 }

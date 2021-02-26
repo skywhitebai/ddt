@@ -751,9 +751,9 @@
             $.messager.alert("提示", "最新库存数量不能为空");
             return;
         }
-        var r = /^[1-9][0-9]*$/;　　//正整数
+        var r = /^(0|[1-9][0-9]*)$/;　　//正整数
         if (!r.test(inventoryQuantityNew)) {
-            $.messager.alert("提示", "最新库存必须为大于等于1的数字.");
+            $.messager.alert("提示", "最新库存必须为大于等于0的数字.");
             $(input).focus()
             return;
         }
