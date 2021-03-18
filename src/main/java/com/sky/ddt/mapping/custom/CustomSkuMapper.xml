@@ -11,11 +11,11 @@
     <sql id="Custom_Column_List">
          s.sku_id, s.product_id, s.sku, s.colour,s.colour_number, s.size,s.weight,s.cost_price,s.head_trip_cost head_trip_cost,s.head_trip_cost_min,
          s.remark, s.create_time, s.create_by, s.update_time, s.update_by,s.second_sku, s.brand, s.product_name, s.material,s.grade, s.executive_standard,
-         s.security_category, s.inspector, s.suggested_retail_price
+         s.security_category, s.inspector, s.suggested_retail_price,s.development_level
     </sql>
     <select id="listSku" parameterType="com.sky.ddt.dto.sku.request.SkuListRequest" resultMap="SkuListMap">
         select
-        <include refid="Custom_Column_List"/>
+        s.*
         ,p.product_code,p.product_name productProductName,(select sum(ss.inventory_quantity) from shop_sku ss where ss.sku_id=s.sku_id) inventory_quantity
         from sku s
         left join product p on s.product_id=p.product_id

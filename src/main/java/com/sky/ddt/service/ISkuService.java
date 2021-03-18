@@ -143,4 +143,13 @@ public interface ISkuService {
     BaseResponse importColour(MultipartFile file, Integer dealUserId);
 
     boolean existSku(List<Integer> productIds);
+
+    /**
+     * @param
+     * @return
+     * @description 导入开发等级
+     * @author baixueping
+     * @date 2021/3/18 10:49
+     */
+    BaseResponse importDevelopmentLevel(MultipartFile file, Integer dealUserId);
 }

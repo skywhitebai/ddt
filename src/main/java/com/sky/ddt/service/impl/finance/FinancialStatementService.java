@@ -5,14 +5,13 @@ import com.sky.ddt.common.constant.FinancialStatementConstant;
 import com.sky.ddt.dao.custom.CustomFinanceMapper;
 import com.sky.ddt.dao.custom.CustomFinancialStatementMapper;
 import com.sky.ddt.dao.custom.CustomMonthlySalesMapper;
+import com.sky.ddt.dao.custom.CustomSkuMapper;
+import com.sky.ddt.dao.generate.SkuMapper;
 import com.sky.ddt.dto.finance.response.FbaCustomerReturnFeeResponse;
 import com.sky.ddt.dto.finance.response.FbaCustomerReturnSkuResponse;
 import com.sky.ddt.dto.finance.response.FinancialStatementResponse;
 import com.sky.ddt.dto.response.BaseResponse;
-import com.sky.ddt.entity.Finance;
-import com.sky.ddt.entity.FinanceExample;
-import com.sky.ddt.entity.FinancialStatement;
-import com.sky.ddt.entity.FinancialStatementExample;
+import com.sky.ddt.entity.*;
 import com.sky.ddt.service.finance.IFinanceService;
 import com.sky.ddt.service.finance.IFinancialStatementService;
 import com.sky.ddt.util.DateUtil;
@@ -52,6 +51,8 @@ public class FinancialStatementService implements IFinancialStatementService {
     CustomFinanceMapper customFinanceMapper;
     @Autowired
     CustomMonthlySalesMapper customMonthlySalesMapper;
+    @Autowired
+    CustomSkuMapper customSkuMapper;
 
     /**
      * @param financeId
@@ -291,7 +292,7 @@ public class FinancialStatementService implements IFinancialStatementService {
         }
         //读取模板
         String excelTitle = month + "-" + shopName + "各SKU利润表";
-        Workbook workbook =getWorkbook(financialStatementList, excelTitle);
+        Workbook workbook = getWorkbook(financialStatementList, excelTitle);
         String fileName = financialStatement.getShopName() + "-" + month + "财务报表";
         return ExcelUtil.exportExcel(response, workbook, fileName);
     }
@@ -334,14 +335,14 @@ public class FinancialStatementService implements IFinancialStatementService {
         Map<String, Workbook> workbookMap = getWorkbookMap(financialStatementList, type, monthChinese);
         //Map<String, ByteArrayOutputStream> byteArrayOutputStreamMap = workBook2Stream(workbookMap);
         String fileName = getZipName(monthChinese, type);
-        Map<String, byte[]> byteMap = workBook2Byte(workbookMap,fileName);
-        ZipUtil.downloadBatchByFile(response, byteMap,fileName);
+        Map<String, byte[]> byteMap = workBook2Byte(workbookMap, fileName);
+        ZipUtil.downloadBatchByFile(response, byteMap, fileName);
         return BaseResponse.success();
     }
 
-    private Map<String,byte[]> workBook2Byte(Map<String, Workbook> workbookMap,String fileName) {
+    private Map<String, byte[]> workBook2Byte(Map<String, Workbook> workbookMap, String fileName) {
         Map<String, byte[]> map = new HashMap<>();
-        String excelNameLast="-"+DateUtil.getFormatStryyyyMMddHHmmss(new Date())+".xlsx";
+        String excelNameLast = "-" + DateUtil.getFormatStryyyyMMddHHmmss(new Date()) + ".xlsx";
         for (String key : workbookMap.keySet()) {
             Workbook workbook = workbookMap.get(key);
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -351,7 +352,7 @@ public class FinancialStatementService implements IFinancialStatementService {
                 e.printStackTrace();
             }
             byte[] bytes = outputStream.toByteArray();
-            String excelName=fileName+"-"+(StringUtils.isEmpty(key)?"null":key)+excelNameLast;
+            String excelName = fileName + "-" + (StringUtils.isEmpty(key) ? "null" : key) + excelNameLast;
             map.put(excelName, bytes);
         }
         return map;
@@ -727,6 +728,9 @@ public class FinancialStatementService implements IFinancialStatementService {
     }
 
     private void setFinancialStatement(Sheet sheet, List<FinancialStatement> financialStatementList) {
+        //获取产品sku对应的开发等级
+        List<Sku> skuList = getSkuList(financialStatementList);
+        //设置开发等级
         int rowIndex = 6;
         for (int i = 0; i < financialStatementList.size(); i++) {
             FinancialStatement financialStatement = financialStatementList.get(i);
@@ -811,8 +815,29 @@ public class FinancialStatementService implements IFinancialStatementService {
             row.createCell(106).setCellValue(financialStatement.getNewProduct() == 1 ? "是" : "否");
             row.createCell(107).setCellValue(financialStatement.getAdvertisingSalesPercentage().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
             row.createCell(108).setCellValue(financialStatement.getProductMonth());
+            Integer developmentLevel=getDevelopmentLevel(financialStatement.getSku(), skuList);
+            if(developmentLevel!=null){
+                row.createCell(109).setCellValue(developmentLevel);
+            }
             rowIndex++;
         }
+    }
+
+    private Integer getDevelopmentLevel(String skuStr, List<Sku> skuList) {
+        for (Sku sku :
+                skuList) {
+            if (sku.getSku().equals(skuStr)) {
+                return sku.getDevelopmentLevel();
+            }
+        }
+        return null;
+    }
+
+    private List<Sku> getSkuList(List<FinancialStatement> financialStatementList) {
+        List<String> skuStrList = financialStatementList.stream().map(FinancialStatement::getSku).collect(Collectors.toList()).stream().distinct().collect(Collectors.toList());
+        SkuExample skuExample = new SkuExample();
+        skuExample.createCriteria().andSkuIn(skuStrList);
+        return customSkuMapper.selectByExample(skuExample);
     }
 
     private void setExcelTitle(Sheet sheet, String month, String shopName) {

@@ -1745,6 +1745,66 @@ public class SkuExample {
             addCriterion("suggested_retail_price not between", value1, value2, "suggestedRetailPrice");
             return (Criteria) this;
         }
+
+        public Criteria andDevelopmentLevelIsNull() {
+            addCriterion("development_level is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelIsNotNull() {
+            addCriterion("development_level is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelEqualTo(Integer value) {
+            addCriterion("development_level =", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelNotEqualTo(Integer value) {
+            addCriterion("development_level <>", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelGreaterThan(Integer value) {
+            addCriterion("development_level >", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelGreaterThanOrEqualTo(Integer value) {
+            addCriterion("development_level >=", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelLessThan(Integer value) {
+            addCriterion("development_level <", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelLessThanOrEqualTo(Integer value) {
+            addCriterion("development_level <=", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelIn(List<Integer> values) {
+            addCriterion("development_level in", values, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelNotIn(List<Integer> values) {
+            addCriterion("development_level not in", values, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelBetween(Integer value1, Integer value2) {
+            addCriterion("development_level between", value1, value2, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelNotBetween(Integer value1, Integer value2) {
+            addCriterion("development_level not between", value1, value2, "developmentLevel");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

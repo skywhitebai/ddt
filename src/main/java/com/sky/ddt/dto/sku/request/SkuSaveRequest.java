@@ -5,10 +5,7 @@ import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
 /**
@@ -34,19 +31,19 @@ public class SkuSaveRequest {
     private String size;
 
     @NotNull(message = SkuConstant.WEIGHT_EMPTY)
-    @DecimalMin(value = "0.01", message = "重量必须为大于等于0的两位小数数字")
-    @Digits(integer = 0,fraction = 2,message = "重量必须为大于等于0的两位小数数字")
+    @DecimalMin(value = "0.01", message = "重量必须为大于0的两位小数数字")
+    @Digits(integer = 10,fraction = 2,message = "重量必须为大于0的两位小数数字")
     private BigDecimal weight;
 
     @Min(value = 0, message = "库存数量必须为大于等于0的数字")
     private Integer inventoryQuantity;
     @NotNull
-    @DecimalMin(value = "0.01", message = "成本价必须为大于等于0的两位小数数字")
-    @Digits(integer = 0,fraction = 2,message = "成本价必须为大于等于0的两位小数数字")
+    @DecimalMin(value = "0.01", message = "成本价必须为大于0的两位小数数字")
+    @Digits(integer = 10,fraction = 2,message = "成本价必须为大于0的两位小数数字")
     private BigDecimal costPrice;
 
-    @DecimalMin(value = "0.01", message = "头程费用必须为大于等于0的两位小数数字")
-    @Digits(integer = 0,fraction = 2,message = "头程费用必须为大于等于0的两位小数数字")
+    @DecimalMin(value = "0.01", message = "头程费用必须为大于0的两位小数数字")
+    @Digits(integer = 10,fraction = 2,message = "头程费用必须为大于0的两位小数数字")
     private BigDecimal headTripCost;
     @Length(max = 50, message = "副sku长度超过50")
     private String secondSku;
@@ -66,5 +63,8 @@ public class SkuSaveRequest {
     private String inspector;
     @Length(max = 50, message = "建议零售价长度超过50")
     private String suggestedRetailPrice;
+    @Min(value = 0,message = "开发等级必须为0-10的数字")
+    @Max(value = 10,message = "开发等级必须为0-10的数字")
+    private Integer developmentLevel;
     private String remark;
 }

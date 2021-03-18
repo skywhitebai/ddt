@@ -31,7 +31,7 @@
     <input class="easyui-validatebox textbox" id="s_productCode">
     产品名称：
     <input class="easyui-validatebox textbox" id="s_productName">
-    <a href="javascript:void(0)"onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+    <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
     <a href="javascript:void(0)" id="a_importSku" onclick="showDialogImport('sku')" class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
@@ -40,18 +40,26 @@
     <a href="javascript:void(0)" id="a_exportSku" onclick="exportSku()" class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导出sku</a>
-    <a href="javascript:void(0)" id="a_importCostPrice" onclick="showDialogImport('costPrice')" class="easyui-linkbutton a_hide"
+    <a href="javascript:void(0)" id="a_importCostPrice" onclick="showDialogImport('costPrice')"
+       class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入成本价</a>
-    <a href="javascript:void(0)" id="a_importWeight" onclick="showDialogImport('weight')" class="easyui-linkbutton a_hide"
+    <a href="javascript:void(0)" id="a_importWeight" onclick="showDialogImport('weight')"
+       class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入重量</a>
-    <a href="javascript:void(0)" id="a_importTmallInfo" onclick="showDialogImport('colour')" class="easyui-linkbutton a_hide"
+    <a href="javascript:void(0)" id="a_importTmallInfo" onclick="showDialogImport('colour')"
+       class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入颜色色号</a>
-    <a href="javascript:void(0)" id="a_importColour" onclick="showDialogImport('tmallInfo')" class="easyui-linkbutton a_hide"
+    <a href="javascript:void(0)" id="a_importColour" onclick="showDialogImport('tmallInfo')"
+       class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入天猫标签信息</a>
+    <a href="javascript:void(0)" id="a_importDevelopmentLevel" onclick="showDialogImport('developmentLevel')"
+       class="easyui-linkbutton a_hide"
+       data-options="iconCls:'icon-search'"
+       style="">导入开发等级</a>
     <a href="javascript:void(0)" onclick="showPrintTmallLabelBysSelect()" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">打印标签</a>
@@ -110,6 +118,11 @@
                 <td>尺码：</td>
                 <td>
                     <input class="easyui-validatebox textbox" name="size" id="size" data-options="required:true">
+                </td>
+                <td>开发等级：</td>
+                <td>
+                    <input class="easyui-numberbox" name="developmentLevel" id="developmentLevel" min="0" max="10"
+                           precision="0">
                 </td>
             </tr>
             <tr>
@@ -296,6 +309,7 @@
             $("#btnDelete").hide()
         }
     }
+
     function bindData() {
         dg = '#dg';
         url = "${pageContext.request.contextPath }/sku/list";
@@ -344,6 +358,7 @@
                 {title: '颜色', field: 'colour', width: 100},
                 {title: '色号', field: 'colourNumber', width: 100},
                 {title: '尺码', field: 'size', width: 100},
+                {title: '开发等级', field: 'developmentLevel', width: 100},
                 {
                     title: '重量', field: 'weight', width: 100,
                     formatter: function (value, rowData, rowIndex) {
@@ -833,6 +848,12 @@
                 importTemplateUrl = "${pageContext.request.contextPath }/static/template/sku/colourTemplate.xlsx";
                 importUrl = "${pageContext.request.contextPath }/sku/importColour";
                 break;
+            case 'developmentLevel':
+                importTitle = "导入开发等级";
+                importTemplateUrl = "${pageContext.request.contextPath }/static/template/sku/developmentLevelTemplate.xlsx";
+                importUrl = "${pageContext.request.contextPath }/sku/importDevelopmentLevel";
+                break;
+
         }
         if (isEmpty(importTitle)) {
             $.messager.alert("提示", "请选择正确的导入类型.");

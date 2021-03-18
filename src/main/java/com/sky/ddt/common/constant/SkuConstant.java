@@ -25,6 +25,8 @@ public class SkuConstant {
     public static final String WEIGHT_EMPTY = "重量不能为空";
     public static final String SKU_NOT_EXIST = "sku不存在";
     public static final String INVENTORY_QUANTITY_EMPTY ="库存数量不能为空";
+    public static final String DEVELOPMENT_LEVEL_EMPTY ="开发等级不能为空";
+    public static final String DEVELOPMENT_LEVEL_ERRO ="开发等级必续为0-10的数字";
     //fba头程费
     public static final BigDecimal HEAD_TRIP_COST_RATE= BigDecimal.valueOf(0.055);
     public static final BigDecimal HEAD_TRIP_COST_MIN_RATE= BigDecimal.valueOf(0.04);

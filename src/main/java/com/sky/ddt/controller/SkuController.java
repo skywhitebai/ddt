@@ -14,6 +14,7 @@ import com.sky.ddt.service.ISkuService;
 import com.sky.ddt.util.ExcelExportUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,6 +45,7 @@ public class SkuController extends SuperController {
     public String printTmallLable() {
         return "sku/printTmallLable";
     }
+
     @RequestMapping("/printTmallLable2")
     @Login(action = Action.Skip)
     public String printTmallLable2() {
@@ -72,7 +74,7 @@ public class SkuController extends SuperController {
     @RequestMapping("save")
     @ResponseBody
     @RightAnnotation("sku/saveSku")
-    public BaseResponse save(SkuSaveRequest params) {
+    public BaseResponse save(@Validated SkuSaveRequest params) {
         Integer dealUserId = getCurrentUserId();
         return skuService.save(params, dealUserId);
     }
@@ -124,6 +126,7 @@ public class SkuController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return skuService.importTmallInfo(file, dealUserId);
     }
+
     @RequestMapping("/importColour")
     @ResponseBody
     @RightAnnotation("sku/importColour")
@@ -131,9 +134,18 @@ public class SkuController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return skuService.importColour(file, dealUserId);
     }
+
     @RequestMapping("/getPrintTmallSku")
     @ResponseBody
     public BaseResponse getPrintTmallSku(GetPrintTmallSkuRequest params) {
         return skuService.getPrintTmallSku(params);
+    }
+
+    @RequestMapping("/importDevelopmentLevel")
+    @ResponseBody
+    @RightAnnotation("sku/saveSku")
+    public BaseResponse importDevelopmentLevel(MultipartFile file) {
+        Integer dealUserId = getCurrentUserId();
+        return skuService.importDevelopmentLevel(file, dealUserId);
     }
 }
