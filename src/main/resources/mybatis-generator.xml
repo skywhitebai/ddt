@@ -40,7 +40,7 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
         <table tableName="sku" >
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <generatedKey column="sku_id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
 </generatorConfiguration>

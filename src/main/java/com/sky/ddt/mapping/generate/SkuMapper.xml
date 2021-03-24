@@ -124,31 +124,34 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.sky.ddt.entity.Sku">
-    insert into sku (sku_id, product_id, sku, 
-      colour, colour_number, size, 
-      weight, cost_price, head_trip_cost, 
-      head_trip_cost_min, inventory_quantity, remark, 
-      create_time, create_by, update_time, 
-      update_by, second_sku, brand, 
-      product_name, material, grade, 
-      executive_standard, security_category, inspector, 
-      suggested_retail_price, development_level)
-    values (#{skuId,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{sku,jdbcType=VARCHAR}, 
-      #{colour,jdbcType=VARCHAR}, #{colourNumber,jdbcType=VARCHAR}, #{size,jdbcType=VARCHAR}, 
-      #{weight,jdbcType=DECIMAL}, #{costPrice,jdbcType=DECIMAL}, #{headTripCost,jdbcType=DECIMAL}, 
-      #{headTripCostMin,jdbcType=DECIMAL}, #{inventoryQuantity,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=INTEGER}, #{secondSku,jdbcType=VARCHAR}, #{brand,jdbcType=VARCHAR}, 
-      #{productName,jdbcType=VARCHAR}, #{material,jdbcType=VARCHAR}, #{grade,jdbcType=VARCHAR}, 
-      #{executiveStandard,jdbcType=VARCHAR}, #{securityCategory,jdbcType=VARCHAR}, #{inspector,jdbcType=VARCHAR}, 
-      #{suggestedRetailPrice,jdbcType=VARCHAR}, #{developmentLevel,jdbcType=INTEGER})
+    <selectKey keyProperty="skuId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into sku (product_id, sku, colour, 
+      colour_number, size, weight, 
+      cost_price, head_trip_cost, head_trip_cost_min, 
+      inventory_quantity, remark, create_time, 
+      create_by, update_time, update_by, 
+      second_sku, brand, product_name, 
+      material, grade, executive_standard, 
+      security_category, inspector, suggested_retail_price, 
+      development_level)
+    values (#{productId,jdbcType=INTEGER}, #{sku,jdbcType=VARCHAR}, #{colour,jdbcType=VARCHAR}, 
+      #{colourNumber,jdbcType=VARCHAR}, #{size,jdbcType=VARCHAR}, #{weight,jdbcType=DECIMAL}, 
+      #{costPrice,jdbcType=DECIMAL}, #{headTripCost,jdbcType=DECIMAL}, #{headTripCostMin,jdbcType=DECIMAL}, 
+      #{inventoryQuantity,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
+      #{secondSku,jdbcType=VARCHAR}, #{brand,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
+      #{material,jdbcType=VARCHAR}, #{grade,jdbcType=VARCHAR}, #{executiveStandard,jdbcType=VARCHAR}, 
+      #{securityCategory,jdbcType=VARCHAR}, #{inspector,jdbcType=VARCHAR}, #{suggestedRetailPrice,jdbcType=VARCHAR}, 
+      #{developmentLevel,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.Sku">
+    <selectKey keyProperty="skuId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into sku
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="skuId != null">
-        sku_id,
-      </if>
       <if test="productId != null">
         product_id,
       </if>
@@ -226,9 +229,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="skuId != null">
-        #{skuId,jdbcType=INTEGER},
-      </if>
       <if test="productId != null">
         #{productId,jdbcType=INTEGER},
       </if>

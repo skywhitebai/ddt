@@ -164,6 +164,9 @@ public class ImgService implements IImgService {
      */
     @Override
     public String getImgUrlBySkuId(Integer skuId) {
+        if(skuId==null){
+            return null;
+        }
         ImgExample imgExample=new ImgExample();
         imgExample.createCriteria().andEntityIdEqualTo(skuId).andImgTypeEqualTo(ImgConstant.ImgTypeEnum.SKU_IMG.getImgType());
         imgExample.setOrderByClause("img_id asc");

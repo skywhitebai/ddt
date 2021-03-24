@@ -15,7 +15,7 @@
     </sql>
     <select id="listSku" parameterType="com.sky.ddt.dto.sku.request.SkuListRequest" resultMap="SkuListMap">
         select
-        s.*
+        <include refid="Custom_Column_List"/>
         ,p.product_code,p.product_name productProductName,(select sum(ss.inventory_quantity) from shop_sku ss where ss.sku_id=s.sku_id) inventory_quantity
         from sku s
         left join product p on s.product_id=p.product_id
