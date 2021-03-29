@@ -13,4 +13,5 @@ public class ListProduceOrderResponse extends ProduceOrder {
     String shopName;
     String statusName;
     Integer productionQuantityTotal;
+    String shopParentSkus;
 }

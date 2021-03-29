@@ -355,7 +355,6 @@
                     {title: '生产数量', field: 'productionQuantityTotal', width: 66},
                     {title: '创建时间', field: 'createTime', width: 180},
                     {title: '修改时间', field: 'updateTime', width: 180},
-                    {title: '备注', field: 'remark', width: 180},
                     {
                         title: '操作', field: 'deal', width: 200, formatter: function (value, row, index) {
                         var content = '<a href="javascript:void(0)" onclick="exportProduceOrderShopSkuById(' + row.id + ')" class="easyui-linkbutton" >导出店铺sku</a>';
@@ -364,7 +363,9 @@
                         }
                         return content;
                     }
-                    }
+                    },
+                    {title: '店铺父sku', field: 'shopParentSkus', width: 150},
+                    {title: '备注', field: 'remark', width: 180}
                 ]],
                 toolbar: [{
                     id: 'btnView',

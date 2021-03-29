@@ -23,6 +23,7 @@ public class SaveShopSkuRequest {
     String remark;
     @NotBlank(message = ShopSkuConstant.TITLE_EMPTY)
     String title;
+    @NotBlank(message = ShopSkuConstant.SHOP_PARENT_SKU_EMPTY)
     String shopParentSku;
     //@NotBlank(message = ShopSkuConstant.ASIN_EMPTY)
     String asin;

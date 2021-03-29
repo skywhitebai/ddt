@@ -4,12 +4,15 @@
     <resultMap id="ListProduceOrderMap" type="com.sky.ddt.dto.produceOrder.response.ListProduceOrderResponse" extends="com.sky.ddt.dao.generate.ProduceOrderMapper.BaseResultMap">
         <result column="shop_name" property="shopName" />
         <result column="productionQuantityTotal" property="productionQuantityTotal" />
+        <result column="shopParentSkus" property="shopParentSkus" />
     </resultMap>
     <select id="listProduceOrder" parameterType="com.sky.ddt.dto.produceOrder.request.ListProduceOrderRequest" resultMap="ListProduceOrderMap">
         select
         <include refid="com.sky.ddt.dao.generate.ProduceOrderMapper.Base_Column_List" />
         ,(select s.shop_name from shop s where po.shop_id=s.shop_id) shop_name,
-        ifnull((select sum(poss.production_Quantity) from produce_order_shop_sku poss where poss.produce_order_id=po.id),0) productionQuantityTotal
+        ifnull((select sum(poss.production_Quantity) from produce_order_shop_sku poss where poss.produce_order_id=po.id),0) productionQuantityTotal,
+        (SELECT GROUP_CONCAT(DISTINCT shop_parent_sku) shopParentSkus FROM `produce_order_shop_sku` poss,`shop_sku` ss WHERE poss.produce_order_id=po.id AND poss.shop_sku_id=ss.shop_sku_id AND shop_parent_sku IS NOT NULL AND shop_parent_sku!='') shopParentSkus
+
         from produce_order po
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">

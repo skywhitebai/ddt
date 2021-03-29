@@ -147,7 +147,7 @@
 
                 <td>店铺父sku：</td>
                 <td>
-                    <input class="easyui-textbox" type="text" name="shopParentSku">
+                    <input class="easyui-textbox" type="text" name="shopParentSku" data-options="required:true">
                 </td>
             </tr>
             <tr>
@@ -462,6 +462,11 @@
         var fnsku = $("div#dlg input[name='fnsku']").val();
         if (fnsku == '') {
             $.messager.alert("提示", '请填写FNSKU');
+            return;
+        }
+        var shopParentSku = $("div#dlg input[name='shopParentSku']").val();
+        if (shopParentSku == '') {
+            $.messager.alert("提示", '请填写店铺父sku');
             return;
         }
         /* var asin = $("div#dlg input[name='asin']").val();
