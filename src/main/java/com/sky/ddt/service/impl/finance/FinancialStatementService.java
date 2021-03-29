@@ -110,6 +110,7 @@ public class FinancialStatementService implements IFinancialStatementService {
             } else {
                 financialStatementResponse.setMoneyBackRate(BigDecimal.ZERO);
             }
+            financialStatementResponse.setRateOfDollarExchangeRmb(FinanceConstant.RATE_OF_DOLLAR_EXCHANGE_RMB);
             financialStatementResponse.setMainBusinessIncome(financialStatementResponse.getMoneyBack().multiply(FinanceConstant.RATE_OF_DOLLAR_EXCHANGE_RMB));
             financialStatementResponse.setTotalEffectiveReceipts(financialStatementResponse.getMainBusinessIncome());
             BigDecimal mainBusinessProfit = BigDecimal.ZERO.add(financialStatementResponse.getTotalEffectiveReceipts())
@@ -190,12 +191,11 @@ public class FinancialStatementService implements IFinancialStatementService {
             financialStatement.setCreateTime(new Date());
             customFinancialStatementMapper.insertSelective(financialStatement);
         }
-        if (FinanceConstant.FinanceStatusEnum.NOT_GENERATED.getStatus().equals(finance.getStatus())) {
-            Finance financeUpdate = new Finance();
-            financeUpdate.setStatus(FinanceConstant.FinanceStatusEnum.GENERATED.getStatus());
-            financeUpdate.setId(financeId);
-            customFinanceMapper.updateByPrimaryKeySelective(financeUpdate);
-        }
+        Finance financeUpdate = new Finance();
+        financeUpdate.setStatus(FinanceConstant.FinanceStatusEnum.GENERATED.getStatus());
+        financeUpdate.setRateOfDollarExchangeRmb(FinanceConstant.RATE_OF_DOLLAR_EXCHANGE_RMB);
+        financeUpdate.setId(financeId);
+        customFinanceMapper.updateByPrimaryKeySelective(financeUpdate);
         return BaseResponse.success();
     }
 
@@ -728,6 +728,7 @@ public class FinancialStatementService implements IFinancialStatementService {
     }
 
     private void setFinancialStatement(Sheet sheet, List<FinancialStatement> financialStatementList) {
+        setRateOfDollarExchangeRmb(sheet,financialStatementList);
         //获取产品sku对应的开发等级
         List<Sku> skuList = getSkuList(financialStatementList);
         //设置开发等级
@@ -821,6 +822,17 @@ public class FinancialStatementService implements IFinancialStatementService {
             }
             rowIndex++;
         }
+    }
+
+    private void setRateOfDollarExchangeRmb(Sheet sheet, List<FinancialStatement> financialStatementList) {
+        if(CollectionUtils.isEmpty(financialStatementList)){
+            return;
+        }
+        if(financialStatementList.get(0).getRateOfDollarExchangeRmb()==null){
+            return;
+        }
+        sheet.getRow(2).getCell(5).setCellValue(financialStatementList.get(0).getRateOfDollarExchangeRmb().toString());
+
     }
 
     private Integer getDevelopmentLevel(String skuStr, List<Sku> skuList) {

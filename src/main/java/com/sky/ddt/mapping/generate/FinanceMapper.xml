@@ -26,6 +26,7 @@
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_by" jdbcType="INTEGER" property="updateBy" />
+    <result column="rate_of_dollar_exchange_rmb" jdbcType="DECIMAL" property="rateOfDollarExchangeRmb" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -90,7 +91,7 @@
     remove_orders, destruction_fee, destruction_details, fba_customer_return_fee, coupon, 
     early_reviewer_program_fee, long_storage_fee, refund_operation_fee, inventory_details, 
     head_deduction, manual_adjustment, status, remark, create_time, create_by, update_time, 
-    update_by
+    update_by, rate_of_dollar_exchange_rmb
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FinanceExample" resultMap="BaseResultMap">
     select
@@ -133,7 +134,8 @@
       long_storage_fee, refund_operation_fee, inventory_details, 
       head_deduction, manual_adjustment, status, 
       remark, create_time, create_by, 
-      update_time, update_by)
+      update_time, update_by, rate_of_dollar_exchange_rmb
+      )
     values (#{shopId,jdbcType=INTEGER}, #{month,jdbcType=TIMESTAMP}, #{monthlySales,jdbcType=BIT}, 
       #{lightingDeal,jdbcType=BIT}, #{monthlyStorageFee,jdbcType=BIT}, #{monthlyAdvertisingFee,jdbcType=BIT}, 
       #{removeOrders,jdbcType=BIT}, #{destructionFee,jdbcType=BIT}, #{destructionDetails,jdbcType=BIT}, 
@@ -141,7 +143,8 @@
       #{longStorageFee,jdbcType=BIT}, #{refundOperationFee,jdbcType=BIT}, #{inventoryDetails,jdbcType=BIT}, 
       #{headDeduction,jdbcType=BIT}, #{manualAdjustment,jdbcType=BIT}, #{status,jdbcType=INTEGER}, 
       #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER})
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{rateOfDollarExchangeRmb,jdbcType=DECIMAL}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.Finance">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -218,6 +221,9 @@
       <if test="updateBy != null">
         update_by,
       </if>
+      <if test="rateOfDollarExchangeRmb != null">
+        rate_of_dollar_exchange_rmb,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="shopId != null">
@@ -288,6 +294,9 @@
       </if>
       <if test="updateBy != null">
         #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="rateOfDollarExchangeRmb != null">
+        #{rateOfDollarExchangeRmb,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -372,6 +381,9 @@
       <if test="record.updateBy != null">
         update_by = #{record.updateBy,jdbcType=INTEGER},
       </if>
+      <if test="record.rateOfDollarExchangeRmb != null">
+        rate_of_dollar_exchange_rmb = #{record.rateOfDollarExchangeRmb,jdbcType=DECIMAL},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -402,7 +414,8 @@
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      update_by = #{record.updateBy,jdbcType=INTEGER}
+      update_by = #{record.updateBy,jdbcType=INTEGER},
+      rate_of_dollar_exchange_rmb = #{record.rateOfDollarExchangeRmb,jdbcType=DECIMAL}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -479,6 +492,9 @@
       <if test="updateBy != null">
         update_by = #{updateBy,jdbcType=INTEGER},
       </if>
+      <if test="rateOfDollarExchangeRmb != null">
+        rate_of_dollar_exchange_rmb = #{rateOfDollarExchangeRmb,jdbcType=DECIMAL},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -506,7 +522,8 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      update_by = #{updateBy,jdbcType=INTEGER}
+      update_by = #{updateBy,jdbcType=INTEGER},
+      rate_of_dollar_exchange_rmb = #{rateOfDollarExchangeRmb,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -1,5 +1,6 @@
 package com.sky.ddt.entity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -1552,6 +1553,66 @@ public class FinanceExample {
 
         public Criteria andUpdateByNotBetween(Integer value1, Integer value2) {
             addCriterion("update_by not between", value1, value2, "updateBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateOfDollarExchangeRmbIsNull() {
+            addCriterion("rate_of_dollar_exchange_rmb is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateOfDollarExchangeRmbIsNotNull() {
+            addCriterion("rate_of_dollar_exchange_rmb is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateOfDollarExchangeRmbEqualTo(BigDecimal value) {
+            addCriterion("rate_of_dollar_exchange_rmb =", value, "rateOfDollarExchangeRmb");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateOfDollarExchangeRmbNotEqualTo(BigDecimal value) {
+            addCriterion("rate_of_dollar_exchange_rmb <>", value, "rateOfDollarExchangeRmb");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateOfDollarExchangeRmbGreaterThan(BigDecimal value) {
+            addCriterion("rate_of_dollar_exchange_rmb >", value, "rateOfDollarExchangeRmb");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateOfDollarExchangeRmbGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("rate_of_dollar_exchange_rmb >=", value, "rateOfDollarExchangeRmb");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateOfDollarExchangeRmbLessThan(BigDecimal value) {
+            addCriterion("rate_of_dollar_exchange_rmb <", value, "rateOfDollarExchangeRmb");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateOfDollarExchangeRmbLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("rate_of_dollar_exchange_rmb <=", value, "rateOfDollarExchangeRmb");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateOfDollarExchangeRmbIn(List<BigDecimal> values) {
+            addCriterion("rate_of_dollar_exchange_rmb in", values, "rateOfDollarExchangeRmb");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateOfDollarExchangeRmbNotIn(List<BigDecimal> values) {
+            addCriterion("rate_of_dollar_exchange_rmb not in", values, "rateOfDollarExchangeRmb");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateOfDollarExchangeRmbBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("rate_of_dollar_exchange_rmb between", value1, value2, "rateOfDollarExchangeRmb");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateOfDollarExchangeRmbNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("rate_of_dollar_exchange_rmb not between", value1, value2, "rateOfDollarExchangeRmb");
             return (Criteria) this;
         }
     }

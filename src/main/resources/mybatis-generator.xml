@@ -39,8 +39,9 @@
         <!--<table tableName="sys_right" domainObjectName="Right">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        <table tableName="sku" >
-            <generatedKey column="sku_id" sqlStatement="MySql" identity="true"/>
+        <table tableName="finance" >
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+
     </context>
 </generatorConfiguration>

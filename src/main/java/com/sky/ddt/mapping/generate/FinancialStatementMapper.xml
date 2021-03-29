@@ -90,6 +90,7 @@
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
     <result column="advertising_sales_percentage" jdbcType="DECIMAL" property="advertisingSalesPercentage" />
     <result column="product_month" jdbcType="INTEGER" property="productMonth" />
+    <result column="rate_of_dollar_exchange_rmb" jdbcType="DECIMAL" property="rateOfDollarExchangeRmb" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -171,7 +172,7 @@
     fba_head_trip_cost, head_deduction_fee, main_business_profit, gross_margin_on_sales, 
     roi, initial_quantity, initial_inventory_cost, final_quantity, final_inventory_cost, 
     inventory_turnover, manual_adjustment, new_product, refund_rate, create_time, create_by, 
-    advertising_sales_percentage, product_month
+    advertising_sales_percentage, product_month, rate_of_dollar_exchange_rmb
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FinancialStatementExample" resultMap="BaseResultMap">
     select
@@ -241,7 +242,7 @@
       final_quantity, final_inventory_cost, inventory_turnover, 
       manual_adjustment, new_product, refund_rate, 
       create_time, create_by, advertising_sales_percentage, 
-      product_month)
+      product_month, rate_of_dollar_exchange_rmb)
     values (#{financeId,jdbcType=INTEGER}, #{month,jdbcType=TIMESTAMP}, #{shopId,jdbcType=INTEGER}, 
       #{shopName,jdbcType=VARCHAR}, #{developerUserId,jdbcType=INTEGER}, #{developerUserName,jdbcType=VARCHAR}, 
       #{salesmanUserId,jdbcType=INTEGER}, #{salesmanUserName,jdbcType=VARCHAR}, #{shopParentSku,jdbcType=VARCHAR}, 
@@ -276,7 +277,7 @@
       #{finalQuantity,jdbcType=INTEGER}, #{finalInventoryCost,jdbcType=DECIMAL}, #{inventoryTurnover,jdbcType=DECIMAL}, 
       #{manualAdjustment,jdbcType=DECIMAL}, #{newProduct,jdbcType=INTEGER}, #{refundRate,jdbcType=DECIMAL}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{advertisingSalesPercentage,jdbcType=DECIMAL}, 
-      #{productMonth,jdbcType=INTEGER})
+      #{productMonth,jdbcType=INTEGER}, #{rateOfDollarExchangeRmb,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.FinancialStatement">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -545,6 +546,9 @@
       <if test="productMonth != null">
         product_month,
       </if>
+      <if test="rateOfDollarExchangeRmb != null">
+        rate_of_dollar_exchange_rmb,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="financeId != null">
@@ -807,6 +811,9 @@
       </if>
       <if test="productMonth != null">
         #{productMonth,jdbcType=INTEGER},
+      </if>
+      <if test="rateOfDollarExchangeRmb != null">
+        #{rateOfDollarExchangeRmb,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -1083,6 +1090,9 @@
       <if test="record.productMonth != null">
         product_month = #{record.productMonth,jdbcType=INTEGER},
       </if>
+      <if test="record.rateOfDollarExchangeRmb != null">
+        rate_of_dollar_exchange_rmb = #{record.rateOfDollarExchangeRmb,jdbcType=DECIMAL},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -1177,7 +1187,8 @@
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER},
       advertising_sales_percentage = #{record.advertisingSalesPercentage,jdbcType=DECIMAL},
-      product_month = #{record.productMonth,jdbcType=INTEGER}
+      product_month = #{record.productMonth,jdbcType=INTEGER},
+      rate_of_dollar_exchange_rmb = #{record.rateOfDollarExchangeRmb,jdbcType=DECIMAL}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -1446,6 +1457,9 @@
       <if test="productMonth != null">
         product_month = #{productMonth,jdbcType=INTEGER},
       </if>
+      <if test="rateOfDollarExchangeRmb != null">
+        rate_of_dollar_exchange_rmb = #{rateOfDollarExchangeRmb,jdbcType=DECIMAL},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -1537,7 +1551,8 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER},
       advertising_sales_percentage = #{advertisingSalesPercentage,jdbcType=DECIMAL},
-      product_month = #{productMonth,jdbcType=INTEGER}
+      product_month = #{productMonth,jdbcType=INTEGER},
+      rate_of_dollar_exchange_rmb = #{rateOfDollarExchangeRmb,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

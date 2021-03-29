@@ -1,5 +1,6 @@
 package com.sky.ddt.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Finance {
@@ -50,6 +51,8 @@ public class Finance {
     private Date updateTime;
 
     private Integer updateBy;
+
+    private BigDecimal rateOfDollarExchangeRmb;
 
     public Integer getId() {
         return id;
@@ -241,5 +244,13 @@ public class Finance {
 
     public void setUpdateBy(Integer updateBy) {
         this.updateBy = updateBy;
+    }
+
+    public BigDecimal getRateOfDollarExchangeRmb() {
+        return rateOfDollarExchangeRmb;
+    }
+
+    public void setRateOfDollarExchangeRmb(BigDecimal rateOfDollarExchangeRmb) {
+        this.rateOfDollarExchangeRmb = rateOfDollarExchangeRmb;
     }
 }

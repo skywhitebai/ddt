@@ -180,6 +180,8 @@ public class FinancialStatement {
 
     private Integer productMonth;
 
+    private BigDecimal rateOfDollarExchangeRmb;
+
     public Integer getId() {
         return id;
     }
@@ -882,5 +884,13 @@ public class FinancialStatement {
 
     public void setProductMonth(Integer productMonth) {
         this.productMonth = productMonth;
+    }
+
+    public BigDecimal getRateOfDollarExchangeRmb() {
+        return rateOfDollarExchangeRmb;
+    }
+
+    public void setRateOfDollarExchangeRmb(BigDecimal rateOfDollarExchangeRmb) {
+        this.rateOfDollarExchangeRmb = rateOfDollarExchangeRmb;
     }
 }
