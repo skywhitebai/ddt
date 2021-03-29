@@ -11,5 +11,6 @@ import lombok.Data;
 public class ExportStockRecordResponse {
     String shopSku;
     String sku;
+    String fnsku;
     Integer stockQuantity;
 }
