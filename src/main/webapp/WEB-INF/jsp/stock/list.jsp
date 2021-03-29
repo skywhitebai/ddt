@@ -162,7 +162,26 @@
         </div>
     </form>
 </div>
+<div id="dlgImg" class="easyui-dialog" style="width: 600px; height: 600px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
+    <form id="frmImg" method="post" enctype="multipart/form-data">
+        <table>
+            <tr style="display: none">
+                <td>skuId：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="entityId">
+                </td>
+                <td>imgType：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="imgType">
 
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table id="dgImg" style="width: 100%; height: auto">
+    </table>
+</div>
 </body>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -224,7 +243,14 @@
                 {field: 'ck', checkbox: true},   //选择
                 {title: '店铺名', field: 'shopName', width: 140},
                 {title: '销售负责人', field: 'salesmanRealName', width: 120},
-                {title: '店铺sku', field: 'shopSku', width: 168}
+                {title: '店铺sku', field: 'shopSku', width: 168},
+                {
+                    title: '图片', field: 'imgUrl', width: 40,
+                    formatter: function (value, rowData, rowIndex) {
+                        var res = '<a href="javascript:;" onclick="showImgDialog(' + rowData.skuId + ')" >查看</a>';
+                        return res;
+                    }
+                }
             ]],
             columns: [[
                 {title: '7天实销', field: 'salesForTheLast7Days', width: 70},
@@ -523,6 +549,62 @@
 
     function openThisView() {
         window.open("${pageContext.request.contextPath }/stock/index");
+    }
+    function showImgDialog(skuId) {
+        $('#dlgImg').dialog('open').dialog('setTitle', 'sku图片');
+        $('#frmImg').form('clear');
+        $("div#dlgImg input[name='entityId']").val(skuId);
+        $("div#dlgImg input[name='imgType']").val("sku.sku_img");
+        bindImgData();
+    }
+    function bindImgData() {
+        dg = '#dgImg';
+        url = "${pageContext.request.contextPath }/img/list";
+        title = "图片管理";
+        queryParams = {
+            entityId: $("div#dlgImg input[name='entityId']").val(),
+            imgType: $("div#dlgImg input[name='imgType']").val()
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: true,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 5,
+            pageList: [5, 10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'imgId',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '图片名', field: 'imgName', width: 180},
+                {
+                    title: '图片', field: 'imgUrl', width: 100,
+                    formatter: function (value, rowData, rowIndex) {
+                        return '<a href="javascript:;" onclick="showImg(' + value + ')" ><img  src="' + value + '?x-oss-process=image/resize,m_fill,h_66,w_66"  style="width:66px; height:66px;"/></a> ';
+                    }
+                },
+                {title: '创建时间', field: 'createTime', width: 180}
+            ]],
+            toolbar: [{
+                id: 'btnImgReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        $(dg).datagrid('clearSelections');
     }
 </script>
 </html>
