@@ -7,9 +7,11 @@ import com.sky.ddt.common.constant.ProduceOrderShopSkuConstant;
 import com.sky.ddt.common.constant.SbErroEntity;
 import com.sky.ddt.dao.custom.CustomLabelPrintShopSkuMapper;
 import com.sky.ddt.dao.custom.CustomProduceOrderShopSkuMapper;
+import com.sky.ddt.dto.produceOrderShopSku.request.ListProduceOrderShopSkuProductionQuantityRequest;
 import com.sky.ddt.dto.produceOrderShopSku.request.ListProduceOrderShopSkuRequest;
 import com.sky.ddt.dto.produceOrderShopSku.request.SaveProduceOrderShopSkuRequest;
 import com.sky.ddt.dto.produceOrderShopSku.request.SaveProductionQuantityRequest;
+import com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuProductionQuantityResponse;
 import com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.ProduceOrder;
@@ -322,6 +324,14 @@ public class ProduceOrderShopSkuService implements IProduceOrderShopSkuService {
         produceOrderShopSkuUpdate.setUpdateTime(new Date());
         customProduceOrderShopSkuMapper.updateByPrimaryKeySelective(produceOrderShopSkuUpdate);
         return BaseResponse.success();
+    }
+
+    @Override
+    public PageInfo<ListProduceOrderShopSkuProductionQuantityResponse> listProduceOrderShopSkuProductionQuantity(ListProduceOrderShopSkuProductionQuantityRequest params) {
+        PageHelper.startPage(params.getPage(), params.getRows(), true);
+        List<ListProduceOrderShopSkuProductionQuantityResponse> list = customProduceOrderShopSkuMapper.listProduceOrderShopSkuProductionQuantity(params);
+        PageInfo<ListProduceOrderShopSkuProductionQuantityResponse> page = new PageInfo<ListProduceOrderShopSkuProductionQuantityResponse>(list);
+        return page;
     }
 
     private ProduceOrderShopSku getProduceOrderShopSku(Integer produceOrderId, Integer shopSkuId) {

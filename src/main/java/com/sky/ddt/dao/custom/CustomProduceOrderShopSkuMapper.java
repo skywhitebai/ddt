@@ -1,7 +1,9 @@
 package com.sky.ddt.dao.custom;
 
 import com.sky.ddt.dao.generate.ProduceOrderShopSkuMapper;
+import com.sky.ddt.dto.produceOrderShopSku.request.ListProduceOrderShopSkuProductionQuantityRequest;
 import com.sky.ddt.dto.produceOrderShopSku.request.ListProduceOrderShopSkuRequest;
+import com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuProductionQuantityResponse;
 import com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuResponse;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,4 +24,5 @@ public interface CustomProduceOrderShopSkuMapper extends ProduceOrderShopSkuMapp
      */
     List<ListProduceOrderShopSkuResponse> listProduceOrderShopSku(ListProduceOrderShopSkuRequest listProduceOrderShopSkuRequest);
 
+    List<ListProduceOrderShopSkuProductionQuantityResponse> listProduceOrderShopSkuProductionQuantity(ListProduceOrderShopSkuProductionQuantityRequest params);
 }

@@ -1301,6 +1301,20 @@ public class ShopSkuService implements IShopSkuService {
     }
 
     /**
+     * @param params@return
+     * @description 查询其他店铺库存信息
+     * @author baixueping
+     * @date 2021/3/30 14:43
+     */
+    @Override
+    public PageInfo<ListInventoryQuantityResponse> listInventoryQuantity(ListInventoryQuantityRequest params) {
+        PageHelper.startPage(params.getPage(), params.getRows(), true);
+        List<ListInventoryQuantityResponse> list = customShopSkuMapper.listInventoryQuantity(params);
+        PageInfo<ListInventoryQuantityResponse> page = new PageInfo<ListInventoryQuantityResponse>(list);
+        return page;
+    }
+
+    /**
      * @param
      * @return
      * @description 获取销售数量

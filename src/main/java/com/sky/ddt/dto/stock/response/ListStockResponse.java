@@ -96,5 +96,13 @@ public class ListStockResponse {
      * 生产单店铺sku生产数量
      */
     private Integer produceOrderShopSkuProductionQuantity;
+    /**
+     * 生产单其他店铺店铺sku生产数量
+     */
+    private Integer produceOrderShopSkuProductionQuantityOtherShop;
+    /**
+     * 生产单其他仓库店铺sku生产数量
+     */
+    private Integer produceOrderShopSkuProductionQuantityWarehouse;
 
 }

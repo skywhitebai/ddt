@@ -6,6 +6,7 @@ import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.shopHeadTripCost.response.ShopSkuHeadTripCostInfo;
 import com.sky.ddt.dto.shopSku.request.*;
 import com.sky.ddt.dto.shopSku.response.ExportShopSkuResponse;
+import com.sky.ddt.dto.shopSku.response.ListInventoryQuantityResponse;
 import com.sky.ddt.dto.shopSku.response.ListShopSkuResponse;
 import com.sky.ddt.dto.shopSku.response.ShopSkuFullProductName;
 import com.sky.ddt.entity.ShopSku;
@@ -214,14 +215,15 @@ public interface IShopSkuService {
      * @date 2020/8/14 15:34
      */
     boolean existWithoutHeadTripCostShopSku(Integer shopId);
-/**
- * @param
- * @param month
- *@return
- * @description
- * @author baixueping
- * @date 2020/8/17 17:06
-*/
+
+    /**
+     * @param
+     * @param month
+     * @return
+     * @description
+     * @author baixueping
+     * @date 2020/8/17 17:06
+     */
     List<ShopSkuHeadTripCostInfo> listNotExistShopSkuHeadTripCost(Integer shopId, Date month);
 
     boolean existWithoutWeightShopSku(Integer shopId);
@@ -236,4 +238,13 @@ public interface IShopSkuService {
 
 
     List<ShopSku> getShopSkuByShopParentSkuAndSize(GetShopSkuByShopParentSkuAndSizeRequest getShopSkuByShopParentSkuAndSizeRequest);
+
+    /**
+     * @param
+     * @return
+     * @description 查询其他店铺库存信息
+     * @author baixueping
+     * @date 2021/3/30 14:43
+     */
+    PageInfo<ListInventoryQuantityResponse> listInventoryQuantity(ListInventoryQuantityRequest params);
 }

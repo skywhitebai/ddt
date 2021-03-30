@@ -9,10 +9,10 @@ import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.shopSku.request.*;
 import com.sky.ddt.dto.shopSku.response.ExportShopSkuResponse;
+import com.sky.ddt.dto.shopSku.response.ListInventoryQuantityResponse;
 import com.sky.ddt.dto.shopSku.response.ListShopSkuResponse;
 import com.sky.ddt.service.IShopSkuService;
 import com.sky.ddt.util.ExcelExportByExcelFieldUtil;
-import com.sky.ddt.util.ExcelExportUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -49,6 +49,7 @@ public class ShopSkuController extends SuperController {
     public String print7040() {
         return "shopSku/print7040";
     }
+
     @RequestMapping("/importShopSku")
     @ResponseBody
     @MenuAnnotation("shopSku/index")
@@ -168,6 +169,7 @@ public class ShopSkuController extends SuperController {
         params.setUserId(getCurrentUserId());
         return shopSkuService.salesCountChart(params);
     }
+
     /**
      * @param
      * @return
@@ -182,12 +184,21 @@ public class ShopSkuController extends SuperController {
     }
 
 
-
     @RequestMapping("/importSalesmanUser")
     @ResponseBody
     @RightAnnotation("shopSku/importSalesmanUser")
     public BaseResponse importSalesmanUser(MultipartFile file) {
-        Integer dealUserId=getCurrentUserId();
-        return shopSkuService.importSalesmanUser(file,dealUserId);
+        Integer dealUserId = getCurrentUserId();
+        return shopSkuService.importSalesmanUser(file, dealUserId);
+    }
+
+    @RequestMapping("/listInventoryQuantity")
+    @ResponseBody
+    public DataGridResponse listInventoryQuantity(@Validated ListInventoryQuantityRequest params) {
+        PageInfo<ListInventoryQuantityResponse> page=shopSkuService.listInventoryQuantity(params);
+        DataGridResponse dataGridResponse=new DataGridResponse();
+        dataGridResponse.setTotal(page.getTotal());
+        dataGridResponse.setRows(page.getList());
+        return dataGridResponse;
     }
 }

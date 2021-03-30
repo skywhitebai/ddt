@@ -182,6 +182,50 @@
     <table id="dgImg" style="width: 100%; height: auto">
     </table>
 </div>
+<div id="dlgInventoryQuantity" class="easyui-dialog" style="width: 600px; height: 600px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
+    <form id="frmInventoryQuantity" method="post" enctype="multipart/form-data">
+        <table>
+            <tr style="display: none">
+                <td>skuId：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="skuId">
+                </td>
+                <td>shopId：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="shopId">
+                </td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="type">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table id="dgInventoryQuantity" style="width: 100%; height: auto">
+    </table>
+</div>
+<div id="dlgProduceOrderShopSkuProductionQuantity" class="easyui-dialog" style="width: 600px; height: 600px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
+    <form id="frmProduceOrderShopSkuProductionQuantity" method="post" enctype="multipart/form-data">
+        <table>
+            <tr style="display: none">
+                <td>skuId：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="skuId">
+                </td>
+                <td>shopId：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="shopId">
+                </td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="type">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table id="dgProduceOrderShopSkuProductionQuantity" style="width: 100%; height: auto">
+    </table>
+</div>
 </body>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -196,6 +240,7 @@
             url: "${pageContext.request.contextPath }/shop/userShopComboboxlist",//获取数据
         });
     }
+
     function bindSalesmanUserId() {
         $('#s_salesmanUserId').combobox({
             valueField: 'userId',
@@ -203,6 +248,7 @@
             url: "${pageContext.request.contextPath }/user/comboboxlist",//获取数据
         });
     }
+
     var pageSizeEnable = false;
 
     function bindData() {
@@ -277,7 +323,7 @@
                         return res;
                     },
                     styler: function (value, row, rowIndex) {
-                        if (value <30) {
+                        if (value < 30) {
                             return 'background-color:yellow;'
                         }
                     }
@@ -301,9 +347,31 @@
                 {title: '店铺sku', field: 'shopSku', width: 168},
                 {title: 'fba可售库存', field: 'afnFulfillableQuantity', width: 90},
                 {title: '店铺库存', field: 'inventoryQuantity', width: 90},
-                {title: '其他店铺库存', field: 'inventoryQuantityOtherShop', width: 100},
-                {title: '仓库库存', field: 'inventoryQuantityWarehouse', width: 90},
+                {
+                    title: '其他店铺库存', field: 'inventoryQuantityOtherShop', width: 90,
+                    formatter: function (value, row, rowIndex) {
+                        return '<a href="javascript:;" title="查看其他店铺库存" onclick="showInventoryQuantityDialog(' + row.skuId + ',' + row.shopId + ',1)" >' + value + '</a>';
+                    }
+                },
+                {
+                    title: '其他仓库库存', field: 'inventoryQuantityWarehouse', width: 90,
+                    formatter: function (value, row, rowIndex) {
+                        return '<a href="javascript:;" title="查看其他仓库库存" onclick="showInventoryQuantityDialog(' + row.skuId + ',' + row.shopId + ',2)" >' + value + '</a>';
+                    }
+                },
                 {title: '生产中数量', field: 'produceOrderShopSkuProductionQuantity', width: 90},
+                {
+                    title: '其他店铺生产中数量', field: 'produceOrderShopSkuProductionQuantityOtherShop', width: 90,
+                    formatter: function (value, row, rowIndex) {
+                        return '<a href="javascript:;" title="查看其他店铺库存" onclick="showProduceOrderShopSkuProductionQuantityDialog(' + row.skuId + ',' + row.shopId + ',1)" >' + value + '</a>';
+                    }
+                },
+                {
+                    title: '其他仓库生产中数量', field: 'produceOrderShopSkuProductionQuantityWarehouse', width: 90,
+                    formatter: function (value, row, rowIndex) {
+                        return '<a href="javascript:;" title="查看其他店铺库存" onclick="showProduceOrderShopSkuProductionQuantityDialog(' + row.skuId + ',' + row.shopId + ',2)" >' + value + '</a>';
+                    }
+                },
                 {title: '补货数量', field: 'stockQuantity', width: 90},
                 {
                     title: '空运补货', field: 'stockQuantityKy', width: 90,
@@ -550,6 +618,7 @@
     function openThisView() {
         window.open("${pageContext.request.contextPath }/stock/index");
     }
+
     function showImgDialog(skuId) {
         $('#dlgImg').dialog('open').dialog('setTitle', 'sku图片');
         $('#frmImg').form('clear');
@@ -557,6 +626,7 @@
         $("div#dlgImg input[name='imgType']").val("sku.sku_img");
         bindImgData();
     }
+
     function bindImgData() {
         dg = '#dgImg';
         url = "${pageContext.request.contextPath }/img/list";
@@ -593,6 +663,122 @@
                     }
                 },
                 {title: '创建时间', field: 'createTime', width: 180}
+            ]],
+            toolbar: [{
+                id: 'btnImgReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        $(dg).datagrid('clearSelections');
+    }
+
+    function showInventoryQuantityDialog(skuId, shopId, type) {
+        if (type == 1) {
+            $('#dlgInventoryQuantity').dialog('open').dialog('setTitle', '其他店铺库存');
+        } else {
+
+            $('#dlgInventoryQuantity').dialog('open').dialog('setTitle', '仓库库存');
+        }
+        $("div#dlgInventoryQuantity input[name='shopId']").val(shopId);
+        $("div#dlgInventoryQuantity input[name='skuId']").val(skuId);
+        $("div#dlgInventoryQuantity input[name='type']").val(type);
+        bindInventoryQuantityData();
+    }
+
+    function bindInventoryQuantityData() {
+        dg = '#dgInventoryQuantity';
+        url = "${pageContext.request.contextPath }/shopSku/listInventoryQuantity";
+        title = "其他店铺仓库库存";
+        queryParams = {
+            shopId: $("div#dlgInventoryQuantity input[name='shopId']").val(),
+            skuId: $("div#dlgInventoryQuantity input[name='skuId']").val(),
+            type: $("div#dlgInventoryQuantity input[name='type']").val()
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: true,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 5,
+            pageList: [5, 10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'shopSkuId',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '店铺名称', field: 'shopName', width: 100},
+                {title: '店铺sku', field: 'shopSku', width: 180},
+                {title: '库存', field: 'inventoryQuantity', width: 80}
+            ]],
+            toolbar: [{
+                id: 'btnImgReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        $(dg).datagrid('clearSelections');
+    }
+    function showProduceOrderShopSkuProductionQuantityDialog(skuId, shopId, type){
+        if (type == 1) {
+            $('#dlgProduceOrderShopSkuProductionQuantity').dialog('open').dialog('setTitle', '其他店铺生产中数量');
+        } else {
+
+            $('#dlgProduceOrderShopSkuProductionQuantity').dialog('open').dialog('setTitle', '其他仓库生产中数量');
+        }
+        $("div#dlgProduceOrderShopSkuProductionQuantity input[name='shopId']").val(shopId);
+        $("div#dlgProduceOrderShopSkuProductionQuantity input[name='skuId']").val(skuId);
+        $("div#dlgProduceOrderShopSkuProductionQuantity input[name='type']").val(type);
+        bindProduceOrderShopSkuProductionQuantityData();
+    }
+    function bindProduceOrderShopSkuProductionQuantityData() {
+        dg = '#dgProduceOrderShopSkuProductionQuantity';
+        url = "${pageContext.request.contextPath }/produceOrderShopSku/listProduceOrderShopSkuProductionQuantity";
+        title = "其他店铺仓库生产中数量";
+        queryParams = {
+            shopId: $("div#dlgProduceOrderShopSkuProductionQuantity input[name='shopId']").val(),
+            skuId: $("div#dlgProduceOrderShopSkuProductionQuantity input[name='skuId']").val(),
+            type: $("div#dlgProduceOrderShopSkuProductionQuantity input[name='type']").val()
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: true,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 5,
+            pageList: [5, 10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'shopSkuId',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '店铺名称', field: 'shopName', width: 100},
+                {title: '店铺sku', field: 'shopSku', width: 180},
+                {title: '生产中数量', field: 'productionQuantity', width: 80}
             ]],
             toolbar: [{
                 id: 'btnImgReload',

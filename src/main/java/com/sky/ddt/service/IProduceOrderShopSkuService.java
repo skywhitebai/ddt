@@ -1,9 +1,11 @@
 package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
+import com.sky.ddt.dto.produceOrderShopSku.request.ListProduceOrderShopSkuProductionQuantityRequest;
 import com.sky.ddt.dto.produceOrderShopSku.request.ListProduceOrderShopSkuRequest;
 import com.sky.ddt.dto.produceOrderShopSku.request.SaveProduceOrderShopSkuRequest;
 import com.sky.ddt.dto.produceOrderShopSku.request.SaveProductionQuantityRequest;
+import com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuProductionQuantityResponse;
 import com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.FbaPackingList;
@@ -80,4 +82,5 @@ public interface IProduceOrderShopSkuService {
      */
     BaseResponse saveProductionQuantity(SaveProductionQuantityRequest params, Integer currentUserId);
 
+    PageInfo<ListProduceOrderShopSkuProductionQuantityResponse> listProduceOrderShopSkuProductionQuantity(ListProduceOrderShopSkuProductionQuantityRequest params);
 }

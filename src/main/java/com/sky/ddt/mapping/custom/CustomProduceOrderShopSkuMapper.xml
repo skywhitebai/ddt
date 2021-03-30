@@ -28,6 +28,14 @@
         where poss.produce_order_id=#{produceOrderId}
         order by ss.shop_sku
     </select>
+    <select id="listProduceOrderShopSkuProductionQuantity"
+            resultType="com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuProductionQuantityResponse">
+         select sum(poss.production_quantity) productionQuantity,s.shop_id shopId,s.shop_name shopName,ss.shop_sku shopSku from
+        produce_order po,produce_order_shop_sku poss,shop_sku ss,shop s
+        where po.id=poss.produce_order_id and po.shop_id=ss.shop_id and po.shop_id=s.shop_id and s.type=#{type} and poss.shop_sku_id=ss.shop_sku_id and po.status in(1,2)
+        and po.shop_id!=#{shopId} and ss.sku_id=#{skuId}
+        group by ss.shop_sku
+    </select>
 
 
 </mapper>

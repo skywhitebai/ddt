@@ -2,10 +2,7 @@ package com.sky.ddt.dao.custom;
 
 import com.sky.ddt.dao.generate.ShopSkuMapper;
 import com.sky.ddt.dto.shopHeadTripCost.response.ShopSkuHeadTripCostInfo;
-import com.sky.ddt.dto.shopSku.request.GetPrintShopSkuRequest;
-import com.sky.ddt.dto.shopSku.request.GetShopSkuByShopParentSkuAndSizeRequest;
-import com.sky.ddt.dto.shopSku.request.ListShopSkuRequest;
-import com.sky.ddt.dto.shopSku.request.SalesCountRequest;
+import com.sky.ddt.dto.shopSku.request.*;
 import com.sky.ddt.dto.shopSku.response.*;
 import com.sky.ddt.entity.Shop;
 import com.sky.ddt.entity.ShopSku;
@@ -104,4 +101,6 @@ public interface CustomShopSkuMapper extends ShopSkuMapper {
     ShopSku getShopSkuBySkuShopId(@Param("shopId")Integer shopId,@Param("sku") String sku);
 
     List<ShopSku> getShopSkuByShopParentSkuAndSize(GetShopSkuByShopParentSkuAndSizeRequest getShopSkuByShopParentSkuAndSizeRequest);
+
+    List<ListInventoryQuantityResponse> listInventoryQuantity(ListInventoryQuantityRequest params);
 }

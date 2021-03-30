@@ -38,7 +38,15 @@
         IFNULL((select sum(poss.production_quantity) produceOrderShopSkuProductionQuantity from
         produce_order po,produce_order_shop_sku poss
         where po.id=poss.produce_order_id and po.shop_id=ss.shop_id and poss.shop_sku_id=ss.shop_sku_id and po.status in(1,2)
-        ),0) produceOrderShopSkuProductionQuantity
+        ),0) produceOrderShopSkuProductionQuantity,
+        IFNULL((select sum(poss.production_quantity) produceOrderShopSkuProductionQuantity from
+        produce_order po,produce_order_shop_sku poss,shop_sku ss2,shop s
+        where po.id=poss.produce_order_id and po.shop_id!=ss.shop_id and po.shop_id=s.shop_id and s.type=1 and poss.shop_sku_id=ss2.shop_sku_id and ss2.sku_id=ss.sku_id and po.status in(1,2)
+        ),0) produceOrderShopSkuProductionQuantityOtherShop,
+        IFNULL((select sum(poss.production_quantity) produceOrderShopSkuProductionQuantity from
+        produce_order po,produce_order_shop_sku poss,shop_sku ss2,shop s
+        where po.id=poss.produce_order_id and po.shop_id!=ss.shop_id and po.shop_id=s.shop_id and s.type=2 and poss.shop_sku_id=ss2.shop_sku_id and ss2.sku_id=ss.sku_id and po.status in(1,2)
+        ),0) produceOrderShopSkuProductionQuantityWarehouse
         FROM
         shop_sku ss
         LEFT JOIN `order_import` oi ON ss.`shop_sku_id`=oi.`shop_sku_id` and
