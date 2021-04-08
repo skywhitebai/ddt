@@ -83,4 +83,11 @@ public class ProudctController extends SuperController {
         Integer dealUserId=getCurrentUserId();
         return productService.importDeveloperUser(file,dealUserId);
     }
+    @RequestMapping("/importDevelopmentLevel")
+    @ResponseBody
+    @RightAnnotation("product/saveSku")
+    public BaseResponse importDevelopmentLevel(MultipartFile file) {
+        Integer dealUserId = getCurrentUserId();
+        return productService.importDevelopmentLevel(file, dealUserId);
+    }
 }

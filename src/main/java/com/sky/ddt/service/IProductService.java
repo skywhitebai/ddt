@@ -53,4 +53,13 @@ public interface IProductService {
      * @date 2020/1/2 17:00
      */
     BaseResponse importDeveloperUser(MultipartFile file, Integer dealUserId);
+
+    /**
+     * @param
+     * @return
+     * @description 导入开发等级
+     * @author baixueping
+     * @date 2021/4/8 16:21
+     */
+    BaseResponse importDevelopmentLevel(MultipartFile file, Integer dealUserId);
 }

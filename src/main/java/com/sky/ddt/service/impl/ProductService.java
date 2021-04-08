@@ -91,6 +91,7 @@ public class ProductService implements IProductService {
             model.setRemark(params.getRemark());
             model.setChineseProductName(params.getChineseProductName());
             model.setEnglishProductName(params.getEnglishProductName());
+            model.setDevelopmentLevel(params.getDevelopmentLevel());
             model.setUpdateBy(dealUserId);
             model.setUpdateTime(new Date());
             int res = customerProductMapper.updateByPrimaryKey(model);
@@ -344,6 +345,82 @@ public class ProductService implements IProductService {
             productUpdate.setUpdateBy(dealUserId);
             productUpdate.setUpdateTime(new Date());
             customerProductMapper.updateByPrimaryKeySelective(productUpdate);
+        }
+        return BaseResponse.success();
+    }
+
+    /**
+     * @param file
+     * @param dealUserId
+     * @return
+     * @description 导入开发等级
+     * @author baixueping
+     * @date 2021/4/8 16:21
+     */
+    @Override
+    public BaseResponse importDevelopmentLevel(MultipartFile file, Integer dealUserId) {
+//读取excel 转换为list
+        List<Map<String, String>> list = ExcelUtil.getListByExcel(file);
+        if (list == null || list.size() == 0) {
+            return BaseResponse.failMessage("导入的数据内容为空");
+        }
+        //遍历list导入信息
+        StringBuilder sbErro = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            Map<String, String> map = list.get(i);
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            StringBuilder sbErroItem = new StringBuilder();
+            if (StringUtils.isEmpty(map.get("产品编码"))) {
+                sbErroItem.append(",").append(ProductConstant.PRODUCTCODE_EMPTY);
+            } else {
+                Product product = getProductByProductCode(map.get("产品编码"));
+                if (product == null) {
+                    sbErroItem.append(",").append(ProductConstant.PRODUCTCODE_NOT_EXIST);
+                } else {
+                    map.put("productId", product.getProductId().toString());
+                }
+            }
+            if (StringUtils.isEmpty(map.get("开发等级"))) {
+                sbErroItem.append(",").append(ProductConstant.DEVELOPMENT_LEVEL_EMPTY);
+            } else {
+                Integer integer = MathUtil.strToInteger(map.get("开发等级"));
+                if (integer == null || integer < 0||integer>10) {
+                    sbErroItem.append(",").append(ProductConstant.DEVELOPMENT_LEVEL_ERRO);
+                }
+            }
+            if (sbErroItem.length() > 0) {
+                sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
+            }
+        }
+        if (sbErro.length() > 0) {
+            return BaseResponse.failMessage(sbErro.substring(1));
+        }
+        for (Map<String, String> map : list) {
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            Product product = new Product();
+            product.setProductId(MathUtil.strToInteger(map.get("productId")));
+            product.setDevelopmentLevel(MathUtil.strToInteger(map.get("开发等级")));
+            customerProductMapper.updateByPrimaryKeySelective(product);
         }
         return BaseResponse.success();
     }

@@ -17,6 +17,7 @@ public class ProductExportInfoResponse {
     String chineseProductName;
     String englishProductName;
 
+    Integer developmentLevel;
     private String description;
 
     private String remark;

@@ -7,6 +7,8 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import java.util.Date;
 
 @Data
@@ -30,4 +32,7 @@ public class ProductSaveRequest {
     String chineseProductName;
     @NotBlank(message = ProductConstant.ENGLISH_PRODUCT_NAME_EMPTY)
     String englishProductName;
+    @Min(value = 0,message = "开发等级必须为0-10的数字")
+    @Max(value = 10,message = "开发等级必须为0-10的数字")
+    private Integer developmentLevel;
 }

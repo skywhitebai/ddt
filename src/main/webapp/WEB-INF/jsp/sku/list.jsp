@@ -390,7 +390,6 @@
                 {title: '颜色', field: 'colour', width: 100},
                 {title: '色号', field: 'colourNumber', width: 100},
                 {title: '尺码', field: 'size', width: 100},
-                {title: '开发等级', field: 'developmentLevel', width: 100},
                 {
                     title: '重量', field: 'weight', width: 100,
                     formatter: function (value, rowData, rowIndex) {

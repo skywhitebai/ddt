@@ -54,6 +54,10 @@
        class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入产品开发人员</a>
+    <a href="javascript:void(0)" id="a_importDevelopmentLevel" onclick="showDialogImport('developmentLevel')"
+       class="easyui-linkbutton a_hide"
+       data-options="iconCls:'icon-search'"
+       style="">导入开发等级</a>
     <a href="javascript:void(0)" id="a_exportProduct" onclick="exportProduct()" class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导出产品</a>
@@ -114,6 +118,13 @@
                 <td>
                     <input name="developmentTime" id="developmentTime"
                            class="easyui-datebox"/>
+                </td>
+            </tr>
+            <tr>
+                <td>开发等级：</td>
+                <td>
+                    <input class="easyui-numberbox" name="developmentLevel" id="developmentLevel" min="0" max="10"
+                           precision="0">
                 </td>
             </tr>
             <tr class="view_hide">
@@ -241,6 +252,7 @@
                 {title: '中文报关名', field: 'chineseProductName', width: 100},
                 {title: '英文报关名', field: 'englishProductName', width: 100},
                 {title: '开发人员', field: 'developerUserName', width: 100},
+                {title: '开发等级', field: 'developmentLevel', width: 65},
                 {
                     title: '开发时间', field: 'developmentTime', width: 100,
                     formatter: function (value, rowData, rowIndex) {
@@ -436,6 +448,11 @@
                 importTitle = "导入产品开发人员";
                 importTemplateUrl = "${pageContext.request.contextPath }/static/template/product/developerUserTemplate.xlsx";
                 importUrl = "${pageContext.request.contextPath }/product/importDeveloperUser";
+                break;
+            case 'developmentLevel':
+                importTitle = "导入开发等级";
+                importTemplateUrl = "${pageContext.request.contextPath }/static/template/product/developmentLevelTemplate.xlsx";
+                importUrl = "${pageContext.request.contextPath }/product/importDevelopmentLevel";
                 break;
         }
         if (isEmpty(importTitle)) {

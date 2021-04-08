@@ -29,6 +29,8 @@ public class Product {
 
     private Date updateTime;
 
+    private Integer developmentLevel;
+
     public Integer getProductId() {
         return productId;
     }
@@ -131,5 +133,13 @@ public class Product {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getDevelopmentLevel() {
+        return developmentLevel;
+    }
+
+    public void setDevelopmentLevel(Integer developmentLevel) {
+        this.developmentLevel = developmentLevel;
     }
 }
