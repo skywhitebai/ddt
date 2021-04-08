@@ -12,11 +12,11 @@ function getUrlParams(queryParams) {
     var urlParams = "";
     for (i in queryParams) {
         if (!isEmpty(queryParams[i])) {
-            urlParams += i + "=" + queryParams[i] + "&tt="+getTimestamp();
+            urlParams += i + "=" + queryParams[i];
         }
     }
     if (!isEmpty(urlParams)) {
-        urlParams = "?" + urlParams;
+        urlParams = "?" + urlParams+ "&tt="+getTimestamp();
     }
     return urlParams;
 }

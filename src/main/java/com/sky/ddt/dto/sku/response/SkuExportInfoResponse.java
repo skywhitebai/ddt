@@ -3,6 +3,7 @@ package com.sky.ddt.dto.sku.response;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * @author baixueping
@@ -27,6 +28,7 @@ public class SkuExportInfoResponse {
     private BigDecimal costPrice;
     BigDecimal headTripCost;
     Integer inventoryQuantity;
+    Date createTime;
     String remark;
 
 }

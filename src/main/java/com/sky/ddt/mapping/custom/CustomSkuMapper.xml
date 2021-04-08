@@ -29,7 +29,7 @@
             resultType="com.sky.ddt.dto.sku.response.SkuExportInfoResponse">
         select
         p.product_name productName,p.product_code productCode,s.sku, s.colour,s.colour_number colourNumber,s.size,s.weight, s.cost_price costPrice,
-        s.head_trip_cost headTripCost, (select sum(ss.inventory_quantity) from shop_sku ss where ss.sku_id=s.sku_id) inventoryQuantity,s.remark
+        s.head_trip_cost headTripCost, (select sum(ss.inventory_quantity) from shop_sku ss where ss.sku_id=s.sku_id) inventoryQuantity,s.create_time createTime,s.remark
         from sku s
         left join product p on s.product_id=p.product_id
         <if test="_parameter != null">
@@ -47,6 +47,8 @@
                 <if test="productName != null and productName != '' ">and p.product_name like
                     concat('%',#{productName},'%')
                 </if>
+                <if test="createTimeStart != null">and s.create_time<![CDATA[>=]]>#{createTimeStart}</if>
+                <if test="createTimeEnd != null">and s.create_time<![CDATA[<]]>date_add(#{createTimeEnd}, interval 1 day)</if>
             </trim>
         </where>
     </sql>

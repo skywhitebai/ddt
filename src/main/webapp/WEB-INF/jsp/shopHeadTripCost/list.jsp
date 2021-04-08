@@ -39,6 +39,8 @@
 
     <a href="javascript:void(0)" onclick="createShopHeadTripCost()" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'">生成店铺头程费</a>
+    <a href="javascript:void(0)" onclick="exportShopHeadTripCost()" class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'">下载店铺头程费</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 
@@ -173,6 +175,17 @@
         });
     }
 
+    function exportShopHeadTripCost() {
+        $.messager.alert("提示", "功能待开发");
+        return;
+        var month = $("#s_month").val();
+        if (isEmpty(month)) {
+            $.messager.alert("提示", "请选择月份");
+            return;
+        }
+
+    }
+
     function createShopHeadTripCost() {
         var shopId = $("#s_shopId").combobox('getValue');
         if (isEmpty(shopId)) {
@@ -295,7 +308,7 @@
     }
 
     function exportShopSkuHeadTripCostHis(id) {
-        url = "${pageContext.request.contextPath }/shopSkuHeadTripCostHis/exportShopSkuHeadTripCostHis?shopHeadTripCostId="+id;
+        url = "${pageContext.request.contextPath }/shopSkuHeadTripCostHis/exportShopSkuHeadTripCostHis?shopHeadTripCostId=" + id;
         window.open(url);
     }
 </script>

@@ -128,7 +128,7 @@ public class ShopHeadTripCostService implements IShopHeadTripCostService {
                 return BaseResponse.failMessage(ShopHeadTripCostConstant.MONTH_ERRO);
             }
         }
-        //校验是否已生产
+        //校验是否已生成
         ShopHeadTripCostExample example = new ShopHeadTripCostExample();
         example.createCriteria().andShopIdEqualTo(params.getShopId()).andMonthEqualTo(params.getMonthDate());
         if (customShopHeadTripCostMapper.countByExample(example) > 0) {

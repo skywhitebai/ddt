@@ -17,7 +17,7 @@
             src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.5.5.4/locale/easyui-lang-zh_CN.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath }/static/css/main.css?t=20200928" type="text/css">
     <script type="text/javascript"
-            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20201028"></script>
+            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20210409"></script>
     <script type="text/javascript"
             src="${pageContext.request.contextPath }/static/js/common/cookieUtil.js?t=20200928"></script>
 
@@ -31,6 +31,14 @@
     <input class="easyui-validatebox textbox" id="s_productCode">
     产品名称：
     <input class="easyui-validatebox textbox" id="s_productName">
+    添加时间
+    <input class="easyui-datebox" id="s_createTimeStart">
+    -
+    <input class="easyui-datebox" id="s_createTimeEnd">
+    <a href="javascript:void(0)" onclick="last30()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+    >最近30天</a>
+    <a href="javascript:void(0)" onclick="last60()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+    >最近60天</a>
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
     <a href="javascript:void(0)" id="a_importSku" onclick="showDialogImport('sku')" class="easyui-linkbutton a_hide"
@@ -310,15 +318,39 @@
         }
     }
 
+    function last30() {
+        var startDate = new Date(new Date().setDate(new Date().getDate() - 30));
+        var endDate = new Date(new Date().setDate(new Date().getDate()));
+        $("#s_createTimeStart").datebox('setValue', dateToString(startDate));
+        $("#s_createTimeEnd").datebox('setValue', dateToString(endDate));
+        //bindData();
+    }
+
+    function last60() {
+        var startDate = new Date(new Date().setDate(new Date().getDate() - 60));
+        var endDate = new Date(new Date().setDate(new Date().getDate()));
+        $("#s_createTimeStart").datebox('setValue', dateToString(startDate));
+        $("#s_createTimeEnd").datebox('setValue', dateToString(endDate));
+        //bindData();
+    }
+
+    function getQueryParams() {
+        queryParams = {
+            sku: $("#s_sku").val(),
+            productCode: $("#s_productCode").val(),
+            productName: $("#s_productName").val(),
+            createTimeStart: $("#s_createTimeStart").val(),
+            createTimeEnd: $("#s_createTimeEnd").val()
+        }
+        ;
+        return queryParams;
+    }
+
     function bindData() {
         dg = '#dg';
         url = "${pageContext.request.contextPath }/sku/list";
         title = "sku管理";
-        queryParams = {
-            sku: $("#s_sku").val(),
-            productCode: $("#s_productCode").val(),
-            productName: $("#s_productName").val()
-        };
+        queryParams = getQueryParams();
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
             title: title,
@@ -556,10 +588,8 @@
 
 
     function exportSku() {
-        sku = $("#s_sku").val();
-        productCode = $("#s_productCode").val();
-        productName = $("#s_productName").val();
-        url = "${pageContext.request.contextPath }/sku/exportSku?sku=" + sku + "&productCode=" + productCode + "&productName=" + productName;
+        queryParams = getQueryParams();
+        url = "${pageContext.request.contextPath }/sku/exportSku" + getUrlParams(queryParams);
         window.open(url);
     }
 
