@@ -85,7 +85,7 @@ public class ProudctController extends SuperController {
     }
     @RequestMapping("/importDevelopmentLevel")
     @ResponseBody
-    @RightAnnotation("product/saveSku")
+    @RightAnnotation("product/importDeveloperUser")
     public BaseResponse importDevelopmentLevel(MultipartFile file) {
         Integer dealUserId = getCurrentUserId();
         return productService.importDevelopmentLevel(file, dealUserId);
