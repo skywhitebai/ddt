@@ -141,11 +141,4 @@ public class SkuController extends SuperController {
         return skuService.getPrintTmallSku(params);
     }
 
-    @RequestMapping("/importDevelopmentLevel")
-    @ResponseBody
-    @RightAnnotation("sku/saveSku")
-    public BaseResponse importDevelopmentLevel(MultipartFile file) {
-        Integer dealUserId = getCurrentUserId();
-        return skuService.importDevelopmentLevel(file, dealUserId);
-    }
 }

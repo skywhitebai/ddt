@@ -63,8 +63,5 @@ public class SkuSaveRequest {
     private String inspector;
     @Length(max = 50, message = "建议零售价长度超过50")
     private String suggestedRetailPrice;
-    @Min(value = 0,message = "开发等级必须为0-10的数字")
-    @Max(value = 10,message = "开发等级必须为0-10的数字")
-    private Integer developmentLevel;
     private String remark;
 }

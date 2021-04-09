@@ -260,7 +260,6 @@ public class SkuService implements ISkuService {
         sku.setSecurityCategory(params.getSecurityCategory());
         sku.setInspector(params.getInspector());
         sku.setSuggestedRetailPrice(params.getSuggestedRetailPrice());
-        sku.setDevelopmentLevel(params.getDevelopmentLevel());
         sku.setUpdateBy(dealUserId);
         sku.setUpdateTime(new Date());
         customSkuMapper.updateByPrimaryKeySelective(sku);
@@ -781,81 +780,5 @@ public class SkuService implements ISkuService {
         SkuExample example = new SkuExample();
         example.createCriteria().andProductIdIn(productIds);
         return customSkuMapper.countByExample(example) > 0;
-    }
-
-    /**
-     * @param file
-     * @param dealUserId
-     * @return
-     * @description 导入开发等级
-     * @author baixueping
-     * @date 2021/3/18 10:49
-     */
-    @Override
-    public BaseResponse importDevelopmentLevel(MultipartFile file, Integer dealUserId) {
-        //读取excel 转换为list
-        List<Map<String, String>> list = ExcelUtil.getListByExcel(file);
-        if (list == null || list.size() == 0) {
-            return BaseResponse.failMessage("导入的数据内容为空");
-        }
-        //遍历list导入信息
-        StringBuilder sbErro = new StringBuilder();
-        for (int i = 0; i < list.size(); i++) {
-            Map<String, String> map = list.get(i);
-            //忽略空行
-            Boolean isEmpty = true;
-            for (String key : map.keySet()) {
-                if (!StringUtils.isEmpty(map.get(key))) {
-                    isEmpty = false;
-                    break;
-                }
-            }
-            if (isEmpty) {
-                continue;
-            }
-            StringBuilder sbErroItem = new StringBuilder();
-            if (StringUtils.isEmpty(map.get("产品sku"))) {
-                sbErroItem.append(",").append(SkuConstant.SKU_EMPTY);
-            } else {
-                Sku sku = getSkuBySku(map.get("产品sku"));
-                if (sku == null) {
-                    sbErroItem.append(",").append(SkuConstant.SKU_NOT_EXIST);
-                } else {
-                    map.put("skuId", sku.getSkuId().toString());
-                }
-            }
-            if (StringUtils.isEmpty(map.get("开发等级"))) {
-                sbErroItem.append(",").append(SkuConstant.DEVELOPMENT_LEVEL_EMPTY);
-            } else {
-                Integer integer = MathUtil.strToInteger(map.get("开发等级"));
-                if (integer == null || integer < 0||integer>10) {
-                    sbErroItem.append(",").append(SkuConstant.DEVELOPMENT_LEVEL_ERRO);
-                }
-            }
-            if (sbErroItem.length() > 0) {
-                sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
-            }
-        }
-        if (sbErro.length() > 0) {
-            return BaseResponse.failMessage(sbErro.substring(1));
-        }
-        for (Map<String, String> map : list) {
-            //忽略空行
-            Boolean isEmpty = true;
-            for (String key : map.keySet()) {
-                if (!StringUtils.isEmpty(map.get(key))) {
-                    isEmpty = false;
-                    break;
-                }
-            }
-            if (isEmpty) {
-                continue;
-            }
-            Sku sku = new Sku();
-            sku.setSkuId(MathUtil.strToInteger(map.get("skuId")));
-            sku.setInventoryQuantity(MathUtil.strToInteger(map.get("数量")));
-            customSkuMapper.updateByPrimaryKeySelective(sku);
-        }
-        return BaseResponse.success();
     }
 }

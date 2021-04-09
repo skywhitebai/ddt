@@ -191,6 +191,9 @@
         if (hasRight("product/importDeveloperUser")) {
             $("#a_importDeveloperUser").show()
         }
+        if (hasRight("product/importProduct")) {
+            $("#a_importDevelopmentLevel").show()
+        }
         if (hasRight("product/exportProduct")) {
             $("#a_exportProduct").show()
         }

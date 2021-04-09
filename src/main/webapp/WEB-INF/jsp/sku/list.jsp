@@ -64,10 +64,6 @@
        class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入天猫标签信息</a>
-    <a href="javascript:void(0)" id="a_importDevelopmentLevel" onclick="showDialogImport('developmentLevel')"
-       class="easyui-linkbutton a_hide"
-       data-options="iconCls:'icon-search'"
-       style="">导入开发等级</a>
     <a href="javascript:void(0)" onclick="showPrintTmallLabelBysSelect()" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">打印标签</a>
@@ -126,11 +122,6 @@
                 <td>尺码：</td>
                 <td>
                     <input class="easyui-validatebox textbox" name="size" id="size" data-options="required:true">
-                </td>
-                <td>开发等级：</td>
-                <td>
-                    <input class="easyui-numberbox" name="developmentLevel" id="developmentLevel" min="0" max="10"
-                           precision="0">
                 </td>
             </tr>
             <tr>
@@ -876,11 +867,6 @@
                 importTitle = "导入颜色色号";
                 importTemplateUrl = "${pageContext.request.contextPath }/static/template/sku/colourTemplate.xlsx";
                 importUrl = "${pageContext.request.contextPath }/sku/importColour";
-                break;
-            case 'developmentLevel':
-                importTitle = "导入开发等级";
-                importTemplateUrl = "${pageContext.request.contextPath }/static/template/sku/developmentLevelTemplate.xlsx";
-                importUrl = "${pageContext.request.contextPath }/sku/importDevelopmentLevel";
                 break;
 
         }
