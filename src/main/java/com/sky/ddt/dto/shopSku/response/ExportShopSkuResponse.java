@@ -23,5 +23,7 @@ public class ExportShopSkuResponse {
     Integer inventoryQuantity;
     String storageLocation;
     BigDecimal headTripCost;
+    BigDecimal weight;
+    BigDecimal costPrice;
     String remark;
 }

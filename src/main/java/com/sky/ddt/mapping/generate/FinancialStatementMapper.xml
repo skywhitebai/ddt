@@ -91,6 +91,9 @@
     <result column="advertising_sales_percentage" jdbcType="DECIMAL" property="advertisingSalesPercentage" />
     <result column="product_month" jdbcType="INTEGER" property="productMonth" />
     <result column="rate_of_dollar_exchange_rmb" jdbcType="DECIMAL" property="rateOfDollarExchangeRmb" />
+    <result column="cost_price" jdbcType="DECIMAL" property="costPrice" />
+    <result column="head_trip_cost" jdbcType="DECIMAL" property="headTripCost" />
+    <result column="development_level" jdbcType="INTEGER" property="developmentLevel" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -172,7 +175,8 @@
     fba_head_trip_cost, head_deduction_fee, main_business_profit, gross_margin_on_sales, 
     roi, initial_quantity, initial_inventory_cost, final_quantity, final_inventory_cost, 
     inventory_turnover, manual_adjustment, new_product, refund_rate, create_time, create_by, 
-    advertising_sales_percentage, product_month, rate_of_dollar_exchange_rmb
+    advertising_sales_percentage, product_month, rate_of_dollar_exchange_rmb, cost_price, 
+    head_trip_cost, development_level
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FinancialStatementExample" resultMap="BaseResultMap">
     select
@@ -242,7 +246,9 @@
       final_quantity, final_inventory_cost, inventory_turnover, 
       manual_adjustment, new_product, refund_rate, 
       create_time, create_by, advertising_sales_percentage, 
-      product_month, rate_of_dollar_exchange_rmb)
+      product_month, rate_of_dollar_exchange_rmb, 
+      cost_price, head_trip_cost, development_level
+      )
     values (#{financeId,jdbcType=INTEGER}, #{month,jdbcType=TIMESTAMP}, #{shopId,jdbcType=INTEGER}, 
       #{shopName,jdbcType=VARCHAR}, #{developerUserId,jdbcType=INTEGER}, #{developerUserName,jdbcType=VARCHAR}, 
       #{salesmanUserId,jdbcType=INTEGER}, #{salesmanUserName,jdbcType=VARCHAR}, #{shopParentSku,jdbcType=VARCHAR}, 
@@ -277,7 +283,9 @@
       #{finalQuantity,jdbcType=INTEGER}, #{finalInventoryCost,jdbcType=DECIMAL}, #{inventoryTurnover,jdbcType=DECIMAL}, 
       #{manualAdjustment,jdbcType=DECIMAL}, #{newProduct,jdbcType=INTEGER}, #{refundRate,jdbcType=DECIMAL}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{advertisingSalesPercentage,jdbcType=DECIMAL}, 
-      #{productMonth,jdbcType=INTEGER}, #{rateOfDollarExchangeRmb,jdbcType=DECIMAL})
+      #{productMonth,jdbcType=INTEGER}, #{rateOfDollarExchangeRmb,jdbcType=DECIMAL}, 
+      #{costPrice,jdbcType=DECIMAL}, #{headTripCost,jdbcType=DECIMAL}, #{developmentLevel,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.FinancialStatement">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -549,6 +557,15 @@
       <if test="rateOfDollarExchangeRmb != null">
         rate_of_dollar_exchange_rmb,
       </if>
+      <if test="costPrice != null">
+        cost_price,
+      </if>
+      <if test="headTripCost != null">
+        head_trip_cost,
+      </if>
+      <if test="developmentLevel != null">
+        development_level,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="financeId != null">
@@ -814,6 +831,15 @@
       </if>
       <if test="rateOfDollarExchangeRmb != null">
         #{rateOfDollarExchangeRmb,jdbcType=DECIMAL},
+      </if>
+      <if test="costPrice != null">
+        #{costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="headTripCost != null">
+        #{headTripCost,jdbcType=DECIMAL},
+      </if>
+      <if test="developmentLevel != null">
+        #{developmentLevel,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -1093,6 +1119,15 @@
       <if test="record.rateOfDollarExchangeRmb != null">
         rate_of_dollar_exchange_rmb = #{record.rateOfDollarExchangeRmb,jdbcType=DECIMAL},
       </if>
+      <if test="record.costPrice != null">
+        cost_price = #{record.costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.headTripCost != null">
+        head_trip_cost = #{record.headTripCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.developmentLevel != null">
+        development_level = #{record.developmentLevel,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -1188,7 +1223,10 @@
       create_by = #{record.createBy,jdbcType=INTEGER},
       advertising_sales_percentage = #{record.advertisingSalesPercentage,jdbcType=DECIMAL},
       product_month = #{record.productMonth,jdbcType=INTEGER},
-      rate_of_dollar_exchange_rmb = #{record.rateOfDollarExchangeRmb,jdbcType=DECIMAL}
+      rate_of_dollar_exchange_rmb = #{record.rateOfDollarExchangeRmb,jdbcType=DECIMAL},
+      cost_price = #{record.costPrice,jdbcType=DECIMAL},
+      head_trip_cost = #{record.headTripCost,jdbcType=DECIMAL},
+      development_level = #{record.developmentLevel,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -1460,6 +1498,15 @@
       <if test="rateOfDollarExchangeRmb != null">
         rate_of_dollar_exchange_rmb = #{rateOfDollarExchangeRmb,jdbcType=DECIMAL},
       </if>
+      <if test="costPrice != null">
+        cost_price = #{costPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="headTripCost != null">
+        head_trip_cost = #{headTripCost,jdbcType=DECIMAL},
+      </if>
+      <if test="developmentLevel != null">
+        development_level = #{developmentLevel,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -1552,7 +1599,10 @@
       create_by = #{createBy,jdbcType=INTEGER},
       advertising_sales_percentage = #{advertisingSalesPercentage,jdbcType=DECIMAL},
       product_month = #{productMonth,jdbcType=INTEGER},
-      rate_of_dollar_exchange_rmb = #{rateOfDollarExchangeRmb,jdbcType=DECIMAL}
+      rate_of_dollar_exchange_rmb = #{rateOfDollarExchangeRmb,jdbcType=DECIMAL},
+      cost_price = #{costPrice,jdbcType=DECIMAL},
+      head_trip_cost = #{headTripCost,jdbcType=DECIMAL},
+      development_level = #{developmentLevel,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

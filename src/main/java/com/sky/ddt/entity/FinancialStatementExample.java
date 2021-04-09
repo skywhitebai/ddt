@@ -5515,6 +5515,186 @@ public class FinancialStatementExample {
             addCriterion("rate_of_dollar_exchange_rmb not between", value1, value2, "rateOfDollarExchangeRmb");
             return (Criteria) this;
         }
+
+        public Criteria andCostPriceIsNull() {
+            addCriterion("cost_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceIsNotNull() {
+            addCriterion("cost_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceEqualTo(BigDecimal value) {
+            addCriterion("cost_price =", value, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceNotEqualTo(BigDecimal value) {
+            addCriterion("cost_price <>", value, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceGreaterThan(BigDecimal value) {
+            addCriterion("cost_price >", value, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("cost_price >=", value, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceLessThan(BigDecimal value) {
+            addCriterion("cost_price <", value, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("cost_price <=", value, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceIn(List<BigDecimal> values) {
+            addCriterion("cost_price in", values, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceNotIn(List<BigDecimal> values) {
+            addCriterion("cost_price not in", values, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("cost_price between", value1, value2, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("cost_price not between", value1, value2, "costPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadTripCostIsNull() {
+            addCriterion("head_trip_cost is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadTripCostIsNotNull() {
+            addCriterion("head_trip_cost is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadTripCostEqualTo(BigDecimal value) {
+            addCriterion("head_trip_cost =", value, "headTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadTripCostNotEqualTo(BigDecimal value) {
+            addCriterion("head_trip_cost <>", value, "headTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadTripCostGreaterThan(BigDecimal value) {
+            addCriterion("head_trip_cost >", value, "headTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadTripCostGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("head_trip_cost >=", value, "headTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadTripCostLessThan(BigDecimal value) {
+            addCriterion("head_trip_cost <", value, "headTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadTripCostLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("head_trip_cost <=", value, "headTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadTripCostIn(List<BigDecimal> values) {
+            addCriterion("head_trip_cost in", values, "headTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadTripCostNotIn(List<BigDecimal> values) {
+            addCriterion("head_trip_cost not in", values, "headTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadTripCostBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("head_trip_cost between", value1, value2, "headTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andHeadTripCostNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("head_trip_cost not between", value1, value2, "headTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelIsNull() {
+            addCriterion("development_level is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelIsNotNull() {
+            addCriterion("development_level is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelEqualTo(Integer value) {
+            addCriterion("development_level =", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelNotEqualTo(Integer value) {
+            addCriterion("development_level <>", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelGreaterThan(Integer value) {
+            addCriterion("development_level >", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelGreaterThanOrEqualTo(Integer value) {
+            addCriterion("development_level >=", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelLessThan(Integer value) {
+            addCriterion("development_level <", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelLessThanOrEqualTo(Integer value) {
+            addCriterion("development_level <=", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelIn(List<Integer> values) {
+            addCriterion("development_level in", values, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelNotIn(List<Integer> values) {
+            addCriterion("development_level not in", values, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelBetween(Integer value1, Integer value2) {
+            addCriterion("development_level between", value1, value2, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelNotBetween(Integer value1, Integer value2) {
+            addCriterion("development_level not between", value1, value2, "developmentLevel");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

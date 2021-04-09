@@ -76,7 +76,6 @@ public class FinancialStatementService implements IFinancialStatementService {
         setfbaCustomerReturnPerUnitFee(financialStatementResponseList);
         //找出销售金额最大的 设置店铺费
         setSellerpaymentsReportFeeSubscription(financialStatementResponseList);
-
         //计算
         for (FinancialStatementResponse financialStatementResponse :
                 financialStatementResponseList) {
@@ -728,7 +727,7 @@ public class FinancialStatementService implements IFinancialStatementService {
     }
 
     private void setFinancialStatement(Sheet sheet, List<FinancialStatement> financialStatementList) {
-        setRateOfDollarExchangeRmb(sheet,financialStatementList);
+        setRateOfDollarExchangeRmb(sheet, financialStatementList);
         //获取产品sku对应的开发等级
         List<Sku> skuList = getSkuList(financialStatementList);
         //设置开发等级
@@ -816,19 +815,24 @@ public class FinancialStatementService implements IFinancialStatementService {
             row.createCell(106).setCellValue(financialStatement.getNewProduct() == 1 ? "是" : "否");
             row.createCell(107).setCellValue(financialStatement.getAdvertisingSalesPercentage().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
             row.createCell(108).setCellValue(financialStatement.getProductMonth());
-            Integer developmentLevel=getDevelopmentLevel(financialStatement.getSku(), skuList);
-            if(developmentLevel!=null){
-                row.createCell(109).setCellValue(developmentLevel);
+            if (financialStatement.getDevelopmentLevel() != null) {
+                row.createCell(109).setCellValue(financialStatement.getDevelopmentLevel());
+            }
+            if (financialStatement.getCostPrice() != null) {
+                row.createCell(110).setCellValue(financialStatement.getCostPrice().doubleValue());
+            }
+            if (financialStatement.getHeadTripCost() != null) {
+                row.createCell(112).setCellValue(financialStatement.getHeadTripCost().doubleValue());
             }
             rowIndex++;
         }
     }
 
     private void setRateOfDollarExchangeRmb(Sheet sheet, List<FinancialStatement> financialStatementList) {
-        if(CollectionUtils.isEmpty(financialStatementList)){
+        if (CollectionUtils.isEmpty(financialStatementList)) {
             return;
         }
-        if(financialStatementList.get(0).getRateOfDollarExchangeRmb()==null){
+        if (financialStatementList.get(0).getRateOfDollarExchangeRmb() == null) {
             return;
         }
         sheet.getRow(2).getCell(5).setCellValue(financialStatementList.get(0).getRateOfDollarExchangeRmb().toString());

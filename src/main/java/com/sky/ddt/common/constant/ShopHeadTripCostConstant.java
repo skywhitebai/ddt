@@ -27,7 +27,7 @@ public class ShopHeadTripCostConstant {
     public static final String SHOP_SKU_WITHOUT_HEAD_TRIP_COST ="店铺sku头程费为空" ;
     public static final String SHOP_SKU_HEAD_TRIP_COST_RATE_NULL ="店铺sku存在头程费率为空的发货记录" ;
     public static final String SHOP_SKU_WEIGHT_NULL ="店铺sku重量为空" ;
-    public static final String EXIST_WITHOUT_WEIGHT_SHOP_SKU ="存在没有重量或重量超过1000的店铺sku";
+    public static final String EXIST_WITHOUT_WEIGHT_SHOP_SKU ="存在没有重量的店铺sku";
     public static List<ExcelField> exportShopSkuHeadTripCostHisFieldList=new ArrayList<>();
     static {
         exportShopSkuHeadTripCostHisFieldList.add(new ExcelField("shopSku", "店铺sku", ExcelField.FieldTypeEnum.STRING));

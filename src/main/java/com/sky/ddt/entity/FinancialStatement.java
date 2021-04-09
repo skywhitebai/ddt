@@ -182,6 +182,12 @@ public class FinancialStatement {
 
     private BigDecimal rateOfDollarExchangeRmb;
 
+    private BigDecimal costPrice;
+
+    private BigDecimal headTripCost;
+
+    private Integer developmentLevel;
+
     public Integer getId() {
         return id;
     }
@@ -892,5 +898,29 @@ public class FinancialStatement {
 
     public void setRateOfDollarExchangeRmb(BigDecimal rateOfDollarExchangeRmb) {
         this.rateOfDollarExchangeRmb = rateOfDollarExchangeRmb;
+    }
+
+    public BigDecimal getCostPrice() {
+        return costPrice;
+    }
+
+    public void setCostPrice(BigDecimal costPrice) {
+        this.costPrice = costPrice;
+    }
+
+    public BigDecimal getHeadTripCost() {
+        return headTripCost;
+    }
+
+    public void setHeadTripCost(BigDecimal headTripCost) {
+        this.headTripCost = headTripCost;
+    }
+
+    public Integer getDevelopmentLevel() {
+        return developmentLevel;
+    }
+
+    public void setDevelopmentLevel(Integer developmentLevel) {
+        this.developmentLevel = developmentLevel;
     }
 }
