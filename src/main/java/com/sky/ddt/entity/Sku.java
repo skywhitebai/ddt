@@ -54,8 +54,6 @@ public class Sku {
 
     private String suggestedRetailPrice;
 
-    private Integer developmentLevel;
-
     public Integer getSkuId() {
         return skuId;
     }
@@ -254,13 +252,5 @@ public class Sku {
 
     public void setSuggestedRetailPrice(String suggestedRetailPrice) {
         this.suggestedRetailPrice = suggestedRetailPrice == null ? null : suggestedRetailPrice.trim();
-    }
-
-    public Integer getDevelopmentLevel() {
-        return developmentLevel;
-    }
-
-    public void setDevelopmentLevel(Integer developmentLevel) {
-        this.developmentLevel = developmentLevel;
     }
 }
