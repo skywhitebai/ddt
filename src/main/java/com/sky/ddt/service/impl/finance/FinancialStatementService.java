@@ -728,8 +728,6 @@ public class FinancialStatementService implements IFinancialStatementService {
 
     private void setFinancialStatement(Sheet sheet, List<FinancialStatement> financialStatementList) {
         setRateOfDollarExchangeRmb(sheet, financialStatementList);
-        //获取产品sku对应的开发等级
-        List<Sku> skuList = getSkuList(financialStatementList);
         //设置开发等级
         int rowIndex = 6;
         for (int i = 0; i < financialStatementList.size(); i++) {
@@ -822,7 +820,7 @@ public class FinancialStatementService implements IFinancialStatementService {
                 row.createCell(110).setCellValue(financialStatement.getCostPrice().doubleValue());
             }
             if (financialStatement.getHeadTripCost() != null) {
-                row.createCell(112).setCellValue(financialStatement.getHeadTripCost().doubleValue());
+                row.createCell(111).setCellValue(financialStatement.getHeadTripCost().doubleValue());
             }
             rowIndex++;
         }
@@ -837,16 +835,6 @@ public class FinancialStatementService implements IFinancialStatementService {
         }
         sheet.getRow(2).getCell(5).setCellValue(financialStatementList.get(0).getRateOfDollarExchangeRmb().toString());
 
-    }
-
-    private Integer getDevelopmentLevel(String skuStr, List<Sku> skuList) {
-        for (Sku sku :
-                skuList) {
-            if (sku.getSku().equals(skuStr)) {
-                return sku.getDevelopmentLevel();
-            }
-        }
-        return null;
     }
 
     private List<Sku> getSkuList(List<FinancialStatement> financialStatementList) {

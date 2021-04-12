@@ -5,7 +5,7 @@
     <select id="getFinancialStatementResponse"  resultType="com.sky.ddt.dto.finance.response.FinancialStatementResponse">
         SELECT f.id financeId,f.month,ss.shop_id shopId,s.`shop_name` shopName,p.`developer_user_id` developerUserId,
         ud.`real_name` developerUserName,ss.`salesman_user_id` salesmanUserId,us.`real_name` salesmanUserName,
-        ss.`shop_parent_sku` shopParentSku,sku.`sku`,ss.headTripCost,sku.cost_price costPrice,ss.shop_sku_id shopSkuId,ss.`shop_sku` shopSku,p.`product_code` productCode,
+        ss.`shop_parent_sku` shopParentSku,sku.`sku`,ss.head_trip_cost headTripCost,sku.cost_price costPrice,ss.shop_sku_id shopSkuId,ss.`shop_sku` shopSku,p.`product_code` productCode,
         p.development_level developmentLevel,
         IFNULL(ms.saleQuantity,0) saleQuantity,
         IFNULL(ms.productSales,0) productSales,
