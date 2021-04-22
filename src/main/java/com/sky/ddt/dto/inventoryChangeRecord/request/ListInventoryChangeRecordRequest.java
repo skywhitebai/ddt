@@ -19,5 +19,6 @@ public class ListInventoryChangeRecordRequest extends DataGridRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     Date createTimeEnd;
     String shopSku;
+    String sku;
     Integer createBy;
 }

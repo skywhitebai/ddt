@@ -15,4 +15,5 @@ public class ListInventoryChangeRecordResponse extends InventoryChangeRecord {
     String createByRealName;
     String batchNumber;
     String  shopSku;
+    String  sku;
 }

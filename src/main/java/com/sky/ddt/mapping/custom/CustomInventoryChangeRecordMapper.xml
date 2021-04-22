@@ -12,7 +12,7 @@
     <select id="listInventoryChangeRecord" parameterType="com.sky.ddt.dto.inventoryChangeRecord.request.ListInventoryChangeRecordRequest"
             resultMap="listInventoryChangeRecordMap">
         select
-        icr.id, icr.shop_sku_id, icr.inventory_quantity_old, icr.inventory_quantity_new, icr.modified_quantity, icr.
+        icr.id, icr.shop_sku_id,sku.sku,icr.inventory_quantity_old, icr.inventory_quantity_new, icr.modified_quantity, icr.
         change_type, icr.entity_id, icr.remark, icr.create_time, icr.create_by, icr.update_time, icr.update_by
         ,s.shop_name,u.real_name createByRealName,ss.shop_sku,
         case change_type when 1 then (select batch_number from warehousing_order wo where wo.id=icr.main_entity_id)
@@ -24,6 +24,7 @@
         left JOIN shop_sku ss on icr.shop_sku_id=ss.shop_sku_id
         left JOIN shop s on ss.shop_id=s.shop_id
         left join `user` u on u.user_id=icr.create_by
+        left join `sku`  on sku.sku_id=ss.sku_id
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 <if test="shopId != null">and s.shop_id =#{shopId}</if>
@@ -35,6 +36,9 @@
                     and ss.shop_sku like concat('%',#{shopSku},'%')
                 </if>
                 <if test="createBy != null">and create_by=#{createBy}</if>
+                <if test="sku != null and sku != '' ">and sku.sku like
+                    concat('%',#{sku},'%')
+                </if>
             </trim>
         </where>
         order by icr.create_time desc,icr.id desc

@@ -11,7 +11,6 @@
                         http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
     <!-- 自动扫描 -->
     <context:component-scan base-package="com.sky.ddt" />
-    
 
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
           destroy-method="close">
@@ -34,6 +33,7 @@
     <!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
+        <!--<property name="configLocation" value="classpath:/MyBatis-Configuration.xml" />-->
         <!-- 自动扫描mapping.xml文件 -->
         <property name="mapperLocations" value="classpath:com/sky/ddt/mapping/**/*.xml"></property>
         <!-- pageHelper 分页插件 -->

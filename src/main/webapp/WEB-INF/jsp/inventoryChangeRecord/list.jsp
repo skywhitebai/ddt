@@ -42,6 +42,8 @@
     <input class="easyui-datebox" id="s_createTimeEnd">
     店铺sku：
     <input class="easyui-validatebox textbox" id="s_shopSku">
+    产品sku：
+    <input class="easyui-validatebox textbox" id="s_sku">
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
 </div>
@@ -72,7 +74,8 @@
             createTimeEnd: $("#s_createTimeEnd").val(),
             batchNumber: $("#s_batchNumber").val(),
             shopSku: $("#s_shopSku").val(),
-            status: $("#s_status").val()
+            status: $("#s_status").val(),
+            sku: $("#s_sku").val()
         };
         return queryParams;
     }
@@ -104,6 +107,7 @@
                     {field: 'ck', checkbox: true},   //选择
                     {title: '店铺名', field: 'shopName', width: 120},
                     {title: '店铺sku', field: 'shopSku', width: 120},
+                    {title: '产品sku', field: 'sku', width: 120},
                     {title: '变更类型', field: 'changeTypeName', width: 80},
                     {title: '批号', field: 'batchNumber', width: 140},
                     {title: '变更前库存', field: 'inventoryQuantityOld', width: 80},

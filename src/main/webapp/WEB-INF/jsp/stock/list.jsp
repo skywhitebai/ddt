@@ -36,6 +36,8 @@
     <input class="easyui-validatebox textbox" id="s_shopSku">
     店铺父sku：
     <input class="easyui-validatebox textbox" id="s_shopParentSku">
+    产品sku：
+    <input class="easyui-validatebox textbox" id="s_sku">
     销售人员：
     <input class="easyui-validatebox textbox" id="s_salesmanUserId">
     显示类型：
@@ -271,7 +273,8 @@
             shopSku: $("#s_shopSku").val(),
             shopParentSku: $("#s_shopParentSku").val(),
             showType: $("#s_showType").val(),
-            salesmanUserId: $("#s_salesmanUserId").val()
+            salesmanUserId: $("#s_salesmanUserId").val(),
+            sku: $("#s_sku").val()
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据

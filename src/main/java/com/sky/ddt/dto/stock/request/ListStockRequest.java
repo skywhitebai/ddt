@@ -16,6 +16,7 @@ public class ListStockRequest extends DataGridRequest {
     @NotNull(message = StockConsatnt.SHOP_ID_EMPTY)
     Integer shopId;
     String shopSku;
+    String sku;
     String shopParentSku;
     Integer showType;
     Integer salesmanUserId;

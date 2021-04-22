@@ -27,7 +27,7 @@ public class InventoryChangeRecordController extends SuperController {
         return "inventoryChangeRecord/list";
     }
 
-    @RequestMapping("listInventoryChangeRecord")
+    @RequestMapping("/listInventoryChangeRecord")
     @ResponseBody
     @MenuAnnotation("inventoryChangeRecord/index")
     public DataGridResponse listInventoryChangeRecord(ListInventoryChangeRecordRequest params) {
