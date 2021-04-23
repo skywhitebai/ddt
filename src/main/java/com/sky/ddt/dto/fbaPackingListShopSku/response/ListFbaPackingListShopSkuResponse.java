@@ -11,4 +11,5 @@ import lombok.Data;
 @Data
 public class ListFbaPackingListShopSkuResponse extends FbaPackingListShopSku {
     String shopSku;
+    String sku;
 }

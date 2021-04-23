@@ -28,6 +28,10 @@
                     and EXISTS (select 1 from fba_packing_list_shop_sku fplss,shop_sku ss
                     where fplss.fba_packing_list_id=fpl.id and fplss.shop_sku_id=ss.shop_sku_id and ss.shop_sku like concat('%',#{shopSku},'%'))
                 </if>
+                <if test="sku != null and sku != '' ">
+                    and EXISTS (select 1 from fba_packing_list_shop_sku fplss,shop_sku ss,sku
+                    where fplss.fba_packing_list_id=fpl.id and fplss.shop_sku_id=ss.shop_sku_id and sku.sku_id=ss.sku_id and sku.sku like concat('%',#{sku},'%'))
+                </if>
                 <if test="userId != null ">and fpl.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
             </trim>
         </where>

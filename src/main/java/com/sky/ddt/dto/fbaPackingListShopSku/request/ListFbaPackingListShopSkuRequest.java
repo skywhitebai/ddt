@@ -12,4 +12,5 @@ import lombok.Data;
 public class ListFbaPackingListShopSkuRequest extends DataGridRequest {
     Integer fbaPackingListId;
     String shopSku;
+    String sku;
 }

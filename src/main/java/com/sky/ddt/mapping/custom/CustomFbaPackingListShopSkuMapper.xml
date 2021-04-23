@@ -5,6 +5,7 @@
                type="com.sky.ddt.dto.fbaPackingListShopSku.response.ListFbaPackingListShopSkuResponse"
                extends="com.sky.ddt.dao.generate.FbaPackingListShopSkuMapper.BaseResultMap">
         <result column="shop_sku" property="shopSku"/>
+        <result column="sku" property="sku"/>
     </resultMap>
 
     <sql id="Custom_Base_Column_List">
@@ -16,8 +17,9 @@
             resultMap="listFbaPackingListShopSkuMap">
         select
         <include refid="Custom_Base_Column_List"/>
-        ,ss.shop_sku
+        ,ss.shop_sku,s.sku
         from fba_packing_list_shop_sku fplss left  join shop_sku ss on ss.shop_sku_id=fplss.shop_sku_id
+        left JOIN sku s on ss.sku_id=s.sku_id
         <if test="_parameter != null">
             <include refid="fbaPackingListShopSku_Query_Where_Clause"/>
         </if>
@@ -29,6 +31,7 @@
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 <if test="fbaPackingListId != null">and fplss.fba_packing_list_id=#{fbaPackingListId}</if>
                 <if test="shopSku != null and shopSku!=''">and ss.shop_sku like concat('%',#{shopSku},'%')</if>
+                <if test="sku != null and sku!=''">and s.sku like concat('%',#{sku},'%')</if>
             </trim>
         </where>
     </sql>

@@ -30,6 +30,8 @@
     </select>
     店铺sku：
     <input class="easyui-validatebox textbox" id="s_shopSku">
+    产品sku：
+    <input class="easyui-validatebox textbox" id="s_sku">
     shipmentId：
     <input class="easyui-validatebox textbox" id="s_shipmentId">
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
@@ -141,6 +143,8 @@
     <div class="easyui-panel">
         店铺sku：
         <input class="easyui-validatebox textbox" id="dlgShopSku_shopSku">
+        产品sku：
+        <input class="easyui-validatebox textbox" id="dlgShopSku_sku">
         <a href="javascript:void(0)" onclick="bindShopSku()" class="easyui-linkbutton"
            data-options="iconCls:'icon-search'"
            style="width: 80px">查 询</a>
@@ -239,6 +243,7 @@
         queryParams = {
             shopId: $("#s_shopId").combobox('getValue'),
             shopSku: $("#s_shopSku").val(),
+            sku: $("#s_sku").val(),
             shipmentId: $("#s_shipmentId").val()
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
@@ -344,7 +349,8 @@
         title = "fba装箱单店铺sku管理";
         queryParams = {
             fbaPackingListId: $('#dlgShopSku_fbaPackingListId').val(),
-            shopSku: $('#dlgShopSku_shopSku').val()
+            shopSku: $('#dlgShopSku_shopSku').val(),
+            sku: $('#dlgShopSku_sku').val()
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -367,6 +373,7 @@
             columns: [[
                 {field: 'ck', checkbox: true},   //选择
                 {title: '店铺sku', field: 'shopSku', width: 160},
+                {title: '产品sku', field: 'sku', width: 160},
                 {title: 'FBA Shipment ID', field: 'fbaShipmentId', width: 180},
                 {title: '数量', field: 'quantity', width: 80},
                 {title: '创建时间', field: 'createTime', width: 180},
