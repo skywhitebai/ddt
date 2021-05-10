@@ -10,5 +10,6 @@ import lombok.Data;
 @Data
 public class ListFactoryProductionOrderShopParentSkuResponse {
     String shopParentSku;
+    String productCode;
     Integer productionQuantity;
 }

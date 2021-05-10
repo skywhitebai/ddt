@@ -4,7 +4,7 @@
 
     <select id="listStock" parameterType="com.sky.ddt.dto.stock.request.ListStockRequest"
             resultType="com.sky.ddt.dto.stock.response.ListStockResponse">
-        SELECT ss.shop_sku_id shopSkuId,ss.`shop_id` shopId,s.`shop_name` shopName,ss.`shop_sku` shopSku,ss.sku_id
+        SELECT ss.shop_sku_id shopSkuId,ss.`shop_id` shopId,s.`shop_name` shopName,ss.`shop_sku` shopSku,sku.sku,ss.sku_id
         skuId,
         SUM(CASE WHEN oi.purchase_date>=DATE_SUB(DATE(NOW()),INTERVAL 8 DAY) THEN oi.`quantity` ELSE 0 END)
         salesForTheLast7Days,
@@ -66,6 +66,7 @@
         LEFT JOIN stock_cart scp ON ss.`shop_sku_id`=scp.`shop_sku_id` and scp.type=2
         LEFT JOIN shop s ON ss.`shop_id`=s.`shop_id`
         LEFT JOIN USER u on u.user_id=ss.salesman_user_id
+        LEFT JOIN sku on ss.sku_id=sku.sku_id
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 and ss.status=1

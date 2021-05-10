@@ -244,6 +244,7 @@
             columns: [[
                 {field: 'ck', checkbox: true},   //选择
                 {title: '店铺父sku', field: 'shopParentSku', width: 150},
+                {title: '产品编码', field: 'productCode', width: 150},
                 {title: '生产数量', field: 'productionQuantity', width: 90},
                 {
                     title: '操作', field: 'deal', width: 300,

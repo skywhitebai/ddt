@@ -32,9 +32,11 @@
 
     <select id="listFactoryProductionOrderShopParentSku"
             resultType="com.sky.ddt.dto.factoryProductionOrder.response.ListFactoryProductionOrderShopParentSkuResponse">
-        SELECT SUM(production_quantity) productionQuantity,ss.shop_parent_sku shopParentSku
+        SELECT SUM(production_quantity) productionQuantity,ss.shop_parent_sku shopParentSku,p.product_code productCode
         FROM factory_production_order_shop_sku fposs
         LEFT JOIN `shop_sku` ss ON fposs.`shop_sku_id`=ss.`shop_sku_id`
+        left join sku on ss.sku_id=sku.sku_id
+        left join product p on sku.product_id=p.product_id
         <where>
             <if test="factoryProductionOrderId != null ">and fposs.factory_production_order_id=#{factoryProductionOrderId}</if>
             <if test="shopParentSku != null and shopParentSku!=''">and ss.shop_parent_sku like

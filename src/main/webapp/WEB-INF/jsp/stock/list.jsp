@@ -293,6 +293,7 @@
                 {title: '店铺名', field: 'shopName', width: 140},
                 {title: '销售负责人', field: 'salesmanRealName', width: 120},
                 {title: '店铺sku', field: 'shopSku', width: 168},
+                {title: '产品sku', field: 'sku', width: 168},
                 {
                     title: '图片', field: 'imgUrl', width: 40,
                     formatter: function (value, rowData, rowIndex) {
