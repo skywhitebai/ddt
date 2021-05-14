@@ -17,6 +17,7 @@ public class FbaPackingListConstant {
     public static final String ORDER_NUMBER_EMPTY ="orderNumber不能为空" ;
     public static final String FBA_PACKING_LIST_ID_EMPTY ="fbaPackingListId不能为空" ;
     public static final String FBA_PACKING_LIST_ID_NOT_EXIST = "fbaPackingListId不存在" ;
+    public static final String NOT_ALLOW_GENERATE_OUTBOUND_ORDER ="FBA装箱单已取消，不允许生成出库单" ;
 
     @Getter
     public enum ProduceOrderStatusEnum {

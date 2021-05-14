@@ -11,6 +11,7 @@
     <result column="total_skus" jdbcType="INTEGER" property="totalSkus" />
     <result column="total_units" jdbcType="INTEGER" property="totalUnits" />
     <result column="pack_list" jdbcType="TIMESTAMP" property="packList" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -77,7 +78,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, shop_id, shipment_id, name, plan_id, ship_to, total_skus, total_units, pack_list, 
-    remark, create_by, create_time, update_by, update_time
+    status, remark, create_by, create_time, update_by, update_time
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FbaPackingListExample" resultMap="BaseResultMap">
     select
@@ -115,14 +116,14 @@
     </selectKey>
     insert into fba_packing_list (shop_id, shipment_id, name, 
       plan_id, ship_to, total_skus, 
-      total_units, pack_list, remark, 
-      create_by, create_time, update_by, 
-      update_time)
+      total_units, pack_list, status, 
+      remark, create_by, create_time, 
+      update_by, update_time)
     values (#{shopId,jdbcType=INTEGER}, #{shipmentId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{planId,jdbcType=VARCHAR}, #{shipTo,jdbcType=VARCHAR}, #{totalSkus,jdbcType=INTEGER}, 
-      #{totalUnits,jdbcType=INTEGER}, #{packList,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
-      #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{totalUnits,jdbcType=INTEGER}, #{packList,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.FbaPackingList">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -153,6 +154,9 @@
       </if>
       <if test="packList != null">
         pack_list,
+      </if>
+      <if test="status != null">
+        status,
       </if>
       <if test="remark != null">
         remark,
@@ -194,6 +198,9 @@
       </if>
       <if test="packList != null">
         #{packList,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -248,6 +255,9 @@
       <if test="record.packList != null">
         pack_list = #{record.packList,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -279,6 +289,7 @@
       total_skus = #{record.totalSkus,jdbcType=INTEGER},
       total_units = #{record.totalUnits,jdbcType=INTEGER},
       pack_list = #{record.packList,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_by = #{record.createBy,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -315,6 +326,9 @@
       <if test="packList != null">
         pack_list = #{packList,jdbcType=TIMESTAMP},
       </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -343,6 +357,7 @@
       total_skus = #{totalSkus,jdbcType=INTEGER},
       total_units = #{totalUnits,jdbcType=INTEGER},
       pack_list = #{packList,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_by = #{createBy,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},

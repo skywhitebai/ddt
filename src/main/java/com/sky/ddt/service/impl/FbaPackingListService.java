@@ -3,10 +3,13 @@ package com.sky.ddt.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.FbaPackingListConstant;
+import com.sky.ddt.common.constant.OutboundOrderConstant;
 import com.sky.ddt.common.constant.SbErroEntity;
 import com.sky.ddt.common.constant.StockConsatnt;
+import com.sky.ddt.common.enums.YesOrNoEnum;
 import com.sky.ddt.dao.custom.CustomFbaPackingListMapper;
 import com.sky.ddt.dao.custom.CustomFbaPackingListShopSkuMapper;
+import com.sky.ddt.dao.custom.CustomOutboundOrderMapper;
 import com.sky.ddt.dto.deliverGoods.request.InvoiceInfo;
 import com.sky.ddt.dto.deliverGoods.request.InvoiceSkuInfo;
 import com.sky.ddt.dto.fbaPackingList.request.ListFbaPackingListRequest;
@@ -15,10 +18,7 @@ import com.sky.ddt.dto.fbaPackingList.response.ListFbaPackingListResponse;
 import com.sky.ddt.dto.fbaPackingList.response.ListInvoiceInfoResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.shopSku.response.ShopSkuFullProductName;
-import com.sky.ddt.entity.FbaPackingList;
-import com.sky.ddt.entity.FbaPackingListExample;
-import com.sky.ddt.entity.FbaPackingListShopSku;
-import com.sky.ddt.entity.ShopSku;
+import com.sky.ddt.entity.*;
 import com.sky.ddt.service.*;
 import com.sky.ddt.util.DateUtil;
 import com.sky.ddt.util.ExcelUtil;
@@ -53,6 +53,9 @@ public class FbaPackingListService implements IFbaPackingListService {
     IOutboundOrderService outboundOrderService;
     @Autowired
     IDeliverGoodsService deliverGoodsService;
+    @Autowired
+    CustomOutboundOrderMapper customOutboundOrderMapper;
+
 
     /**
      * @param file
@@ -249,7 +252,7 @@ public class FbaPackingListService implements IFbaPackingListService {
 
     private boolean existShipMentId(String shipmentId) {
         FbaPackingListExample example = new FbaPackingListExample();
-        example.createCriteria().andShipmentIdEqualTo(shipmentId);
+        example.createCriteria().andShipmentIdEqualTo(shipmentId).andStatusEqualTo(YesOrNoEnum.YES.getValue());
         return customFbaPackingListMapper.countByExample(example) > 0;
     }
 
@@ -297,6 +300,9 @@ public class FbaPackingListService implements IFbaPackingListService {
         if (fbaPackingList == null) {
             return BaseResponse.failMessage(FbaPackingListConstant.ID_NOT_EXIST);
         }
+        if (!YesOrNoEnum.YES.getValue().equals(fbaPackingList.getStatus())) {
+            return BaseResponse.failMessage(FbaPackingListConstant.NOT_ALLOW_GENERATE_OUTBOUND_ORDER);
+        }
         return outboundOrderService.generateOutboundOrder(fbaPackingList, dealUserId);
     }
 
@@ -304,7 +310,7 @@ public class FbaPackingListService implements IFbaPackingListService {
      * @param fbaPackingListId
      * @param orderNumber      @return
      * @param type
-     *@param response @description 导出发票
+     * @param response         @description 导出发票
      * @author baixueping
      * @date 2020/8/12 15:55
      */
@@ -317,11 +323,11 @@ public class FbaPackingListService implements IFbaPackingListService {
             return BaseResponse.failMessage(FbaPackingListConstant.FBA_PACKING_LIST_ID_EMPTY);
         }
         InvoiceInfo invoiceInfo = new InvoiceInfo();
-        FbaPackingList fbaPackingList=customFbaPackingListMapper.selectByPrimaryKey(fbaPackingListId);
-        if(fbaPackingList==null){
+        FbaPackingList fbaPackingList = customFbaPackingListMapper.selectByPrimaryKey(fbaPackingListId);
+        if (fbaPackingList == null) {
             return BaseResponse.failMessage(FbaPackingListConstant.FBA_PACKING_LIST_ID_NOT_EXIST);
         }
-        if(StockConsatnt.StockQuantityTypeEnum.getStockQuantityTypeEnum(type)==null){
+        if (StockConsatnt.StockQuantityTypeEnum.getStockQuantityTypeEnum(type) == null) {
             return BaseResponse.failMessage("发票类型错误");
         }
         invoiceInfo.setShipmentId(fbaPackingList.getShipmentId());
@@ -333,7 +339,37 @@ public class FbaPackingListService implements IFbaPackingListService {
         if (!updateInvoiceSkuInfoListResponse.isSuccess()) {
             return updateInvoiceSkuInfoListResponse;
         }
-        return deliverGoodsService.generateInvoice(invoiceInfo,invoiceSkuInfoList,type,response);
+        return deliverGoodsService.generateInvoice(invoiceInfo, invoiceSkuInfoList, type, response);
+    }
+
+    @Override
+    public BaseResponse cancelFbaPackingList(Integer id, Integer dealUserId) {
+        if(id==null){
+            return BaseResponse.failMessage("id不能为空");
+        }
+        if(existUncancelOutboundOrder(id)){
+            return BaseResponse.failMessage("请先取消装箱单对应的出库单");
+        }
+        FbaPackingList fbaPackingListOld=customFbaPackingListMapper.selectByPrimaryKey(id);
+        if(fbaPackingListOld==null){
+            return BaseResponse.failMessage(FbaPackingListConstant.ID_NOT_EXIST);
+        }
+        if(YesOrNoEnum.NO.getValue().equals(fbaPackingListOld.getStatus())){
+            return BaseResponse.success();
+        }
+        FbaPackingList fbaPackingList=new FbaPackingList();
+        fbaPackingList.setId(id);
+        fbaPackingList.setUpdateBy(dealUserId);
+        fbaPackingList.setUpdateTime(new Date());
+        fbaPackingList.setStatus(YesOrNoEnum.NO.getValue());
+         customFbaPackingListMapper.updateByPrimaryKeySelective(fbaPackingList);
+        return BaseResponse.success();
+    }
+
+    private boolean existUncancelOutboundOrder(Integer id) {
+        OutboundOrderExample example=new OutboundOrderExample();
+        example.createCriteria().andFbaPackingListIdEqualTo(id).andStatusNotEqualTo(OutboundOrderConstant.StatusEnum.CANCEL.getStatus());
+        return customOutboundOrderMapper.countByExample(example)>0;
     }
 
     /**

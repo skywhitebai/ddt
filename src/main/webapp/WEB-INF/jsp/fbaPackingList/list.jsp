@@ -32,6 +32,12 @@
     <input class="easyui-validatebox textbox" id="s_shopSku">
     产品sku：
     <input class="easyui-validatebox textbox" id="s_sku">
+    状态：
+    <select class="easyui-combobox" id="s_status" style="width:100px;">
+        <option value="">全部</option>
+        <option value="1">有效</option>
+        <option value="2">取消</option>
+    </select>
     shipmentId：
     <input class="easyui-validatebox textbox" id="s_shipmentId">
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
@@ -244,7 +250,8 @@
             shopId: $("#s_shopId").combobox('getValue'),
             shopSku: $("#s_shopSku").val(),
             sku: $("#s_sku").val(),
-            shipmentId: $("#s_shipmentId").val()
+            shipmentId: $("#s_shipmentId").val(),
+            status: $("#s_status").val()
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -289,7 +296,9 @@
                 {
                     title: '生成出库单', field: 'outboundOrderStatus', width: 100,
                     formatter: function (value, row, index) {
-                        if (value == 1) {
+                        if (row.status == 0) {
+                            return '已取消';
+                        }else if (value == 1) {
                             return '已生成出库单';
                         } else {
                             return '<a href="javascript:;" onclick="generateOutboundOrder(\'' + row.id + '\')" title="生成出库单">生成出库单</a>';
@@ -315,6 +324,13 @@
                     //实现刷新栏目中的数据
                     $(dg).datagrid("reload");
                 }
+            },'-', {
+                id: 'btnDelete',
+                text: '取消',
+                iconCls: 'icon-remove',
+                handler: function () {
+                    cancelFbaPackingList();//实现直接删除数据的方法
+                }
             }],
             onDblClickRow: function (rowIndex, rowData) {
                 $(dg).datagrid('uncheckAll');
@@ -324,7 +340,25 @@
         })
         $(dg).datagrid('clearSelections');
     }
-
+    function cancelFbaPackingList() {
+        var rows = $('#dg').datagrid('getSelections');
+        if (rows && rows.length == 1) {
+            $.messager.confirm('提示', '确认取消店铺[' + rows[0].shopName + '],Shipment ID[' + rows[0].shipmentId + ']的FBA装箱单吗？', function (r) {
+                if (r) {
+                    $.post('${pageContext.request.contextPath }/fbaPackingList/cancelFbaPackingList', {id: rows[0].id}, function (data) {
+                        if (data.code == '200') {
+                            bindData();
+                        }
+                        else {
+                            $.messager.alert("提示", data.message);
+                        }
+                    });
+                }
+            });
+        } else {
+            $.messager.alert("提示", "请选择一条记录.");
+        }
+    }
     function showViewDialog() {
         var rows = $('#dg').datagrid('getSelections');
         if (rows && rows.length == 1) {

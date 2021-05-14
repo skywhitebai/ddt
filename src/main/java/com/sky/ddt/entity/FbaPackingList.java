@@ -21,6 +21,8 @@ public class FbaPackingList {
 
     private Date packList;
 
+    private Integer status;
+
     private String remark;
 
     private Integer createBy;
@@ -101,6 +103,14 @@ public class FbaPackingList {
 
     public void setPackList(Date packList) {
         this.packList = packList;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public String getRemark() {

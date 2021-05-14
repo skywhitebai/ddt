@@ -68,4 +68,11 @@ public class FbaPackingListController extends SuperController {
     public BaseResponse downInvoice(Integer fbaPackingListId,String orderNumber,String type){
         return fbaPackingListService.downInvoice(fbaPackingListId,orderNumber,type,response);
     }
+    @RequestMapping("/cancelFbaPackingList")
+    @MenuAnnotation("fbaPackingList/index")
+    @ResponseBody
+    public BaseResponse cancelFbaPackingList(Integer id) {
+        Integer dealUserId=getCurrentUserId();
+        return fbaPackingListService.cancelFbaPackingList(id,dealUserId);
+    }
 }

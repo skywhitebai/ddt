@@ -65,4 +65,6 @@ public interface IFbaPackingListService {
      * @date 2020/8/12 15:55
      */
     BaseResponse downInvoice(Integer fbaPackingListId, String orderNumber, String type, HttpServletResponse response);
+
+    BaseResponse cancelFbaPackingList(Integer id, Integer dealUserId);
 }
