@@ -89,8 +89,8 @@
         queryParams = {
             shopId: $("#s_shopId").combobox('getValue'),
             id: $("#s_id").val(),
-            shopSku:$("#s_shopSku").val(),
-            sku:$("#s_sku").val()
+            shopSku: $("#s_shopSku").val(),
+            sku: $("#s_sku").val()
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -115,6 +115,17 @@
                 {title: '补货记录id', field: 'id', width: 88},
                 {title: '店铺名', field: 'shopName', width: 120},
                 {title: '标题', field: 'title', width: 320},
+                {title: '发货总数', field: 'stockQuantityTotal', width: 90},
+                {
+                    title: '状态', field: 'status', width: 88,
+                    formatter: function (value, row, rowIndex) {
+                        if (value == 1) {
+                            return '已完成';
+                        } else {
+                            return ' <a href="javascript:void(0)" onclick="setDone(' + row.id + ')" class="easyui-linkbutton" style="width: 80px">设置已完成</a>';
+                        }
+                    }
+                },
                 {
                     title: '备注', field: 'remark', width: 300,
                     formatter: function (value, row, rowIndex) {
@@ -167,8 +178,8 @@
         title = "发货单详情";
         queryParams = {
             stockRecordId: $("#s_stockRecordId").val(),
-            shopSku:$("#s_stockRecordItem_shopSku").val(),
-            sku:$("#s_stockRecordItem_sku").val()
+            shopSku: $("#s_stockRecordItem_shopSku").val(),
+            sku: $("#s_stockRecordItem_sku").val()
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -236,6 +247,19 @@
         window.open(url);
     }
 
+    function setDone(stockRecordId) {
+        $.post('${pageContext.request.contextPath }/stockRecord/setStockRecordDone', {
+            stockRecordId: stockRecordId
+        }, function (data) {
+            if (data.code == '200') {
+                $.messager.alert("提示", "设置成功");
+                bindData();
+            } else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+
     function saveStockRecordRemark(input, stockRecordId) {
         var remark = $(input).val();
         $.post('${pageContext.request.contextPath }/stockRecord/saveStockRecordRemark', {
@@ -245,8 +269,7 @@
             if (data.code == '200') {
                 $.messager.alert("提示", "修改成功");
                 bindData();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });

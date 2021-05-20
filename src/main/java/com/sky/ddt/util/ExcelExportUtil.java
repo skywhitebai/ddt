@@ -32,17 +32,28 @@ public class ExcelExportUtil<T> {
         }
     }
 
+    private XSSFCellStyle getXSSFCellStyle(XSSFWorkbook workbook) {
+        XSSFCellStyle setBorder = workbook.createCellStyle();
+        setBorder.setBorderBottom(XSSFCellStyle.BORDER_THIN); //下边框
+        setBorder.setBorderLeft(XSSFCellStyle.BORDER_THIN);//左边框
+        setBorder.setBorderTop(XSSFCellStyle.BORDER_THIN);//上边框
+        setBorder.setBorderRight(XSSFCellStyle.BORDER_THIN);//右边框
+        return setBorder;
+    }
+
     private BaseResponse exportExcel(HttpServletResponse response, List<T> list, String[] headers, String fileName) {
         // 声明一个工作薄
         XSSFWorkbook workbook = new XSSFWorkbook();
         String sheetName = fileName;
         // 生成一个表格
         XSSFSheet sheet = workbook.createSheet(sheetName);
+        XSSFCellStyle xssfCellStyle=getXSSFCellStyle(workbook);
         // 设置表格默认列宽度为15个字节
         sheet.setDefaultColumnWidth((short) 20);
         XSSFRow row = sheet.createRow(0);
         for (short i = 0; i < headers.length; i++) {
             XSSFCell cell = row.createCell(i);
+            cell.setCellStyle(xssfCellStyle);
             XSSFRichTextString text = new XSSFRichTextString(headers[i]);
             cell.setCellValue(text);
         }
@@ -70,18 +81,19 @@ public class ExcelExportUtil<T> {
                         continue;
                     }
                     XSSFCell cell = row.createCell(i);
+                    cell.setCellStyle(xssfCellStyle);
                     if (value.getClass().equals(Date.class)) {
                         String textValue = DateUtil.getFormatDateStr((Date) value);
                         cell.setCellValue(textValue);
                     } else if (value.getClass().equals(Integer.class)) {
-                        cell.setCellValue((Integer)value);
+                        cell.setCellValue((Integer) value);
                     } else if (value.getClass().equals(Long.class)) {
-                        cell.setCellValue((Long)value);
-                    }else if (value.getClass().equals(BigDecimal.class)) {
-                        cell.setCellValue(((BigDecimal)value).doubleValue());
-                    }else if (value.getClass().equals(Double.class)) {
-                        cell.setCellValue((Double)value);
-                    }else{
+                        cell.setCellValue((Long) value);
+                    } else if (value.getClass().equals(BigDecimal.class)) {
+                        cell.setCellValue(((BigDecimal) value).doubleValue());
+                    } else if (value.getClass().equals(Double.class)) {
+                        cell.setCellValue((Double) value);
+                    } else {
                         cell.setCellValue(value.toString());
                     }
                 }

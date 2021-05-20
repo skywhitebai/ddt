@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.stockRecord.request.ListStockRecordRequest;
 import com.sky.ddt.dto.stockRecord.request.SaveStockRecordRemarkRequest;
+import com.sky.ddt.dto.stockRecord.request.SetStockRecordDoneRequest;
 import com.sky.ddt.dto.stockRecord.response.ExportStockRecordResponse;
 import com.sky.ddt.dto.stockRecord.response.ListStockRecordResponse;
 import com.sky.ddt.entity.StockCart;
@@ -66,4 +67,6 @@ public interface IStockRecordService {
     List<StockCart> getStockCartListByShopId(Integer shopId, Integer type);
 
     void deleteStockCartListByShopId(Integer shopId, Integer type);
+
+    BaseResponse setStockRecordDone(SetStockRecordDoneRequest params, Integer dealUserId);
 }

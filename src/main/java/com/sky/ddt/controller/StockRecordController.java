@@ -8,6 +8,7 @@ import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.stockRecord.request.ListStockRecordRequest;
 import com.sky.ddt.dto.stockRecord.request.SaveStockRecordRemarkRequest;
+import com.sky.ddt.dto.stockRecord.request.SetStockRecordDoneRequest;
 import com.sky.ddt.dto.stockRecord.response.ExportStockRecordResponse;
 import com.sky.ddt.dto.stockRecord.response.ListStockRecordResponse;
 import com.sky.ddt.entity.StockRecord;
@@ -16,6 +17,7 @@ import com.sky.ddt.service.IStockRecordService;
 import com.sky.ddt.util.ExcelExportUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -93,6 +95,17 @@ public class StockRecordController extends SuperController {
             headers=StockRecordConstant.EXPORT_STOCK_RECORD_HEAD;
             title+="补货单";
         }
+        Integer total=0;
+        for (ExportStockRecordResponse exportStockRecordResponse:
+                list) {
+            total+=exportStockRecordResponse.getStockQuantity();
+        }
+        ExportStockRecordResponse exportStockRecordResponseTotal=new ExportStockRecordResponse();
+        exportStockRecordResponseTotal.setStockQuantity(total);
+        list.add(exportStockRecordResponseTotal);
+        ExportStockRecordResponse exportStockRecordResponseRemark=new ExportStockRecordResponse();
+        exportStockRecordResponseRemark.setShopSku(stockRecord.getRemark());
+        list.add(exportStockRecordResponseRemark);
         BaseResponse exportResponse = new ExcelExportUtil<ExportStockRecordResponse>().export(response, list, headers, title);
         return exportResponse;
     }
@@ -102,5 +115,13 @@ public class StockRecordController extends SuperController {
     public BaseResponse saveStockRecordRemark(SaveStockRecordRemarkRequest params) {
         Integer dealUserId = getCurrentUserId();
         return stockRecordService.saveStockRecordRemark(params, dealUserId);
+    }
+    @RequestMapping("/setStockRecordDone")
+    @ResponseBody
+    @MenuAnnotation("stockRecord/index")
+    public BaseResponse setStockRecordDone(@Validated SetStockRecordDoneRequest params){
+        Integer dealUserId = getCurrentUserId();
+        return stockRecordService.setStockRecordDone(params, dealUserId);
+
     }
 }

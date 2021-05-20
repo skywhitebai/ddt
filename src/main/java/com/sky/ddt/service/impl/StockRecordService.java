@@ -12,6 +12,7 @@ import com.sky.ddt.dao.custom.CustomStockRecordMapper;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.stockRecord.request.ListStockRecordRequest;
 import com.sky.ddt.dto.stockRecord.request.SaveStockRecordRemarkRequest;
+import com.sky.ddt.dto.stockRecord.request.SetStockRecordDoneRequest;
 import com.sky.ddt.dto.stockRecord.response.ExportStockRecordResponse;
 import com.sky.ddt.dto.stockRecord.response.ListStockRecordResponse;
 import com.sky.ddt.entity.*;
@@ -78,6 +79,7 @@ public class StockRecordService implements IStockRecordService {
         stockRecord.setCreateBy(currentUserId);
         stockRecord.setCreateTime(new Date());
         stockRecord.setTitle(title);
+        stockRecord.setStatus(0);
         customStockRecordMapper.insertSelective(stockRecord);
         //生成补货记录内容
         for (StockCart stockCart : stockCartList) {
@@ -156,6 +158,17 @@ public class StockRecordService implements IStockRecordService {
         StockCartExample example = new StockCartExample();
         example.createCriteria().andShopIdEqualTo(shopId).andTypeEqualTo(type);
         customStockCartMapper.deleteByExample(example);
+    }
+
+    @Override
+    public BaseResponse setStockRecordDone(SetStockRecordDoneRequest params, Integer dealUserId) {
+        StockRecord stockRecord=new StockRecord();
+        stockRecord.setId(params.getStockRecordId());
+        stockRecord.setUpdateBy(dealUserId);
+        stockRecord.setUpdateTime(new Date());
+        stockRecord.setStatus(1);
+        customStockRecordMapper.updateByPrimaryKeySelective(stockRecord);
+        return BaseResponse.success();
     }
 
     @Override

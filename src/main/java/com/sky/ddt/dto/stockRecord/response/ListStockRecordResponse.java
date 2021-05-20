@@ -11,4 +11,5 @@ import lombok.Data;
 @Data
 public class ListStockRecordResponse extends StockRecord {
     String shopName;
+    Integer stockQuantityTotal;
 }

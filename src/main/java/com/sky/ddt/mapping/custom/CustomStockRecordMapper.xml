@@ -9,7 +9,8 @@
             resultMap="listStockRecordMap">
         SELECT
         <include refid="com.sky.ddt.dao.generate.StockRecordMapper.Base_Column_List"/>,
-        (select shop_name from shop s where s.shop_id=sr.shop_id ) shopName
+        (select shop_name from shop s where s.shop_id=sr.shop_id ) shopName,
+        (select sum(stock_quantity) from stock_record_item sri where sri.stock_record_id=sr.id) stockQuantityTotal
         from stock_record sr where sr.shop_id in (select su.shop_id from shop_user su where su.user_id=#{userId})
         <if test="shopId != null ">and sr.shop_id=#{shopId}</if>
         <if test="id != null ">and sr.id=#{id}</if>

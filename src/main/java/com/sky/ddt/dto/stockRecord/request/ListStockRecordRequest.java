@@ -9,10 +9,11 @@ import lombok.Data;
  * @date 2019/8/22 18:03
  */
 @Data
-public class ListStockRecordRequest extends DataGridRequest{
+public class ListStockRecordRequest extends DataGridRequest {
     Integer shopId;
     Integer userId;
     Integer id;
     String shopSku;
     String sku;
+    Integer status;
 }
