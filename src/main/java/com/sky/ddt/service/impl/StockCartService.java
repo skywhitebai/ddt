@@ -7,6 +7,7 @@ import com.sky.ddt.common.constant.StockRecordConstant;
 import com.sky.ddt.dao.custom.CustomShopSkuMapper;
 import com.sky.ddt.dao.custom.CustomStockCartMapper;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.dto.sku.response.SkuListResponse;
 import com.sky.ddt.dto.stock.request.ListStockRequest;
 import com.sky.ddt.dto.stock.request.SaveProductionQuantityRequest;
 import com.sky.ddt.dto.stock.request.SaveStockQuantityRequest;
@@ -14,12 +15,14 @@ import com.sky.ddt.dto.stock.response.ListStockResponse;
 import com.sky.ddt.entity.ShopSku;
 import com.sky.ddt.entity.StockCart;
 import com.sky.ddt.entity.StockCartExample;
+import com.sky.ddt.service.IImgService;
 import com.sky.ddt.service.IShopUserService;
 import com.sky.ddt.service.IStockCartService;
 import com.sky.ddt.util.MathUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -37,6 +40,8 @@ public class StockCartService implements IStockCartService {
     CustomShopSkuMapper customShopSkuMapper;
     @Autowired
     IShopUserService shopUserService;
+    @Autowired
+    IImgService imgService;
 
     /**
      * @param params
@@ -50,6 +55,15 @@ public class StockCartService implements IStockCartService {
         PageHelper.startPage(params.getPage(), params.getRows(), true);
         List<ListStockResponse> list = customStockCartMapper.listStock(params);
         setListStock(list);
+        for (ListStockResponse listStockResponse :
+                list) {
+            String imgUrl = imgService.getImgUrlBySkuId(listStockResponse.getSkuId());
+            if (!StringUtils.isEmpty(imgUrl)) {
+                listStockResponse.setImgUrl(imgUrl);
+            }
+            /*Integer inventoryQuantity = shopSkuService.getSkuInventoryQuantity(skuListResponse.getSkuId());
+            skuListResponse.setInventoryQuantity(inventoryQuantity);*/
+        }
         PageInfo<ListStockResponse> page = new PageInfo<ListStockResponse>(list);
         return page;
     }

@@ -16,7 +16,8 @@ public class ListStockResponse {
     String shopName;
     String shopSku;
     String sku;
-    String skuId;
+    String imgUrl;
+    Integer skuId;
     String shopSkuId;
     Integer salesForTheLast7Days;
     Integer salesForTheLast14Days;

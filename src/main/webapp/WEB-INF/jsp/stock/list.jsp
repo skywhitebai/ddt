@@ -295,9 +295,15 @@
                 {title: '店铺sku', field: 'shopSku', width: 168},
                 {title: '产品sku', field: 'sku', width: 168},
                 {
-                    title: '图片', field: 'imgUrl', width: 40,
+                    title: '图片', field: 'imgUrl', width: 120,
                     formatter: function (value, rowData, rowIndex) {
-                        var res = '<a href="javascript:;" onclick="showImgDialog(' + rowData.skuId + ')" >查看</a>';
+                        var res = "";
+                        if (value != null && value != '') {
+                            res += '<a href="javascript:;" onclick="showImg(' + value + ')" ><img  src="' + value + '?x-oss-process=image/resize,m_fill,h_66,w_66"  style="width:66px; height:66px;"/></a> '
+                        } else {
+                            res += '暂无图片   '
+                        }
+                        res += '<a href="javascript:;" onclick="showImgDialog(' + rowData.skuId + ')" >查看</a>';
                         return res;
                     }
                 }
