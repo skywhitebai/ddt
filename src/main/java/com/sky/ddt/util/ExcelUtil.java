@@ -1,5 +1,6 @@
 package com.sky.ddt.util;
 
+import com.sky.ddt.common.exception.NoticeException;
 import com.sky.ddt.dto.response.BaseResponse;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -92,7 +93,11 @@ public class ExcelUtil {
                     try {
                         cellValue = String.valueOf(cell.getNumericCellValue());
                     } catch (IllegalStateException e) {
-                        cellValue = String.valueOf(cell.getRichStringCellValue());
+                        try {
+                            cellValue = String.valueOf(cell.getRichStringCellValue());
+                        } catch (IllegalStateException ex) {
+                            throw ex;
+                        }
                     }
                     break;
                 }
@@ -239,7 +244,11 @@ public class ExcelUtil {
             Boolean isEmpty = true;
             if (row != null) {
                 for (int j = 0; j < colnum; j++) {
-                    cellData = (String) getCellFormatValue(row.getCell(j));
+                    try{
+                        cellData = (String) getCellFormatValue(row.getCell(j));
+                    }catch (Exception ex){
+                        throw new NoticeException(String.format("第%d行，第%d列，数据错误：%s",i+1,j+1,ex.getMessage()));
+                    }
                     if (!StringUtils.isEmpty(cellData)) {
                         isEmpty = false;
                     }
