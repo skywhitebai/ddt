@@ -37,4 +37,6 @@ public interface IFinancialStatementService {
      * @date 2020/12/15 14:42
      */
     BaseResponse exportFinancialStatement(HttpServletResponse response, String month, String type);
+
+    BaseResponse exportFinancialStatementAll(HttpServletResponse response, String month);
 }

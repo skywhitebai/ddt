@@ -46,4 +46,10 @@ public class FinancialStatementController extends SuperController {
     public BaseResponse exportSalesmanFinancialStatement(String month) {
         return financialStatementService.exportFinancialStatement(response,month,"salesman");
     }
+    @RequestMapping("/exportFinancialStatementAll")
+    @ResponseBody
+    @MenuAnnotation("finance/index")
+    public BaseResponse exportFinancialStatementAll(String month) {
+        return financialStatementService.exportFinancialStatementAll(response,month);
+    }
 }

@@ -261,6 +261,31 @@ public class FinancialStatementService implements IFinancialStatementService {
         return null;
     }
 
+
+    @Override
+    public BaseResponse exportFinancialStatementAll(HttpServletResponse response, String month) {
+        if (StringUtils.isEmpty(month)) {
+            return BaseResponse.failMessage(FinanceConstant.MONTH_EMPTY);
+        }
+        Date monthDate = DateUtil.strMonthToDate(month);
+        if (monthDate == null) {
+            return BaseResponse.failMessage("月份格式错误");
+        }
+        FinancialStatementExample example = new FinancialStatementExample();
+        example.createCriteria().andMonthEqualTo(monthDate);
+        example.setOrderByClause("shop_name,shop_parent_sku,sku");
+        List<FinancialStatement> financialStatementList = customFinancialStatementMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(financialStatementList)) {
+            return BaseResponse.failMessage(FinancialStatementConstant.FINANCIAL_STATEMENT_NOT_EXIST);
+        }
+        FinancialStatement financialStatement = financialStatementList.get(0);
+        //读取模板
+        String excelTitle = month + "-各SKU利润表";
+        Workbook workbook = getWorkbook(financialStatementList, excelTitle);
+        String fileName = month + "财务报表";
+        return ExcelUtil.exportExcel(response, workbook, fileName);
+    }
+
     /**
      * @param response
      * @param financeId @return
