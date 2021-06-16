@@ -30,11 +30,14 @@
     </select>
     <select id="listProduceOrderShopSkuProductionQuantity"
             resultType="com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuProductionQuantityResponse">
-         select sum(poss.production_quantity) productionQuantity,s.shop_id shopId,s.shop_name shopName,ss.shop_sku shopSku from
-        produce_order po,produce_order_shop_sku poss,shop_sku ss,shop s
-        where po.id=poss.produce_order_id and po.shop_id=ss.shop_id and po.shop_id=s.shop_id and s.type=#{type} and poss.shop_sku_id=ss.shop_sku_id and po.status in(1,2)
-        and po.shop_id!=#{shopId} and ss.sku_id=#{skuId}
-        group by ss.shop_sku
+ SELECT SUM(poss.production_quantity) productionQuantity,SUM(IFNULL(woss.warehousing_quantity,0)) warehousingQuantity,s.shop_id shopId,s.shop_name shopName,ss.shop_sku shopSku FROM
+	shop_sku ss
+	INNER JOIN shop s ON ss.`shop_id`=s.`shop_id` and ss.sku_id=#{skuId} and s.type=#{type}
+	INNER JOIN produce_order po ON po.shop_id=s.shop_id AND po.status IN(1,2)
+	INNER JOIN produce_order_shop_sku poss ON po.id=poss.produce_order_id AND ss.`shop_sku_id`=poss.`shop_sku_id`
+	LEFT JOIN warehousing_order wo ON wo.produce_order_id=po.id
+    LEFT JOIN warehousing_order_shop_sku woss ON wo.id=woss.`warehousing_order_id` AND woss.shop_sku_id=ss.shop_sku_id
+	GROUP BY ss.shop_sku
     </select>
 
 
