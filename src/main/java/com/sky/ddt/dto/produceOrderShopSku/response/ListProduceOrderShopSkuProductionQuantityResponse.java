@@ -14,4 +14,5 @@ public class ListProduceOrderShopSkuProductionQuantityResponse {
     String shopName;
     String shopSku;
     Integer productionQuantity;
+    Integer warehousingQuantity;
 }

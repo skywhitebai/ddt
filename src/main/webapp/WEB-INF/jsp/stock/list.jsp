@@ -788,7 +788,8 @@
                 {field: 'ck', checkbox: true},   //选择
                 {title: '店铺名称', field: 'shopName', width: 100},
                 {title: '店铺sku', field: 'shopSku', width: 180},
-                {title: '生产中数量', field: 'productionQuantity', width: 80}
+                {title: '生产中数量', field: 'productionQuantity', width: 80},
+                {title: '入库数量', field: 'warehousingQuantity', width: 80}
             ]],
             toolbar: [{
                 id: 'btnImgReload',
