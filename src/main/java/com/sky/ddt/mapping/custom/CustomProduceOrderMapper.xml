@@ -30,6 +30,6 @@
                 <if test="type != null">and  po.type=#{type}</if>
             </trim>
         </where>
-        order by po.create_time desc
+        order by po.batch_number desc
     </select>
 </mapper>
