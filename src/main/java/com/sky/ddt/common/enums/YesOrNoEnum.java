@@ -11,4 +11,13 @@ public enum YesOrNoEnum {
     YesOrNoEnum(Integer value) {
         this.value = value;
     }
+    public static Boolean containValue(Integer value){
+        for (YesOrNoEnum itemEmun:
+             YesOrNoEnum.values()) {
+            if(itemEmun.value.equals(value)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

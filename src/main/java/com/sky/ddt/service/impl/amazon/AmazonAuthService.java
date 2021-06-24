@@ -8,6 +8,7 @@ import com.sky.ddt.dao.custom.CustomAmazonAuthMapper;
 import com.sky.ddt.dto.amazon.AmazonConfig;
 import com.sky.ddt.dto.amazon.amazonAuth.request.ListAmazonAuthRequest;
 import com.sky.ddt.dto.amazon.amazonAuth.request.SaveAmazonAuthRequest;
+import com.sky.ddt.dto.amazon.amazonAuth.request.UpdateAmazonAuthRequest;
 import com.sky.ddt.dto.amazon.amazonAuth.response.ListAmazonAuthResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.AmazonAuth;
@@ -93,6 +94,31 @@ public class AmazonAuthService implements IAmazonAuthService {
         }
         return BaseResponse.success();
     }
+
+    /**
+     * @param params @return
+     * @param currentUserId
+     * @description 修改亚马逊授权信息
+     * @author baixueping
+     * @date 2021/6/24 15:57
+     */
+    @Override
+    public BaseResponse updateAmazonAuth(UpdateAmazonAuthRequest params, Integer currentUserId) {
+        if(!YesOrNoEnum.containValue(params.getStatus())){
+            return BaseResponse.failMessage("状态错误");
+        }
+        AmazonAuth amazonAuth=customAmazonAuthMapper.selectByPrimaryKey(params.getId());
+        if(amazonAuth==null){
+            return BaseResponse.failMessage("亚马逊授权信息不存在");
+        }
+        AmazonAuth amazonAuthUpdate=new AmazonAuth();
+        BeanUtils.copyProperties(params,amazonAuthUpdate);
+        amazonAuthUpdate.setUpdateBy(currentUserId.longValue());
+        amazonAuthUpdate.setUpdateTime(new Date());
+        customAmazonAuthMapper.updateByPrimaryKeySelective(amazonAuthUpdate);
+        return BaseResponse.success();
+    }
+
     private AmazonAuth getAmazonAuthByMerchantId(String sellingPartnerId) {
         AmazonAuthExample amazonAuthExample=new AmazonAuthExample();
         amazonAuthExample.createCriteria().andMerchantIdEqualTo(sellingPartnerId);

@@ -42,17 +42,5 @@
         <table tableName="amazon_auth" >
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <table tableName="amazon_fba_inventory" >
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="amazon_order" >
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="amazon_order_item" >
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="amazon_sync_info" >
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
     </context>
 </generatorConfiguration>

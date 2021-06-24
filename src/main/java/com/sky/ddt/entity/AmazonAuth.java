@@ -9,8 +9,6 @@ public class AmazonAuth {
 
     private String shopName;
 
-    private Long customerId;
-
     private String refreshToken;
 
     private String nwsAuthToken;
@@ -53,14 +51,6 @@ public class AmazonAuth {
 
     public void setShopName(String shopName) {
         this.shopName = shopName == null ? null : shopName.trim();
-    }
-
-    public Long getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
     }
 
     public String getRefreshToken() {
