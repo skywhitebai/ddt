@@ -1,0 +1,502 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.AmazonFbaInventoryMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.AmazonFbaInventory">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="merchant_id" jdbcType="VARCHAR" property="merchantId" />
+    <result column="asin" jdbcType="VARCHAR" property="asin" />
+    <result column="fn_sku" jdbcType="VARCHAR" property="fnSku" />
+    <result column="seller_sku" jdbcType="VARCHAR" property="sellerSku" />
+    <result column="condition_str" jdbcType="VARCHAR" property="conditionStr" />
+    <result column="fulfillable_quantity" jdbcType="INTEGER" property="fulfillableQuantity" />
+    <result column="inbound_working_quantity" jdbcType="INTEGER" property="inboundWorkingQuantity" />
+    <result column="inbound_receiving_quantity" jdbcType="INTEGER" property="inboundReceivingQuantity" />
+    <result column="total_reserved_quantity" jdbcType="INTEGER" property="totalReservedQuantity" />
+    <result column="pending_customer_order_quantity" jdbcType="INTEGER" property="pendingCustomerOrderQuantity" />
+    <result column="pending_transshipment_quantity" jdbcType="INTEGER" property="pendingTransshipmentQuantity" />
+    <result column="fc_processing_quantity" jdbcType="INTEGER" property="fcProcessingQuantity" />
+    <result column="total_researching_quantity" jdbcType="INTEGER" property="totalResearchingQuantity" />
+    <result column="researching_quantity_in_short_term" jdbcType="INTEGER" property="researchingQuantityInShortTerm" />
+    <result column="researching_quantity_in_mid_uerm" jdbcType="INTEGER" property="researchingQuantityInMidUerm" />
+    <result column="researching_quantity_in_long_term" jdbcType="INTEGER" property="researchingQuantityInLongTerm" />
+    <result column="unfulfillable_quantity" jdbcType="INTEGER" property="unfulfillableQuantity" />
+    <result column="last_updated_time" jdbcType="TIMESTAMP" property="lastUpdatedTime" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="total_quantity" jdbcType="INTEGER" property="totalQuantity" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, merchant_id, asin, fn_sku, seller_sku, condition_str, fulfillable_quantity, inbound_working_quantity, 
+    inbound_receiving_quantity, total_reserved_quantity, pending_customer_order_quantity, 
+    pending_transshipment_quantity, fc_processing_quantity, total_researching_quantity, 
+    researching_quantity_in_short_term, researching_quantity_in_mid_uerm, researching_quantity_in_long_term, 
+    unfulfillable_quantity, last_updated_time, product_name, total_quantity, create_time, 
+    update_time
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.AmazonFbaInventoryExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from amazon_fba_inventory
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from amazon_fba_inventory
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from amazon_fba_inventory
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.AmazonFbaInventoryExample">
+    delete from amazon_fba_inventory
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.AmazonFbaInventory">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into amazon_fba_inventory (merchant_id, asin, fn_sku, 
+      seller_sku, condition_str, fulfillable_quantity, 
+      inbound_working_quantity, inbound_receiving_quantity, 
+      total_reserved_quantity, pending_customer_order_quantity, 
+      pending_transshipment_quantity, fc_processing_quantity, 
+      total_researching_quantity, researching_quantity_in_short_term, 
+      researching_quantity_in_mid_uerm, researching_quantity_in_long_term, 
+      unfulfillable_quantity, last_updated_time, 
+      product_name, total_quantity, create_time, 
+      update_time)
+    values (#{merchantId,jdbcType=VARCHAR}, #{asin,jdbcType=VARCHAR}, #{fnSku,jdbcType=VARCHAR}, 
+      #{sellerSku,jdbcType=VARCHAR}, #{conditionStr,jdbcType=VARCHAR}, #{fulfillableQuantity,jdbcType=INTEGER}, 
+      #{inboundWorkingQuantity,jdbcType=INTEGER}, #{inboundReceivingQuantity,jdbcType=INTEGER}, 
+      #{totalReservedQuantity,jdbcType=INTEGER}, #{pendingCustomerOrderQuantity,jdbcType=INTEGER}, 
+      #{pendingTransshipmentQuantity,jdbcType=INTEGER}, #{fcProcessingQuantity,jdbcType=INTEGER}, 
+      #{totalResearchingQuantity,jdbcType=INTEGER}, #{researchingQuantityInShortTerm,jdbcType=INTEGER}, 
+      #{researchingQuantityInMidUerm,jdbcType=INTEGER}, #{researchingQuantityInLongTerm,jdbcType=INTEGER}, 
+      #{unfulfillableQuantity,jdbcType=INTEGER}, #{lastUpdatedTime,jdbcType=TIMESTAMP}, 
+      #{productName,jdbcType=VARCHAR}, #{totalQuantity,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.AmazonFbaInventory">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Long">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into amazon_fba_inventory
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="merchantId != null">
+        merchant_id,
+      </if>
+      <if test="asin != null">
+        asin,
+      </if>
+      <if test="fnSku != null">
+        fn_sku,
+      </if>
+      <if test="sellerSku != null">
+        seller_sku,
+      </if>
+      <if test="conditionStr != null">
+        condition_str,
+      </if>
+      <if test="fulfillableQuantity != null">
+        fulfillable_quantity,
+      </if>
+      <if test="inboundWorkingQuantity != null">
+        inbound_working_quantity,
+      </if>
+      <if test="inboundReceivingQuantity != null">
+        inbound_receiving_quantity,
+      </if>
+      <if test="totalReservedQuantity != null">
+        total_reserved_quantity,
+      </if>
+      <if test="pendingCustomerOrderQuantity != null">
+        pending_customer_order_quantity,
+      </if>
+      <if test="pendingTransshipmentQuantity != null">
+        pending_transshipment_quantity,
+      </if>
+      <if test="fcProcessingQuantity != null">
+        fc_processing_quantity,
+      </if>
+      <if test="totalResearchingQuantity != null">
+        total_researching_quantity,
+      </if>
+      <if test="researchingQuantityInShortTerm != null">
+        researching_quantity_in_short_term,
+      </if>
+      <if test="researchingQuantityInMidUerm != null">
+        researching_quantity_in_mid_uerm,
+      </if>
+      <if test="researchingQuantityInLongTerm != null">
+        researching_quantity_in_long_term,
+      </if>
+      <if test="unfulfillableQuantity != null">
+        unfulfillable_quantity,
+      </if>
+      <if test="lastUpdatedTime != null">
+        last_updated_time,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="totalQuantity != null">
+        total_quantity,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="merchantId != null">
+        #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="asin != null">
+        #{asin,jdbcType=VARCHAR},
+      </if>
+      <if test="fnSku != null">
+        #{fnSku,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerSku != null">
+        #{sellerSku,jdbcType=VARCHAR},
+      </if>
+      <if test="conditionStr != null">
+        #{conditionStr,jdbcType=VARCHAR},
+      </if>
+      <if test="fulfillableQuantity != null">
+        #{fulfillableQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="inboundWorkingQuantity != null">
+        #{inboundWorkingQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="inboundReceivingQuantity != null">
+        #{inboundReceivingQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="totalReservedQuantity != null">
+        #{totalReservedQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="pendingCustomerOrderQuantity != null">
+        #{pendingCustomerOrderQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="pendingTransshipmentQuantity != null">
+        #{pendingTransshipmentQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="fcProcessingQuantity != null">
+        #{fcProcessingQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="totalResearchingQuantity != null">
+        #{totalResearchingQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="researchingQuantityInShortTerm != null">
+        #{researchingQuantityInShortTerm,jdbcType=INTEGER},
+      </if>
+      <if test="researchingQuantityInMidUerm != null">
+        #{researchingQuantityInMidUerm,jdbcType=INTEGER},
+      </if>
+      <if test="researchingQuantityInLongTerm != null">
+        #{researchingQuantityInLongTerm,jdbcType=INTEGER},
+      </if>
+      <if test="unfulfillableQuantity != null">
+        #{unfulfillableQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdatedTime != null">
+        #{lastUpdatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalQuantity != null">
+        #{totalQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.AmazonFbaInventoryExample" resultType="java.lang.Long">
+    select count(*) from amazon_fba_inventory
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update amazon_fba_inventory
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=BIGINT},
+      </if>
+      <if test="record.merchantId != null">
+        merchant_id = #{record.merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.asin != null">
+        asin = #{record.asin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fnSku != null">
+        fn_sku = #{record.fnSku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sellerSku != null">
+        seller_sku = #{record.sellerSku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.conditionStr != null">
+        condition_str = #{record.conditionStr,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fulfillableQuantity != null">
+        fulfillable_quantity = #{record.fulfillableQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.inboundWorkingQuantity != null">
+        inbound_working_quantity = #{record.inboundWorkingQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.inboundReceivingQuantity != null">
+        inbound_receiving_quantity = #{record.inboundReceivingQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.totalReservedQuantity != null">
+        total_reserved_quantity = #{record.totalReservedQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.pendingCustomerOrderQuantity != null">
+        pending_customer_order_quantity = #{record.pendingCustomerOrderQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.pendingTransshipmentQuantity != null">
+        pending_transshipment_quantity = #{record.pendingTransshipmentQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.fcProcessingQuantity != null">
+        fc_processing_quantity = #{record.fcProcessingQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.totalResearchingQuantity != null">
+        total_researching_quantity = #{record.totalResearchingQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.researchingQuantityInShortTerm != null">
+        researching_quantity_in_short_term = #{record.researchingQuantityInShortTerm,jdbcType=INTEGER},
+      </if>
+      <if test="record.researchingQuantityInMidUerm != null">
+        researching_quantity_in_mid_uerm = #{record.researchingQuantityInMidUerm,jdbcType=INTEGER},
+      </if>
+      <if test="record.researchingQuantityInLongTerm != null">
+        researching_quantity_in_long_term = #{record.researchingQuantityInLongTerm,jdbcType=INTEGER},
+      </if>
+      <if test="record.unfulfillableQuantity != null">
+        unfulfillable_quantity = #{record.unfulfillableQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastUpdatedTime != null">
+        last_updated_time = #{record.lastUpdatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.productName != null">
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.totalQuantity != null">
+        total_quantity = #{record.totalQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update amazon_fba_inventory
+    set id = #{record.id,jdbcType=BIGINT},
+      merchant_id = #{record.merchantId,jdbcType=VARCHAR},
+      asin = #{record.asin,jdbcType=VARCHAR},
+      fn_sku = #{record.fnSku,jdbcType=VARCHAR},
+      seller_sku = #{record.sellerSku,jdbcType=VARCHAR},
+      condition_str = #{record.conditionStr,jdbcType=VARCHAR},
+      fulfillable_quantity = #{record.fulfillableQuantity,jdbcType=INTEGER},
+      inbound_working_quantity = #{record.inboundWorkingQuantity,jdbcType=INTEGER},
+      inbound_receiving_quantity = #{record.inboundReceivingQuantity,jdbcType=INTEGER},
+      total_reserved_quantity = #{record.totalReservedQuantity,jdbcType=INTEGER},
+      pending_customer_order_quantity = #{record.pendingCustomerOrderQuantity,jdbcType=INTEGER},
+      pending_transshipment_quantity = #{record.pendingTransshipmentQuantity,jdbcType=INTEGER},
+      fc_processing_quantity = #{record.fcProcessingQuantity,jdbcType=INTEGER},
+      total_researching_quantity = #{record.totalResearchingQuantity,jdbcType=INTEGER},
+      researching_quantity_in_short_term = #{record.researchingQuantityInShortTerm,jdbcType=INTEGER},
+      researching_quantity_in_mid_uerm = #{record.researchingQuantityInMidUerm,jdbcType=INTEGER},
+      researching_quantity_in_long_term = #{record.researchingQuantityInLongTerm,jdbcType=INTEGER},
+      unfulfillable_quantity = #{record.unfulfillableQuantity,jdbcType=INTEGER},
+      last_updated_time = #{record.lastUpdatedTime,jdbcType=TIMESTAMP},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      total_quantity = #{record.totalQuantity,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.AmazonFbaInventory">
+    update amazon_fba_inventory
+    <set>
+      <if test="merchantId != null">
+        merchant_id = #{merchantId,jdbcType=VARCHAR},
+      </if>
+      <if test="asin != null">
+        asin = #{asin,jdbcType=VARCHAR},
+      </if>
+      <if test="fnSku != null">
+        fn_sku = #{fnSku,jdbcType=VARCHAR},
+      </if>
+      <if test="sellerSku != null">
+        seller_sku = #{sellerSku,jdbcType=VARCHAR},
+      </if>
+      <if test="conditionStr != null">
+        condition_str = #{conditionStr,jdbcType=VARCHAR},
+      </if>
+      <if test="fulfillableQuantity != null">
+        fulfillable_quantity = #{fulfillableQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="inboundWorkingQuantity != null">
+        inbound_working_quantity = #{inboundWorkingQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="inboundReceivingQuantity != null">
+        inbound_receiving_quantity = #{inboundReceivingQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="totalReservedQuantity != null">
+        total_reserved_quantity = #{totalReservedQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="pendingCustomerOrderQuantity != null">
+        pending_customer_order_quantity = #{pendingCustomerOrderQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="pendingTransshipmentQuantity != null">
+        pending_transshipment_quantity = #{pendingTransshipmentQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="fcProcessingQuantity != null">
+        fc_processing_quantity = #{fcProcessingQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="totalResearchingQuantity != null">
+        total_researching_quantity = #{totalResearchingQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="researchingQuantityInShortTerm != null">
+        researching_quantity_in_short_term = #{researchingQuantityInShortTerm,jdbcType=INTEGER},
+      </if>
+      <if test="researchingQuantityInMidUerm != null">
+        researching_quantity_in_mid_uerm = #{researchingQuantityInMidUerm,jdbcType=INTEGER},
+      </if>
+      <if test="researchingQuantityInLongTerm != null">
+        researching_quantity_in_long_term = #{researchingQuantityInLongTerm,jdbcType=INTEGER},
+      </if>
+      <if test="unfulfillableQuantity != null">
+        unfulfillable_quantity = #{unfulfillableQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="lastUpdatedTime != null">
+        last_updated_time = #{lastUpdatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="totalQuantity != null">
+        total_quantity = #{totalQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.AmazonFbaInventory">
+    update amazon_fba_inventory
+    set merchant_id = #{merchantId,jdbcType=VARCHAR},
+      asin = #{asin,jdbcType=VARCHAR},
+      fn_sku = #{fnSku,jdbcType=VARCHAR},
+      seller_sku = #{sellerSku,jdbcType=VARCHAR},
+      condition_str = #{conditionStr,jdbcType=VARCHAR},
+      fulfillable_quantity = #{fulfillableQuantity,jdbcType=INTEGER},
+      inbound_working_quantity = #{inboundWorkingQuantity,jdbcType=INTEGER},
+      inbound_receiving_quantity = #{inboundReceivingQuantity,jdbcType=INTEGER},
+      total_reserved_quantity = #{totalReservedQuantity,jdbcType=INTEGER},
+      pending_customer_order_quantity = #{pendingCustomerOrderQuantity,jdbcType=INTEGER},
+      pending_transshipment_quantity = #{pendingTransshipmentQuantity,jdbcType=INTEGER},
+      fc_processing_quantity = #{fcProcessingQuantity,jdbcType=INTEGER},
+      total_researching_quantity = #{totalResearchingQuantity,jdbcType=INTEGER},
+      researching_quantity_in_short_term = #{researchingQuantityInShortTerm,jdbcType=INTEGER},
+      researching_quantity_in_mid_uerm = #{researchingQuantityInMidUerm,jdbcType=INTEGER},
+      researching_quantity_in_long_term = #{researchingQuantityInLongTerm,jdbcType=INTEGER},
+      unfulfillable_quantity = #{unfulfillableQuantity,jdbcType=INTEGER},
+      last_updated_time = #{lastUpdatedTime,jdbcType=TIMESTAMP},
+      product_name = #{productName,jdbcType=VARCHAR},
+      total_quantity = #{totalQuantity,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
