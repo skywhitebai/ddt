@@ -7,16 +7,18 @@
         <result column="transport_type_name" property="transportTypeName"/>
         <result column="order_number" property="orderNumber"/>
         <result column="existFbaShipmentIdShort" property="existFbaShipmentIdShort"/>
+        <result column="internalOrderNumberRemark" property="internalOrderNumberRemark"/>
     </resultMap>
     <select id="listInternalOrderNumberTransport"
             parameterType="com.sky.ddt.dto.internalOrderNumberTransport.request.ListInternalOrderNumberTransportRequest"
             resultMap="listInternalOrderNumberTransportMap">
         select
-        <include refid="com.sky.ddt.dao.generate.InternalOrderNumberTransportMapper.Base_Column_List"/>,
+        iont.*,
         (select transport_type_name from transport_type tt where tt.id=iont.transport_type_id) transport_type_name,
-        (select order_number from internal_order_number ion where ion.id=iont.internal_order_number_id) order_number,
+        ion.order_number,ion.remark internalOrderNumberRemark
         case when exists(select 1 from fba_packing_list_shop_sku fplss where fplss.fba_shipment_id=iont.fba_shipment_id_short) then 1 else 0 end existFbaShipmentIdShort
         from internal_order_number_transport iont
+        left JOIN internal_order_number ion on ion.id=iont.internal_order_number_id
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 <if test="orderNumber != null and orderNumber != '' ">and iont.sub_order_number like
