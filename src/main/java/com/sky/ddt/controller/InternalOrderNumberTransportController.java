@@ -7,6 +7,7 @@ import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.internalOrderNumberTransport.request.AddInternalOrderNumberTransportRequest;
 import com.sky.ddt.dto.internalOrderNumberTransport.request.ListInternalOrderNumberTransportRequest;
 import com.sky.ddt.dto.internalOrderNumberTransport.request.SaveInternalOrderNumberTransportRequest;
+import com.sky.ddt.dto.internalOrderNumberTransport.request.SaveInternalOrderNumberTransportWightRequest;
 import com.sky.ddt.dto.internalOrderNumberTransport.response.ListInternalOrderNumberTransportResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.service.IInternalOrderNumberTransportService;
@@ -102,5 +103,13 @@ public class InternalOrderNumberTransportController extends SuperController {
         List<ListInternalOrderNumberTransportResponse> list = internalOrderNumberTransportService.listExportInternalOrderNumberTransport(params);
         BaseResponse exportResponse = new ExcelExportByExcelFieldUtil().export(response, list, InternalOrderNumberTransportConstant.exprotInternalOrderNumberTransportFieldList, "内部单号发货记录");
         return exportResponse;
+    }
+
+    @RequestMapping("/saveInternalOrderNumberTransportWight")
+    @ResponseBody
+    @MenuAnnotation("internalOrderNumberTransport/index")
+    public BaseResponse saveInternalOrderNumberTransportWight(SaveInternalOrderNumberTransportWightRequest params) {
+        Integer dealUserId = getCurrentUserId();
+        return internalOrderNumberTransportService.saveInternalOrderNumberTransportWight(params, dealUserId);
     }
 }

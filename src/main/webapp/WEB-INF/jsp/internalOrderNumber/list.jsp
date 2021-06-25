@@ -165,6 +165,7 @@
                 {title: '单号', field: 'orderNumber', width: 130},
                 {title: '数量', field: 'number', width: 100},
                 {title: '物流渠道', field: 'transportTypeName', width: 130},
+                {title: '重量kg', field: 'totalWeight', width: 60},
                 {
                     title: '操作', field: 'id', width: 150,
                     formatter: function (value, row, index) {

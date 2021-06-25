@@ -228,6 +228,16 @@
                 {title: 'fbaShipmentId', field: 'fbaShipmentId', width: 190},
                 {title: '转单号', field: 'transferOrderNo', width: 190},
                 {title: '物流渠道', field: 'transportTypeName', width: 120},
+                {
+                    title: '重量kg', field: 'weight', width: 90,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " min="0" precision="2" onchange="saveWeight(this,' + row.id + ')">';
+                        } else {
+                            return '<input class="easyui-numberbox" min="0" precision="2" value="' + value + '" onchange="saveWeight(this,' + row.id + ')">';
+                        }
+                    }
+                },
                 {title: '头程费率', field: 'headTripCostRate', width: 65},
                 {
                     title: '锁定费率', field: 'lockHeadTripCostRate', width: 65,
@@ -251,7 +261,7 @@
                 },
                 {title: '创建时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
-                {title: '备注', field: 'title', width: 120}
+                {title: '备注', field: 'internalOrderNumberRemark', width: 120}
             ]],
             toolbar: [{
                 id: 'btnView',
@@ -312,12 +322,13 @@
             $.messager.alert("提示", "请选择一条记录.");
         }
     }
+
     function sendOrderNumberTransport() {
         var rows = $('#dg').datagrid('getSelections');
         if (rows && rows.length == 1) {
-            $.messager.confirm('提示', '是否要将子单号：'+rows[0].subOrderNumber+',设置为已发货？', function (r) {
+            $.messager.confirm('提示', '是否要将子单号：' + rows[0].subOrderNumber + ',设置为已发货？', function (r) {
                 if (r) {
-                    $.post('${pageContext.request.contextPath }/internalOrderNumberTransport/sendInternalOrderNumberTransport', {id:rows[0].id}, function (data) {
+                    $.post('${pageContext.request.contextPath }/internalOrderNumberTransport/sendInternalOrderNumberTransport', {id: rows[0].id}, function (data) {
                         if (data.code == '200') {
                             bindData();
                         }
@@ -331,6 +342,7 @@
             $.messager.alert("提示", "请选择一条记录.");
         }
     }
+
     function showViewDialog() {
         var rows = $('#dg').datagrid('getSelections');
         if (rows && rows.length == 1) {
@@ -345,6 +357,32 @@
 
     function closeDialog() {
         $('#dlg').dialog('close');
+    }
+
+    function saveWeight(input, id) {
+        var weight = $(input).val();
+        if (isEmpty(weight)) {
+            weight = null;
+        }else{
+            var r = /^[+]{0,1}(\d+)$|^[+]{0,1}(\d+\.\d+)$/;　　//正数
+            if (!r.test(weight)) {
+                $.messager.alert("提示", "补货数量必须为大于等于0的数字.");
+                $(input).focus()
+                return;
+            }
+        }
+
+        $.post('${pageContext.request.contextPath }/internalOrderNumberTransport/saveInternalOrderNumberTransportWight', {
+            id: id,
+            weight: weight
+        }, function (data) {
+            if (data.code == '200') {
+                $.messager.alert("提示", "保存成功");
+            }
+            else {
+                $.messager.alert("提示", data.message);
+            }
+        });
     }
 
     function save() {

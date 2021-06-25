@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dto.internalOrderNumberTransport.request.AddInternalOrderNumberTransportRequest;
 import com.sky.ddt.dto.internalOrderNumberTransport.request.ListInternalOrderNumberTransportRequest;
 import com.sky.ddt.dto.internalOrderNumberTransport.request.SaveInternalOrderNumberTransportRequest;
+import com.sky.ddt.dto.internalOrderNumberTransport.request.SaveInternalOrderNumberTransportWightRequest;
 import com.sky.ddt.dto.internalOrderNumberTransport.response.ListInternalOrderNumberTransportResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import org.springframework.web.multipart.MultipartFile;
@@ -82,4 +83,6 @@ public interface IInternalOrderNumberTransportService {
      * @date 2020/8/18 17:19
      */
     void lockHeadTripCostRate(Integer shopId, Date monthDate);
+
+    BaseResponse saveInternalOrderNumberTransportWight(SaveInternalOrderNumberTransportWightRequest params, Integer dealUserId);
 }

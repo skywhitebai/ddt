@@ -15,7 +15,7 @@
         select
         iont.*,
         (select transport_type_name from transport_type tt where tt.id=iont.transport_type_id) transport_type_name,
-        ion.order_number,ion.remark internalOrderNumberRemark
+        ion.order_number,ion.remark internalOrderNumberRemark,
         case when exists(select 1 from fba_packing_list_shop_sku fplss where fplss.fba_shipment_id=iont.fba_shipment_id_short) then 1 else 0 end existFbaShipmentIdShort
         from internal_order_number_transport iont
         left JOIN internal_order_number ion on ion.id=iont.internal_order_number_id
@@ -47,7 +47,7 @@
                 <if test="lockHeadTripCostRate != null ">and iont.lock_head_trip_cost_rate = #{lockHeadTripCostRate}</if>
             </trim>
         </where>
-        order by iont.create_time desc
+        order by ion.order_number desc,iont.sub_order_number asc
     </select>
     <select id="existHeadTripCostRateNull" resultType="java.lang.Long">
         select count(0) from`fba_packing_list` fpl,`internal_order_number_transport` iont

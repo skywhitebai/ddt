@@ -12,6 +12,9 @@
     <result column="transport_type_id" jdbcType="INTEGER" property="transportTypeId" />
     <result column="head_trip_cost_rate" jdbcType="DECIMAL" property="headTripCostRate" />
     <result column="lock_head_trip_cost_rate" jdbcType="INTEGER" property="lockHeadTripCostRate" />
+    <result column="weight" jdbcType="DECIMAL" property="weight" />
+    <result column="send_status" jdbcType="INTEGER" property="sendStatus" />
+    <result column="send_time" jdbcType="TIMESTAMP" property="sendTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -78,7 +81,7 @@
   <sql id="Base_Column_List">
     id, internal_order_number_id, sub_order_number, fba_shipment_id, fba_shipment_id_short, 
     shipment_id, transfer_order_no, transport_type_id, head_trip_cost_rate, lock_head_trip_cost_rate, 
-    create_time, create_by, update_time, update_by
+    weight, send_status, send_time, create_time, create_by, update_time, update_by
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.InternalOrderNumberTransportExample" resultMap="BaseResultMap">
     select
@@ -117,12 +120,14 @@
     insert into internal_order_number_transport (internal_order_number_id, sub_order_number, 
       fba_shipment_id, fba_shipment_id_short, shipment_id, 
       transfer_order_no, transport_type_id, head_trip_cost_rate, 
-      lock_head_trip_cost_rate, create_time, create_by, 
+      lock_head_trip_cost_rate, weight, send_status, 
+      send_time, create_time, create_by, 
       update_time, update_by)
     values (#{internalOrderNumberId,jdbcType=INTEGER}, #{subOrderNumber,jdbcType=VARCHAR}, 
       #{fbaShipmentId,jdbcType=VARCHAR}, #{fbaShipmentIdShort,jdbcType=VARCHAR}, #{shipmentId,jdbcType=VARCHAR}, 
       #{transferOrderNo,jdbcType=VARCHAR}, #{transportTypeId,jdbcType=INTEGER}, #{headTripCostRate,jdbcType=DECIMAL}, 
-      #{lockHeadTripCostRate,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
+      #{lockHeadTripCostRate,jdbcType=INTEGER}, #{weight,jdbcType=DECIMAL}, #{sendStatus,jdbcType=INTEGER}, 
+      #{sendTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.InternalOrderNumberTransport">
@@ -157,6 +162,15 @@
       </if>
       <if test="lockHeadTripCostRate != null">
         lock_head_trip_cost_rate,
+      </if>
+      <if test="weight != null">
+        weight,
+      </if>
+      <if test="sendStatus != null">
+        send_status,
+      </if>
+      <if test="sendTime != null">
+        send_time,
       </if>
       <if test="createTime != null">
         create_time,
@@ -198,6 +212,15 @@
       </if>
       <if test="lockHeadTripCostRate != null">
         #{lockHeadTripCostRate,jdbcType=INTEGER},
+      </if>
+      <if test="weight != null">
+        #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="sendStatus != null">
+        #{sendStatus,jdbcType=INTEGER},
+      </if>
+      <if test="sendTime != null">
+        #{sendTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -252,6 +275,15 @@
       <if test="record.lockHeadTripCostRate != null">
         lock_head_trip_cost_rate = #{record.lockHeadTripCostRate,jdbcType=INTEGER},
       </if>
+      <if test="record.weight != null">
+        weight = #{record.weight,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sendStatus != null">
+        send_status = #{record.sendStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.sendTime != null">
+        send_time = #{record.sendTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -281,6 +313,9 @@
       transport_type_id = #{record.transportTypeId,jdbcType=INTEGER},
       head_trip_cost_rate = #{record.headTripCostRate,jdbcType=DECIMAL},
       lock_head_trip_cost_rate = #{record.lockHeadTripCostRate,jdbcType=INTEGER},
+      weight = #{record.weight,jdbcType=DECIMAL},
+      send_status = #{record.sendStatus,jdbcType=INTEGER},
+      send_time = #{record.sendTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -319,6 +354,15 @@
       <if test="lockHeadTripCostRate != null">
         lock_head_trip_cost_rate = #{lockHeadTripCostRate,jdbcType=INTEGER},
       </if>
+      <if test="weight != null">
+        weight = #{weight,jdbcType=DECIMAL},
+      </if>
+      <if test="sendStatus != null">
+        send_status = #{sendStatus,jdbcType=INTEGER},
+      </if>
+      <if test="sendTime != null">
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -345,6 +389,9 @@
       transport_type_id = #{transportTypeId,jdbcType=INTEGER},
       head_trip_cost_rate = #{headTripCostRate,jdbcType=DECIMAL},
       lock_head_trip_cost_rate = #{lockHeadTripCostRate,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=DECIMAL},
+      send_status = #{sendStatus,jdbcType=INTEGER},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

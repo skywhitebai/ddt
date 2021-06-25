@@ -24,6 +24,12 @@ public class InternalOrderNumberTransport {
 
     private Integer lockHeadTripCostRate;
 
+    private BigDecimal weight;
+
+    private Integer sendStatus;
+
+    private Date sendTime;
+
     private Date createTime;
 
     private Integer createBy;
@@ -110,6 +116,30 @@ public class InternalOrderNumberTransport {
 
     public void setLockHeadTripCostRate(Integer lockHeadTripCostRate) {
         this.lockHeadTripCostRate = lockHeadTripCostRate;
+    }
+
+    public BigDecimal getWeight() {
+        return weight;
+    }
+
+    public void setWeight(BigDecimal weight) {
+        this.weight = weight;
+    }
+
+    public Integer getSendStatus() {
+        return sendStatus;
+    }
+
+    public void setSendStatus(Integer sendStatus) {
+        this.sendStatus = sendStatus;
+    }
+
+    public Date getSendTime() {
+        return sendTime;
+    }
+
+    public void setSendTime(Date sendTime) {
+        this.sendTime = sendTime;
     }
 
     public Date getCreateTime() {

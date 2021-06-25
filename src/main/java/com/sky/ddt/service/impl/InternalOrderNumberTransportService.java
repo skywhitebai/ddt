@@ -8,6 +8,7 @@ import com.sky.ddt.dao.custom.CustomInternalOrderNumberTransportMapper;
 import com.sky.ddt.dto.internalOrderNumberTransport.request.AddInternalOrderNumberTransportRequest;
 import com.sky.ddt.dto.internalOrderNumberTransport.request.ListInternalOrderNumberTransportRequest;
 import com.sky.ddt.dto.internalOrderNumberTransport.request.SaveInternalOrderNumberTransportRequest;
+import com.sky.ddt.dto.internalOrderNumberTransport.request.SaveInternalOrderNumberTransportWightRequest;
 import com.sky.ddt.dto.internalOrderNumberTransport.response.ListInternalOrderNumberTransportResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.InternalOrderNumber;
@@ -394,6 +395,20 @@ public class InternalOrderNumberTransportService implements IInternalOrderNumber
     @Override
     public void lockHeadTripCostRate(Integer shopId, Date monthDate) {
         customInternalOrderNumberTransportMapper.lockHeadTripCostRate(shopId, monthDate);
+    }
+
+    @Override
+    public BaseResponse saveInternalOrderNumberTransportWight(SaveInternalOrderNumberTransportWightRequest params, Integer dealUserId) {
+        if(BigDecimal.ZERO.equals(params.getWeight())){
+            params.setWeight(null);
+        }
+        InternalOrderNumberTransport internalOrderNumberTransport=customInternalOrderNumberTransportMapper.selectByPrimaryKey(params.getId());
+        if(internalOrderNumberTransport==null){
+            return BaseResponse.failMessage("id不存在");
+        }
+        internalOrderNumberTransport.setWeight(params.getWeight());
+        customInternalOrderNumberTransportMapper.updateByPrimaryKey(internalOrderNumberTransport);
+        return BaseResponse.success();
     }
 
     private boolean repeatOrderNumber(String orderNumber, List<Map<String, String>> list) {

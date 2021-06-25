@@ -39,7 +39,7 @@
         <!--<table tableName="sys_right" domainObjectName="Right">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        <table tableName="amazon_auth" >
+        <table tableName="internal_order_number_transport" >
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

@@ -13,5 +13,5 @@ public class ListInternalOrderNumberTransportResponse extends InternalOrderNumbe
     String transportTypeName;
     String orderNumber;
     String existFbaShipmentIdShort;
-    String remark;
+    String internalOrderNumberRemark;
 }
