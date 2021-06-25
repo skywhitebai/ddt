@@ -6,6 +6,9 @@ import com.sky.ddt.dto.amazon.amazonAuth.request.SaveAmazonAuthRequest;
 import com.sky.ddt.dto.amazon.amazonAuth.request.UpdateAmazonAuthRequest;
 import com.sky.ddt.dto.amazon.amazonAuth.response.ListAmazonAuthResponse;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.entity.AmazonAuth;
+
+import java.util.List;
 
 /**
  * @author baixueping
@@ -26,4 +29,6 @@ public interface IAmazonAuthService {
      * @date 2021/6/24 15:57
      */
     BaseResponse updateAmazonAuth(UpdateAmazonAuthRequest params, Integer currentUserId);
+
+    List<AmazonAuth> listAmazonAuth();
 }

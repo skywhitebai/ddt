@@ -23,6 +23,9 @@
 		<property name="ignoreUnresolvablePlaceholders" value="true" />
 	</bean>
 	<context:component-scan base-package="com.sky.ddt" />
+	<task:annotation-driven />
+	<!-- 扫描任务 -->
+	<context:component-scan base-package="com.sky.ddt.task" />
 	<!-- 开启AOP监听 只对当前配置文件有效 -->
 	<aop:aspectj-autoproxy proxy-target-class="true" expose-proxy="true" />
 	<import resource="classpath:spring-mybatis.xml" />

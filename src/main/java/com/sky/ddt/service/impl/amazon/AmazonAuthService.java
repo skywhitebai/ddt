@@ -118,7 +118,12 @@ public class AmazonAuthService implements IAmazonAuthService {
         customAmazonAuthMapper.updateByPrimaryKeySelective(amazonAuthUpdate);
         return BaseResponse.success();
     }
-
+    @Override
+    public List<AmazonAuth> listAmazonAuth() {
+        AmazonAuthExample amazonAuthExample = new AmazonAuthExample();
+        amazonAuthExample.createCriteria().andStatusEqualTo(YesOrNoEnum.YES.getValue());
+        return customAmazonAuthMapper.selectByExample(amazonAuthExample);
+    }
     private AmazonAuth getAmazonAuthByMerchantId(String sellingPartnerId) {
         AmazonAuthExample amazonAuthExample=new AmazonAuthExample();
         amazonAuthExample.createCriteria().andMerchantIdEqualTo(sellingPartnerId);

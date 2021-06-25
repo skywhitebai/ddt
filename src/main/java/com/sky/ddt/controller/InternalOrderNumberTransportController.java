@@ -28,7 +28,7 @@ import java.util.List;
  * @date 2020/7/1 16:37
  */
 @Controller
-@RequestMapping("internalOrderNumberTransport")
+@RequestMapping("/internalOrderNumberTransport")
 public class InternalOrderNumberTransportController extends SuperController {
     @Autowired
     IInternalOrderNumberTransportService internalOrderNumberTransportService;
