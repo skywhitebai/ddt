@@ -57,4 +57,10 @@ public class AmazonAuthController extends SuperController {
     public BaseResponse updateAmazonAuth(@Validated UpdateAmazonAuthRequest params){
         return amazonAuthService.updateAmazonAuth(params,getCurrentUserId());
     }
+
+    @RequestMapping("/amazonSellerAuth")
+    public String amazonSellerAuth() {
+        return "amazon/amazonAuth/amazonSellerAuth";
+    }
+
 }

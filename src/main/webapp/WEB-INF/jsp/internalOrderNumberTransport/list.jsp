@@ -377,7 +377,6 @@
             weight: weight
         }, function (data) {
             if (data.code == '200') {
-                $.messager.alert("提示", "保存成功");
             }
             else {
                 $.messager.alert("提示", data.message);
