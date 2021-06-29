@@ -52,8 +52,8 @@
 <script type="text/javascript">
     initAuthInfo();
     function initAuthInfo() {
-        sellingPartnerId = getUrlParams("sellingPartnerId");
-        spapiOauthCode = getUrlParams("spapiOauthCode");
+        sellingPartnerId = getQueryVariable("sellingPartnerId");
+        spapiOauthCode = getQueryVariable("spapiOauthCode");
         if (isEmpty(sellingPartnerId)) {
             $.messager.alert("提示", "商户id不能为空");
             return;
