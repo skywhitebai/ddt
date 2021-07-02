@@ -52,6 +52,7 @@ public class FbaInventoryJob {
     IAmazonAuthService amazonAuthService;
 
     @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
     //@Scheduled(cron = "0/2 * * * * ?")
     public void scheduled() {
         //获取获取订单信息
@@ -63,7 +64,7 @@ public class FbaInventoryJob {
             if (StringUtils.isEmpty(amazonAuth.getMarketplaceId())) {
                 continue;
             }
-            log.info("{}，获取店铺{}的库存信息", DateUtil.getFormatDateStr(new Date()),amazonAuth.getMarketplaceId());
+            log.info("{}，获取店铺{}的库存信息", DateUtil.getFormatDateStr(new Date()),amazonAuth.getMerchantId());
             try {
                 syncFbaInventoryInfo(amazonAuth);
             } catch (ApiException e) {

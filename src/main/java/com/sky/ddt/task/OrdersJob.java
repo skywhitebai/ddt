@@ -57,7 +57,7 @@ public class OrdersJob {
             if (StringUtils.isEmpty(amazonAuth.getMarketplaceId())) {
                 continue;
             }
-            log.info("{}，获取店铺{}的订单信息", DateUtil.getFormatDateStr(new Date()),amazonAuth.getMarketplaceId());
+            log.info("{}，获取店铺{}的订单信息", DateUtil.getFormatDateStr(new Date()),amazonAuth.getMerchantId());
             try {
                 syncOrderInfo(amazonAuth);
             } catch (ApiException e) {
