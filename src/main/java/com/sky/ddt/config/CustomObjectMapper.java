@@ -24,7 +24,7 @@ public class CustomObjectMapper extends ObjectMapper {
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
         simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
-        //simpleModule.addSerializer(LocalDateTime.class,LocalDateTimeToStringSerializer.instance);
+        simpleModule.addSerializer(LocalDateTime.class,LocalDateTimeToStringSerializer.instance);
         registerModule(simpleModule);
 
     }

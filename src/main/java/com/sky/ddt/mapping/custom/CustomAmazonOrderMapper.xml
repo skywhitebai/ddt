@@ -30,6 +30,6 @@
                 </if>
             </trim>
         </where>
-        order by ao.purchase_date desc
+        order by ao.update_time desc
     </select>
 </mapper>

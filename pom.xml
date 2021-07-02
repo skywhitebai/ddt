@@ -282,8 +282,8 @@
             <groupId>com.penghaiping</groupId>
             <artifactId>amazon-sp-api</artifactId>
             <version>1.0.0-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/amazon-sp-api-1.0.0-SNAPSHOT.jar</systemPath>
+            <!--<scope>system</scope>
+            <systemPath>${project.basedir}/lib/amazon-sp-api-1.0.0-SNAPSHOT.jar</systemPath>-->
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>

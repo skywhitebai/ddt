@@ -43,6 +43,7 @@ public class AmazonFbaInventoryService implements IAmazonFbaInventoryService {
         if (!StringUtil.isEmpty(params.getProductName())) {
             criteria.andProductNameLike(params.getProductName());
         }
+        example.setOrderByClause("update_time desc");
         PageHelper.startPage(params.getPage(), params.getRows());
         List<AmazonFbaInventory> list = customAmazonFbaInventoryMapper.selectByExample(example);
         PageInfo<AmazonFbaInventory> pageInfo = new PageInfo<>(list);

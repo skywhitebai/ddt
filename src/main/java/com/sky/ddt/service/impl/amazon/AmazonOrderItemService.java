@@ -40,6 +40,7 @@ public class AmazonOrderItemService implements IAmazonOrderItemService {
         if (!StringUtils.isEmpty(params.getTitle())) {
             criteria.andTitleLike(params.getTitle());
         }
+        example.setOrderByClause("update_time desc");
         PageHelper.startPage(params.getPage(), params.getRows());
         List<AmazonOrderItem> list = customAmazonOrderItemMapper.selectByExample(example);
         PageInfo<AmazonOrderItem> pageInfo = new PageInfo<>(list);
