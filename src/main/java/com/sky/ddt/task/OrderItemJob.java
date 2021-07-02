@@ -39,7 +39,7 @@ public class OrderItemJob {
     CustomAmazonOrderMapper customAmazonOrderMapper;
     @Autowired
     CustomAmazonOrderItemMapper customAmazonOrderItemMapper;
-    //@Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     public void scheduled() {
         //获取获取订单信息
         log.info("{}，获取订单商品信息", DateUtil.getFormatDateStr(new Date()));
@@ -50,6 +50,7 @@ public class OrderItemJob {
             if (StringUtils.isEmpty(amazonAuth.getMarketplaceId())) {
                 continue;
             }
+            log.info("{}，获取店铺{}的订单商品信息", DateUtil.getFormatDateStr(new Date()),amazonAuth.getMarketplaceId());
             try {
                 syncOrderItemInfo(amazonAuth);
             } catch (ApiException e) {

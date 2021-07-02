@@ -45,7 +45,7 @@ public class OrdersJob {
     @Autowired
     IAmazonAuthService amazonAuthService;
 
-    //@Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 0/10 * * * ?")
     //@Scheduled(cron = "0/2 * * * * ?")
     public void scheduled() {
         //获取获取订单信息
@@ -57,6 +57,7 @@ public class OrdersJob {
             if (StringUtils.isEmpty(amazonAuth.getMarketplaceId())) {
                 continue;
             }
+            log.info("{}，获取店铺{}的订单信息", DateUtil.getFormatDateStr(new Date()),amazonAuth.getMarketplaceId());
             try {
                 syncOrderInfo(amazonAuth);
             } catch (ApiException e) {

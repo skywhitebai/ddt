@@ -51,8 +51,8 @@ public class FbaInventoryJob {
     @Autowired
     IAmazonAuthService amazonAuthService;
 
-    //@Scheduled(cron = "0 0/5 * * * ?")
-    @Scheduled(cron = "0/2 * * * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
+    //@Scheduled(cron = "0/2 * * * * ?")
     public void scheduled() {
         //获取获取订单信息
         log.info("{}，获取库存信息", DateUtil.getFormatDateStr(new Date()));
@@ -63,6 +63,7 @@ public class FbaInventoryJob {
             if (StringUtils.isEmpty(amazonAuth.getMarketplaceId())) {
                 continue;
             }
+            log.info("{}，获取店铺{}的库存信息", DateUtil.getFormatDateStr(new Date()),amazonAuth.getMarketplaceId());
             try {
                 syncFbaInventoryInfo(amazonAuth);
             } catch (ApiException e) {
@@ -129,11 +130,11 @@ public class FbaInventoryJob {
         List<String> marketplaceIds = new ArrayList<>();
         marketplaceIds.add(amazonAuth.getMarketplaceId());
         Boolean details = true;
-        OffsetDateTime startDateTime = null;
+        OffsetDateTime startDateTime = OffsetDateTimeTool2.getOffsetDateTime(amazonSyncInfo.getLastUpdateAfter());
         List<String> sellerSkus = null;
         String nextToken = null;
         if (StringUtils.isEmpty(amazonSyncInfo.getNextToken())) {
-            startDateTime = OffsetDateTimeTool2.getOffsetDateTime(amazonSyncInfo.getLastUpdateAfter());
+                //startDateTime = OffsetDateTimeTool2.getOffsetDateTime(amazonSyncInfo.getLastUpdateAfter());
         } else {
             nextToken = amazonSyncInfo.getNextToken();
         }
