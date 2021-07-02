@@ -110,9 +110,9 @@ public class OrdersJob {
     }
 
     private void dealOrderInfo(OrdersV0Api ordersV0Api, AmazonAuth amazonAuth, OrdersList ordersList, AmazonSyncInfo amazonSyncInfo) throws ApiException {
-        if (CollectionUtils.isEmpty(ordersList.getOrders())) {
+        /*if (CollectionUtils.isEmpty(ordersList.getOrders())) {
             return;
-        }
+        }*/
         log.info("dealTime:{},dealOrderInfo orderSize:{},nextToken:{}", DateUtil.getFormatSSS(new Date()), ordersList.getOrders().size(), ordersList.getNextToken());
         ordersList.getOrders().forEach(order -> {
             AmazonOrder amazonOrder = getAmazonOrderByAmazonOrderId(order.getAmazonOrderId());
