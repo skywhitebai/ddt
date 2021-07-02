@@ -2,6 +2,7 @@ package com.sky.ddt.dto.amazon.amazonOrder.request;
 
 import com.sky.ddt.dto.easyui.request.DataGridRequest;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -19,7 +20,9 @@ public class ListAmazonOrderRequest extends DataGridRequest {
     private String amazonOrderId;
 
     private String sellerOrderId;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date purchaseDateStart;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date purchaseDateEnd;
     private String orderStatus;
     private String buyerEmail;

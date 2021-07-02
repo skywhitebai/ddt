@@ -51,7 +51,7 @@ public class FbaInventoryJob {
     @Autowired
     IAmazonAuthService amazonAuthService;
 
-    //@Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
     public void scheduled() {
         //获取获取订单信息
         log.info("{}，获取库存信息", DateUtil.getFormatDateStr(new Date()));

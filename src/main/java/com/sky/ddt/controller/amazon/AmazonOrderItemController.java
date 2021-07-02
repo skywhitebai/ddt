@@ -24,6 +24,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class AmazonOrderItemController extends SuperController {
     @Autowired
     IAmazonOrderItemService amazonOrderItemService;
+    @RequestMapping("/index")
+    public String index() {
+        return "amazon/amazonOrderItem/list";
+    }
     @RequestMapping("listAmazonOrderItem")
     @ResponseBody
     public DataGridResponse listAmazonOrderItem(@Validated ListAmazonOrderItemRequest params){

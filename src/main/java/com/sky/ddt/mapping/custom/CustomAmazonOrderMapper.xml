@@ -3,7 +3,7 @@
 <mapper namespace="com.sky.ddt.dao.custom.CustomAmazonOrderMapper">
 
     <select id="listAmazonOrder" parameterType="com.sky.ddt.dto.amazon.amazonOrder.request.ListAmazonOrderRequest"
-            resultMap="com.sky.ddt.dao.generate.CheckOrderMapper.BaseResultMap">
+            resultMap="com.sky.ddt.dao.generate.AmazonOrderMapper.BaseResultMap">
         select
         ao.*
         from amazon_order ao
