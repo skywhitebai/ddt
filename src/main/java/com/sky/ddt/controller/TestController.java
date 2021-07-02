@@ -4,12 +4,15 @@ import com.sky.ddt.common.annotation.Action;
 import com.sky.ddt.common.annotation.Login;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.test.DateTestRequest;
+import com.sky.ddt.dto.test.GetLocalDateTimeRequest;
 import com.sky.ddt.util.ExcelUtil;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -28,5 +31,11 @@ public class TestController extends SuperController {
     @ResponseBody
     public BaseResponse testDate(DateTestRequest params) {
         return BaseResponse.successData(params);
+    }
+    @RequestMapping("/getLocalDateTime")
+    @Login(action = Action.Skip)
+    @ResponseBody
+    public BaseResponse getLocalDateTime(@RequestBody GetLocalDateTimeRequest prams) {
+        return BaseResponse.successData(prams);
     }
 }

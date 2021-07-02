@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomAmazonOrderMapper">
+
+    <select id="listAmazonOrder" parameterType="com.sky.ddt.dto.amazon.amazonOrder.request.ListAmazonOrderRequest"
+            resultMap="com.sky.ddt.dao.generate.CheckOrderMapper.BaseResultMap">
+        select
+        ao.*
+        from amazon_order ao
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="merchantId != null and merchantId != ''">and merchant_id concat('%',#{merchantId},'%')</if>
+                <if test="marketplaceId != null and marketplaceId != ''">and marketplace_id concat('%',#{marketplaceId},'%')</if>
+                <if test="amazonOrderId != null and amazonOrderId != ''">and amazon_order_id concat('%',#{amazonOrderId},'%')</if>
+                <if test="sellerOrderId != null and sellerOrderId != ''">and seller_order_id concat('%',#{sellerOrderId},'%')</if>
+                <if test="purchaseDateStart != null ">and purchase_date <![CDATA[>=]]>
+                    date(#{purchaseDateStart})
+                </if>
+
+                <if test="purchaseDateEnd != null ">and purchase_date <![CDATA[<]]>
+                    DATE_ADD(date(#{purchaseDateEnd}),INTERVAL 1 DAY)
+                </if>
+                <if test="orderStatus != null and orderStatus != '' ">and order_status=#{orderStatus}
+                </if>
+                <if test="buyerEmail != null and buyerEmail != ''">and buyer_email concat('%',#{buyerEmail},'%')</if>
+
+                <if test="sellerSku != null and sellerSku != '' ">
+                    and exists (select 1 from amazon_order_item aoi where aoi.amazon_order_id=ao.amazon_order_id and
+                    aoi.seller_sku like concat('%',#{sellerSku},'%'))
+                </if>
+            </trim>
+        </where>
+        order by ao.purchase_date desc
+    </select>
+</mapper>

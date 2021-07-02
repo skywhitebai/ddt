@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @date 2021/6/28 14:53
  */
 @Controller
+@RequestMapping("/amazonFbaInventory")
 public class AmazonFbaInventoryController extends SuperController {
     @Autowired
     IAmazonFbaInventoryService amazonFbaInventoryService;
@@ -30,9 +31,7 @@ public class AmazonFbaInventoryController extends SuperController {
     @ResponseBody
     public DataGridResponse listAmazonFbaInventory(@Validated ListAmazonFbaInventoryRequest params){
         PageInfo<AmazonFbaInventory> page = amazonFbaInventoryService.listAmazonFbaInventory(params);
-        DataGridResponse dataGridResponse = new DataGridResponse();
-        dataGridResponse.setTotal(page.getTotal());
-        dataGridResponse.setRows(page.getList());
+        DataGridResponse dataGridResponse = new DataGridResponse(page);
         return dataGridResponse;
     }
 }
