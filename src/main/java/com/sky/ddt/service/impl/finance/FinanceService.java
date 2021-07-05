@@ -252,6 +252,25 @@ public class FinanceService implements IFinanceService {
         return BaseResponse.success();
     }
 
+    @Override
+    public BaseResponse lockFinanceStatistic(Integer id, Integer dealUserId) {
+        if (id == null) {
+            return BaseResponse.failMessage(FinanceConstant.ID_EMPTY);
+        }
+        Finance finance = getFinance(id);
+        if (finance == null) {
+            return BaseResponse.failMessage(FinanceConstant.ID_NOT_EXIST);
+        }
+        if (!FinanceConstant.FinanceStatusEnum.GENERATED.getStatus().equals(finance.getStatisticStatus())) {
+            return BaseResponse.failMessage(FinanceConstant.NOT_ALLOW_LOCK);
+        }
+        Finance financeUpdate = new Finance();
+        financeUpdate.setId(finance.getId());
+        financeUpdate.setStatisticStatus(FinanceConstant.FinanceStatusEnum.LOCKED.getStatus());
+        customFinanceMapper.updateByPrimaryKeySelective(financeUpdate);
+        return BaseResponse.success();
+    }
+
     /**
      * @param id
      * @param dealUserId

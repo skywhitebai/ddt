@@ -268,6 +268,19 @@
                     }
                 },
                 {
+                    title: '生成回款信息', field: 'createFinanceStatistic', width: 100,
+                    formatter: function (value, row, rowIndex) {
+                        if (row.status == 0) {
+                            return '<a href="javascript:void(0)" onclick="createFinanceStatistic(' + row.id + ')" class="easyui-linkbutton" >生成报表</a>';
+                        } else if (row.status == 1) {
+                            return '<a href="javascript:void(0)" onclick="createFinanceStatistic(' + row.id + ')" class="easyui-linkbutton" >重新生成</a>'
+                                + '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="lockFinanceStatistic(' + row.id + ')" title="锁定后不能再重新生成" class="easyui-linkbutton" >锁定</a>';
+                        } else if (row.status == 2) {
+                            return '已锁定';
+                        }
+                    }
+                },
+                {
                     title: '备注', field: 'remark', width: 288,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
@@ -404,13 +417,36 @@
             }
         });
     }
-
+    function createFinanceStatistic(id) {
+        showCover();
+        $.post('${pageContext.request.contextPath }/financialStatistic/createFinanceStatistic', {financeId: id}, function (data) {
+            hideCover();
+            if (data.code == '200') {
+                $.messager.alert("提示", "生成成功");
+                bindData();
+            }
+            else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
     function exportFinancialStatement(id) {
         window.open('${pageContext.request.contextPath }/financialStatement/exportFinancialStatement?financeId=' + id);
     }
 
     function lockFinance(id) {
         $.post('${pageContext.request.contextPath }/finance/lockFinance', {id: id}, function (data) {
+            if (data.code == '200') {
+                $.messager.alert("提示", "锁定成功");
+                bindData();
+            }
+            else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+    function lockFinance(id) {
+        $.post('${pageContext.request.contextPath }/finance/lockFinanceStatistic', {id: id}, function (data) {
             if (data.code == '200') {
                 $.messager.alert("提示", "锁定成功");
                 bindData();

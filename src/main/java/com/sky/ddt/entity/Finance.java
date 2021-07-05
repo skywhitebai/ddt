@@ -42,6 +42,8 @@ public class Finance {
 
     private Integer status;
 
+    private Integer statisticStatus;
+
     private String remark;
 
     private Date createTime;
@@ -204,6 +206,14 @@ public class Finance {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getStatisticStatus() {
+        return statisticStatus;
+    }
+
+    public void setStatisticStatus(Integer statisticStatus) {
+        this.statisticStatus = statisticStatus;
     }
 
     public String getRemark() {

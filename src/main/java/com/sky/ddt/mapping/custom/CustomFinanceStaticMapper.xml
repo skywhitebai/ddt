@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomFinanceStatisticMapper">
+
+    <select id="getFinanceStatisticInfo"
+            resultMap="com.sky.ddt.dao.generate.FinanceStatisticMapper.BaseResultMap">
+        select fs.finance_id,fs.shop_id,fs.shop_name,sum(initial_inventory_cost) initial_inventory_cost,sum(final_inventory_cost) final_inventory_cost,
+        sum(sshtch.fba_send_quantity*(head_trip_cost_after+sku.cost_price)) send_cost,sum(fs.procurement_cost+fs.fba_head_trip_cost) sale_cost,
+        sum(main_business_income) main_business_income,sum(manual_adjustment) manual_adjustment
+        from `financial_statement` fs
+        left join shop_sku_head_trip_cost_his sshtch
+        on sshtch.shop_sku_id=fs.`shop_sku_id`
+        left join shop_sku ss
+        on ss.`shop_sku_id`=fs.`shop_sku_id`
+        LEFT JOIN sku
+        ON ss.`sku_id`=sku.`sku_id`
+        where fs.`finance_id`=#{financeId}
+        ORDER BY ss.`shop_parent_sku`,sku.`sku`
+    </select>
+</mapper>

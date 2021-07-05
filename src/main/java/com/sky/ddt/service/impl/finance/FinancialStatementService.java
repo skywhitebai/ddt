@@ -13,6 +13,7 @@ import com.sky.ddt.dto.finance.response.FinancialStatementResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.*;
 import com.sky.ddt.service.finance.IFinanceService;
+import com.sky.ddt.service.finance.IFinanceStatisticService;
 import com.sky.ddt.service.finance.IFinancialStatementService;
 import com.sky.ddt.util.DateUtil;
 import com.sky.ddt.util.ExcelUtil;
@@ -21,6 +22,7 @@ import com.sky.ddt.util.ZipUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.checkerframework.checker.units.qual.A;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -53,6 +55,8 @@ public class FinancialStatementService implements IFinancialStatementService {
     CustomMonthlySalesMapper customMonthlySalesMapper;
     @Autowired
     CustomSkuMapper customSkuMapper;
+    @Autowired
+    IFinanceStatisticService financeStatisticService;
 
     /**
      * @param financeId
@@ -66,6 +70,13 @@ public class FinancialStatementService implements IFinancialStatementService {
     public BaseResponse createFinancialStatement(Integer financeId, Integer dealUserId) {
         if (financeId == null) {
             return BaseResponse.failMessage(FinanceConstant.ID_EMPTY);
+        }
+        Finance finance = financeService.getFinance(financeId);
+        if (finance == null) {
+            return BaseResponse.failMessage(FinanceConstant.ID_NOT_EXIST);
+        }
+        if (FinanceConstant.FinanceStatusEnum.LOCKED.getStatus().equals(finance.getStatus())) {
+            return BaseResponse.failMessage(FinanceConstant.NOT_ALLOW_CREATE_FINANCIAL_STATEMENT);
         }
         //获取
         List<FinancialStatementResponse> financialStatementResponseList = customFinancialStatementMapper.getFinancialStatementResponse(financeId);
@@ -168,13 +179,7 @@ public class FinancialStatementService implements IFinancialStatementService {
                 }
             }
         }
-        Finance finance = financeService.getFinance(financeId);
-        if (finance == null) {
-            return BaseResponse.failMessage(FinanceConstant.ID_NOT_EXIST);
-        }
-        if (FinanceConstant.FinanceStatusEnum.LOCKED.getStatus().equals(finance.getStatus())) {
-            return BaseResponse.failMessage(FinanceConstant.NOT_ALLOW_CREATE_FINANCIAL_STATEMENT);
-        }
+
 
         if (FinanceConstant.FinanceStatusEnum.GENERATED.getStatus().equals(finance.getStatus())) {
             FinancialStatementExample financialStatementExample = new FinancialStatementExample();
@@ -190,6 +195,11 @@ public class FinancialStatementService implements IFinancialStatementService {
             financialStatement.setCreateTime(new Date());
             customFinancialStatementMapper.insertSelective(financialStatement);
         }
+        //生成回款信息
+        BaseResponse createFinanceStatisticResponse=financeStatisticService.createFinanceStatistic(financeId,dealUserId);
+        if(createFinanceStatisticResponse.isFail()){
+            return createFinanceStatisticResponse;
+        }
         Finance financeUpdate = new Finance();
         financeUpdate.setStatus(FinanceConstant.FinanceStatusEnum.GENERATED.getStatus());
         financeUpdate.setRateOfDollarExchangeRmb(FinanceConstant.RATE_OF_DOLLAR_EXCHANGE_RMB);
@@ -197,7 +207,6 @@ public class FinancialStatementService implements IFinancialStatementService {
         customFinanceMapper.updateByPrimaryKeySelective(financeUpdate);
         return BaseResponse.success();
     }
-
     private void setfbaCustomerReturnPerUnitFee(List<FinancialStatementResponse> financialStatementResponseList) {
         if (CollectionUtils.isEmpty(financialStatementResponseList)) {
             return;

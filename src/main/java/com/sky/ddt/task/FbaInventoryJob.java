@@ -52,7 +52,6 @@ public class FbaInventoryJob {
     IAmazonAuthService amazonAuthService;
 
     @Scheduled(cron = "0 0/5 * * * ?")
-    @Scheduled(cron = "0 0/5 * * * ?")
     //@Scheduled(cron = "0/2 * * * * ?")
     public void scheduled() {
         //获取获取订单信息

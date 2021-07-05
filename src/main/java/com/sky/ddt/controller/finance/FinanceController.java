@@ -80,6 +80,14 @@ public class FinanceController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return financeService.lockFinance(id, dealUserId);
     }
+
+    @RequestMapping("/lockFinanceStatistic")
+    @ResponseBody
+    @MenuAnnotation("finance/index")
+    public BaseResponse lockFinanceStatistic(Integer id) {
+        Integer dealUserId = getCurrentUserId();
+        return financeService.lockFinanceStatistic(id, dealUserId);
+    }
     @RequestMapping("/exportFbaCustomerReturnPerUnitFeeNotExistSku")
     @ResponseBody
     @MenuAnnotation("finance/index")

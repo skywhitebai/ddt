@@ -1246,6 +1246,66 @@ public class FinanceExample {
             return (Criteria) this;
         }
 
+        public Criteria andStatisticStatusIsNull() {
+            addCriterion("statistic_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusIsNotNull() {
+            addCriterion("statistic_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusEqualTo(Integer value) {
+            addCriterion("statistic_status =", value, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusNotEqualTo(Integer value) {
+            addCriterion("statistic_status <>", value, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusGreaterThan(Integer value) {
+            addCriterion("statistic_status >", value, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("statistic_status >=", value, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusLessThan(Integer value) {
+            addCriterion("statistic_status <", value, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("statistic_status <=", value, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusIn(List<Integer> values) {
+            addCriterion("statistic_status in", values, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusNotIn(List<Integer> values) {
+            addCriterion("statistic_status not in", values, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusBetween(Integer value1, Integer value2) {
+            addCriterion("statistic_status between", value1, value2, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("statistic_status not between", value1, value2, "statisticStatus");
+            return (Criteria) this;
+        }
+
         public Criteria andRemarkIsNull() {
             addCriterion("remark is null");
             return (Criteria) this;

@@ -90,4 +90,6 @@ public interface IFinanceService {
      * @date 2020/1/3 11:15
      */
     BaseResponse saveFinanceRemark(SaveFinanceRemarkRequest params, Integer dealUserId);
+
+    BaseResponse lockFinanceStatistic(Integer id, Integer dealUserId);
 }

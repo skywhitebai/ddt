@@ -21,6 +21,7 @@
     <result column="head_deduction" jdbcType="BIT" property="headDeduction" />
     <result column="manual_adjustment" jdbcType="BIT" property="manualAdjustment" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="statistic_status" jdbcType="INTEGER" property="statisticStatus" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
@@ -90,8 +91,8 @@
     id, shop_id, month, monthly_sales, lighting_deal, monthly_storage_fee, monthly_advertising_fee, 
     remove_orders, destruction_fee, destruction_details, fba_customer_return_fee, coupon, 
     early_reviewer_program_fee, long_storage_fee, refund_operation_fee, inventory_details, 
-    head_deduction, manual_adjustment, status, remark, create_time, create_by, update_time, 
-    update_by, rate_of_dollar_exchange_rmb
+    head_deduction, manual_adjustment, status, statistic_status, remark, create_time, 
+    create_by, update_time, update_by, rate_of_dollar_exchange_rmb
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FinanceExample" resultMap="BaseResultMap">
     select
@@ -133,18 +134,18 @@
       fba_customer_return_fee, coupon, early_reviewer_program_fee, 
       long_storage_fee, refund_operation_fee, inventory_details, 
       head_deduction, manual_adjustment, status, 
-      remark, create_time, create_by, 
-      update_time, update_by, rate_of_dollar_exchange_rmb
-      )
+      statistic_status, remark, create_time, 
+      create_by, update_time, update_by, 
+      rate_of_dollar_exchange_rmb)
     values (#{shopId,jdbcType=INTEGER}, #{month,jdbcType=TIMESTAMP}, #{monthlySales,jdbcType=BIT}, 
       #{lightingDeal,jdbcType=BIT}, #{monthlyStorageFee,jdbcType=BIT}, #{monthlyAdvertisingFee,jdbcType=BIT}, 
       #{removeOrders,jdbcType=BIT}, #{destructionFee,jdbcType=BIT}, #{destructionDetails,jdbcType=BIT}, 
       #{fbaCustomerReturnFee,jdbcType=BIT}, #{coupon,jdbcType=BIT}, #{earlyReviewerProgramFee,jdbcType=BIT}, 
       #{longStorageFee,jdbcType=BIT}, #{refundOperationFee,jdbcType=BIT}, #{inventoryDetails,jdbcType=BIT}, 
       #{headDeduction,jdbcType=BIT}, #{manualAdjustment,jdbcType=BIT}, #{status,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{rateOfDollarExchangeRmb,jdbcType=DECIMAL}
-      )
+      #{statisticStatus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
+      #{rateOfDollarExchangeRmb,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.Finance">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -205,6 +206,9 @@
       </if>
       <if test="status != null">
         status,
+      </if>
+      <if test="statisticStatus != null">
+        statistic_status,
       </if>
       <if test="remark != null">
         remark,
@@ -279,6 +283,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="statisticStatus != null">
+        #{statisticStatus,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -366,6 +373,9 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
+      <if test="record.statisticStatus != null">
+        statistic_status = #{record.statisticStatus,jdbcType=INTEGER},
+      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -410,6 +420,7 @@
       head_deduction = #{record.headDeduction,jdbcType=BIT},
       manual_adjustment = #{record.manualAdjustment,jdbcType=BIT},
       status = #{record.status,jdbcType=INTEGER},
+      statistic_status = #{record.statisticStatus,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER},
@@ -477,6 +488,9 @@
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="statisticStatus != null">
+        statistic_status = #{statisticStatus,jdbcType=INTEGER},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -518,6 +532,7 @@
       head_deduction = #{headDeduction,jdbcType=BIT},
       manual_adjustment = #{manualAdjustment,jdbcType=BIT},
       status = #{status,jdbcType=INTEGER},
+      statistic_status = #{statisticStatus,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER},
