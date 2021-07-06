@@ -306,7 +306,7 @@
     function bindData() {
         dg = '#dg';
         url = "${pageContext.request.contextPath }/amazonOrderItem/listAmazonOrderItem";
-        title = "亚马逊库存管理";
+        title = "亚马逊订单商品管理";
         queryParams = {
             amazonOrderId: $("#s_amazonOrderId").val(),
             asin: $("#s_asin").val(),

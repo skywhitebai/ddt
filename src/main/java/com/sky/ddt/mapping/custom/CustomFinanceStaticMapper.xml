@@ -4,7 +4,7 @@
 
     <select id="getFinanceStatisticInfo"
             resultMap="com.sky.ddt.dao.generate.FinanceStatisticMapper.BaseResultMap">
-        select fs.finance_id,fs.shop_id,fs.shop_name,sum(initial_inventory_cost) initial_inventory_cost,sum(final_inventory_cost) final_inventory_cost,
+        select fs.finance_id,fs.month,fs.shop_id,fs.shop_name,sum(initial_inventory_cost) initial_inventory_cost,sum(final_inventory_cost) final_inventory_cost,
         sum(sshtch.fba_send_quantity*(head_trip_cost_after+sku.cost_price)) send_cost,sum(fs.procurement_cost+fs.fba_head_trip_cost) sale_cost,
         sum(main_business_income) main_business_income,sum(manual_adjustment) manual_adjustment
         from `financial_statement` fs
@@ -17,4 +17,21 @@
         where fs.`finance_id`=#{financeId}
         ORDER BY ss.`shop_parent_sku`,sku.`sku`
     </select>
+    <resultMap id="listFinanceStatisticMap" type="com.sky.ddt.dto.finance.financeStatistic.response.ListFinanceStatisticResponse"
+               extends="com.sky.ddt.dao.generate.FinanceStatisticMapper.BaseResultMap">
+        <result column="monthStr" property="monthStr"/>
+    </resultMap>
+    <select id="listFinanceStatistic"
+            resultMap="listFinanceStatisticMap">
+        select fs.*,date_format(fs.month,'%Y-%m') monthStr from finance_statistic fs
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopId != null">and fs.shop_id=#{shopId}</if>
+                <if test="financeId != null">and fs.finance_id=#{financeId}</if>
+                <if test="monthDate != null ">and fs.month=#{monthDate}</if>
+            </trim>
+        </where>
+        ORDER BY fs.month desc, fs.`shop_name` asc
+    </select>
+
 </mapper>

@@ -90,9 +90,21 @@
         <img src="${pageContext.request.contextPath }/static/img/loading.gif" width="100px">
     </div>
 </div>
-</body>
 
+<div id="dlgFinanceStatistic" class="easyui-dialog" style="width: 800px; height: 300px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', align:'center'">
+    <div class="ftitle">
+        回款信息
+    </div>
+    <table id="dgFinanceStatistic" style="width: 100%; height: auto">
+
+    </table>
+    <a href="javascript:void(0)" class="easyui-linkbutton"
+       data-options="iconCls:'icon-cancel'" onclick="closeDlgFinanceStatistic()">关闭</a>
+</div>
+</body>
 <script type="text/javascript">
+    var financeIdLocal;
     $(function () {
         initMonth('s_month');
         initMonth('importMonth');
@@ -268,15 +280,17 @@
                     }
                 },
                 {
-                    title: '生成回款信息', field: 'createFinanceStatistic', width: 100,
+                    title: '回款信息', field: 'statisticStatus', width: 130,
                     formatter: function (value, row, rowIndex) {
-                        if (row.status == 0) {
-                            return '<a href="javascript:void(0)" onclick="createFinanceStatistic(' + row.id + ')" class="easyui-linkbutton" >生成报表</a>';
-                        } else if (row.status == 1) {
+                        if (value == 0) {
+                            return '<a href="javascript:void(0)" onclick="createFinanceStatistic(' + row.id + ')" class="easyui-linkbutton" >生成</a>';
+                        } else if (value == 1) {
                             return '<a href="javascript:void(0)" onclick="createFinanceStatistic(' + row.id + ')" class="easyui-linkbutton" >重新生成</a>'
+                                + '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="showFinanceStatistic(' + row.id + ')" class="easyui-linkbutton" >查看</a>'
                                 + '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="lockFinanceStatistic(' + row.id + ')" title="锁定后不能再重新生成" class="easyui-linkbutton" >锁定</a>';
-                        } else if (row.status == 2) {
-                            return '已锁定';
+                        } else if (value == 2) {
+                            return '<a href="javascript:void(0)" onclick="showFinanceStatistic(' + row.id + ')" class="easyui-linkbutton" >查看</a>'
+                                + '&nbsp;&nbsp;已锁定';
                         }
                     }
                 },
@@ -363,6 +377,68 @@
         $('#dlgImport').dialog('close');
     }
 
+    function showFinanceStatistic(financeId) {
+        financeIdLocal = financeId;
+        $('#dlgFinanceStatistic').dialog('open').dialog('setTitle', '回款信息');
+        bindFinanceStatistic();
+    }
+
+    function bindFinanceStatistic() {
+        dg = '#dgFinanceStatistic';
+        url = "${pageContext.request.contextPath }/financeStatistic/listFinanceStatistic";
+        title = "回款信息";
+        queryParams = {
+            financeId: financeIdLocal
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: false,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 15,
+            pageList: [10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'id',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '店铺名', field: 'shopName', width: 120},
+                {title: '年月', field: 'monthStr', width: 80},
+                {title: '期初价值', field: 'initialInventoryCost', width: 80},
+                {title: '期末价值', field: 'finalInventoryCost', width: 80},
+                {title: '当月发送价值', field: 'sendCost', width: 80},
+                {title: '当月销售价值', field: 'saleCost', width: 80},
+                {title: '当月回款', field: 'mainBusinessIncome', width: 80},
+                {title: '账外调整', field: 'manualAdjustment', width: 80},
+                {title: '当月净入', field: 'netIncome', width: 80},
+                {title: '创建时间', field: 'createTime', width: 120},
+                {title: '修改时间', field: 'updateTime', width: 120}
+            ]],
+            toolbar: [{
+                id: 'btnReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        $(dg).datagrid('clearSelections');
+    }
+
+    function closeDlgFinanceStatistic() {
+        $('#dlgFinanceStatistic').dialog('close');
+    }
+
     function importFinance() {
         var month = $('#importMonth').datebox('getValue');
         if (isEmpty(month)) {
@@ -417,9 +493,10 @@
             }
         });
     }
+
     function createFinanceStatistic(id) {
         showCover();
-        $.post('${pageContext.request.contextPath }/financialStatistic/createFinanceStatistic', {financeId: id}, function (data) {
+        $.post('${pageContext.request.contextPath }/financeStatistic/createFinanceStatistic', {financeId: id}, function (data) {
             hideCover();
             if (data.code == '200') {
                 $.messager.alert("提示", "生成成功");
@@ -430,6 +507,7 @@
             }
         });
     }
+
     function exportFinancialStatement(id) {
         window.open('${pageContext.request.contextPath }/financialStatement/exportFinancialStatement?financeId=' + id);
     }
@@ -445,7 +523,8 @@
             }
         });
     }
-    function lockFinance(id) {
+
+    function lockFinanceStatistic(id) {
         $.post('${pageContext.request.contextPath }/finance/lockFinanceStatistic', {id: id}, function (data) {
             if (data.code == '200') {
                 $.messager.alert("提示", "锁定成功");
@@ -484,7 +563,7 @@
 
     function exportDeveloperFinancialStatement() {
         var month = $("#s_month").val();
-        if(isEmpty(month)){
+        if (isEmpty(month)) {
             $.messager.alert("提示", "请选择月份");
             return;
         }
@@ -493,15 +572,16 @@
 
     function exportSalesmanFinancialStatement() {
         var month = $("#s_month").val();
-        if(isEmpty(month)){
+        if (isEmpty(month)) {
             $.messager.alert("提示", "请选择月份");
             return;
         }
         window.open('${pageContext.request.contextPath }/financialStatement/exportSalesmanFinancialStatement?month=' + month);
     }
-    function exportFinancialStatementAll(){
+
+    function exportFinancialStatementAll() {
         var month = $("#s_month").val();
-        if(isEmpty(month)){
+        if (isEmpty(month)) {
             $.messager.alert("提示", "请选择月份");
             return;
         }

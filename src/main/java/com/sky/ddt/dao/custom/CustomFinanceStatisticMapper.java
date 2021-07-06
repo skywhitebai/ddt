@@ -1,7 +1,11 @@
 package com.sky.ddt.dao.custom;
 
 import com.sky.ddt.dao.generate.FinanceStatisticMapper;
+import com.sky.ddt.dto.finance.financeStatistic.request.ListFinanceStatisticRequest;
+import com.sky.ddt.dto.finance.financeStatistic.response.ListFinanceStatisticResponse;
 import com.sky.ddt.entity.FinanceStatistic;
+
+import java.util.List;
 
 /**
  * @author baixueping
@@ -10,4 +14,6 @@ import com.sky.ddt.entity.FinanceStatistic;
  */
 public interface CustomFinanceStatisticMapper extends FinanceStatisticMapper {
     FinanceStatistic getFinanceStatisticInfo(Integer financeId);
+
+    List<ListFinanceStatisticResponse> listFinanceStatistic(ListFinanceStatisticRequest params);
 }

@@ -1,18 +1,29 @@
 package com.sky.ddt.service.impl.finance;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.FinanceConstant;
+import com.sky.ddt.common.constant.ShopSkuConstant;
+import com.sky.ddt.common.constant.finance.FinanceStatisticConstant;
 import com.sky.ddt.dao.custom.CustomFinanceMapper;
 import com.sky.ddt.dao.custom.CustomFinanceStatisticMapper;
+import com.sky.ddt.dto.finance.financeStatistic.request.ListFinanceStatisticRequest;
+import com.sky.ddt.dto.finance.financeStatistic.response.ListFinanceStatisticResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.Finance;
 import com.sky.ddt.entity.FinanceStatistic;
 import com.sky.ddt.entity.FinanceStatisticExample;
 import com.sky.ddt.service.finance.IFinanceService;
 import com.sky.ddt.service.finance.IFinanceStatisticService;
+import com.sky.ddt.util.DateUtil;
+import com.sky.ddt.util.ExcelExportByExcelFieldUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
+import javax.servlet.http.HttpServletResponse;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -48,6 +59,7 @@ public class FinanceStatisticService implements IFinanceStatisticService {
         }
         //查询财务汇款信息
         FinanceStatistic financeStatisticInfo=customFinanceStatisticMapper.getFinanceStatisticInfo(financeId);
+        financeStatisticInfo.setNetIncome(getNetIncome(financeStatisticInfo));
         FinanceStatistic financeStatisticOld=getFinanceStatisticByFinanceId(financeId);
         if(financeStatisticOld==null){
             financeStatisticInfo.setCreateBy(dealUserId);
@@ -64,6 +76,42 @@ public class FinanceStatisticService implements IFinanceStatisticService {
         financeUpdate.setId(financeId);
         customFinanceMapper.updateByPrimaryKeySelective(financeUpdate);
         return BaseResponse.success();
+    }
+
+    @Override
+    public PageInfo<ListFinanceStatisticResponse> listFinanceStatistic(ListFinanceStatisticRequest params) {
+        if(!StringUtils.isEmpty(params.getMonth())){
+            String monthStr = params.getMonth() + "-01";
+            Date monthDate = DateUtil.strToDate(monthStr);
+            if (monthDate!= null) {
+                params.setMonthDate(monthDate);
+            }
+        }
+        PageHelper.startPage(params.getPage(), params.getRows(), true);
+        List<ListFinanceStatisticResponse> list = customFinanceStatisticMapper.listFinanceStatistic(params);
+        PageInfo<ListFinanceStatisticResponse> page = new PageInfo<ListFinanceStatisticResponse>(list);
+        return page;
+    }
+
+    @Override
+    public BaseResponse exportFinanceStatistic(HttpServletResponse response, ListFinanceStatisticRequest params) {
+        List<ListFinanceStatisticResponse> list = customFinanceStatisticMapper.listFinanceStatistic(params);
+        BaseResponse exportResponse=  new ExcelExportByExcelFieldUtil().export(response, list, FinanceStatisticConstant.exportFinanceStatisticFieldList, "回款信息");;
+        return exportResponse;
+    }
+
+    private BigDecimal getNetIncome(FinanceStatistic financeStatisticInfo) {
+        BigDecimal res=BigDecimal.ZERO;
+        if(financeStatisticInfo.getMainBusinessIncome()!=null){
+            res=res.add(financeStatisticInfo.getMainBusinessIncome());
+        }
+        if(financeStatisticInfo.getSendCost()!=null){
+            res=res.subtract(financeStatisticInfo.getSendCost());
+        }
+        if(financeStatisticInfo.getManualAdjustment()!=null){
+            res=res.add(financeStatisticInfo.getManualAdjustment());
+        }
+        return res;
     }
 
     private FinanceStatistic getFinanceStatisticByFinanceId(Integer financeId) {
