@@ -62,6 +62,7 @@ public class FinanceStatisticService implements IFinanceStatisticService {
         financeStatisticInfo.setNetIncome(getNetIncome(financeStatisticInfo));
         FinanceStatistic financeStatisticOld=getFinanceStatisticByFinanceId(financeId);
         if(financeStatisticOld==null){
+            financeStatisticInfo.setManualAdjustment(BigDecimal.ZERO);
             financeStatisticInfo.setCreateBy(dealUserId);
             financeStatisticInfo.setCreateTime(new Date());
             customFinanceStatisticMapper.insertSelective(financeStatisticInfo);

@@ -4,18 +4,14 @@
 
     <select id="getFinanceStatisticInfo"
             resultMap="com.sky.ddt.dao.generate.FinanceStatisticMapper.BaseResultMap">
-        select fs.finance_id,fs.month,fs.shop_id,fs.shop_name,sum(initial_inventory_cost) initial_inventory_cost,sum(final_inventory_cost) final_inventory_cost,
-        sum(sshtch.fba_send_quantity*(head_trip_cost_after+sku.cost_price)) send_cost,sum(fs.procurement_cost+fs.fba_head_trip_cost) sale_cost,
-        sum(main_business_income) main_business_income,sum(manual_adjustment) manual_adjustment
-        from `financial_statement` fs
-        left join shop_sku_head_trip_cost_his sshtch
-        on sshtch.shop_sku_id=fs.`shop_sku_id`
-        left join shop_sku ss
-        on ss.`shop_sku_id`=fs.`shop_sku_id`
-        LEFT JOIN sku
-        ON ss.`sku_id`=sku.`sku_id`
-        where fs.`finance_id`=#{financeId}
-        ORDER BY ss.`shop_parent_sku`,sku.`sku`
+
+ SELECT fs.finance_id,fs.month,fs.shop_id,fs.shop_name,SUM(initial_inventory_cost) initial_inventory_cost,SUM(final_inventory_cost) final_inventory_cost,
+        SUM(fs.procurement_cost+fs.fba_head_trip_cost) sale_cost,
+        ifnull((SELECT SUM(sshtch.fba_send_quantity*(sshtch.head_trip_cost_after+sku.cost_price)) FROM `shop_head_trip_cost` shtc,`shop_sku_head_trip_cost_his` sshtch,finance f,shop_sku ss,sku
+   WHERE f.id=#{financeId} AND f.shop_id=shtc.shop_id AND f.month=shtc.month AND shtc.id=sshtch.shop_head_trip_cost_id
+   AND sshtch.shop_sku_id=ss.shop_sku_id AND ss.sku_id=sku.`sku_id`),0) send_cost
+        FROM `financial_statement` fs
+        WHERE fs.`finance_id`=#{financeId}
     </select>
     <resultMap id="listFinanceStatisticMap" type="com.sky.ddt.dto.finance.financeStatistic.response.ListFinanceStatisticResponse"
                extends="com.sky.ddt.dao.generate.FinanceStatisticMapper.BaseResultMap">

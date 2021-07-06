@@ -94,8 +94,27 @@
                 {title: '当月发送价值', field: 'sendCost', width: 80},
                 {title: '当月销售价值', field: 'saleCost', width: 80},
                 {title: '当月回款', field: 'mainBusinessIncome', width: 80},
-                {title: '账外调整', field: 'manualAdjustment', width: 80},
+                {
+                    title: '账外调整', field: 'manualAdjustment', width: 80,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " precision="2" onchange="saveManualAdjustment(this,' + row.id + ')">';
+                        } else {
+                            return '<input class="easyui-numberbox" precision="2" value="' + value + '" onchange="saveManualAdjustment(this,' + row.id + ')">';
+                        }
+                    }
+                },
                 {title: '当月净入', field: 'netIncome', width: 80},
+                {
+                    title: '备注', field: 'remark', width: 300,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-textbox " style="width:100%"  onchange="saveFinanceStatisticRemark(this,' + row.id + ')">';
+                        } else {
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveFinanceStatisticRemark(this,' + row.id + ')">';
+                        }
+                    }
+                },
                 {title: '创建时间', field: 'createTime', width: 120},
                 {title: '修改时间', field: 'updateTime', width: 120}
             ]],
@@ -119,7 +138,31 @@
         };
         return queryParams;
     }
-
+    function saveManualAdjustment(input, id) {
+        var manualAdjustment = $(input).val();
+        if (isEmpty(manualAdjustment)) {
+            manualAdjustment = 0;
+        }
+        var r = /^\d+$/;　　//正整数
+        if (!r.test(stockQuantity)) {
+            $.messager.alert("提示", "补货数量必须为大于等于0的数字.");
+            $(input).focus()
+            return;
+        }
+        $.post('${pageContext.request.contextPath }/stock/saveStockQuantity', {
+            stockQuantity: stockQuantity,
+            shopSkuId: shopSkuId,
+            type: type
+        }, function (data) {
+            if (data.code == '200') {
+                //保存成功
+                refreshStockQuantity(stockQuantity, shopSkuId, type);
+            }
+            else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
     function exportFinanceStatistic() {
         window.open('${pageContext.request.contextPath }/financeStatistic/exportFinanceStatistic' + getUrlParams(getQueryParams()));
     }
