@@ -28,6 +28,8 @@ public class FinanceStatistic {
 
     private BigDecimal netIncome;
 
+    private String remark;
+
     private Date createTime;
 
     private Integer createBy;
@@ -130,6 +132,14 @@ public class FinanceStatistic {
 
     public void setNetIncome(BigDecimal netIncome) {
         this.netIncome = netIncome;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public Date getCreateTime() {

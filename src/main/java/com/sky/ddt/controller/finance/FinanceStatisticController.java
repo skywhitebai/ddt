@@ -5,6 +5,8 @@ import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.controller.SuperController;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.finance.financeStatistic.request.ListFinanceStatisticRequest;
+import com.sky.ddt.dto.finance.financeStatistic.request.SaveFinanceStatisticManualAdjustmentRequest;
+import com.sky.ddt.dto.finance.financeStatistic.request.SaveFinanceStatisticRemarkRequest;
 import com.sky.ddt.dto.finance.financeStatistic.response.ListFinanceStatisticResponse;
 import com.sky.ddt.dto.finance.request.FinanceListRequest;
 import com.sky.ddt.dto.response.BaseResponse;
@@ -12,6 +14,7 @@ import com.sky.ddt.entity.FinanceStatistic;
 import com.sky.ddt.service.finance.IFinanceStatisticService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -25,10 +28,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class FinanceStatisticController extends SuperController {
     @Autowired
     IFinanceStatisticService financeStatisticService;
+
     @RequestMapping("/index")
     public String index() {
         return "finance/financeStatistic/list";
     }
+
     @RequestMapping("/createFinanceStatistic")
     @ResponseBody
     @MenuAnnotation("finance/index")
@@ -36,6 +41,7 @@ public class FinanceStatisticController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return financeStatisticService.createFinanceStatistic(financeId, dealUserId);
     }
+
     @RequestMapping("/listFinanceStatistic")
     @ResponseBody
     public DataGridResponse listFinanceStatistic(ListFinanceStatisticRequest params) {
@@ -45,10 +51,25 @@ public class FinanceStatisticController extends SuperController {
         dataGridResponse.setRows(page.getList());
         return dataGridResponse;
     }
+
     @RequestMapping("/exportFinanceStatistic")
     @ResponseBody
     @MenuAnnotation("financeStatistic/index")
     public BaseResponse exportFinanceStatistic(ListFinanceStatisticRequest params) {
-        return financeStatisticService.exportFinanceStatistic(response,params);
+        return financeStatisticService.exportFinanceStatistic(response, params);
+    }
+
+    @RequestMapping("/saveFinanceStatisticManualAdjustment")
+    @ResponseBody
+    @MenuAnnotation("financeStatistic/index")
+    public BaseResponse saveFinanceStatisticManualAdjustment(@Validated SaveFinanceStatisticManualAdjustmentRequest params) {
+        return financeStatisticService.saveFinanceStatisticManualAdjustment(params, getCurrentUserId());
+    }
+
+    @RequestMapping("/saveFinanceStatisticRemark")
+    @ResponseBody
+    @MenuAnnotation("financeStatistic/index")
+    public BaseResponse saveFinanceStatisticRemark(@Validated SaveFinanceStatisticRemarkRequest params) {
+        return financeStatisticService.saveFinanceStatisticRemark(params, getCurrentUserId());
     }
 }

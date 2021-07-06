@@ -2,6 +2,8 @@ package com.sky.ddt.service.finance;
 
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dto.finance.financeStatistic.request.ListFinanceStatisticRequest;
+import com.sky.ddt.dto.finance.financeStatistic.request.SaveFinanceStatisticManualAdjustmentRequest;
+import com.sky.ddt.dto.finance.financeStatistic.request.SaveFinanceStatisticRemarkRequest;
 import com.sky.ddt.dto.finance.financeStatistic.response.ListFinanceStatisticResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 
@@ -25,4 +27,8 @@ public interface IFinanceStatisticService {
     PageInfo<ListFinanceStatisticResponse> listFinanceStatistic(ListFinanceStatisticRequest params);
 
     BaseResponse exportFinanceStatistic(HttpServletResponse response, ListFinanceStatisticRequest params);
+
+    BaseResponse saveFinanceStatisticManualAdjustment(SaveFinanceStatisticManualAdjustmentRequest params, Integer dealUserId);
+
+    BaseResponse saveFinanceStatisticRemark(SaveFinanceStatisticRemarkRequest params, Integer dealUserId);
 }

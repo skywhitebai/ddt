@@ -3,11 +3,12 @@ package com.sky.ddt.service.impl.finance;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.FinanceConstant;
-import com.sky.ddt.common.constant.ShopSkuConstant;
 import com.sky.ddt.common.constant.finance.FinanceStatisticConstant;
 import com.sky.ddt.dao.custom.CustomFinanceMapper;
 import com.sky.ddt.dao.custom.CustomFinanceStatisticMapper;
 import com.sky.ddt.dto.finance.financeStatistic.request.ListFinanceStatisticRequest;
+import com.sky.ddt.dto.finance.financeStatistic.request.SaveFinanceStatisticManualAdjustmentRequest;
+import com.sky.ddt.dto.finance.financeStatistic.request.SaveFinanceStatisticRemarkRequest;
 import com.sky.ddt.dto.finance.financeStatistic.response.ListFinanceStatisticResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.Finance;
@@ -40,6 +41,7 @@ public class FinanceStatisticService implements IFinanceStatisticService {
     CustomFinanceMapper customFinanceMapper;
     @Autowired
     IFinanceService financeService;
+
     /**
      * @param financeId
      * @param dealUserId
@@ -58,16 +60,18 @@ public class FinanceStatisticService implements IFinanceStatisticService {
             return BaseResponse.failMessage(FinanceConstant.ID_NOT_EXIST);
         }
         //查询财务汇款信息
-        FinanceStatistic financeStatisticInfo=customFinanceStatisticMapper.getFinanceStatisticInfo(financeId);
-        financeStatisticInfo.setNetIncome(getNetIncome(financeStatisticInfo));
-        FinanceStatistic financeStatisticOld=getFinanceStatisticByFinanceId(financeId);
-        if(financeStatisticOld==null){
+        FinanceStatistic financeStatisticInfo = customFinanceStatisticMapper.getFinanceStatisticInfo(financeId);
+        FinanceStatistic financeStatisticOld = getFinanceStatisticByFinanceId(financeId);
+        if (financeStatisticOld == null) {
             financeStatisticInfo.setManualAdjustment(BigDecimal.ZERO);
+            financeStatisticInfo.setNetIncome(getNetIncome(financeStatisticInfo));
             financeStatisticInfo.setCreateBy(dealUserId);
             financeStatisticInfo.setCreateTime(new Date());
             customFinanceStatisticMapper.insertSelective(financeStatisticInfo);
-        }else{
+        } else {
             financeStatisticInfo.setId(financeStatisticOld.getId());
+            financeStatisticInfo.setManualAdjustment(financeStatisticOld.getManualAdjustment());
+            financeStatisticInfo.setNetIncome(getNetIncome(financeStatisticInfo));
             financeStatisticInfo.setUpdateBy(financeId);
             financeStatisticInfo.setUpdateTime(new Date());
             customFinanceStatisticMapper.updateByPrimaryKeySelective(financeStatisticInfo);
@@ -81,10 +85,10 @@ public class FinanceStatisticService implements IFinanceStatisticService {
 
     @Override
     public PageInfo<ListFinanceStatisticResponse> listFinanceStatistic(ListFinanceStatisticRequest params) {
-        if(!StringUtils.isEmpty(params.getMonth())){
+        if (!StringUtils.isEmpty(params.getMonth())) {
             String monthStr = params.getMonth() + "-01";
             Date monthDate = DateUtil.strToDate(monthStr);
-            if (monthDate!= null) {
+            if (monthDate != null) {
                 params.setMonthDate(monthDate);
             }
         }
@@ -97,29 +101,56 @@ public class FinanceStatisticService implements IFinanceStatisticService {
     @Override
     public BaseResponse exportFinanceStatistic(HttpServletResponse response, ListFinanceStatisticRequest params) {
         List<ListFinanceStatisticResponse> list = customFinanceStatisticMapper.listFinanceStatistic(params);
-        BaseResponse exportResponse=  new ExcelExportByExcelFieldUtil().export(response, list, FinanceStatisticConstant.exportFinanceStatisticFieldList, "回款信息");;
+        BaseResponse exportResponse = new ExcelExportByExcelFieldUtil().export(response, list, FinanceStatisticConstant.exportFinanceStatisticFieldList, "回款信息");
         return exportResponse;
     }
 
+    @Override
+    public BaseResponse saveFinanceStatisticManualAdjustment(SaveFinanceStatisticManualAdjustmentRequest params, Integer dealUserId) {
+        FinanceStatistic financeStatistic = customFinanceStatisticMapper.selectByPrimaryKey(params.getId());
+        if (financeStatistic == null) {
+            return BaseResponse.failMessage("id不存在");
+        }
+        financeStatistic.setManualAdjustment(params.getManualAdjustment());
+        financeStatistic.setNetIncome(getNetIncome(financeStatistic));
+        financeStatistic.setUpdateBy(dealUserId);
+        financeStatistic.setUpdateTime(new Date());
+        customFinanceStatisticMapper.updateByPrimaryKey(financeStatistic);
+        return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse saveFinanceStatisticRemark(SaveFinanceStatisticRemarkRequest params, Integer dealUserId) {
+        FinanceStatistic financeStatistic = customFinanceStatisticMapper.selectByPrimaryKey(params.getId());
+        if (financeStatistic == null) {
+            return BaseResponse.failMessage("id不存在");
+        }
+        financeStatistic.setRemark(params.getRemark());
+        financeStatistic.setUpdateBy(dealUserId);
+        financeStatistic.setUpdateTime(new Date());
+        customFinanceStatisticMapper.updateByPrimaryKey(financeStatistic);
+        return BaseResponse.success();
+    }
+
     private BigDecimal getNetIncome(FinanceStatistic financeStatisticInfo) {
-        BigDecimal res=BigDecimal.ZERO;
-        if(financeStatisticInfo.getMainBusinessIncome()!=null){
-            res=res.add(financeStatisticInfo.getMainBusinessIncome());
+        BigDecimal res = BigDecimal.ZERO;
+        if (financeStatisticInfo.getMainBusinessIncome() != null) {
+            res = res.add(financeStatisticInfo.getMainBusinessIncome());
         }
-        if(financeStatisticInfo.getSendCost()!=null){
-            res=res.subtract(financeStatisticInfo.getSendCost());
+        if (financeStatisticInfo.getSendCost() != null) {
+            res = res.subtract(financeStatisticInfo.getSendCost());
         }
-        if(financeStatisticInfo.getManualAdjustment()!=null){
-            res=res.add(financeStatisticInfo.getManualAdjustment());
+        if (financeStatisticInfo.getManualAdjustment() != null) {
+            res = res.subtract(financeStatisticInfo.getManualAdjustment());
         }
         return res;
     }
 
     private FinanceStatistic getFinanceStatisticByFinanceId(Integer financeId) {
-        FinanceStatisticExample example=new FinanceStatisticExample();
+        FinanceStatisticExample example = new FinanceStatisticExample();
         example.createCriteria().andFinanceIdEqualTo(financeId);
-        List<FinanceStatistic> list= customFinanceStatisticMapper.selectByExample(example);
-        if(CollectionUtils.isEmpty(list)){
+        List<FinanceStatistic> list = customFinanceStatisticMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(list)) {
             return null;
         }
         return list.get(0);

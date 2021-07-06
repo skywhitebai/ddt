@@ -91,7 +91,7 @@
     </div>
 </div>
 
-<div id="dlgFinanceStatistic" class="easyui-dialog" style="width: 800px; height: 300px; padding: 10px 20px"
+<div id="dlgFinanceStatistic" class="easyui-dialog" style="width: 1500px; height: 300px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', align:'center'">
     <div class="ftitle">
         回款信息
@@ -157,7 +157,7 @@
                 }
                 },
                 {
-                    title: '月销售流水', field: 'monthlySales', width: 80, formatter: function (value, row, index) {
+                    title: '月销售流水', field: 'monthlySales', width: 100, formatter: function (value, row, index) {
                     if (value) {
                         return "<a href='#' onclick=\"showDlgImport('monthlySales','" + row.month + "')\"' title='更新月销售流水' >已导入</a>";
                     } else {
@@ -382,7 +382,39 @@
         $('#dlgFinanceStatistic').dialog('open').dialog('setTitle', '回款信息');
         bindFinanceStatistic();
     }
-
+    function saveManualAdjustment(input, id) {
+        var manualAdjustment = $(input).val();
+        if (isEmpty(manualAdjustment)) {
+            manualAdjustment = 0;
+        }
+        $.post('${pageContext.request.contextPath }/financeStatistic/saveFinanceStatisticManualAdjustment', {
+            manualAdjustment: manualAdjustment,
+            id: id
+        }, function (data) {
+            if (data.code == '200') {
+                //保存成功
+                bindFinanceStatistic();
+            }
+            else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+    function saveFinanceStatisticRemark(input, id) {
+        var remark = $(input).val();
+        $.post('${pageContext.request.contextPath }/financeStatistic/saveFinanceStatisticRemark', {
+            remark: remark,
+            id: id
+        }, function (data) {
+            if (data.code == '200') {
+                //保存成功
+                bindFinanceStatistic();
+            }
+            else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
     function bindFinanceStatistic() {
         dg = '#dgFinanceStatistic';
         url = "${pageContext.request.contextPath }/financeStatistic/listFinanceStatistic";
@@ -412,13 +444,32 @@
                 {field: 'ck', checkbox: true},   //选择
                 {title: '店铺名', field: 'shopName', width: 120},
                 {title: '年月', field: 'monthStr', width: 80},
-                {title: '期初价值', field: 'initialInventoryCost', width: 80},
-                {title: '期末价值', field: 'finalInventoryCost', width: 80},
-                {title: '当月发送价值', field: 'sendCost', width: 80},
-                {title: '当月销售价值', field: 'saleCost', width: 80},
-                {title: '当月回款', field: 'mainBusinessIncome', width: 80},
-                {title: '账外调整', field: 'manualAdjustment', width: 80},
-                {title: '当月净入', field: 'netIncome', width: 80},
+                {title: '期初价值', field: 'initialInventoryCost', width: 95},
+                {title: '期末价值', field: 'finalInventoryCost', width: 95},
+                {title: '当月发送价值', field: 'sendCost', width: 95},
+                {title: '当月销售价值', field: 'saleCost', width: 95},
+                {title: '当月回款', field: 'mainBusinessIncome', width: 95},
+                {
+                    title: '账外调整', field: 'manualAdjustment', width: 95,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " precision="2" onchange="saveManualAdjustment(this,' + row.id + ')">';
+                        } else {
+                            return '<input class="easyui-numberbox" precision="2" value="' + value + '" onchange="saveManualAdjustment(this,' + row.id + ')">';
+                        }
+                    }
+                },
+                {title: '当月净入', field: 'netIncome', width: 95},
+                {
+                    title: '备注', field: 'remark', width: 300,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-textbox " style="width:100%"  onchange="saveFinanceStatisticRemark(this,' + row.id + ')">';
+                        } else {
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveFinanceStatisticRemark(this,' + row.id + ')">';
+                        }
+                    }
+                },
                 {title: '创建时间', field: 'createTime', width: 120},
                 {title: '修改时间', field: 'updateTime', width: 120}
             ]],

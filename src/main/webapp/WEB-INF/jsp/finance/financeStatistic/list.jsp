@@ -143,20 +143,28 @@
         if (isEmpty(manualAdjustment)) {
             manualAdjustment = 0;
         }
-        var r = /^\d+$/;　　//正整数
-        if (!r.test(stockQuantity)) {
-            $.messager.alert("提示", "补货数量必须为大于等于0的数字.");
-            $(input).focus()
-            return;
-        }
-        $.post('${pageContext.request.contextPath }/stock/saveStockQuantity', {
-            stockQuantity: stockQuantity,
-            shopSkuId: shopSkuId,
-            type: type
+        $.post('${pageContext.request.contextPath }/financeStatistic/saveFinanceStatisticManualAdjustment', {
+            manualAdjustment: manualAdjustment,
+            id: id
         }, function (data) {
             if (data.code == '200') {
                 //保存成功
-                refreshStockQuantity(stockQuantity, shopSkuId, type);
+                bindData();
+            }
+            else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+    function saveFinanceStatisticRemark(input, id) {
+        var remark = $(input).val();
+        $.post('${pageContext.request.contextPath }/financeStatistic/saveFinanceStatisticRemark', {
+            remark: remark,
+            id: id
+        }, function (data) {
+            if (data.code == '200') {
+                //保存成功
+                bindData();
             }
             else {
                 $.messager.alert("提示", data.message);
