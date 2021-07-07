@@ -282,6 +282,9 @@
                 {
                     title: '回款信息', field: 'statisticStatus', width: 130,
                     formatter: function (value, row, rowIndex) {
+                        if (row.status == 0) {
+                            return '请先生成财务报表';
+                        }
                         if (value == 0) {
                             return '<a href="javascript:void(0)" onclick="createFinanceStatistic(' + row.id + ')" class="easyui-linkbutton" >生成</a>';
                         } else if (value == 1) {
