@@ -22,6 +22,7 @@ public class FinanceStatisticConstant {
         exportFinanceStatisticFieldList.add(new ExcelField("mainBusinessIncome", "当月回款", ExcelField.FieldTypeEnum.NUMBER));
         exportFinanceStatisticFieldList.add(new ExcelField("manualAdjustment", "账外调整", ExcelField.FieldTypeEnum.NUMBER));
         exportFinanceStatisticFieldList.add(new ExcelField("netIncome", "当月净入", ExcelField.FieldTypeEnum.NUMBER));
+        exportFinanceStatisticFieldList.add(new ExcelField("mainBusinessProfit", "毛利润", ExcelField.FieldTypeEnum.NUMBER));
         exportFinanceStatisticFieldList.add(new ExcelField("createTime", "创建时间", ExcelField.FieldTypeEnum.DATE_TIME));
         exportFinanceStatisticFieldList.add(new ExcelField("updateTime", "修改时间", ExcelField.FieldTypeEnum.DATE_TIME));
     }

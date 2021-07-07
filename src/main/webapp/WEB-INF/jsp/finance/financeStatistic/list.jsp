@@ -115,6 +115,7 @@
                         }
                     }
                 },
+                {title: '毛利润', field: 'mainBusinessProfit', width: 80},
                 {title: '创建时间', field: 'createTime', width: 120},
                 {title: '修改时间', field: 'updateTime', width: 120}
             ]],

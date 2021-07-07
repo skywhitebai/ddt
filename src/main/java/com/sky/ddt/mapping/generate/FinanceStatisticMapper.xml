@@ -14,6 +14,7 @@
     <result column="main_business_income" jdbcType="DECIMAL" property="mainBusinessIncome" />
     <result column="manual_adjustment" jdbcType="DECIMAL" property="manualAdjustment" />
     <result column="net_income" jdbcType="DECIMAL" property="netIncome" />
+    <result column="main_business_profit" jdbcType="DECIMAL" property="mainBusinessProfit" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
@@ -80,8 +81,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, finance_id, month, shop_id, shop_name, initial_inventory_cost, final_inventory_cost, 
-    send_cost, sale_cost, main_business_income, manual_adjustment, net_income, remark, 
-    create_time, create_by, update_time, update_by
+    send_cost, sale_cost, main_business_income, manual_adjustment, net_income, main_business_profit, 
+    remark, create_time, create_by, update_time, update_by
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FinanceStatisticExample" resultMap="BaseResultMap">
     select
@@ -120,15 +121,15 @@
     insert into finance_statistic (finance_id, month, shop_id, 
       shop_name, initial_inventory_cost, final_inventory_cost, 
       send_cost, sale_cost, main_business_income, 
-      manual_adjustment, net_income, remark, 
-      create_time, create_by, update_time, 
-      update_by)
+      manual_adjustment, net_income, main_business_profit, 
+      remark, create_time, create_by, 
+      update_time, update_by)
     values (#{financeId,jdbcType=INTEGER}, #{month,jdbcType=TIMESTAMP}, #{shopId,jdbcType=INTEGER}, 
       #{shopName,jdbcType=VARCHAR}, #{initialInventoryCost,jdbcType=DECIMAL}, #{finalInventoryCost,jdbcType=DECIMAL}, 
       #{sendCost,jdbcType=DECIMAL}, #{saleCost,jdbcType=DECIMAL}, #{mainBusinessIncome,jdbcType=DECIMAL}, 
-      #{manualAdjustment,jdbcType=DECIMAL}, #{netIncome,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=INTEGER})
+      #{manualAdjustment,jdbcType=DECIMAL}, #{netIncome,jdbcType=DECIMAL}, #{mainBusinessProfit,jdbcType=DECIMAL}, 
+      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.FinanceStatistic">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -168,6 +169,9 @@
       </if>
       <if test="netIncome != null">
         net_income,
+      </if>
+      <if test="mainBusinessProfit != null">
+        main_business_profit,
       </if>
       <if test="remark != null">
         remark,
@@ -218,6 +222,9 @@
       </if>
       <if test="netIncome != null">
         #{netIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="mainBusinessProfit != null">
+        #{mainBusinessProfit,jdbcType=DECIMAL},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -281,6 +288,9 @@
       <if test="record.netIncome != null">
         net_income = #{record.netIncome,jdbcType=DECIMAL},
       </if>
+      <if test="record.mainBusinessProfit != null">
+        main_business_profit = #{record.mainBusinessProfit,jdbcType=DECIMAL},
+      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -315,6 +325,7 @@
       main_business_income = #{record.mainBusinessIncome,jdbcType=DECIMAL},
       manual_adjustment = #{record.manualAdjustment,jdbcType=DECIMAL},
       net_income = #{record.netIncome,jdbcType=DECIMAL},
+      main_business_profit = #{record.mainBusinessProfit,jdbcType=DECIMAL},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER},
@@ -360,6 +371,9 @@
       <if test="netIncome != null">
         net_income = #{netIncome,jdbcType=DECIMAL},
       </if>
+      <if test="mainBusinessProfit != null">
+        main_business_profit = #{mainBusinessProfit,jdbcType=DECIMAL},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -391,6 +405,7 @@
       main_business_income = #{mainBusinessIncome,jdbcType=DECIMAL},
       manual_adjustment = #{manualAdjustment,jdbcType=DECIMAL},
       net_income = #{netIncome,jdbcType=DECIMAL},
+      main_business_profit = #{mainBusinessProfit,jdbcType=DECIMAL},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER},

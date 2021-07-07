@@ -836,6 +836,66 @@ public class FinanceStatisticExample {
             return (Criteria) this;
         }
 
+        public Criteria andMainBusinessProfitIsNull() {
+            addCriterion("main_business_profit is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainBusinessProfitIsNotNull() {
+            addCriterion("main_business_profit is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainBusinessProfitEqualTo(BigDecimal value) {
+            addCriterion("main_business_profit =", value, "mainBusinessProfit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainBusinessProfitNotEqualTo(BigDecimal value) {
+            addCriterion("main_business_profit <>", value, "mainBusinessProfit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainBusinessProfitGreaterThan(BigDecimal value) {
+            addCriterion("main_business_profit >", value, "mainBusinessProfit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainBusinessProfitGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("main_business_profit >=", value, "mainBusinessProfit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainBusinessProfitLessThan(BigDecimal value) {
+            addCriterion("main_business_profit <", value, "mainBusinessProfit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainBusinessProfitLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("main_business_profit <=", value, "mainBusinessProfit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainBusinessProfitIn(List<BigDecimal> values) {
+            addCriterion("main_business_profit in", values, "mainBusinessProfit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainBusinessProfitNotIn(List<BigDecimal> values) {
+            addCriterion("main_business_profit not in", values, "mainBusinessProfit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainBusinessProfitBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("main_business_profit between", value1, value2, "mainBusinessProfit");
+            return (Criteria) this;
+        }
+
+        public Criteria andMainBusinessProfitNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("main_business_profit not between", value1, value2, "mainBusinessProfit");
+            return (Criteria) this;
+        }
+
         public Criteria andRemarkIsNull() {
             addCriterion("remark is null");
             return (Criteria) this;

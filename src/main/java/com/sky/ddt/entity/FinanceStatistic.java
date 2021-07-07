@@ -28,6 +28,8 @@ public class FinanceStatistic {
 
     private BigDecimal netIncome;
 
+    private BigDecimal mainBusinessProfit;
+
     private String remark;
 
     private Date createTime;
@@ -132,6 +134,14 @@ public class FinanceStatistic {
 
     public void setNetIncome(BigDecimal netIncome) {
         this.netIncome = netIncome;
+    }
+
+    public BigDecimal getMainBusinessProfit() {
+        return mainBusinessProfit;
+    }
+
+    public void setMainBusinessProfit(BigDecimal mainBusinessProfit) {
+        this.mainBusinessProfit = mainBusinessProfit;
     }
 
     public String getRemark() {
