@@ -5,13 +5,15 @@
                extends="com.sky.ddt.dao.generate.FbaPackingListMapper.BaseResultMap">
         <result column="shop_name" property="shopName"/>
         <result column="outbound_order_status" property="outboundOrderStatus"/>
+        <result column="actualDeliveryQuantity" property="actualDeliveryQuantity"/>
     </resultMap>
     <select id="listFbaPackingList" parameterType="com.sky.ddt.dto.fbaPackingList.request.ListFbaPackingListRequest"
             resultMap="listFbaPackingListMap">
         select
         <include refid="com.sky.ddt.dao.generate.FbaPackingListMapper.Base_Column_List"/>
         ,(select shop_name from shop s where fpl.shop_id=s.shop_id) shop_name,
-        CASE WHEN EXISTS(SELECT 1 FROM `outbound_order` oo WHERE oo.fba_packing_list_id=fpl.id and oo.status!=0) THEN 1 ELSE 0 END outbound_order_status
+        CASE WHEN EXISTS(SELECT 1 FROM `outbound_order` oo WHERE oo.fba_packing_list_id=fpl.id and oo.status!=0) THEN 1 ELSE 0 END outbound_order_status,
+        (select sum(quantity) from fba_packing_list_shop_sku fplss where fplss.fba_packing_list_id=fpl.id)  actualDeliveryQuantity
         from fba_packing_list fpl
         <if test="_parameter != null">
             <include refid="fbaPackingList_Query_Where_Clause"/>

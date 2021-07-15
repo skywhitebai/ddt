@@ -12,12 +12,14 @@ import java.util.List;
  */
 @Data
 public class InvoiceInfo {
+    Integer fbaPackingListId;
     String shipmentId;
     String fbaNo;
     String shipTo;
     Date date;
     Integer numberOfBoxes;
     Double totalPrice;
+    Double unitPrice;
     Integer totalQuantity;
     String shopName;
     List<InvoiceGoodsInfo> invoiceGoodsInfoList;

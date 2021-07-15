@@ -330,6 +330,7 @@ public class FbaPackingListService implements IFbaPackingListService {
         if (StockConsatnt.StockQuantityTypeEnum.getStockQuantityTypeEnum(type) == null) {
             return BaseResponse.failMessage("发票类型错误");
         }
+        invoiceInfo.setFbaPackingListId(fbaPackingListId);
         invoiceInfo.setShipmentId(fbaPackingList.getShipmentId());
         invoiceInfo.setShipTo(fbaPackingList.getShipTo());
         invoiceInfo.setFbaNo(orderNumber);

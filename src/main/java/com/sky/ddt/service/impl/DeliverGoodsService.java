@@ -608,7 +608,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
      */
     private void updateInvoiceInfoPackageMax(InvoiceInfo invoiceInfo) {
         updateInvoiceInfoPackageInfoList(invoiceInfo);
-        List<InvoiceGoodsInfo> invoiceGoodsInfoList = getInvoiceGoodsInfoList(invoiceInfo.getInvoicePackingInfoList(), 0.7);
+        List<InvoiceGoodsInfo> invoiceGoodsInfoList = getInvoiceGoodsInfoList(invoiceInfo.getInvoicePackingInfoList(), invoiceInfo.getUnitPrice());
         invoiceInfo.setInvoiceGoodsInfoList(invoiceGoodsInfoList);
     }
 
@@ -1102,11 +1102,10 @@ public class DeliverGoodsService implements IDeliverGoodsService {
     }
 
     private InvoiceInfo getInvoiceInfo(InvoiceInfo invoiceInfo, List<InvoiceSkuInfo> invoiceSkuInfoList) {
-        Double unitPrice = 0.7;
-        setNumberOfBoxesAndTotalQuantityAndTotalPrice(invoiceInfo, invoiceSkuInfoList, unitPrice);
-        List<InvoicePackingInfo> invoicePackingInfoList = getInvoicePackingInfoList(invoiceSkuInfoList, unitPrice);
+        setNumberOfBoxesAndTotalQuantityAndTotalPrice(invoiceInfo, invoiceSkuInfoList);
+        List<InvoicePackingInfo> invoicePackingInfoList = getInvoicePackingInfoList(invoiceSkuInfoList, invoiceInfo.getUnitPrice());
         invoiceInfo.setInvoicePackingInfoList(invoicePackingInfoList);
-        List<InvoiceGoodsInfo> invoiceGoodsInfoList = getInvoiceGoodsInfoList(invoicePackingInfoList, unitPrice);
+        List<InvoiceGoodsInfo> invoiceGoodsInfoList = getInvoiceGoodsInfoList(invoicePackingInfoList, invoiceInfo.getUnitPrice());
         invoiceInfo.setInvoiceGoodsInfoList(invoiceGoodsInfoList);
         invoiceInfo.setDate(new Date());
         //设置店铺名称
@@ -1235,20 +1234,29 @@ public class DeliverGoodsService implements IDeliverGoodsService {
      * @author baixueping
      * @date 2019/9/17 18:09
      */
-    private void setNumberOfBoxesAndTotalQuantityAndTotalPrice(InvoiceInfo invoiceInfo, List<InvoiceSkuInfo> invoiceSkuInfoList, Double unitPrice) {
+    private void setNumberOfBoxesAndTotalQuantityAndTotalPrice(InvoiceInfo invoiceInfo, List<InvoiceSkuInfo> invoiceSkuInfoList) {
         List<String> containerNoList = new ArrayList<>();
         Integer totalQuantity = 0;
-        Double totalPrice = 0.0;
+        Double unitPrice=0.0;
+        Double totalPrice = getTitalPrice(invoiceInfo.getFbaPackingListId());
         for (InvoiceSkuInfo invoiceSkuInfo : invoiceSkuInfoList) {
             if (!containerNoList.contains(invoiceSkuInfo.getContainerNo())) {
                 containerNoList.add(invoiceSkuInfo.getContainerNo());
             }
             totalQuantity += invoiceSkuInfo.getQuantity();
         }
+        unitPrice=MathUtil.divide(totalPrice,totalQuantity,2);
         totalPrice = totalQuantity * unitPrice;
         invoiceInfo.setNumberOfBoxes(containerNoList.size());
         invoiceInfo.setTotalQuantity(totalQuantity);
         invoiceInfo.setTotalPrice(totalPrice);
+        invoiceInfo.setUnitPrice(unitPrice);
+    }
+
+    private Double getTitalPrice(Integer fbaPackingListId) {
+        Random r = new Random(fbaPackingListId);
+        Integer res = r.nextInt(200)+400;
+        return res.doubleValue();
     }
 
     /**

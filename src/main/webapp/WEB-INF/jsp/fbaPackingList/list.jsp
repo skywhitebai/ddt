@@ -279,6 +279,7 @@
                 {title: 'Plan ID', field: 'planId', width: 160},
                 {title: 'Total SKUs', field: 'totalSkus', width: 80},
                 {title: 'Total Units', field: 'totalUnits', width: 140},
+                {title: '实发数量', field: 'actualDeliveryQuantity', width: 120},
                 {title: 'Pack list', field: 'packList', width: 120},
                 {title: 'Ship To', field: 'shipTo', width: 120},
                 {
