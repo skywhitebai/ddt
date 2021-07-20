@@ -5,9 +5,9 @@ import java.util.Date;
 public class AmazonAuth {
     private Long id;
 
-    private String merchantId;
+    private Integer shopId;
 
-    private String shopName;
+    private String merchantId;
 
     private String refreshToken;
 
@@ -37,20 +37,20 @@ public class AmazonAuth {
         this.id = id;
     }
 
+    public Integer getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Integer shopId) {
+        this.shopId = shopId;
+    }
+
     public String getMerchantId() {
         return merchantId;
     }
 
     public void setMerchantId(String merchantId) {
         this.merchantId = merchantId == null ? null : merchantId.trim();
-    }
-
-    public String getShopName() {
-        return shopName;
-    }
-
-    public void setShopName(String shopName) {
-        this.shopName = shopName == null ? null : shopName.trim();
     }
 
     public String getRefreshToken() {

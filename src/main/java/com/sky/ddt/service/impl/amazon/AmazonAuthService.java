@@ -13,6 +13,7 @@ import com.sky.ddt.dto.amazon.amazonAuth.response.ListAmazonAuthResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.AmazonAuth;
 import com.sky.ddt.entity.AmazonAuthExample;
+import com.sky.ddt.service.IShopService;
 import com.sky.ddt.service.amazon.IAmazonAuthService;
 import com.sky.ddt.util.HttpTool;
 import org.springframework.beans.BeanUtils;
@@ -32,30 +33,13 @@ import java.util.*;
 public class AmazonAuthService implements IAmazonAuthService {
     @Autowired
     CustomAmazonAuthMapper customAmazonAuthMapper;
+    @Autowired
+    IShopService shopService;
 
     @Override
     public PageInfo<ListAmazonAuthResponse> listAmazonAuth(ListAmazonAuthRequest params) {
         PageHelper.startPage(params.getPage(), params.getRows());
-        AmazonAuthExample amazonAuthExample = new AmazonAuthExample();
-        AmazonAuthExample.Criteria criteria = amazonAuthExample.createCriteria();
-        if (!StringUtils.isEmpty(params.getMerchantId())) {
-            criteria.andMerchantIdLike(params.getMerchantId());
-        }
-        if (!StringUtils.isEmpty(params.getShopName())) {
-            criteria.andShopNameLike(params.getShopName());
-        }
-        if (params.getStatus() != null) {
-            criteria.andStatusEqualTo(params.getStatus());
-        }
-        List<AmazonAuth> amazonAuthList = customAmazonAuthMapper.selectByExample(amazonAuthExample);
-        List<ListAmazonAuthResponse> listAmazonAuthResponseList = new ArrayList<>();
-        if (!CollectionUtils.isEmpty(amazonAuthList)) {
-            amazonAuthList.forEach(item -> {
-                ListAmazonAuthResponse listAmazonAuthResponse = new ListAmazonAuthResponse();
-                BeanUtils.copyProperties(item, listAmazonAuthResponse);
-                listAmazonAuthResponseList.add(listAmazonAuthResponse);
-            });
-        }
+        List<ListAmazonAuthResponse> listAmazonAuthResponseList = customAmazonAuthMapper.listAmazonAuth(params);
         PageInfo<ListAmazonAuthResponse> pageInfo = new PageInfo<>(listAmazonAuthResponseList);
         return pageInfo;
     }
@@ -72,18 +56,18 @@ public class AmazonAuthService implements IAmazonAuthService {
         if (StringUtils.isEmpty(res)) {
             return BaseResponse.failMessage("授权失败");
         }
-        JSONObject jsonObject=JSONObject.parseObject(res);
-        String refreshToken=jsonObject.getString("refresh_token");
-        AmazonAuth amazonAuthExist=getAmazonAuthByMerchantId(params.getSellingPartnerId());
-        if(amazonAuthExist!=null){
-            AmazonAuth amazonAuthUpdate=new AmazonAuth();
+        JSONObject jsonObject = JSONObject.parseObject(res);
+        String refreshToken = jsonObject.getString("refresh_token");
+        AmazonAuth amazonAuthExist = getAmazonAuthByMerchantId(params.getSellingPartnerId());
+        if (amazonAuthExist != null) {
+            AmazonAuth amazonAuthUpdate = new AmazonAuth();
             amazonAuthUpdate.setId(amazonAuthExist.getId());
             amazonAuthUpdate.setRefreshToken(refreshToken);
             amazonAuthUpdate.setUpdateTime(new Date());
             amazonAuthUpdate.setUpdateBy(currentUserId.longValue());
             customAmazonAuthMapper.updateByPrimaryKeySelective(amazonAuthUpdate);
-        }else {
-            AmazonAuth amazonAuth=new AmazonAuth();
+        } else {
+            AmazonAuth amazonAuth = new AmazonAuth();
             amazonAuth.setMerchantId(params.getSellingPartnerId());
             amazonAuth.setMarketplaceId("ATVPDKIKX0DER");
             amazonAuth.setRefreshToken(refreshToken);
@@ -96,7 +80,7 @@ public class AmazonAuthService implements IAmazonAuthService {
     }
 
     /**
-     * @param params @return
+     * @param params        @return
      * @param currentUserId
      * @description 修改亚马逊授权信息
      * @author baixueping
@@ -104,31 +88,53 @@ public class AmazonAuthService implements IAmazonAuthService {
      */
     @Override
     public BaseResponse updateAmazonAuth(UpdateAmazonAuthRequest params, Integer currentUserId) {
-        if(!YesOrNoEnum.containValue(params.getStatus())){
+        if (!YesOrNoEnum.containValue(params.getStatus())) {
             return BaseResponse.failMessage("状态错误");
         }
-        AmazonAuth amazonAuth=customAmazonAuthMapper.selectByPrimaryKey(params.getId());
-        if(amazonAuth==null){
+        AmazonAuth amazonAuth = customAmazonAuthMapper.selectByPrimaryKey(params.getId());
+        if (amazonAuth == null) {
             return BaseResponse.failMessage("亚马逊授权信息不存在");
         }
-        AmazonAuth amazonAuthUpdate=new AmazonAuth();
-        BeanUtils.copyProperties(params,amazonAuthUpdate);
+        if (amazonAuth.getShopId() != null) {
+            if (!amazonAuth.getShopId().equals(params.getShopId())) {
+                return BaseResponse.failMessage("店铺不允许修改，请联系管理员");
+            }
+        }
+        if (params.getShopId() != null && amazonAuth.getShopId() == null) {
+            if (shopService.getShop(params.getShopId()) == null) {
+                return BaseResponse.failMessage("店铺id不存在，请重新选择");
+            }
+            //判断是否存在
+            if (existAmazonAuthByShopId(params.getShopId())) {
+                return BaseResponse.failMessage("店铺已存在，请重新选择或者联系管理员");
+            }
+        }
+        AmazonAuth amazonAuthUpdate = new AmazonAuth();
+        BeanUtils.copyProperties(params, amazonAuthUpdate);
         amazonAuthUpdate.setUpdateBy(currentUserId.longValue());
         amazonAuthUpdate.setUpdateTime(new Date());
         customAmazonAuthMapper.updateByPrimaryKeySelective(amazonAuthUpdate);
         return BaseResponse.success();
     }
+
+    private boolean existAmazonAuthByShopId(Integer shopId) {
+        AmazonAuthExample amazonAuthExample = new AmazonAuthExample();
+        amazonAuthExample.createCriteria().andShopIdEqualTo(shopId);
+        return customAmazonAuthMapper.countByExample(amazonAuthExample) > 0;
+    }
+
     @Override
     public List<AmazonAuth> listAmazonAuth() {
         AmazonAuthExample amazonAuthExample = new AmazonAuthExample();
         amazonAuthExample.createCriteria().andStatusEqualTo(YesOrNoEnum.YES.getValue());
         return customAmazonAuthMapper.selectByExample(amazonAuthExample);
     }
+
     private AmazonAuth getAmazonAuthByMerchantId(String sellingPartnerId) {
-        AmazonAuthExample amazonAuthExample=new AmazonAuthExample();
+        AmazonAuthExample amazonAuthExample = new AmazonAuthExample();
         amazonAuthExample.createCriteria().andMerchantIdEqualTo(sellingPartnerId);
-        List<AmazonAuth> list=customAmazonAuthMapper.selectByExample(amazonAuthExample);
-        if(CollectionUtils.isEmpty(list)){
+        List<AmazonAuth> list = customAmazonAuthMapper.selectByExample(amazonAuthExample);
+        if (CollectionUtils.isEmpty(list)) {
             return null;
         }
         return list.get(0);

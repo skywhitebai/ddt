@@ -9,10 +9,10 @@
         from amazon_order ao
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
-                <if test="merchantId != null and merchantId != ''">and merchant_id concat('%',#{merchantId},'%')</if>
-                <if test="marketplaceId != null and marketplaceId != ''">and marketplace_id concat('%',#{marketplaceId},'%')</if>
-                <if test="amazonOrderId != null and amazonOrderId != ''">and amazon_order_id concat('%',#{amazonOrderId},'%')</if>
-                <if test="sellerOrderId != null and sellerOrderId != ''">and seller_order_id concat('%',#{sellerOrderId},'%')</if>
+                <if test="merchantId != null and merchantId != ''">and merchant_id like concat('%',#{merchantId},'%')</if>
+                <if test="marketplaceId != null and marketplaceId != ''">and marketplace_id like concat('%',#{marketplaceId},'%')</if>
+                <if test="amazonOrderId != null and amazonOrderId != ''">and amazon_order_id like concat('%',#{amazonOrderId},'%')</if>
+                <if test="sellerOrderId != null and sellerOrderId != ''">and seller_order_id like concat('%',#{sellerOrderId},'%')</if>
                 <if test="purchaseDateStart != null ">and purchase_date <![CDATA[>=]]>
                     date(#{purchaseDateStart})
                 </if>

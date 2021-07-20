@@ -369,7 +369,12 @@
                         return '<a href="javascript:;" title="查看其他仓库库存" onclick="showInventoryQuantityDialog(' + row.skuId + ',' + row.shopId + ',2)" >' + value + '</a>';
                     }
                 },
-                {title: '生产中数量', field: 'produceOrderShopSkuProductionQuantity', width: 90},
+                {
+                    title: '生产中数量', field: 'produceOrderShopSkuProductionQuantity', width: 90,
+                    formatter: function (value, row, rowIndex) {
+                        return '<a href="javascript:;" title="生产中数量" onclick="showProduceOrderShopSkuProductionQuantityDialog(' + row.skuId + ',' + row.shopId + ',0)" >' + value + '</a>';
+                    }
+                },
                 {
                     title: '其他店铺生产中数量', field: 'produceOrderShopSkuProductionQuantityOtherShop', width: 90,
                     formatter: function (value, row, rowIndex) {
@@ -746,10 +751,11 @@
         $(dg).datagrid('clearSelections');
     }
     function showProduceOrderShopSkuProductionQuantityDialog(skuId, shopId, type){
-        if (type == 1) {
+        if (type == 0) {
+            $('#dlgProduceOrderShopSkuProductionQuantity').dialog('open').dialog('setTitle', '生产中数量');
+        } else if (type == 1) {
             $('#dlgProduceOrderShopSkuProductionQuantity').dialog('open').dialog('setTitle', '其他店铺生产中数量');
-        } else {
-
+        } else if (type == 2){
             $('#dlgProduceOrderShopSkuProductionQuantity').dialog('open').dialog('setTitle', '其他仓库生产中数量');
         }
         $("div#dlgProduceOrderShopSkuProductionQuantity input[name='shopId']").val(shopId);
@@ -760,7 +766,7 @@
     function bindProduceOrderShopSkuProductionQuantityData() {
         dg = '#dgProduceOrderShopSkuProductionQuantity';
         url = "${pageContext.request.contextPath }/produceOrderShopSku/listProduceOrderShopSkuProductionQuantity";
-        title = "其他店铺仓库生产中数量";
+        title = "生产中数量";
         queryParams = {
             shopId: $("div#dlgProduceOrderShopSkuProductionQuantity input[name='shopId']").val(),
             skuId: $("div#dlgProduceOrderShopSkuProductionQuantity input[name='skuId']").val(),

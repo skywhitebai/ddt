@@ -13,29 +13,42 @@
     <select id="listProduceOrderShopSku"
             parameterType="com.sky.ddt.dto.produceOrderShopSku.request.ListProduceOrderShopSkuRequest"
             resultMap="ListProduceOrderShopSkuMap">
-        select
-        poss.*
-        ,(select s.shop_name from shop s where po.shop_id=s.shop_id) shop_name,
-        ss.shop_sku
-        ,sku.sku,
-        (select sum(warehousing_quantity) from warehousing_order_shop_sku woss,warehousing_order wo WHERE
-        wo.id=woss.warehousing_order_id and wo.status=2 and wo.type=1 and wo.produce_order_id=poss.produce_order_id and
-        woss.shop_sku_id=poss.shop_sku_id) warehousingQuantity
+        select poss.*
+                ,
+               (select s.shop_name from shop s where po.shop_id = s.shop_id) shop_name,
+               ss.shop_sku
+                ,
+               sku.sku,
+               (select sum(warehousing_quantity)
+                from warehousing_order_shop_sku woss,
+                     warehousing_order wo
+                WHERE wo.id = woss.warehousing_order_id
+                  and wo.status = 2
+                  and wo.type = 1
+                  and wo.produce_order_id = poss.produce_order_id
+                  and woss.shop_sku_id = poss.shop_sku_id)                   warehousingQuantity
         from produce_order_shop_sku poss
-        left join produce_order po on poss.produce_order_id=po.id
-        left join shop_sku ss on poss.shop_sku_id=ss.shop_sku_id
-        left join sku on sku.sku_id=ss.sku_id
-        where poss.produce_order_id=#{produceOrderId}
+                 left join produce_order po on poss.produce_order_id = po.id
+                 left join shop_sku ss on poss.shop_sku_id = ss.shop_sku_id
+                 left join sku on sku.sku_id = ss.sku_id
+        where poss.produce_order_id = #{produceOrderId}
         order by ss.shop_sku
     </select>
     <select id="listProduceOrderShopSkuProductionQuantity"
             resultType="com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuProductionQuantityResponse">
-	 SELECT SUM(productionQuantity) productionQuantity,SUM(warehousingQuantity) warehousingQuantity,shopId,shopName,shopSku FROM (SELECT poss.production_quantity productionQuantity,(SELECT SUM(woss.warehousing_quantity) warehousingQuantity FROM  warehousing_order wo,warehousing_order_shop_sku woss WHERE wo.produce_order_id=po.id AND wo.STATUS IN(1,2) AND wo.id=woss.`warehousing_order_id` AND woss.shop_sku_id=ss.shop_sku_id) warehousingQuantity,s.shop_id shopId,s.shop_name shopName,ss.shop_sku shopSku FROM
-	shop_sku ss
-	INNER JOIN shop s ON ss.`shop_id`=s.`shop_id` AND s.shop_id!=#{shopId} and ss.sku_id=#{skuId} and s.type=#{type}
-	INNER JOIN produce_order po ON po.shop_id=s.shop_id AND po.status IN(1,2)
-	INNER JOIN produce_order_shop_sku poss ON po.id=poss.produce_order_id AND ss.`shop_sku_id`=poss.`shop_sku_id`) t
-	GROUP BY shopSku
+        SELECT SUM(productionQuantity) productionQuantity,SUM(warehousingQuantity)
+        warehousingQuantity,shopId,shopName,shopSku FROM (SELECT poss.production_quantity productionQuantity,(SELECT
+        SUM(woss.warehousing_quantity) warehousingQuantity FROM warehousing_order wo,warehousing_order_shop_sku woss
+        WHERE wo.produce_order_id=po.id AND wo.STATUS IN(1,2) AND wo.id=woss.`warehousing_order_id` AND
+        woss.shop_sku_id=ss.shop_sku_id) warehousingQuantity,s.shop_id shopId,s.shop_name shopName,ss.shop_sku shopSku
+        FROM
+        shop_sku ss
+        INNER JOIN shop s ON ss.`shop_id`=s.`shop_id` and ss.sku_id=#{skuId}
+        <if test="type != null and type==0">AND s.shop_id=#{shopId}</if>
+        <if test="type != null and type!=0">AND s.shop_id!=#{shopId} and s.type=#{type}</if>
+        INNER JOIN produce_order po ON po.shop_id=s.shop_id AND po.status IN(1,2)
+        INNER JOIN produce_order_shop_sku poss ON po.id=poss.produce_order_id AND ss.`shop_sku_id`=poss.`shop_sku_id`) t
+        GROUP BY shopSku
     </select>
 
 

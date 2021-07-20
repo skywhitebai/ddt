@@ -11,6 +11,6 @@ import lombok.Data;
 @Data
 public class ListAmazonAuthRequest extends DataGridRequest {
     String merchantId;
-    String shopName;
+    Integer shopId;
     Integer status;
 }

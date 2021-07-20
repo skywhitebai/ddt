@@ -30,8 +30,9 @@
     买家id：
 
     <input class="easyui-validatebox textbox" id="s_merchantId">
-    店铺名称：
-    <input class="easyui-validatebox textbox" id="s_shopName">
+    店铺：
+    <select id="s_shopId" style="width:150px;">
+    </select>
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
     <a href="javascript:void(0)" onclick="amazonAuth()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
@@ -56,9 +57,10 @@
                 </td>
             </tr>
             <tr>
-                <td>店铺名：</td>
+                <td>店铺：</td>
                 <td colspan="3">
-                    <input class="easyui-textbox" type="text" name="shopName">
+                    <select name="shopId" id="shopId" style="width:150px;">
+                    </select>
                 </td>
             </tr>
             <tr>
@@ -112,15 +114,29 @@
     </form>
 </div>
 <script type="text/javascript">
+    bindShop();
     bindData();
-
+    function bindShop() {
+        $.post('${pageContext.request.contextPath }/shop/userShopComboboxlist', {}, function (data) {
+            $('#s_shopId').combobox({
+                data: data,
+                valueField: 'shopId',
+                textField: 'shopName'
+            });
+            $('#shopId').combobox({
+                data: data,
+                valueField: 'shopId',
+                textField: 'shopName'
+            });
+        });
+    }
     function bindData() {
         dg = '#dg';
         url = "${pageContext.request.contextPath }/amazonAuth/listAmazonAuth";
         title = "亚马逊授权管理";
         queryParams = {
             merchantId: $("#s_merchantId").val(),
-            shopName: $("#s_shopName").val()
+            shopId: $("#s_shopId").val()
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据

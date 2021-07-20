@@ -14,8 +14,8 @@ import javax.validation.constraints.NotNull;
 public class UpdateAmazonAuthRequest {
     @NotNull(message = "id不能为空")
     Long id;
-    @Length(max = 50,message = "店铺名称长度不能超过50")
-    String shopName;
+    @NotNull(message = "店铺id不能为空")
+    Integer shopId;
     @Length(max = 50,message = "国家名称长度不能超过50")
     String countryName;
     @Length(max = 100,message = "备注长度不能超过100")

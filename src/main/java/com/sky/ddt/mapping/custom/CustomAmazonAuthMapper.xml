@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomAmazonOrderMapper">
+    <resultMap id="listAmazonAuthMap"
+               type="com.sky.ddt.dto.amazon.amazonAuth.response.ListAmazonAuthResponse"
+               extends="com.sky.ddt.dao.generate.AmazonAuthMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+    </resultMap>
+    <select id="listAmazonAuth" parameterType="com.sky.ddt.dto.amazon.amazonAuth.request.ListAmazonAuthRequest"
+            resultMap="listAmazonAuthMap">
+        select
+        aa.*,(select s.shop_name from shop s where s.shop_id=aa.shop_id) shop_name
+        from amazon_auth aa
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="merchantId != null and merchantId != ''">and merchant_id like concat('%',#{merchantId},'%')</if>
+                <if test="shopId != null">and aa.shop_id =#{shopId}</if>
+                <if test="status != null">and aa.status=#{status}</if>
+            </trim>
+        </where>
+        order by aa.create_time desc desc
+    </select>
+</mapper>
