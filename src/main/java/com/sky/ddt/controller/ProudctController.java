@@ -9,9 +9,8 @@ import com.sky.ddt.dto.product.request.ProductSaveRequest;
 import com.sky.ddt.dto.product.response.ProductExportInfoResponse;
 import com.sky.ddt.dto.product.response.ProductListResponse;
 import com.sky.ddt.dto.response.BaseResponse;
-import com.sky.ddt.entity.Product;
 import com.sky.ddt.service.IProductService;
-import com.sky.ddt.util.ExcelExportUtil;
+import com.sky.ddt.util.ExcelExportByExcelFieldUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -73,7 +72,7 @@ public class ProudctController extends SuperController {
     @RightAnnotation("product/exportProduct")
     public BaseResponse exportProduct(ProductListRequest params) {
         List<ProductExportInfoResponse> list=productService.listProductExportInfo(params);
-        BaseResponse exportResponse= new ExcelExportUtil<ProductExportInfoResponse>().export(response,list, ProductConstant.EXPORT_PRODUCT_HEAD,"产品信息");
+        BaseResponse exportResponse= new ExcelExportByExcelFieldUtil<ProductExportInfoResponse>().export(response,list, ProductConstant.exportProductFieldList,"产品信息");
         return exportResponse;
     }
     @RequestMapping("/importDeveloperUser")

@@ -3,10 +3,7 @@ package com.sky.ddt.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.ProductConstant;
-import com.sky.ddt.common.constant.SkuConstant;
-import com.sky.ddt.common.constant.UserConstant;
 import com.sky.ddt.dao.custom.CustomProductMapper;
-import com.sky.ddt.dao.generate.ProductMapper;
 import com.sky.ddt.dto.product.request.ProductListRequest;
 import com.sky.ddt.dto.product.request.ProductSaveRequest;
 import com.sky.ddt.dto.product.response.ProductExportInfoResponse;
@@ -27,7 +24,6 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.math.BigDecimal;
 import java.util.*;
 
 @Service

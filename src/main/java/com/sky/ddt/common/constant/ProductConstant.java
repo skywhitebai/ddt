@@ -1,5 +1,7 @@
 package com.sky.ddt.common.constant;
 
+import com.sky.ddt.common.excel.ExcelField;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,4 +26,21 @@ public class ProductConstant {
     public static final String DEVELOPER_USERNAME_NOT_EXIST ="开发人员用户名不存在" ;
     public static final String DEVELOPMENT_LEVEL_EMPTY ="开发等级不能为空";
     public static final String DEVELOPMENT_LEVEL_ERRO ="开发等级必续为0-10的数字";
+    public static List<ExcelField> exportProductFieldList=new ArrayList<>();
+    static {
+        exportProductFieldList.add(new ExcelField("productName", "产品名", ExcelField.FieldTypeEnum.STRING));
+        exportProductFieldList.add(new ExcelField("productCode", "产品编码", ExcelField.FieldTypeEnum.STRING));
+        exportProductFieldList.add(new ExcelField("chineseProductName", "中文报关名", ExcelField.FieldTypeEnum.STRING));
+        exportProductFieldList.add(new ExcelField("englishProductName", "英文报关名", ExcelField.FieldTypeEnum.STRING));
+        exportProductFieldList.add(new ExcelField("developerUserName", "开发人员", ExcelField.FieldTypeEnum.STRING));
+        exportProductFieldList.add(new ExcelField("developmentLevel", "开发等级", ExcelField.FieldTypeEnum.STRING));
+        exportProductFieldList.add(new ExcelField("developmentTime", "开发时间", ExcelField.FieldTypeEnum.DATE_TIME));
+        exportProductFieldList.add(new ExcelField("costPriceMin", "成本价最小值", ExcelField.FieldTypeEnum.NUMBER));
+        exportProductFieldList.add(new ExcelField("costPriceMax", "成本价最大值", ExcelField.FieldTypeEnum.NUMBER));
+        exportProductFieldList.add(new ExcelField("headTripCostMin", "头程费用最小值", ExcelField.FieldTypeEnum.NUMBER));
+        exportProductFieldList.add(new ExcelField("headTripCostMax", "头程费用最大值", ExcelField.FieldTypeEnum.NUMBER));
+        exportProductFieldList.add(new ExcelField("createTime", "创建时间", ExcelField.FieldTypeEnum.DATE_TIME));
+        exportProductFieldList.add(new ExcelField("updateTime", "修改时间", ExcelField.FieldTypeEnum.DATE_TIME));
+        exportProductFieldList.add(new ExcelField("remark", "备注", ExcelField.FieldTypeEnum.STRING));
+    }
 }

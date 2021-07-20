@@ -1,5 +1,6 @@
 package com.sky.ddt.dto.product.response;
 
+import com.sky.ddt.entity.Product;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -10,15 +11,11 @@ import java.math.BigDecimal;
  * @date 2019/5/13 16:40
  */
 @Data
-public class ProductExportInfoResponse {
-    private String productName;
-
-    private String productCode;
-    String chineseProductName;
-    String englishProductName;
-
-    Integer developmentLevel;
-    private String description;
-
-    private String remark;
+public class ProductExportInfoResponse extends Product {
+    //开发人员名称
+    String developerUserName;
+    private BigDecimal costPriceMin;
+    private BigDecimal costPriceMax;
+    private BigDecimal headTripCostMin;
+    private BigDecimal headTripCostMax;
 }

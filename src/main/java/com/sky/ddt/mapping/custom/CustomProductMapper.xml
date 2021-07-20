@@ -10,6 +10,7 @@
         <result column="head_trip_cost_max" property="headTripCostMax" />
         <result column="developer_user_name" property="developerUserName" />
     </resultMap>
+
     <select id="listProduct" resultMap="listProductMap" parameterType="com.sky.ddt.dto.product.request.ProductListRequest" >
         select
         <include refid="com.sky.ddt.dao.generate.ProductMapper.Base_Column_List" />,
@@ -25,9 +26,21 @@
         </if>
         order by p.product_code
     </select>
-    <select id="listProductExportInfo" resultType="com.sky.ddt.dto.product.response.ProductExportInfoResponse" parameterType="com.sky.ddt.dto.product.request.ProductListRequest" >
+    <resultMap id="listProductExportInfoMap" type="com.sky.ddt.dto.product.response.ProductExportInfoResponse" extends="com.sky.ddt.dao.generate.ProductMapper.BaseResultMap">
+        <result column="cost_price_min" property="costPriceMin" />
+        <result column="cost_price_max" property="costPriceMax" />
+        <result column="head_trip_cost_min" property="headTripCostMin" />
+        <result column="head_trip_cost_max" property="headTripCostMax" />
+        <result column="developer_user_name" property="developerUserName" />
+    </resultMap>
+    <select id="listProductExportInfo" resultMap="listProductExportInfoMap" parameterType="com.sky.ddt.dto.product.request.ProductListRequest" >
         select
-        product_name productName,product_code productCode,chinese_product_name chineseProductName,english_product_name englishProductName,description,remark
+        p.*,
+        (SELECT  MIN(sku.`cost_price`) FROM `sku` WHERE sku.product_id=p.product_id) cost_price_min,
+        (SELECT  MAX(sku.`cost_price`) FROM `sku` WHERE sku.product_id=p.product_id) cost_price_max,
+        (SELECT  MIN(sku.`head_trip_cost`) FROM `sku` WHERE sku.product_id=p.product_id) head_trip_cost_min,
+        (SELECT  MAX(sku.`head_trip_cost`) FROM `sku` WHERE sku.product_id=p.product_id) head_trip_cost_max,
+        (select user_name from user where user.user_id=p.developer_user_id) developer_user_name
         from product p
         <if test="_parameter != null">
             <include refid="product_Query_Where_Clause" />

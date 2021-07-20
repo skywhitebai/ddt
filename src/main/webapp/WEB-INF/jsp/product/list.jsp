@@ -208,14 +208,7 @@
         dg = '#dg';
         url = "${pageContext.request.contextPath }/product/list";
         title = "产品管理";
-        queryParams = {
-            productName: $("#s_productName").val(),
-            productCode: $("#s_productCode").val(),
-            sku: $("#s_sku").val(),
-            colour: $("#s_colour").val(),
-            size: $("#s_size").val(),
-            status: $("#s_status").val()
-        };
+        queryParams = getQueryParams();
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
             title: title,
@@ -393,8 +386,7 @@
                 if (res.code == '200') {
                     closeDialog();
                     bindData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
@@ -422,8 +414,7 @@
                     if (data.code == '200') {
                         $('#dlg').dialog('close');
                         bindData();
-                    }
-                    else {
+                    } else {
                         $.messager.alert("提示", data.message);
                     }
                 });
@@ -500,23 +491,24 @@
                 if (res.code == '200') {
                     $.messager.alert("提示", "上传成功");
                     bindData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
         });
     }
 
+    function getQueryParams() {
+        queryParams = {
+            productName: $("#s_productName").val(),
+            productCode: $("#s_productCode").val()
+        };
+        return getQueryParams;
+    }
+
     function exportProduct() {
-        productName = $("#s_productName").val();
-        productCode = $("#s_productCode").val();
-        colour = $("#s_colour").val();
-        size = $("#s_size").val();
-        sku = $("#s_sku").val();
-        status = $("#s_status").val();
-        url = "${pageContext.request.contextPath }/product/exportProduct?productName=" + productName + "&productCode=" + productCode
-            + "&colour=" + colour + "&size=" + size + "&sku=" + sku + "&status=" + status;
+        queryParams=getQueryParams();
+        url = "${pageContext.request.contextPath }/product/exportProduct"+getUrlParams(getQueryParams());
         window.open(url);
     }
 </script>
