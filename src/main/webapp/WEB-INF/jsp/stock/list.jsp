@@ -47,6 +47,8 @@
     </select>
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
+    <a href="javascript:void(0)" onclick="stopShopSku()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+       style="width: 80px">停用</a>
     <a href="javascript:void(0)" onclick="createStockRecord()" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">生成补货单</a>
@@ -244,10 +246,14 @@
     }
 
     function bindSalesmanUserId() {
-        $('#s_salesmanUserId').combobox({
-            valueField: 'userId',
-            textField: 'realName',
-            url: "${pageContext.request.contextPath }/user/comboboxlist",//获取数据
+        $.post('${pageContext.request.contextPath }/user/comboboxlist', {}, function (data) {
+            var userNull={'userId':-1,'realName':"销售人员为空"};
+            data.push(userNull);
+            $('#s_salesmanUserId').combobox({
+                data: data,
+                valueField: 'userId',
+                textField: 'realName'
+            });
         });
     }
 
@@ -808,6 +814,22 @@
             }]
         })
         $(dg).datagrid('clearSelections');
+    }
+    function stopShopSku(){
+        var rows = $('#dg').datagrid('getSelections');
+        if (rows && rows.length == 1) {
+           var shopSkuId=rows[0].shopSkuId;
+            $.post('${pageContext.request.contextPath }/shopSku/stopShopSku', {shopSkuId: shopSkuId}, function (data) {
+                if (data.code == '200') {
+                    bindData();
+                }
+                else {
+                    $.messager.alert("提示", data.message);
+                }
+            });
+        } else {
+            $.messager.alert("提示", "请选择一条记录.");
+        }
     }
 </script>
 </html>

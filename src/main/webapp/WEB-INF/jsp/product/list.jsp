@@ -503,7 +503,7 @@
             productName: $("#s_productName").val(),
             productCode: $("#s_productCode").val()
         };
-        return getQueryParams;
+        return queryParams;
     }
 
     function exportProduct() {
