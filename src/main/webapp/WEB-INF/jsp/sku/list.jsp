@@ -64,9 +64,12 @@
        class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入天猫标签信息</a>
-    <a href="javascript:void(0)" onclick="showPrintTmallLabelBysSelect()" class="easyui-linkbutton"
+    <%--<a href="javascript:void(0)" onclick="showPrintTmallLabelBysSelect()" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
-       style="">打印标签</a>
+       style="">打印天猫标签</a>--%>
+    <a href="javascript:void(0)" onclick="showPrintProduceLabelBysSelect()" class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'"
+       style="">打印生产标签</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 
@@ -423,7 +426,8 @@
                 {
                     title: '操作', field: 'shopSkuId', width: 80,
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:;" onclick="showPrintTmallLabel(\'' + row.sku + '\')" title="打印天猫标签">打印天猫标签</a>';
+                        //return '<a href="javascript:;" onclick="showPrintTmallLabel(\'' + row.sku + '\')" title="打印天猫标签">打印天猫标签</a>';
+                        return '<a href="javascript:;" onclick="showPrintProduceLabel(\'' + row.sku + '\')" title="打印生产标签">打印生产标签</a>';
                     }
                 }
             ]],
@@ -936,6 +940,21 @@
             window.open("${pageContext.request.contextPath }/sku/printTmallLable");
         } else {
             window.open("${pageContext.request.contextPath }/sku/printTmallLable?sku=" + sku);
+        }
+    }
+    function showPrintProduceLabelBysSelect() {
+        var rows = $('#dg').datagrid('getSelections');
+        if (rows && rows.length == 1) {
+            showPrintProduceLabel(rows[0].sku);
+        } else {
+            $.messager.alert("提示", "请选择一条记录.");
+        }
+    }
+    function showPrintProduceLabel(sku){
+        if (isEmpty(sku)) {
+            window.open("${pageContext.request.contextPath }/sku/printProduceLabel");
+        } else {
+            window.open("${pageContext.request.contextPath }/sku/printProduceLabel?sku=" + sku);
         }
     }
 </script>
