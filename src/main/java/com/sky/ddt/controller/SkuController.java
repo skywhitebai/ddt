@@ -45,6 +45,11 @@ public class SkuController extends SuperController {
     public String printTmallLable() {
         return "sku/printTmallLable";
     }
+    @RequestMapping("/printProduceLable")
+    @MenuAnnotation("sku/index")
+    public String printProduceLable() {
+        return "sku/printProduceLable";
+    }
 
     @RequestMapping("/printTmallLable2")
     @Login(action = Action.Skip)
