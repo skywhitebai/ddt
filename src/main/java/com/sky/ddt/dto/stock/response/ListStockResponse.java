@@ -15,6 +15,7 @@ public class ListStockResponse {
     Integer shopId;
     String shopName;
     String shopSku;
+    String shopParentSku;
     String sku;
     String imgUrl;
     Integer skuId;

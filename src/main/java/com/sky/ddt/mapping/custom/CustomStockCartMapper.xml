@@ -4,7 +4,7 @@
 
     <select id="listStock" parameterType="com.sky.ddt.dto.stock.request.ListStockRequest"
             resultType="com.sky.ddt.dto.stock.response.ListStockResponse">
-        SELECT ss.shop_sku_id shopSkuId,ss.`shop_id` shopId,s.`shop_name` shopName,ss.`shop_sku` shopSku,sku.sku,ss.sku_id
+        SELECT ss.shop_sku_id shopSkuId,ss.`shop_id` shopId,ss.shop_parent_sku shopParentSku,s.`shop_name` shopName,ss.`shop_sku` shopSku,sku.sku,ss.sku_id
         skuId,
         SUM(CASE WHEN oi.purchase_date>=DATE_SUB(DATE(NOW()),INTERVAL 8 DAY) THEN oi.`quantity` ELSE 0 END)
         salesForTheLast7Days,
