@@ -110,6 +110,11 @@ public class ShopSkuController extends SuperController {
     public BaseResponse deleteShopSku(@RequestParam(required = false, value = "shopSkuIds[]") List<Integer> shopSkuIds) {
         return shopSkuService.deleteShopSku(shopSkuIds);
     }
+    @RequestMapping("/stopShopSku")
+    @ResponseBody
+    public BaseResponse stopShopSku(Integer shopSkuId) {
+        return shopSkuService.stopShopSku(shopSkuId,getCurrentUserId());
+    }
 
     /**
      * @param

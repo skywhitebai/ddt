@@ -47,6 +47,8 @@
     </select>
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
+    <a href="javascript:void(0)" onclick="stopShopSku()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+       style="width: 80px">停用</a>
     <a href="javascript:void(0)" onclick="createStockRecord()" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">生成补货单</a>
@@ -812,6 +814,22 @@
             }]
         })
         $(dg).datagrid('clearSelections');
+    }
+    function stopShopSku(){
+        var rows = $('#dg').datagrid('getSelections');
+        if (rows && rows.length == 1) {
+           var shopSkuId=rows[0].shopSkuId;
+            $.post('${pageContext.request.contextPath }/shopSku/stopShopSku', {shopSkuId: shopSkuId}, function (data) {
+                if (data.code == '200') {
+                    bindData();
+                }
+                else {
+                    $.messager.alert("提示", data.message);
+                }
+            });
+        } else {
+            $.messager.alert("提示", "请选择一条记录.");
+        }
     }
 </script>
 </html>

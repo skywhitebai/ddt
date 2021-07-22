@@ -1314,6 +1314,24 @@ public class ShopSkuService implements IShopSkuService {
         return page;
     }
 
+    @Override
+    public BaseResponse stopShopSku(Integer shopSkuId, Integer currentUserId) {
+        if(shopSkuId==null){
+            return BaseResponse.failMessage("shopSkuId不能为空");
+        }
+        ShopSku shopSku=customShopSkuMapper.selectByPrimaryKey(shopSkuId);
+        if(shopSku==null){
+            return BaseResponse.failMessage("shopSkuId不存在");
+        }
+        ShopSku shopSkuUpdate=new ShopSku();
+        shopSkuUpdate.setShopSkuId(shopSkuId);
+        shopSkuUpdate.setStatus(ShopSkuConstant.ShopSkuStatusEnum.UNAVAILABLE.getStatus());
+        shopSkuUpdate.setUpdateTime(new Date());
+        shopSkuUpdate.setUpdateBy(currentUserId);
+        customShopSkuMapper.updateByPrimaryKeySelective(shopSkuUpdate);
+        return BaseResponse.success();
+    }
+
     /**
      * @param
      * @return

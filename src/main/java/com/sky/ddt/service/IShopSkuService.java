@@ -247,4 +247,6 @@ public interface IShopSkuService {
      * @date 2021/3/30 14:43
      */
     PageInfo<ListInventoryQuantityResponse> listInventoryQuantity(ListInventoryQuantityRequest params);
+
+    BaseResponse stopShopSku(Integer shopSkuId, Integer currentUserId);
 }
