@@ -244,10 +244,14 @@
     }
 
     function bindSalesmanUserId() {
-        $('#s_salesmanUserId').combobox({
-            valueField: 'userId',
-            textField: 'realName',
-            url: "${pageContext.request.contextPath }/user/comboboxlist",//获取数据
+        $.post('${pageContext.request.contextPath }/user/comboboxlist', {}, function (data) {
+            var userNull={'userId':-1,'realName':"销售人员为空"};
+            data.push(userNull);
+            $('#s_salesmanUserId').combobox({
+                data: data,
+                valueField: 'userId',
+                textField: 'realName'
+            });
         });
     }
 

@@ -75,7 +75,9 @@
                 <if test="shopParentSku != null and shopParentSku!= '' ">and ss.shop_parent_sku like
                     concat('%',#{shopParentSku},'%')
                 </if>
-                <if test="salesmanUserId != null">and ss.salesman_user_id=#{salesmanUserId}
+                <if test="salesmanUserId != null and salesmanUserId != -1">and ss.salesman_user_id=#{salesmanUserId}
+                </if>
+                <if test="salesmanUserId != null and salesmanUserId == -1">and ss.salesman_user_id is null
                 </if>
                 <if test="showType != null and showType==2 ">
                     and (exists(select 1 from shop_sku ss2,fba_import fi2 WHERE fi2.shop_sku_id=ss2.shop_sku_id and
