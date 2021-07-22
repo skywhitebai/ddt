@@ -47,8 +47,6 @@
     </select>
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
-    <a href="javascript:void(0)" onclick="stopShopSku()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
-       style="width: 80px">停用</a>
     <a href="javascript:void(0)" onclick="createStockRecord()" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">生成补货单</a>
@@ -208,7 +206,8 @@
     <table id="dgInventoryQuantity" style="width: 100%; height: auto">
     </table>
 </div>
-<div id="dlgProduceOrderShopSkuProductionQuantity" class="easyui-dialog" style="width: 600px; height: 600px; padding: 10px 20px"
+<div id="dlgProduceOrderShopSkuProductionQuantity" class="easyui-dialog"
+     style="width: 600px; height: 600px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
     <form id="frmProduceOrderShopSkuProductionQuantity" method="post" enctype="multipart/form-data">
         <table>
@@ -247,7 +246,7 @@
 
     function bindSalesmanUserId() {
         $.post('${pageContext.request.contextPath }/user/comboboxlist', {}, function (data) {
-            var userNull={'userId':-1,'realName':"销售人员为空"};
+            var userNull = {'userId': -1, 'realName': "销售人员为空"};
             data.push(userNull);
             $('#s_salesmanUserId').combobox({
                 data: data,
@@ -457,6 +456,13 @@
                     $(dg).datagrid("reload");
                     $(dg).datagrid('uncheckAll');
                 }
+            }, '-', {
+                id: 'btnReload',
+                text: '停用',
+                iconCls: 'icon-remove',
+                handler: function () {
+                    stopShopSku();
+                }
             }],
             onDblClickRow: function (rowIndex, rowData) {
                 $(dg).datagrid('uncheckAll');
@@ -516,8 +522,7 @@
             if (data.code == '200') {
                 //保存成功
                 refreshStockQuantity(stockQuantity, shopSkuId, type);
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
@@ -540,8 +545,7 @@
         }, function (data) {
             if (data.code == '200') {
                 //保存成功
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
@@ -603,8 +607,7 @@
                         //跳转到补货单列表页
                         $.messager.alert("提示", "生成补货单数据成功，请到补货单记录管理查看");
                         bindData();
-                    }
-                    else {
+                    } else {
                         $.messager.alert("提示", data.message);
                     }
                 });
@@ -627,8 +630,7 @@
                         //跳转到补货单列表页
                         $.messager.alert("提示", "生成工厂生产单数据成功，请到工厂生产单管理查看");
                         bindData();
-                    }
-                    else {
+                    } else {
                         $.messager.alert("提示", data.message);
                     }
                 });
@@ -756,12 +758,13 @@
         })
         $(dg).datagrid('clearSelections');
     }
-    function showProduceOrderShopSkuProductionQuantityDialog(skuId, shopId, type){
+
+    function showProduceOrderShopSkuProductionQuantityDialog(skuId, shopId, type) {
         if (type == 0) {
             $('#dlgProduceOrderShopSkuProductionQuantity').dialog('open').dialog('setTitle', '生产中数量');
         } else if (type == 1) {
             $('#dlgProduceOrderShopSkuProductionQuantity').dialog('open').dialog('setTitle', '其他店铺生产中数量');
-        } else if (type == 2){
+        } else if (type == 2) {
             $('#dlgProduceOrderShopSkuProductionQuantity').dialog('open').dialog('setTitle', '其他仓库生产中数量');
         }
         $("div#dlgProduceOrderShopSkuProductionQuantity input[name='shopId']").val(shopId);
@@ -769,6 +772,7 @@
         $("div#dlgProduceOrderShopSkuProductionQuantity input[name='type']").val(type);
         bindProduceOrderShopSkuProductionQuantityData();
     }
+
     function bindProduceOrderShopSkuProductionQuantityData() {
         dg = '#dgProduceOrderShopSkuProductionQuantity';
         url = "${pageContext.request.contextPath }/produceOrderShopSku/listProduceOrderShopSkuProductionQuantity";
@@ -815,16 +819,21 @@
         })
         $(dg).datagrid('clearSelections');
     }
-    function stopShopSku(){
+
+    function stopShopSku() {
         var rows = $('#dg').datagrid('getSelections');
         if (rows && rows.length == 1) {
-           var shopSkuId=rows[0].shopSkuId;
-            $.post('${pageContext.request.contextPath }/shopSku/stopShopSku', {shopSkuId: shopSkuId}, function (data) {
-                if (data.code == '200') {
-                    bindData();
-                }
-                else {
-                    $.messager.alert("提示", data.message);
+            var shopSkuId = rows[0].shopSkuId;
+            var shopSku = rows[0].shopSku;
+            $.messager.confirm('提示', '确认停用【' + shopSku + '】吗？', function (r) {
+                if (r) {
+                    $.post('${pageContext.request.contextPath }/shopSku/stopShopSku', {shopSkuId: shopSkuId}, function (data) {
+                        if (data.code == '200') {
+                            bindData();
+                        } else {
+                            $.messager.alert("提示", data.message);
+                        }
+                    });
                 }
             });
         } else {
