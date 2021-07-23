@@ -876,6 +876,66 @@ public class ShopSkuExample {
             return (Criteria) this;
         }
 
+        public Criteria andProduceStatusIsNull() {
+            addCriterion("produce_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProduceStatusIsNotNull() {
+            addCriterion("produce_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProduceStatusEqualTo(Integer value) {
+            addCriterion("produce_status =", value, "produceStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andProduceStatusNotEqualTo(Integer value) {
+            addCriterion("produce_status <>", value, "produceStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andProduceStatusGreaterThan(Integer value) {
+            addCriterion("produce_status >", value, "produceStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andProduceStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("produce_status >=", value, "produceStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andProduceStatusLessThan(Integer value) {
+            addCriterion("produce_status <", value, "produceStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andProduceStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("produce_status <=", value, "produceStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andProduceStatusIn(List<Integer> values) {
+            addCriterion("produce_status in", values, "produceStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andProduceStatusNotIn(List<Integer> values) {
+            addCriterion("produce_status not in", values, "produceStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andProduceStatusBetween(Integer value1, Integer value2) {
+            addCriterion("produce_status between", value1, value2, "produceStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andProduceStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("produce_status not between", value1, value2, "produceStatus");
+            return (Criteria) this;
+        }
+
         public Criteria andRemarkIsNull() {
             addCriterion("remark is null");
             return (Criteria) this;

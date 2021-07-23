@@ -1332,6 +1332,24 @@ public class ShopSkuService implements IShopSkuService {
         return BaseResponse.success();
     }
 
+    @Override
+    public BaseResponse setShopSkuProduceStatus(SetProduceStatusRequest params, Integer currentUserId) {
+        ShopSku shopSku=customShopSkuMapper.selectByPrimaryKey(params.getShopSkuId());
+        if(shopSku==null){
+            return BaseResponse.failMessage("shopSkuId不存在");
+        }
+        if(ShopSkuConstant.ShopSkuProduceStatusEnum.getShopSkuProduceStatusEnumByStatus(params.getProduceStatus())==null){
+            return BaseResponse.failMessage("生产状态produceStatus错误");
+        }
+        ShopSku shopSkuUpdate=new ShopSku();
+        shopSkuUpdate.setShopSkuId(params.getShopSkuId());
+        shopSkuUpdate.setProduceStatus(params.getProduceStatus());
+        shopSkuUpdate.setUpdateTime(new Date());
+        shopSkuUpdate.setUpdateBy(currentUserId);
+        customShopSkuMapper.updateByPrimaryKeySelective(shopSkuUpdate);
+        return BaseResponse.success();
+    }
+
     /**
      * @param
      * @return

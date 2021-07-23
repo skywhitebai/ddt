@@ -53,6 +53,7 @@ public class ShopSkuConstant {
         exportShopSkuFieldList.add(new ExcelField("parentAsin", "店铺父ASIN", ExcelField.FieldTypeEnum.STRING));
         exportShopSkuFieldList.add(new ExcelField("title", "标题", ExcelField.FieldTypeEnum.STRING));
         exportShopSkuFieldList.add(new ExcelField("status", "状态", ExcelField.FieldTypeEnum.STRING));
+        exportShopSkuFieldList.add(new ExcelField("produceStatus", "生产状态", ExcelField.FieldTypeEnum.STRING));
         exportShopSkuFieldList.add(new ExcelField("inventoryQuantity", "库存", ExcelField.FieldTypeEnum.NUMBER));
         exportShopSkuFieldList.add(new ExcelField("storageLocation", "库位", ExcelField.FieldTypeEnum.STRING));
         exportShopSkuFieldList.add(new ExcelField("weight", "重量", ExcelField.FieldTypeEnum.NUMBER));
@@ -91,5 +92,25 @@ public class ShopSkuConstant {
             return null;
         }
     }
+    @Getter
+    public enum ShopSkuProduceStatusEnum {
+        AVAILABLE(1, "正常生产"),
+        UNAVAILABLE(2, "暂停生产");
 
+        private Integer status;
+        private String statusName;
+
+        ShopSkuProduceStatusEnum(Integer status, String statusName) {
+            this.status = status;
+            this.statusName = statusName;
+        }
+        public static ShopSkuProduceStatusEnum getShopSkuProduceStatusEnumByStatus(Integer status) {
+            for (ShopSkuProduceStatusEnum shopSkuProduceStatusEnum : ShopSkuProduceStatusEnum.values()) {
+                if (shopSkuProduceStatusEnum.getStatus().equals(status)) {
+                    return shopSkuProduceStatusEnum;
+                }
+            }
+            return null;
+        }
+    }
 }

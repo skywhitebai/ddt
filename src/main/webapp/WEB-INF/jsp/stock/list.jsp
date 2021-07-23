@@ -45,6 +45,12 @@
         <option value="1">全部</option>
         <option value="2">有销量或者fba库存</option>
     </select>
+    生产状态：
+    <select class="easyui-combobox" id="s_produceStatus" style="width:100px;">
+        <option value="">全部</option>
+        <option value="1">正常生产</option>
+        <option value="2">暂停生产</option>
+    </select>
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
     <a href="javascript:void(0)" onclick="createStockRecord()" class="easyui-linkbutton"
@@ -279,7 +285,8 @@
             shopParentSku: $("#s_shopParentSku").val(),
             showType: $("#s_showType").val(),
             salesmanUserId: $("#s_salesmanUserId").val(),
-            sku: $("#s_sku").val()
+            sku: $("#s_sku").val(),
+            produceStatus: $("#s_produceStatus").val()
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -439,7 +446,17 @@
                     }
                 },
                 {title: '设置时间', field: 'createTime', width: 180},
-                {title: '修改时间', field: 'updateTime', width: 180}
+                {title: '修改时间', field: 'updateTime', width: 180},
+                {
+                    title: '生产状态', field: 'produceStatus', width: 65,
+                    formatter: function (value, row, rowIndex) {
+                        if (value == 1) {
+                            return '<a href="javascript:;" title="正常生产" onclick="setProduceStatus(' + row.shopSkuId + ",'" + row.shopSku + "'" + ',2)" >正常生产</a>';
+                        } else if (value == 2) {
+                            return '<a href="javascript:;" title="暂停生产" onclick="setProduceStatus(' + row.shopSkuId + ",'" + row.shopSku + "'"  + ',1)" >暂停生产</a>';
+                        }
+                    }
+                }
             ]],
             toolbar: [{
                 id: 'btnView',
@@ -840,6 +857,26 @@
         } else {
             $.messager.alert("提示", "请选择一条记录.");
         }
+    }
+
+    function setProduceStatus(shopSkuId, shopSku, produceStatus) {
+        var produceStatusName;
+        if(produceStatus==1){
+            produceStatusName="正常生产";
+        }else if(produceStatus==2){
+            produceStatusName="暂停生产";
+        }
+        $.messager.confirm('提示', '确认修改【' + shopSku + '】的生产状态为【'+produceStatusName+'】吗？', function (r) {
+            if (r) {
+                $.post('${pageContext.request.contextPath }/shopSku/setShopSkuProduceStatus', {shopSkuId: shopSkuId,produceStatus:produceStatus}, function (data) {
+                    if (data.code == '200') {
+                        bindData();
+                    } else {
+                        $.messager.alert("提示", data.message);
+                    }
+                });
+            }
+        });
     }
 </script>
 </html>

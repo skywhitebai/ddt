@@ -14,6 +14,7 @@
     <result column="storage_location" jdbcType="VARCHAR" property="storageLocation" />
     <result column="head_trip_cost" jdbcType="DECIMAL" property="headTripCost" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="produce_status" jdbcType="INTEGER" property="produceStatus" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -82,8 +83,8 @@
   </sql>
   <sql id="Base_Column_List">
     shop_sku_id, shop_sku, sku_id, shop_id, salesman_user_id, fnsku, asin, title, inventory_quantity, 
-    storage_location, head_trip_cost, status, remark, create_by, create_time, update_by, 
-    update_time, shop_parent_sku, parent_asin
+    storage_location, head_trip_cost, status, produce_status, remark, create_by, create_time, 
+    update_by, update_time, shop_parent_sku, parent_asin
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.ShopSkuExample" resultMap="BaseResultMap">
     select
@@ -116,30 +117,27 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.sky.ddt.entity.ShopSku">
-    <selectKey keyProperty="shopSkuId" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into shop_sku (shop_sku, sku_id, shop_id, 
-      salesman_user_id, fnsku, asin, 
-      title, inventory_quantity, storage_location, 
-      head_trip_cost, status, remark, 
-      create_by, create_time, update_by, 
-      update_time, shop_parent_sku, parent_asin
-      )
-    values (#{shopSku,jdbcType=VARCHAR}, #{skuId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, 
-      #{salesmanUserId,jdbcType=INTEGER}, #{fnsku,jdbcType=VARCHAR}, #{asin,jdbcType=VARCHAR}, 
-      #{title,jdbcType=VARCHAR}, #{inventoryQuantity,jdbcType=INTEGER}, #{storageLocation,jdbcType=VARCHAR}, 
-      #{headTripCost,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
-      #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{shopParentSku,jdbcType=VARCHAR}, #{parentAsin,jdbcType=VARCHAR}
-      )
+    insert into shop_sku (shop_sku_id, shop_sku, sku_id, 
+      shop_id, salesman_user_id, fnsku, 
+      asin, title, inventory_quantity, 
+      storage_location, head_trip_cost, status, 
+      produce_status, remark, create_by, 
+      create_time, update_by, update_time, 
+      shop_parent_sku, parent_asin)
+    values (#{shopSkuId,jdbcType=INTEGER}, #{shopSku,jdbcType=VARCHAR}, #{skuId,jdbcType=INTEGER}, 
+      #{shopId,jdbcType=INTEGER}, #{salesmanUserId,jdbcType=INTEGER}, #{fnsku,jdbcType=VARCHAR}, 
+      #{asin,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{inventoryQuantity,jdbcType=INTEGER}, 
+      #{storageLocation,jdbcType=VARCHAR}, #{headTripCost,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, 
+      #{produceStatus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{shopParentSku,jdbcType=VARCHAR}, #{parentAsin,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.ShopSku">
-    <selectKey keyProperty="shopSkuId" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into shop_sku
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="shopSkuId != null">
+        shop_sku_id,
+      </if>
       <if test="shopSku != null">
         shop_sku,
       </if>
@@ -173,6 +171,9 @@
       <if test="status != null">
         status,
       </if>
+      <if test="produceStatus != null">
+        produce_status,
+      </if>
       <if test="remark != null">
         remark,
       </if>
@@ -196,6 +197,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="shopSkuId != null">
+        #{shopSkuId,jdbcType=INTEGER},
+      </if>
       <if test="shopSku != null">
         #{shopSku,jdbcType=VARCHAR},
       </if>
@@ -228,6 +232,9 @@
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="produceStatus != null">
+        #{produceStatus,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -297,6 +304,9 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
+      <if test="record.produceStatus != null">
+        produce_status = #{record.produceStatus,jdbcType=INTEGER},
+      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -337,6 +347,7 @@
       storage_location = #{record.storageLocation,jdbcType=VARCHAR},
       head_trip_cost = #{record.headTripCost,jdbcType=DECIMAL},
       status = #{record.status,jdbcType=INTEGER},
+      produce_status = #{record.produceStatus,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_by = #{record.createBy,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -384,6 +395,9 @@
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="produceStatus != null">
+        produce_status = #{produceStatus,jdbcType=INTEGER},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -421,6 +435,7 @@
       storage_location = #{storageLocation,jdbcType=VARCHAR},
       head_trip_cost = #{headTripCost,jdbcType=DECIMAL},
       status = #{status,jdbcType=INTEGER},
+      produce_status = #{produceStatus,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_by = #{createBy,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},

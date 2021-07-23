@@ -115,7 +115,11 @@ public class ShopSkuController extends SuperController {
     public BaseResponse stopShopSku(Integer shopSkuId) {
         return shopSkuService.stopShopSku(shopSkuId,getCurrentUserId());
     }
-
+    @RequestMapping("/setShopSkuProduceStatus")
+    @ResponseBody
+    public BaseResponse setShopSkuProduceStatus(@Validated  SetProduceStatusRequest params) {
+        return shopSkuService.setShopSkuProduceStatus(params,getCurrentUserId());
+    }
     /**
      * @param
      * @return

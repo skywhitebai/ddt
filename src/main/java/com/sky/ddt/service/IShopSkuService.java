@@ -249,4 +249,6 @@ public interface IShopSkuService {
     PageInfo<ListInventoryQuantityResponse> listInventoryQuantity(ListInventoryQuantityRequest params);
 
     BaseResponse stopShopSku(Integer shopSkuId, Integer currentUserId);
+
+    BaseResponse setShopSkuProduceStatus(SetProduceStatusRequest params, Integer currentUserId);
 }

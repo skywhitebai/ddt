@@ -20,4 +20,5 @@ public class ListShopSkuRequest extends DataGridRequest {
     String productName;
     Integer userId;
     Integer status;
+    Integer produceStatus;
 }

@@ -28,6 +28,8 @@ public class ShopSku {
 
     private Integer status;
 
+    private Integer produceStatus;
+
     private String remark;
 
     private Integer createBy;
@@ -136,6 +138,14 @@ public class ShopSku {
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getProduceStatus() {
+        return produceStatus;
+    }
+
+    public void setProduceStatus(Integer produceStatus) {
+        this.produceStatus = produceStatus;
     }
 
     public String getRemark() {

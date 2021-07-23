@@ -51,6 +51,7 @@
                 </if>
                 <if test="userId != null ">and ss.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
                 <if test="status != null">and ss.status=#{status}</if>
+                <if test="produceStatus != null">and ss.produce_status=#{produceStatus}</if>
             </trim>
         </where>
     </sql>
@@ -58,8 +59,9 @@
             resultType="com.sky.ddt.dto.shopSku.response.ExportShopSkuResponse">
         select
         s.shop_name shopName,sku.sku,ss.shop_sku shopSku,ss.shop_parent_sku
-        shopParentSku,ss.head_trip_cost headTripCost,sku.cost_price costPrice,sku.weight,ss.fnsku,ss.asin,ss.parent_asin parentAsin,ss.title,case ss.status when 1 then '启用' else '停用' end
-        status,ss.storage_location storageLocation,ss.remark,ss.inventory_quantity inventoryQuantity
+        shopParentSku,ss.head_trip_cost headTripCost,sku.cost_price costPrice,sku.weight,ss.fnsku,ss.asin,ss.parent_asin parentAsin,ss.title
+        ,case ss.status when 1 then '启用' else '停用' end status,case ss.produce_status when 1 then '正常生产' when 2 then '暂停生产' else '' end produceStatus
+        ,ss.storage_location storageLocation,ss.remark,ss.inventory_quantity inventoryQuantity
         from shop_sku ss
         left join sku on ss.sku_id=sku.sku_id
         left join product p on sku.product_id=p.product_id
