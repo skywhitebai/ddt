@@ -345,24 +345,24 @@
                     {title: '状态', field: 'statusName', width: 50},
                     {
                         title: '生产类型', field: 'type', width: 80, formatter: function (value, row, index) {
-                        if (value == 1) {
-                            return '手工生产单';
-                        } else if (value == 2) {
-                            return '工厂生产单';
+                            if (value == 1) {
+                                return '手工生产单';
+                            } else if (value == 2) {
+                                return '工厂生产单';
+                            }
                         }
-                    }
                     },
                     {title: '生产数量', field: 'productionQuantityTotal', width: 66},
                     {title: '创建时间', field: 'createTime', width: 180},
                     {title: '修改时间', field: 'updateTime', width: 180},
                     {
                         title: '操作', field: 'deal', width: 200, formatter: function (value, row, index) {
-                        var content = '<a href="javascript:void(0)" onclick="exportProduceOrderShopSkuById(' + row.id + ')" class="easyui-linkbutton" >导出店铺sku</a>';
-                        if (row.status == 1) {
-                            content += '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="showImportProduceOrderShopSkuById(' + row.id + ')" class="easyui-linkbutton" >导入店铺sku</a>';
+                            var content = '<a href="javascript:void(0)" onclick="exportProduceOrderShopSkuById(' + row.id + ')" class="easyui-linkbutton" >导出店铺sku</a>';
+                            if (row.status == 1) {
+                                content += '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="showImportProduceOrderShopSkuById(' + row.id + ')" class="easyui-linkbutton" >导入店铺sku</a>';
+                            }
+                            return content;
                         }
-                        return content;
-                    }
                     },
                     {title: '店铺父sku', field: 'shopParentSkus', width: 150},
                     {title: '备注', field: 'remark', width: 180}
@@ -448,8 +448,7 @@
         $.post('${pageContext.request.contextPath }/produceOrder/finishedProduction', {id: id}, function (data) {
             if (data.code == '200') {
                 bindData();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
@@ -510,8 +509,7 @@
                 if (res.code == '200') {
                     closeDialog();
                     bindData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
@@ -526,8 +524,7 @@
                     $.post('${pageContext.request.contextPath }/produceOrder/cancelProduceOrder', {id: rows[0].id}, function (data) {
                         if (data.code == '200') {
                             bindData();
-                        }
-                        else {
+                        } else {
                             $.messager.alert("提示", data.message);
                         }
                     });
@@ -588,6 +585,12 @@
                     }
                 },
                 {title: '入库数量', field: 'warehousingQuantity', width: 66},
+                {
+                    title: '打印标签', field: 'shopSkuId', width: 80,
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:;" onclick="showPrintProductLabel(\'' + row.sku + '\')" title="打印产品标签">打印标签</a>';
+                    }
+                },
                 {title: '创建时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
                 {title: '备注', field: 'remark', width: 180}
@@ -692,8 +695,7 @@
                 if (res.code == '200') {
                     closeProduceOrderShopSkuInfoDialog();
                     bindProduceOrderShopSkuData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
@@ -708,8 +710,7 @@
                     $.post('${pageContext.request.contextPath }/produceOrderShopSku/deleteProduceOrderShopSku', {id: rows[0].id}, function (data) {
                         if (data.code == '200') {
                             bindProduceOrderShopSkuData();
-                        }
-                        else {
+                        } else {
                             $.messager.alert("提示", data.message);
                         }
                     });
@@ -801,8 +802,7 @@
                 if (res.code == '200') {
                     $.messager.alert("提示", "上传成功");
                     bindData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
@@ -828,13 +828,18 @@
             if (data.code == '200') {
                 //保存成功
                 $.messager.alert("提示", data.message);
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
     }
-
+    function showPrintProductLabel(sku){
+        if (isEmpty(sku)) {
+            window.open("${pageContext.request.contextPath }/produceOrder/printProductLabel");
+        } else {
+            window.open("${pageContext.request.contextPath }/produceOrder/printProductLabel?sku=" + sku);
+        }
+    }
 
 </script>
 </html>

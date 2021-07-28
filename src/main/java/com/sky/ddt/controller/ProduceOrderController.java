@@ -74,4 +74,9 @@ public class ProduceOrderController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return produceOrderService.importProduceOrder(file, dealUserId);
     }
+    @RequestMapping("/printProductLabel")
+    @MenuAnnotation("sku/index")
+    public String printProduceLable() {
+        return "produceOrder/printProductLabel";
+    }
 }

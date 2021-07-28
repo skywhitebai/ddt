@@ -10,10 +10,12 @@ import com.sky.ddt.dto.sku.request.SkuListRequest;
 import com.sky.ddt.dto.sku.request.SkuSaveRequest;
 import com.sky.ddt.dto.sku.response.SkuExportInfoResponse;
 import com.sky.ddt.dto.sku.response.SkuListResponse;
+import com.sky.ddt.entity.Sku;
 import com.sky.ddt.service.ISkuService;
 import com.sky.ddt.util.ExcelExportUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,10 +47,10 @@ public class SkuController extends SuperController {
     public String printTmallLable() {
         return "sku/printTmallLable";
     }
-    @RequestMapping("/printProduceLable")
+    @RequestMapping("/printProduceLabel")
     @MenuAnnotation("sku/index")
     public String printProduceLable() {
-        return "sku/printProduceLable";
+        return "sku/printProduceLabel";
     }
 
     @RequestMapping("/printTmallLable2")
@@ -145,5 +147,16 @@ public class SkuController extends SuperController {
     public BaseResponse getPrintTmallSku(GetPrintTmallSkuRequest params) {
         return skuService.getPrintTmallSku(params);
     }
-
+    @RequestMapping("/getSkuBySku")
+    @ResponseBody
+    public BaseResponse getSkuBySku(String sku) {
+        if(StringUtils.isEmpty(sku)){
+            return BaseResponse.failMessage("sku不能为空");
+        }
+        Sku skuInfo= skuService.getSkuBySku(sku);
+        if(skuInfo==null){
+            return BaseResponse.failMessage("sku不存在");
+        }
+        return BaseResponse.successData(sku);
+    }
 }
