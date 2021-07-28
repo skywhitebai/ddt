@@ -302,24 +302,8 @@
             queryParams: queryParams,  //异步查询的参数
             frozenColumns: [[
                 {field: 'ck', checkbox: true},   //选择
-                {title: '店铺名', field: 'shopName', width: 140},
-                {title: '销售负责人', field: 'salesmanRealName', width: 120},
                 {title: '店铺sku', field: 'shopSku', width: 168},
-                {title: '店铺父sku', field: 'shopParentSku', width: 168},
-                {title: '产品sku', field: 'sku', width: 168},
-                {
-                    title: '图片', field: 'imgUrl', width: 120,
-                    formatter: function (value, rowData, rowIndex) {
-                        var res = "";
-                        if (value != null && value != '') {
-                            res += '<a href="javascript:;" onclick="showImg(' + value + ')" ><img  src="' + value + '?x-oss-process=image/resize,m_fill,h_66,w_66"  style="width:66px; height:66px;"/></a> '
-                        } else {
-                            res += '暂无图片   '
-                        }
-                        res += '<a href="javascript:;" onclick="showImgDialog(' + rowData.skuId + ')" >查看</a>';
-                        return res;
-                    }
-                }
+                {title: '产品sku', field: 'sku', width: 168}
             ]],
             columns: [[
                 {title: '7天实销', field: 'salesForTheLast7Days', width: 70},
@@ -443,6 +427,22 @@
                         } else {
                             return '<input class="easyui-numberbox" min="0" precision="0" value="' + value + '" onchange="saveProductionQuantity(this,' + row.shopSkuId + ')">';
                         }
+                    }
+                },
+                {title: '店铺名', field: 'shopName', width: 140},
+                {title: '销售负责人', field: 'salesmanRealName', width: 120},
+                {title: '店铺父sku', field: 'shopParentSku', width: 168},
+                {
+                    title: '图片', field: 'imgUrl', width: 120,
+                    formatter: function (value, rowData, rowIndex) {
+                        var res = "";
+                        if (value != null && value != '') {
+                            res += '<a href="javascript:;" onclick="showImg(' + value + ')" ><img  src="' + value + '?x-oss-process=image/resize,m_fill,h_66,w_66"  style="width:66px; height:66px;"/></a> '
+                        } else {
+                            res += '暂无图片   '
+                        }
+                        res += '<a href="javascript:;" onclick="showImgDialog(' + rowData.skuId + ')" >查看</a>';
+                        return res;
                     }
                 },
                 {title: '设置时间', field: 'createTime', width: 180},

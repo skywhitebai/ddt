@@ -845,7 +845,9 @@ public class FinancialStatementService implements IFinancialStatementService {
             row.createCell(105).setCellValue(financialStatement.getRefundRate().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
             row.createCell(106).setCellValue(financialStatement.getNewProduct() == 1 ? "是" : "否");
             row.createCell(107).setCellValue(financialStatement.getAdvertisingSalesPercentage().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
-            row.createCell(108).setCellValue(financialStatement.getProductMonth());
+            if(!StringUtils.isEmpty(financialStatement.getProductMonth())){
+                row.createCell(108).setCellValue(financialStatement.getProductMonth());
+            }
             if (financialStatement.getDevelopmentLevel() != null) {
                 row.createCell(109).setCellValue(financialStatement.getDevelopmentLevel());
             }
