@@ -71,7 +71,7 @@
     </table>
 </div>
 </body>
-<script type="javascript">
+<script type="text/javascript">
     $(document).ready(function () {
         bindFirst();
     });
