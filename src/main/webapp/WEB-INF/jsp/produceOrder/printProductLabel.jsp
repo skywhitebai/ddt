@@ -90,12 +90,12 @@
             alert('请填写产品sku或者副sku');
             return;
         }
-        $.post('${pageContext.request.contextPath }/sku/getPrintTmallSku', {
+        $.post('${pageContext.request.contextPath }/sku/getSkuBySku', {
             sku: sku,
             secondSku: secondSku
         }, function (data) {
             if (data.code == '200') {
-                $("#sku").val(data.data.secondSku);
+                $("#sku").val(data.data.sku);
                 $("#productName").val(data.data.productName);
                 $("#productCode").val(data.data.productCode);
                 $("#colour").val(data.data.colour);

@@ -157,6 +157,6 @@ public class SkuController extends SuperController {
         if(skuInfo==null){
             return BaseResponse.failMessage("sku不存在");
         }
-        return BaseResponse.successData(sku);
+        return BaseResponse.successData(skuInfo);
     }
 }
