@@ -27,19 +27,20 @@
     <style>
         .printInfoBack {
             width: 10cm;
+            padding: 0cm 0cm;
         }
 
         .printInfoProduct {
             width: 3.2cm;
-            height: 1.9cm;
+            height: 1.74cm;
             overflow-y: hidden;
             overflow-x: hidden;
-            padding: 2px;
+            padding: 3px 0.066cm;
             float: left
         }
 
         .certificate {
-            margin-bottom: 10px;
+            /*margin-bottom: 10px;*/
         }
 
         .certificateTitle {
@@ -56,32 +57,41 @@
 
         .attributeLeft {
             display: inline;
+            padding-left: 5px;
         }
 
         .attributeRight {
             display: inline;
             float: right;
+            padding-right: 5px;
         }
 
         .attributeCenter {
             text-align: center;
             font-size: 18px;
         }
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
     </style>
 </head>
 <body>
 <!--查询条件-->
-<div class="easyui-panel printHide">
-    产品sku：
-    <input class="easyui-validatebox textbox" id="s_sku">
-    <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
-       style="width: 80px">查 询</a>
-    <br/>
-    数量
-    <input class="easyui-numberbox" name="quantity" id="quantity" min="0"
-           precision="0">
-    <a href="javascript:void(0)" onclick="createPrintProductLable()" class="easyui-linkbutton">生成标签</a>
-    <a href="javascript:void(0)" onclick="printProductLable()" class="easyui-linkbutton">打印</a>
+<div class="printHide">
+    <div class="easyui-panel">
+        产品sku：
+        <input class="easyui-validatebox textbox" id="s_sku">
+        <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+           style="width: 80px">查 询</a>
+        <br/>
+        数量
+        <input class="easyui-numberbox" name="quantity" id="quantity" min="0"
+               precision="0">
+        <a href="javascript:void(0)" onclick="createPrintProductLable()" class="easyui-linkbutton">生成标签</a>
+        <a href="javascript:void(0)" onclick="hide()" class="easyui-linkbutton">隐藏</a>
+        <a href="javascript:void(0)" onclick="printProductLable()" class="easyui-linkbutton">打印</a>
+    </div>
 </div>
 <div class="printHide">
     <table>
@@ -192,7 +202,7 @@
             return;
         }*/
 
-        var printInfoProductHtml='<div class="printInfoProduct">\n' +
+        var printInfoProductHtml = '<div class="printInfoProduct">\n' +
             '            <div class="certificate">\n' +
             '                <div class="certificateTitle">产品sku</div>\n' +
             '            </div>\n' +
@@ -204,13 +214,13 @@
             '                <div class="attributeCenter">尺码大一点</div>\n' +
             '            </div>\n' +
             '        </div>';
-        printInfoProductHtml=printInfoProductHtml.replace('产品sku', sku);
-        printInfoProductHtml=printInfoProductHtml.replace('颜色', colour);
-        printInfoProductHtml=printInfoProductHtml.replace('色号', colourNumber);
-        printInfoProductHtml=printInfoProductHtml.replace('尺码大一点', size);
+        printInfoProductHtml = printInfoProductHtml.replace('产品sku', sku);
+        printInfoProductHtml = printInfoProductHtml.replace('颜色', colour);
+        printInfoProductHtml = printInfoProductHtml.replace('色号', colourNumber);
+        printInfoProductHtml = printInfoProductHtml.replace('尺码大一点', size);
         var html = "";
         for (i = 0; i < quantity; i++) {
-            html=html+printInfoProductHtml;
+            html = html + printInfoProductHtml;
         }
         $('#printInfoBackDiv').html(html);
     }
@@ -218,6 +228,12 @@
     function printProductLable() {
         $(".printHide").hide();
         window.print();
+        $(".printHide").show();
+    }
+    function hide() {
+        $(".printHide").hide();
+    }
+    function show() {
         $(".printHide").show();
     }
 </script>
