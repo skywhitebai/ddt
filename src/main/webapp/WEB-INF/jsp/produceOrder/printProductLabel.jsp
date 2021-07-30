@@ -89,7 +89,6 @@
         <input class="easyui-numberbox" name="quantity" id="quantity" min="0"
                precision="0">
         <a href="javascript:void(0)" onclick="createPrintProductLable()" class="easyui-linkbutton">生成标签</a>
-        <a href="javascript:void(0)" onclick="hide()" class="easyui-linkbutton">隐藏</a>
         <a href="javascript:void(0)" onclick="printProductLable()" class="easyui-linkbutton">打印</a>
     </div>
 </div>
@@ -146,7 +145,7 @@
             $("#s_sku").val(decodeURI(sku));
             var preWarehousingQuantity = getQueryVariable('preWarehousingQuantity');
             if (!isEmpty(preWarehousingQuantity)) {
-                $("#quantity").val(preWarehousingQuantity);
+                $("#quantity").numberbox('setValue',preWarehousingQuantity);
             }
             bindData();
         }
