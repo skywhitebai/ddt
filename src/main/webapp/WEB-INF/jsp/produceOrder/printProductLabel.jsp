@@ -144,20 +144,23 @@
         var sku = getQueryVariable('sku');
         if (!isEmpty(sku)) {
             $("#s_sku").val(decodeURI(sku));
+            var preWarehousingQuantity = getQueryVariable('preWarehousingQuantity');
+            if (!isEmpty(preWarehousingQuantity)) {
+                $("#quantity").val(preWarehousingQuantity);
+            }
             bindData();
         }
+
     }
 
     function bindData() {
         var sku = $("#s_sku").val();
-        var secondSku = $("#s_secondSku").val();
-        if (isEmpty(sku) && isEmpty(secondSku)) {
-            alert('请填写产品sku或者副sku');
+        if (isEmpty(sku)) {
+            alert('请填写产品sku');
             return;
         }
         $.post('${pageContext.request.contextPath }/sku/getSkuBySku', {
-            sku: sku,
-            secondSku: secondSku
+            sku: sku
         }, function (data) {
             if (data.code == '200') {
                 $("#sku").val(data.data.sku);

@@ -117,27 +117,30 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.sky.ddt.entity.ShopSku">
-    insert into shop_sku (shop_sku_id, shop_sku, sku_id, 
-      shop_id, salesman_user_id, fnsku, 
-      asin, title, inventory_quantity, 
-      storage_location, head_trip_cost, status, 
-      produce_status, remark, create_by, 
-      create_time, update_by, update_time, 
-      shop_parent_sku, parent_asin)
-    values (#{shopSkuId,jdbcType=INTEGER}, #{shopSku,jdbcType=VARCHAR}, #{skuId,jdbcType=INTEGER}, 
-      #{shopId,jdbcType=INTEGER}, #{salesmanUserId,jdbcType=INTEGER}, #{fnsku,jdbcType=VARCHAR}, 
-      #{asin,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{inventoryQuantity,jdbcType=INTEGER}, 
-      #{storageLocation,jdbcType=VARCHAR}, #{headTripCost,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, 
-      #{produceStatus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{shopParentSku,jdbcType=VARCHAR}, #{parentAsin,jdbcType=VARCHAR})
+    <selectKey keyProperty="shopSkuId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into shop_sku (shop_sku, sku_id, shop_id, 
+      salesman_user_id, fnsku, asin, 
+      title, inventory_quantity, storage_location, 
+      head_trip_cost, status, produce_status, 
+      remark, create_by, create_time, 
+      update_by, update_time, shop_parent_sku, 
+      parent_asin)
+    values (#{shopSku,jdbcType=VARCHAR}, #{skuId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, 
+      #{salesmanUserId,jdbcType=INTEGER}, #{fnsku,jdbcType=VARCHAR}, #{asin,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{inventoryQuantity,jdbcType=INTEGER}, #{storageLocation,jdbcType=VARCHAR}, 
+      #{headTripCost,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, #{produceStatus,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{shopParentSku,jdbcType=VARCHAR}, 
+      #{parentAsin,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.ShopSku">
+    <selectKey keyProperty="shopSkuId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into shop_sku
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="shopSkuId != null">
-        shop_sku_id,
-      </if>
       <if test="shopSku != null">
         shop_sku,
       </if>
@@ -197,9 +200,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="shopSkuId != null">
-        #{shopSkuId,jdbcType=INTEGER},
-      </if>
       <if test="shopSku != null">
         #{shopSku,jdbcType=VARCHAR},
       </if>

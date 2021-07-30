@@ -11,6 +11,8 @@ public class ProduceOrderShopSku {
 
     private Integer productionQuantity;
 
+    private Integer preWarehousingQuantity;
+
     private String remark;
 
     private Date createTime;
@@ -51,6 +53,14 @@ public class ProduceOrderShopSku {
 
     public void setProductionQuantity(Integer productionQuantity) {
         this.productionQuantity = productionQuantity;
+    }
+
+    public Integer getPreWarehousingQuantity() {
+        return preWarehousingQuantity;
+    }
+
+    public void setPreWarehousingQuantity(Integer preWarehousingQuantity) {
+        this.preWarehousingQuantity = preWarehousingQuantity;
     }
 
     public String getRemark() {

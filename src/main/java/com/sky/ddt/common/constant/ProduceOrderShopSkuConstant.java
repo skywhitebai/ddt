@@ -31,6 +31,8 @@ public class ProduceOrderShopSkuConstant {
     public static final String PRODUCE_ORDER_SHOP_SKU_WAREHOUSING_NOT_ALLOW_DELETE = "店铺sku已有对应的入库单不允许删除";
     public static final String SHOP_SKU_SHOP_ID_NOT_SAME = "店铺sku的店铺不一致";
     public static final String SHOP_SKU_REPEAT = "店铺sku不允许重复";
+    public static final String PRE_WAREHOUSING_QUANTITY_EMPTY ="预入库数量不能为空" ;
+    public static final String PRE_WAREHOUSING_QUANTITY_ERRO ="预入库数量错误" ;
     public static List<ExcelField> exportProduceOrderShopSkuFieldList = new ArrayList<>();
 
     static {

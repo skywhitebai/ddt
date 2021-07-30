@@ -7,10 +7,7 @@ import com.sky.ddt.common.constant.ProduceOrderShopSkuConstant;
 import com.sky.ddt.common.constant.SbErroEntity;
 import com.sky.ddt.dao.custom.CustomLabelPrintShopSkuMapper;
 import com.sky.ddt.dao.custom.CustomProduceOrderShopSkuMapper;
-import com.sky.ddt.dto.produceOrderShopSku.request.ListProduceOrderShopSkuProductionQuantityRequest;
-import com.sky.ddt.dto.produceOrderShopSku.request.ListProduceOrderShopSkuRequest;
-import com.sky.ddt.dto.produceOrderShopSku.request.SaveProduceOrderShopSkuRequest;
-import com.sky.ddt.dto.produceOrderShopSku.request.SaveProductionQuantityRequest;
+import com.sky.ddt.dto.produceOrderShopSku.request.*;
 import com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuProductionQuantityResponse;
 import com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuResponse;
 import com.sky.ddt.dto.response.BaseResponse;
@@ -332,6 +329,27 @@ public class ProduceOrderShopSkuService implements IProduceOrderShopSkuService {
         List<ListProduceOrderShopSkuProductionQuantityResponse> list = customProduceOrderShopSkuMapper.listProduceOrderShopSkuProductionQuantity(params);
         PageInfo<ListProduceOrderShopSkuProductionQuantityResponse> page = new PageInfo<ListProduceOrderShopSkuProductionQuantityResponse>(list);
         return page;
+    }
+
+    @Override
+    public BaseResponse savePreWarehousingQuantity(SavePreWarehousingQuantityRequest params, Integer currentUserId) {
+        ProduceOrderShopSku produceOrderShopSku=customProduceOrderShopSkuMapper.selectByPrimaryKey(params.getId());
+        if(produceOrderShopSku==null){
+            return BaseResponse.failMessage(ProduceOrderShopSkuConstant.ID_NOT_EXIST);
+        }
+        ProduceOrder produceOrder=produceOrderService.getProduceOrderById(produceOrderShopSku.getProduceOrderId());
+        if (produceOrder == null) {
+            return BaseResponse.failMessage(ProduceOrderShopSkuConstant.PRODUCE_ORDER_ID_NOT_EXIST);
+        } else if (!ProduceOrderConstant.StatusEnum.PENDING_STORAGE.getStatus().equals(produceOrder.getStatus())) {
+            return BaseResponse.failMessage(ProduceOrderShopSkuConstant.PRODUCE_ORDER_NOT_ALLOW_WAREHOUSING);
+        }
+        ProduceOrderShopSku produceOrderShopSkuUpdate=new ProduceOrderShopSku();
+        produceOrderShopSkuUpdate.setId(params.getId());
+        produceOrderShopSkuUpdate.setPreWarehousingQuantity(params.getPreWarehousingQuantity());
+        produceOrderShopSkuUpdate.setUpdateBy(currentUserId);
+        produceOrderShopSkuUpdate.setUpdateTime(new Date());
+        customProduceOrderShopSkuMapper.updateByPrimaryKeySelective(produceOrderShopSkuUpdate);
+        return BaseResponse.success();
     }
 
     private ProduceOrderShopSku getProduceOrderShopSku(Integer produceOrderId, Integer shopSkuId) {

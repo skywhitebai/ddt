@@ -586,11 +586,22 @@
                 },
                 {title: '入库数量', field: 'warehousingQuantity', width: 66},
                 {
-                    title: '打印标签', field: 'shopSkuId', width: 80,
-                    formatter: function (value, row, index) {
-                        return '<a href="javascript:;" onclick="showPrintProductLabel(\'' + row.sku + '\')" title="打印产品标签">打印标签</a>';
+                    title: '预入库数量', field: 'preWarehousingQuantity', width: 66,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " min="1" precision="0" onchange="savePreWarehousingQuantity(this,' + row.id + ')">';
+                        } else {
+                            return '<input class="easyui-numberbox" min="1" precision="0" value="' + value + '" onchange="savePreWarehousingQuantity(this,' + row.id + ')">';
+                        }
                     }
                 },
+                {
+                    title: '打印标签', field: 'shopSkuId', width: 80,
+                    formatter: function (value, row, index) {
+                        return '<a href="javascript:;" onclick="showPrintProductLabel(\'' + row.sku + '\','+row.preWarehousingQuantity+')" title="打印产品标签">打印标签</a>';
+                    }
+                },
+
                 {title: '创建时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
                 {title: '备注', field: 'remark', width: 180}
@@ -833,12 +844,40 @@
             }
         });
     }
-    function showPrintProductLabel(sku){
+    function savePreWarehousingQuantity(input, id) {
+        var preWarehousingQuantity = $(input).val();
+        if (isEmpty(preWarehousingQuantity)) {
+            $.messager.alert("提示", "预入库不能为空");
+            return;
+        }
+        var r = /^[1-9][0-9]*$/;　　//正整数
+        if (!r.test(preWarehousingQuantity)) {
+            $.messager.alert("提示", "生产数量必须为大于等于1的数字.");
+            $(input).focus()
+            return;
+        }
+        $.post('${pageContext.request.contextPath }/produceOrderShopSku/savePreWarehousingQuantity', {
+            preWarehousingQuantity: preWarehousingQuantity,
+            id: id
+        }, function (data) {
+            if (data.code == '200') {
+                //保存成功
+                $.messager.alert("提示", data.message);
+            } else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+    function showPrintProductLabel(sku,preWarehousingQuantity){
         if (isEmpty(sku)) {
             window.open("${pageContext.request.contextPath }/produceOrder/printProductLabel");
         } else {
-            window.open("${pageContext.request.contextPath }/produceOrder/printProductLabel?sku=" + sku);
-        }
+            if(isEmpty(preWarehousingQuantity)){
+                window.open("${pageContext.request.contextPath }/produceOrder/printProductLabel?sku=" + sku);
+            }else{
+                window.open("${pageContext.request.contextPath }/produceOrder/printProductLabel?sku=" + sku+"&preWarehousingQuantity="+preWarehousingQuantity);
+            }
+         }
     }
 
 </script>

@@ -345,6 +345,66 @@ public class ProduceOrderShopSkuExample {
             return (Criteria) this;
         }
 
+        public Criteria andPreWarehousingQuantityIsNull() {
+            addCriterion("pre_warehousing_quantity is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreWarehousingQuantityIsNotNull() {
+            addCriterion("pre_warehousing_quantity is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreWarehousingQuantityEqualTo(Integer value) {
+            addCriterion("pre_warehousing_quantity =", value, "preWarehousingQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreWarehousingQuantityNotEqualTo(Integer value) {
+            addCriterion("pre_warehousing_quantity <>", value, "preWarehousingQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreWarehousingQuantityGreaterThan(Integer value) {
+            addCriterion("pre_warehousing_quantity >", value, "preWarehousingQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreWarehousingQuantityGreaterThanOrEqualTo(Integer value) {
+            addCriterion("pre_warehousing_quantity >=", value, "preWarehousingQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreWarehousingQuantityLessThan(Integer value) {
+            addCriterion("pre_warehousing_quantity <", value, "preWarehousingQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreWarehousingQuantityLessThanOrEqualTo(Integer value) {
+            addCriterion("pre_warehousing_quantity <=", value, "preWarehousingQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreWarehousingQuantityIn(List<Integer> values) {
+            addCriterion("pre_warehousing_quantity in", values, "preWarehousingQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreWarehousingQuantityNotIn(List<Integer> values) {
+            addCriterion("pre_warehousing_quantity not in", values, "preWarehousingQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreWarehousingQuantityBetween(Integer value1, Integer value2) {
+            addCriterion("pre_warehousing_quantity between", value1, value2, "preWarehousingQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPreWarehousingQuantityNotBetween(Integer value1, Integer value2) {
+            addCriterion("pre_warehousing_quantity not between", value1, value2, "preWarehousingQuantity");
+            return (Criteria) this;
+        }
+
         public Criteria andRemarkIsNull() {
             addCriterion("remark is null");
             return (Criteria) this;

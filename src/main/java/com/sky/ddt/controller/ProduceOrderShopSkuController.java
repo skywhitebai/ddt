@@ -4,10 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.common.constant.ProduceOrderShopSkuConstant;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
-import com.sky.ddt.dto.produceOrderShopSku.request.ListProduceOrderShopSkuProductionQuantityRequest;
-import com.sky.ddt.dto.produceOrderShopSku.request.ListProduceOrderShopSkuRequest;
-import com.sky.ddt.dto.produceOrderShopSku.request.SaveProduceOrderShopSkuRequest;
-import com.sky.ddt.dto.produceOrderShopSku.request.SaveProductionQuantityRequest;
+import com.sky.ddt.dto.produceOrderShopSku.request.*;
 import com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuProductionQuantityResponse;
 import com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuResponse;
 import com.sky.ddt.dto.response.BaseResponse;
@@ -97,6 +94,12 @@ public class ProduceOrderShopSkuController extends SuperController {
     @MenuAnnotation("produceOrder/index")
     public BaseResponse saveProductionQuantity(@Validated SaveProductionQuantityRequest params) {
         return produceOrderShopSkuService.saveProductionQuantity(params,getCurrentUserId());
+    }
+    @RequestMapping("/savePreWarehousingQuantity")
+    @ResponseBody
+    @MenuAnnotation("produceOrder/index")
+    public BaseResponse savePreWarehousingQuantity(@Validated SavePreWarehousingQuantityRequest params) {
+        return produceOrderShopSkuService.savePreWarehousingQuantity(params,getCurrentUserId());
     }
     @RequestMapping("/listProduceOrderShopSkuProductionQuantity")
     @ResponseBody
