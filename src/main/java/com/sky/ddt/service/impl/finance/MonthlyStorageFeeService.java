@@ -98,55 +98,55 @@ public class MonthlyStorageFeeService implements IMonthlyStorageFeeService {
             } else {
                 monthlyStorageFeeImportRequest.setFnsku(map.get("fnsku"));
             }
-            if (StringUtils.isEmpty(map.get("product-name"))) {
+            if (StringUtils.isEmpty(map.get("product_name"))) {
                 sbErroItem.append(",").append(MonthlyStorageFeeConstant.PRODUCT_NAME_EMPTY);
             } else {
-                monthlyStorageFeeImportRequest.setProductName(map.get("product-name"));
+                monthlyStorageFeeImportRequest.setProductName(map.get("product_name"));
             }
-            if (StringUtils.isEmpty(map.get("fulfillment-center"))) {
+            if (StringUtils.isEmpty(map.get("fulfillment_center"))) {
                 sbErroItem.append(",").append(MonthlyStorageFeeConstant.FULFILLMENT_CENTER_EMPTY);
             } else {
-                monthlyStorageFeeImportRequest.setFulfillmentCenter(map.get("fulfillment-center"));
+                monthlyStorageFeeImportRequest.setFulfillmentCenter(map.get("fulfillment_center"));
             }
-            if (StringUtils.isEmpty(map.get("country-code"))) {
+            if (StringUtils.isEmpty(map.get("country_code"))) {
                 sbErroItem.append(",").append(MonthlyStorageFeeConstant.COUNTRY_CODE_EMPTY);
             } else {
-                monthlyStorageFeeImportRequest.setCountryCode(map.get("country-code"));
+                monthlyStorageFeeImportRequest.setCountryCode(map.get("country_code"));
             }
-            if (StringUtils.isEmpty(map.get("longest-side"))) {
+            if (StringUtils.isEmpty(map.get("longest_side"))) {
                 sbErroItem.append(",").append(MonthlyStorageFeeConstant.LONGEST_SIDE_EMPTY);
             } else {
-                BigDecimal longestSide = MathUtil.strToBigDecimal(map.get("longest-side"));
+                BigDecimal longestSide = MathUtil.strToBigDecimal(map.get("longest_side"));
                 if (longestSide == null) {
                     sbErroItem.append(",").append(MonthlyStorageFeeConstant.LONGEST_SIDE_ERRO);
                 } else {
                     monthlyStorageFeeImportRequest.setLongestSide(longestSide);
                 }
             }
-            if (StringUtils.isEmpty(map.get("median-side"))) {
+            if (StringUtils.isEmpty(map.get("median_side"))) {
                 sbErroItem.append(",").append(MonthlyStorageFeeConstant.MEDIAN_SIDE_EMPTY);
             } else {
-                BigDecimal medianSide = MathUtil.strToBigDecimal(map.get("median-side"));
+                BigDecimal medianSide = MathUtil.strToBigDecimal(map.get("median_side"));
                 if (medianSide == null) {
                     sbErroItem.append(",").append(MonthlyStorageFeeConstant.MEDIAN_SIDE_ERRO);
                 } else {
                     monthlyStorageFeeImportRequest.setMedianSide(medianSide);
                 }
             }
-            if (StringUtils.isEmpty(map.get("shortest-side"))) {
+            if (StringUtils.isEmpty(map.get("shortest_side"))) {
                 sbErroItem.append(",").append(MonthlyStorageFeeConstant.SHORTEST_SIDE_EMPTY);
             } else {
-                BigDecimal shortestSide = MathUtil.strToBigDecimal(map.get("shortest-side"));
+                BigDecimal shortestSide = MathUtil.strToBigDecimal(map.get("shortest_side"));
                 if (shortestSide == null) {
                     sbErroItem.append(",").append(MonthlyStorageFeeConstant.SHORTEST_SIDE_ERRO);
                 } else {
                     monthlyStorageFeeImportRequest.setShortestSide(shortestSide);
                 }
             }
-            if (StringUtils.isEmpty(map.get("measurement-units"))) {
+            if (StringUtils.isEmpty(map.get("measurement_units"))) {
                 sbErroItem.append(",").append(MonthlyStorageFeeConstant.MEASUREMENT_UNITS_EMPTY);
             } else {
-                monthlyStorageFeeImportRequest.setMeasurementUnits(map.get("measurement-units"));
+                monthlyStorageFeeImportRequest.setMeasurementUnits(map.get("measurement_units"));
             }
             if (StringUtils.isEmpty(map.get("weight"))) {
                 sbErroItem.append(",").append(MonthlyStorageFeeConstant.WEIGHT_EMPTY);
@@ -158,61 +158,61 @@ public class MonthlyStorageFeeService implements IMonthlyStorageFeeService {
                     monthlyStorageFeeImportRequest.setWeight(weight);
                 }
             }
-            if (StringUtils.isEmpty(map.get("weight-units"))) {
+            if (StringUtils.isEmpty(map.get("weight_units"))) {
                 sbErroItem.append(",").append(MonthlyStorageFeeConstant.WEIGHT_UNITS_EMPTY);
             } else {
-                monthlyStorageFeeImportRequest.setWeightUnits(map.get("weight-units"));
+                monthlyStorageFeeImportRequest.setWeightUnits(map.get("weight_units"));
             }
-            if (StringUtils.isEmpty(map.get("item-volume"))) {
+            if (StringUtils.isEmpty(map.get("item_volume"))) {
                 sbErroItem.append(",").append(MonthlyStorageFeeConstant.ITEM_VOLUME_ERRO);
             } else {
-                BigDecimal itemVolume = MathUtil.strToBigDecimal(map.get("item-volume"));
+                BigDecimal itemVolume = MathUtil.strToBigDecimal(map.get("item_volume"));
                 if (itemVolume == null) {
                     sbErroItem.append(",").append(MonthlyStorageFeeConstant.ITEM_VOLUME_ERRO);
                 } else {
                     monthlyStorageFeeImportRequest.setItemVolume(itemVolume);
                 }
             }
-            if (StringUtils.isEmpty(map.get("volume-units"))) {
+            if (StringUtils.isEmpty(map.get("volume_units"))) {
                 sbErroItem.append(",").append(MonthlyStorageFeeConstant.VOLUME_UNITS_EMPTY);
             } else {
-                monthlyStorageFeeImportRequest.setVolumeUnits(map.get("volume-units"));
+                monthlyStorageFeeImportRequest.setVolumeUnits(map.get("volume_units"));
             }
-            if (StringUtils.isEmpty(map.get("product-size-tier"))) {
+            if (StringUtils.isEmpty(map.get("product_size_tier"))) {
                 sbErroItem.append(",").append(MonthlyStorageFeeConstant.PRODUCT_SIZE_TIER_EMPTY);
             } else {
-                monthlyStorageFeeImportRequest.setProductSizeTier(map.get("product-size-tier"));
+                monthlyStorageFeeImportRequest.setProductSizeTier(map.get("product_size_tier"));
             }
-            BaseResponse<BigDecimal> checkAverageQuantityOnHand = CheckUtil.checkBigDecimal(map, "average-quantity-on-hand", true);
+            BaseResponse<BigDecimal> checkAverageQuantityOnHand = CheckUtil.checkBigDecimal(map, "average_quantity_on_hand", true);
             if (checkAverageQuantityOnHand.isSuccess()) {
                 monthlyStorageFeeImportRequest.setAverageQuantityOnHand(checkAverageQuantityOnHand.getData());
             } else {
                 sbErroItem.append(",").append(checkAverageQuantityOnHand.getMessage());
             }
-            BaseResponse<BigDecimal> checkAverageQuantityPendingRemoval = CheckUtil.checkBigDecimal(map, "average-quantity-pending-removal", true);
+            BaseResponse<BigDecimal> checkAverageQuantityPendingRemoval = CheckUtil.checkBigDecimal(map, "average_quantity_pending_removal", true);
             if (checkAverageQuantityPendingRemoval.isSuccess()) {
                 monthlyStorageFeeImportRequest.setAverageQuantityPendingRemoval(checkAverageQuantityPendingRemoval.getData());
             } else {
                 sbErroItem.append(",").append(checkAverageQuantityPendingRemoval.getMessage());
             }
-            CheckUtil.checkAndSetBigDecimal(monthlyStorageFeeImportRequest, sbErroItem, map, "average-quantity-pending-removal", null, true);
+            CheckUtil.checkAndSetBigDecimal(monthlyStorageFeeImportRequest, sbErroItem, map, "average_quantity_pending_removal", null, true);
 
-            if (StringUtils.isEmpty(map.get("month-of-charge"))) {
-                sbErroItem.append(",").append("month-of-charge不能为空");
+            if (StringUtils.isEmpty(map.get("month_of_charge"))) {
+                sbErroItem.append(",").append("month_of_charge不能为空");
             } else {
-                Date date = DateUtil.strToDate(map.get("month-of-charge"));
+                Date date = DateUtil.strToDate(map.get("month_of_charge"));
                 if (date == null) {
-                    sbErroItem.append(",").append("month-of-charge必须为年月");
+                    sbErroItem.append(",").append("month_of_charge必须为年月");
                 } else {
                     monthlyStorageFeeImportRequest.setMonthOfCharge(DateUtil.getFormatYearMonth(date));
                 }
             }
-            CheckUtil.checkAndSetBigDecimal(monthlyStorageFeeImportRequest, sbErroItem, map, "storage-rate", null, true);
+            CheckUtil.checkAndSetBigDecimal(monthlyStorageFeeImportRequest, sbErroItem, map, "storage_rate", null, true);
             CheckUtil.checkAndSetStr(monthlyStorageFeeImportRequest, sbErroItem, map, "currency", null, true);
-            CheckUtil.checkAndSetBigDecimal(monthlyStorageFeeImportRequest, sbErroItem, map, "estimated-monthly-storage-fee", null, true);
-            CheckUtil.checkAndSetStr(monthlyStorageFeeImportRequest, sbErroItem, map, "dangerous-goods-storage-type", null, true);
-            CheckUtil.checkAndSetBoolenOrYN(monthlyStorageFeeImportRequest, sbErroItem, map, "eligible-for-inventory-discount", true);
-            CheckUtil.checkAndSetBoolen(monthlyStorageFeeImportRequest, sbErroItem, map, "qualifies-for-inventory-discount", true);
+            CheckUtil.checkAndSetBigDecimal(monthlyStorageFeeImportRequest, sbErroItem, map, "estimated_monthly_storage_fee", null, true);
+            CheckUtil.checkAndSetStr(monthlyStorageFeeImportRequest, sbErroItem, map, "dangerous_goods_storage_type", null, true);
+            CheckUtil.checkAndSetBoolenOrYN(monthlyStorageFeeImportRequest, sbErroItem, map, "eligible_for_inventory_discount", true);
+            CheckUtil.checkAndSetBoolenOrYN(monthlyStorageFeeImportRequest, sbErroItem, map, "qualifies_for_inventory_discount", true);
             monthlyStorageFeeImportRequestList.add(monthlyStorageFeeImportRequest);
             if (sbErroItem.length() > 0) {
                 sbErro.append(",第" + map.get("rowNum") + "行").append(sbErroItem);
