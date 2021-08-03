@@ -312,6 +312,16 @@
                 {title: '店铺父sku', field: 'shopParentSku', width: 150},
                 {title: '颜色', field: 'colourInfo', width: 150},
                 {
+                    title: 'F', field: 'productionQuantityF', width: 60,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'F\')">';
+                        } else {
+                            return '<input class="easyui-numberbox " min="0" precision="0" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'F\')">';
+                        }
+                    }
+                },
+                {
                     title: 'XS', field: 'productionQuantityXS', width: 60,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {

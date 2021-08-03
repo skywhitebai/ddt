@@ -13,6 +13,7 @@ public class ListFactoryProductionOrderInfoResponse {
     String shopParentSku;
     String colour;
     String colourNumber;
+    Integer productionQuantityF;
     Integer productionQuantityXS;
     Integer productionQuantityS;
     Integer productionQuantityM;
