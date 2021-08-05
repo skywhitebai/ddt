@@ -40,5 +40,6 @@ public class ProduceOrderShopSkuConstant {
         exportProduceOrderShopSkuFieldList.add(new ExcelField("sku", "产品sku", ExcelField.FieldTypeEnum.STRING));
         exportProduceOrderShopSkuFieldList.add(new ExcelField("shopSku", "店铺sku", ExcelField.FieldTypeEnum.STRING));
         exportProduceOrderShopSkuFieldList.add(new ExcelField("productionQuantity", "生产数量", ExcelField.FieldTypeEnum.NUMBER));
+        exportProduceOrderShopSkuFieldList.add(new ExcelField("preWarehousingQuantity", "预入库数量", ExcelField.FieldTypeEnum.NUMBER));
     }
 }
