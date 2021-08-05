@@ -30,10 +30,11 @@ public class SkuConstant {
     //fba头程费
     public static final BigDecimal HEAD_TRIP_COST_RATE= BigDecimal.valueOf(0.055);
     public static final BigDecimal HEAD_TRIP_COST_MIN_RATE= BigDecimal.valueOf(0.04);
-    public static final String SIZE_ERRO ="尺码错误，尺码必须为XS到6XL" ;
+    public static final String SIZE_ERRO ="尺码错误，尺码必须为F、XS到6XL" ;
 
     @Getter
     public enum SkuSizeEnum {
+        F("F"),
         XS("XS"),
         S("S"),
         M("M"),

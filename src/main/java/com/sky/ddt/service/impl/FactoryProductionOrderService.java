@@ -134,6 +134,9 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
                         sbErroEntity.append("店铺sku：" + shopSkuProductionQuantityDto.getShopSku() + ",尺码为空，请完善尺码");
                         continue;
                     }
+                    if (SkuConstant.SkuSizeEnum.F.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityF(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else
                     if (SkuConstant.SkuSizeEnum.XS.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
                         listFactoryProductionOrderInfoResponse.setProductionQuantityXS(shopSkuProductionQuantityDto.getProductionQuantity());
                     } else if (SkuConstant.SkuSizeEnum.S.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
