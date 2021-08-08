@@ -59,6 +59,7 @@ public class ShopSkuConstant {
         exportShopSkuFieldList.add(new ExcelField("weight", "重量", ExcelField.FieldTypeEnum.NUMBER));
         exportShopSkuFieldList.add(new ExcelField("costPrice", "成本价", ExcelField.FieldTypeEnum.NUMBER));
         exportShopSkuFieldList.add(new ExcelField("headTripCost", "头程费", ExcelField.FieldTypeEnum.NUMBER));
+        exportShopSkuFieldList.add(new ExcelField("salesmanUserRealName", "销售负责人", ExcelField.FieldTypeEnum.STRING));
         exportShopSkuFieldList.add(new ExcelField("remark", "备注", ExcelField.FieldTypeEnum.STRING));
     }
     @Getter
