@@ -100,6 +100,13 @@ public class FinanceStatisticService implements IFinanceStatisticService {
 
     @Override
     public BaseResponse exportFinanceStatistic(HttpServletResponse response, ListFinanceStatisticRequest params) {
+        if (!StringUtils.isEmpty(params.getMonth())) {
+            String monthStr = params.getMonth() + "-01";
+            Date monthDate = DateUtil.strToDate(monthStr);
+            if (monthDate != null) {
+                params.setMonthDate(monthDate);
+            }
+        }
         List<ListFinanceStatisticResponse> list = customFinanceStatisticMapper.listFinanceStatistic(params);
         BaseResponse exportResponse = new ExcelExportByExcelFieldUtil().export(response, list, FinanceStatisticConstant.exportFinanceStatisticFieldList, "回款信息");
         return exportResponse;
