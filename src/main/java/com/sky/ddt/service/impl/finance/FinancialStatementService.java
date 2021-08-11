@@ -635,7 +635,7 @@ public class FinancialStatementService implements IFinancialStatementService {
         row2.createCell(17).setCellValue("退款率");
         row3.createCell(17).setCellValue(financialStatementCount.getRefundRate().doubleValue());
         row2.createCell(18).setCellValue("广告占比");
-        row3.createCell(18).setCellValue(financialStatement.getAdvertisingSalesPercentage().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
+        row3.createCell(18).setCellValue(financialStatementCount.getAdvertisingSalesPercentage().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
         row2.createCell(19).setCellValue("销售业绩");
         row3.createCell(19).setCellValue(financialStatementCount.getMainBusinessProfit().doubleValue());
         row2.createCell(20).setCellValue("品牌广告支出");
