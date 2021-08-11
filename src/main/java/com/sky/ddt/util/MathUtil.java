@@ -89,6 +89,15 @@ public class MathUtil {
         }
         return preferentialAmount.add(couponPreferentialAmount);
     }
+    public static BigDecimal subtractBigDecimal(BigDecimal b1, BigDecimal b2) {
+        if (b1 == null) {
+            b1 = BigDecimal.ZERO;
+        }
+        if (b2 == null) {
+            b2 = BigDecimal.ZERO;
+        }
+        return b1.subtract(b2);
+    }
 
     public static Integer strToInteger(String str) {
         if (StringUtils.isEmpty(str)) {
