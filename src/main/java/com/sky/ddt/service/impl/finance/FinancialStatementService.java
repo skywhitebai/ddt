@@ -457,10 +457,12 @@ public class FinancialStatementService implements IFinancialStatementService {
                 rateOfDollarExchangeRmb = financialStatementList.get(0).getRateOfDollarExchangeRmb();
             }
         }
-        BigDecimal newMainBusinessProfit=BigDecimal.ZERO;
-        BigDecimal oldMainBusinessProfit=BigDecimal.ZERO;
+        financialStatementCount.setRateOfDollarExchangeRmb(rateOfDollarExchangeRmb);
+        BigDecimal newMainBusinessProfit = BigDecimal.ZERO;
+        BigDecimal oldMainBusinessProfit = BigDecimal.ZERO;
         for (FinancialStatement financialStatement :
                 financialStatementList) {
+            financialStatementCount.setSaleQuantity(MathUtil.add(financialStatementCount.getSaleQuantity(), financialStatement.getSaleQuantity()));
             financialStatementCount.setProductSales(MathUtil.addBigDecimal(financialStatementCount.getProductSales(), financialStatement.getProductSales()));
             financialStatementCount.setProductSalesTax(MathUtil.addBigDecimal(financialStatementCount.getProductSalesTax(), financialStatement.getProductSalesTax()));
             financialStatementCount.setShippingCredits(MathUtil.addBigDecimal(financialStatementCount.getShippingCredits(), financialStatement.getShippingCredits()));
@@ -519,10 +521,10 @@ public class FinancialStatementService implements IFinancialStatementService {
             financialStatementCount.setFbaHeadTripCost(MathUtil.addBigDecimal(financialStatementCount.getFbaHeadTripCost(), financialStatement.getFbaHeadTripCost()));
             financialStatementCount.setHeadDeductionFee(MathUtil.addBigDecimal(financialStatementCount.getHeadDeductionFee(), financialStatement.getHeadDeductionFee()));
             financialStatementCount.setMainBusinessProfit(MathUtil.addBigDecimal(financialStatementCount.getMainBusinessProfit(), financialStatement.getMainBusinessProfit()));
-            if(financialStatement.getNewProduct()==1){
-                newMainBusinessProfit=MathUtil.addBigDecimal(newMainBusinessProfit,financialStatement.getMainBusinessProfit());
-            }else{
-                oldMainBusinessProfit=MathUtil.addBigDecimal(oldMainBusinessProfit,financialStatement.getMainBusinessProfit());
+            if (financialStatement.getNewProduct() == 1) {
+                newMainBusinessProfit = MathUtil.addBigDecimal(newMainBusinessProfit, financialStatement.getMainBusinessProfit());
+            } else {
+                oldMainBusinessProfit = MathUtil.addBigDecimal(oldMainBusinessProfit, financialStatement.getMainBusinessProfit());
             }
             financialStatementCount.setInitialQuantity(MathUtil.add(financialStatementCount.getInitialQuantity(), financialStatement.getInitialQuantity()));
             financialStatementCount.setInitialInventoryCost(MathUtil.addBigDecimal(financialStatementCount.getInitialInventoryCost(), financialStatement.getInitialInventoryCost()));
@@ -530,13 +532,11 @@ public class FinancialStatementService implements IFinancialStatementService {
             financialStatementCount.setFinalInventoryCost(MathUtil.addBigDecimal(financialStatementCount.getFinalInventoryCost(), financialStatement.getFinalInventoryCost()));
             financialStatementCount.setManualAdjustment(MathUtil.addBigDecimal(financialStatementCount.getManualAdjustment(), financialStatement.getManualAdjustment()));
         }
-        financialStatementCount.setMoneyBackRate(MathUtil.divide(financialStatementCount.getMoneyBack(), financialStatementCount.getProductSales(), 2));
-        financialStatementCount.setGrossMarginOnSales(MathUtil.divide(MathUtil.divide(financialStatementCount.getMainBusinessProfit(), financialStatementCount.getProductSales(), 2), rateOfDollarExchangeRmb, 2));
-        financialStatementCount.setRoi(MathUtil.divide(financialStatementCount.getMainBusinessProfit(), MathUtil.subtractBigDecimal(MathUtil.addBigDecimal(financialStatementCount.getProcurementCost(), financialStatementCount.getFbaHeadTripCost()), financialStatementCount.getHeadDeductionFee()), 2));
-        financialStatementCount.setInventoryTurnover(getInventoryTurnover(financialStatementCount));
-        financialStatementCount.setRefundRate(getRefundRate(financialStatementCount));
-        financialStatementCount.setAdvertisingSalesPercentage(MathUtil.divide(financialStatementCount.getCostOfAdvertising(), financialStatementCount.getProductSales(), 2));
-
+        setMoneyBackRate(financialStatementCount);
+        setGrossMarginOnSales(financialStatementCount);
+        setRoiAndInventoryTurnover(financialStatementCount);
+        setRefundRate(financialStatementCount);
+        setAdvertisingSalesPercentage(financialStatementCount);
         int rowIndex = sheet.getLastRowNum() + 2;
         Row row = sheet.createRow(rowIndex);
         row.createCell(7).setCellValue("汇总");
@@ -630,21 +630,101 @@ public class FinancialStatementService implements IFinancialStatementService {
         row3.createCell(14).setCellValue(financialStatementCount.getProductSales().doubleValue());
         row2.createCell(15).setCellValue("期末价值");
         row3.createCell(15).setCellValue(financialStatementCount.getFinalInventoryCost().doubleValue());
+        row2.createCell(16).setCellValue("回款率");
+        row3.createCell(16).setCellValue(financialStatementCount.getMoneyBackRate().doubleValue());
+        row2.createCell(17).setCellValue("退款率");
+        row3.createCell(17).setCellValue(financialStatementCount.getRefundRate().doubleValue());
+        row2.createCell(18).setCellValue("广告占比");
+        row3.createCell(18).setCellValue(financialStatement.getAdvertisingSalesPercentage().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
+        row2.createCell(19).setCellValue("销售业绩");
+        row3.createCell(19).setCellValue(financialStatementCount.getMainBusinessProfit().doubleValue());
+        row2.createCell(20).setCellValue("品牌广告支出");
+        //row3.createCell(20).setCellValue("");
+        row2.createCell(21).setCellValue("其他补贴");
+        //row3.createCell(21).setCellValue("");
+        row2.createCell(22).setCellValue("提成计算总额");
+        row3.createCell(22).setCellValue(financialStatementCount.getMainBusinessProfit().doubleValue());
+        row2.createCell(23).setCellValue("年度业绩计入");
+        row3.createCell(23).setCellValue(financialStatementCount.getMainBusinessProfit().doubleValue());
+        row2.createCell(24).setCellValue("月度业绩计入");
+        row3.createCell(24).setCellValue(financialStatementCount.getMainBusinessProfit().doubleValue());
     }
 
-    private BigDecimal getRefundRate(FinancialStatement financialStatementCount) {
-        Double rate = MathUtil.divide(financialStatementCount.getRefundSaleQuantity(), financialStatementCount.getSaleQuantity().doubleValue(), 2);
-        if (rate != null) {
-            return new BigDecimal(rate);
+    private void setAdvertisingSalesPercentage(FinancialStatement financialStatement) {
+        if (financialStatement.getCostOfAdvertising().compareTo(BigDecimal.ZERO) == 0) {
+            financialStatement.setAdvertisingSalesPercentage(BigDecimal.ZERO);
+        } else {
+            if (BigDecimal.ZERO.compareTo(financialStatement.getProductSales()) == 0) {
+                financialStatement.setAdvertisingSalesPercentage(new BigDecimal(10000));
+            } else {
+                BigDecimal advertisingSalesPercentage = MathUtil.divide(financialStatement.getCostOfAdvertising().multiply(new BigDecimal(-1)), financialStatement.getProductSales(), 4);
+                if (advertisingSalesPercentage != null) {
+                    financialStatement.setAdvertisingSalesPercentage(advertisingSalesPercentage);
+                } else {
+                    financialStatement.setAdvertisingSalesPercentage(BigDecimal.ZERO);
+                }
+            }
         }
-        return null;
     }
 
-    private BigDecimal getInventoryTurnover(FinancialStatement financialStatementCount) {
-        BigDecimal inventoryCost = MathUtil.addBigDecimal(financialStatementCount.getInitialInventoryCost(), financialStatementCount.getFinalInventoryCost());
-        inventoryCost = MathUtil.divide(inventoryCost, new BigDecimal(2), 2);
-        BigDecimal cost = MathUtil.subtractBigDecimal(MathUtil.addBigDecimal(financialStatementCount.getProcurementCost(), financialStatementCount.getFbaHeadTripCost()), financialStatementCount.getHeadDeductionFee());
-        return MathUtil.divide(inventoryCost, cost, 2).multiply(new BigDecimal(30));
+    private void setRefundRate(FinancialStatement financialStatement) {
+        if (new Integer(0).equals(financialStatement.getSaleQuantity())) {
+            if (new Integer(0).equals(financialStatement.getRefundSaleQuantity())) {
+                financialStatement.setRefundRate(BigDecimal.ZERO);
+            } else {
+                financialStatement.setRefundRate(new BigDecimal(10000));
+            }
+        } else {
+            Double refundRate = MathUtil.divide(financialStatement.getRefundSaleQuantity(), financialStatement.getSaleQuantity().doubleValue(), 4);
+            if (refundRate != null) {
+                financialStatement.setRefundRate(new BigDecimal(refundRate));
+            } else {
+                financialStatement.setRefundRate(BigDecimal.ZERO);
+            }
+        }
+    }
+
+    private void setRoiAndInventoryTurnover(FinancialStatement financialStatement) {
+        BigDecimal cost =MathUtil.subtractBigDecimal(MathUtil.addBigDecimal(financialStatement.getProcurementCost(), financialStatement.getFbaHeadTripCost()), financialStatement.getHeadDeductionFee());
+        if (cost.compareTo(BigDecimal.ZERO) != 0) {
+            BigDecimal roi =MathUtil.divide(financialStatement.getMainBusinessProfit(),cost, 2);
+            financialStatement.setRoi(roi);
+            BigDecimal inventoryCost = MathUtil.addBigDecimal(financialStatement.getInitialInventoryCost(), financialStatement.getFinalInventoryCost());
+            inventoryCost = MathUtil.divide(inventoryCost, new BigDecimal(2), 2);
+            BigDecimal inventoryTurnover=MathUtil.divide(inventoryCost.multiply(new BigDecimal(30)), cost, 2);
+            financialStatement.setInventoryTurnover(inventoryTurnover);
+        } else {
+            financialStatement.setRoi(BigDecimal.ZERO);
+            financialStatement.setInventoryTurnover(BigDecimal.ZERO);
+        }
+    }
+
+    private void setGrossMarginOnSales(FinancialStatement financialStatement) {
+        if (financialStatement.getProductSales()!=null
+                && financialStatement.getProductSales().compareTo(BigDecimal.ZERO) != 0){
+            BigDecimal grossMarginOnSales = financialStatement.getMainBusinessProfit().divide(financialStatement.getProductSales().multiply(getRateOfDollarExchangeRmb(financialStatement)), 4, BigDecimal.ROUND_HALF_UP);
+            financialStatement.setGrossMarginOnSales(grossMarginOnSales);
+        } else{
+            financialStatement.setGrossMarginOnSales(BigDecimal.ZERO);
+        }
+    }
+
+    private BigDecimal getRateOfDollarExchangeRmb(FinancialStatement financialStatement) {
+        BigDecimal rateOfDollarExchangeRmb = FinanceConstant.RATE_OF_DOLLAR_EXCHANGE_RMB;
+        if (financialStatement.getRateOfDollarExchangeRmb() != null) {
+            rateOfDollarExchangeRmb = financialStatement.getRateOfDollarExchangeRmb();
+        }
+        return rateOfDollarExchangeRmb;
+    }
+
+    private void setMoneyBackRate(FinancialStatement financialStatement) {
+        if (financialStatement.getProductSales() != null
+                && financialStatement.getProductSales().compareTo(BigDecimal.ZERO) != 0) {
+            BigDecimal moneyBackRate = financialStatement.getMoneyBack().divide(financialStatement.getProductSales(), 4, BigDecimal.ROUND_HALF_UP);
+            financialStatement.setMoneyBackRate(moneyBackRate);
+        } else {
+            financialStatement.setMoneyBackRate(BigDecimal.ZERO);
+        }
     }
 
     private void setExcelTitle(Sheet sheet, String excelTitle) {
@@ -888,60 +968,11 @@ public class FinancialStatementService implements IFinancialStatementService {
         List<FinancialStatement> financialStatementShopParentSkuList = new ArrayList<>();
         for (Map.Entry<String, FinancialStatement> map : financialStatementMap.entrySet()) {
             FinancialStatement financialStatement = map.getValue();
-            if (financialStatement.getProductSales().compareTo(BigDecimal.ZERO) != 0) {
-                BigDecimal moneyBackRate = financialStatement.getMoneyBack().divide(financialStatement.getProductSales(), 4, BigDecimal.ROUND_HALF_UP);
-                financialStatement.setMoneyBackRate(moneyBackRate);
-            } else {
-                financialStatement.setMoneyBackRate(BigDecimal.ZERO);
-            }
-            if (financialStatement.getProductSales().compareTo(BigDecimal.ZERO) != 0) {
-                BigDecimal grossMarginOnSales = financialStatement.getMainBusinessProfit().divide(financialStatement.getProductSales().multiply(FinanceConstant.RATE_OF_DOLLAR_EXCHANGE_RMB), 4, BigDecimal.ROUND_HALF_UP);
-                financialStatement.setGrossMarginOnSales(grossMarginOnSales);
-            } else {
-                financialStatement.setGrossMarginOnSales(BigDecimal.ZERO);
-            }
-            BigDecimal cost = BigDecimal.ZERO.add(financialStatement.getProcurementCost()).add(financialStatement.getFbaHeadTripCost());
-            if (cost.compareTo(BigDecimal.ZERO) != 0) {
-                BigDecimal roi = financialStatement.getMainBusinessProfit().divide(cost, 2, BigDecimal.ROUND_HALF_UP);
-                financialStatement.setRoi(roi);
-                BigDecimal inventoryTurnover = financialStatement.getInitialInventoryCost()
-                        .add(financialStatement.getFinalInventoryCost())
-                        .divide(new BigDecimal(2))
-                        .multiply(new BigDecimal(31))
-                        .divide(cost, 2, BigDecimal.ROUND_HALF_UP);
-                financialStatement.setInventoryTurnover(inventoryTurnover);
-            } else {
-                financialStatement.setRoi(BigDecimal.ZERO);
-                financialStatement.setInventoryTurnover(BigDecimal.ZERO);
-            }
-            if (new Integer(0).equals(financialStatement.getSaleQuantity())) {
-                if (new Integer(0).equals(financialStatement.getRefundSaleQuantity())) {
-                    financialStatement.setRefundRate(BigDecimal.ZERO);
-                } else {
-                    financialStatement.setRefundRate(new BigDecimal(10000));
-                }
-            } else {
-                Double refundRate = MathUtil.divide(financialStatement.getRefundSaleQuantity(), financialStatement.getSaleQuantity().doubleValue(), 4);
-                if (refundRate != null) {
-                    financialStatement.setRefundRate(new BigDecimal(refundRate));
-                } else {
-                    financialStatement.setRefundRate(BigDecimal.ZERO);
-                }
-            }
-            if (financialStatement.getCostOfAdvertising().compareTo(BigDecimal.ZERO) == 0) {
-                financialStatement.setAdvertisingSalesPercentage(BigDecimal.ZERO);
-            } else {
-                if (BigDecimal.ZERO.compareTo(financialStatement.getProductSales()) == 0) {
-                    financialStatement.setAdvertisingSalesPercentage(new BigDecimal(10000));
-                } else {
-                    BigDecimal advertisingSalesPercentage = MathUtil.divide(financialStatement.getCostOfAdvertising().multiply(new BigDecimal(-1)), financialStatement.getProductSales(), 4);
-                    if (advertisingSalesPercentage != null) {
-                        financialStatement.setAdvertisingSalesPercentage(advertisingSalesPercentage);
-                    } else {
-                        financialStatement.setAdvertisingSalesPercentage(BigDecimal.ZERO);
-                    }
-                }
-            }
+            setMoneyBackRate(financialStatement);
+            setGrossMarginOnSales(financialStatement);
+            setRoiAndInventoryTurnover(financialStatement);
+            setRefundRate(financialStatement);
+            setAdvertisingSalesPercentage(financialStatement);
             financialStatementShopParentSkuList.add(financialStatement);
         }
         Collections.sort(financialStatementShopParentSkuList, new Comparator<FinancialStatement>() {
