@@ -195,8 +195,8 @@ public class FinancialStatementService implements IFinancialStatementService {
             customFinancialStatementMapper.insertSelective(financialStatement);
         }
         //生成回款信息
-        BaseResponse createFinanceStatisticResponse=financeStatisticService.createFinanceStatistic(financeId,dealUserId);
-        if(createFinanceStatisticResponse.isFail()){
+        BaseResponse createFinanceStatisticResponse = financeStatisticService.createFinanceStatistic(financeId, dealUserId);
+        if (createFinanceStatisticResponse.isFail()) {
             return createFinanceStatisticResponse;
         }
         Finance financeUpdate = new Finance();
@@ -206,6 +206,7 @@ public class FinancialStatementService implements IFinancialStatementService {
         customFinanceMapper.updateByPrimaryKeySelective(financeUpdate);
         return BaseResponse.success();
     }
+
     private void setfbaCustomerReturnPerUnitFee(List<FinancialStatementResponse> financialStatementResponseList) {
         if (CollectionUtils.isEmpty(financialStatementResponseList)) {
             return;
@@ -441,10 +442,209 @@ public class FinancialStatementService implements IFinancialStatementService {
         Sheet sheet = wb.getSheetAt(0);
         setExcelTitle(sheet, excelTitle);
         setFinancialStatement(sheet, financialStatementList);
+        setFinancialCountInfo(sheet, financialStatementList, excelTitle);
         Sheet sheetShopParentSku = wb.getSheetAt(1);
         setExcelTitle(sheetShopParentSku, excelTitle);
         setFinancialStatementShopParentSku(sheetShopParentSku, financialStatementList);
         return wb;
+    }
+
+    private void setFinancialCountInfo(Sheet sheet, List<FinancialStatement> financialStatementList, String excelTitle) {
+        FinancialStatement financialStatementCount = new FinancialStatementResponse();
+        BigDecimal rateOfDollarExchangeRmb = FinanceConstant.RATE_OF_DOLLAR_EXCHANGE_RMB;
+        if (!CollectionUtils.isEmpty(financialStatementList)) {
+            if (financialStatementList.get(0).getRateOfDollarExchangeRmb() != null) {
+                rateOfDollarExchangeRmb = financialStatementList.get(0).getRateOfDollarExchangeRmb();
+            }
+        }
+        BigDecimal newMainBusinessProfit=BigDecimal.ZERO;
+        BigDecimal oldMainBusinessProfit=BigDecimal.ZERO;
+        for (FinancialStatement financialStatement :
+                financialStatementList) {
+            financialStatementCount.setProductSales(MathUtil.addBigDecimal(financialStatementCount.getProductSales(), financialStatement.getProductSales()));
+            financialStatementCount.setProductSalesTax(MathUtil.addBigDecimal(financialStatementCount.getProductSalesTax(), financialStatement.getProductSalesTax()));
+            financialStatementCount.setShippingCredits(MathUtil.addBigDecimal(financialStatementCount.getShippingCredits(), financialStatement.getShippingCredits()));
+            financialStatementCount.setShippingCreditsTax(MathUtil.addBigDecimal(financialStatementCount.getShippingCreditsTax(), financialStatement.getShippingCreditsTax()));
+            financialStatementCount.setGiftWrapCredits(MathUtil.addBigDecimal(financialStatementCount.getGiftWrapCredits(), financialStatement.getGiftWrapCredits()));
+            financialStatementCount.setGiftWrapCreditsTax(MathUtil.addBigDecimal(financialStatementCount.getGiftWrapCreditsTax(), financialStatement.getGiftWrapCreditsTax()));
+            financialStatementCount.setPromotionalRebates(MathUtil.addBigDecimal(financialStatementCount.getPromotionalRebates(), financialStatement.getPromotionalRebates()));
+            financialStatementCount.setPromotionalRebatesTax(MathUtil.addBigDecimal(financialStatementCount.getPromotionalRebatesTax(), financialStatement.getPromotionalRebatesTax()));
+            financialStatementCount.setMarketplaceWithheldTax(MathUtil.addBigDecimal(financialStatementCount.getMarketplaceWithheldTax(), financialStatement.getMarketplaceWithheldTax()));
+            financialStatementCount.setSellingFees(MathUtil.addBigDecimal(financialStatementCount.getSellingFees(), financialStatement.getSellingFees()));
+            financialStatementCount.setFbaFees(MathUtil.addBigDecimal(financialStatementCount.getFbaFees(), financialStatement.getFbaFees()));
+            financialStatementCount.setOtherTransactionFees(MathUtil.addBigDecimal(financialStatementCount.getOtherTransactionFees(), financialStatement.getOtherTransactionFees()));
+            financialStatementCount.setOther(MathUtil.addBigDecimal(financialStatementCount.getOther(), financialStatement.getOther()));
+            financialStatementCount.setTotal(MathUtil.addBigDecimal(financialStatementCount.getTotal(), financialStatement.getTotal()));
+            financialStatementCount.setRefundSaleQuantity(MathUtil.add(financialStatementCount.getRefundSaleQuantity(), financialStatement.getRefundSaleQuantity()));
+            financialStatementCount.setRefundProductSales(MathUtil.addBigDecimal(financialStatementCount.getRefundProductSales(), financialStatement.getRefundProductSales()));
+            financialStatementCount.setRefundProductSalesTax(MathUtil.addBigDecimal(financialStatementCount.getRefundProductSalesTax(), financialStatement.getRefundProductSalesTax()));
+            financialStatementCount.setRefundShippingCredits(MathUtil.addBigDecimal(financialStatementCount.getRefundShippingCredits(), financialStatement.getRefundShippingCredits()));
+            financialStatementCount.setRefundShippingCreditsTax(MathUtil.addBigDecimal(financialStatementCount.getRefundShippingCreditsTax(), financialStatement.getRefundShippingCreditsTax()));
+            financialStatementCount.setRefundGiftWrapCredits(MathUtil.addBigDecimal(financialStatementCount.getRefundGiftWrapCredits(), financialStatement.getRefundGiftWrapCredits()));
+            financialStatementCount.setRefundGiftWrapCreditsTax(MathUtil.addBigDecimal(financialStatementCount.getRefundGiftWrapCreditsTax(), financialStatement.getRefundGiftWrapCreditsTax()));
+            financialStatementCount.setRefundPromotionalRebates(MathUtil.addBigDecimal(financialStatementCount.getRefundPromotionalRebates(), financialStatement.getRefundPromotionalRebates()));
+            financialStatementCount.setRefundPromotionalRebatesTax(MathUtil.addBigDecimal(financialStatementCount.getRefundPromotionalRebatesTax(), financialStatement.getRefundPromotionalRebatesTax()));
+            financialStatementCount.setRefundMarketplaceWithheldTax(MathUtil.addBigDecimal(financialStatementCount.getRefundMarketplaceWithheldTax(), financialStatement.getRefundMarketplaceWithheldTax()));
+            financialStatementCount.setRefundSellingFees(MathUtil.addBigDecimal(financialStatementCount.getRefundSellingFees(), financialStatement.getRefundSellingFees()));
+            financialStatementCount.setRefundFbaFees(MathUtil.addBigDecimal(financialStatementCount.getRefundFbaFees(), financialStatement.getRefundFbaFees()));
+            financialStatementCount.setRefundOtherTransactionFees(MathUtil.addBigDecimal(financialStatementCount.getRefundOtherTransactionFees(), financialStatement.getRefundOtherTransactionFees()));
+            financialStatementCount.setRefundOther(MathUtil.addBigDecimal(financialStatementCount.getRefundOther(), financialStatement.getRefundOther()));
+            financialStatementCount.setRefundTotal(MathUtil.addBigDecimal(financialStatementCount.getRefundTotal(), financialStatement.getRefundTotal()));
+            financialStatementCount.setSellerpaymentsReportFeeSubscription(MathUtil.addBigDecimal(financialStatementCount.getSellerpaymentsReportFeeSubscription(), financialStatement.getSellerpaymentsReportFeeSubscription()));
+            financialStatementCount.setLightningDealFee(MathUtil.addBigDecimal(financialStatementCount.getLightningDealFee(), financialStatement.getLightningDealFee()));
+            financialStatementCount.setCostOfAdvertising(MathUtil.addBigDecimal(financialStatementCount.getCostOfAdvertising(), financialStatement.getCostOfAdvertising()));
+            financialStatementCount.setFbaInventoryReimbursementCustomerReturn(MathUtil.addBigDecimal(financialStatementCount.getFbaInventoryReimbursementCustomerReturn(), financialStatement.getFbaInventoryReimbursementCustomerReturn()));
+            financialStatementCount.setFbaInventoryReimbursementDamagedWarehouse(MathUtil.addBigDecimal(financialStatementCount.getFbaInventoryReimbursementDamagedWarehouse(), financialStatement.getFbaInventoryReimbursementDamagedWarehouse()));
+            financialStatementCount.setFbaInventoryReimbursementCustomerServiceIssue(MathUtil.addBigDecimal(financialStatementCount.getFbaInventoryReimbursementCustomerServiceIssue(), financialStatement.getFbaInventoryReimbursementCustomerServiceIssue()));
+            financialStatementCount.setFbaInventoryReimbursementFeeCorrection(MathUtil.addBigDecimal(financialStatementCount.getFbaInventoryReimbursementFeeCorrection(), financialStatement.getFbaInventoryReimbursementFeeCorrection()));
+            financialStatementCount.setFbaInventoryReimbursementGeneralAdjustment(MathUtil.addBigDecimal(financialStatementCount.getFbaInventoryReimbursementGeneralAdjustment(), financialStatement.getFbaInventoryReimbursementGeneralAdjustment()));
+            financialStatementCount.setFbaInventoryReimbursementLostInbound(MathUtil.addBigDecimal(financialStatementCount.getFbaInventoryReimbursementLostInbound(), financialStatement.getFbaInventoryReimbursementLostInbound()));
+            financialStatementCount.setFbaInventoryReimbursementLostWarehouse(MathUtil.addBigDecimal(financialStatementCount.getFbaInventoryReimbursementLostWarehouse(), financialStatement.getFbaInventoryReimbursementLostWarehouse()));
+            financialStatementCount.setNonSubscriptionFeeAdjustment(MathUtil.addBigDecimal(financialStatementCount.getNonSubscriptionFeeAdjustment(), financialStatement.getNonSubscriptionFeeAdjustment()));
+            financialStatementCount.setFbaInventoryPlacementServiceFee(MathUtil.addBigDecimal(financialStatementCount.getFbaInventoryPlacementServiceFee(), financialStatement.getFbaInventoryPlacementServiceFee()));
+            financialStatementCount.setFbaCustomerReturnPerUnitFee(MathUtil.addBigDecimal(financialStatementCount.getFbaCustomerReturnPerUnitFee(), financialStatement.getFbaCustomerReturnPerUnitFee()));
+            financialStatementCount.setFbaInventoryStorageFee(MathUtil.addBigDecimal(financialStatementCount.getFbaInventoryStorageFee(), financialStatement.getFbaInventoryStorageFee()));
+            financialStatementCount.setFbaLongTermStorageFee(MathUtil.addBigDecimal(financialStatementCount.getFbaLongTermStorageFee(), financialStatement.getFbaLongTermStorageFee()));
+            financialStatementCount.setFbaRemovalOrderDisposalFee(MathUtil.addBigDecimal(financialStatementCount.getFbaRemovalOrderDisposalFee(), financialStatement.getFbaRemovalOrderDisposalFee()));
+            financialStatementCount.setCouponRedemptionFee(MathUtil.addBigDecimal(financialStatementCount.getCouponRedemptionFee(), financialStatement.getCouponRedemptionFee()));
+            financialStatementCount.setEarlyReviewerProgramFee(MathUtil.addBigDecimal(financialStatementCount.getEarlyReviewerProgramFee(), financialStatement.getEarlyReviewerProgramFee()));
+            financialStatementCount.setMoneyBack(MathUtil.addBigDecimal(financialStatementCount.getMoneyBack(), financialStatement.getMoneyBack()));
+            financialStatementCount.setMainBusinessIncome(MathUtil.addBigDecimal(financialStatementCount.getMainBusinessIncome(), financialStatement.getMainBusinessIncome()));
+            financialStatementCount.setTotalEffectiveReceipts(MathUtil.addBigDecimal(financialStatementCount.getTotalEffectiveReceipts(), financialStatement.getTotalEffectiveReceipts()));
+            financialStatementCount.setSellableRequestedQuantity(MathUtil.add(financialStatementCount.getSellableRequestedQuantity(), financialStatement.getSellableRequestedQuantity()));
+            financialStatementCount.setSellableCost(MathUtil.addBigDecimal(financialStatementCount.getSellableCost(), financialStatement.getSellableCost()));
+            financialStatementCount.setUnsellableRequestedQuantity(MathUtil.add(financialStatementCount.getUnsellableRequestedQuantity(), financialStatement.getUnsellableRequestedQuantity()));
+            financialStatementCount.setUnsellableCost(MathUtil.addBigDecimal(financialStatementCount.getUnsellableCost(), financialStatement.getUnsellableCost()));
+            financialStatementCount.setProcurementCost(MathUtil.addBigDecimal(financialStatementCount.getProcurementCost(), financialStatement.getProcurementCost()));
+            financialStatementCount.setFbaHeadTripCost(MathUtil.addBigDecimal(financialStatementCount.getFbaHeadTripCost(), financialStatement.getFbaHeadTripCost()));
+            financialStatementCount.setHeadDeductionFee(MathUtil.addBigDecimal(financialStatementCount.getHeadDeductionFee(), financialStatement.getHeadDeductionFee()));
+            financialStatementCount.setMainBusinessProfit(MathUtil.addBigDecimal(financialStatementCount.getMainBusinessProfit(), financialStatement.getMainBusinessProfit()));
+            if(financialStatement.getNewProduct()==1){
+                newMainBusinessProfit=MathUtil.addBigDecimal(newMainBusinessProfit,financialStatement.getMainBusinessProfit());
+            }else{
+                oldMainBusinessProfit=MathUtil.addBigDecimal(oldMainBusinessProfit,financialStatement.getMainBusinessProfit());
+            }
+            financialStatementCount.setInitialQuantity(MathUtil.add(financialStatementCount.getInitialQuantity(), financialStatement.getInitialQuantity()));
+            financialStatementCount.setInitialInventoryCost(MathUtil.addBigDecimal(financialStatementCount.getInitialInventoryCost(), financialStatement.getInitialInventoryCost()));
+            financialStatementCount.setFinalQuantity(MathUtil.add(financialStatementCount.getFinalQuantity(), financialStatement.getFinalQuantity()));
+            financialStatementCount.setFinalInventoryCost(MathUtil.addBigDecimal(financialStatementCount.getFinalInventoryCost(), financialStatement.getFinalInventoryCost()));
+            financialStatementCount.setManualAdjustment(MathUtil.addBigDecimal(financialStatementCount.getManualAdjustment(), financialStatement.getManualAdjustment()));
+        }
+        financialStatementCount.setMoneyBackRate(MathUtil.divide(financialStatementCount.getMoneyBack(), financialStatementCount.getProductSales(), 2));
+        financialStatementCount.setGrossMarginOnSales(MathUtil.divide(MathUtil.divide(financialStatementCount.getMainBusinessProfit(), financialStatementCount.getProductSales(), 2), rateOfDollarExchangeRmb, 2));
+        financialStatementCount.setRoi(MathUtil.divide(financialStatementCount.getMainBusinessProfit(), MathUtil.subtractBigDecimal(MathUtil.addBigDecimal(financialStatementCount.getProcurementCost(), financialStatementCount.getFbaHeadTripCost()), financialStatementCount.getHeadDeductionFee()), 2));
+        financialStatementCount.setInventoryTurnover(getInventoryTurnover(financialStatementCount));
+        financialStatementCount.setRefundRate(getRefundRate(financialStatementCount));
+        financialStatementCount.setAdvertisingSalesPercentage(MathUtil.divide(financialStatementCount.getCostOfAdvertising(), financialStatementCount.getProductSales(), 2));
+
+        int rowIndex = sheet.getLastRowNum() + 2;
+        Row row = sheet.createRow(rowIndex);
+        row.createCell(7).setCellValue("汇总");
+        row.createCell(9).setCellValue(financialStatementCount.getSaleQuantity().doubleValue());
+        row.createCell(10).setCellValue(financialStatementCount.getProductSales().doubleValue());
+        row.createCell(11).setCellValue(financialStatementCount.getProductSalesTax().doubleValue());
+        row.createCell(12).setCellValue(financialStatementCount.getShippingCredits().doubleValue());
+        row.createCell(13).setCellValue(financialStatementCount.getShippingCreditsTax().doubleValue());
+        row.createCell(14).setCellValue(financialStatementCount.getGiftWrapCredits().doubleValue());
+        row.createCell(15).setCellValue(financialStatementCount.getGiftWrapCreditsTax().doubleValue());
+        row.createCell(16).setCellValue(financialStatementCount.getPromotionalRebates().doubleValue());
+        row.createCell(17).setCellValue(financialStatementCount.getPromotionalRebatesTax().doubleValue());
+        row.createCell(18).setCellValue(financialStatementCount.getMarketplaceWithheldTax().doubleValue());
+        row.createCell(19).setCellValue(financialStatementCount.getSellingFees().doubleValue());
+        row.createCell(20).setCellValue(financialStatementCount.getFbaFees().doubleValue());
+        row.createCell(21).setCellValue(financialStatementCount.getOtherTransactionFees().doubleValue());
+        row.createCell(22).setCellValue(financialStatementCount.getOther().doubleValue());
+        row.createCell(23).setCellValue(financialStatementCount.getTotal().doubleValue());
+        row.createCell(24).setCellValue(financialStatementCount.getRefundSaleQuantity().doubleValue());
+        row.createCell(25).setCellValue(financialStatementCount.getRefundProductSales().doubleValue());
+        row.createCell(26).setCellValue(financialStatementCount.getRefundProductSalesTax().doubleValue());
+        row.createCell(27).setCellValue(financialStatementCount.getRefundShippingCredits().doubleValue());
+        row.createCell(28).setCellValue(financialStatementCount.getRefundShippingCreditsTax().doubleValue());
+        row.createCell(29).setCellValue(financialStatementCount.getRefundGiftWrapCredits().doubleValue());
+        row.createCell(30).setCellValue(financialStatementCount.getRefundGiftWrapCreditsTax().doubleValue());
+        row.createCell(31).setCellValue(financialStatementCount.getRefundPromotionalRebates().doubleValue());
+        row.createCell(32).setCellValue(financialStatementCount.getRefundPromotionalRebatesTax().doubleValue());
+        row.createCell(33).setCellValue(financialStatementCount.getRefundMarketplaceWithheldTax().doubleValue());
+        row.createCell(34).setCellValue(financialStatementCount.getRefundSellingFees().doubleValue());
+        row.createCell(35).setCellValue(financialStatementCount.getRefundFbaFees().doubleValue());
+        row.createCell(36).setCellValue(financialStatementCount.getRefundOtherTransactionFees().doubleValue());
+        row.createCell(37).setCellValue(financialStatementCount.getRefundOther().doubleValue());
+        row.createCell(38).setCellValue(financialStatementCount.getRefundTotal().doubleValue());
+        row.createCell(41).setCellValue(financialStatementCount.getSellerpaymentsReportFeeSubscription().doubleValue());
+        row.createCell(43).setCellValue(financialStatementCount.getLightningDealFee().doubleValue());
+        row.createCell(44).setCellValue(financialStatementCount.getCostOfAdvertising().doubleValue());
+        row.createCell(45).setCellValue(financialStatementCount.getFbaInventoryReimbursementCustomerReturn().doubleValue());
+        row.createCell(46).setCellValue(financialStatementCount.getFbaInventoryReimbursementDamagedWarehouse().doubleValue());
+        row.createCell(47).setCellValue(financialStatementCount.getFbaInventoryReimbursementCustomerServiceIssue().doubleValue());
+        row.createCell(48).setCellValue(financialStatementCount.getFbaInventoryReimbursementFeeCorrection().doubleValue());
+        row.createCell(49).setCellValue(financialStatementCount.getFbaInventoryReimbursementGeneralAdjustment().doubleValue());
+        row.createCell(50).setCellValue(financialStatementCount.getFbaInventoryReimbursementLostInbound().doubleValue());
+        row.createCell(51).setCellValue(financialStatementCount.getFbaInventoryReimbursementLostWarehouse().doubleValue());
+        row.createCell(52).setCellValue(financialStatementCount.getNonSubscriptionFeeAdjustment().doubleValue());
+        row.createCell(53).setCellValue(financialStatementCount.getFbaInventoryPlacementServiceFee().doubleValue());
+        row.createCell(55).setCellValue(financialStatementCount.getFbaCustomerReturnPerUnitFee().doubleValue());
+        row.createCell(57).setCellValue(financialStatementCount.getFbaInventoryStorageFee().doubleValue());
+        row.createCell(58).setCellValue(financialStatementCount.getFbaLongTermStorageFee().doubleValue());
+        row.createCell(59).setCellValue(financialStatementCount.getFbaRemovalOrderDisposalFee().doubleValue());
+        row.createCell(62).setCellValue(financialStatementCount.getCouponRedemptionFee().doubleValue());
+        row.createCell(63).setCellValue(financialStatementCount.getEarlyReviewerProgramFee().doubleValue());
+        row.createCell(65).setCellValue(financialStatementCount.getManualAdjustment().doubleValue());
+        row.createCell(66).setCellValue(financialStatementCount.getMoneyBack().doubleValue());
+        row.createCell(67).setCellValue(financialStatementCount.getMoneyBackRate().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
+        row.createCell(68).setCellValue(financialStatementCount.getMainBusinessIncome().doubleValue());
+        row.createCell(77).setCellValue(financialStatementCount.getTotalEffectiveReceipts().doubleValue());
+        row.createCell(78).setCellValue(financialStatementCount.getSellableRequestedQuantity().doubleValue());
+        row.createCell(79).setCellValue(financialStatementCount.getSellableCost().doubleValue());
+        row.createCell(80).setCellValue(financialStatementCount.getUnsellableRequestedQuantity().doubleValue());
+        row.createCell(81).setCellValue(financialStatementCount.getUnsellableCost().doubleValue());
+        row.createCell(83).setCellValue(financialStatementCount.getProcurementCost().doubleValue());
+        row.createCell(84).setCellValue(financialStatementCount.getFbaHeadTripCost().doubleValue());
+        row.createCell(85).setCellValue(financialStatementCount.getHeadDeductionFee().doubleValue());
+        row.createCell(90).setCellValue(financialStatementCount.getMainBusinessProfit().doubleValue());
+        row.createCell(91).setCellValue(financialStatementCount.getGrossMarginOnSales().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
+        row.createCell(92).setCellValue(financialStatementCount.getRoi().doubleValue());
+        row.createCell(100).setCellValue(financialStatementCount.getInitialQuantity());
+        row.createCell(101).setCellValue(financialStatementCount.getInitialInventoryCost().doubleValue());
+        row.createCell(102).setCellValue(financialStatementCount.getFinalQuantity());
+        row.createCell(103).setCellValue(financialStatementCount.getFinalInventoryCost().doubleValue());
+        row.createCell(104).setCellValue(financialStatementCount.getInventoryTurnover().doubleValue());
+        row.createCell(105).setCellValue(financialStatementCount.getRefundRate().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
+        row.createCell(107).setCellValue(financialStatementCount.getAdvertisingSalesPercentage().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
+        Row row2 = sheet.createRow(rowIndex + 1);
+        Row row3 = sheet.createRow(rowIndex + 2);
+        row2.createCell(7).setCellValue("负责人");
+        row3.createCell(7).setCellValue(excelTitle);
+        row2.createCell(8).setCellValue("业绩额");
+        row3.createCell(8).setCellValue(financialStatementCount.getMainBusinessProfit().doubleValue());
+        row2.createCell(9).setCellValue("ROI");
+        row3.createCell(9).setCellValue(financialStatementCount.getRoi().doubleValue());
+        row2.createCell(10).setCellValue("库存周转天数");
+        row3.createCell(10).setCellValue(financialStatementCount.getInventoryTurnover().doubleValue());
+        row2.createCell(11).setCellValue("0-14");
+        row3.createCell(11).setCellValue(newMainBusinessProfit.doubleValue());
+        row2.createCell(12).setCellValue("14+");
+        row3.createCell(12).setCellValue(oldMainBusinessProfit.doubleValue());
+        row2.createCell(13).setCellValue("销售量");
+        row3.createCell(13).setCellValue(financialStatementCount.getSaleQuantity());
+        row2.createCell(14).setCellValue("销售额");
+        row3.createCell(14).setCellValue(financialStatementCount.getProductSales().doubleValue());
+        row2.createCell(15).setCellValue("期末价值");
+        row3.createCell(15).setCellValue(financialStatementCount.getFinalInventoryCost().doubleValue());
+    }
+
+    private BigDecimal getRefundRate(FinancialStatement financialStatementCount) {
+        Double rate = MathUtil.divide(financialStatementCount.getRefundSaleQuantity(), financialStatementCount.getSaleQuantity().doubleValue(), 2);
+        if (rate != null) {
+            return new BigDecimal(rate);
+        }
+        return null;
+    }
+
+    private BigDecimal getInventoryTurnover(FinancialStatement financialStatementCount) {
+        BigDecimal inventoryCost = MathUtil.addBigDecimal(financialStatementCount.getInitialInventoryCost(), financialStatementCount.getFinalInventoryCost());
+        inventoryCost = MathUtil.divide(inventoryCost, new BigDecimal(2), 2);
+        BigDecimal cost = MathUtil.subtractBigDecimal(MathUtil.addBigDecimal(financialStatementCount.getProcurementCost(), financialStatementCount.getFbaHeadTripCost()), financialStatementCount.getHeadDeductionFee());
+        return MathUtil.divide(inventoryCost, cost, 2).multiply(new BigDecimal(30));
     }
 
     private void setExcelTitle(Sheet sheet, String excelTitle) {
@@ -845,7 +1045,7 @@ public class FinancialStatementService implements IFinancialStatementService {
             row.createCell(105).setCellValue(financialStatement.getRefundRate().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
             row.createCell(106).setCellValue(financialStatement.getNewProduct() == 1 ? "是" : "否");
             row.createCell(107).setCellValue(financialStatement.getAdvertisingSalesPercentage().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
-            if(!StringUtils.isEmpty(financialStatement.getProductMonth())){
+            if (!StringUtils.isEmpty(financialStatement.getProductMonth())) {
                 row.createCell(108).setCellValue(financialStatement.getProductMonth());
             }
             if (financialStatement.getDevelopmentLevel() != null) {
