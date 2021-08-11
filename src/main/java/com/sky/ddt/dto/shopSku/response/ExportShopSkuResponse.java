@@ -27,4 +27,5 @@ public class ExportShopSkuResponse {
     BigDecimal weight;
     BigDecimal costPrice;
     String remark;
+    String salesmanUserRealName;
 }
