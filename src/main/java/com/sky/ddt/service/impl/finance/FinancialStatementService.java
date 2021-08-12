@@ -631,13 +631,13 @@ public class FinancialStatementService implements IFinancialStatementService {
         row2.createCell(15).setCellValue("期末价值");
         row3.createCell(15).setCellValue(financialStatementCount.getFinalInventoryCost().doubleValue());
         row2.createCell(16).setCellValue("回款率");
-        row3.createCell(16).setCellValue(financialStatementCount.getMoneyBackRate().doubleValue());
+        row3.createCell(16).setCellValue(financialStatementCount.getMoneyBackRate().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
         row2.createCell(17).setCellValue("退款率");
-        row3.createCell(17).setCellValue(financialStatementCount.getRefundRate().doubleValue());
+        row3.createCell(17).setCellValue(financialStatementCount.getRefundRate().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
         row2.createCell(18).setCellValue("广告占比");
         row3.createCell(18).setCellValue(financialStatementCount.getAdvertisingSalesPercentage().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
         row2.createCell(19).setCellValue("销售业绩");
-        row3.createCell(19).setCellValue(financialStatementCount.getMainBusinessProfit().doubleValue());
+        row3.createCell(19).setCellValue(financialStatementCount.getMainBusinessProfit().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
         row2.createCell(20).setCellValue("品牌广告支出");
         //row3.createCell(20).setCellValue("");
         row2.createCell(21).setCellValue("其他补贴");
@@ -648,6 +648,8 @@ public class FinancialStatementService implements IFinancialStatementService {
         row3.createCell(23).setCellValue(financialStatementCount.getMainBusinessProfit().doubleValue());
         row2.createCell(24).setCellValue("月度业绩计入");
         row3.createCell(24).setCellValue(financialStatementCount.getMainBusinessProfit().doubleValue());
+        row2.createCell(25).setCellValue("毛利率");
+        row3.createCell(25).setCellValue(financialStatementCount.getGrossMarginOnSales().doubleValue());
     }
 
     private void setAdvertisingSalesPercentage(FinancialStatement financialStatement) {
