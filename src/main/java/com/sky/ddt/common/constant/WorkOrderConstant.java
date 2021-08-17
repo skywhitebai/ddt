@@ -47,7 +47,7 @@ public class WorkOrderConstant {
         Integer dealStatus;
         String statusName;
 
-        dealStatus(Integer dealStatus, String statusName) {
+        DealStatusEnum(Integer dealStatus, String statusName) {
             this.dealStatus = dealStatus;
             this.statusName = statusName;
         }
