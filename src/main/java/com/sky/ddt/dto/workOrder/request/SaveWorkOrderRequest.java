@@ -3,6 +3,7 @@ package com.sky.ddt.dto.workOrder.request;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -27,15 +28,9 @@ public class SaveWorkOrderRequest {
     @NotNull(message = "处理级别不能为空")
     private Integer level;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date planEndTime;
-
-    private Date actualEndTime;
-
-    private Integer dealUserId;
-
     private Integer dealStatus;
-
-
     @NotEmpty(message = "内容不能为空")
     private String content;
 }

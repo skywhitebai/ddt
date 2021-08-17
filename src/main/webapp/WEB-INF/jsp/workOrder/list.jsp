@@ -67,13 +67,13 @@
             <tr>
                 <td>标题：</td>
                 <td colspan="3">
-                    <input class="easyui-validatebox textbox" name="id" width="90%">
+                    <input class="easyui-validatebox textbox" name="title" width="90%">
                 </td>
             </tr>
             <tr>
                 <td>内容：</td>
                 <td colspan="3">
-                    <input class="easyui-validatebox textbox" name="id" width="90%">
+                    <input class="easyui-validatebox textbox" name="content" width="90%">
                 </td>
             </tr>
             <tr>
@@ -87,7 +87,7 @@
                 </td>
                 <td>处理结束时间：</td>
                 <td>
-                    <input class="easyui-textbox" type="text" name="actualEndTime" readonly="readonly">
+                    <input class="easyui-datebox" type="text" name="planEndTime">
                 </td>
             </tr>
             <tr class="view_status">
@@ -99,7 +99,6 @@
                         <option value="3">取消</option>
                     </select>
                 </td>
-                0
             </tr>
             <tr class="view_status">
                 <td>处理状态：</td>
@@ -249,8 +248,8 @@
 
     function getQueryParams() {
         queryParams = {
-            ttitle: $("#s_ttitle").val(),
-            status: $("#s_status").combobox('getValue')
+            title: $("#s_title").val(),
+            status: $("#s_status").val()
         };
         return queryParams;
     }
