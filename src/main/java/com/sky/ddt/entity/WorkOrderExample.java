@@ -235,76 +235,6 @@ public class WorkOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andRemarkIsNull() {
-            addCriterion("remark is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkIsNotNull() {
-            addCriterion("remark is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkEqualTo(String value) {
-            addCriterion("remark =", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkNotEqualTo(String value) {
-            addCriterion("remark <>", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkGreaterThan(String value) {
-            addCriterion("remark >", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkGreaterThanOrEqualTo(String value) {
-            addCriterion("remark >=", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkLessThan(String value) {
-            addCriterion("remark <", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkLessThanOrEqualTo(String value) {
-            addCriterion("remark <=", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkLike(String value) {
-            addCriterion("remark like", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkNotLike(String value) {
-            addCriterion("remark not like", value, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkIn(List<String> values) {
-            addCriterion("remark in", values, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkNotIn(List<String> values) {
-            addCriterion("remark not in", values, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkBetween(String value1, String value2) {
-            addCriterion("remark between", value1, value2, "remark");
-            return (Criteria) this;
-        }
-
-        public Criteria andRemarkNotBetween(String value1, String value2) {
-            addCriterion("remark not between", value1, value2, "remark");
-            return (Criteria) this;
-        }
-
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
@@ -605,63 +535,133 @@ public class WorkOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andDaelTimeStausIsNull() {
-            addCriterion("dael_time_staus is null");
+        public Criteria andDealStatusIsNull() {
+            addCriterion("deal_status is null");
             return (Criteria) this;
         }
 
-        public Criteria andDaelTimeStausIsNotNull() {
-            addCriterion("dael_time_staus is not null");
+        public Criteria andDealStatusIsNotNull() {
+            addCriterion("deal_status is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDaelTimeStausEqualTo(Integer value) {
-            addCriterion("dael_time_staus =", value, "daelTimeStaus");
+        public Criteria andDealStatusEqualTo(Integer value) {
+            addCriterion("deal_status =", value, "dealStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDaelTimeStausNotEqualTo(Integer value) {
-            addCriterion("dael_time_staus <>", value, "daelTimeStaus");
+        public Criteria andDealStatusNotEqualTo(Integer value) {
+            addCriterion("deal_status <>", value, "dealStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDaelTimeStausGreaterThan(Integer value) {
-            addCriterion("dael_time_staus >", value, "daelTimeStaus");
+        public Criteria andDealStatusGreaterThan(Integer value) {
+            addCriterion("deal_status >", value, "dealStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDaelTimeStausGreaterThanOrEqualTo(Integer value) {
-            addCriterion("dael_time_staus >=", value, "daelTimeStaus");
+        public Criteria andDealStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("deal_status >=", value, "dealStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDaelTimeStausLessThan(Integer value) {
-            addCriterion("dael_time_staus <", value, "daelTimeStaus");
+        public Criteria andDealStatusLessThan(Integer value) {
+            addCriterion("deal_status <", value, "dealStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDaelTimeStausLessThanOrEqualTo(Integer value) {
-            addCriterion("dael_time_staus <=", value, "daelTimeStaus");
+        public Criteria andDealStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("deal_status <=", value, "dealStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDaelTimeStausIn(List<Integer> values) {
-            addCriterion("dael_time_staus in", values, "daelTimeStaus");
+        public Criteria andDealStatusIn(List<Integer> values) {
+            addCriterion("deal_status in", values, "dealStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDaelTimeStausNotIn(List<Integer> values) {
-            addCriterion("dael_time_staus not in", values, "daelTimeStaus");
+        public Criteria andDealStatusNotIn(List<Integer> values) {
+            addCriterion("deal_status not in", values, "dealStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDaelTimeStausBetween(Integer value1, Integer value2) {
-            addCriterion("dael_time_staus between", value1, value2, "daelTimeStaus");
+        public Criteria andDealStatusBetween(Integer value1, Integer value2) {
+            addCriterion("deal_status between", value1, value2, "dealStatus");
             return (Criteria) this;
         }
 
-        public Criteria andDaelTimeStausNotBetween(Integer value1, Integer value2) {
-            addCriterion("dael_time_staus not between", value1, value2, "daelTimeStaus");
+        public Criteria andDealStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("deal_status not between", value1, value2, "dealStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkIsNull() {
+            addCriterion("remark is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkIsNotNull() {
+            addCriterion("remark is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkEqualTo(String value) {
+            addCriterion("remark =", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotEqualTo(String value) {
+            addCriterion("remark <>", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkGreaterThan(String value) {
+            addCriterion("remark >", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkGreaterThanOrEqualTo(String value) {
+            addCriterion("remark >=", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLessThan(String value) {
+            addCriterion("remark <", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLessThanOrEqualTo(String value) {
+            addCriterion("remark <=", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkLike(String value) {
+            addCriterion("remark like", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotLike(String value) {
+            addCriterion("remark not like", value, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkIn(List<String> values) {
+            addCriterion("remark in", values, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotIn(List<String> values) {
+            addCriterion("remark not in", values, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkBetween(String value1, String value2) {
+            addCriterion("remark between", value1, value2, "remark");
+            return (Criteria) this;
+        }
+
+        public Criteria andRemarkNotBetween(String value1, String value2) {
+            addCriterion("remark not between", value1, value2, "remark");
             return (Criteria) this;
         }
 

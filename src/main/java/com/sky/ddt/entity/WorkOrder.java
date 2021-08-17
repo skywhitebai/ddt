@@ -7,8 +7,6 @@ public class WorkOrder {
 
     private String title;
 
-    private String remark;
-
     private Integer status;
 
     private Integer level;
@@ -19,7 +17,9 @@ public class WorkOrder {
 
     private Integer dealUserId;
 
-    private Integer daelTimeStaus;
+    private Integer dealStatus;
+
+    private String remark;
 
     private Date createTime;
 
@@ -45,14 +45,6 @@ public class WorkOrder {
 
     public void setTitle(String title) {
         this.title = title == null ? null : title.trim();
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark == null ? null : remark.trim();
     }
 
     public Integer getStatus() {
@@ -95,12 +87,20 @@ public class WorkOrder {
         this.dealUserId = dealUserId;
     }
 
-    public Integer getDaelTimeStaus() {
-        return daelTimeStaus;
+    public Integer getDealStatus() {
+        return dealStatus;
     }
 
-    public void setDaelTimeStaus(Integer daelTimeStaus) {
-        this.daelTimeStaus = daelTimeStaus;
+    public void setDealStatus(Integer dealStatus) {
+        this.dealStatus = dealStatus;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark == null ? null : remark.trim();
     }
 
     public Date getCreateTime() {
