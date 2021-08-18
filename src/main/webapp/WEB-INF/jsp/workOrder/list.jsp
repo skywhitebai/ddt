@@ -50,7 +50,7 @@
 
 </table>
 <!--入库单编辑页面-->
-<div id="dlg" class="easyui-dialog" style="width: 700px; height: 500px; padding: 10px 20px"
+<div id="dlg" class="easyui-dialog" style="width: 700px; height: 550px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
     <div class="ftitle">
         <b>工单</b>
@@ -67,13 +67,13 @@
             <tr>
                 <td>标题：</td>
                 <td colspan="3">
-                    <input class="easyui-validatebox textbox" name="title" width="90%">
+                    <input class="easyui-validatebox textbox" name="title"  style="width: 90%">
                 </td>
             </tr>
             <tr>
                 <td>内容：</td>
                 <td colspan="3">
-                    <input class="easyui-validatebox textbox" name="content" width="90%">
+                    <input class="easyui-textbox" data-options="multiline:true" name="content"  style="width: 90%;height:200px">
                 </td>
             </tr>
             <tr>
@@ -85,7 +85,7 @@
                         <option value="3">不急</option>
                     </select>
                 </td>
-                <td>处理结束时间：</td>
+                <td>计划结束时间：</td>
                 <td>
                     <input class="easyui-datebox" type="text" name="planEndTime">
                 </td>
@@ -104,9 +104,9 @@
                 <td>处理状态：</td>
                 <td>
                     <select class="easyui-combobox" name="dealStatus" style="width:100px;" readonly="readonly">
-                        <option value="1">紧急</option>
-                        <option value="2">普通</option>
-                        <option value="3">不急</option>
+                        <option value="0">未处理</option>
+                        <option value="1">处理及时</option>
+                        <option value="2">处理超时</option>
                     </select>
                 </td>
                 <td>实际处理时间：</td>
@@ -191,8 +191,8 @@
 
                         }
                     },
-                    {title: '计划结束时间', field: 'planEndTime', width: 140},
-                    {title: '实际结束时间', field: 'actualEndTime', width: 50},
+                    {title: '计划结束时间', field: 'planEndTime', width: 150},
+                    {title: '实际结束时间', field: 'actualEndTime', width: 150},
                     {title: '创建时间', field: 'createTime', width: 180},
                     {title: '修改时间', field: 'updateTime', width: 180},
                     {title: '备注', field: 'remark', width: 180}

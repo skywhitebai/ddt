@@ -30,7 +30,6 @@ public class SaveWorkOrderRequest {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date planEndTime;
-    private Integer dealStatus;
     @NotEmpty(message = "内容不能为空")
     private String content;
 }

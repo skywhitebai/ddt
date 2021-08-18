@@ -15,4 +15,6 @@ public interface IWorkOrderService {
     PageInfo<WorkOrder> listWorkOrder(ListWorkOrderRequest params);
 
     BaseResponse saveWorkOrder(SaveWorkOrderRequest params, Integer dealUserId);
+
+    BaseResponse cancelWorkOrder(Integer id, Integer dealUserId);
 }

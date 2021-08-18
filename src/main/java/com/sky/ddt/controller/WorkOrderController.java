@@ -47,4 +47,11 @@ public class WorkOrderController extends SuperController{
         Integer dealUserId = getCurrentUserId();
         return workOrderService.saveWorkOrder(params, dealUserId);
     }
+    @RequestMapping("cancelWorkOrder")
+    @ResponseBody
+    @MenuAnnotation("workOrder/index")
+    public BaseResponse cancelWorkOrder(Integer id) {
+        Integer dealUserId = getCurrentUserId();
+        return workOrderService.cancelWorkOrder(id, dealUserId);
+    }
 }

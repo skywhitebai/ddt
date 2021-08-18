@@ -12,7 +12,7 @@ public class WorkOrderConstant {
     public enum StatusEnum {
         HAVE_IN_HAND(1, "进行中"),
         COMPLETED(2, "已完成"),
-        CANCEL(0, "取消"),;
+        CANCEL(3, "取消"),;
         Integer status;
         String statusName;
 
