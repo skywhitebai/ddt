@@ -746,66 +746,6 @@ public class SkuExample {
             return (Criteria) this;
         }
 
-        public Criteria andInventoryQuantityIsNull() {
-            addCriterion("inventory_quantity is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andInventoryQuantityIsNotNull() {
-            addCriterion("inventory_quantity is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andInventoryQuantityEqualTo(Integer value) {
-            addCriterion("inventory_quantity =", value, "inventoryQuantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andInventoryQuantityNotEqualTo(Integer value) {
-            addCriterion("inventory_quantity <>", value, "inventoryQuantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andInventoryQuantityGreaterThan(Integer value) {
-            addCriterion("inventory_quantity >", value, "inventoryQuantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andInventoryQuantityGreaterThanOrEqualTo(Integer value) {
-            addCriterion("inventory_quantity >=", value, "inventoryQuantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andInventoryQuantityLessThan(Integer value) {
-            addCriterion("inventory_quantity <", value, "inventoryQuantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andInventoryQuantityLessThanOrEqualTo(Integer value) {
-            addCriterion("inventory_quantity <=", value, "inventoryQuantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andInventoryQuantityIn(List<Integer> values) {
-            addCriterion("inventory_quantity in", values, "inventoryQuantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andInventoryQuantityNotIn(List<Integer> values) {
-            addCriterion("inventory_quantity not in", values, "inventoryQuantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andInventoryQuantityBetween(Integer value1, Integer value2) {
-            addCriterion("inventory_quantity between", value1, value2, "inventoryQuantity");
-            return (Criteria) this;
-        }
-
-        public Criteria andInventoryQuantityNotBetween(Integer value1, Integer value2) {
-            addCriterion("inventory_quantity not between", value1, value2, "inventoryQuantity");
-            return (Criteria) this;
-        }
-
         public Criteria andRemarkIsNull() {
             addCriterion("remark is null");
             return (Criteria) this;
@@ -1743,6 +1683,66 @@ public class SkuExample {
 
         public Criteria andSuggestedRetailPriceNotBetween(String value1, String value2) {
             addCriterion("suggested_retail_price not between", value1, value2, "suggestedRetailPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelIsNull() {
+            addCriterion("development_level is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelIsNotNull() {
+            addCriterion("development_level is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelEqualTo(Integer value) {
+            addCriterion("development_level =", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelNotEqualTo(Integer value) {
+            addCriterion("development_level <>", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelGreaterThan(Integer value) {
+            addCriterion("development_level >", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelGreaterThanOrEqualTo(Integer value) {
+            addCriterion("development_level >=", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelLessThan(Integer value) {
+            addCriterion("development_level <", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelLessThanOrEqualTo(Integer value) {
+            addCriterion("development_level <=", value, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelIn(List<Integer> values) {
+            addCriterion("development_level in", values, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelNotIn(List<Integer> values) {
+            addCriterion("development_level not in", values, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelBetween(Integer value1, Integer value2) {
+            addCriterion("development_level between", value1, value2, "developmentLevel");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentLevelNotBetween(Integer value1, Integer value2) {
+            addCriterion("development_level not between", value1, value2, "developmentLevel");
             return (Criteria) this;
         }
     }

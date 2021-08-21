@@ -4,8 +4,9 @@
 
     <insert id="saveProductInventoryQuantityHis">
        INSERT INTO product_inventory_quantity_his(product_id,inventory_quantity,MONTH)
-       SELECT s.product_id,sum(inventory_quantity),#{month} FROM `sku` s WHERE s.inventory_quantity IS NOT NULL AND s.inventory_quantity!=0
-       group by s.product_id
+       SELECT s.product_id,SUM(inventory_quantity),#{month} FROM `sku` s,shop_sku ss,product p
+WHERE s.sku_id=ss.sku_id AND p.product_id=s.product_id AND ss.inventory_quantity IS NOT NULL AND ss.inventory_quantity!=0
+GROUP BY s.product_id
     </insert>
 
 </mapper>

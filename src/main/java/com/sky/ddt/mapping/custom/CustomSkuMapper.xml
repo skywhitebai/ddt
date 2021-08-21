@@ -7,6 +7,7 @@
         <result column="product_code" property="productCode"/>
         <result column="productProductName" property="productProductName"/>
         <result column="img_url" property="imgUrl"/>
+        <result column="inventory_quantity" property="inventoryQuantity"/>
     </resultMap>
     <sql id="Custom_Column_List">
          s.sku_id, s.product_id, s.sku, s.colour,s.colour_number, s.size,s.weight,s.cost_price,s.head_trip_cost head_trip_cost,s.head_trip_cost_min,
