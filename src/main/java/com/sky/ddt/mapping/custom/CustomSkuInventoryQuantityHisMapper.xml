@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomSkuInventoryQuantityHisMapper">
+
+    <insert id="saveSkuInventoryQuantityHis">
+       INSERT INTO sku_inventory_quantity_his(sku_id,inventory_quantity,MONTH)
+       SELECT s.sku_id,inventory_quantity,#{month} FROM `sku` s WHERE s.inventory_quantity IS NOT NULL AND s.inventory_quantity!=0
+    </insert>
+
+</mapper>
