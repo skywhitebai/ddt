@@ -664,6 +664,76 @@ public class InternalOrderNumberExample {
             addCriterion("transport_type_id not between", value1, value2, "transportTypeId");
             return (Criteria) this;
         }
+
+        public Criteria andFinancialRemarkIsNull() {
+            addCriterion("financial_remark is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialRemarkIsNotNull() {
+            addCriterion("financial_remark is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialRemarkEqualTo(String value) {
+            addCriterion("financial_remark =", value, "financialRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialRemarkNotEqualTo(String value) {
+            addCriterion("financial_remark <>", value, "financialRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialRemarkGreaterThan(String value) {
+            addCriterion("financial_remark >", value, "financialRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialRemarkGreaterThanOrEqualTo(String value) {
+            addCriterion("financial_remark >=", value, "financialRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialRemarkLessThan(String value) {
+            addCriterion("financial_remark <", value, "financialRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialRemarkLessThanOrEqualTo(String value) {
+            addCriterion("financial_remark <=", value, "financialRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialRemarkLike(String value) {
+            addCriterion("financial_remark like", value, "financialRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialRemarkNotLike(String value) {
+            addCriterion("financial_remark not like", value, "financialRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialRemarkIn(List<String> values) {
+            addCriterion("financial_remark in", values, "financialRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialRemarkNotIn(List<String> values) {
+            addCriterion("financial_remark not in", values, "financialRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialRemarkBetween(String value1, String value2) {
+            addCriterion("financial_remark between", value1, value2, "financialRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFinancialRemarkNotBetween(String value1, String value2) {
+            addCriterion("financial_remark not between", value1, value2, "financialRemark");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

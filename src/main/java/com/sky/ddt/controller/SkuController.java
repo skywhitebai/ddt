@@ -102,6 +102,7 @@ public class SkuController extends SuperController {
         return skuService.delete(skuIds);
     }
 
+    @Deprecated
     @RequestMapping("/importInventory")
     @ResponseBody
     @RightAnnotation("sku/saveSku")

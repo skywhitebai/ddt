@@ -22,8 +22,8 @@ public class InventoryQuantityHisJob {
     ISkuInventoryQuantityHisService skuInventoryQuantityHisService;
     @Autowired
     IProductInventoryQuantityHisService productInventoryQuantityHisService;
-    //@Scheduled(cron ="0 30 4 0 1/1 ?")
-    @Scheduled(cron = "0 0/1 * * * ? ")
+    @Scheduled(cron ="0 30 4 1 * ?")
+    //@Scheduled(cron = "0 0/1 * * * ? ")
     public void scheduled() {
         log.info("{}，生成库存历史记录", DateUtil.getFormatDateStr(new Date()));
         skuInventoryQuantityHisService.saveSkuInventoryQuantityHis();

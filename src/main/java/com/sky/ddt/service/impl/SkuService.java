@@ -368,6 +368,7 @@ public class SkuService implements ISkuService {
      * @author baixueping
      * @date 2019/8/15 17:12
      */
+    @Deprecated
     @Override
     public BaseResponse importInventory(MultipartFile file, Integer dealUserId) {
         //读取excel 转换为list
@@ -401,14 +402,6 @@ public class SkuService implements ISkuService {
                     map.put("skuId", sku.getSkuId().toString());
                 }
             }
-            if (StringUtils.isEmpty(map.get("数量"))) {
-                sbErroItem.append(",").append(SkuConstant.INVENTORY_QUANTITY_EMPTY);
-            } else {
-                Integer integer = MathUtil.strToInteger(map.get("数量"));
-                if (integer == null || integer < 0) {
-                    sbErroItem.append(",").append(SkuConstant.INVENTORY_QUANTITY_ERRO);
-                }
-            }
             if (sbErroItem.length() > 0) {
                 sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
             }
@@ -430,7 +423,6 @@ public class SkuService implements ISkuService {
             }
             Sku sku = new Sku();
             sku.setSkuId(MathUtil.strToInteger(map.get("skuId")));
-            sku.setInventoryQuantity(MathUtil.strToInteger(map.get("数量")));
             customSkuMapper.updateByPrimaryKeySelective(sku);
         }
         return BaseResponse.success();

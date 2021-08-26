@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.internalOrderNumber.request.ListInternalOrderNumberRequest;
+import com.sky.ddt.dto.internalOrderNumber.request.SaveInternalOrderNumberFinancialRemarkRequest;
 import com.sky.ddt.dto.internalOrderNumber.request.SaveInternalOrderNumberRequest;
 import com.sky.ddt.dto.internalOrderNumber.response.ListInternalOrderNumberResponse;
 import com.sky.ddt.dto.response.BaseResponse;
@@ -32,7 +33,7 @@ public class InternalOrderNumberController extends SuperController {
         return "internalOrderNumber/list";
     }
 
-    @RequestMapping("listInternalOrderNumber")
+    @RequestMapping("/listInternalOrderNumber")
     @ResponseBody
     @MenuAnnotation("internalOrderNumber/index")
     public DataGridResponse listInternalOrderNumber(ListInternalOrderNumberRequest params) {
@@ -49,6 +50,13 @@ public class InternalOrderNumberController extends SuperController {
     public BaseResponse saveInternalOrderNumber(@Validated SaveInternalOrderNumberRequest params) {
         Integer dealUserId=getCurrentUserId();
         return internalOrderNumberService.saveInternalOrderNumber(params,dealUserId);
+    }
+    @RequestMapping("saveFinancialRemark")
+    @ResponseBody
+    @MenuAnnotation("internalOrderNumber/index")
+    public BaseResponse saveFinancialRemark(@Validated SaveInternalOrderNumberFinancialRemarkRequest params) {
+        Integer dealUserId=getCurrentUserId();
+        return internalOrderNumberService.saveFinancialRemark(params,dealUserId);
     }
     @RequestMapping("downPDF")
     @ResponseBody

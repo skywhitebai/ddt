@@ -96,6 +96,12 @@
                     <input class="easyui-textbox textbox-wide" type="text" name="remark" style="width:90%;">
                 </td>
             </tr>
+            <tr>
+                <td>财务备注：</td>
+                <td colspan="3">
+                    <input class="easyui-textbox textbox-wide" type="text" name="financialRemark" style="width:90%;">
+                </td>
+            </tr>
         </table>
         <div style="text-align:center;">
             <a href="javascript:void(0)" class="easyui-linkbutton"
@@ -175,6 +181,16 @@
                 {title: '创建时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
                 {title: '备注', field: 'remark', width: 200},
+                {
+                    title: '财务备注', field: 'financialRemark', width: 200,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="textbox" onchange="saveFinancialRemark(this,' + row.id + ')">';
+                        } else {
+                            return '<input class="textbox" value="' + value + '" saveFinancialRemark="saveWeight(this,' + row.id + ')">';
+                        }
+                    }
+                }
             ]],
             toolbar: [{
                 id: 'btnAdd',
@@ -284,6 +300,18 @@
 
     function downPDF(id) {
         window.open('${pageContext.request.contextPath }/internalOrderNumber/downPDF?id=' + id)
+    }
+    function saveFinancialRemark(input, id){
+            var financialRemark = $(input).val();
+            $.post('${pageContext.request.contextPath }/internalOrderNumber/saveFinancialRemark', {
+                financialRemark: financialRemark,
+                id: id
+            }, function (data) {
+                if (data.code == '200') {
+                } else {
+                    $.messager.alert("提示", data.message);
+                }
+            });
     }
 </script>
 </html>

@@ -13,15 +13,9 @@ import javax.validation.constraints.NotNull;
  * @date 2020/6/30 15:06
  */
 @Data
-public class SaveInternalOrderNumberRequest {
+public class SaveInternalOrderNumberFinancialRemarkRequest {
     Integer id;
     @NotNull(message = InternalOrderNumberConstant.NUMBER_EMPTY)
-    @Min(value = 1, message = InternalOrderNumberConstant.NUMBER_ERRO)
-    Integer number;
-    //@NotNull(message = InternalOrderNumberConstant.TRANSPORT_TYPE_ID_EMPTY)
-    Integer transportTypeId;
-    @Length(max = 200, message = InternalOrderNumberConstant.REMARK_TOO_LONG)
-    String remark;
     @Length(max = 200, message = InternalOrderNumberConstant.FINANCIAL_REMARK_TOO_LONG)
     String financialRemark;
 }

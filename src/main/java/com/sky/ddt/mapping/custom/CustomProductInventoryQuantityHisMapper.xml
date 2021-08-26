@@ -8,5 +8,20 @@
 WHERE s.sku_id=ss.sku_id AND p.product_id=s.product_id AND ss.inventory_quantity IS NOT NULL AND ss.inventory_quantity!=0
 GROUP BY s.product_id
     </insert>
+    <resultMap id="listProductInventoryQuantityHisMap"
+               type="com.sky.ddt.dto.inventoryQuantityHis.response.ListInventoryQuantityHisResponse"
+               extends="com.sky.ddt.dao.generate.ProductInventoryQuantityHisMapper.BaseResultMap">
+        <result column="product_name" property="productName"/>
+        <result column="product_code" property="productCode"/>
+    </resultMap>
+    <select id="listProductInventoryQuantityHis"
+            resultMap="listProductInventoryQuantityHisMap">
+        select piqh.*,p.product_name,p.product_code from product_inventory_quantity_his piqh,
+        product p
+        where piqh.product_id=p.product_id
+        <if test="monthDate != null">and  piqh.month=#{monthDate}</if>
+        <if test="productCode != null and productCode != '' ">and  productCode like concat('%',#{productCode},'%')</if>
+        <if test="sku != null and sku != '' ">and  exists  (select 1 from sku s where s.sku like concat('%',#{sku},'%') and s.product_id=p.product_id)</if>
+    </select>
 
 </mapper>

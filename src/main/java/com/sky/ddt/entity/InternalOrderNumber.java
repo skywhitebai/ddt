@@ -21,6 +21,8 @@ public class InternalOrderNumber {
 
     private Integer transportTypeId;
 
+    private String financialRemark;
+
     public Integer getId() {
         return id;
     }
@@ -91,5 +93,13 @@ public class InternalOrderNumber {
 
     public void setTransportTypeId(Integer transportTypeId) {
         this.transportTypeId = transportTypeId;
+    }
+
+    public String getFinancialRemark() {
+        return financialRemark;
+    }
+
+    public void setFinancialRemark(String financialRemark) {
+        this.financialRemark = financialRemark == null ? null : financialRemark.trim();
     }
 }

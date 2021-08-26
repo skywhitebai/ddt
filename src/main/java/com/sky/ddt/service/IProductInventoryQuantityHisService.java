@@ -1,5 +1,9 @@
 package com.sky.ddt.service;
 
+import com.github.pagehelper.PageInfo;
+import com.sky.ddt.dto.inventoryQuantityHis.request.ListInventoryQuantityHisRequest;
+import com.sky.ddt.dto.inventoryQuantityHis.response.ListInventoryQuantityHisResponse;
+
 /**
  * @author sky
  * @Description 产品库存
@@ -14,4 +18,6 @@ public interface IProductInventoryQuantityHisService {
       * @date
       */
     void saveProductInventoryQuantityHis();
+
+    PageInfo<ListInventoryQuantityHisResponse> listProductInventoryQuantityHis(ListInventoryQuantityHisRequest params);
 }

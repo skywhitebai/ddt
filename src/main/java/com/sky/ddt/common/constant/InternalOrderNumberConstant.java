@@ -14,4 +14,5 @@ public class InternalOrderNumberConstant {
     public static final String ID_EMPTY ="id不能为空" ;
     public static final String TRANSPORT_TYPE_ID_EMPTY ="物流渠道id不能为空" ;
     public static final String TRANSPORT_TYPE_ID_NOT_EXIST ="物流渠道id不存在" ;
+    public static final String FINANCIAL_REMARK_TOO_LONG ="财务备注长度不能超过200";
 }

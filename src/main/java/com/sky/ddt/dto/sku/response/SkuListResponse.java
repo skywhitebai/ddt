@@ -13,4 +13,5 @@ public class SkuListResponse extends Sku {
     String productProductName;
     String productCode;
     String imgUrl;
+    Integer inventoryQuantity;
 }
