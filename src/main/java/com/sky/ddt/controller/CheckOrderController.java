@@ -38,7 +38,7 @@ public class CheckOrderController extends SuperController {
         return "checkOrder/list";
     }
 
-    @RequestMapping("listCheckOrder")
+    @RequestMapping("/listCheckOrder")
     @ResponseBody
     @MenuAnnotation("checkOrder/index")
     public DataGridResponse listCheckOrder(ListCheckOrderRequest params) {

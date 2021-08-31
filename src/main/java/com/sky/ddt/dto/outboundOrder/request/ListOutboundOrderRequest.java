@@ -21,6 +21,7 @@ public class ListOutboundOrderRequest extends DataGridRequest {
     String batchNumber;
     String fbaNo;
     String shopSku;
+    String sku;
     Integer status;
     Integer type;
 }

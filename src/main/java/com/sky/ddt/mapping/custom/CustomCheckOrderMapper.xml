@@ -28,6 +28,10 @@
                     and exists (select 1 from check_order_shop_sku coss where coss.check_order_id=co.id and
                     coss.shop_sku like concat('%',#{shopSku},'%'))
                 </if>
+                <if test="sku != null and sku != '' ">
+                    and exists (select 1 from check_order_shop_sku coss,shop_sku ss,sku s where coss.check_order_id=co.id and
+                    coss.shop_sku_id=ss.shop_sku_id and ss.sku_id=s.sku_id and s.sku like concat('%',#{sku},'%'))
+                </if>
                 <if test="status != null">and status=#{status}</if>
             </trim>
         </where>

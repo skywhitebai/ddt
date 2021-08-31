@@ -20,6 +20,7 @@ public class ListWarehousingOrderRequest extends DataGridRequest {
     Date warehousingTimeEnd;
     String batchNumber;
     String shopSku;
+    String sku;
     Integer type;
     String produceOrderBatchNumber;
     Integer status;
