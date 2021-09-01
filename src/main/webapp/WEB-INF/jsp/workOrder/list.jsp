@@ -167,7 +167,7 @@
                 queryParams: queryParams,  //异步查询的参数
                 columns: [[
                     {field: 'ck', checkbox: true},   //选择
-                    {title: '标题', field: 'title', width: 120},
+                    {title: '标题', field: 'title', width: 200},
                     {
                         title: '状态', field: 'status', width: 50, formatter: function (value, row, index) {
                             if (value == 1) {
