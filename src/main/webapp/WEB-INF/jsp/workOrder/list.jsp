@@ -235,11 +235,10 @@
                     }
                 }],
                 onDblClickRow:
-
                     function (rowIndex, rowData) {
                         $(dg).datagrid('uncheckAll');
                         $(dg).datagrid('checkRow', rowIndex);
-                        showViewDialog();
+                        showEditDialog();
                     }
             }
         )
