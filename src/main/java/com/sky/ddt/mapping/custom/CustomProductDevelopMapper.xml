@@ -10,7 +10,7 @@
     <select id="listProductDevelop" resultMap="listProductDevelopMap" parameterType="com.sky.ddt.dto.product.request.ProductListRequest" >
         select
         pd.*,
-        (SELECT  MAX(img.`img_url`) FROM `img` WHERE img.`entity_id`=pd.`id` AND img.`img_type`='productDevelop.img') imgUrl,
+        (SELECT  MAX(img.`img_url`) FROM `img` WHERE img.`entity_id`=pd.`id` AND img.`img_type`='productDevelop.productDevelop_img') imgUrl,
         (select user_name from user where user.user_id=pd.developer_user_id) developer_user_name
         from product_develop pd
         <if test="_parameter != null">

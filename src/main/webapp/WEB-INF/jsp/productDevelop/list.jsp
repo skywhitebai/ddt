@@ -143,6 +143,34 @@
     </form>
 </div>
 
+
+<div id="dlgImg" class="easyui-dialog" style="width: 600px; height: 600px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
+    <form id="frmImg" method="post" enctype="multipart/form-data">
+        <table>
+            <tr style="display: none">
+                <td>skuId：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="entityId">
+                </td>
+                <td>imgType：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="imgType">
+
+                </td>
+            </tr>
+            <tr>
+                <td><input type="file" id="imgFile" name="imgFile" accept=".jpg,.jpeg,.png,.gif"></td>
+                <td>
+                    <a href="javascript:void(0)" class="easyui-linkbutton"
+                       data-options="iconCls:'icon-ok'" onclick="btnUploadImgFile()">上传图片</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table id="dgImg" style="width: 100%; height: auto">
+    </table>
+</div>
 <script type="text/javascript">
     $(document).ready(function (){
         bindDeveloperUserId();
@@ -196,15 +224,17 @@
             columns: [[
                 {field: 'ck', checkbox: true},   //选择
                 {title: '产品名', field: 'productName', width: 100},
+
                 {
-                    title: '图片', field: 'imgUrl', width: 70,
+                    title: '图片', field: 'imgUrl', width: 120,
                     formatter: function (value, rowData, rowIndex) {
                         var res = "";
                         if (value != null && value != '') {
-                            res += '<img  src="' + value + '?x-oss-process=image/resize,m_fill,h_66,w_66" onclick="showImg(' + value + ')"  style="width:66px; height:66px;"/>'
+                            res += '<a href="javascript:;" onclick="showImg(' + value + ')" ><img  src="' + value + '?x-oss-process=image/resize,m_fill,h_66,w_66"  style="width:66px; height:66px;"/></a> '
                         } else {
-                            res += '暂无图片'
+                            res += '暂无图片   '
                         }
+                        res += '<a href="javascript:;" onclick="showImgDialog(' + rowData.id + ')" >编辑</a>';
                         return res;
                     }
                 },
@@ -212,7 +242,6 @@
                 {title: '中文报关名', field: 'chineseProductName', width: 100},
                 {title: '英文报关名', field: 'englishProductName', width: 100},
                 {title: '开发人员', field: 'developerUserName', width: 100},
-                {title: '开发等级', field: 'developmentLevel', width: 65},
                 {
                     title: '开发时间', field: 'developmentTime', width: 100,
                     formatter: function (value, rowData, rowIndex) {
@@ -268,7 +297,137 @@
         $(dg).datagrid('clearSelections');
         initOperationRight();
     }
+    function showImgDialog(id) {
+        $('#dlgImg').dialog('open').dialog('setTitle', 'sku图片');
+        $('#frmImg').form('clear');
+        $("div#dlgImg input[name='entityId']").val(id);
+        $("div#dlgImg input[name='imgType']").val("productDevelop.productDevelop_img");
+        bindImgData();
+    }
+    function bindImgData() {
+        dg = '#dgImg';
+        url = "${pageContext.request.contextPath }/img/list";
+        title = "图片管理";
+        queryParams = {
+            entityId: $("div#dlgImg input[name='entityId']").val(),
+            imgType: $("div#dlgImg input[name='imgType']").val()
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: true,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 5,
+            pageList: [5, 10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'imgId',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '图片名', field: 'imgName', width: 180},
+                {
+                    title: '图片', field: 'imgUrl', width: 100,
+                    formatter: function (value, rowData, rowIndex) {
+                        return '<a href="javascript:;" onclick="showImg(' + value + ')" ><img  src="' + value + '?x-oss-process=image/resize,m_fill,h_66,w_66"  style="width:66px; height:66px;"/></a> ';
+                    }
+                },
+                {title: '创建时间', field: 'createTime', width: 180}
+            ]],
+            toolbar: [{
+                id: 'btnImgDelete',
+                text: '删除',
+                iconCls: 'icon-remove',
+                handler: function () {
+                    deleteImgInfo();//实现直接删除数据的方法
+                }
+            }, '-', {
+                id: 'btnImgReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        $(dg).datagrid('clearSelections');
+    }
+    function btnUploadImgFile() {
+        var entityId = $("div#dlgImg input[name='entityId']").val();
+        if (entityId == '') {
+            $.messager.alert("提示", "skuId不能为空");
+            return;
+        }
+        var imgType = $("div#dlgImg input[name='imgType']").val();
+        if (imgType == '') {
+            $.messager.alert("提示", "图片类型不能为空");
+            return;
+        }
+        var imgFile = $("div#dlgImg input[name='imgFile']").val();
+        if (imgFile == '') {
+            $.messager.alert("提示", "图片不能为空");
+            return;
+        }
+        var dom = document.getElementById("imgFile");
+        var fileSize = dom.files[0].size;
+        if (fileSize > 30000000) {
+            $.messager.alert("提示", "上传文件过大,请上传小于3M的图片");
+            return false;
+        }
+        $('#frmImg').form('submit', {
+            url: '${pageContext.request.contextPath }/img/addImg',
+            onSubmit: function () {
+                return $(this).form('validate');
+            },
+            success: function (data) {
+                res = eval("(" + data + ")");
+                if (res.code == '200') {
+                    $.messager.alert("提示", "上传成功");
+                    bindImgData();
+                }
+                else {
+                    $.messager.alert("提示", res.message);
+                }
+            }
+        });
+    }
+    function deleteImgInfo() {
+        //防止重复点击
+        var rows = $('#dgImg').datagrid('getSelections');
+        if (!rows || rows.length == 0) {
+            $.messager.alert("提示", "请选择要删除的数据.");
+            return;
+        }
+        $.messager.confirm('提示', '确认删除这' + rows.length + '条数据吗？', function (r) {
+            if (r) {
+                var imgIds = new Array();
+                for (var i = 0; i < rows.length; i++) {
+                    imgIds.push(rows[i].imgId);
+                }
+                $.post('${pageContext.request.contextPath }/img/deleteImg', {imgIds: imgIds}, function (data) {
+                    if (data.code == '200') {
+                        $('#dlg').dialog('close');
+                        bindImgData();
+                    }
+                    else {
+                        $.messager.alert("提示", data.message);
+                    }
+                });
+            }
+        });
+    }
 
+    function showImg(imgUrl) {
+        window.open(imgUrl);
+    }
     function showEditDialog() {
         var rows = $('#dg').datagrid('getSelections');
         if (rows && rows.length == 1) {
@@ -276,6 +435,7 @@
             $('#frm').form('load', rows[0]);
             $("#btn_save").show();
             $(".view_hide").hide();
+            $(".add_hide").show();
         } else {
             $.messager.alert("提示", "请选择一条记录.");
         }
@@ -288,6 +448,7 @@
             $('#frm').form('load', rows[0]);
             $("#btn_save").hide();
             $(".view_hide").show();
+            $(".add_hide").show();
         } else {
             $.messager.alert("提示", "请选择一条记录.");
         }
@@ -306,6 +467,8 @@
         $('#frm').form('clear');
         $("#btn_save").show();
         $(".view_hide").hide();
+        $(".add_hide").hide();
+
     }
 
     function save() {

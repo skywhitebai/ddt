@@ -21,7 +21,8 @@ public class ImgConstant {
 
     @Getter
    public enum ImgTypeEnum {
-        SKU_IMG("sku.sku_img");
+        SKU_IMG("sku.sku_img"),
+        PRODUCTDEVELOP_IMG("productDevelop.productDevelop_img");
         String imgType;
 
         ImgTypeEnum(String imgType) {
