@@ -21,8 +21,7 @@
             src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.5.5.4/jquery.easyui.min.js"></script>
     <script type="text/javascript"
             src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.5.5.4/locale/easyui-lang-zh_CN.js"></script>
-    <script type="text/javascript"
-            src="${pageContext.request.contextPath }/static/js/easyuiDateTool.js"></script>
+
     <script type="text/javascript"
             src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.5.5.4/locale/easyui-lang-zh_CN.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath }/static/css/main.css?t=20200928" type="text/css">
@@ -149,7 +148,7 @@
     <form id="frmImg" method="post" enctype="multipart/form-data">
         <table>
             <tr style="display: none">
-                <td>skuId：</td>
+                <td>entityId：</td>
                 <td>
                     <input class="easyui-validatebox textbox" name="entityId">
                 </td>
@@ -170,6 +169,39 @@
     </form>
     <table id="dgImg" style="width: 100%; height: auto">
     </table>
+</div>
+
+<div id="dlgFile" class="easyui-dialog" style="width: 600px; height: 600px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
+    <form id="frmFile" method="post" enctype="multipart/form-data">
+        <table>
+            <tr style="display: none">
+                <td>entityId：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="entityId">
+                </td>
+                <td>fileType：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="fileType">
+
+                </td>
+            </tr>
+            <tr>
+                <td><input type="file" id="file" name="file"></td>
+                <td>
+                    <a href="javascript:void(0)" class="easyui-linkbutton"
+                       data-options="iconCls:'icon-ok'" onclick="btnUploadFile()">上传附件</a>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table id="dgFile" style="width: 100%; height: auto">
+    </table>
+</div>
+<div id="cover">
+    <div id="coverMsg">
+        <img src="${pageContext.request.contextPath }/static/img/loading.gif" width="100px">
+    </div>
 </div>
 <script type="text/javascript">
     $(document).ready(function (){
@@ -238,6 +270,12 @@
                         return res;
                     }
                 },
+                {
+                    title: '附件', field: 'file', width: 60,
+                    formatter: function (value, rowData, rowIndex) {
+                        return '<a href="javascript:;" onclick="showFileDialog(' + rowData.id + ')" >编辑附件</a>';
+                    }
+                },
                 {title: '产品编码', field: 'productCode', width: 100},
                 {title: '中文报关名', field: 'chineseProductName', width: 100},
                 {title: '英文报关名', field: 'englishProductName', width: 100},
@@ -298,10 +336,10 @@
         initOperationRight();
     }
     function showImgDialog(id) {
-        $('#dlgImg').dialog('open').dialog('setTitle', 'sku图片');
+        $('#dlgImg').dialog('open').dialog('setTitle', '图片');
         $('#frmImg').form('clear');
         $("div#dlgImg input[name='entityId']").val(id);
-        $("div#dlgImg input[name='imgType']").val("productDevelop.productDevelop_img");
+        $("div#dlgImg input[name='imgType']").val("product_develop.img");
         bindImgData();
     }
     function bindImgData() {
@@ -336,7 +374,7 @@
                 {
                     title: '图片', field: 'imgUrl', width: 100,
                     formatter: function (value, rowData, rowIndex) {
-                        return '<a href="javascript:;" onclick="showImg(' + value + ')" ><img  src="' + value + '?x-oss-process=image/resize,m_fill,h_66,w_66"  style="width:66px; height:66px;"/></a> ';
+                        return '<a href="javascript:;" onclick="showImg(\'' + value + '\')" ><img  src="' + value + '?x-oss-process=image/resize,m_fill,h_66,w_66"  style="width:66px; height:66px;"/></a> ';
                     }
                 },
                 {title: '创建时间', field: 'createTime', width: 180}
@@ -379,15 +417,17 @@
         var dom = document.getElementById("imgFile");
         var fileSize = dom.files[0].size;
         if (fileSize > 30000000) {
-            $.messager.alert("提示", "上传文件过大,请上传小于3M的图片");
+            $.messager.alert("提示", "上传文件过大,请上传小于30M的图片");
             return false;
         }
+        showCover();
         $('#frmImg').form('submit', {
             url: '${pageContext.request.contextPath }/img/addImg',
             onSubmit: function () {
                 return $(this).form('validate');
             },
             success: function (data) {
+                hideCover();
                 res = eval("(" + data + ")");
                 if (res.code == '200') {
                     $.messager.alert("提示", "上传成功");
@@ -428,6 +468,141 @@
     function showImg(imgUrl) {
         window.open(imgUrl);
     }
+
+
+    function showFileDialog(id) {
+        $('#dlgFile').dialog('open').dialog('setTitle', '附件');
+        $('#frmFile').form('clear');
+        $("div#dlgFile input[name='entityId']").val(id);
+        $("div#dlgFile input[name='fileType']").val("product_develop.file");
+        bindFileData();
+    }
+    function bindFileData() {
+        dg = '#dgFile';
+        url = "${pageContext.request.contextPath }/file/list";
+        title = "附件管理";
+        queryParams = {
+            entityId: $("div#dlgFile input[name='entityId']").val(),
+            fileType: $("div#dlgFile input[name='fileType']").val()
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: true,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 5,
+            pageList: [5, 10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'id',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '文件名', field: 'fileName', width: 180},
+                {
+                    title: '文件下载', field: 'fileUrl', width: 100,
+                    formatter: function (value, rowData, rowIndex) {
+                        return '<a href="javascript:;" onclick="downFile(\'' + value + '\')" >下载</a> ';
+                    }
+                },
+                {title: '创建时间', field: 'createTime', width: 180}
+            ]],
+            toolbar: [{
+                id: 'btnFileDelete',
+                text: '删除',
+                iconCls: 'icon-remove',
+                handler: function () {
+                    deleteFileInfo();//实现直接删除数据的方法
+                }
+            }, '-', {
+                id: 'btnImgReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        $(dg).datagrid('clearSelections');
+    }
+    function btnUploadFile() {
+        var entityId = $("div#dlgFile input[name='entityId']").val();
+        if (entityId == '') {
+            $.messager.alert("提示", "entityId不能为空");
+            return;
+        }
+        var fileType = $("div#dlgFile input[name='fileType']").val();
+        if (fileType == '') {
+            $.messager.alert("提示", "文件类型不能为空");
+            return;
+        }
+        var file = $("div#dlgFile input[name='file']").val();
+        if (file == '') {
+            $.messager.alert("提示", "文件不能为空");
+            return;
+        }
+        var dom = document.getElementById("file");
+        var fileSize = dom.files[0].size;
+        if (fileSize > 50000000) {
+            $.messager.alert("提示", "上传文件过大,请上传小于50M的文件");
+            return false;
+        }
+        showCover();
+        $('#frmFile').form('submit', {
+            url: '${pageContext.request.contextPath }/file/addFile',
+            onSubmit: function () {
+                return $(this).form('validate');
+            },
+            success: function (data) {
+                hideCover();
+                res = eval("(" + data + ")");
+                if (res.code == '200') {
+                    $.messager.alert("提示", "上传成功");
+                    bindFileData();
+                }
+                else {
+                    $.messager.alert("提示", res.message);
+                }
+            }
+        });
+    }
+    function deleteFileInfo() {
+        //防止重复点击
+        var rows = $('#dgFile').datagrid('getSelections');
+        if (!rows || rows.length == 0) {
+            $.messager.alert("提示", "请选择要删除的数据.");
+            return;
+        }
+        $.messager.confirm('提示', '确认删除这' + rows.length + '条数据吗？', function (r) {
+            if (r) {
+                var fileIds = new Array();
+                for (var i = 0; i < rows.length; i++) {
+                    fileIds.push(rows[i].id);
+                }
+                $.post('${pageContext.request.contextPath }/file/deleteFile', {fileIds: fileIds}, function (data) {
+                    if (data.code == '200') {
+                        $('#dlg').dialog('close');
+                        bindFileData();
+                    }
+                    else {
+                        $.messager.alert("提示", data.message);
+                    }
+                });
+            }
+        });
+    }
+    function downFile(fileUrl) {
+        window.open(fileUrl);
+    }
+
     function showEditDialog() {
         var rows = $('#dg').datagrid('getSelections');
         if (rows && rows.length == 1) {

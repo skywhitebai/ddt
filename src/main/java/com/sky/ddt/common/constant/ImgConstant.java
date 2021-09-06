@@ -12,8 +12,7 @@ public class ImgConstant {
     public static final String IMG_TYPE_EMPTY = "图片类型不能为空" ;
     public static final String IMG_FILE_EMPTY ="图片不能为空" ;
     public static final String IMG_READ_FAIL = "图片读取失败";
-    public static final long IMG_MAX_SIZE =5*1024*1024 ;
-    public static final String IMG_MAX_ERRO ="图片不能大于5M" ;
+    public static final long IMG_MAX_SIZE =5;
     public final static String FILE_EMPTY="文件不能为空";
     public final static String FILE_MAX_ERRO="文件不能超过";
     public final static String FILE_TYPE_ERRO="文件类型错误";
@@ -22,7 +21,7 @@ public class ImgConstant {
     @Getter
    public enum ImgTypeEnum {
         SKU_IMG("sku.sku_img"),
-        PRODUCTDEVELOP_IMG("productDevelop.productDevelop_img");
+        PRODUCTDEVELOP_IMG("product_develop.img");
         String imgType;
 
         ImgTypeEnum(String imgType) {

@@ -4,14 +4,17 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.ProductDevelopConstant;
 import com.sky.ddt.dao.custom.CustomProductDevelopMapper;
+import com.sky.ddt.dao.custom.CustomProductMapper;
 import com.sky.ddt.dto.product.response.ProductListResponse;
 import com.sky.ddt.dto.productDevelop.request.ListProductDevelopRequest;
 import com.sky.ddt.dto.productDevelop.request.SaveProductDevelopRequest;
 import com.sky.ddt.dto.productDevelop.response.ListProductDevelopResponse;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.entity.Product;
 import com.sky.ddt.entity.ProductDevelop;
 import com.sky.ddt.entity.ProductDevelopExample;
 import com.sky.ddt.service.IProductDevelopService;
+import com.sky.ddt.service.IProductService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +32,10 @@ import java.util.List;
 public class ProductDevelopService implements IProductDevelopService {
     @Autowired
     CustomProductDevelopMapper customProductDevelopMapper;
+    @Autowired
+    IProductService productService;
+    @Autowired
+    CustomProductMapper customProductMapper;
 
     @Override
     public PageInfo<ListProductDevelopResponse> listProductDevelop(ListProductDevelopRequest params) {
@@ -61,9 +68,25 @@ public class ProductDevelopService implements IProductDevelopService {
         }
         ProductDevelop productDevelopUpdate=new ProductDevelop();
         BeanUtils.copyProperties(params, productDevelopUpdate);
-        productDevelopUpdate.setCreateBy(dealUserId);
-        productDevelopUpdate.setCreateTime(new Date());
+        productDevelopUpdate.setUpdateBy(dealUserId);
+        productDevelopUpdate.setUpdateTime(new Date());
+        if (ProductDevelopConstant.ProductDevelopStatusEnum.CONFIRM_PRODUCTION.getValue().equals(params.getStatus())) {
+            //确认生产
+            //判断产品编码是否存在
+            if(productService.getProductByProductCode(params.getProductCode())!=null){
+                return BaseResponse.failMessage("产品表已存在产品编码["+params.getProductCode()+"]，请修改后再确认生产");
+            }
+            Product product=new Product();
+            BeanUtils.copyProperties(productDevelop,product);
+            product.setCreateBy(dealUserId);
+            product.setCreateTime(new Date());
+            customProductMapper.insertSelective(product);
+            productDevelopUpdate.setProductId(product.getProductId());
+        }
         customProductDevelopMapper.updateByPrimaryKeySelective(productDevelopUpdate);
+        if (ProductDevelopConstant.ProductDevelopStatusEnum.CONFIRM_PRODUCTION.getValue().equals(params.getStatus())) {
+            return BaseResponse.successMessage("确认生产成功");
+        }
         return BaseResponse.success();
     }
 

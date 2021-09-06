@@ -1,4 +1,5 @@
 package com.sky.ddt.util;
+import com.sky.ddt.common.constant.FileConstant;
 import com.sky.ddt.common.constant.ImgConstant;
 import com.sky.ddt.dto.response.BaseResponse;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,24 +35,24 @@ public class FileCheckUtil {
 
         // 检测文件是否存在
         if (mulFile == null) {
-            return BaseResponse.failMessage(ImgConstant.FILE_EMPTY);
+            return BaseResponse.failMessage(FileConstant.FILE_EMPTY);
         }
         String fileName = mulFile.getOriginalFilename();
         if (fileName.trim() == "") {
-            return BaseResponse.failMessage(ImgConstant.FILE_EMPTY);
+            return BaseResponse.failMessage(FileConstant.FILE_EMPTY);
         }
 
         // 检测类型
         String contentType = mulFile.getContentType();
         if (type!=null && !Arrays.asList(type).contains(contentType)) {
-            return BaseResponse.failMessage( ImgConstant.FILE_TYPE_ERRO);
+            return BaseResponse.failMessage( FileConstant.FILE_TYPE_ERRO);
         }
 
         // 检测大小
         long fileSize = mulFile.getSize();
         long maxFileSizeTemp = maxFileSize * 1024 * 1024;
         if (fileSize > maxFileSizeTemp || fileSize <= 0) {
-            return BaseResponse.failMessage(ImgConstant.FILE_MAX_ERRO + maxFileSize + "M");
+            return BaseResponse.failMessage(FileConstant.FILE_MAX_ERRO + maxFileSize + "M");
         }
         return BaseResponse.success();
     }

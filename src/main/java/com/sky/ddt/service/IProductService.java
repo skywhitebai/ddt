@@ -25,7 +25,7 @@ public interface IProductService {
      * @author baixueping
      * @date 2019/5/10 15:28
      */
-    Product getProductByProductCode(String sku);
+    Product getProductByProductCode(String productCode);
 
     /**
      * @param
