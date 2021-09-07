@@ -41,13 +41,14 @@
 <div class="easyui-panel">
     产品名：
     <input class="easyui-validatebox textbox" id="s_productName">
-    货号：
+    产品编码：
     <input class="easyui-validatebox textbox" id="s_productCode">
     开发人员：
     <select id="s_developerUserId" name="developerUserId" style="width:150px;">
     </select>
     状态：
     <select class="easyui-combobox" id="s_status" style="width:100px;" >
+        <option value="">全部</option>
         <option value="1">开发中</option>
         <option value="2">开发完成</option>
         <option value="3">确认生产</option>
@@ -329,7 +330,6 @@
             }
         })
         $(dg).datagrid('clearSelections');
-        initOperationRight();
     }
     function showImgDialog(id) {
         $('#dlgImg').dialog('open').dialog('setTitle', '图片');
@@ -680,7 +680,7 @@
         queryParams = {
             productName: $("#s_productName").val(),
             productCode: $("#s_productCode").val(),
-            developUserId: $("#s_developUserId").val(),
+            developerUserId: $("#s_developerUserId").combobox('getValue'),
             status: $("#s_status").val()
         };
         return queryParams;

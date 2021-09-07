@@ -12,6 +12,6 @@ import lombok.Data;
 public class ListProductDevelopRequest extends DataGridRequest {
     private String productName;
     private String productCode;
-    private Integer developUserId;
+    private Integer developerUserId;
     private Integer status;
 }

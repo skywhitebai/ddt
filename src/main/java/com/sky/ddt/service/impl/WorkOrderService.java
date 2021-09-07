@@ -72,7 +72,7 @@ public class WorkOrderService implements IWorkOrderService {
             }
             if (WorkOrderConstant.StatusEnum.COMPLETED.getStatus().equals(params.getStatus())) {
                 Date now = new Date();
-                if (now.before(workOrderExist.getPlanEndTime())) {
+                if (workOrderExist.getPlanEndTime()==null||now.before(workOrderExist.getPlanEndTime())) {
                     workOrder.setDealStatus(WorkOrderConstant.DealStatusEnum.HANDLER.getDealStatus());
                 } else {
                     workOrder.setDealStatus(WorkOrderConstant.DealStatusEnum.TIMEOUT_HANDLER.getDealStatus());
