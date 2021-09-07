@@ -2,11 +2,8 @@ package com.sky.ddt.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.annotation.MenuAnnotation;
-import com.sky.ddt.common.annotation.RightAnnotation;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
-import com.sky.ddt.dto.product.request.ProductListRequest;
-import com.sky.ddt.dto.product.request.ProductSaveRequest;
-import com.sky.ddt.dto.product.response.ProductListResponse;
+import com.sky.ddt.dto.productDevelop.request.ChangeProductDevelopStatusRequest;
 import com.sky.ddt.dto.productDevelop.request.ListProductDevelopRequest;
 import com.sky.ddt.dto.productDevelop.request.SaveProductDevelopRequest;
 import com.sky.ddt.dto.productDevelop.response.ListProductDevelopResponse;
@@ -50,5 +47,12 @@ public class ProductDevelopController extends SuperController{
     public BaseResponse saveProductDevelop(@Validated SaveProductDevelopRequest params) {
         Integer dealUserId=getCurrentUserId();
         return productDevelopService.saveProductDevelop(params,dealUserId);
+    }
+    @RequestMapping("/changeProductDevelopStatus")
+    @ResponseBody
+    @MenuAnnotation("productDevelop/index")
+    public BaseResponse changeProductDevelopStatus(@Validated ChangeProductDevelopStatusRequest params) {
+        Integer dealUserId=getCurrentUserId();
+        return productDevelopService.changeProductDevelopStatus(params,dealUserId);
     }
 }

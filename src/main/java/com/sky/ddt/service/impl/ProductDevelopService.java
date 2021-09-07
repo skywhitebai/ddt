@@ -6,6 +6,7 @@ import com.sky.ddt.common.constant.ProductDevelopConstant;
 import com.sky.ddt.dao.custom.CustomProductDevelopMapper;
 import com.sky.ddt.dao.custom.CustomProductMapper;
 import com.sky.ddt.dto.product.response.ProductListResponse;
+import com.sky.ddt.dto.productDevelop.request.ChangeProductDevelopStatusRequest;
 import com.sky.ddt.dto.productDevelop.request.ListProductDevelopRequest;
 import com.sky.ddt.dto.productDevelop.request.SaveProductDevelopRequest;
 import com.sky.ddt.dto.productDevelop.response.ListProductDevelopResponse;
@@ -66,18 +67,55 @@ public class ProductDevelopService implements IProductDevelopService {
         if (ProductDevelopConstant.ProductDevelopStatusEnum.CONFIRM_PRODUCTION.getValue().equals(productDevelop.getStatus())) {
             return BaseResponse.failMessage("产品已确认生产，不允许修改");
         }
-        ProductDevelop productDevelopUpdate=new ProductDevelop();
+        ProductDevelop productDevelopUpdate = new ProductDevelop();
         BeanUtils.copyProperties(params, productDevelopUpdate);
         productDevelopUpdate.setUpdateBy(dealUserId);
         productDevelopUpdate.setUpdateTime(new Date());
         if (ProductDevelopConstant.ProductDevelopStatusEnum.CONFIRM_PRODUCTION.getValue().equals(params.getStatus())) {
             //确认生产
             //判断产品编码是否存在
-            if(productService.getProductByProductCode(params.getProductCode())!=null){
-                return BaseResponse.failMessage("产品表已存在产品编码["+params.getProductCode()+"]，请修改后再确认生产");
+            if (productService.getProductByProductCode(params.getProductCode()) != null) {
+                return BaseResponse.failMessage("产品表已存在产品编码[" + params.getProductCode() + "]，请修改后再确认生产");
             }
-            Product product=new Product();
-            BeanUtils.copyProperties(productDevelop,product);
+            Product product = new Product();
+            BeanUtils.copyProperties(productDevelop, product);
+            product.setCreateBy(dealUserId);
+            product.setCreateTime(new Date());
+            customProductMapper.insertSelective(product);
+            productDevelopUpdate.setProductId(product.getProductId());
+        }
+        customProductDevelopMapper.updateByPrimaryKeySelective(productDevelopUpdate);
+        if (ProductDevelopConstant.ProductDevelopStatusEnum.CONFIRM_PRODUCTION.getValue().equals(params.getStatus())) {
+            return BaseResponse.successMessage("确认生产成功");
+        }
+        return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse changeProductDevelopStatus(ChangeProductDevelopStatusRequest params, Integer dealUserId) {
+        if (!ProductDevelopConstant.ProductDevelopStatusEnum.contains(params.getStatus())) {
+            return BaseResponse.failMessage("产品开发状态错误");
+        }
+        ProductDevelop productDevelop = customProductDevelopMapper.selectByPrimaryKey(params.getId());
+        if (productDevelop == null) {
+            return BaseResponse.failMessage("产品开发id不存在");
+        }
+        if (ProductDevelopConstant.ProductDevelopStatusEnum.CONFIRM_PRODUCTION.getValue().equals(productDevelop.getStatus())) {
+            return BaseResponse.failMessage("产品已确认生产，不允许修改");
+        }
+        ProductDevelop productDevelopUpdate = new ProductDevelop();
+        productDevelopUpdate.setId(params.getId());
+        productDevelopUpdate.setUpdateBy(dealUserId);
+        productDevelopUpdate.setUpdateTime(new Date());
+        productDevelopUpdate.setStatus(params.getStatus());
+        if (ProductDevelopConstant.ProductDevelopStatusEnum.CONFIRM_PRODUCTION.getValue().equals(params.getStatus())) {
+            //确认生产
+            //判断产品编码是否存在
+            if (productService.getProductByProductCode(productDevelop.getProductCode()) != null) {
+                return BaseResponse.failMessage("产品表已存在产品编码[" + productDevelop.getProductCode() + "]，请修改后再确认生产");
+            }
+            Product product = new Product();
+            BeanUtils.copyProperties(productDevelop, product);
             product.setCreateBy(dealUserId);
             product.setCreateTime(new Date());
             customProductMapper.insertSelective(product);

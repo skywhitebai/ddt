@@ -47,7 +47,7 @@
     <select id="s_developerUserId" name="developerUserId" style="width:150px;">
     </select>
     状态：
-    <select class="easyui-combobox" id="s_status" style="width:100px;" >
+    <select class="easyui-combobox" id="s_status" style="width:100px;">
         <option value="">全部</option>
         <option value="1">开发中</option>
         <option value="2">开发完成</option>
@@ -82,17 +82,17 @@
                 </td>
                 <td>货号：</td>
                 <td>
-                    <input class="easyui-textbox" name="productCode" >
+                    <input class="easyui-textbox" name="productCode">
                 </td>
             </tr>
             <tr>
                 <td>中文报关名：</td>
                 <td>
-                    <input class="easyui-textbox" type="text" name="chineseProductName" >
+                    <input class="easyui-textbox" type="text" name="chineseProductName">
                 </td>
                 <td>英文报关名：</td>
                 <td>
-                    <input class="easyui-textbox" type="text" name="englishProductName" >
+                    <input class="easyui-textbox" type="text" name="englishProductName">
                 </td>
             </tr>
             <tr>
@@ -112,7 +112,7 @@
             <tr class="add_hide">
                 <td>状态：</td>
                 <td>
-                    <select class="easyui-combobox" name="status" style="width:100px;" >
+                    <select class="easyui-combobox" name="status" style="width:100px;">
                         <option value="1">开发中</option>
                         <option value="2">开发完成</option>
                         <option value="3">确认生产</option>
@@ -129,7 +129,7 @@
                 <td>开发时间：</td>
                 <td>
                     <input name="developmentTime" id="developmentTime"
-                           class="easyui-validatebox textbox" readonly="readonly" />
+                           class="easyui-validatebox textbox" readonly="readonly"/>
                 </td>
             </tr>
             <tr class="view_hide">
@@ -220,7 +220,7 @@
     </div>
 </div>
 <script type="text/javascript">
-    $(document).ready(function (){
+    $(document).ready(function () {
         bindDeveloperUserId();
         bindData();
     });
@@ -276,7 +276,7 @@
                 {title: '中文报关名', field: 'chineseProductName', width: 100},
                 {title: '英文报关名', field: 'englishProductName', width: 100},
                 {title: '开发人员', field: 'developerUserName', width: 100},
-                {title: '开发等级', field: 'developmentLevel', width: 50},
+                {title: '开发等级', field: 'developmentLevel', width: 70},
                 {
                     title: '开发时间', field: 'developmentTime', width: 100,
                     formatter: function (value, rowData, rowIndex) {
@@ -286,9 +286,34 @@
                         }
                         return res;
                     }
+                }, {
+                    title: '状态', field: 'status', width: 70,
+                    formatter: function (value, rowData, rowIndex) {
+                        if (value == 1) {
+                            return '开发中';
+                        }else if (value == 2) {
+                            return '开发完成';
+                        } else if (value == 3) {
+                            return '确认生产';
+                        }else if (value == 4) {
+                            return '开发失败';
+                        }
+                    }
                 },
                 {title: '创建时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
+                {
+                    title: '操作', field: 'deal', width: 258,
+                    formatter: function (value, rowData, rowIndex) {
+                        if (rowData.status == 3) {
+                            return '';
+                        }
+                        return '<a href="javascript:;" onclick="changeStatus(' + rowData.id + ',1)" >开发中</a>&nbsp;&nbsp;'
+                            + '<a href="javascript:;" onclick="changeStatus(' + rowData.id + ',2)" >开发完成</a>&nbsp;&nbsp;'
+                            + '<a href="javascript:;" onclick="changeStatus(' + rowData.id + ',3)" >确认生产</a>&nbsp;&nbsp;'
+                            + '<a href="javascript:;" onclick="changeStatus(' + rowData.id + ',4)" >开发失败</a>&nbsp;&nbsp;';
+                    }
+                },
                 {title: '备注', field: 'remark', width: 300}
             ]],
             toolbar: [{
@@ -331,6 +356,7 @@
         })
         $(dg).datagrid('clearSelections');
     }
+
     function showImgDialog(id) {
         $('#dlgImg').dialog('open').dialog('setTitle', '图片');
         $('#frmImg').form('clear');
@@ -338,6 +364,7 @@
         $("div#dlgImg input[name='imgType']").val("product_develop.img");
         bindImgData();
     }
+
     function bindImgData() {
         dg = '#dgImg';
         url = "${pageContext.request.contextPath }/img/list";
@@ -394,6 +421,7 @@
         })
         $(dg).datagrid('clearSelections');
     }
+
     function btnUploadImgFile() {
         var entityId = $("div#dlgImg input[name='entityId']").val();
         if (entityId == '') {
@@ -428,13 +456,13 @@
                 if (res.code == '200') {
                     $.messager.alert("提示", "上传成功");
                     bindImgData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
         });
     }
+
     function deleteImgInfo() {
         //防止重复点击
         var rows = $('#dgImg').datagrid('getSelections');
@@ -450,10 +478,8 @@
                 }
                 $.post('${pageContext.request.contextPath }/img/deleteImg', {imgIds: imgIds}, function (data) {
                     if (data.code == '200') {
-                        $('#dlg').dialog('close');
                         bindImgData();
-                    }
-                    else {
+                    } else {
                         $.messager.alert("提示", data.message);
                     }
                 });
@@ -473,6 +499,7 @@
         $("div#dlgFile input[name='fileType']").val("product_develop.file");
         bindFileData();
     }
+
     function bindFileData() {
         dg = '#dgFile';
         url = "${pageContext.request.contextPath }/file/list";
@@ -529,6 +556,7 @@
         })
         $(dg).datagrid('clearSelections');
     }
+
     function btnUploadFile() {
         var entityId = $("div#dlgFile input[name='entityId']").val();
         if (entityId == '') {
@@ -563,13 +591,13 @@
                 if (res.code == '200') {
                     $.messager.alert("提示", "上传成功");
                     bindFileData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
         });
     }
+
     function deleteFileInfo() {
         //防止重复点击
         var rows = $('#dgFile').datagrid('getSelections');
@@ -587,16 +615,43 @@
                     if (data.code == '200') {
                         $('#dlg').dialog('close');
                         bindFileData();
-                    }
-                    else {
+                    } else {
                         $.messager.alert("提示", data.message);
                     }
                 });
             }
         });
     }
+
     function downFile(fileUrl) {
         window.open(fileUrl);
+    }
+
+    function changeStatus(id, status) {
+        var statusName = "";
+        if (status == 1) {
+            statusName = "开发中";
+        } else if (status == 2) {
+            statusName = "开发完成";
+        } else if (status == 3) {
+            statusName = "确认生产";
+        } else if (status == 4) {
+            statusName = "开发失败";
+        }
+        $.messager.confirm('提示', '确认修改状态为' + statusName + '吗？', function (r) {
+            if (r) {
+                $.post('${pageContext.request.contextPath }/productDevelop/changeProductDevelopStatus', {
+                    id: id,
+                    status: status
+                }, function (data) {
+                    if (data.code == '200') {
+                        bindData();
+                    } else {
+                        $.messager.alert("提示", data.message);
+                    }
+                });
+            }
+        });
     }
 
     function showEditDialog() {
