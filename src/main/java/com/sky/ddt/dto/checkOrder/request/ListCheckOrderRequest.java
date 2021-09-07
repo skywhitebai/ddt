@@ -20,5 +20,6 @@ public class ListCheckOrderRequest extends DataGridRequest{
     Date checkTimeEnd;
     String batchNumber;
     String shopSku;
+    String sku;
     Integer status;
 }

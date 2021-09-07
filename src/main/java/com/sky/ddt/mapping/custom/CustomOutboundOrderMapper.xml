@@ -31,6 +31,10 @@
                     and exists (select 1 from outbound_order_shop_sku ooss,shop_sku ss where ooss.outbound_order_id=oo.id and ooss.shop_sku_id=ss.shop_sku_id
                     and ss.shop_sku like concat('%',#{shopSku},'%'))
                 </if>
+                <if test="sku != null and sku != '' ">
+                    and exists (select 1 from outbound_order_shop_sku ooss,shop_sku ss,sku s where ooss.outbound_order_id=oo.id and
+                    ooss.shop_sku_id=ss.shop_sku_id and ss.sku_id=s.sku_id and s.sku like concat('%',#{sku},'%'))
+                </if>
                 <if test="status != null">and status=#{status}</if>
                 <if test="type != null">and type=#{type}</if>
             </trim>

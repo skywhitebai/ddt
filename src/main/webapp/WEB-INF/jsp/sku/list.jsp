@@ -615,7 +615,7 @@
         var dom = document.getElementById("imgFile");
         var fileSize = dom.files[0].size;
         if (fileSize > 30000000) {
-            $.messager.alert("提示", "上传文件过大,请上传小于3M的图片");
+            $.messager.alert("提示", "上传文件过大,请上传小于30M的图片");
             return false;
         }
         $('#frmImg').form('submit', {

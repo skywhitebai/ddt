@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomSkuInventoryQuantityHisMapper">
+
+    <insert id="saveSkuInventoryQuantityHis">
+       INSERT INTO sku_inventory_quantity_his(sku_id,inventory_quantity,MONTH)
+       SELECT s.sku_id,SUM(ss.inventory_quantity),#{month} FROM `sku` s,shop_sku ss
+        WHERE s.sku_id=ss.sku_id AND ss.inventory_quantity IS NOT NULL AND ss.inventory_quantity!=0
+        GROUP BY s.sku_id
+</insert>
+    <resultMap id="listSkuInventoryQuantityHisMap"
+               type="com.sky.ddt.dto.inventoryQuantityHis.response.ListInventoryQuantityHisResponse"
+               extends="com.sky.ddt.dao.generate.SkuInventoryQuantityHisMapper.BaseResultMap">
+        <result column="product_name" property="productName"/>
+        <result column="product_code" property="productCode"/>
+        <result column="product_Id" property="productId"/>
+        <result column="sku_name" property="skuName"/>
+        <result column="sku" property="sku"/>
+    </resultMap>
+    <select id="listSkuInventoryQuantityHis"
+            resultMap="listSkuInventoryQuantityHisMap">
+        select siqh.*,s.sku,p.product_name,p.product_code from sku_inventory_quantity_his siqh,
+        product p,sku s
+        where s.product_id=p.product_id and siqh.sku_id=s.sku_id
+        <if test="monthDate != null">and  siqh.month=#{monthDate}</if>
+        <if test="productCode != null and productCode != '' ">and  p.productCode like concat('%',#{productCode},'%')</if>
+        <if test="sku != null and sku != '' ">and  s.sku like concat('%',#{sku},'%')</if>
+    </select>
+</mapper>

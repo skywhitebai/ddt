@@ -54,6 +54,7 @@ public class ImgController extends SuperController {
     public BaseResponse deleteImg(@RequestParam(required = false, value = "imgIds[]") List<Integer> imgIds) {
         return imgService.deleteImg(imgIds);
     }
+    @Deprecated
     @RequestMapping("get")
     @ResponseBody
     public void get(Integer imgId) throws IOException {

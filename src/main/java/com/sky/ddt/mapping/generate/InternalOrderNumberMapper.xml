@@ -11,6 +11,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_by" jdbcType="INTEGER" property="updateBy" />
     <result column="transport_type_id" jdbcType="INTEGER" property="transportTypeId" />
+    <result column="financial_remark" jdbcType="VARCHAR" property="financialRemark" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,7 +73,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, order_number, number, remark, create_time, create_by, update_time, update_by, 
-    transport_type_id
+    transport_type_id, financial_remark
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.InternalOrderNumberExample" resultMap="BaseResultMap">
     select
@@ -110,10 +111,12 @@
     </selectKey>
     insert into internal_order_number (order_number, number, remark, 
       create_time, create_by, update_time, 
-      update_by, transport_type_id)
+      update_by, transport_type_id, financial_remark
+      )
     values (#{orderNumber,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=INTEGER}, #{transportTypeId,jdbcType=INTEGER})
+      #{updateBy,jdbcType=INTEGER}, #{transportTypeId,jdbcType=INTEGER}, #{financialRemark,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.InternalOrderNumber">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -145,6 +148,9 @@
       <if test="transportTypeId != null">
         transport_type_id,
       </if>
+      <if test="financialRemark != null">
+        financial_remark,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="orderNumber != null">
@@ -170,6 +176,9 @@
       </if>
       <if test="transportTypeId != null">
         #{transportTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="financialRemark != null">
+        #{financialRemark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -209,6 +218,9 @@
       <if test="record.transportTypeId != null">
         transport_type_id = #{record.transportTypeId,jdbcType=INTEGER},
       </if>
+      <if test="record.financialRemark != null">
+        financial_remark = #{record.financialRemark,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -224,7 +236,8 @@
       create_by = #{record.createBy,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       update_by = #{record.updateBy,jdbcType=INTEGER},
-      transport_type_id = #{record.transportTypeId,jdbcType=INTEGER}
+      transport_type_id = #{record.transportTypeId,jdbcType=INTEGER},
+      financial_remark = #{record.financialRemark,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -256,6 +269,9 @@
       <if test="transportTypeId != null">
         transport_type_id = #{transportTypeId,jdbcType=INTEGER},
       </if>
+      <if test="financialRemark != null">
+        financial_remark = #{financialRemark,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -268,7 +284,8 @@
       create_by = #{createBy,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=INTEGER},
-      transport_type_id = #{transportTypeId,jdbcType=INTEGER}
+      transport_type_id = #{transportTypeId,jdbcType=INTEGER},
+      financial_remark = #{financialRemark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

@@ -52,6 +52,8 @@
     <input class="easyui-validatebox textbox" id="s_fbaNo">
     店铺sku：
     <input class="easyui-validatebox textbox" id="s_shopSku">
+    产品sku：
+    <input class="easyui-validatebox textbox" id="s_sku">
     type：
     <select class="easyui-combobox" id="s_type" style="width:100px;">
         <option value="">全部</option>
@@ -321,6 +323,7 @@
             batchNumber: $("#s_batchNumber").val(),
             fbaNo: $("#s_fbaNo").val(),
             shopSku: $("#s_shopSku").val(),
+            sku: $("#s_sku").val(),
             status: $("#s_status").val()
         };
         return queryParams;

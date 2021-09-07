@@ -36,7 +36,7 @@ public class WarehousingOrderController extends SuperController {
         return "warehousingOrder/list";
     }
 
-    @RequestMapping("listWarehousingOrder")
+    @RequestMapping("/listWarehousingOrder")
     @ResponseBody
     @MenuAnnotation("warehousingOrder/index")
     public DataGridResponse listWarehousingOrder(ListWarehousingOrderRequest listWarehousingOrderRequest) {

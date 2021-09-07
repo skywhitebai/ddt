@@ -48,7 +48,7 @@ public class ProudctController extends SuperController {
         dataGridResponse.setRows(page.getList());
         return dataGridResponse;
     }
-    @RequestMapping("save")
+    @RequestMapping("/save")
     @ResponseBody
     @RightAnnotation("product/saveProduct")
     public BaseResponse save(@Validated ProductSaveRequest params) {

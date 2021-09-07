@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.InternalOrderNumberConstant;
 import com.sky.ddt.dao.custom.CustomInternalOrderNumberMapper;
 import com.sky.ddt.dto.internalOrderNumber.request.ListInternalOrderNumberRequest;
+import com.sky.ddt.dto.internalOrderNumber.request.SaveInternalOrderNumberFinancialRemarkRequest;
 import com.sky.ddt.dto.internalOrderNumber.request.SaveInternalOrderNumberRequest;
 import com.sky.ddt.dto.internalOrderNumber.response.ListInternalOrderNumberResponse;
 import com.sky.ddt.dto.response.BaseResponse;
@@ -128,6 +129,21 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
             return null;
         }
         return list.get(0);
+    }
+
+    @Override
+    public BaseResponse saveFinancialRemark(SaveInternalOrderNumberFinancialRemarkRequest params, Integer dealUserId) {
+        InternalOrderNumber internalOrderNumber = customInternalOrderNumberMapper.selectByPrimaryKey(params.getId());
+        if (internalOrderNumber == null) {
+            return BaseResponse.failMessage(InternalOrderNumberConstant.ID_NOT_EXIST);
+        }
+        InternalOrderNumber internalOrderNumberUpdate = new InternalOrderNumber();
+        internalOrderNumberUpdate.setId(params.getId());
+        internalOrderNumberUpdate.setFinancialRemark(params.getFinancialRemark());
+        internalOrderNumberUpdate.setUpdateTime(new Date());
+        internalOrderNumberUpdate.setUpdateBy(dealUserId);
+        customInternalOrderNumberMapper.updateByPrimaryKeySelective(internalOrderNumberUpdate);
+        return BaseResponse.success();
     }
 
     private String getOrderNumber() {

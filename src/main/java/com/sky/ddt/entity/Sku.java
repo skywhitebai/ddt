@@ -24,8 +24,6 @@ public class Sku {
 
     private BigDecimal headTripCostMin;
 
-    private Integer inventoryQuantity;
-
     private String remark;
 
     private Date createTime;
@@ -53,6 +51,8 @@ public class Sku {
     private String inspector;
 
     private String suggestedRetailPrice;
+
+    private Integer developmentLevel;
 
     public Integer getSkuId() {
         return skuId;
@@ -132,14 +132,6 @@ public class Sku {
 
     public void setHeadTripCostMin(BigDecimal headTripCostMin) {
         this.headTripCostMin = headTripCostMin;
-    }
-
-    public Integer getInventoryQuantity() {
-        return inventoryQuantity;
-    }
-
-    public void setInventoryQuantity(Integer inventoryQuantity) {
-        this.inventoryQuantity = inventoryQuantity;
     }
 
     public String getRemark() {
@@ -252,5 +244,13 @@ public class Sku {
 
     public void setSuggestedRetailPrice(String suggestedRetailPrice) {
         this.suggestedRetailPrice = suggestedRetailPrice == null ? null : suggestedRetailPrice.trim();
+    }
+
+    public Integer getDevelopmentLevel() {
+        return developmentLevel;
+    }
+
+    public void setDevelopmentLevel(Integer developmentLevel) {
+        this.developmentLevel = developmentLevel;
     }
 }

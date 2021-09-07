@@ -4,13 +4,13 @@
   <resultMap id="BaseResultMap" type="com.sky.ddt.entity.WorkOrder">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="level" jdbcType="INTEGER" property="level" />
     <result column="plan_end_time" jdbcType="TIMESTAMP" property="planEndTime" />
     <result column="actual_end_time" jdbcType="TIMESTAMP" property="actualEndTime" />
     <result column="deal_user_id" jdbcType="INTEGER" property="dealUserId" />
-    <result column="dael_time_staus" jdbcType="INTEGER" property="daelTimeStaus" />
+    <result column="deal_status" jdbcType="INTEGER" property="dealStatus" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -78,8 +78,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, title, remark, status, level, plan_end_time, actual_end_time, deal_user_id, dael_time_staus, 
-    create_time, create_by, update_time, update_by
+    id, title, status, level, plan_end_time, actual_end_time, deal_user_id, deal_status, 
+    remark, create_time, create_by, update_time, update_by
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -136,14 +136,14 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into work_order (title, remark, status, 
-      level, plan_end_time, actual_end_time, 
-      deal_user_id, dael_time_staus, create_time, 
+    insert into work_order (title, status, level, 
+      plan_end_time, actual_end_time, deal_user_id, 
+      deal_status, remark, create_time, 
       create_by, update_time, update_by, 
       content)
-    values (#{title,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{level,jdbcType=INTEGER}, #{planEndTime,jdbcType=TIMESTAMP}, #{actualEndTime,jdbcType=TIMESTAMP}, 
-      #{dealUserId,jdbcType=INTEGER}, #{daelTimeStaus,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+    values (#{title,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{level,jdbcType=INTEGER}, 
+      #{planEndTime,jdbcType=TIMESTAMP}, #{actualEndTime,jdbcType=TIMESTAMP}, #{dealUserId,jdbcType=INTEGER}, 
+      #{dealStatus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
       #{content,jdbcType=LONGVARCHAR})
   </insert>
@@ -155,9 +155,6 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="title != null">
         title,
-      </if>
-      <if test="remark != null">
-        remark,
       </if>
       <if test="status != null">
         status,
@@ -174,8 +171,11 @@
       <if test="dealUserId != null">
         deal_user_id,
       </if>
-      <if test="daelTimeStaus != null">
-        dael_time_staus,
+      <if test="dealStatus != null">
+        deal_status,
+      </if>
+      <if test="remark != null">
+        remark,
       </if>
       <if test="createTime != null">
         create_time,
@@ -197,9 +197,6 @@
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
       </if>
-      <if test="remark != null">
-        #{remark,jdbcType=VARCHAR},
-      </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
       </if>
@@ -215,8 +212,11 @@
       <if test="dealUserId != null">
         #{dealUserId,jdbcType=INTEGER},
       </if>
-      <if test="daelTimeStaus != null">
-        #{daelTimeStaus,jdbcType=INTEGER},
+      <if test="dealStatus != null">
+        #{dealStatus,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -250,9 +250,6 @@
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
       </if>
-      <if test="record.remark != null">
-        remark = #{record.remark,jdbcType=VARCHAR},
-      </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
@@ -268,8 +265,11 @@
       <if test="record.dealUserId != null">
         deal_user_id = #{record.dealUserId,jdbcType=INTEGER},
       </if>
-      <if test="record.daelTimeStaus != null">
-        dael_time_staus = #{record.daelTimeStaus,jdbcType=INTEGER},
+      <if test="record.dealStatus != null">
+        deal_status = #{record.dealStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -295,13 +295,13 @@
     update work_order
     set id = #{record.id,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
-      remark = #{record.remark,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
       level = #{record.level,jdbcType=INTEGER},
       plan_end_time = #{record.planEndTime,jdbcType=TIMESTAMP},
       actual_end_time = #{record.actualEndTime,jdbcType=TIMESTAMP},
       deal_user_id = #{record.dealUserId,jdbcType=INTEGER},
-      dael_time_staus = #{record.daelTimeStaus,jdbcType=INTEGER},
+      deal_status = #{record.dealStatus,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -315,13 +315,13 @@
     update work_order
     set id = #{record.id,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
-      remark = #{record.remark,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
       level = #{record.level,jdbcType=INTEGER},
       plan_end_time = #{record.planEndTime,jdbcType=TIMESTAMP},
       actual_end_time = #{record.actualEndTime,jdbcType=TIMESTAMP},
       deal_user_id = #{record.dealUserId,jdbcType=INTEGER},
-      dael_time_staus = #{record.daelTimeStaus,jdbcType=INTEGER},
+      deal_status = #{record.dealStatus,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -335,9 +335,6 @@
     <set>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="remark != null">
-        remark = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
@@ -354,8 +351,11 @@
       <if test="dealUserId != null">
         deal_user_id = #{dealUserId,jdbcType=INTEGER},
       </if>
-      <if test="daelTimeStaus != null">
-        dael_time_staus = #{daelTimeStaus,jdbcType=INTEGER},
+      <if test="dealStatus != null">
+        deal_status = #{dealStatus,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -378,13 +378,13 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sky.ddt.entity.WorkOrder">
     update work_order
     set title = #{title,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       level = #{level,jdbcType=INTEGER},
       plan_end_time = #{planEndTime,jdbcType=TIMESTAMP},
       actual_end_time = #{actualEndTime,jdbcType=TIMESTAMP},
       deal_user_id = #{dealUserId,jdbcType=INTEGER},
-      dael_time_staus = #{daelTimeStaus,jdbcType=INTEGER},
+      deal_status = #{dealStatus,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -395,13 +395,13 @@
   <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.WorkOrder">
     update work_order
     set title = #{title,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       level = #{level,jdbcType=INTEGER},
       plan_end_time = #{planEndTime,jdbcType=TIMESTAMP},
       actual_end_time = #{actualEndTime,jdbcType=TIMESTAMP},
       deal_user_id = #{dealUserId,jdbcType=INTEGER},
-      dael_time_staus = #{daelTimeStaus,jdbcType=INTEGER},
+      deal_status = #{dealStatus,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

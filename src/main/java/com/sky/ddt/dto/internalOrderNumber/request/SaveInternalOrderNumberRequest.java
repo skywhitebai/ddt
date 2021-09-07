@@ -22,4 +22,6 @@ public class SaveInternalOrderNumberRequest {
     Integer transportTypeId;
     @Length(max = 200, message = InternalOrderNumberConstant.REMARK_TOO_LONG)
     String remark;
+    @Length(max = 200, message = InternalOrderNumberConstant.FINANCIAL_REMARK_TOO_LONG)
+    String financialRemark;
 }

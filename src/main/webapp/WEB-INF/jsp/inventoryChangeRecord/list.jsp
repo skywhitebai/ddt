@@ -47,7 +47,7 @@
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
 </div>
-<!--出库单列表-->
+<!--列表-->
 <table id="dg" style="width: 100%; height: auto">
 
 </table>
