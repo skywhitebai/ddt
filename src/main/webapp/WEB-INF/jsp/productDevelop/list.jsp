@@ -258,7 +258,7 @@
                     formatter: function (value, rowData, rowIndex) {
                         var res = "";
                         if (value != null && value != '') {
-                            res += '<a href="javascript:;" onclick="showImg(' + value + ')" ><img  src="' + value + '?x-oss-process=image/resize,m_fill,h_66,w_66"  style="width:66px; height:66px;"/></a> '
+                            res += '<a href="javascript:;" onclick="showImg(\'' + value + '\')" ><img  src="' + value + '?x-oss-process=image/resize,m_fill,h_66,w_66"  style="width:66px; height:66px;"/></a> '
                         } else {
                             res += '暂无图片   '
                         }
