@@ -13,4 +13,5 @@ public class ListProductDevelopRequest extends DataGridRequest {
     private String productName;
     private String productCode;
     private Integer developUserId;
+    private Integer status;
 }

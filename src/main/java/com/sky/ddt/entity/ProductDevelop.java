@@ -33,6 +33,8 @@ public class ProductDevelop {
 
     private Integer updateBy;
 
+    private Integer developmentLevel;
+
     public Integer getId() {
         return id;
     }
@@ -151,5 +153,13 @@ public class ProductDevelop {
 
     public void setUpdateBy(Integer updateBy) {
         this.updateBy = updateBy;
+    }
+
+    public Integer getDevelopmentLevel() {
+        return developmentLevel;
+    }
+
+    public void setDevelopmentLevel(Integer developmentLevel) {
+        this.developmentLevel = developmentLevel;
     }
 }

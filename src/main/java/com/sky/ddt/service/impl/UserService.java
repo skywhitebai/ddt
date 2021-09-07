@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.UserConstant;
 import com.sky.ddt.dao.custom.CustomUserMapper;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.dto.user.request.UserComboboxRequest;
 import com.sky.ddt.dto.user.request.UserListRequest;
 import com.sky.ddt.dto.user.request.UserSaveRequest;
 import com.sky.ddt.dto.user.response.UserComboboxResponse;
@@ -136,9 +137,10 @@ public class UserService implements IUserService {
      * @description 用户下拉
      * @author baixueping
      * @date 2019/7/19 15:04
+     * @param params
      */
     @Override
-    public List<UserComboboxResponse> comboboxlist() {
+    public List<UserComboboxResponse> comboboxlist(UserComboboxRequest params) {
         return customUserMapper.comboboxlist();
     }
 

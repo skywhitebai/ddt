@@ -2,6 +2,7 @@ package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.dto.user.request.UserComboboxRequest;
 import com.sky.ddt.dto.user.request.UserListRequest;
 import com.sky.ddt.dto.user.request.UserSaveRequest;
 import com.sky.ddt.dto.user.response.UserComboboxResponse;
@@ -32,12 +33,13 @@ public interface IUserService {
 
     /**
      * @param
+     * @param params
      * @return
      * @description 用户下拉
      * @author baixueping
      * @date 2019/7/19 15:04
      */
-    List<UserComboboxResponse> comboboxlist();
+    List<UserComboboxResponse> comboboxlist(UserComboboxRequest params);
 
     /**
      * @param

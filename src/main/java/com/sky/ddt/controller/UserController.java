@@ -5,6 +5,7 @@ import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.common.annotation.RightAnnotation;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.dto.user.request.UserComboboxRequest;
 import com.sky.ddt.dto.user.request.UserListRequest;
 import com.sky.ddt.dto.user.request.UserSaveRequest;
 import com.sky.ddt.dto.user.response.UserComboboxResponse;
@@ -57,8 +58,8 @@ public class UserController extends SuperController{
     }
     @RequestMapping("comboboxlist")
     @ResponseBody
-    public List<UserComboboxResponse> comboboxlist() {
-        List<UserComboboxResponse> list=userService.comboboxlist();
+    public List<UserComboboxResponse> comboboxlist(UserComboboxRequest params) {
+        List<UserComboboxResponse> list=userService.comboboxlist(params);
         return list;
     }
 }

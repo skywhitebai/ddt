@@ -5,6 +5,11 @@
     <select id="comboboxlist" resultType="com.sky.ddt.dto.user.response.UserComboboxResponse">
         SELECT user_id userId,`user_name` userName,`real_name` realName
         FROM user
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="status != null ">and status=#{status}</if>
+            </trim>
+        </where>
         order by real_name desc
     </select>
     <resultMap id="listUserMap" type="com.sky.ddt.dto.user.response.UserListResponse"
@@ -18,7 +23,7 @@
         FROM `sys_role` r,`sys_user_role` ur WHERE r.`id`=ur.`role_id` AND ur.`user_id`=u.user_id) roleNames
         FROM user u
         <if test="_parameter != null">
-            <include refid="user_Query_Where_Clause" />
+            <include refid="user_Query_Where_Clause"/>
         </if>
         order by status desc,user_name asc
     </select>

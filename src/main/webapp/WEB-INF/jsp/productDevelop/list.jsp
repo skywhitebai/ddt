@@ -43,7 +43,15 @@
     <input class="easyui-validatebox textbox" id="s_productName">
     货号：
     <input class="easyui-validatebox textbox" id="s_productCode">
+    开发人员：
     <select id="s_developerUserId" name="developerUserId" style="width:150px;">
+    </select>
+    状态：
+    <select class="easyui-combobox" id="s_status" style="width:100px;" >
+        <option value="1">开发中</option>
+        <option value="2">开发完成</option>
+        <option value="3">确认生产</option>
+        <option value="4">开发失败</option>
     </select>
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
@@ -84,6 +92,13 @@
                 <td>英文报关名：</td>
                 <td>
                     <input class="easyui-textbox" type="text" name="englishProductName" >
+                </td>
+            </tr>
+            <tr>
+                <td>开发等级：</td>
+                <td>
+                    <input class="easyui-numberbox" name="developmentLevel" id="developmentLevel" min="0" max="10"
+                           precision="0">
                 </td>
             </tr>
             <tr>
@@ -210,26 +225,6 @@
     });
 
 
-    function initOperationRight() {
-        if (hasRight("product/importProduct")) {
-            $("#a_importProduct").show()
-        }
-        if (hasRight("product/importDeveloperUser")) {
-            $("#a_importDeveloperUser").show();
-            $("#a_importDevelopmentLevel").show();
-        }
-        if (hasRight("product/exportProduct")) {
-            $("#a_exportProduct").show()
-        }
-        if (!hasRight("product/saveProduct")) {
-            $("#btnAdd").hide();
-            $("#btnEdit").hide();
-        }
-        if (!hasRight("product/deleteProduct")) {
-            $("#btnDelete").hide()
-        }
-    }
-
     function bindData() {
         dg = '#dg';
         url = "${pageContext.request.contextPath }/productDevelop/listProductDevelop";
@@ -280,6 +275,7 @@
                 {title: '中文报关名', field: 'chineseProductName', width: 100},
                 {title: '英文报关名', field: 'englishProductName', width: 100},
                 {title: '开发人员', field: 'developerUserName', width: 100},
+                {title: '开发等级', field: 'developmentLevel', width: 50},
                 {
                     title: '开发时间', field: 'developmentTime', width: 100,
                     formatter: function (value, rowData, rowIndex) {
@@ -684,7 +680,8 @@
         queryParams = {
             productName: $("#s_productName").val(),
             productCode: $("#s_productCode").val(),
-            developUserId: $("#s_developUserId").val()
+            developUserId: $("#s_developUserId").val(),
+            status: $("#s_status").val()
         };
         return queryParams;
     }
