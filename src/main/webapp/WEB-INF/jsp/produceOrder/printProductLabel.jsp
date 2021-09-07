@@ -57,7 +57,7 @@
 
         .attributeLeft {
             display: inline;
-            padding-left: 5px;
+            padding-left: 8px;
         }
 
         .attributeRight {
