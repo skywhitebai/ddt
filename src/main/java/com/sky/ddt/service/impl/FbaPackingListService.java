@@ -271,7 +271,7 @@ public class FbaPackingListService implements IFbaPackingListService {
                     String totalSkusStr = skuInfoArray[0].replace("SKU 总数：", "").replace(" ", "");
                     Integer totalSkus = MathUtil.strToInteger(totalSkusStr);
                     fbaPackingList.setTotalSkus(totalSkus);
-                    String totalUnitStr = skuInfoArray[1].replace("件商品", "").replace(" ", "");
+                    String totalUnitStr = skuInfoArray[1].replace("件商品）", "").replace(" ", "");
                     Integer totalUnit = MathUtil.strToInteger(totalUnitStr);
                     fbaPackingList.setTotalUnits(totalUnit);
                 }
@@ -288,7 +288,7 @@ public class FbaPackingListService implements IFbaPackingListService {
         Row rowTitle = sheet.getRow(rownumTitle);
         int colnumTitle = rowTitle.getLastCellNum();
         for (int i = 0; i <= colnumTitle; i++) {
-            String cellData = ExcelUtil.getCellFormatValueString(wb,rowTitle.getCell(i));
+            String cellData = ExcelUtil.getCellFormatValueString(rowTitle.getCell(i));
             columns.add(cellData);
         }
         //获取内容
@@ -316,7 +316,7 @@ public class FbaPackingListService implements IFbaPackingListService {
             }
             String shopSku = ExcelUtil.getCellFormatValueString(row.getCell(0));
             if (StringUtils.isEmpty(shopSku)) {
-                sbErroEntityItem.append("SKU为空");
+                break;
             } else {
                 ShopSku shopSkuInfo = shopSkuService.getShopSkuByShopSku(shopSku);
                 if (shopSkuInfo == null) {

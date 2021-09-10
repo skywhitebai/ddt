@@ -135,17 +135,22 @@ public class ExcelUtil {
                 }
                 case Cell.CELL_TYPE_FORMULA: {
                     //判断cell是否为日期格式
-                    if (DateUtil.isCellDateFormatted(cell)) {
-                        //转换为日期格式YYYY-mm-dd
-                        cellValue = com.sky.ddt.util.DateUtil.getFormatDateStr(cell.getDateCellValue());
-                    } else {
-                        //数字
-                        cellValue = String.valueOf(cell.getNumericCellValue());
+                    try {
+                        if (DateUtil.isCellDateFormatted(cell)) {
+                            //转换为日期格式YYYY-mm-dd
+                            cellValue = com.sky.ddt.util.DateUtil.getFormatDateStr(cell.getDateCellValue());
+                        } else {
+                            //数字
+                            cellValue = String.valueOf(cell.getNumericCellValue());
+                        }
+                    } catch (Exception ex) {
+                        cellValue = cell.getStringCellValue();
                     }
+
                     break;
                 }
                 case Cell.CELL_TYPE_STRING: {
-                    cellValue = cell.getRichStringCellValue().getString();
+                    cellValue = cell.getStringCellValue();
                     break;
                 }
                 default:
@@ -304,44 +309,5 @@ public class ExcelUtil {
             e.printStackTrace();
             return BaseResponse.fail();
         }
-    }
-
-    public static String getCellFormatValueString(Workbook wb, Cell cell) {
-        String cellValue = "";
-        if (cell != null) {
-            //判断cell类型
-            switch (cell.getCellType()) {
-                case Cell.CELL_TYPE_NUMERIC: {
-                    if (cell.getCellStyle().getDataFormat() == 58) {
-                        double value = cell.getNumericCellValue();
-                        Date date = DateUtil.getJavaDate(value);
-                        cellValue = com.sky.ddt.util.DateUtil.getFormatDateStrYMD(date);
-                    } else {
-                        cellValue = String.valueOf(cell.getNumericCellValue());
-                        if (cellValue != null && cellValue.endsWith(".0")) {
-                            cellValue = cellValue.substring(0, cellValue.length() - 2);
-                        }
-                    }
-                    break;
-                }
-                case Cell.CELL_TYPE_FORMULA: {
-                    HSSFFormulaEvaluator eva = new HSSFFormulaEvaluator((HSSFWorkbook) wb);
-                    //根据值的类型获取公式的计算结果
-                    cellValue = (cell.getCellType() == HSSFCell.LAST_COLUMN_NUMBER)
-                            ? String.valueOf(cell.getNumericCellValue())
-                            : cell.getStringCellValue();
-                    break;
-                }
-                case Cell.CELL_TYPE_STRING: {
-                    cellValue = cell.getRichStringCellValue().getString();
-                    break;
-                }
-                default:
-                    cellValue = "";
-            }
-        } else {
-            cellValue = "";
-        }
-        return cellValue;
     }
 }

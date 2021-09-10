@@ -154,6 +154,7 @@
         FBAshipment id：<input class="easyui-textbox" name="fbaShipmentId" id="dlg_importFbaPackingList2_fbaShipmentId"></td>
         <input type="file" id="importFbaPackingListFile2" name="file" accept=".xls,.xlsx"/>
         <div style="text-align:center;">
+            <label style="color: red">请将excel里面的公式转换为普通数值再导入</label>
             <a href="javascript:void(0)" class="easyui-linkbutton"
                data-options="iconCls:'icon-ok'" onclick="importFbaPackingList2()">导入</a>
             <a href="javascript:void(0)" class="easyui-linkbutton"
