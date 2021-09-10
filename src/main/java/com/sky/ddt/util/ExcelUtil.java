@@ -2,10 +2,7 @@ package com.sky.ddt.util;
 
 import com.sky.ddt.common.exception.NoticeException;
 import com.sky.ddt.dto.response.BaseResponse;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.hssf.util.Region;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.DateUtil;
@@ -244,10 +241,10 @@ public class ExcelUtil {
             Boolean isEmpty = true;
             if (row != null) {
                 for (int j = 0; j < colnum; j++) {
-                    try{
+                    try {
                         cellData = (String) getCellFormatValue(row.getCell(j));
-                    }catch (Exception ex){
-                        throw new NoticeException(String.format("第%d行，第%d列，数据错误：%s",i+1,j+1,ex.getMessage()));
+                    } catch (Exception ex) {
+                        throw new NoticeException(String.format("第%d行，第%d列，数据错误：%s", i + 1, j + 1, ex.getMessage()));
                     }
                     if (!StringUtils.isEmpty(cellData)) {
                         isEmpty = false;
@@ -307,5 +304,44 @@ public class ExcelUtil {
             e.printStackTrace();
             return BaseResponse.fail();
         }
+    }
+
+    public static String getCellFormatValueString(Workbook wb, Cell cell) {
+        String cellValue = "";
+        if (cell != null) {
+            //判断cell类型
+            switch (cell.getCellType()) {
+                case Cell.CELL_TYPE_NUMERIC: {
+                    if (cell.getCellStyle().getDataFormat() == 58) {
+                        double value = cell.getNumericCellValue();
+                        Date date = DateUtil.getJavaDate(value);
+                        cellValue = com.sky.ddt.util.DateUtil.getFormatDateStrYMD(date);
+                    } else {
+                        cellValue = String.valueOf(cell.getNumericCellValue());
+                        if (cellValue != null && cellValue.endsWith(".0")) {
+                            cellValue = cellValue.substring(0, cellValue.length() - 2);
+                        }
+                    }
+                    break;
+                }
+                case Cell.CELL_TYPE_FORMULA: {
+                    HSSFFormulaEvaluator eva = new HSSFFormulaEvaluator((HSSFWorkbook) wb);
+                    //根据值的类型获取公式的计算结果
+                    cellValue = (cell.getCellType() == HSSFCell.LAST_COLUMN_NUMBER)
+                            ? String.valueOf(cell.getNumericCellValue())
+                            : cell.getStringCellValue();
+                    break;
+                }
+                case Cell.CELL_TYPE_STRING: {
+                    cellValue = cell.getRichStringCellValue().getString();
+                    break;
+                }
+                default:
+                    cellValue = "";
+            }
+        } else {
+            cellValue = "";
+        }
+        return cellValue;
     }
 }

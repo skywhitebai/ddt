@@ -200,7 +200,7 @@ public class FbaPackingListService implements IFbaPackingListService {
                 }
                 Integer quantity = MathUtil.strToInteger(quantityStr);
                 if (quantity == null || quantity <= 0) {
-                    sbErroEntityItem.append(columnName + "的值不许为大于0的整数");
+                    sbErroEntityItem.append(columnName + "的值必须为大于0的整数");
                     continue;
                 }
 
@@ -208,6 +208,177 @@ public class FbaPackingListService implements IFbaPackingListService {
                 fbaPackingListShopSku.setShopSkuId(shopSkuId);
                 fbaPackingListShopSku.setQuantity(quantity);
                 fbaPackingListShopSku.setFbaShipmentId(fbaShipmentId);
+                fbaPackingListShopSku.setRemark(shopSku);
+                fbaPackingListShopSkuList.add(fbaPackingListShopSku);
+            }
+            if (sbErroEntityItem.isFail()) {
+                sbErroEntity.append("第" + (i + 1) + "行," + sbErroEntityItem.getMessage());
+            }
+        }
+        if (sbErroEntity.isFail()) {
+            return sbErroEntity.getResponse();
+        }
+        if (CollectionUtils.isEmpty(fbaPackingListShopSkuList)) {
+            return BaseResponse.failMessage(FbaPackingListConstant.FBA_PACKING_LIST_NO_ENABLE_SHOP_SKU);
+        }
+
+        //插入
+        fbaPackingList.setShopId(shopId);
+        fbaPackingList.setCreateBy(dealUserId);
+        fbaPackingList.setCreateTime(new Date());
+        customFbaPackingListMapper.insertSelective(fbaPackingList);
+        for (FbaPackingListShopSku fbaPackingListShopSku :
+                fbaPackingListShopSkuList) {
+            fbaPackingListShopSku.setRemark(null);
+            fbaPackingListShopSku.setFbaPackingListId(fbaPackingList.getId());
+            fbaPackingListShopSku.setCreateBy(dealUserId);
+            fbaPackingListShopSku.setCreateTime(new Date());
+            customFbaPackingListShopSkuMapper.insertSelective(fbaPackingListShopSku);
+        }
+        return BaseResponse.success();
+    }
+
+
+    @Override
+    public BaseResponse importFbaPackingList2(String fbaShipmentId, MultipartFile file, Integer dealUserId) {
+        if (file == null) {
+            return BaseResponse.failMessage("请选择要上传的文件");
+        }
+        if(StringUtils.isEmpty(fbaShipmentId)){
+            return BaseResponse.failMessage("fbaShipmentId不能为空");
+        }
+        Workbook wb = ExcelUtil.readExcel(file);
+        if (wb == null || wb.getNumberOfSheets() == 0) {
+            return BaseResponse.failMessage("excel读取失败");
+        }
+        Sheet sheet = wb.getSheetAt(0);
+        int rownum = sheet.getLastRowNum();
+        if (rownum == 0) {
+            return BaseResponse.failMessage("excel内容为空");
+        }
+        if (rownum < 5) {
+            return BaseResponse.failMessage("装箱单数据为空");
+        }
+        FbaPackingList fbaPackingList = new FbaPackingList();
+
+        Row row3 = sheet.getRow(2);
+        if (row3 != null) {
+            //SKU 总数：7（140 件商品）
+            String skuInfo = ExcelUtil.getCellFormatValueString(row3.getCell(0)).replace("(","（").replace("）","）");
+            if (!StringUtils.isEmpty(skuInfo)) {
+                String []skuInfoArray=skuInfo.split("（");
+                if(skuInfoArray.length==2){
+                    String totalSkusStr = skuInfoArray[0].replace("SKU 总数：", "").replace(" ", "");
+                    Integer totalSkus = MathUtil.strToInteger(totalSkusStr);
+                    fbaPackingList.setTotalSkus(totalSkus);
+                    String totalUnitStr = skuInfoArray[1].replace("件商品", "").replace(" ", "");
+                    Integer totalUnit = MathUtil.strToInteger(totalUnitStr);
+                    fbaPackingList.setTotalUnits(totalUnit);
+                }
+            }
+        }
+        Integer rownumTitle = 4;
+        fbaPackingList.setShipmentId(fbaShipmentId);
+        //判断shipmentId 是否存在
+        if (existShipMentId(fbaPackingList.getShipmentId())) {
+            return BaseResponse.failMessage(FbaPackingListConstant.SHIPMENT_ID_EXIST);
+        }
+        //获取表头
+        List<String> columns = new ArrayList<String>();
+        Row rowTitle = sheet.getRow(rownumTitle);
+        int colnumTitle = rowTitle.getLastCellNum();
+        for (int i = 0; i <= colnumTitle; i++) {
+            String cellData = ExcelUtil.getCellFormatValueString(wb,rowTitle.getCell(i));
+            columns.add(cellData);
+        }
+        //获取内容
+        List<Map<String, String>> list = new ArrayList<>();
+        for (int i = rownumTitle + 1; i <= rownum; i++) {
+            Map<String, String> map = new LinkedHashMap<String, String>();
+            Row row = sheet.getRow(i);
+            if (row != null) {
+                for (int j = 0; j <= colnumTitle; j++) {
+                    String cellData = ExcelUtil.getCellFormatValueString(row.getCell(j));
+                    map.put(columns.get(j), cellData);
+                }
+            }
+            list.add(map);
+        }
+        List<FbaPackingListShopSku> fbaPackingListShopSkuList = new ArrayList<>();
+        SbErroEntity sbErroEntity = new SbErroEntity(";");
+        Integer shopId = null;
+        for (int i = rownumTitle + 1; i <= rownum; i++) {
+            SbErroEntity sbErroEntityItem = new SbErroEntity();
+            Integer shopSkuId = null;
+            Row row = sheet.getRow(i);
+            if (row == null) {
+                continue;
+            }
+            String shopSku = ExcelUtil.getCellFormatValueString(row.getCell(0));
+            if (StringUtils.isEmpty(shopSku)) {
+                sbErroEntityItem.append("SKU为空");
+            } else {
+                ShopSku shopSkuInfo = shopSkuService.getShopSkuByShopSku(shopSku);
+                if (shopSkuInfo == null) {
+                    sbErroEntityItem.append("SKU不存在");
+                } else {
+                    shopSkuId = shopSkuInfo.getShopSkuId();
+                    if (shopId == null) {
+                        shopId = shopSkuInfo.getShopId();
+                    } else if (!shopId.equals(shopSkuInfo.getShopId())) {
+                        sbErroEntityItem.append("SKU的店铺与第" + (rownumTitle + 2) + "行的不一致");
+                    }
+                }
+            }
+            //判断sku是否重复
+            if (!StringUtils.isEmpty(shopSku)) {
+                for (int j = i + 1; j <= rownum; j++) {
+                    Row row2 = sheet.getRow(j);
+                    if (row2 == null) {
+                        continue;
+                    }
+                    if (shopSku.equals(ExcelUtil.getCellFormatValueString(row2.getCell(0)))) {
+                        sbErroEntityItem.append(String.format(FbaPackingListConstant.SHOP_SKU_REPEAT, shopSku));
+                    }
+                }
+            }
+            List<Integer> fbaShipmentIdNumList = new ArrayList<>();
+            for (int j = 1; j <= colnumTitle; j++) {
+                String columnName = columns.get(j);
+                if (!columnName.contains("包装箱")) {
+                    continue;
+                }
+                String quantityStr = ExcelUtil.getCellFormatValueString(row.getCell(j));
+                if (StringUtils.isEmpty(quantityStr)) {
+                    continue;
+                }
+                Integer quantity = MathUtil.strToInteger(quantityStr);
+                if (quantity == null || quantity < 0) {
+                    sbErroEntityItem.append(columnName + "的值必须为大于等于0的整数");
+                    continue;
+                }
+                if (quantity == 0) {
+                    continue;
+                }
+                String fbaShipmentIdNumStr = columnName.replace("包装箱", "").replace("数量", "").replace(" ", "");
+                Integer fbaShipmentIdNum = MathUtil.strToInteger(fbaShipmentIdNumStr);
+                if (fbaShipmentIdNum == null || fbaShipmentIdNum <= 0) {
+                    sbErroEntityItem.append(columnName + "装箱信息错误，必须为类似【包装箱 1 数量】的格式");
+                    continue;
+                }
+                if (fbaShipmentIdNumList.contains(fbaShipmentIdNum)) {
+                    sbErroEntityItem.append(columnName + "装箱号重复，请修改后导入");
+                    break;
+                }
+                fbaShipmentIdNumList.add(fbaShipmentIdNum);
+                FbaPackingListShopSku fbaPackingListShopSku = new FbaPackingListShopSku();
+                fbaPackingListShopSku.setShopSkuId(shopSkuId);
+                fbaPackingListShopSku.setQuantity(quantity);
+                String fbaShipmentIdNumInfo=fbaShipmentIdNum.toString();
+                while (fbaShipmentIdNumInfo.length()<3){
+                    fbaShipmentIdNumInfo="0"+fbaShipmentIdNumInfo;
+                }
+                fbaPackingListShopSku.setFbaShipmentId(fbaShipmentId + "U" + fbaShipmentIdNumInfo);
                 fbaPackingListShopSku.setRemark(shopSku);
                 fbaPackingListShopSkuList.add(fbaPackingListShopSku);
             }
@@ -345,32 +516,32 @@ public class FbaPackingListService implements IFbaPackingListService {
 
     @Override
     public BaseResponse cancelFbaPackingList(Integer id, Integer dealUserId) {
-        if(id==null){
+        if (id == null) {
             return BaseResponse.failMessage("id不能为空");
         }
-        if(existUncancelOutboundOrder(id)){
+        if (existUncancelOutboundOrder(id)) {
             return BaseResponse.failMessage("请先取消装箱单对应的出库单");
         }
-        FbaPackingList fbaPackingListOld=customFbaPackingListMapper.selectByPrimaryKey(id);
-        if(fbaPackingListOld==null){
+        FbaPackingList fbaPackingListOld = customFbaPackingListMapper.selectByPrimaryKey(id);
+        if (fbaPackingListOld == null) {
             return BaseResponse.failMessage(FbaPackingListConstant.ID_NOT_EXIST);
         }
-        if(YesOrNoEnum.NO.getValue().equals(fbaPackingListOld.getStatus())){
+        if (YesOrNoEnum.NO.getValue().equals(fbaPackingListOld.getStatus())) {
             return BaseResponse.success();
         }
-        FbaPackingList fbaPackingList=new FbaPackingList();
+        FbaPackingList fbaPackingList = new FbaPackingList();
         fbaPackingList.setId(id);
         fbaPackingList.setUpdateBy(dealUserId);
         fbaPackingList.setUpdateTime(new Date());
         fbaPackingList.setStatus(YesOrNoEnum.NO.getValue());
-         customFbaPackingListMapper.updateByPrimaryKeySelective(fbaPackingList);
+        customFbaPackingListMapper.updateByPrimaryKeySelective(fbaPackingList);
         return BaseResponse.success();
     }
 
     private boolean existUncancelOutboundOrder(Integer id) {
-        OutboundOrderExample example=new OutboundOrderExample();
+        OutboundOrderExample example = new OutboundOrderExample();
         example.createCriteria().andFbaPackingListIdEqualTo(id).andStatusNotEqualTo(OutboundOrderConstant.StatusEnum.CANCEL.getStatus());
-        return customOutboundOrderMapper.countByExample(example)>0;
+        return customOutboundOrderMapper.countByExample(example) > 0;
     }
 
     /**

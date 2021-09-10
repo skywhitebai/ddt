@@ -67,4 +67,6 @@ public interface IFbaPackingListService {
     BaseResponse downInvoice(Integer fbaPackingListId, String orderNumber, String type, HttpServletResponse response);
 
     BaseResponse cancelFbaPackingList(Integer id, Integer dealUserId);
+
+    BaseResponse importFbaPackingList2(String fbaShipmentId, MultipartFile file, Integer dealUserId);
 }

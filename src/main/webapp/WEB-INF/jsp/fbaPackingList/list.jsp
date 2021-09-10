@@ -45,6 +45,9 @@
     <a href="javascript:void(0)" onclick="showDialogImportFbaPackingList()" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">导入fba装箱单信息</a>
+    <a href="javascript:void(0)" onclick="showDialogImportFbaPackingList2()" class="easyui-linkbutton"
+                                 data-options="iconCls:'icon-search'"
+                                 style="">新的导入fba装箱单信息</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 </table>
@@ -141,6 +144,23 @@
         </div>
     </form>
 </div>
+<!--导入页面-->
+<div id="dlg_importFbaPackingList2" class="easyui-dialog" style="width: 600px; height: 300px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons',top:10, align:'center'">
+    <div class="ftitle">
+        <b>新的fba装箱单导入</b>
+    </div>
+    <form id="frm_importFbaPackingList2" method="post" novalidate="novalidate" enctype="multipart/form-data">
+        FBAshipment id：<input class="easyui-textbox" name="fbaShipmentId" id="dlg_importFbaPackingList2_fbaShipmentId"></td>
+        <input type="file" id="importFbaPackingListFile2" name="file" accept=".xls,.xlsx"/>
+        <div style="text-align:center;">
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-ok'" onclick="importFbaPackingList2()">导入</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-cancel'" onclick="closeDialogImportFbaPackingList2()">关闭</a>
+        </div>
+    </form>
+</div>
 <!--编辑页面-->
 <div id="dlgShopSku" class="easyui-dialog" style="width: 850px; height: 500px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', align:'center'">
@@ -198,11 +218,17 @@
     function showDialogImportFbaPackingList() {
         $('#dlg_importFbaPackingList').dialog('open').dialog('setTitle', 'fba装箱单导入');
     }
+    function showDialogImportFbaPackingList2() {
+        $('#dlg_importFbaPackingList2').dialog('open').dialog('setTitle', '新的fba装箱单导入');
+        $("#dlg_importFbaPackingList2_fbaShipmentId").val("");
+    }
 
     function closeDialogImportFbaPackingList() {
         $('#dlg_importFbaPackingList').dialog('close');
     }
-
+    function closeDialogImportFbaPackingList2() {
+        $('#dlg_importFbaPackingList2').dialog('close');
+    }
     function closeDialog() {
         $('#dlg').dialog('close');
     }
@@ -221,6 +247,45 @@
         }
         $('#frm_importFbaPackingList').form('submit', {
             url: '${pageContext.request.contextPath }/fbaPackingList/importFbaPackingList',
+            onSubmit: function () {
+                var isValid = $(this).form('validate');
+                if (isValid) {
+                    showCover();
+                }
+                return isValid;
+            },
+            success: function (data) {
+                hideCover();
+                res = eval("(" + data + ")")
+                if (res.code == '200') {
+                    $.messager.alert("提示", "上传成功");
+                    bindData();
+                }
+                else {
+                    $.messager.alert("提示", res.message);
+                }
+            }
+        });
+    }
+    function importFbaPackingList2() {
+        var importFbaPackingListFile = $("#importFbaPackingListFile2").val();
+        if (importFbaPackingListFile == '') {
+            $.messager.alert("提示", "请选择导入的文件");
+            return;
+        }
+        var fbaShipmentId = $("#dlg_importFbaPackingList2_fbaShipmentId").val();
+        if (fbaShipmentId == '') {
+            $.messager.alert("提示", "请填写fbaShipmentId");
+            return;
+        }
+        var dom = document.getElementById("importFbaPackingListFile2");
+        var fileSize = dom.files[0].size;
+        if (fileSize > 30000000) {
+            $.messager.alert("提示", "上传文件过大,请上传小于30M的文件");
+            return false;
+        }
+        $('#frm_importFbaPackingList2').form('submit', {
+            url: '${pageContext.request.contextPath }/fbaPackingList/importFbaPackingList2',
             onSubmit: function () {
                 var isValid = $(this).form('validate');
                 if (isValid) {
