@@ -4,14 +4,15 @@
 
     <select id="getFinanceStatisticInfo"
             resultMap="com.sky.ddt.dao.generate.FinanceStatisticMapper.BaseResultMap">
-
- SELECT fs.finance_id,fs.month,fs.shop_id,fs.shop_name,SUM(initial_inventory_cost) initial_inventory_cost,SUM(final_inventory_cost) final_inventory_cost,
+ SELECT a.*,b.*FROM (SELECT fs.finance_id,fs.month,fs.shop_id,fs.shop_name,SUM(initial_inventory_cost) initial_inventory_cost,SUM(final_inventory_cost) final_inventory_cost,
         SUM(fs.procurement_cost+fs.fba_head_trip_cost) sale_cost,SUM(main_business_income) main_business_income,SUM(main_business_profit) main_business_profit,
-        ifnull((SELECT SUM(sshtch.fba_send_quantity*(sshtch.head_trip_cost_after+sku.cost_price)) FROM `shop_head_trip_cost` shtc,`shop_sku_head_trip_cost_his` sshtch,finance f,shop_sku ss,sku
-   WHERE f.id=#{financeId} AND f.shop_id=shtc.shop_id AND f.month=shtc.month AND shtc.id=sshtch.shop_head_trip_cost_id
-   AND sshtch.shop_sku_id=ss.shop_sku_id AND ss.sku_id=sku.`sku_id`),0) send_cost
+        SUM(fs.procurement_cost) sale_procurement_cost,SUM(fs.fba_head_trip_cost) sale_fba_head_trip_cost
         FROM `financial_statement` fs
-        WHERE fs.`finance_id`=#{financeId}
+        WHERE fs.`finance_id`=#{financeId}) a ,
+        (SELECT SUM(sshtch.fba_send_quantity*(sshtch.head_trip_cost_after+sku.cost_price)) send_cost,SUM(sshtch.fba_send_quantity*sku.cost_price) send_cost_price,SUM(sshtch.fba_send_quantity*sshtch.head_trip_cost_after) send_head_trip_cost_after
+       FROM `shop_head_trip_cost` shtc,`shop_sku_head_trip_cost_his` sshtch,finance f,shop_sku ss,sku
+   WHERE f.id=#{financeId} AND f.shop_id=shtc.shop_id AND f.month=shtc.month AND shtc.id=sshtch.shop_head_trip_cost_id
+   AND sshtch.shop_sku_id=ss.shop_sku_id AND ss.sku_id=sku.`sku_id`) b
     </select>
     <resultMap id="listFinanceStatisticMap" type="com.sky.ddt.dto.finance.financeStatistic.response.ListFinanceStatisticResponse"
                extends="com.sky.ddt.dao.generate.FinanceStatisticMapper.BaseResultMap">

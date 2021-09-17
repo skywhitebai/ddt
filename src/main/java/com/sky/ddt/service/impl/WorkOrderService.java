@@ -11,6 +11,7 @@ import com.sky.ddt.dto.workOrder.request.SaveWorkOrderRequest;
 import com.sky.ddt.entity.WorkOrder;
 import com.sky.ddt.entity.WorkOrderExample;
 import com.sky.ddt.service.IWorkOrderService;
+import com.sky.ddt.util.DateUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,7 @@ public class WorkOrderService implements IWorkOrderService {
         }
         BeanUtils.copyProperties(params, workOrder);
         if (params.getId() == null) {
+            workOrder.setWorkOrderNo(getWorderOrderNo());
             workOrder.setCreateBy(dealUserId);
             workOrder.setCreateTime(new Date());
             workOrder.setStatus(WorkOrderConstant.StatusEnum.HAVE_IN_HAND.getStatus());
@@ -85,6 +87,31 @@ public class WorkOrderService implements IWorkOrderService {
             customWorkOrderMapper.updateByPrimaryKeySelective(workOrder);
         }
         return BaseResponse.success();
+    }
+
+    private String getWorderOrderNo() {
+        String worderOrderNoFirst = "WO" + DateUtil.getFormatStryyyyMMdd(new Date());
+        WorkOrderExample example=new WorkOrderExample();
+        example.createCriteria().andCreateTimeGreaterThanOrEqualTo(DateUtil.getToday());
+        Long count = customWorkOrderMapper.countByExample(example);
+        String worderOrderNo = "";
+        do {
+            count++;
+            if (count >= 10) {
+                worderOrderNo = worderOrderNoFirst + count.toString();
+            } else {
+                worderOrderNo = worderOrderNoFirst + "0" + count.toString();
+            }
+        }
+        while (existWorderOrderNo(worderOrderNo));
+        return worderOrderNo;
+    }
+
+    private boolean existWorderOrderNo(String worderOrderNo) {
+        WorkOrderExample example=new WorkOrderExample();
+        example.createCriteria().andWorkOrderNoEqualTo(worderOrderNo);
+        Long count = customWorkOrderMapper.countByExample(example);
+        return count>0;
     }
 
     @Override

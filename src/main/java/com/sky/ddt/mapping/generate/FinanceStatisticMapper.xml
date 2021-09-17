@@ -10,6 +10,8 @@
     <result column="initial_inventory_cost" jdbcType="DECIMAL" property="initialInventoryCost" />
     <result column="final_inventory_cost" jdbcType="DECIMAL" property="finalInventoryCost" />
     <result column="send_cost" jdbcType="DECIMAL" property="sendCost" />
+    <result column="send_cost_price" jdbcType="DECIMAL" property="sendCostPrice" />
+    <result column="send_head_trip_cost_after" jdbcType="DECIMAL" property="sendHeadTripCostAfter" />
     <result column="sale_cost" jdbcType="DECIMAL" property="saleCost" />
     <result column="main_business_income" jdbcType="DECIMAL" property="mainBusinessIncome" />
     <result column="manual_adjustment" jdbcType="DECIMAL" property="manualAdjustment" />
@@ -81,8 +83,9 @@
   </sql>
   <sql id="Base_Column_List">
     id, finance_id, month, shop_id, shop_name, initial_inventory_cost, final_inventory_cost, 
-    send_cost, sale_cost, main_business_income, manual_adjustment, net_income, main_business_profit, 
-    remark, create_time, create_by, update_time, update_by
+    send_cost, send_cost_price, send_head_trip_cost_after, sale_cost, main_business_income, 
+    manual_adjustment, net_income, main_business_profit, remark, create_time, create_by, 
+    update_time, update_by
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FinanceStatisticExample" resultMap="BaseResultMap">
     select
@@ -120,16 +123,18 @@
     </selectKey>
     insert into finance_statistic (finance_id, month, shop_id, 
       shop_name, initial_inventory_cost, final_inventory_cost, 
-      send_cost, sale_cost, main_business_income, 
-      manual_adjustment, net_income, main_business_profit, 
-      remark, create_time, create_by, 
-      update_time, update_by)
+      send_cost, send_cost_price, send_head_trip_cost_after, 
+      sale_cost, main_business_income, manual_adjustment, 
+      net_income, main_business_profit, remark, 
+      create_time, create_by, update_time, 
+      update_by)
     values (#{financeId,jdbcType=INTEGER}, #{month,jdbcType=TIMESTAMP}, #{shopId,jdbcType=INTEGER}, 
       #{shopName,jdbcType=VARCHAR}, #{initialInventoryCost,jdbcType=DECIMAL}, #{finalInventoryCost,jdbcType=DECIMAL}, 
-      #{sendCost,jdbcType=DECIMAL}, #{saleCost,jdbcType=DECIMAL}, #{mainBusinessIncome,jdbcType=DECIMAL}, 
-      #{manualAdjustment,jdbcType=DECIMAL}, #{netIncome,jdbcType=DECIMAL}, #{mainBusinessProfit,jdbcType=DECIMAL}, 
-      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER})
+      #{sendCost,jdbcType=DECIMAL}, #{sendCostPrice,jdbcType=DECIMAL}, #{sendHeadTripCostAfter,jdbcType=DECIMAL}, 
+      #{saleCost,jdbcType=DECIMAL}, #{mainBusinessIncome,jdbcType=DECIMAL}, #{manualAdjustment,jdbcType=DECIMAL}, 
+      #{netIncome,jdbcType=DECIMAL}, #{mainBusinessProfit,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.FinanceStatistic">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -157,6 +162,12 @@
       </if>
       <if test="sendCost != null">
         send_cost,
+      </if>
+      <if test="sendCostPrice != null">
+        send_cost_price,
+      </if>
+      <if test="sendHeadTripCostAfter != null">
+        send_head_trip_cost_after,
       </if>
       <if test="saleCost != null">
         sale_cost,
@@ -210,6 +221,12 @@
       </if>
       <if test="sendCost != null">
         #{sendCost,jdbcType=DECIMAL},
+      </if>
+      <if test="sendCostPrice != null">
+        #{sendCostPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="sendHeadTripCostAfter != null">
+        #{sendHeadTripCostAfter,jdbcType=DECIMAL},
       </if>
       <if test="saleCost != null">
         #{saleCost,jdbcType=DECIMAL},
@@ -276,6 +293,12 @@
       <if test="record.sendCost != null">
         send_cost = #{record.sendCost,jdbcType=DECIMAL},
       </if>
+      <if test="record.sendCostPrice != null">
+        send_cost_price = #{record.sendCostPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sendHeadTripCostAfter != null">
+        send_head_trip_cost_after = #{record.sendHeadTripCostAfter,jdbcType=DECIMAL},
+      </if>
       <if test="record.saleCost != null">
         sale_cost = #{record.saleCost,jdbcType=DECIMAL},
       </if>
@@ -321,6 +344,8 @@
       initial_inventory_cost = #{record.initialInventoryCost,jdbcType=DECIMAL},
       final_inventory_cost = #{record.finalInventoryCost,jdbcType=DECIMAL},
       send_cost = #{record.sendCost,jdbcType=DECIMAL},
+      send_cost_price = #{record.sendCostPrice,jdbcType=DECIMAL},
+      send_head_trip_cost_after = #{record.sendHeadTripCostAfter,jdbcType=DECIMAL},
       sale_cost = #{record.saleCost,jdbcType=DECIMAL},
       main_business_income = #{record.mainBusinessIncome,jdbcType=DECIMAL},
       manual_adjustment = #{record.manualAdjustment,jdbcType=DECIMAL},
@@ -358,6 +383,12 @@
       </if>
       <if test="sendCost != null">
         send_cost = #{sendCost,jdbcType=DECIMAL},
+      </if>
+      <if test="sendCostPrice != null">
+        send_cost_price = #{sendCostPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="sendHeadTripCostAfter != null">
+        send_head_trip_cost_after = #{sendHeadTripCostAfter,jdbcType=DECIMAL},
       </if>
       <if test="saleCost != null">
         sale_cost = #{saleCost,jdbcType=DECIMAL},
@@ -401,6 +432,8 @@
       initial_inventory_cost = #{initialInventoryCost,jdbcType=DECIMAL},
       final_inventory_cost = #{finalInventoryCost,jdbcType=DECIMAL},
       send_cost = #{sendCost,jdbcType=DECIMAL},
+      send_cost_price = #{sendCostPrice,jdbcType=DECIMAL},
+      send_head_trip_cost_after = #{sendHeadTripCostAfter,jdbcType=DECIMAL},
       sale_cost = #{saleCost,jdbcType=DECIMAL},
       main_business_income = #{mainBusinessIncome,jdbcType=DECIMAL},
       manual_adjustment = #{manualAdjustment,jdbcType=DECIMAL},

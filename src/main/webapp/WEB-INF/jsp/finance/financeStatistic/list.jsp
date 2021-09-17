@@ -91,8 +91,10 @@
                 {title: '年月', field: 'monthStr', width: 80},
                 {title: '期初价值', field: 'initialInventoryCost', width: 80},
                 {title: '期末价值', field: 'finalInventoryCost', width: 80},
-                {title: '当月发送价值', field: 'sendCost', width: 80},
-                {title: '当月销售价值', field: 'saleCost', width: 80},
+                {title: '当月发送价值', field: 'sendCost', width: 100},
+                {title: '当月发送价值(货值)', field: 'sendCostPrice', width: 130},
+                {title: '当月发送价值(头程)', field: 'sendHeadTripCostAfter', width: 130},
+                {title: '当月销售价值', field: 'saleCost', width: 100},
                 {title: '当月回款', field: 'mainBusinessIncome', width: 80},
                 {
                     title: '账外调整', field: 'manualAdjustment', width: 80,
