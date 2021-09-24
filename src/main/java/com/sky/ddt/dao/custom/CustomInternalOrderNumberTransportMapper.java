@@ -1,8 +1,10 @@
 package com.sky.ddt.dao.custom;
 
 import com.sky.ddt.dao.generate.InternalOrderNumberTransportMapper;
+import com.sky.ddt.dto.internalOrderNumber.request.GenerateTheoreticalAmountRequest;
 import com.sky.ddt.dto.internalOrderNumberTransport.request.ListInternalOrderNumberTransportRequest;
 import com.sky.ddt.dto.internalOrderNumberTransport.response.ListInternalOrderNumberTransportResponse;
+import com.sky.ddt.entity.InternalOrderNumberTransport;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -19,4 +21,6 @@ public interface CustomInternalOrderNumberTransportMapper extends InternalOrderN
     Long existHeadTripCostRateNull(@Param("shopId") Integer shopId, @Param("month") Date month);
 
     void lockHeadTripCostRate(@Param("shopId") Integer shopId, @Param("month") Date monthDate);
+
+    List<InternalOrderNumberTransport> queryInternalOrderNumberTransportsNoHeadTripCostRate(GenerateTheoreticalAmountRequest params);
 }

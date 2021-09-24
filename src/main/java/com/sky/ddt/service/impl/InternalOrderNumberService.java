@@ -4,13 +4,11 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.InternalOrderNumberConstant;
 import com.sky.ddt.dao.custom.CustomInternalOrderNumberMapper;
-import com.sky.ddt.dto.internalOrderNumber.request.ListInternalOrderNumberRequest;
-import com.sky.ddt.dto.internalOrderNumber.request.SaveInternalOrderNumberFinancialRemarkRequest;
-import com.sky.ddt.dto.internalOrderNumber.request.SaveInternalOrderNumberRequest;
+import com.sky.ddt.dao.custom.CustomInternalOrderNumberTransportMapper;
+import com.sky.ddt.dto.internalOrderNumber.request.*;
 import com.sky.ddt.dto.internalOrderNumber.response.ListInternalOrderNumberResponse;
 import com.sky.ddt.dto.response.BaseResponse;
-import com.sky.ddt.entity.InternalOrderNumber;
-import com.sky.ddt.entity.InternalOrderNumberExample;
+import com.sky.ddt.entity.*;
 import com.sky.ddt.service.IInternalOrderNumberService;
 import com.sky.ddt.service.ITransportTypeService;
 import com.sky.ddt.util.DateUtil;
@@ -24,6 +22,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author baixueping
@@ -36,6 +35,8 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
     CustomInternalOrderNumberMapper customInternalOrderNumberMapper;
     @Autowired
     ITransportTypeService transportTypeService;
+    @Autowired
+    CustomInternalOrderNumberTransportMapper customInternalOrderNumberTransportMapper;
 
     /**
      * @param params@return
@@ -60,7 +61,7 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
      */
     @Override
     public BaseResponse saveInternalOrderNumber(SaveInternalOrderNumberRequest params, Integer dealUserId) {
-        if(transportTypeService.notExistTransportTypeId(params.getTransportTypeId())){
+        if (transportTypeService.notExistTransportTypeId(params.getTransportTypeId())) {
             return BaseResponse.failMessage(InternalOrderNumberConstant.TRANSPORT_TYPE_ID_NOT_EXIST);
         }
         //修改
@@ -119,13 +120,13 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
      */
     @Override
     public InternalOrderNumber getInternalOrderNumberByOrderNumber(String orderNumber) {
-        if(StringUtils.isEmpty(orderNumber)){
+        if (StringUtils.isEmpty(orderNumber)) {
             return null;
         }
         InternalOrderNumberExample example = new InternalOrderNumberExample();
         example.createCriteria().andOrderNumberEqualTo(orderNumber);
-        List<InternalOrderNumber> list=customInternalOrderNumberMapper.selectByExample(example);
-        if(CollectionUtils.isEmpty(list)){
+        List<InternalOrderNumber> list = customInternalOrderNumberMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(list)) {
             return null;
         }
         return list.get(0);
@@ -146,6 +147,46 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
         return BaseResponse.success();
     }
 
+    @Override
+    public BaseResponse savePayAmount(SaveInternalOrderNumberPayAmountRequest params, Integer dealUserId) {
+        InternalOrderNumber internalOrderNumber = customInternalOrderNumberMapper.selectByPrimaryKey(params.getId());
+        if (internalOrderNumber == null) {
+            return BaseResponse.failMessage(InternalOrderNumberConstant.ID_NOT_EXIST);
+        }
+        InternalOrderNumber internalOrderNumberUpdate = new InternalOrderNumber();
+        internalOrderNumberUpdate.setId(params.getId());
+        internalOrderNumberUpdate.setPayAmount(params.getPayAmount());
+        internalOrderNumberUpdate.setUpdateTime(new Date());
+        internalOrderNumberUpdate.setUpdateBy(dealUserId);
+        customInternalOrderNumberMapper.updateByPrimaryKeySelective(internalOrderNumberUpdate);
+        return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse generateTheoreticalAmount(GenerateTheoreticalAmountRequest params) {
+        //判断是否有没有头程费率或者没有重量的
+        List<InternalOrderNumberTransport> internalOrderNumberTransportsNoHeadTripCostRates = customInternalOrderNumberTransportMapper.queryInternalOrderNumberTransportsNoHeadTripCostRate(params);
+        if (!CollectionUtils.isEmpty(internalOrderNumberTransportsNoHeadTripCostRates)) {
+            String subOrderNumbers = internalOrderNumberTransportsNoHeadTripCostRates.stream().map(item ->item.getSubOrderNumber()).collect(Collectors.joining(","));
+            if(subOrderNumbers.length()>500){
+                subOrderNumbers= subOrderNumbers.substring(0,500);
+            }
+            return BaseResponse.failMessage("以下内部单号子单号的头程费率为空或者小于等于0："+subOrderNumbers);
+        }
+        List<String> skuNoWeights= customInternalOrderNumberMapper.querySkuNoWeight(params);
+        if (!CollectionUtils.isEmpty(skuNoWeights)) {
+            String skus = skuNoWeights.stream().collect(Collectors.joining(","));
+            if(skus.length()>500){
+                skus= skus.substring(0,500);
+            }
+            return BaseResponse.failMessage("以下sku重量为空或者小于等于0："+skus);
+        }
+        int count=customInternalOrderNumberMapper.generateTheoreticalAmount(params);
+        if(count>0){
+            return BaseResponse.success();
+        }
+        return BaseResponse.failMessage("没有需要更新的数据");
+    }
     private String getOrderNumber() {
         //获取当天数量
         InternalOrderNumberExample example = new InternalOrderNumberExample();

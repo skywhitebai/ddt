@@ -1,5 +1,6 @@
 package com.sky.ddt.entity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -292,6 +293,186 @@ public class InternalOrderNumberExample {
 
         public Criteria andNumberNotBetween(Integer value1, Integer value2) {
             addCriterion("number not between", value1, value2, "number");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmountIsNull() {
+            addCriterion("pay_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmountIsNotNull() {
+            addCriterion("pay_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmountEqualTo(BigDecimal value) {
+            addCriterion("pay_amount =", value, "payAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmountNotEqualTo(BigDecimal value) {
+            addCriterion("pay_amount <>", value, "payAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmountGreaterThan(BigDecimal value) {
+            addCriterion("pay_amount >", value, "payAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("pay_amount >=", value, "payAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmountLessThan(BigDecimal value) {
+            addCriterion("pay_amount <", value, "payAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("pay_amount <=", value, "payAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmountIn(List<BigDecimal> values) {
+            addCriterion("pay_amount in", values, "payAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmountNotIn(List<BigDecimal> values) {
+            addCriterion("pay_amount not in", values, "payAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("pay_amount between", value1, value2, "payAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("pay_amount not between", value1, value2, "payAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountIsNull() {
+            addCriterion("theoretical_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountIsNotNull() {
+            addCriterion("theoretical_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountEqualTo(BigDecimal value) {
+            addCriterion("theoretical_amount =", value, "theoreticalAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountNotEqualTo(BigDecimal value) {
+            addCriterion("theoretical_amount <>", value, "theoreticalAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountGreaterThan(BigDecimal value) {
+            addCriterion("theoretical_amount >", value, "theoreticalAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("theoretical_amount >=", value, "theoreticalAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountLessThan(BigDecimal value) {
+            addCriterion("theoretical_amount <", value, "theoreticalAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("theoretical_amount <=", value, "theoreticalAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountIn(List<BigDecimal> values) {
+            addCriterion("theoretical_amount in", values, "theoreticalAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountNotIn(List<BigDecimal> values) {
+            addCriterion("theoretical_amount not in", values, "theoreticalAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("theoretical_amount between", value1, value2, "theoreticalAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("theoretical_amount not between", value1, value2, "theoreticalAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountStatusIsNull() {
+            addCriterion("theoretical_amount_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountStatusIsNotNull() {
+            addCriterion("theoretical_amount_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountStatusEqualTo(Integer value) {
+            addCriterion("theoretical_amount_status =", value, "theoreticalAmountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountStatusNotEqualTo(Integer value) {
+            addCriterion("theoretical_amount_status <>", value, "theoreticalAmountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountStatusGreaterThan(Integer value) {
+            addCriterion("theoretical_amount_status >", value, "theoreticalAmountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("theoretical_amount_status >=", value, "theoreticalAmountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountStatusLessThan(Integer value) {
+            addCriterion("theoretical_amount_status <", value, "theoreticalAmountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("theoretical_amount_status <=", value, "theoreticalAmountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountStatusIn(List<Integer> values) {
+            addCriterion("theoretical_amount_status in", values, "theoreticalAmountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountStatusNotIn(List<Integer> values) {
+            addCriterion("theoretical_amount_status not in", values, "theoreticalAmountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountStatusBetween(Integer value1, Integer value2) {
+            addCriterion("theoretical_amount_status between", value1, value2, "theoreticalAmountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTheoreticalAmountStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("theoretical_amount_status not between", value1, value2, "theoreticalAmountStatus");
             return (Criteria) this;
         }
 

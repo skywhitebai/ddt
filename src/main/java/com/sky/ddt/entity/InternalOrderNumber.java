@@ -1,5 +1,6 @@
 package com.sky.ddt.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class InternalOrderNumber {
@@ -8,6 +9,12 @@ public class InternalOrderNumber {
     private String orderNumber;
 
     private Integer number;
+
+    private BigDecimal payAmount;
+
+    private BigDecimal theoreticalAmount;
+
+    private Integer theoreticalAmountStatus;
 
     private String remark;
 
@@ -45,6 +52,30 @@ public class InternalOrderNumber {
 
     public void setNumber(Integer number) {
         this.number = number;
+    }
+
+    public BigDecimal getPayAmount() {
+        return payAmount;
+    }
+
+    public void setPayAmount(BigDecimal payAmount) {
+        this.payAmount = payAmount;
+    }
+
+    public BigDecimal getTheoreticalAmount() {
+        return theoreticalAmount;
+    }
+
+    public void setTheoreticalAmount(BigDecimal theoreticalAmount) {
+        this.theoreticalAmount = theoreticalAmount;
+    }
+
+    public Integer getTheoreticalAmountStatus() {
+        return theoreticalAmountStatus;
+    }
+
+    public void setTheoreticalAmountStatus(Integer theoreticalAmountStatus) {
+        this.theoreticalAmountStatus = theoreticalAmountStatus;
     }
 
     public String getRemark() {
