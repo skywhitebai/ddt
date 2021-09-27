@@ -7,6 +7,7 @@ import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.InternalOrderNumber;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * @author baixueping
@@ -56,4 +57,6 @@ public interface IInternalOrderNumberService {
     BaseResponse savePayAmount(SaveInternalOrderNumberPayAmountRequest params, Integer dealUserId);
 
     BaseResponse generateTheoreticalAmount(GenerateTheoreticalAmountRequest params);
+
+    List<ListInternalOrderNumberResponse> listExportInternalOrderNumber(ListInternalOrderNumberRequest params);
 }

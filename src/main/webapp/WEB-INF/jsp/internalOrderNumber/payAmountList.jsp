@@ -60,6 +60,8 @@
 
     <a href="javascript:void(0)" onclick="generateTheoreticalAmount()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        >生成理论金额</a>
+    <a href="javascript:void(0)" onclick="exportInternalOrderNumber()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+    >下载内部单号信息</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 
@@ -235,6 +237,11 @@
                 });
             }
         });
+    }
+    function exportInternalOrderNumber() {
+        queryParams=getQueryParams();
+        url = "${pageContext.request.contextPath }/internalOrderNumber/exportInternalOrderNumber"+getUrlParams(getQueryParams());
+        window.open(url);
     }
 </script>
 </html>

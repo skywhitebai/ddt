@@ -187,6 +187,12 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
         }
         return BaseResponse.failMessage("没有需要更新的数据");
     }
+
+    @Override
+    public List<ListInternalOrderNumberResponse> listExportInternalOrderNumber(ListInternalOrderNumberRequest params) {
+        return customInternalOrderNumberMapper.listInternalOrderNumber(params);
+    }
+
     private String getOrderNumber() {
         //获取当天数量
         InternalOrderNumberExample example = new InternalOrderNumberExample();
