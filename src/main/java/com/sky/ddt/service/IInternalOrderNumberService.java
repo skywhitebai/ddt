@@ -1,9 +1,7 @@
 package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
-import com.sky.ddt.dto.internalOrderNumber.request.ListInternalOrderNumberRequest;
-import com.sky.ddt.dto.internalOrderNumber.request.SaveInternalOrderNumberFinancialRemarkRequest;
-import com.sky.ddt.dto.internalOrderNumber.request.SaveInternalOrderNumberRequest;
+import com.sky.ddt.dto.internalOrderNumber.request.*;
 import com.sky.ddt.dto.internalOrderNumber.response.ListInternalOrderNumberResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.InternalOrderNumber;
@@ -54,4 +52,8 @@ public interface IInternalOrderNumberService {
     InternalOrderNumber getInternalOrderNumberByOrderNumber(String orderNumber);
 
     BaseResponse saveFinancialRemark(SaveInternalOrderNumberFinancialRemarkRequest params, Integer dealUserId);
+
+    BaseResponse savePayAmount(SaveInternalOrderNumberPayAmountRequest params, Integer dealUserId);
+
+    BaseResponse generateTheoreticalAmount(GenerateTheoreticalAmountRequest params);
 }

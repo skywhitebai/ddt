@@ -70,6 +70,12 @@
                     <input class="easyui-validatebox textbox" name="title"  style="width: 90%">
                 </td>
             </tr>
+            <tr class="view_status">
+                <td>编号：</td>
+                <td colspan="3">
+                    <input class="easyui-validatebox textbox" name="workOrderNo" readonly="readonly" style="width: 90%">
+                </td>
+            </tr>
             <tr>
                 <td>内容：</td>
                 <td colspan="3">
@@ -168,6 +174,7 @@
                 columns: [[
                     {field: 'ck', checkbox: true},   //选择
                     {title: '标题', field: 'title', width: 200},
+                    {title: '编号', field: 'workOrderNo', width: 150},
                     {
                         title: '状态', field: 'status', width: 50, formatter: function (value, row, index) {
                             if (value == 1) {

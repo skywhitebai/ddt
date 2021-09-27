@@ -62,4 +62,11 @@
         and iont.`create_time`<![CDATA[>=]]>#{month} and iont.`create_time`<![CDATA[<]]>date_add(#{month}, interval 1 MONTH)
         and head_trip_cost_rate is not null
     </update>
+
+    <select id="queryInternalOrderNumberTransportsNoHeadTripCostRate" resultMap="com.sky.ddt.dao.generate.InternalOrderNumberTransportMapper.BaseResultMap">
+        select * from internal_order_number_transport iont,internal_order_number ion
+        where ion.create_time<![CDATA[>=]]> #{createTimeStart} and ion.create_time <![CDATA[<]]>
+                    DATE_ADD(date(#{createTimeEnd}),INTERVAL 1 DAY)
+and ion.id=iont.internal_order_number_id and (iont.head_trip_cost_rate is null  or iont.head_trip_cost_rate<![CDATA[<=]]>0)
+    </select>
 </mapper>

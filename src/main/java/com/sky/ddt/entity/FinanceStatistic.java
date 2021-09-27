@@ -20,6 +20,10 @@ public class FinanceStatistic {
 
     private BigDecimal sendCost;
 
+    private BigDecimal sendCostPrice;
+
+    private BigDecimal sendHeadTripCostAfter;
+
     private BigDecimal saleCost;
 
     private BigDecimal mainBusinessIncome;
@@ -102,6 +106,22 @@ public class FinanceStatistic {
 
     public void setSendCost(BigDecimal sendCost) {
         this.sendCost = sendCost;
+    }
+
+    public BigDecimal getSendCostPrice() {
+        return sendCostPrice;
+    }
+
+    public void setSendCostPrice(BigDecimal sendCostPrice) {
+        this.sendCostPrice = sendCostPrice;
+    }
+
+    public BigDecimal getSendHeadTripCostAfter() {
+        return sendHeadTripCostAfter;
+    }
+
+    public void setSendHeadTripCostAfter(BigDecimal sendHeadTripCostAfter) {
+        this.sendHeadTripCostAfter = sendHeadTripCostAfter;
     }
 
     public BigDecimal getSaleCost() {

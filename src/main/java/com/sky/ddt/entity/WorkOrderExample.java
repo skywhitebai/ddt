@@ -235,6 +235,76 @@ public class WorkOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andWorkOrderNoIsNull() {
+            addCriterion("work_order_no is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkOrderNoIsNotNull() {
+            addCriterion("work_order_no is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkOrderNoEqualTo(String value) {
+            addCriterion("work_order_no =", value, "workOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkOrderNoNotEqualTo(String value) {
+            addCriterion("work_order_no <>", value, "workOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkOrderNoGreaterThan(String value) {
+            addCriterion("work_order_no >", value, "workOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkOrderNoGreaterThanOrEqualTo(String value) {
+            addCriterion("work_order_no >=", value, "workOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkOrderNoLessThan(String value) {
+            addCriterion("work_order_no <", value, "workOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkOrderNoLessThanOrEqualTo(String value) {
+            addCriterion("work_order_no <=", value, "workOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkOrderNoLike(String value) {
+            addCriterion("work_order_no like", value, "workOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkOrderNoNotLike(String value) {
+            addCriterion("work_order_no not like", value, "workOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkOrderNoIn(List<String> values) {
+            addCriterion("work_order_no in", values, "workOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkOrderNoNotIn(List<String> values) {
+            addCriterion("work_order_no not in", values, "workOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkOrderNoBetween(String value1, String value2) {
+            addCriterion("work_order_no between", value1, value2, "workOrderNo");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkOrderNoNotBetween(String value1, String value2) {
+            addCriterion("work_order_no not between", value1, value2, "workOrderNo");
+            return (Criteria) this;
+        }
+
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;

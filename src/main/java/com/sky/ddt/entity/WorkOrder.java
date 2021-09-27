@@ -7,6 +7,8 @@ public class WorkOrder {
 
     private String title;
 
+    private String workOrderNo;
+
     private Integer status;
 
     private Integer level;
@@ -45,6 +47,14 @@ public class WorkOrder {
 
     public void setTitle(String title) {
         this.title = title == null ? null : title.trim();
+    }
+
+    public String getWorkOrderNo() {
+        return workOrderNo;
+    }
+
+    public void setWorkOrderNo(String workOrderNo) {
+        this.workOrderNo = workOrderNo == null ? null : workOrderNo.trim();
     }
 
     public Integer getStatus() {

@@ -596,6 +596,126 @@ public class FinanceStatisticExample {
             return (Criteria) this;
         }
 
+        public Criteria andSendCostPriceIsNull() {
+            addCriterion("send_cost_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceIsNotNull() {
+            addCriterion("send_cost_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceEqualTo(BigDecimal value) {
+            addCriterion("send_cost_price =", value, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceNotEqualTo(BigDecimal value) {
+            addCriterion("send_cost_price <>", value, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceGreaterThan(BigDecimal value) {
+            addCriterion("send_cost_price >", value, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("send_cost_price >=", value, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceLessThan(BigDecimal value) {
+            addCriterion("send_cost_price <", value, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("send_cost_price <=", value, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceIn(List<BigDecimal> values) {
+            addCriterion("send_cost_price in", values, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceNotIn(List<BigDecimal> values) {
+            addCriterion("send_cost_price not in", values, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("send_cost_price between", value1, value2, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("send_cost_price not between", value1, value2, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostAfterIsNull() {
+            addCriterion("send_head_trip_cost_after is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostAfterIsNotNull() {
+            addCriterion("send_head_trip_cost_after is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostAfterEqualTo(BigDecimal value) {
+            addCriterion("send_head_trip_cost_after =", value, "sendHeadTripCostAfter");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostAfterNotEqualTo(BigDecimal value) {
+            addCriterion("send_head_trip_cost_after <>", value, "sendHeadTripCostAfter");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostAfterGreaterThan(BigDecimal value) {
+            addCriterion("send_head_trip_cost_after >", value, "sendHeadTripCostAfter");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostAfterGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("send_head_trip_cost_after >=", value, "sendHeadTripCostAfter");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostAfterLessThan(BigDecimal value) {
+            addCriterion("send_head_trip_cost_after <", value, "sendHeadTripCostAfter");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostAfterLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("send_head_trip_cost_after <=", value, "sendHeadTripCostAfter");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostAfterIn(List<BigDecimal> values) {
+            addCriterion("send_head_trip_cost_after in", values, "sendHeadTripCostAfter");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostAfterNotIn(List<BigDecimal> values) {
+            addCriterion("send_head_trip_cost_after not in", values, "sendHeadTripCostAfter");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostAfterBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("send_head_trip_cost_after between", value1, value2, "sendHeadTripCostAfter");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostAfterNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("send_head_trip_cost_after not between", value1, value2, "sendHeadTripCostAfter");
+            return (Criteria) this;
+        }
+
         public Criteria andSaleCostIsNull() {
             addCriterion("sale_cost is null");
             return (Criteria) this;

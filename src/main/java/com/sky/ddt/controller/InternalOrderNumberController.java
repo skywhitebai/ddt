@@ -3,9 +3,7 @@ package com.sky.ddt.controller;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
-import com.sky.ddt.dto.internalOrderNumber.request.ListInternalOrderNumberRequest;
-import com.sky.ddt.dto.internalOrderNumber.request.SaveInternalOrderNumberFinancialRemarkRequest;
-import com.sky.ddt.dto.internalOrderNumber.request.SaveInternalOrderNumberRequest;
+import com.sky.ddt.dto.internalOrderNumber.request.*;
 import com.sky.ddt.dto.internalOrderNumber.response.ListInternalOrderNumberResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.service.IInternalOrderNumberService;
@@ -22,7 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @date 2020/6/30 10:40
  */
 @Controller
-@RequestMapping("internalOrderNumber")
+@RequestMapping("/internalOrderNumber")
 public class InternalOrderNumberController extends SuperController {
     @Autowired
     IInternalOrderNumberService internalOrderNumberService;
@@ -31,6 +29,11 @@ public class InternalOrderNumberController extends SuperController {
     @MenuAnnotation("internalOrderNumber/index")
     public String index() {
         return "internalOrderNumber/list";
+    }
+    @GetMapping("/payAmountIndex")
+    @MenuAnnotation("internalOrderNumber/payAmountIndex")
+    public String payAmountIndex() {
+        return "internalOrderNumber/payAmountList";
     }
 
     @RequestMapping("/listInternalOrderNumber")
@@ -44,24 +47,40 @@ public class InternalOrderNumberController extends SuperController {
         return dataGridResponse;
     }
 
-    @RequestMapping("saveInternalOrderNumber")
+    @RequestMapping("/saveInternalOrderNumber")
     @ResponseBody
     @MenuAnnotation("internalOrderNumber/index")
     public BaseResponse saveInternalOrderNumber(@Validated SaveInternalOrderNumberRequest params) {
         Integer dealUserId=getCurrentUserId();
         return internalOrderNumberService.saveInternalOrderNumber(params,dealUserId);
     }
-    @RequestMapping("saveFinancialRemark")
+    @RequestMapping("/saveFinancialRemark")
     @ResponseBody
     @MenuAnnotation("internalOrderNumber/index")
     public BaseResponse saveFinancialRemark(@Validated SaveInternalOrderNumberFinancialRemarkRequest params) {
         Integer dealUserId=getCurrentUserId();
         return internalOrderNumberService.saveFinancialRemark(params,dealUserId);
     }
-    @RequestMapping("downPDF")
+    @RequestMapping("/downPDF")
     @ResponseBody
     @MenuAnnotation("internalOrderNumber/index")
     public BaseResponse downPDF(Integer id) {
         return internalOrderNumberService.downPDF(id,response);
     }
+
+    @RequestMapping("/savePayAmount")
+    @ResponseBody
+    @MenuAnnotation("internalOrderNumber/index")
+    public BaseResponse savePayAmount(@Validated SaveInternalOrderNumberPayAmountRequest params) {
+        Integer dealUserId=getCurrentUserId();
+        return internalOrderNumberService.savePayAmount(params,dealUserId);
+    }
+    @RequestMapping("/generateTheoreticalAmount")
+    @ResponseBody
+    @MenuAnnotation("internalOrderNumber/payAmountIndex")
+    public BaseResponse generateTheoreticalAmount(@Validated GenerateTheoreticalAmountRequest params) {
+        params.setDealUserId(getCurrentUserId());
+        return internalOrderNumberService.generateTheoreticalAmount(params);
+    }
+
 }

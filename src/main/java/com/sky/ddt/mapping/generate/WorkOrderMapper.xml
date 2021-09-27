@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.sky.ddt.entity.WorkOrder">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="work_order_no" jdbcType="VARCHAR" property="workOrderNo" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="level" jdbcType="INTEGER" property="level" />
     <result column="plan_end_time" jdbcType="TIMESTAMP" property="planEndTime" />
@@ -78,8 +79,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, title, status, level, plan_end_time, actual_end_time, deal_user_id, deal_status, 
-    remark, create_time, create_by, update_time, update_by
+    id, title, work_order_no, status, level, plan_end_time, actual_end_time, deal_user_id, 
+    deal_status, remark, create_time, create_by, update_time, update_by
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -136,16 +137,16 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into work_order (title, status, level, 
-      plan_end_time, actual_end_time, deal_user_id, 
-      deal_status, remark, create_time, 
-      create_by, update_time, update_by, 
-      content)
-    values (#{title,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, #{level,jdbcType=INTEGER}, 
-      #{planEndTime,jdbcType=TIMESTAMP}, #{actualEndTime,jdbcType=TIMESTAMP}, #{dealUserId,jdbcType=INTEGER}, 
-      #{dealStatus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
-      #{content,jdbcType=LONGVARCHAR})
+    insert into work_order (title, work_order_no, status, 
+      level, plan_end_time, actual_end_time, 
+      deal_user_id, deal_status, remark, 
+      create_time, create_by, update_time, 
+      update_by, content)
+    values (#{title,jdbcType=VARCHAR}, #{workOrderNo,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{level,jdbcType=INTEGER}, #{planEndTime,jdbcType=TIMESTAMP}, #{actualEndTime,jdbcType=TIMESTAMP}, 
+      #{dealUserId,jdbcType=INTEGER}, #{dealStatus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.WorkOrder">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -155,6 +156,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="title != null">
         title,
+      </if>
+      <if test="workOrderNo != null">
+        work_order_no,
       </if>
       <if test="status != null">
         status,
@@ -196,6 +200,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="workOrderNo != null">
+        #{workOrderNo,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
@@ -250,6 +257,9 @@
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
       </if>
+      <if test="record.workOrderNo != null">
+        work_order_no = #{record.workOrderNo,jdbcType=VARCHAR},
+      </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
@@ -295,6 +305,7 @@
     update work_order
     set id = #{record.id,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
+      work_order_no = #{record.workOrderNo,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
       level = #{record.level,jdbcType=INTEGER},
       plan_end_time = #{record.planEndTime,jdbcType=TIMESTAMP},
@@ -315,6 +326,7 @@
     update work_order
     set id = #{record.id,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
+      work_order_no = #{record.workOrderNo,jdbcType=VARCHAR},
       status = #{record.status,jdbcType=INTEGER},
       level = #{record.level,jdbcType=INTEGER},
       plan_end_time = #{record.planEndTime,jdbcType=TIMESTAMP},
@@ -335,6 +347,9 @@
     <set>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="workOrderNo != null">
+        work_order_no = #{workOrderNo,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
@@ -378,6 +393,7 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sky.ddt.entity.WorkOrder">
     update work_order
     set title = #{title,jdbcType=VARCHAR},
+      work_order_no = #{workOrderNo,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       level = #{level,jdbcType=INTEGER},
       plan_end_time = #{planEndTime,jdbcType=TIMESTAMP},
@@ -395,6 +411,7 @@
   <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.WorkOrder">
     update work_order
     set title = #{title,jdbcType=VARCHAR},
+      work_order_no = #{workOrderNo,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
       level = #{level,jdbcType=INTEGER},
       plan_end_time = #{planEndTime,jdbcType=TIMESTAMP},

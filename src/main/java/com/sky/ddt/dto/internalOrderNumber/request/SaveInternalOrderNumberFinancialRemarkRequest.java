@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class SaveInternalOrderNumberFinancialRemarkRequest {
+    @NotNull(message =InternalOrderNumberConstant.ID_EMPTY )
     Integer id;
     @NotNull(message = InternalOrderNumberConstant.NUMBER_EMPTY)
     @Length(max = 200, message = InternalOrderNumberConstant.FINANCIAL_REMARK_TOO_LONG)

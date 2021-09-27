@@ -1,6 +1,7 @@
 package com.sky.ddt.dao.custom;
 
 import com.sky.ddt.dao.generate.InternalOrderNumberMapper;
+import com.sky.ddt.dto.internalOrderNumber.request.GenerateTheoreticalAmountRequest;
 import com.sky.ddt.dto.internalOrderNumber.request.ListInternalOrderNumberRequest;
 import com.sky.ddt.dto.internalOrderNumber.response.ListInternalOrderNumberResponse;
 
@@ -20,4 +21,8 @@ public interface CustomInternalOrderNumberMapper extends InternalOrderNumberMapp
      * @date 2020/6/30 14:54
     */
     List<ListInternalOrderNumberResponse> listInternalOrderNumber(ListInternalOrderNumberRequest params);
+
+    int generateTheoreticalAmount(GenerateTheoreticalAmountRequest params);
+
+    List<String> querySkuNoWeight(GenerateTheoreticalAmountRequest params);
 }
