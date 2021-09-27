@@ -962,6 +962,9 @@ public class DeliverGoodsService implements IDeliverGoodsService {
     }
 
     private String getPostalCode(String shipTo) {
+        if(StringUtils.isEmpty(shipTo)){
+            return "";
+        }
         return RegexUtil.getFirstStr(shipTo, "[0-9]+[-][0-9]+");
     }
 
