@@ -3,6 +3,7 @@ package com.sky.ddt.controller;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
+import com.sky.ddt.dto.fbaPackingList.request.ImportFbaPackingList2Request;
 import com.sky.ddt.dto.fbaPackingList.request.ListFbaPackingListRequest;
 import com.sky.ddt.dto.fbaPackingList.request.ListInvoiceInfoRequest;
 import com.sky.ddt.dto.fbaPackingList.response.ListFbaPackingListResponse;
@@ -46,9 +47,9 @@ public class FbaPackingListController extends SuperController {
     @RequestMapping("/importFbaPackingList2")
     @MenuAnnotation("fbaPackingList/index")
     @ResponseBody
-    public BaseResponse importFbaPackingList2(@Validated @NotEmpty(message = "FBAshipment id不能为空")String fbaShipmentId, MultipartFile file) {
+    public BaseResponse importFbaPackingList2(@Validated ImportFbaPackingList2Request params) {
         Integer dealUserId = getCurrentUserId();
-        return fbaPackingListService.importFbaPackingList2(fbaShipmentId,file, dealUserId);
+        return fbaPackingListService.importFbaPackingList2(params,dealUserId);
     }
 
     @RequestMapping("/listFbaPackingList")

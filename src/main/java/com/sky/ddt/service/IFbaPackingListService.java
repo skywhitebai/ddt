@@ -1,6 +1,7 @@
 package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
+import com.sky.ddt.dto.fbaPackingList.request.ImportFbaPackingList2Request;
 import com.sky.ddt.dto.fbaPackingList.request.ListFbaPackingListRequest;
 import com.sky.ddt.dto.fbaPackingList.request.ListInvoiceInfoRequest;
 import com.sky.ddt.dto.fbaPackingList.response.ListFbaPackingListResponse;
@@ -68,5 +69,5 @@ public interface IFbaPackingListService {
 
     BaseResponse cancelFbaPackingList(Integer id, Integer dealUserId);
 
-    BaseResponse importFbaPackingList2(String fbaShipmentId, MultipartFile file, Integer dealUserId);
+    BaseResponse importFbaPackingList2(ImportFbaPackingList2Request params, Integer dealUserId);
 }

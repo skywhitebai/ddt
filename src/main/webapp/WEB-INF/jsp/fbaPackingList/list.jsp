@@ -145,13 +145,14 @@
     </form>
 </div>
 <!--导入页面-->
-<div id="dlg_importFbaPackingList2" class="easyui-dialog" style="width: 600px; height: 300px; padding: 10px 20px"
+<div id="dlg_importFbaPackingList2" class="easyui-dialog" style="width: 700px; height: 300px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons',top:10, align:'center'">
     <div class="ftitle">
         <b>新的fba装箱单导入</b>
     </div>
     <form id="frm_importFbaPackingList2" method="post" novalidate="novalidate" enctype="multipart/form-data">
-        FBAshipment id：<input class="easyui-textbox" name="fbaShipmentId" id="dlg_importFbaPackingList2_fbaShipmentId"></td>
+        FBAshipment id：<input class="easyui-textbox" name="fbaShipmentId" id="dlg_importFbaPackingList2_fbaShipmentId"><br>
+        Ship to（地址）：<input class="easyui-textbox" name="shipTo" id="dlg_importFbaPackingList2_shipTo"><br>
         <input type="file" id="importFbaPackingListFile2" name="file" accept=".xls,.xlsx"/>
         <div style="text-align:center;">
             <label style="color: red">请将excel里面的公式转换为普通数值再导入</label>
@@ -222,6 +223,7 @@
     function showDialogImportFbaPackingList2() {
         $('#dlg_importFbaPackingList2').dialog('open').dialog('setTitle', '新的fba装箱单导入');
         $("#dlg_importFbaPackingList2_fbaShipmentId").val("");
+        $("#dlg_importFbaPackingList2_shopTo").val("");
     }
 
     function closeDialogImportFbaPackingList() {
@@ -277,6 +279,11 @@
         var fbaShipmentId = $("#dlg_importFbaPackingList2_fbaShipmentId").val();
         if (fbaShipmentId == '') {
             $.messager.alert("提示", "请填写fbaShipmentId");
+            return;
+        }
+        var shipTo= $("#dlg_importFbaPackingList2_shipTo").val();
+        if (shipTo == '') {
+            $.messager.alert("提示", "请填写shipTo");
             return;
         }
         var dom = document.getElementById("importFbaPackingListFile2");

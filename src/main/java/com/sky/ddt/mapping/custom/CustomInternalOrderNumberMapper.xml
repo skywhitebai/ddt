@@ -33,7 +33,7 @@
     </select>
 
     <update id="generateTheoreticalAmount">
-        UPDATE internal_order_number ion,(SELECT ion.id,SUM(iont.`head_trip_cost_rate`*sku.`weight`) theoretical_amount FROM `internal_order_number` ion,`internal_order_number_transport` iont,`fba_packing_list_shop_sku` splss,`shop_sku` ss,sku  WHERE
+        UPDATE internal_order_number ion,(SELECT ion.id,SUM(iont.`head_trip_cost_rate`*sku.`weight`*splss.`quantity`) theoretical_amount FROM `internal_order_number` ion,`internal_order_number_transport` iont,`fba_packing_list_shop_sku` splss,`shop_sku` ss,sku  WHERE
 ion.create_time<![CDATA[>=]]> #{createTimeStart} and ion.create_time <![CDATA[<]]>
                     DATE_ADD(date(#{createTimeEnd}),INTERVAL 1 DAY)
 and ion.id=iont.internal_order_number_id
