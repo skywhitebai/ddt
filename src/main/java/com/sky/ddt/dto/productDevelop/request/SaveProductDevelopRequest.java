@@ -31,4 +31,7 @@ public class SaveProductDevelopRequest {
     String chineseProductName;
     String englishProductName;
     private Integer status;
+    @Min(value = 1,message = "开发等级必须为1-10")
+    @Max(value = 10,message = "开发等级必须为1-10")
+    private Integer developmentLevel;
 }
