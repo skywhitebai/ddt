@@ -5,6 +5,7 @@
                type="com.sky.ddt.dto.shopSkuHeadTripCostHis.response.ListShopSkuHeadTripCostHisResponse"
                extends="com.sky.ddt.dao.generate.ShopSkuHeadTripCostHisMapper.BaseResultMap">
         <result column="shop_sku" property="shopSku"/>
+        <result column="month" property="month"/>
     </resultMap>
     <select id="listShopSkuHeadTripCostHis"
             parameterType="com.sky.ddt.dto.shopSkuHeadTripCostHis.request.ListShopSkuHeadTripCostHisRequest"
@@ -18,7 +19,36 @@
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 <trim prefix="(" suffix=")" prefixOverrides="and">
                     <if test="shopHeadTripCostId != null">and sshtch.shop_head_trip_cost_id=#{shopHeadTripCostId}</if>
-                    <if test="shopSku != null ">and ss.shop_sku like concat('%',#{shopSku},'%')</if>
+                    <if test="shopSku != null and shopSku!=''">and ss.shop_sku like concat('%',#{shopSku},'%')</if>
+                </trim>
+            </trim>
+        </where>
+        order by sshtch.create_time desc
+    </select>
+    <resultMap id="listExportShopSkuHeadTripCostHisMap"
+               type="com.sky.ddt.dto.shopSkuHeadTripCostHis.response.ExportShopSkuHeadTripCostHisResponse"
+               extends="com.sky.ddt.dao.generate.ShopSkuHeadTripCostHisMapper.BaseResultMap">
+        <result column="shop_sku" property="shopSku"/>
+        <result column="shop_name" property="shopName"/>
+        <result column="month" property="month"/>
+    </resultMap>
+    <select id="listExportShopSkuHeadTripCostHis"
+            parameterType="com.sky.ddt.dto.shopSkuHeadTripCostHis.request.ExportShopSkuHeadTripCostHisRequest"
+            resultMap="listExportShopSkuHeadTripCostHisMap">
+        select
+        sshtch.*,shtc.month,s.shop_name,
+        ss.shop_sku
+        from shop_sku_head_trip_cost_his sshtch
+        left join shop_sku ss on sshtch.shop_sku_id=ss.shop_sku_id
+        left join shop_head_trip_cost shtc on shtc.id=sshtch.shop_head_trip_cost_id
+        left join shop s on shtc.shop_id=s.shop_id
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <trim prefix="(" suffix=")" prefixOverrides="and">
+                    <if test="shopHeadTripCostId != null">and sshtch.shop_head_trip_cost_id=#{shopHeadTripCostId}</if>
+                    <if test="shopSku != null and shopSku!=''">and ss.shop_sku like concat('%',#{shopSku},'%')</if>
+                    <if test="shopId != null ">and shtc.shop_id =#{shopId}</if>
+                    <if test="monthDate != null ">and shtc.month =#{monthDate}</if>
                 </trim>
             </trim>
         </where>

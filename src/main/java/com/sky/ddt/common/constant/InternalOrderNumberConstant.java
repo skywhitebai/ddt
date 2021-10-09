@@ -28,6 +28,7 @@ public class InternalOrderNumberConstant {
         exportInternalOrderNumberFieldList.add(new ExcelField("number", "数量", ExcelField.FieldTypeEnum.STRING));
         exportInternalOrderNumberFieldList.add(new ExcelField("payAmount", "实付金额", ExcelField.FieldTypeEnum.NUMBER));
         exportInternalOrderNumberFieldList.add(new ExcelField("theoreticalAmount", "理论金额", ExcelField.FieldTypeEnum.NUMBER));
+        exportInternalOrderNumberFieldList.add(new ExcelField("differenceAmount", "差额（理论-实付）", ExcelField.FieldTypeEnum.NUMBER));
         exportInternalOrderNumberFieldList.add(new ExcelField("transportTypeName", "物流渠道", ExcelField.FieldTypeEnum.STRING));
         exportInternalOrderNumberFieldList.add(new ExcelField("totalWeight", "重量kg", ExcelField.FieldTypeEnum.NUMBER));
         exportInternalOrderNumberFieldList.add(new ExcelField("remark", "备注", ExcelField.FieldTypeEnum.STRING));

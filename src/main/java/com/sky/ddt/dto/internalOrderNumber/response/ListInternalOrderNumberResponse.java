@@ -14,4 +14,5 @@ import java.math.BigDecimal;
 public class ListInternalOrderNumberResponse extends InternalOrderNumber{
     String transportTypeName;
     BigDecimal totalWeight;
+    BigDecimal differenceAmount;
 }

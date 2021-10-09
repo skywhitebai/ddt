@@ -11,8 +11,11 @@ import java.util.Date;
  * @date 2020/8/18 18:07
  */
 @Data
-public class ListShopSkuHeadTripCostHisRequest extends DataGridRequest {
+public class ExportShopSkuHeadTripCostHisRequest {
     Integer shopHeadTripCostId;
     String shopSku;
+    Integer shopId;
+    String month;
+    Date monthDate;
 
 }

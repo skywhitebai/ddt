@@ -5,7 +5,9 @@ import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.common.constant.ShopHeadTripCostConstant;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.dto.shopSkuHeadTripCostHis.request.ExportShopSkuHeadTripCostHisRequest;
 import com.sky.ddt.dto.shopSkuHeadTripCostHis.request.ListShopSkuHeadTripCostHisRequest;
+import com.sky.ddt.dto.shopSkuHeadTripCostHis.response.ExportShopSkuHeadTripCostHisResponse;
 import com.sky.ddt.dto.shopSkuHeadTripCostHis.response.ListShopSkuHeadTripCostHisResponse;
 import com.sky.ddt.service.IShopSkuHeadTripCostHisService;
 import com.sky.ddt.util.ExcelExportByExcelFieldUtil;
@@ -37,9 +39,10 @@ public class ShopSkuHeadTripCostHisController extends SuperController {
     @RequestMapping("/exportShopSkuHeadTripCostHis")
     @ResponseBody
     @MenuAnnotation("shopHeadTripCost/index")
-    public BaseResponse exportShopSkuHeadTripCostHis(ListShopSkuHeadTripCostHisRequest params) {
-        List<ListShopSkuHeadTripCostHisResponse> list = shopSkuHeadTripCostHisService.listExportShopSkuHeadTripCostHis(params);
+    public BaseResponse exportShopSkuHeadTripCostHis(ExportShopSkuHeadTripCostHisRequest params) {
+        List<ExportShopSkuHeadTripCostHisResponse> list = shopSkuHeadTripCostHisService.listExportShopSkuHeadTripCostHis(params);
         BaseResponse exportResponse = new ExcelExportByExcelFieldUtil().export(response, list, ShopHeadTripCostConstant.exportShopSkuHeadTripCostHisFieldList, "店铺sku头程费");
         return exportResponse;
     }
+
 }

@@ -141,6 +141,7 @@
                     }
                 },
                 {title: '理论金额', field: 'theoreticalAmount', width: 80},
+                {title: '差额（理论-实付）', field: 'differenceAmount', width: 90},
                 {title: '物流渠道', field: 'transportTypeName', width: 130},
                 {title: '重量kg', field: 'totalWeight', width: 60},
                 {

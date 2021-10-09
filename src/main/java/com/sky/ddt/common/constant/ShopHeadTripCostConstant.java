@@ -30,6 +30,8 @@ public class ShopHeadTripCostConstant {
     public static final String EXIST_WITHOUT_WEIGHT_SHOP_SKU ="存在没有重量的店铺sku";
     public static List<ExcelField> exportShopSkuHeadTripCostHisFieldList=new ArrayList<>();
     static {
+        exportShopSkuHeadTripCostHisFieldList.add(new ExcelField("shopName", "店铺名", ExcelField.FieldTypeEnum.STRING));
+        exportShopSkuHeadTripCostHisFieldList.add(new ExcelField("month", "月份", ExcelField.FieldTypeEnum.DATE_TIME));
         exportShopSkuHeadTripCostHisFieldList.add(new ExcelField("shopSku", "店铺sku", ExcelField.FieldTypeEnum.STRING));
         exportShopSkuHeadTripCostHisFieldList.add(new ExcelField("headTripCostBefore", "旧头程费", ExcelField.FieldTypeEnum.NUMBER));
         exportShopSkuHeadTripCostHisFieldList.add(new ExcelField("headTripCostAfter", "新头程费", ExcelField.FieldTypeEnum.NUMBER));

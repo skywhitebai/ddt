@@ -1,7 +1,9 @@
 package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
+import com.sky.ddt.dto.shopSkuHeadTripCostHis.request.ExportShopSkuHeadTripCostHisRequest;
 import com.sky.ddt.dto.shopSkuHeadTripCostHis.request.ListShopSkuHeadTripCostHisRequest;
+import com.sky.ddt.dto.shopSkuHeadTripCostHis.response.ExportShopSkuHeadTripCostHisResponse;
 import com.sky.ddt.dto.shopSkuHeadTripCostHis.response.ListShopSkuHeadTripCostHisResponse;
 
 import java.util.List;
@@ -21,5 +23,5 @@ public interface IShopSkuHeadTripCostHisService {
      */
     PageInfo<ListShopSkuHeadTripCostHisResponse> listShopSkuHeadTripCostHis(ListShopSkuHeadTripCostHisRequest params);
 
-    List<ListShopSkuHeadTripCostHisResponse> listExportShopSkuHeadTripCostHis(ListShopSkuHeadTripCostHisRequest params);
+    List<ExportShopSkuHeadTripCostHisResponse> listExportShopSkuHeadTripCostHis(ExportShopSkuHeadTripCostHisRequest params);
 }

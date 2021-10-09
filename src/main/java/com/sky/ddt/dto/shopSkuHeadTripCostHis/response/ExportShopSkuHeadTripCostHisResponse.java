@@ -11,6 +11,8 @@ import java.util.Date;
  * @date 2020/8/18 18:11
  */
 @Data
-public class ListShopSkuHeadTripCostHisResponse extends ShopSkuHeadTripCostHis {
+public class ExportShopSkuHeadTripCostHisResponse extends ShopSkuHeadTripCostHis {
     String shopSku;
+    String shopName;
+    Date month;
 }

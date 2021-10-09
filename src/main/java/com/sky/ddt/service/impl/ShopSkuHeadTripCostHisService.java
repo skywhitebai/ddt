@@ -3,12 +3,17 @@ package com.sky.ddt.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dao.custom.CustomShopSkuHeadTripCostHisMapper;
+import com.sky.ddt.dto.shopSkuHeadTripCostHis.request.ExportShopSkuHeadTripCostHisRequest;
 import com.sky.ddt.dto.shopSkuHeadTripCostHis.request.ListShopSkuHeadTripCostHisRequest;
+import com.sky.ddt.dto.shopSkuHeadTripCostHis.response.ExportShopSkuHeadTripCostHisResponse;
 import com.sky.ddt.dto.shopSkuHeadTripCostHis.response.ListShopSkuHeadTripCostHisResponse;
 import com.sky.ddt.service.IShopSkuHeadTripCostHisService;
+import com.sky.ddt.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,7 +40,13 @@ public class ShopSkuHeadTripCostHisService implements IShopSkuHeadTripCostHisSer
     }
 
     @Override
-    public List<ListShopSkuHeadTripCostHisResponse> listExportShopSkuHeadTripCostHis(ListShopSkuHeadTripCostHisRequest params) {
-        return customShopSkuHeadTripCostHisMapper.listShopSkuHeadTripCostHis(params);
+    public List<ExportShopSkuHeadTripCostHisResponse> listExportShopSkuHeadTripCostHis(ExportShopSkuHeadTripCostHisRequest params) {
+        if (!StringUtils.isEmpty(params.getMonth())) {
+            Date monthDate = DateUtil.strMonthToDate(params.getMonth());
+            if (monthDate != null) {
+                params.setMonthDate(monthDate);
+            }
+        }
+        return customShopSkuHeadTripCostHisMapper.listExportShopSkuHeadTripCostHis(params);
     }
 }

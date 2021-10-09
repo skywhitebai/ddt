@@ -82,14 +82,20 @@
         });
     }
 
-    function bindData() {
-        dg = '#dg';
-        url = "${pageContext.request.contextPath }/shopHeadTripCost/list";
-        title = "订单管理";
+    function getQueryParams() {
         queryParams = {
             shopId: $("#s_shopId").combobox('getValue'),
             month: $("#s_month").val()
         };
+        return queryParams;
+
+    }
+
+    function bindData() {
+        dg = '#dg';
+        url = "${pageContext.request.contextPath }/shopHeadTripCost/list";
+        title = "订单管理";
+        queryParams = getQueryParams();
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
             title: title,
@@ -114,10 +120,10 @@
                 {title: '店铺名', field: 'shopName', width: 120},
                 {
                     title: '年月', field: 'month', width: 80, formatter: function (value, row, index) {
-                    if (value) {
-                        return value.substr(0, 7);
+                        if (value) {
+                            return value.substr(0, 7);
+                        }
                     }
-                }
                 }, {
                     title: '店铺sku头程费',
                     field: 'shopSkuHeadTripCost',
@@ -168,22 +174,21 @@
             if (data.code == '200') {
                 $.messager.alert("提示", "修改成功");
                 bindData();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
     }
 
     function exportShopHeadTripCost() {
-        $.messager.alert("提示", "功能待开发");
-        return;
-        var month = $("#s_month").val();
-        if (isEmpty(month)) {
-            $.messager.alert("提示", "请选择月份");
+        shopId=$("#s_shopId").combobox('getValue');
+        month=$("#s_month").val();
+        if(isEmpty(shopId)&&isEmpty(month)){
+            $.messager.alert("提示", "请选择店铺或者月份，防止数据过大下载失败");
             return;
         }
-
+        url = "${pageContext.request.contextPath }/shopSkuHeadTripCostHis/exportShopSkuHeadTripCostHis" + getUrlParams(getQueryParams());
+        window.open(url);
     }
 
     function createShopHeadTripCost() {
@@ -210,8 +215,7 @@
                     if (data.code == '200') {
                         bindData();
                         $.messager.alert("提示", "生成成功");
-                    }
-                    else {
+                    } else {
                         $.messager.alert("提示", data.message);
                     }
                 });
@@ -242,8 +246,7 @@
                         hideCover();
                     }
                 });
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
                 hideCover();
             }

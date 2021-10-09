@@ -6,6 +6,7 @@
                extends="com.sky.ddt.dao.generate.InternalOrderNumberMapper.BaseResultMap">
         <result column="transport_type_name" property="transportTypeName"/>
         <result column="totalWeight" property="totalWeight"/>
+        <result column="differenceAmount" property="differenceAmount"/>
     </resultMap>
     <select id="listInternalOrderNumber"
             parameterType="com.sky.ddt.dto.internalOrderNumber.request.ListInternalOrderNumberRequest"
@@ -14,7 +15,7 @@
         <include refid="com.sky.ddt.dao.generate.InternalOrderNumberMapper.Base_Column_List"/>,
         (select transport_type_name from transport_type tt where tt.id=ion.transport_type_id)transport_type_name,
         (select sum(weight) from internal_order_number_transport iont where iont.internal_order_number_id =ion.id)
-        totalWeight
+        totalWeight,case when theoretical_amount_status=1 then (theoretical_amount-pay_amount) else null end differenceAmount
         from internal_order_number ion
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
