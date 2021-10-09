@@ -46,6 +46,9 @@
     <input class="easyui-validatebox textbox" id="s_sku">
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
+    <a href="javascript:void(0)" onclick="exportInventoryChangeRecord()" class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'"
+       style="width: 80px">下载</a>
 </div>
 <!--列表-->
 <table id="dg" style="width: 100%; height: auto">
@@ -83,7 +86,7 @@
     function bindData() {
         dg = '#dg';
         url = "${pageContext.request.contextPath }/inventoryChangeRecord/listInventoryChangeRecord";
-        title = "出库单管理";
+        title = "库存变更记录";
         queryParams = getQueryParams();
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
                 url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -132,5 +135,10 @@
         $(dg).datagrid('clearSelections');
     }
 
+    function exportInventoryChangeRecord() {
+        queryParams = getQueryParams();
+        url = "${pageContext.request.contextPath }/inventoryChangeRecord/exportInventoryChangeRecord" + getUrlParams(getQueryParams());
+        window.open(url);
+    }
 </script>
 </html>

@@ -1,6 +1,10 @@
 package com.sky.ddt.common.constant;
 
+import com.sky.ddt.common.excel.ExcelField;
 import lombok.Getter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author baixueping
@@ -8,6 +12,21 @@ import lombok.Getter;
  * @date 2020/5/7 16:48
  */
 public class InventoryChangeRecordConstant {
+    public static List<ExcelField> exportInventoryChangeRecordFieldList=new ArrayList<>();
+    static {
+        exportInventoryChangeRecordFieldList.add(new ExcelField("shopName", "店铺名", ExcelField.FieldTypeEnum.STRING));
+        exportInventoryChangeRecordFieldList.add(new ExcelField("shopSku", "店铺sku", ExcelField.FieldTypeEnum.STRING));
+        exportInventoryChangeRecordFieldList.add(new ExcelField("sku", "产品sku", ExcelField.FieldTypeEnum.STRING));
+        exportInventoryChangeRecordFieldList.add(new ExcelField("changeTypeName", "变更类型", ExcelField.FieldTypeEnum.STRING));
+        exportInventoryChangeRecordFieldList.add(new ExcelField("batchNumber", "批号", ExcelField.FieldTypeEnum.STRING));
+        exportInventoryChangeRecordFieldList.add(new ExcelField("inventoryQuantityOld", "变更前库存", ExcelField.FieldTypeEnum.NUMBER));
+        exportInventoryChangeRecordFieldList.add(new ExcelField("modifiedQuantity", "变更值", ExcelField.FieldTypeEnum.NUMBER));
+        exportInventoryChangeRecordFieldList.add(new ExcelField("inventoryQuantityNew", "变更后库存", ExcelField.FieldTypeEnum.NUMBER));
+        exportInventoryChangeRecordFieldList.add(new ExcelField("createByRealName", "变更人", ExcelField.FieldTypeEnum.STRING));
+        exportInventoryChangeRecordFieldList.add(new ExcelField("remark", "备注", ExcelField.FieldTypeEnum.STRING));
+        exportInventoryChangeRecordFieldList.add(new ExcelField("createTime", "创建时间", ExcelField.FieldTypeEnum.DATE_TIME));
+        exportInventoryChangeRecordFieldList.add(new ExcelField("updateTime", "修改时间", ExcelField.FieldTypeEnum.DATE_TIME));
+    }
     @Getter
     public enum ChangeTypeEnum {
         WAREHOUSING(1,"入库"),

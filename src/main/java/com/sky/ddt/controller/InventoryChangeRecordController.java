@@ -2,14 +2,20 @@ package com.sky.ddt.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.annotation.MenuAnnotation;
+import com.sky.ddt.common.constant.InternalOrderNumberConstant;
+import com.sky.ddt.common.constant.InventoryChangeRecordConstant;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.inventoryChangeRecord.request.ListInventoryChangeRecordRequest;
 import com.sky.ddt.dto.inventoryChangeRecord.response.ListInventoryChangeRecordResponse;
+import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.service.IInventoryChangeRecordService;
+import com.sky.ddt.util.ExcelExportByExcelFieldUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * @author baixueping
@@ -21,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class InventoryChangeRecordController extends SuperController {
     @Autowired
     IInventoryChangeRecordService inventoryChangeRecordService;
+
     @RequestMapping("/index")
     @MenuAnnotation("inventoryChangeRecord/index")
     public String index() {
@@ -36,5 +43,14 @@ public class InventoryChangeRecordController extends SuperController {
         dataGridResponse.setTotal(page.getTotal());
         dataGridResponse.setRows(page.getList());
         return dataGridResponse;
+    }
+
+    @RequestMapping("/exportInventoryChangeRecord")
+    @ResponseBody
+    @MenuAnnotation("inventoryChangeRecord/index")
+    public BaseResponse exportInventoryChangeRecord(ListInventoryChangeRecordRequest params) {
+        List<ListInventoryChangeRecordResponse> list = inventoryChangeRecordService.listExportInventoryChangeRecord(params);
+        BaseResponse exportResponse = new ExcelExportByExcelFieldUtil().export(response, list, InventoryChangeRecordConstant.exportInventoryChangeRecordFieldList, "库存变更记录");
+        return exportResponse;
     }
 }

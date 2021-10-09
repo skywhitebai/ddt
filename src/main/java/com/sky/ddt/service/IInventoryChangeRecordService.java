@@ -5,6 +5,8 @@ import com.sky.ddt.dto.inventoryChangeRecord.request.AddInventoryChangeRecordReq
 import com.sky.ddt.dto.inventoryChangeRecord.request.ListInventoryChangeRecordRequest;
 import com.sky.ddt.dto.inventoryChangeRecord.response.ListInventoryChangeRecordResponse;
 
+import java.util.List;
+
 /**
  * @author baixueping
  * @description 店铺sku库存改变记录
@@ -28,4 +30,6 @@ public interface IInventoryChangeRecordService {
      * @date 2020/5/12 17:54
      */
     PageInfo<ListInventoryChangeRecordResponse> listInventoryChangeRecord(ListInventoryChangeRecordRequest params);
+
+    List<ListInventoryChangeRecordResponse> listExportInventoryChangeRecord(ListInventoryChangeRecordRequest params);
 }

@@ -59,4 +59,9 @@ public class InventoryChangeRecordService implements IInventoryChangeRecordServi
         PageInfo<ListInventoryChangeRecordResponse> page = new PageInfo<ListInventoryChangeRecordResponse>(list);
         return page;
     }
+
+    @Override
+    public List<ListInventoryChangeRecordResponse> listExportInventoryChangeRecord(ListInventoryChangeRecordRequest params) {
+        return  customInventoryChangeRecordMapper.listInventoryChangeRecord(params);
+    }
 }
