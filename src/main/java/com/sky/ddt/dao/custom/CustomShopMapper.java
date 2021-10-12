@@ -1,6 +1,7 @@
 package com.sky.ddt.dao.custom;
 
 import com.sky.ddt.dao.generate.ShopMapper;
+import com.sky.ddt.dto.shop.request.ShopComboboxlistRequest;
 import com.sky.ddt.dto.shop.request.ShopListRequest;
 import com.sky.ddt.dto.shop.response.ShopComboboxResponse;
 import com.sky.ddt.dto.shop.response.ShopListResponse;
@@ -28,14 +29,5 @@ public interface CustomShopMapper extends ShopMapper {
      */
     List<ShopListResponse> listShop(ShopListRequest params);
 
-    List<ShopComboboxResponse> comboboxlist();
-
-    /**
-     * @param
-     * @return
-     * @description 获取当前用户店铺
-     * @author baixueping
-     * @date 2019/7/26 19:04
-     */
-    List<ShopComboboxResponse> userShopComboboxlist(Integer userId);
+    List<ShopComboboxResponse> comboboxlist(ShopComboboxlistRequest shopComboboxlistRequest);
 }

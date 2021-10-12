@@ -39,4 +39,6 @@ public interface IStockCartService {
      * @date 2019/9/3 10:36
      */
     BaseResponse saveProductionQuantity(SaveProductionQuantityRequest params, Integer currentUserId);
+
+    PageInfo<ListStockResponse> listWarehouseStock(ListStockRequest params);
 }

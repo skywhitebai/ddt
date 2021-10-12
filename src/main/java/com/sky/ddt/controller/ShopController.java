@@ -7,10 +7,7 @@ import com.sky.ddt.common.annotation.Login;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.response.BaseResponse;
-import com.sky.ddt.dto.shop.request.ShopListRequest;
-import com.sky.ddt.dto.shop.request.ShopSaveRequest;
-import com.sky.ddt.dto.shop.request.UpdateInventoryQueryStartDateTimeRequest;
-import com.sky.ddt.dto.shop.request.UpdateOrderLastUpdatedAfterRequest;
+import com.sky.ddt.dto.shop.request.*;
 import com.sky.ddt.dto.shop.response.ShopComboboxResponse;
 import com.sky.ddt.dto.shop.response.ShopListResponse;
 import com.sky.ddt.entity.Shop;
@@ -88,14 +85,15 @@ public class ShopController extends SuperController {
     }
     @RequestMapping("/comboboxlist")
     @ResponseBody
-    public List<ShopComboboxResponse> comboboxlist() {
-        List<ShopComboboxResponse> list=shopService.comboboxlist();
+    public List<ShopComboboxResponse> comboboxlist(ShopComboboxlistRequest shopComboboxlistRequest) {
+        List<ShopComboboxResponse> list=shopService.comboboxlist(shopComboboxlistRequest);
         return list;
     }
     @RequestMapping("/userShopComboboxlist")
     @ResponseBody
-    public List<ShopComboboxResponse> userShopComboboxlist() {
-        List<ShopComboboxResponse> list=shopService.userShopComboboxlist(getCurrentUserId());
+    public List<ShopComboboxResponse> userShopComboboxlist(ShopComboboxlistRequest shopComboboxlistRequest) {
+        shopComboboxlistRequest.setUserId(getCurrentUserId());
+        List<ShopComboboxResponse> list=shopService.comboboxlist(shopComboboxlistRequest);
         return list;
     }
     @RequestMapping("/save")

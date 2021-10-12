@@ -9,10 +9,7 @@ import com.sky.ddt.dao.custom.CustomShopClientHisMapper;
 import com.sky.ddt.dao.custom.CustomShopMapper;
 import com.sky.ddt.dao.custom.CustomShopSkuMapper;
 import com.sky.ddt.dto.response.BaseResponse;
-import com.sky.ddt.dto.shop.request.ShopListRequest;
-import com.sky.ddt.dto.shop.request.ShopSaveRequest;
-import com.sky.ddt.dto.shop.request.UpdateInventoryQueryStartDateTimeRequest;
-import com.sky.ddt.dto.shop.request.UpdateOrderLastUpdatedAfterRequest;
+import com.sky.ddt.dto.shop.request.*;
 import com.sky.ddt.dto.shop.response.ShopComboboxResponse;
 import com.sky.ddt.dto.shop.response.ShopListResponse;
 import com.sky.ddt.entity.Shop;
@@ -26,7 +23,6 @@ import com.sky.ddt.util.DateUtil;
 import com.sky.ddt.util.StringTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -287,10 +283,11 @@ public class ShopService implements IShopService {
      * 获取店铺下拉菜单
      *
      * @return
+     * @param shopComboboxlistRequest
      */
     @Override
-    public List<ShopComboboxResponse> comboboxlist() {
-        return customShopMapper.comboboxlist();
+    public List<ShopComboboxResponse> comboboxlist(ShopComboboxlistRequest shopComboboxlistRequest) {
+        return customShopMapper.comboboxlist(shopComboboxlistRequest);
     }
 
     /**
@@ -320,17 +317,6 @@ public class ShopService implements IShopService {
         shop.setInventoryQueryStartDateTime(params.getInventoryQueryStartDateTime());
         customShopMapper.updateByPrimaryKeySelective(shop);
         return BaseResponse.success();
-    }
-
-    /**
-     * @param currentUserId@return
-     * @description 获取当前用户店铺
-     * @author baixueping
-     * @date 2019/7/26 19:02
-     */
-    @Override
-    public List<ShopComboboxResponse> userShopComboboxlist(Integer currentUserId) {
-        return customShopMapper.userShopComboboxlist(currentUserId);
     }
 
     /**

@@ -59,12 +59,12 @@
     <select id="comboboxlist" resultType="com.sky.ddt.dto.shop.response.ShopComboboxResponse">
         select shop_id shopId,shop_name shopName
         from shop s
-        order by s.create_time
-    </select>
-    <select id="userShopComboboxlist" resultType="com.sky.ddt.dto.shop.response.ShopComboboxResponse">
-        select shop_id shopId,shop_name shopName
-        from shop s
-        where s.shop_id in(select shop_id from shop_user where user_id =#{userId})
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="userId != null ">s.shop_id in(select shop_id from shop_user where user_id =#{userId})</if>
+                <if test="type != null">and s.type = #{type}</if>
+            </trim>
+        </where>
         order by s.create_time
     </select>
 </mapper>

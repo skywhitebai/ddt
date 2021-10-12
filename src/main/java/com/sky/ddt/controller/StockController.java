@@ -31,6 +31,11 @@ public class StockController extends SuperController {
     public String index() {
         return "stock/list";
     }
+    @RequestMapping("/warehouseIndex")
+    @MenuAnnotation("stock/index")
+    public String warehouseIndex() {
+        return "stock/warehouseList";
+    }
 
     @RequestMapping("/listStock")
     @ResponseBody
@@ -43,7 +48,17 @@ public class StockController extends SuperController {
         dataGridResponse.setRows(page.getList());
         return dataGridResponse;
     }
-
+    @RequestMapping("/listWarehouseStock")
+    @ResponseBody
+    @MenuAnnotation("stock/index")
+    public DataGridResponse listWarehouseStock(@Validated ListStockRequest params) {
+        params.setUserId(getCurrentUserId());
+        PageInfo<ListStockResponse> page = stockCartService.listWarehouseStock(params);
+        DataGridResponse dataGridResponse = new DataGridResponse();
+        dataGridResponse.setTotal(page.getTotal());
+        dataGridResponse.setRows(page.getList());
+        return dataGridResponse;
+    }
     /**
      * @param
      * @return

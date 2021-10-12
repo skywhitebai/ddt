@@ -21,4 +21,8 @@ public interface CustomStockCartMapper extends StockCartMapper {
      * @date 2019/8/21 14:50
      */
     List<ListStockResponse> listStock(ListStockRequest params);
+
+    List<ListStockResponse> listWarehouseStock(ListStockRequest params);
+
+    List<ListStockResponse> listWarehouseStockOtherInfo(List<Integer> list);
 }

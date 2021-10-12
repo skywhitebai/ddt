@@ -32,8 +32,14 @@
     店铺：
     <select id="s_shopId" style="width:150px;">
     </select>
+    店铺sku：
+    <input class="easyui-validatebox textbox" id="s_shopSku">
+    店铺父sku：
+    <input class="easyui-validatebox textbox" id="s_shopParentSku">
     产品sku：
     <input class="easyui-validatebox textbox" id="s_sku">
+    销售人员：
+    <input class="easyui-validatebox textbox" id="s_salesmanUserId">
     显示类型：
     <select class="easyui-combobox" id="s_showType" style="width:200px;">
         <option value="1">全部</option>
@@ -47,9 +53,6 @@
     </select>
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
-    <a href="javascript:void(0)" onclick="createStockRecord()" class="easyui-linkbutton"
-       data-options="iconCls:'icon-search'"
-       style="">生成补货单</a>
     <a href="javascript:void(0)" onclick="createFactoryProduction()" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">生成工厂生产单</a>
@@ -68,7 +71,7 @@
     <form id="frm" method="post" novalidate="novalidate">
         <table>
             <tr>
-                <td>店铺sku：</td>
+                <td>产品sku：</td>
                 <td>
                     <input class="easyui-validatebox textbox" name="shopSku" readonly="readonly">
                 </td>
@@ -233,29 +236,15 @@
 <script type="text/javascript">
     $(document).ready(function () {
         bindShop();
-        bindSalesmanUserId();
     });
 
     function bindShop() {
         $('#s_shopId').combobox({
             valueField: 'shopId',
             textField: 'shopName',
-            url: "${pageContext.request.contextPath }/shop/userShopComboboxlist",//获取数据
+            url: "${pageContext.request.contextPath }/shop/userShopComboboxlist?type=2",//获取数据
         });
     }
-
-    function bindSalesmanUserId() {
-        $.post('${pageContext.request.contextPath }/user/comboboxlist', {}, function (data) {
-            var userNull = {'userId': -1, 'realName': "销售人员为空"};
-            data.push(userNull);
-            $('#s_salesmanUserId').combobox({
-                data: data,
-                valueField: 'userId',
-                textField: 'realName'
-            });
-        });
-    }
-
     var pageSizeEnable = false;
 
     function bindData() {
@@ -271,8 +260,8 @@
             pageSizeEnable = true;
         }
         dg = '#dg';
-        url = "${pageContext.request.contextPath }/stock/listStock";
-        title = "备货管理";
+        url = "${pageContext.request.contextPath }/stock/listWarehouseStock";
+        title = "产品sku备货管理";
         queryParams = {
             shopId: shopId,
             shopSku: $("#s_shopSku").val(),
@@ -347,13 +336,7 @@
                 },
                 {title: '店铺sku', field: 'shopSku', width: 168},
                 {title: 'fba可售库存', field: 'afnFulfillableQuantity', width: 90},
-                {title: '店铺库存', field: 'inventoryQuantity', width: 90},
-                {
-                    title: '其他店铺库存', field: 'inventoryQuantityOtherShop', width: 90,
-                    formatter: function (value, row, rowIndex) {
-                        return '<a href="javascript:;" title="查看其他店铺库存" onclick="showInventoryQuantityDialog(' + row.skuId + ',' + row.shopId + ',1)" >' + value + '</a>';
-                    }
-                },
+                {title: '仓库库存', field: 'inventoryQuantity', width: 90},
                 {
                     title: '其他仓库库存', field: 'inventoryQuantityWarehouse', width: 90,
                     formatter: function (value, row, rowIndex) {
@@ -367,51 +350,10 @@
                     }
                 },
                 {
-                    title: '其他店铺生产中数量', field: 'produceOrderShopSkuProductionQuantityOtherShop', width: 90,
-                    formatter: function (value, row, rowIndex) {
-                        return '<a href="javascript:;" title="查看其他店铺库存" onclick="showProduceOrderShopSkuProductionQuantityDialog(' + row.skuId + ',' + row.shopId + ',1)" >' + value + '</a>';
-                    }
-                },
-                {
                     title: '其他仓库生产中数量', field: 'produceOrderShopSkuProductionQuantityWarehouse', width: 90,
                     formatter: function (value, row, rowIndex) {
                         return '<a href="javascript:;" title="查看其他店铺库存" onclick="showProduceOrderShopSkuProductionQuantityDialog(' + row.skuId + ',' + row.shopId + ',2)" >' + value + '</a>';
                     }
-                },
-                {title: '补货数量', field: 'stockQuantity', width: 90},
-                {
-                    title: '空运补货', field: 'stockQuantityKy', width: 90,
-                    formatter: function (value, row, rowIndex) {
-                        if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0" onchange="saveStockQuantity(this,' + row.shopSkuId + ',\'ky\')">';
-                        } else {
-                            return '<input class="easyui-numberbox" min="0" precision="0" value="' + value + '" onchange="saveStockQuantity(this,' + row.shopSkuId + ',\'ky\')">';
-                        }
-                    }
-                },
-                {
-                    title: '空派补货', field: 'stockQuantityKp', width: 90,
-                    formatter: function (value, row, rowIndex) {
-                        if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0" onchange="saveStockQuantity(this,' + row.shopSkuId + ',\'kp\')">';
-                        } else {
-                            return '<input class="easyui-numberbox" min="0" precision="0" value="' + value + '" onchange="saveStockQuantity(this,' + row.shopSkuId + ',\'kp\')">';
-                        }
-                    }
-                },
-                {
-                    title: '海运补货', field: 'stockQuantityHy', width: 90,
-                    formatter: function (value, row, rowIndex) {
-                        if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0" onchange="saveStockQuantity(this,' + row.shopSkuId + ',\'hy\')">';
-                        } else {
-                            return '<input class="easyui-numberbox" min="0" precision="0" value="' + value + '" onchange="saveStockQuantity(this,' + row.shopSkuId + ',\'hy\')">';
-                        }
-                    }
-                },
-                {
-                    title: '预计生产数量', field: 'estimateProductionQuantity', width: 100, styler: cellStyler,
-                    formatter: cellFormatter
                 },
                 {
                     title: '实际生产数量', field: 'productionQuantity', width: 100,
@@ -515,31 +457,6 @@
         return res;
     }
 
-    function saveStockQuantity(input, shopSkuId, type) {
-        var stockQuantity = $(input).val();
-        if (isEmpty(stockQuantity)) {
-            stockQuantity = 0;
-        }
-        var r = /^\d+$/;　　//正整数
-        if (!r.test(stockQuantity)) {
-            $.messager.alert("提示", "补货数量必须为大于等于0的数字.");
-            $(input).focus()
-            return;
-        }
-        $.post('${pageContext.request.contextPath }/stock/saveStockQuantity', {
-            stockQuantity: stockQuantity,
-            shopSkuId: shopSkuId,
-            type: type
-        }, function (data) {
-            if (data.code == '200') {
-                //保存成功
-                refreshStockQuantity(stockQuantity, shopSkuId, type);
-            } else {
-                $.messager.alert("提示", data.message);
-            }
-        });
-    }
-
     function saveProductionQuantity(input, shopSkuId) {
         var productionQuantity = $(input).val();
         if (isEmpty(productionQuantity)) {
@@ -563,36 +480,6 @@
         });
     }
 
-    function refreshStockQuantity(stockQuantity, shopSkuId, type) {
-        var rowIndex = $('#dg').datagrid('getRowIndex', shopSkuId);//id是关键字值
-        var row = $('#dg').datagrid('getData').rows[rowIndex];
-        if (type == "ky") {
-            row.stockQuantityKy = stockQuantity;
-        } else if (type == "kp") {
-            row.stockQuantityKp = stockQuantity;
-        } else if (type == "hy") {
-            row.stockQuantityHy = stockQuantity;
-        }
-        var stockQuantityKy = parseInt(row.stockQuantityKy);
-        var stockQuantityKp = parseInt(row.stockQuantityKp)
-        var stockQuantityHy = parseInt(row.stockQuantityHy)
-        var stockQuantityTotal = stockQuantityKy + stockQuantityKp + stockQuantityHy;
-        var estimateProductionQuantity = stockQuantityTotal - row.inventoryQuantity;
-        var stockQuantityTotal = stockQuantityKy + stockQuantityKp + stockQuantityHy;
-        var stockQuantityCanSaleDay = getCanSaleDay(stockQuantityTotal, row.estimateAverageDailySales);
-        $('#dg').datagrid('updateRow', {
-            index: rowIndex,
-            row: {
-                'stockQuantity': stockQuantityTotal,
-                'stockQuantityKy': stockQuantityKy,
-                'stockQuantityKp': stockQuantityKp,
-                'stockQuantityHy': stockQuantityHy,
-                'stockQuantityCanSaleDay': stockQuantityCanSaleDay,
-                'estimateProductionQuantity': estimateProductionQuantity
-            }
-        });
-    }
-
     function getCanSaleDay(quantity, estimateAverageDailySales) {
         if (quantity == 0) {
             return 0.00;
@@ -602,29 +489,6 @@
         }
         var canSaleDay = fomatFloat(quantity / estimateAverageDailySales, 2);
         return canSaleDay;
-    }
-
-    function createStockRecord() {
-        var shopId = $("#s_shopId").combobox('getValue');
-        if (isEmpty(shopId)) {
-            $.messager.alert("提示", "请选择店铺.");
-            return;
-        }
-        var shopName = $("#s_shopId").combobox('getText');
-        $.messager.confirm('提示', '确认生成店铺' + shopName + '的补货单数据吗？', function (r) {
-            if (r) {
-                $.post('${pageContext.request.contextPath }/stockRecord/createStockRecord', {shopId: shopId}, function (data) {
-                    if (data.code == '200') {
-                        $('#dlg').dialog('close');
-                        //跳转到补货单列表页
-                        $.messager.alert("提示", "生成补货单数据成功，请到补货单记录管理查看");
-                        bindData();
-                    } else {
-                        $.messager.alert("提示", data.message);
-                    }
-                });
-            }
-        });
     }
 
     function createFactoryProduction() {
@@ -651,7 +515,7 @@
     }
 
     function openThisView() {
-        window.open("${pageContext.request.contextPath }/stock/index");
+        window.open("${pageContext.request.contextPath }/stock/warehouseIndex");
     }
 
     function showImgDialog(skuId) {

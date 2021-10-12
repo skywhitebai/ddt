@@ -12,6 +12,7 @@ import com.sky.ddt.dto.stock.request.ListStockRequest;
 import com.sky.ddt.dto.stock.request.SaveProductionQuantityRequest;
 import com.sky.ddt.dto.stock.request.SaveStockQuantityRequest;
 import com.sky.ddt.dto.stock.response.ListStockResponse;
+import com.sky.ddt.entity.InternalOrderNumber;
 import com.sky.ddt.entity.ShopSku;
 import com.sky.ddt.entity.StockCart;
 import com.sky.ddt.entity.StockCartExample;
@@ -19,6 +20,7 @@ import com.sky.ddt.service.IImgService;
 import com.sky.ddt.service.IShopUserService;
 import com.sky.ddt.service.IStockCartService;
 import com.sky.ddt.util.MathUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -26,6 +28,8 @@ import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author baixueping
@@ -66,6 +70,51 @@ public class StockCartService implements IStockCartService {
         }
         PageInfo<ListStockResponse> page = new PageInfo<ListStockResponse>(list);
         return page;
+    }
+
+    @Override
+    public PageInfo<ListStockResponse> listWarehouseStock(ListStockRequest params) {
+        PageHelper.startPage(params.getPage(), params.getRows(), true);
+        List<ListStockResponse> list = customStockCartMapper.listWarehouseStock(params);
+        if(!CollectionUtils.isEmpty(list)){
+            List<Integer> ids=list.stream().map(ListStockResponse::getSkuId).collect(Collectors.toList());
+            List<ListStockResponse> listInfo = customStockCartMapper.listWarehouseStockOtherInfo(ids);
+            setOtherInfo(list,listInfo);
+            setListStock(list);
+            for (ListStockResponse listStockResponse :
+                    list) {
+                String imgUrl = imgService.getImgUrlBySkuId(listStockResponse.getSkuId());
+                if (!StringUtils.isEmpty(imgUrl)) {
+                    listStockResponse.setImgUrl(imgUrl);
+                }
+            }
+        }
+
+        PageInfo<ListStockResponse> page = new PageInfo<ListStockResponse>(list);
+        return page;
+    }
+
+    private void setOtherInfo(List<ListStockResponse> list, List<ListStockResponse> listInfo) {
+        for (ListStockResponse listStockResponse :
+                list) {
+            Optional<ListStockResponse> infoFirst=listInfo.stream().filter(item->item.getSkuId().equals(listStockResponse.getSkuId())).findFirst();
+            if(infoFirst.isPresent()){
+                ListStockResponse info=infoFirst.get();
+                listStockResponse.setAfnFulfillableQuantity(info.getAfnFulfillableQuantity());
+                listStockResponse.setOnTheWayQuantity(info.getOnTheWayQuantity());
+                listStockResponse.setAfnReservedQuantity(info.getAfnReservedQuantity());
+                listStockResponse.setAfnInboundWorkingQuantity(info.getAfnInboundWorkingQuantity());
+                listStockResponse.setAfnInboundShippedQuantity(info.getAfnInboundShippedQuantity());
+                listStockResponse.setAfnInboundReceivingQuantity(info.getAfnInboundReceivingQuantity());
+                listStockResponse.setFbaTotalCanSaleQuantity(info.getFbaTotalCanSaleQuantity());
+
+                listStockResponse.setSalesForTheLast7Days(info.getSalesForTheLast7Days());
+                listStockResponse.setSalesForTheLast14Days(info.getSalesForTheLast14Days());
+                listStockResponse.setSalesForTheLast21Days(info.getSalesForTheLast21Days());
+                listStockResponse.setSalesForTheLast28Days(info.getSalesForTheLast28Days());
+                listStockResponse.setSalesForTheLast35Days(info.getSalesForTheLast35Days());
+            }
+        }
     }
 
     /**
@@ -172,6 +221,7 @@ public class StockCartService implements IStockCartService {
         }
         return BaseResponse.success();
     }
+
 
     private StockCart getStockCartByShopSkuId(Integer shopSkuId,Integer type) {
         StockCartExample example = new StockCartExample();

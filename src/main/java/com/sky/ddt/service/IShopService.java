@@ -2,13 +2,9 @@ package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dto.response.BaseResponse;
-import com.sky.ddt.dto.shop.request.ShopListRequest;
-import com.sky.ddt.dto.shop.request.ShopSaveRequest;
-import com.sky.ddt.dto.shop.request.UpdateInventoryQueryStartDateTimeRequest;
-import com.sky.ddt.dto.shop.request.UpdateOrderLastUpdatedAfterRequest;
+import com.sky.ddt.dto.shop.request.*;
 import com.sky.ddt.dto.shop.response.ShopComboboxResponse;
 import com.sky.ddt.dto.shop.response.ShopListResponse;
-import com.sky.ddt.dto.shopSku.request.UpdateShopSkuInventoryQuantityRequest;
 import com.sky.ddt.entity.Shop;
 
 import java.util.Date;
@@ -75,8 +71,9 @@ public interface IShopService {
      * 获取店铺下拉菜单
      *
      * @return
+     * @param shopComboboxlistRequest
      */
-    List<ShopComboboxResponse> comboboxlist();
+    List<ShopComboboxResponse> comboboxlist(ShopComboboxlistRequest shopComboboxlistRequest);
 
     /**
      * @param
@@ -86,15 +83,6 @@ public interface IShopService {
      * @date 2019/5/5 9:33
      */
     BaseResponse updateInventoryQueryStartDateTime(Integer dealUserId, UpdateInventoryQueryStartDateTimeRequest params);
-
-    /**
-     * @param
-     * @return
-     * @description 获取当前用户店铺
-     * @author baixueping
-     * @date 2019/7/26 19:02
-     */
-    List<ShopComboboxResponse> userShopComboboxlist(Integer currentUserId);
 
     /**
      * @param
