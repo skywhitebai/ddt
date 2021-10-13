@@ -14,6 +14,7 @@ import java.util.Date;
 public class ListStockResponse {
     Integer shopId;
     String shopName;
+    String saleShopNames;
     String shopSku;
     String shopParentSku;
     String sku;

@@ -253,7 +253,7 @@
             $.messager.alert("提示", "请选择店铺.");
             return;
         }
-        var pageSize = 15;
+        var pageSize = 500;
         if (pageSizeEnable) {
             pageSize = $("#dg").datagrid("getPager").data("pagination").options.pageSize;
         } else {
@@ -282,6 +282,7 @@
             rownumbers: true,
             remoteSort: false,
             idField: 'shopSkuId',
+            nowrap:false,
             queryParams: queryParams,  //异步查询的参数
             frozenColumns: [[
                 {field: 'ck', checkbox: true},   //选择
@@ -381,6 +382,7 @@
                     }
                 },
                 {title: '店铺名', field: 'shopName', width: 140},
+                {title: '销售渠道', field: 'saleShopNames', width: 200},
                 {title: '销售负责人', field: 'salesmanRealName', width: 120},
                 {title: '店铺父sku', field: 'shopParentSku', width: 168},
                 {

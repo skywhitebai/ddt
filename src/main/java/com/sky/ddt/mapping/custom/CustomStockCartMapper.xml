@@ -141,17 +141,17 @@
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 <if test="showType != null and showType==2 ">
                     and (
-                    exists(select 1 from shop_sku ss2,order_import oi2 WHERE oi2.shop_sku_id=ss2.shop_sku_id and
+                    exists(select 1 from shop_sku ss2,order_import oi2,sku s WHERE oi2.shop_sku_id=ss2.shop_sku_id and
                     oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 36 DAY) AND oi2.purchase_date<![CDATA[<]]>
                     DATE_SUB(DATE(NOW()),INTERVAL 1 DAY) AND oi2.order_status!='Cancelled' AND
                     oi2.sales_channel='Amazon.com'
                     and oi2.item_price is not null
                     AND oi2.`quantity`>0 and
-                    ss2.sku_id=ss.sku_id )
-                    or exists(select 1 from shop_sku ss2,fba_import fi2 WHERE fi2.shop_sku_id=ss2.shop_sku_id and
+                    ss2.sku_id=s.sku_id and s.product_id =sku.product_id )
+                    or exists(select 1 from shop_sku ss2,fba_import fi2,sku s WHERE fi2.shop_sku_id=ss2.shop_sku_id and
                     (IFNULL(fi2.`afn_total_quantity`,0)-IFNULL(fi2.`afn_unsellable_quantity`,0))>0 and
-                    ss2.sku_id=ss.sku_id )
-                    or (select sum(ss2.inventory_quantity) from shop_sku ss2 where ss2.sku_id=ss.sku_id)>0
+                    ss2.sku_id=s.sku_id and s.product_id =sku.product_id )
+                    or (select sum(ss2.inventory_quantity) from shop_sku ss2,sku s where ss2.sku_id=s.sku_id and s.product_id =sku.product_id )>0
                     )
                 </if>
                 <if test="salesmanUserId != null and salesmanUserId != -1">and ss.salesman_user_id=#{salesmanUserId}
@@ -176,7 +176,7 @@
     </select>
     <select id="listWarehouseStockOtherInfo" parameterType="java.util.List"
             resultType="com.sky.ddt.dto.stock.response.ListStockResponse">
-        select a.*,b.* from (select ss.sku_id skuId,IFNULL(sum(fi.afn_fulfillable_quantity),0) afnFulfillableQuantity,
+        select a.*,b.*,c.* from (select ss.sku_id skuId,IFNULL(sum(fi.afn_fulfillable_quantity),0) afnFulfillableQuantity,
         IFNULL(sum(fi.`afn_reserved_quantity`),0)+ IFNULL(sum(fi.`afn_inbound_working_quantity`),0)+
         IFNULL(sum(fi.`afn_inbound_shipped_quantity`),0)+ IFNULL(sum(fi.`afn_inbound_receiving_quantity`),0)
         onTheWayQuantity,
@@ -218,5 +218,11 @@
         and ss.`shop_id` NOT IN (SELECT shop_id FROM shop s WHERE s.type=2)
         group by ss.sku_id) b
         on a.skuId=b.skuId
+        left join
+        (select GROUP_CONCAT(shop_name) saleShopNames,ss.sku_id skuId from  shop s,shop_sku ss where s.shop_id=ss.shop_id and s.type=1 and ss.sku_id  in
+        <foreach close=")" collection="list" item="listItem" open="(" separator=",">
+            #{listItem}
+        </foreach> group by ss.sku_id) c
+        on a.skuId=c.skuId
     </select>
 </mapper>

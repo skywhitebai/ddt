@@ -107,7 +107,7 @@ public class StockCartService implements IStockCartService {
                 listStockResponse.setAfnInboundShippedQuantity(info.getAfnInboundShippedQuantity());
                 listStockResponse.setAfnInboundReceivingQuantity(info.getAfnInboundReceivingQuantity());
                 listStockResponse.setFbaTotalCanSaleQuantity(info.getFbaTotalCanSaleQuantity());
-
+                listStockResponse.setSaleShopNames(info.getSaleShopNames());
                 listStockResponse.setSalesForTheLast7Days(info.getSalesForTheLast7Days());
                 listStockResponse.setSalesForTheLast14Days(info.getSalesForTheLast14Days());
                 listStockResponse.setSalesForTheLast21Days(info.getSalesForTheLast21Days());
