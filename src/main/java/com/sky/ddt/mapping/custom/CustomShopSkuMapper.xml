@@ -137,9 +137,9 @@
     </select>
 
     <insert id="initWareHouseShopSku">
-INSERT INTO shop_sku(shop_sku,sku_id,shop_id,create_by)
-SELECT CONCAT( #{shopId},s.`sku`) shop_sku,s.sku_id,#{shopId} shop_id,#{createBy} FROM sku s
-WHERE NOT EXISTS (SELECT 1 FROM shop_sku ss WHERE ss.`shop_sku`= CONCAT( #{shopId},s.`sku`) )
+INSERT INTO shop_sku(shop_sku,shop_parent_sku,sku_id,shop_id,create_by)
+SELECT CONCAT( #{shopId},'-',s.`sku`) shop_sku,p.product_code,s.sku_id,#{shopId} shop_id,#{createBy} FROM sku s,product p
+WHERE s.product_id=p.product_id and NOT EXISTS (SELECT 1 FROM shop_sku ss WHERE ss.`shop_sku`= CONCAT( #{shopId},'-',s.`sku`) )
     </insert>
     <insert id="insertWarehouseShopSku" parameterType="com.sky.ddt.entity.Sku">
 INSERT INTO shop_sku(shop_sku,sku_id,shop_id,create_by)

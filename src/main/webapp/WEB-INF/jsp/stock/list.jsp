@@ -43,7 +43,7 @@
     显示类型：
     <select class="easyui-combobox" id="s_showType" style="width:200px;">
         <option value="1">全部</option>
-        <option value="2">有销量或者fba库存</option>
+        <option value="2">有销量、fba库存、仓库库存</option>
     </select>
     生产状态：
     <select class="easyui-combobox" id="s_produceStatus" style="width:100px;">

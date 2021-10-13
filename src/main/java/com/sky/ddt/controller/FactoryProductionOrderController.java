@@ -11,6 +11,7 @@ import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.service.IFactoryProductionOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -104,6 +105,7 @@ public class FactoryProductionOrderController extends SuperController {
     @RequestMapping("/confirmFactoryProductionOrder")
     @ResponseBody
     @MenuAnnotation("factoryProductionOrder/index")
+    @Transactional
     public BaseResponse confirmFactoryProductionOrder(Integer id) {
         Integer dealUserId = getCurrentUserId();
         return factoryProductionOrderService.confirmFactoryProductionOrder(id, dealUserId);
