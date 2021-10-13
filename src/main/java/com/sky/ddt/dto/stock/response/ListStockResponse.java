@@ -42,6 +42,10 @@ public class ListStockResponse {
     Integer replenishQuantity56Days;
     Integer replenishQuantity90Days;
     /**
+     * 总库存
+     */
+    Integer inventoryQuantityTotal;
+    /**
      * 国内仓库数量
      */
     Integer inventoryQuantity;
@@ -96,6 +100,10 @@ public class ListStockResponse {
     private Integer productionQuantity;
 
     private String salesmanRealName;
+    /**
+     *总生产中数量
+     */
+    private Integer produceOrderShopSkuProductionQuantityTotal;
     /**
      * 生产单店铺sku生产数量
      */

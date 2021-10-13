@@ -76,10 +76,10 @@ public class StockCartService implements IStockCartService {
     public PageInfo<ListStockResponse> listWarehouseStock(ListStockRequest params) {
         PageHelper.startPage(params.getPage(), params.getRows(), true);
         List<ListStockResponse> list = customStockCartMapper.listWarehouseStock(params);
-        if(!CollectionUtils.isEmpty(list)){
-            List<Integer> ids=list.stream().map(ListStockResponse::getSkuId).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(list)) {
+            List<Integer> ids = list.stream().map(ListStockResponse::getSkuId).collect(Collectors.toList());
             List<ListStockResponse> listInfo = customStockCartMapper.listWarehouseStockOtherInfo(ids);
-            setOtherInfo(list,listInfo);
+            setOtherInfo(list, listInfo);
             setListStock(list);
             for (ListStockResponse listStockResponse :
                     list) {
@@ -97,9 +97,9 @@ public class StockCartService implements IStockCartService {
     private void setOtherInfo(List<ListStockResponse> list, List<ListStockResponse> listInfo) {
         for (ListStockResponse listStockResponse :
                 list) {
-            Optional<ListStockResponse> infoFirst=listInfo.stream().filter(item->item.getSkuId().equals(listStockResponse.getSkuId())).findFirst();
-            if(infoFirst.isPresent()){
-                ListStockResponse info=infoFirst.get();
+            Optional<ListStockResponse> infoFirst = listInfo.stream().filter(item -> item.getSkuId().equals(listStockResponse.getSkuId())).findFirst();
+            if (infoFirst.isPresent()) {
+                ListStockResponse info = infoFirst.get();
                 listStockResponse.setAfnFulfillableQuantity(info.getAfnFulfillableQuantity());
                 listStockResponse.setOnTheWayQuantity(info.getOnTheWayQuantity());
                 listStockResponse.setAfnReservedQuantity(info.getAfnReservedQuantity());
@@ -113,6 +113,20 @@ public class StockCartService implements IStockCartService {
                 listStockResponse.setSalesForTheLast21Days(info.getSalesForTheLast21Days());
                 listStockResponse.setSalesForTheLast28Days(info.getSalesForTheLast28Days());
                 listStockResponse.setSalesForTheLast35Days(info.getSalesForTheLast35Days());
+            }else{
+                listStockResponse.setAfnFulfillableQuantity(0);
+                listStockResponse.setOnTheWayQuantity(0);
+                listStockResponse.setAfnReservedQuantity(0);
+                listStockResponse.setAfnInboundWorkingQuantity(0);
+                listStockResponse.setAfnInboundShippedQuantity(0);
+                listStockResponse.setAfnInboundReceivingQuantity(0);
+                listStockResponse.setFbaTotalCanSaleQuantity(0);
+
+                listStockResponse.setSalesForTheLast7Days(0);
+                listStockResponse.setSalesForTheLast14Days(0);
+                listStockResponse.setSalesForTheLast21Days(0);
+                listStockResponse.setSalesForTheLast28Days(0);
+                listStockResponse.setSalesForTheLast35Days(0);
             }
         }
     }
@@ -139,7 +153,7 @@ public class StockCartService implements IStockCartService {
         if (!shopUserService.exisShopUser(shopSku.getShopId(), currentUserId)) {
             return BaseResponse.failMessage(StockRecordConstant.USER_NO_SHOP_RIGHT);
         }
-        StockCart stockCart = getStockCartByShopSkuId(params.getShopSkuId(),StockConsatnt.TypeEnum.REPLENISHMENT.getType());
+        StockCart stockCart = getStockCartByShopSkuId(params.getShopSkuId(), StockConsatnt.TypeEnum.REPLENISHMENT.getType());
         if (stockCart == null) {
             if (params.getStockQuantity() == 0) {
                 return BaseResponse.success();
@@ -170,9 +184,9 @@ public class StockCartService implements IStockCartService {
                 stockCart.setStockQuantityHy(params.getStockQuantity());
             }
             stockCart.setStockQuantity(stockCart.getStockQuantityKy() + stockCart.getStockQuantityKp() + stockCart.getStockQuantityHy());
-            if(stockCart.getStockQuantity()==0){
+            if (stockCart.getStockQuantity() == 0) {
                 customStockCartMapper.deleteByPrimaryKey(stockCart.getId());
-            }else{
+            } else {
                 customStockCartMapper.updateByPrimaryKeySelective(stockCart);
             }
         }
@@ -196,7 +210,7 @@ public class StockCartService implements IStockCartService {
         if (!shopUserService.exisShopUser(shopSku.getShopId(), currentUserId)) {
             return BaseResponse.failMessage(StockRecordConstant.USER_NO_SHOP_RIGHT);
         }
-        StockCart stockCart = getStockCartByShopSkuId(params.getShopSkuId(),StockConsatnt.TypeEnum.FACTORY_PRODUCTION.getType());
+        StockCart stockCart = getStockCartByShopSkuId(params.getShopSkuId(), StockConsatnt.TypeEnum.FACTORY_PRODUCTION.getType());
         if (stockCart == null) {
             if (params.getProductionQuantity() == 0) {
                 return BaseResponse.success();
@@ -213,9 +227,9 @@ public class StockCartService implements IStockCartService {
             stockCart.setUpdateBy(currentUserId);
             stockCart.setUpdateTime(new Date());
             stockCart.setProductionQuantity(params.getProductionQuantity());
-            if(stockCart.getProductionQuantity()==0){
+            if (stockCart.getProductionQuantity() == 0) {
                 customStockCartMapper.deleteByPrimaryKey(stockCart.getId());
-            }else{
+            } else {
                 customStockCartMapper.updateByPrimaryKeySelective(stockCart);
             }
         }
@@ -223,7 +237,7 @@ public class StockCartService implements IStockCartService {
     }
 
 
-    private StockCart getStockCartByShopSkuId(Integer shopSkuId,Integer type) {
+    private StockCart getStockCartByShopSkuId(Integer shopSkuId, Integer type) {
         StockCartExample example = new StockCartExample();
         example.createCriteria().andShopSkuIdEqualTo(shopSkuId).andTypeEqualTo(type);
         List<StockCart> list = customStockCartMapper.selectByExample(example);
@@ -266,7 +280,9 @@ public class StockCartService implements IStockCartService {
             listStockResponse.setAbleCanSaleDay(getCanSaleDay(listStockResponse.getAfnFulfillableQuantity(), estimateAverageDailySales));
             listStockResponse.setOnTheWayQuantityCanSaleDay(getCanSaleDay(listStockResponse.getOnTheWayQuantity(), estimateAverageDailySales));
             listStockResponse.setStockQuantityCanSaleDay(getCanSaleDay(listStockResponse.getStockQuantity(), estimateAverageDailySales));
-            listStockResponse.setEstimateProductionQuantity(listStockResponse.getStockQuantity()-listStockResponse.getInventoryQuantity());
+            listStockResponse.setEstimateProductionQuantity(listStockResponse.getStockQuantity() - listStockResponse.getInventoryQuantity());
+            listStockResponse.setInventoryQuantityTotal(MathUtil.add(MathUtil.add(listStockResponse.getInventoryQuantity(), listStockResponse.getInventoryQuantityOtherShop()), listStockResponse.getInventoryQuantityWarehouse()));
+            listStockResponse.setProduceOrderShopSkuProductionQuantityTotal(MathUtil.add(MathUtil.add(listStockResponse.getProduceOrderShopSkuProductionQuantity(), listStockResponse.getProduceOrderShopSkuProductionQuantityOtherShop()), listStockResponse.getProduceOrderShopSkuProductionQuantityWarehouse()));
         }
     }
 

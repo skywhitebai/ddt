@@ -336,17 +336,32 @@
                 },
                 {title: '店铺sku', field: 'shopSku', width: 168},
                 {title: 'fba可售库存', field: 'afnFulfillableQuantity', width: 90},
-                {title: '仓库库存', field: 'inventoryQuantity', width: 90},
+                {title: '总库存', field: 'inventoryQuantityTotal', width: 90},
+                {title: '本仓库库存', field: 'inventoryQuantity', width: 90},
+                {
+                    title: '其他店铺库存', field: 'inventoryQuantityOtherShop', width: 90,
+                    formatter: function (value, row, rowIndex) {
+                        return '<a href="javascript:;" title="查看其他店铺库存" onclick="showInventoryQuantityDialog(' + row.skuId + ',' + row.shopId + ',1)" >' + value + '</a>';
+                    }
+                },
                 {
                     title: '其他仓库库存', field: 'inventoryQuantityWarehouse', width: 90,
                     formatter: function (value, row, rowIndex) {
                         return '<a href="javascript:;" title="查看其他仓库库存" onclick="showInventoryQuantityDialog(' + row.skuId + ',' + row.shopId + ',2)" >' + value + '</a>';
                     }
                 },
+
+                {title: '总生产中数量', field: 'produceOrderShopSkuProductionQuantityTotal', width: 90},
                 {
-                    title: '生产中数量', field: 'produceOrderShopSkuProductionQuantity', width: 90,
+                    title: '本仓库生产中数量', field: 'produceOrderShopSkuProductionQuantity', width: 90,
                     formatter: function (value, row, rowIndex) {
                         return '<a href="javascript:;" title="生产中数量" onclick="showProduceOrderShopSkuProductionQuantityDialog(' + row.skuId + ',' + row.shopId + ',0)" >' + value + '</a>';
+                    }
+                },
+                {
+                    title: '其他店铺生产中数量', field: 'produceOrderShopSkuProductionQuantityOtherShop', width: 90,
+                    formatter: function (value, row, rowIndex) {
+                        return '<a href="javascript:;" title="查看其他店铺库存" onclick="showProduceOrderShopSkuProductionQuantityDialog(' + row.skuId + ',' + row.shopId + ',1)" >' + value + '</a>';
                     }
                 },
                 {

@@ -109,14 +109,23 @@
         shopName,ss.`shop_sku` shopSku,sku.sku,ss.sku_id skuId,0 stockQuantity,
         ss.produce_status produceStatussc,sc.`create_time`,sc.`update_time`,IFNULL(sc.production_quantity,0) productionQuantity,
         IFNULL(ss.`inventory_quantity`,0) inventoryQuantity,
+        IFNULL((select sum(sso.inventory_quantity) from shop_sku sso,shop so WHERE sso.shop_id=so.shop_id and so.type=1
+        AND
+        sso.sku_id=ss.sku_id and sso.shop_sku_id!=ss.shop_sku_id),0) inventoryQuantityOtherShop,
         IFNULL((select sum(ssw.inventory_quantity) from shop_sku ssw,shop sw WHERE ssw.shop_id=sw.shop_id and sw.type=2
         AND
-        ssw.sku_id=ss.sku_id and ssw.shop_sku_id!=ss.shop_sku_id),0) inventoryQuantityWarehouse,u.real_name salesmanRealName,
+        ssw.sku_id=ss.sku_id and ssw.shop_sku_id!=ss.shop_sku_id),0) inventoryQuantityWarehouse,
+               u.real_name salesmanRealName,
         IFNULL((select sum(poss.production_quantity) produceOrderShopSkuProductionQuantity from
         produce_order po,produce_order_shop_sku poss
         where po.id=poss.produce_order_id and po.shop_id=ss.shop_id and poss.shop_sku_id=ss.shop_sku_id and po.status
         in(1,2)
         ),0) produceOrderShopSkuProductionQuantity,
+        IFNULL((select sum(poss.production_quantity) produceOrderShopSkuProductionQuantity from
+        produce_order po,produce_order_shop_sku poss,shop_sku ss2,shop s
+        where po.id=poss.produce_order_id and po.shop_id!=ss.shop_id and po.shop_id=s.shop_id and s.type=1 and
+        poss.shop_sku_id=ss2.shop_sku_id and ss2.sku_id=ss.sku_id and po.status in(1,2)
+        ),0) produceOrderShopSkuProductionQuantityOtherShop,
         IFNULL((select sum(poss.production_quantity) produceOrderShopSkuProductionQuantity from
         produce_order po,produce_order_shop_sku poss,shop_sku ss2,shop s
         where po.id=poss.produce_order_id and po.shop_id!=ss.shop_id and po.shop_id=s.shop_id and s.type=2 and
