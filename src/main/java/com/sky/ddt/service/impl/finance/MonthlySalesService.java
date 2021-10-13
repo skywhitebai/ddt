@@ -97,8 +97,17 @@ public class MonthlySalesService implements IMonthlySalesService {
             }
             monthlySalesImportRequest.setType(map.get("type"));
             monthlySalesImportRequest.setOrderId(map.get("order id"));
-            if (!StringUtils.isEmpty(map.get("sku"))) {
-                ShopSku shopSku = shopSkuService.getShopSkuByShopSku(map.get("sku"));
+            String sku = map.get("sku");
+            if (!StringUtils.isEmpty(sku)) {
+                ShopSku shopSku = null;
+                if (sku.startsWith("X") && sku.length() == 10) {
+                    shopSku = shopSkuService.getShopSkuByFnsku(sku);
+                    if (shopSku == null) {
+                        shopSku = shopSkuService.getShopSkuByShopSku(sku);
+                    }
+                } else {
+                    shopSku = shopSkuService.getShopSkuByShopSku(sku);
+                }
                 if (shopSku == null) {
                     sbErroItem.append(",").append(MonthlySalesConstant.SKU_NOT_EXIST);
                 } else {
@@ -111,7 +120,7 @@ public class MonthlySalesService implements IMonthlySalesService {
                     }
                     monthlySalesImportRequest.setShopSkuId(shopSku.getShopSkuId());
                 }
-                monthlySalesImportRequest.setSku(map.get("sku"));
+                monthlySalesImportRequest.setSku(shopSku.getShopSku());
             }
             monthlySalesImportRequest.setDescription(map.get("description"));
             monthlySalesImportRequest.setQuantity(MathUtil.strToInteger(map.get("quantity")));

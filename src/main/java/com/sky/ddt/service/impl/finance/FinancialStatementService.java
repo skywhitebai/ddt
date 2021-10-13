@@ -82,8 +82,8 @@ public class FinancialStatementService implements IFinancialStatementService {
         if (CollectionUtils.isEmpty(financialStatementResponseList)) {
             return BaseResponse.failMessage(FinanceConstant.GET_FINANCIAL_STATEMENT_RESPONSE_FAIL);
         }
-        //设置fba服务费返还
-        setfbaCustomerReturnPerUnitFee(financialStatementResponseList);
+        //设置fba服务费返还 直接从数据库读取
+        //setfbaCustomerReturnPerUnitFee(financialStatementResponseList);
         //找出销售金额最大的 设置店铺费
         setSellerpaymentsReportFeeSubscription(financialStatementResponseList);
         //计算

@@ -38,8 +38,7 @@
         IFNULL(ms.refundOtherTransactionFees,0) refundOtherTransactionFees,
         IFNULL(ms.refundOther,0) refundOther,
         IFNULL(ms.refundTotal,0) refundTotal,
-
-        0 fbaCustomerReturnPerUnitFee,
+        IFNULL(ms.fbaCustomerReturnPerUnitFee,0) fbaCustomerReturnPerUnitFee,
 
         IFNULL(ld.lightningDealFee,0) lightningDealFee,
         IFNULL(maf.costOfAdvertising,0) costOfAdvertising,
@@ -121,7 +120,7 @@
         SUM(CASE WHEN  ms.`type`='Refund' THEN IFNULL(ms.`other_transaction_fees`,0) ELSE 0 END)  refundOtherTransactionFees,
         SUM(CASE WHEN  ms.`type`='Refund' THEN IFNULL(ms.`other`,0) ELSE 0 END)  refundOther,
         SUM(CASE WHEN  ms.`type`='Refund' THEN IFNULL(ms.`total`,0) ELSE 0 END)  refundTotal,
-
+        sum(CASE WHEN ms.type='FBA Customer Return Fee' AND ms.description='FBA Customer Return Per Unit Fee' THEN IFNULL(ms.`total`,0) ELSE 0 END) fbaCustomerReturnPerUnitFee,
         SUM(CASE WHEN  ms.`type`='Adjustment' AND ms.`description`='FBA Inventory Reimbursement - Customer Return' THEN IFNULL(ms.`total`,0) ELSE 0 END)  fbaInventoryReimbursementCustomerReturn,
         SUM(CASE WHEN  ms.`type`='Adjustment' AND ms.`description`='FBA Inventory Reimbursement - Damaged:Warehouse' THEN IFNULL(ms.`total`,0) ELSE 0 END)  fbaInventoryReimbursementDamagedWarehouse,
         SUM(CASE WHEN  ms.`type`='Adjustment' AND ms.`description`='FBA Inventory Reimbursement - Customer Service Issue' THEN IFNULL(ms.`total`,0) ELSE 0 END)  fbaInventoryReimbursementCustomerServiceIssue,

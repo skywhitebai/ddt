@@ -91,15 +91,15 @@ public class ShopSkuService implements IShopSkuService {
         List<String> shopNameList = new ArrayList<>();
         List<Sku> skuList = new ArrayList<>();
         BaseResponse repeatShopSku = checkRepeat(list, "店铺sku");
-        if(!repeatShopSku.isSuccess()){
+        if (!repeatShopSku.isSuccess()) {
             return repeatShopSku;
         }
         BaseResponse repeatFnsku = checkRepeat(list, "FNSKU");
-        if(!repeatFnsku.isSuccess()){
+        if (!repeatFnsku.isSuccess()) {
             return repeatFnsku;
         }
         BaseResponse repeatAsin = checkRepeat(list, "ASIN");
-        if(!repeatAsin.isSuccess()){
+        if (!repeatAsin.isSuccess()) {
             return repeatAsin;
         }
         for (int i = 0; i < list.size(); i++) {
@@ -204,28 +204,28 @@ public class ShopSkuService implements IShopSkuService {
         if (CollectionUtils.isEmpty(list)) {
             return BaseResponse.success();
         }
-        List<String> repeatList=new ArrayList<>();
-        for(int i=0;i<list.size();i++){
-            Map<String, String> map=list.get(i);
-            String value=map.get(type);
-            if(StringUtils.isEmpty(value)){
+        List<String> repeatList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            Map<String, String> map = list.get(i);
+            String value = map.get(type);
+            if (StringUtils.isEmpty(value)) {
                 continue;
             }
-            if(repeatList.contains(value)){
+            if (repeatList.contains(value)) {
                 continue;
             }
-            for(int j=i+1;j<list.size();j++){
-                if(value.equals(list.get(j).get(type))){
+            for (int j = i + 1; j < list.size(); j++) {
+                if (value.equals(list.get(j).get(type))) {
                     repeatList.add(value);
                     break;
                 }
             }
         }
-        if(repeatList.size()==0){
+        if (repeatList.size() == 0) {
             return BaseResponse.success();
         }
-        SbErroEntity sbErroEntity=new SbErroEntity();
-        sbErroEntity.append(type).append("存在重复数据："+String.join(",", repeatList));
+        SbErroEntity sbErroEntity = new SbErroEntity();
+        sbErroEntity.append(type).append("存在重复数据：" + String.join(",", repeatList));
         return sbErroEntity.getResponse();
     }
 
@@ -1032,6 +1032,21 @@ public class ShopSkuService implements IShopSkuService {
         return list.get(0);
     }
 
+
+    @Override
+    public ShopSku getShopSkuByFnsku(String fnsku) {
+        if (StringUtils.isEmpty(fnsku)) {
+            return null;
+        }
+        ShopSkuExample shopSkuExample = new ShopSkuExample();
+        shopSkuExample.createCriteria().andFnskuEqualTo(fnsku);
+        List<ShopSku> list = customShopSkuMapper.selectByExample(shopSkuExample);
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        return list.get(0);
+    }
+
     /**
      * @param file
      * @param dealUserId
@@ -1316,14 +1331,14 @@ public class ShopSkuService implements IShopSkuService {
 
     @Override
     public BaseResponse stopShopSku(Integer shopSkuId, Integer currentUserId) {
-        if(shopSkuId==null){
+        if (shopSkuId == null) {
             return BaseResponse.failMessage("shopSkuId不能为空");
         }
-        ShopSku shopSku=customShopSkuMapper.selectByPrimaryKey(shopSkuId);
-        if(shopSku==null){
+        ShopSku shopSku = customShopSkuMapper.selectByPrimaryKey(shopSkuId);
+        if (shopSku == null) {
             return BaseResponse.failMessage("shopSkuId不存在");
         }
-        ShopSku shopSkuUpdate=new ShopSku();
+        ShopSku shopSkuUpdate = new ShopSku();
         shopSkuUpdate.setShopSkuId(shopSkuId);
         shopSkuUpdate.setStatus(ShopSkuConstant.ShopSkuStatusEnum.UNAVAILABLE.getStatus());
         shopSkuUpdate.setUpdateTime(new Date());
@@ -1334,14 +1349,14 @@ public class ShopSkuService implements IShopSkuService {
 
     @Override
     public BaseResponse setShopSkuProduceStatus(SetProduceStatusRequest params, Integer currentUserId) {
-        ShopSku shopSku=customShopSkuMapper.selectByPrimaryKey(params.getShopSkuId());
-        if(shopSku==null){
+        ShopSku shopSku = customShopSkuMapper.selectByPrimaryKey(params.getShopSkuId());
+        if (shopSku == null) {
             return BaseResponse.failMessage("shopSkuId不存在");
         }
-        if(ShopSkuConstant.ShopSkuProduceStatusEnum.getShopSkuProduceStatusEnumByStatus(params.getProduceStatus())==null){
+        if (ShopSkuConstant.ShopSkuProduceStatusEnum.getShopSkuProduceStatusEnumByStatus(params.getProduceStatus()) == null) {
             return BaseResponse.failMessage("生产状态produceStatus错误");
         }
-        ShopSku shopSkuUpdate=new ShopSku();
+        ShopSku shopSkuUpdate = new ShopSku();
         shopSkuUpdate.setShopSkuId(params.getShopSkuId());
         shopSkuUpdate.setProduceStatus(params.getProduceStatus());
         shopSkuUpdate.setUpdateTime(new Date());

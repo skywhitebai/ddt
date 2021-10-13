@@ -251,4 +251,6 @@ public interface IShopSkuService {
     BaseResponse stopShopSku(Integer shopSkuId, Integer currentUserId);
 
     BaseResponse setShopSkuProduceStatus(SetProduceStatusRequest params, Integer currentUserId);
+
+    ShopSku getShopSkuByFnsku(String fnsku);
 }
