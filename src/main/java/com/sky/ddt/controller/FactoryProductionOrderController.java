@@ -84,7 +84,6 @@ public class FactoryProductionOrderController extends SuperController {
 
     @RequestMapping("/createFactoryProductionOrder")
     @ResponseBody
-    @MenuAnnotation("factoryProductionOrder/index")
     public BaseResponse createFactoryProductionOrder(Integer shopId) {
         Integer dealUserId = getCurrentUserId();
         return factoryProductionOrderService.createFactoryProductionOrder(shopId, dealUserId);
