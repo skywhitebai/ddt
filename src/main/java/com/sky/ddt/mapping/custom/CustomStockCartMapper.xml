@@ -87,9 +87,9 @@
                     ss2.shop_parent_sku=ss.shop_parent_sku )
                     or exists(select 1 from shop_sku ss2,order_import oi2 WHERE oi2.shop_sku_id=ss2.shop_sku_id and
                     oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 36 DAY) AND oi2.purchase_date<![CDATA[<]]>
-                    DATE_SUB(DATE(NOW()),INTERVAL 1 DAY) AND oi.order_status!='Cancelled' AND
-                    oi.sales_channel='Amazon.com'
-                    and oi.item_price is not null
+                    DATE_SUB(DATE(NOW()),INTERVAL 1 DAY) AND oi2.order_status!='Cancelled' AND
+                    oi2.sales_channel='Amazon.com'
+                    and oi2.item_price is not null
                     AND oi2.`quantity`>0 and
                     ss2.shop_parent_sku=ss.shop_parent_sku )
                     )
@@ -152,14 +152,14 @@
                 <if test="showType != null and showType==2 ">
                     and (exists(select 1 from shop_sku ss2,fba_import fi2 WHERE fi2.shop_sku_id=ss2.shop_sku_id and
                     (IFNULL(fi2.`afn_total_quantity`,0)-IFNULL(fi2.`afn_unsellable_quantity`,0))>0 and
-                    ss2.shop_parent_sku=ss.shop_parent_sku )
+                    ss2.sku_id=ss.sku_id )
                     or exists(select 1 from shop_sku ss2,order_import oi2 WHERE oi2.shop_sku_id=ss2.shop_sku_id and
                     oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 36 DAY) AND oi2.purchase_date<![CDATA[<]]>
-                    DATE_SUB(DATE(NOW()),INTERVAL 1 DAY) AND oi.order_status!='Cancelled' AND
-                    oi.sales_channel='Amazon.com'
-                    and oi.item_price is not null
+                    DATE_SUB(DATE(NOW()),INTERVAL 1 DAY) AND oi2.order_status!='Cancelled' AND
+                    oi2.sales_channel='Amazon.com'
+                    and oi2.item_price is not null
                     AND oi2.`quantity`>0 and
-                    ss2.shop_parent_sku=ss.shop_parent_sku )
+                    ss2.sku_id=ss.sku_id )
                     )
                 </if>
                 <if test="userId != null ">and ss.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
