@@ -111,6 +111,7 @@
                     }
                 },
                 {title: '当月净入', field: 'netIncome', width: 80},
+                {title: '毛利润', field: 'mainBusinessProfit', width: 80},
                 {
                     title: '备注', field: 'remark', width: 300,
                     formatter: function (value, row, rowIndex) {
@@ -123,7 +124,6 @@
                         }
                     }
                 },
-                {title: '毛利润', field: 'mainBusinessProfit', width: 80},
                 {title: '创建时间', field: 'createTime', width: 120},
                 {title: '修改时间', field: 'updateTime', width: 120}
             ]],
