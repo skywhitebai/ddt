@@ -7,6 +7,7 @@
     <result column="product_code" jdbcType="VARCHAR" property="productCode" />
     <result column="chinese_product_name" jdbcType="VARCHAR" property="chineseProductName" />
     <result column="english_product_name" jdbcType="VARCHAR" property="englishProductName" />
+    <result column="labour_cost" jdbcType="DECIMAL" property="labourCost" />
     <result column="description" jdbcType="VARCHAR" property="description" />
     <result column="developer_user_id" jdbcType="INTEGER" property="developerUserId" />
     <result column="development_time" jdbcType="DATE" property="developmentTime" />
@@ -77,8 +78,8 @@
   </sql>
   <sql id="Base_Column_List">
     product_id, product_name, product_code, chinese_product_name, english_product_name, 
-    description, developer_user_id, development_time, remark, create_by, create_time, 
-    update_by, update_time, development_level
+    labour_cost, description, developer_user_id, development_time, remark, create_by, 
+    create_time, update_by, update_time, development_level
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.ProductExample" resultMap="BaseResultMap">
     select
@@ -115,15 +116,15 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into product (product_name, product_code, chinese_product_name, 
-      english_product_name, description, developer_user_id, 
-      development_time, remark, create_by, 
-      create_time, update_by, update_time, 
-      development_level)
+      english_product_name, labour_cost, description, 
+      developer_user_id, development_time, remark, 
+      create_by, create_time, update_by, 
+      update_time, development_level)
     values (#{productName,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR}, #{chineseProductName,jdbcType=VARCHAR}, 
-      #{englishProductName,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{developerUserId,jdbcType=INTEGER}, 
-      #{developmentTime,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{developmentLevel,jdbcType=INTEGER})
+      #{englishProductName,jdbcType=VARCHAR}, #{labourCost,jdbcType=DECIMAL}, #{description,jdbcType=VARCHAR}, 
+      #{developerUserId,jdbcType=INTEGER}, #{developmentTime,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{developmentLevel,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.Product">
     <selectKey keyProperty="productId" order="AFTER" resultType="java.lang.Integer">
@@ -142,6 +143,9 @@
       </if>
       <if test="englishProductName != null">
         english_product_name,
+      </if>
+      <if test="labourCost != null">
+        labour_cost,
       </if>
       <if test="description != null">
         description,
@@ -183,6 +187,9 @@
       </if>
       <if test="englishProductName != null">
         #{englishProductName,jdbcType=VARCHAR},
+      </if>
+      <if test="labourCost != null">
+        #{labourCost,jdbcType=DECIMAL},
       </if>
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
@@ -237,6 +244,9 @@
       <if test="record.englishProductName != null">
         english_product_name = #{record.englishProductName,jdbcType=VARCHAR},
       </if>
+      <if test="record.labourCost != null">
+        labour_cost = #{record.labourCost,jdbcType=DECIMAL},
+      </if>
       <if test="record.description != null">
         description = #{record.description,jdbcType=VARCHAR},
       </if>
@@ -276,6 +286,7 @@
       product_code = #{record.productCode,jdbcType=VARCHAR},
       chinese_product_name = #{record.chineseProductName,jdbcType=VARCHAR},
       english_product_name = #{record.englishProductName,jdbcType=VARCHAR},
+      labour_cost = #{record.labourCost,jdbcType=DECIMAL},
       description = #{record.description,jdbcType=VARCHAR},
       developer_user_id = #{record.developerUserId,jdbcType=INTEGER},
       development_time = #{record.developmentTime,jdbcType=DATE},
@@ -303,6 +314,9 @@
       </if>
       <if test="englishProductName != null">
         english_product_name = #{englishProductName,jdbcType=VARCHAR},
+      </if>
+      <if test="labourCost != null">
+        labour_cost = #{labourCost,jdbcType=DECIMAL},
       </if>
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
@@ -340,6 +354,7 @@
       product_code = #{productCode,jdbcType=VARCHAR},
       chinese_product_name = #{chineseProductName,jdbcType=VARCHAR},
       english_product_name = #{englishProductName,jdbcType=VARCHAR},
+      labour_cost = #{labourCost,jdbcType=DECIMAL},
       description = #{description,jdbcType=VARCHAR},
       developer_user_id = #{developerUserId,jdbcType=INTEGER},
       development_time = #{developmentTime,jdbcType=DATE},

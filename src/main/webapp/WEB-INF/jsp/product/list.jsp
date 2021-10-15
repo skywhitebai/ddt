@@ -57,6 +57,10 @@
        class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入开发等级</a>
+    <a href="javascript:void(0)" id="a_importLabourCost" onclick="showDialogImport('labourCost')"
+       class="easyui-linkbutton a_hide"
+       data-options="iconCls:'icon-search'"
+       style="">导入工价</a>
     <a href="javascript:void(0)" id="a_exportProduct" onclick="exportProduct()" class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导出产品</a>
@@ -124,6 +128,12 @@
                 <td>
                     <input class="easyui-numberbox" name="developmentLevel" id="developmentLevel" min="0" max="10"
                            precision="0">
+                </td>
+                <td>工价：</td>
+                <td>
+                    <input class="easyui-numberbox" name="labourCost" id="labourCost" readonly="readonly" min="0"
+                           max="10000"
+                           precision="2">
                 </td>
             </tr>
             <tr class="view_hide">
@@ -201,6 +211,10 @@
         if (!hasRight("product/deleteProduct")) {
             $("#btnDelete").hide()
         }
+        if (hasRight("product/labourCost")) {
+            $("#a_importLabourCost").show();
+            $("#labourCost").attr("readonly", false);
+        }
     }
 
     function bindData() {
@@ -256,6 +270,7 @@
                         return res;
                     }
                 },
+                {title: '工价', field: 'labourCost', width: 65},
                 {title: '成本价最小值', field: 'costPriceMin', width: 100},
                 {title: '成本价最大值', field: 'costPriceMax', width: 100},
                 {title: '头程费用最小值', field: 'headTripCostMin', width: 100},
@@ -445,6 +460,11 @@
                 importTemplateUrl = "${pageContext.request.contextPath }/static/template/product/developmentLevelTemplate.xlsx";
                 importUrl = "${pageContext.request.contextPath }/product/importDevelopmentLevel";
                 break;
+            case 'labourCost':
+                importTitle = "导入工价";
+                importTemplateUrl = "${pageContext.request.contextPath }/static/template/product/labourCostTemplate.xlsx";
+                importUrl = "${pageContext.request.contextPath }/product/importLabourCost";
+                break;
         }
         if (isEmpty(importTitle)) {
             $.messager.alert("提示", "请选择正确的导入类型.");
@@ -506,8 +526,8 @@
     }
 
     function exportProduct() {
-        queryParams=getQueryParams();
-        url = "${pageContext.request.contextPath }/product/exportProduct"+getUrlParams(getQueryParams());
+        queryParams = getQueryParams();
+        url = "${pageContext.request.contextPath }/product/exportProduct" + getUrlParams(getQueryParams());
         window.open(url);
     }
 </script>

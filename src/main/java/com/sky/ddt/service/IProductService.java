@@ -62,4 +62,6 @@ public interface IProductService {
      * @date 2021/4/8 16:21
      */
     BaseResponse importDevelopmentLevel(MultipartFile file, Integer dealUserId);
+
+    BaseResponse importLabourCost(MultipartFile file, Integer dealUserId);
 }

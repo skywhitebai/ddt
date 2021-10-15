@@ -24,6 +24,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -88,6 +89,7 @@ public class ProductService implements IProductService {
             model.setChineseProductName(params.getChineseProductName());
             model.setEnglishProductName(params.getEnglishProductName());
             model.setDevelopmentLevel(params.getDevelopmentLevel());
+            model.setLabourCost(params.getLabourCost());
             model.setUpdateBy(dealUserId);
             model.setUpdateTime(new Date());
             int res = customerProductMapper.updateByPrimaryKey(model);
@@ -416,6 +418,74 @@ public class ProductService implements IProductService {
             Product product = new Product();
             product.setProductId(MathUtil.strToInteger(map.get("productId")));
             product.setDevelopmentLevel(MathUtil.strToInteger(map.get("开发等级")));
+            customerProductMapper.updateByPrimaryKeySelective(product);
+        }
+        return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse importLabourCost(MultipartFile file, Integer dealUserId) {
+        //读取excel 转换为list
+        List<Map<String, String>> list = ExcelUtil.getListByExcel(file);
+        if (list == null || list.size() == 0) {
+            return BaseResponse.failMessage("导入的数据内容为空");
+        }
+        //遍历list导入信息
+        StringBuilder sbErro = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            Map<String, String> map = list.get(i);
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            StringBuilder sbErroItem = new StringBuilder();
+            if (StringUtils.isEmpty(map.get("产品编码"))) {
+                sbErroItem.append(",").append(ProductConstant.PRODUCTCODE_EMPTY);
+            } else {
+                Product product = getProductByProductCode(map.get("产品编码"));
+                if (product == null) {
+                    sbErroItem.append(",").append(ProductConstant.PRODUCTCODE_NOT_EXIST);
+                } else {
+                    map.put("productId", product.getProductId().toString());
+                }
+            }
+            if (StringUtils.isEmpty(map.get("工价"))) {
+                sbErroItem.append(",").append(ProductConstant.LABOUR_COST_EMPTY);
+            } else {
+                BigDecimal value = MathUtil.strToBigDecimal(map.get("工价"));
+                if (!MathUtil.checkMinMaxDigits(value,0,10000,2)) {
+                    sbErroItem.append(",").append(ProductConstant.LABOUR_COST_ERRO);
+                }
+            }
+            if (sbErroItem.length() > 0) {
+                sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
+            }
+        }
+        if (sbErro.length() > 0) {
+            return BaseResponse.failMessage(sbErro.substring(1));
+        }
+        for (Map<String, String> map : list) {
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            Product product = new Product();
+            product.setProductId(MathUtil.strToInteger(map.get("productId")));
+            product.setLabourCost(MathUtil.strToBigDecimal(map.get("工价")));
             customerProductMapper.updateByPrimaryKeySelective(product);
         }
         return BaseResponse.success();

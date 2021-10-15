@@ -32,7 +32,7 @@
             ,sum(send_head_trip_cost_after) send_head_trip_cost_after,sum(sale_cost) sale_cost
             ,sum(main_business_income) main_business_income,sum(manual_adjustment) manual_adjustment
             ,sum(net_income) net_income,sum(main_business_profit) main_business_profit
-            ,remark,create_time,update_time
+            ,create_time,update_time
         </if>
         ,date_format(fs.month,'%Y-%m') monthStr from finance_statistic fs
         <where>

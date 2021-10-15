@@ -363,7 +363,7 @@
     function bindRightList() {
         dg = '#dgRight';
         url = "${pageContext.request.contextPath }/right/listRight";
-        title = "菜单管理";
+        title = "权限管理";
         queryParams = {menuId: $('#dlgRightList_menuId').val()};
         $(dg).datagrid({
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -429,7 +429,7 @@
             onDblClickRow: function (rowIndex, rowData) {
                 $(dg).datagrid('uncheckAll');
                 $(dg).datagrid('checkRow', rowIndex);
-                showViewDialog();
+                        showViewRightDialog();
             }
         })
         $(dg).datagrid('clearSelections');

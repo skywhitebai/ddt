@@ -7,8 +7,10 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Digits;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -35,4 +37,8 @@ public class ProductSaveRequest {
     @Min(value = 0,message = "开发等级必须为0-10的数字")
     @Max(value = 10,message = "开发等级必须为0-10的数字")
     private Integer developmentLevel;
+    @Min(value = 0,message = "工价必须为0-10000的数字")
+    @Max(value = 10000,message = "工价必须为0-10000的数字")
+    @Digits(integer = 6, fraction = 2,message ="工价必须为0-10000的两位数字" )
+    private BigDecimal labourCost;
 }

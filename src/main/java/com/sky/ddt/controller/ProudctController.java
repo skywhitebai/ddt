@@ -89,4 +89,11 @@ public class ProudctController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return productService.importDevelopmentLevel(file, dealUserId);
     }
+    @RequestMapping("/importLabourCost")
+    @ResponseBody
+    @RightAnnotation("product/labourCost")
+    public BaseResponse importLabourCost(MultipartFile file) {
+        Integer dealUserId = getCurrentUserId();
+        return productService.importLabourCost(file, dealUserId);
+    }
 }

@@ -1,5 +1,6 @@
 package com.sky.ddt.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class Product {
@@ -12,6 +13,8 @@ public class Product {
     private String chineseProductName;
 
     private String englishProductName;
+
+    private BigDecimal labourCost;
 
     private String description;
 
@@ -69,6 +72,14 @@ public class Product {
 
     public void setEnglishProductName(String englishProductName) {
         this.englishProductName = englishProductName == null ? null : englishProductName.trim();
+    }
+
+    public BigDecimal getLabourCost() {
+        return labourCost;
+    }
+
+    public void setLabourCost(BigDecimal labourCost) {
+        this.labourCost = labourCost;
     }
 
     public String getDescription() {

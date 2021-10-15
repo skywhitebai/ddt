@@ -1,5 +1,6 @@
 package com.sky.ddt.entity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -469,6 +470,66 @@ public class ProductExample {
 
         public Criteria andEnglishProductNameNotBetween(String value1, String value2) {
             addCriterion("english_product_name not between", value1, value2, "englishProductName");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabourCostIsNull() {
+            addCriterion("labour_cost is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabourCostIsNotNull() {
+            addCriterion("labour_cost is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabourCostEqualTo(BigDecimal value) {
+            addCriterion("labour_cost =", value, "labourCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabourCostNotEqualTo(BigDecimal value) {
+            addCriterion("labour_cost <>", value, "labourCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabourCostGreaterThan(BigDecimal value) {
+            addCriterion("labour_cost >", value, "labourCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabourCostGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("labour_cost >=", value, "labourCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabourCostLessThan(BigDecimal value) {
+            addCriterion("labour_cost <", value, "labourCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabourCostLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("labour_cost <=", value, "labourCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabourCostIn(List<BigDecimal> values) {
+            addCriterion("labour_cost in", values, "labourCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabourCostNotIn(List<BigDecimal> values) {
+            addCriterion("labour_cost not in", values, "labourCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabourCostBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("labour_cost between", value1, value2, "labourCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andLabourCostNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("labour_cost not between", value1, value2, "labourCost");
             return (Criteria) this;
         }
 
