@@ -16,4 +16,5 @@ public class ListFinanceStatisticRequest extends DataGridRequest {
     Integer shopId;
     String month;
     Date monthDate;
+    String type;
 }

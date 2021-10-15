@@ -94,6 +94,12 @@ public class FinanceStatisticService implements IFinanceStatisticService {
         }
         PageHelper.startPage(params.getPage(), params.getRows(), true);
         List<ListFinanceStatisticResponse> list = customFinanceStatisticMapper.listFinanceStatistic(params);
+        if(!StringUtils.isEmpty(params.getType())&&params.getType().equals("count")){
+            for (ListFinanceStatisticResponse item:
+                    list ) {
+                item.setShopName("汇总");
+            }
+        }
         PageInfo<ListFinanceStatisticResponse> page = new PageInfo<ListFinanceStatisticResponse>(list);
         return page;
     }

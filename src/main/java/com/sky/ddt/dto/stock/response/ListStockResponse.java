@@ -65,6 +65,7 @@ public class ListStockResponse {
     private Integer stockQuantityKy;
     private Integer stockQuantityKp;
     private Integer stockQuantityHy;
+    Date skuCreateTime;
     Date createTime;
     Date updateTime;
     /**

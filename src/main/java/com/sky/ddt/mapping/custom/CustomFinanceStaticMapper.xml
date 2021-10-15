@@ -14,13 +14,27 @@
    WHERE f.id=#{financeId} AND f.shop_id=shtc.shop_id AND f.month=shtc.month AND shtc.id=sshtch.shop_head_trip_cost_id
    AND sshtch.shop_sku_id=ss.shop_sku_id AND ss.sku_id=sku.`sku_id`) b
     </select>
-    <resultMap id="listFinanceStatisticMap" type="com.sky.ddt.dto.finance.financeStatistic.response.ListFinanceStatisticResponse"
+    <resultMap id="listFinanceStatisticMap"
+               type="com.sky.ddt.dto.finance.financeStatistic.response.ListFinanceStatisticResponse"
                extends="com.sky.ddt.dao.generate.FinanceStatisticMapper.BaseResultMap">
         <result column="monthStr" property="monthStr"/>
     </resultMap>
     <select id="listFinanceStatistic"
             resultMap="listFinanceStatisticMap">
-        select fs.*,date_format(fs.month,'%Y-%m') monthStr from finance_statistic fs
+        select
+        <if test="type =='shop'">
+            fs.*
+        </if>
+        <if test="type =='count'">
+            '汇总' shop_name,sum(initial_inventory_cost) initial_inventory_cost,sum(final_inventory_cost)
+            final_inventory_cost
+            ,sum(send_cost) send_cost,sum(send_cost_price) send_cost_price
+            ,sum(send_head_trip_cost_after) send_head_trip_cost_after,sum(sale_cost) sale_cost
+            ,sum(main_business_income) main_business_income,sum(manual_adjustment) manual_adjustment
+            ,sum(net_income) net_income,sum(main_business_profit) main_business_profit
+            ,remark,create_time,update_time
+        </if>
+        ,date_format(fs.month,'%Y-%m') monthStr from finance_statistic fs
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 <if test="shopId != null">and fs.shop_id=#{shopId}</if>
@@ -28,6 +42,9 @@
                 <if test="monthDate != null ">and fs.month=#{monthDate}</if>
             </trim>
         </where>
+        <if test="type =='count'">
+            group by fs.month
+        </if>
         ORDER BY fs.month desc, fs.`shop_name` asc
     </select>
 

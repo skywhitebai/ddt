@@ -398,6 +398,7 @@
                         return res;
                     }
                 },
+                {title: '产品sku创建时间', field: 'skuCreateTime', width: 180},
                 {title: '设置时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
                 {

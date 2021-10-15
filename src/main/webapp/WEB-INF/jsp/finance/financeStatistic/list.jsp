@@ -35,6 +35,11 @@
     </select>
     年月
     <input class="easyui-validatebox textbox" id="s_month">
+    类型：
+    <select class="easyui-combobox" id="s_type" style="width:100px;">
+        <option value="shop">店铺</option>
+        <option value="count">汇总</option>
+    </select>
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
     <a href="javascript:void(0)" onclick="exportFinanceStatistic()" class="easyui-linkbutton">导出回款信息</a>
@@ -63,10 +68,7 @@
         dg = '#dg';
         url = "${pageContext.request.contextPath }/financeStatistic/listFinanceStatistic";
         title = "回款信息";
-        queryParams = {
-            shopId: $("#s_shopId").combobox('getValue'),
-            month: $("#s_month").val()
-        };
+        queryParams = getQueryParams();
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
             title: title,
@@ -99,7 +101,9 @@
                 {
                     title: '账外调整', field: 'manualAdjustment', width: 80,
                     formatter: function (value, row, rowIndex) {
-                        if (isEmpty(value)) {
+                        if ($("#s_type").combobox('getValue') == 'count') {
+                            return value;
+                        } else if (isEmpty(value)) {
                             return '<input class="easyui-numberbox " precision="2" onchange="saveManualAdjustment(this,' + row.id + ')">';
                         } else {
                             return '<input class="easyui-numberbox" precision="2" value="' + value + '" onchange="saveManualAdjustment(this,' + row.id + ')">';
@@ -110,7 +114,9 @@
                 {
                     title: '备注', field: 'remark', width: 300,
                     formatter: function (value, row, rowIndex) {
-                        if (isEmpty(value)) {
+                        if ($("#s_type").combobox('getValue') == 'count') {
+                            return value;
+                        } else if (isEmpty(value)) {
                             return '<input class="easyui-textbox " style="width:100%"  onchange="saveFinanceStatisticRemark(this,' + row.id + ')">';
                         } else {
                             return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveFinanceStatisticRemark(this,' + row.id + ')">';
@@ -137,10 +143,12 @@
     function getQueryParams() {
         queryParams = {
             shopId: $("#s_shopId").combobox('getValue'),
+            type: $("#s_type").combobox('getValue'),
             month: $("#s_month").val()
         };
         return queryParams;
     }
+
     function saveManualAdjustment(input, id) {
         var manualAdjustment = $(input).val();
         if (isEmpty(manualAdjustment)) {
@@ -153,12 +161,12 @@
             if (data.code == '200') {
                 //保存成功
                 bindData();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
     }
+
     function saveFinanceStatisticRemark(input, id) {
         var remark = $(input).val();
         $.post('${pageContext.request.contextPath }/financeStatistic/saveFinanceStatisticRemark', {
@@ -168,12 +176,12 @@
             if (data.code == '200') {
                 //保存成功
                 bindData();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
     }
+
     function exportFinanceStatistic() {
         window.open('${pageContext.request.contextPath }/financeStatistic/exportFinanceStatistic' + getUrlParams(getQueryParams()));
     }
