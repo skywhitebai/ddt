@@ -22,4 +22,5 @@ public class ListStockRequest extends DataGridRequest {
     Integer salesmanUserId;
     Integer userId;
     Integer produceStatus;
+    Integer saleShopId;
 }

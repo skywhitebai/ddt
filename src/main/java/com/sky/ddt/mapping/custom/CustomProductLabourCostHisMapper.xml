@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomProductLabourCostHisMapper">
+    <resultMap id="listProductLabourCostHisMap" type="com.sky.ddt.dto.productLabourCostHis.response.ListProductLabourCostHisResponse"
+               extends="com.sky.ddt.dao.generate.ProductLabourCostHisMapper.BaseResultMap">
+        <result column="createUserName" property="createUserName"/>
+        <result column="product_code" property="productCode"/>
+    </resultMap>
+    <select id="listProductLabourCostHis" parameterType="com.sky.ddt.dto.skuCostPriceHis.request.ListSkuCostPriceHisRequest" resultMap="listProductLabourCostHisMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.ProductLabourCostHisMapper.Base_Column_List" />,(select u.real_name from user u where plch.create_by=u.user_id )createUserName,(select product_code from product p where p.product_id=plch.product_id) product_code
+        from product_labour_cost_his plch
+        where plch.product_id=#{productId}
+        order by plch.create_time desc
+    </select>
+
+</mapper>

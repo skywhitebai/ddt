@@ -51,6 +51,9 @@
         <option value="1">正常生产</option>
         <option value="2">暂停生产</option>
     </select>
+    销售渠道（店铺）：
+    <select id="s_saleShopId" style="width:150px;">
+    </select>
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
     <a href="javascript:void(0)" onclick="createFactoryProduction()" class="easyui-linkbutton"
@@ -242,9 +245,28 @@
         $('#s_shopId').combobox({
             valueField: 'shopId',
             textField: 'shopName',
-            url: "${pageContext.request.contextPath }/shop/userShopComboboxlist?type=2",//获取数据
+            url: "${pageContext.request.contextPath }/shop/userShopComboboxlist?type=2",//获取数
+        });
+        $('#s_saleShopId').combobox({
+            valueField: 'shopId',
+            textField: 'shopName',
+            url: "${pageContext.request.contextPath }/shop/userShopComboboxlist?type=1",//获取数据,
+            loadFilter: function (data) {
+                var obj = {};
+                obj.shopId = '-1';
+                obj.shopName = '无销售店铺'
+                //在数组0位置插入obj,不删除原来的元素
+                data.splice(0, 0, obj)
+                var obj2 = {};
+                obj2.shopId = '0';
+                obj2.shopName = '有销售店铺'
+                //在数组0位置插入obj,不删除原来的元素
+                data.splice(0, 0, obj2)
+                return data;
+            }
         });
     }
+
     var pageSizeEnable = false;
 
     function bindData() {
@@ -269,7 +291,8 @@
             showType: $("#s_showType").val(),
             salesmanUserId: $("#s_salesmanUserId").val(),
             sku: $("#s_sku").val(),
-            produceStatus: $("#s_produceStatus").val()
+            produceStatus: $("#s_produceStatus").val(),
+            saleShopId: $("#s_saleShopId").combobox('getValue')
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -282,7 +305,7 @@
             rownumbers: true,
             remoteSort: false,
             idField: 'shopSkuId',
-            nowrap:false,
+            nowrap: false,
             queryParams: queryParams,  //异步查询的参数
             frozenColumns: [[
                 {field: 'ck', checkbox: true},   //选择
@@ -407,7 +430,7 @@
                         if (value == 1) {
                             return '<a href="javascript:;" title="正常生产" onclick="setProduceStatus(' + row.shopSkuId + ",'" + row.shopSku + "'" + ',2)" >正常生产</a>';
                         } else if (value == 2) {
-                            return '<a href="javascript:;" title="暂停生产" onclick="setProduceStatus(' + row.shopSkuId + ",'" + row.shopSku + "'"  + ',1)" ><font color="red">暂停</font> </a>';
+                            return '<a href="javascript:;" title="暂停生产" onclick="setProduceStatus(' + row.shopSkuId + ",'" + row.shopSku + "'" + ',1)" ><font color="red">暂停</font> </a>';
                         }
                     }
                 }
@@ -737,14 +760,17 @@
 
     function setProduceStatus(shopSkuId, shopSku, produceStatus) {
         var produceStatusName;
-        if(produceStatus==1){
-            produceStatusName="正常生产";
-        }else if(produceStatus==2){
-            produceStatusName="暂停生产";
+        if (produceStatus == 1) {
+            produceStatusName = "正常生产";
+        } else if (produceStatus == 2) {
+            produceStatusName = "暂停生产";
         }
-        $.messager.confirm('提示', '确认修改【' + shopSku + '】的生产状态为【'+produceStatusName+'】吗？', function (r) {
+        $.messager.confirm('提示', '确认修改【' + shopSku + '】的生产状态为【' + produceStatusName + '】吗？', function (r) {
             if (r) {
-                $.post('${pageContext.request.contextPath }/shopSku/setShopSkuProduceStatus', {shopSkuId: shopSkuId,produceStatus:produceStatus}, function (data) {
+                $.post('${pageContext.request.contextPath }/shopSku/setShopSkuProduceStatus', {
+                    shopSkuId: shopSkuId,
+                    produceStatus: produceStatus
+                }, function (data) {
                     if (data.code == '200') {
                         bindData();
                     } else {

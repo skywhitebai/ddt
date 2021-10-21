@@ -83,7 +83,8 @@
                     ss2.shop_parent_sku=ss.shop_parent_sku )
                     or ss.inventory_quantity>0
                     )
-                </if> <if test="sku != null and sku != '' ">and ss.sku_id in(select sku_id from sku where sku.sku like
+                </if>
+                <if test="sku != null and sku != '' ">and ss.sku_id in(select sku_id from sku where sku.sku like
                     concat('%',#{sku},'%'))
                 </if>
                 <if test="shopSku != null and shopSku != '' ">and ss.shop_sku like concat('%',#{shopSku},'%')</if>
@@ -151,7 +152,8 @@
                     or exists(select 1 from shop_sku ss2,fba_import fi2,sku s WHERE fi2.shop_sku_id=ss2.shop_sku_id and
                     (IFNULL(fi2.`afn_total_quantity`,0)-IFNULL(fi2.`afn_unsellable_quantity`,0))>0 and
                     ss2.sku_id=s.sku_id and s.product_id =sku.product_id )
-                    or (select sum(ss2.inventory_quantity) from shop_sku ss2,sku s where ss2.sku_id=s.sku_id and s.product_id =sku.product_id )>0
+                    or (select sum(ss2.inventory_quantity) from shop_sku ss2,sku s where ss2.sku_id=s.sku_id and
+                    s.product_id =sku.product_id )>0
                     )
                 </if>
                 <if test="salesmanUserId != null and salesmanUserId != -1">and ss.salesman_user_id=#{salesmanUserId}
@@ -170,13 +172,24 @@
                 and ss.status=1
                 <if test="produceStatus != null ">and ss.produce_status=#{produceStatus}</if>
                 <if test="shopId != null ">and ss.shop_id=#{shopId}</if>
+                <if test="saleShopId != null and saleShopId==-1 ">and not exists (select 1 from shop_sku ss2,shop s2
+                    where ss2.shop_id=s2.shop_id and s2.type=1 and ss2.sku_id=ss.sku_id)
+                </if>
+                <if test="saleShopId != null and saleShopId==0 ">and exists (select 1 from shop_sku ss2,shop s2 where
+                    ss2.shop_id=s2.shop_id and s2.type=1 and ss2.sku_id=ss.sku_id)
+                </if>
+
+                <if test="saleShopId != null and saleShopId!=0 and and saleShopId!=-1 ">and exists (select 1 from shop_sku ss2 where
+                    ss2.shop_id=#{saleShopId})
+                </if>
             </trim>
         </where>
         ORDER BY ss.`shop_parent_sku`,ss.`shop_sku`
     </select>
     <select id="listWarehouseStockOtherInfo" parameterType="java.util.List"
             resultType="com.sky.ddt.dto.stock.response.ListStockResponse">
-        select a.*,b.*,c.* from (select ss.sku_id skuId,IFNULL(sum(fi.afn_fulfillable_quantity),0) afnFulfillableQuantity,
+        select a.*,b.*,c.* from (select ss.sku_id skuId,IFNULL(sum(fi.afn_fulfillable_quantity),0)
+        afnFulfillableQuantity,
         IFNULL(sum(fi.`afn_reserved_quantity`),0)+ IFNULL(sum(fi.`afn_inbound_working_quantity`),0)+
         IFNULL(sum(fi.`afn_inbound_shipped_quantity`),0)+ IFNULL(sum(fi.`afn_inbound_receiving_quantity`),0)
         onTheWayQuantity,
@@ -219,10 +232,12 @@
         group by ss.sku_id) b
         on a.skuId=b.skuId
         left join
-        (select GROUP_CONCAT(shop_name) saleShopNames,ss.sku_id skuId from  shop s,shop_sku ss where s.shop_id=ss.shop_id and s.type=1 and ss.sku_id  in
+        (select GROUP_CONCAT(shop_name) saleShopNames,ss.sku_id skuId from shop s,shop_sku ss where s.shop_id=ss.shop_id
+        and s.type=1 and ss.sku_id in
         <foreach close=")" collection="list" item="listItem" open="(" separator=",">
             #{listItem}
-        </foreach> group by ss.sku_id) c
+        </foreach>
+        group by ss.sku_id) c
         on a.skuId=c.skuId
     </select>
 </mapper>

@@ -3,6 +3,7 @@ package com.sky.ddt.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.ProductConstant;
+import com.sky.ddt.common.constant.ProductLabourCostHisConstant;
 import com.sky.ddt.dao.custom.CustomProductMapper;
 import com.sky.ddt.dto.product.request.ProductListRequest;
 import com.sky.ddt.dto.product.request.ProductSaveRequest;
@@ -12,6 +13,7 @@ import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.Product;
 import com.sky.ddt.entity.ProductExample;
 import com.sky.ddt.entity.User;
+import com.sky.ddt.service.IProductLabourCostHisService;
 import com.sky.ddt.service.IProductService;
 import com.sky.ddt.service.ISkuService;
 import com.sky.ddt.service.IUserService;
@@ -35,6 +37,8 @@ public class ProductService implements IProductService {
     IUserService userService;
     @Autowired
     ISkuService skuService;
+    @Autowired
+    IProductLabourCostHisService productLabourCostHisService;
 
     @Override
     public PageInfo<ProductListResponse> list(ProductListRequest params) {
@@ -68,6 +72,7 @@ public class ProductService implements IProductService {
             model.setCreateBy(dealUserId);
             model.setCreateTime(new Date());
             int res = customerProductMapper.insertSelective(model);
+            productLabourCostHisService.saveProductLabourCostHis(model.getProductId(),null,model.getLabourCost(), ProductLabourCostHisConstant.TypeEnum.SAVE,dealUserId);
             //添加成功
             if (res > 0) {
                 return BaseResponse.success();
@@ -76,23 +81,25 @@ public class ProductService implements IProductService {
                 return BaseResponse.fail();
             }
         } else {
-            Product model = customerProductMapper.selectByPrimaryKey(params.getProductId());
-            if (model == null) {
+            Product product = customerProductMapper.selectByPrimaryKey(params.getProductId());
+            if (product == null) {
                 return BaseResponse.failMessage(ProductConstant.PRODUCTID_NOT_EXIST);
             }
-            model.setProductName(params.getProductName());
-            model.setProductCode(params.getProductCode());
-            model.setDescription(params.getDescription());
-            model.setDeveloperUserId(params.getDeveloperUserId());
-            model.setDevelopmentTime(params.getDevelopmentTime());
-            model.setRemark(params.getRemark());
-            model.setChineseProductName(params.getChineseProductName());
-            model.setEnglishProductName(params.getEnglishProductName());
-            model.setDevelopmentLevel(params.getDevelopmentLevel());
-            model.setLabourCost(params.getLabourCost());
-            model.setUpdateBy(dealUserId);
-            model.setUpdateTime(new Date());
-            int res = customerProductMapper.updateByPrimaryKey(model);
+            BigDecimal labourCostBefore=product.getLabourCost();
+            product.setProductName(params.getProductName());
+            product.setProductCode(params.getProductCode());
+            product.setDescription(params.getDescription());
+            product.setDeveloperUserId(params.getDeveloperUserId());
+            product.setDevelopmentTime(params.getDevelopmentTime());
+            product.setRemark(params.getRemark());
+            product.setChineseProductName(params.getChineseProductName());
+            product.setEnglishProductName(params.getEnglishProductName());
+            product.setDevelopmentLevel(params.getDevelopmentLevel());
+            product.setLabourCost(params.getLabourCost());
+            product.setUpdateBy(dealUserId);
+            product.setUpdateTime(new Date());
+            int res = customerProductMapper.updateByPrimaryKey(product);
+            productLabourCostHisService.saveProductLabourCostHis(product.getProductId(),labourCostBefore,product.getLabourCost(), ProductLabourCostHisConstant.TypeEnum.SAVE,dealUserId);
             //修改成功
             if (res > 0) {
                 return BaseResponse.success();
@@ -454,6 +461,9 @@ public class ProductService implements IProductService {
                     sbErroItem.append(",").append(ProductConstant.PRODUCTCODE_NOT_EXIST);
                 } else {
                     map.put("productId", product.getProductId().toString());
+                    if(product.getLabourCost()!=null){
+                        map.put("labourCostBefore", product.getLabourCost().toString());
+                    }
                 }
             }
             if (StringUtils.isEmpty(map.get("工价"))) {
@@ -483,10 +493,13 @@ public class ProductService implements IProductService {
             if (isEmpty) {
                 continue;
             }
+
+            BigDecimal labourCostBefore = MathUtil.strToBigDecimal(map.get("labourCostBefore"));
             Product product = new Product();
             product.setProductId(MathUtil.strToInteger(map.get("productId")));
             product.setLabourCost(MathUtil.strToBigDecimal(map.get("工价")));
             customerProductMapper.updateByPrimaryKeySelective(product);
+            productLabourCostHisService.saveProductLabourCostHis(product.getProductId(),labourCostBefore,product.getLabourCost(), ProductLabourCostHisConstant.TypeEnum.IMPORT_LABOUR_COST,dealUserId);
         }
         return BaseResponse.success();
     }

@@ -253,4 +253,6 @@ public interface IShopSkuService {
     BaseResponse setShopSkuProduceStatus(SetProduceStatusRequest params, Integer currentUserId);
 
     ShopSku getShopSkuByFnsku(String fnsku);
+
+    BaseResponse importProduceStatus(MultipartFile file, Integer dealUserId);
 }

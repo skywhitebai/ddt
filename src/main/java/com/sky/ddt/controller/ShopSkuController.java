@@ -200,6 +200,13 @@ public class ShopSkuController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return shopSkuService.importSalesmanUser(file, dealUserId);
     }
+    @RequestMapping("/importProduceStatus")
+    @ResponseBody
+    @RightAnnotation("shopSku/importProduceStatus")
+    public BaseResponse importProduceStatus(MultipartFile file) {
+        Integer dealUserId = getCurrentUserId();
+        return shopSkuService.importProduceStatus(file, dealUserId);
+    }
 
     @RequestMapping("/listInventoryQuantity")
     @ResponseBody

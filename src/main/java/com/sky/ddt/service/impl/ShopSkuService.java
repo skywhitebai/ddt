@@ -1047,6 +1047,80 @@ public class ShopSkuService implements IShopSkuService {
         return list.get(0);
     }
 
+    @Override
+    public BaseResponse importProduceStatus(MultipartFile file, Integer dealUserId) {
+        //读取excel 转换为list
+        List<Map<String, String>> list = ExcelUtil.getListByExcel(file);
+        if (list == null || list.size() == 0) {
+            return BaseResponse.failMessage("导入的数据内容为空");
+        }
+        //遍历list导入信息
+        StringBuilder sbErro = new StringBuilder();
+        Map<String, User> userMap = new HashMap<>();
+        List<String> userNameNotExistList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            Map<String, String> map = list.get(i);
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            StringBuilder sbErroItem = new StringBuilder();
+            if (StringUtils.isEmpty(map.get("店铺sku"))) {
+                sbErroItem.append(",").append(ShopSkuConstant.SHOP_SKU_EMPTY);
+            } else {
+                ShopSku shopSku = getShopSkuByShopSku(map.get("店铺sku"));
+                if (shopSku == null) {
+                    sbErroItem.append(",").append(ShopSkuConstant.SHOP_SKU_NOT_EXIST);
+                } else {
+                    map.put("shopSkuId", shopSku.getShopSkuId().toString());
+                }
+            }
+            if (StringUtils.isEmpty(map.get("生产状态"))) {
+                sbErroItem.append(",").append(ShopSkuConstant.PRODUCE_STATUS_EMPTY);
+            } else {
+                ShopSkuConstant.ShopSkuProduceStatusEnum shopSkuProduceStatusEnum = ShopSkuConstant.ShopSkuProduceStatusEnum.getShopSkuProduceStatusEnumByStatusName(map.get("生产状态"));
+                if (shopSkuProduceStatusEnum == null) {
+                    sbErroItem.append(",").append(ShopSkuConstant.PRODUCE_STATUS_ERROE);
+                } else {
+                    map.put("produceStatus", shopSkuProduceStatusEnum.getStatus().toString());
+                }
+            }
+            if (sbErroItem.length() > 0) {
+                sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
+            }
+        }
+        if (sbErro.length() > 0) {
+            return BaseResponse.failMessage(sbErro.substring(1));
+        }
+        for (Map<String, String> map : list) {
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            ShopSku shopSkuUpdate = new ShopSku();
+            shopSkuUpdate.setShopSkuId(MathUtil.strToInteger(map.get("shopSkuId")));
+            shopSkuUpdate.setProduceStatus(MathUtil.strToInteger(map.get("produceStatus")));
+            shopSkuUpdate.setUpdateBy(dealUserId);
+            shopSkuUpdate.setUpdateTime(new Date());
+            customShopSkuMapper.updateByPrimaryKeySelective(shopSkuUpdate);
+        }
+        return BaseResponse.success();
+    }
+
     /**
      * @param file
      * @param dealUserId

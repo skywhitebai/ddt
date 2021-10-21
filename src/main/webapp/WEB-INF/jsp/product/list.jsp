@@ -161,7 +161,11 @@
         </div>
     </form>
 </div>
-
+<div id="dlgProductLabourCostHis" class="easyui-dialog" style="width: 780px; height: 400px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
+    <table id="dgProductLabourCostHis" style="width: 100%; height: auto">
+    </table>
+</div>
 <!--导入信息-->
 <div id="dlgImport" class="easyui-dialog" style="width: 600px; height: 300px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', align:'center'">
@@ -270,7 +274,18 @@
                         return res;
                     }
                 },
-                {title: '工价', field: 'labourCost', width: 65},
+                {
+                    title: '工价', field: 'labourCost', width: 65,
+                    formatter: function (value, rowData, rowIndex) {
+                        var res = "";
+                        if (value != null && value != '') {
+                            res += '<a href="javascript:;" onclick="showProductLabourCostHisDialog(' + rowData.productId + ')" title="查看历史工价">' + value + '</a>';
+                        } else {
+                            res += '<a href="javascript:;" onclick="showProductLabourCostHisDialog(' + rowData.productId + ')" title="查看历史工价">暂无工价</a>';
+                        }
+                        return res;
+                    }
+                },
                 {title: '成本价最小值', field: 'costPriceMin', width: 100},
                 {title: '成本价最大值', field: 'costPriceMax', width: 100},
                 {title: '头程费用最小值', field: 'headTripCostMin', width: 100},
@@ -529,6 +544,60 @@
         queryParams = getQueryParams();
         url = "${pageContext.request.contextPath }/product/exportProduct" + getUrlParams(getQueryParams());
         window.open(url);
+    }
+    var productLabourCostProductId;
+
+    function showProductLabourCostHisDialog(productId) {
+        $('#dlgProductLabourCostHis').dialog('open').dialog('setTitle', '工价历史');
+        productLabourCostProductId = productId;
+        bindProductLabourCostHisData();
+    }
+
+    function bindProductLabourCostHisData() {
+        dg = '#dgProductLabourCostHis';
+        url = "${pageContext.request.contextPath }/productLabourCostHis/listProductLabourCostHis";
+        title = "工价历史管理";
+        queryParams = {
+            productId: productLabourCostProductId
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: true,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 5,
+            pageList: [5, 10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'id',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '产品编码', field: 'productCode', width: 120},
+                {title: '修改前价格', field: 'labourCostBefore', width: 90},
+                {title: '修改后价格', field: 'labourCostAfter', width: 90},
+                {title: '修改人姓名', field: 'createUserName', width: 80},
+                {title: '修改类型', field: 'typeName', width: 100},
+                {title: '修改时间', field: 'createTime', width: 160}
+            ]],
+            toolbar: [{
+                id: 'btnSkuCostPriceReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        $(dg).datagrid('clearSelections');
     }
 </script>
 </body>

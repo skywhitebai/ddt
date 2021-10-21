@@ -75,6 +75,9 @@
     <a href="javascript:void(0)" id="a_importSalesmanUser" onclick="showDialogImport('salesmanUser')" class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入店铺sku销售人员</a>
+    <a href="javascript:void(0)" id="a_importProduceStatus" onclick="showDialogImport('produceStatus')" class="easyui-linkbutton a_hide"
+       data-options="iconCls:'icon-search'"
+       style="">导入店铺sku生产状态</a>
     <a href="javascript:void(0)" onclick="showTransformShopSku()" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">店铺sku信息转换</a>
@@ -280,6 +283,10 @@
         }
         if (hasRight("shopSku/importSalesmanUser")) {
             $("#a_importSalesmanUser").show()
+        }
+
+        if (hasRight("shopSku/importProduceStatus")) {
+            $("#a_importProduceStatus").show()
         }
         if (!hasRight("shopSku/saveShopSku")) {
             $("#btnAdd").hide();
@@ -611,6 +618,11 @@
                 importTemplateUrl = "${pageContext.request.contextPath }/static/template/shopSku/salesmanUserTemplate.xlsx";
                 importUrl = "${pageContext.request.contextPath }/shopSku/importSalesmanUser";
                 break;
+            case 'produceStatus':
+                importTitle = "导入店铺sku生产状态";
+                importTemplateUrl = "${pageContext.request.contextPath }/static/template/shopSku/shopSkuProduceStatusTemplate.xlsx";
+                importUrl = "${pageContext.request.contextPath }/shopSku/importProduceStatus";
+                break;
         }
         if (isEmpty(importTitle)) {
             $.messager.alert("提示", "请选择正确的导入类型.");
@@ -619,6 +631,7 @@
         $("#importTitle").text(importTitle);
         $("#importTemplate").attr("href", importTemplateUrl);
         $('#dlgImport').dialog('open').dialog('setTitle', importTitle);
+        $('#importFile').val("");
     }
 
     function closeDialogImport() {

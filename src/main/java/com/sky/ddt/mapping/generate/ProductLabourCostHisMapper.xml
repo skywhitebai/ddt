@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.ProductLabourCostHisMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.ProductLabourCostHis">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="product_id" jdbcType="INTEGER" property="productId" />
+    <result column="labour_cost_before" jdbcType="DECIMAL" property="labourCostBefore" />
+    <result column="labour_cost_after" jdbcType="DECIMAL" property="labourCostAfter" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, product_id, labour_cost_before, labour_cost_after, type, remark, create_by, create_time
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.ProductLabourCostHisExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from product_labour_cost_his
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from product_labour_cost_his
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from product_labour_cost_his
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.ProductLabourCostHisExample">
+    delete from product_labour_cost_his
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.ProductLabourCostHis">
+    insert into product_labour_cost_his (id, product_id, labour_cost_before, 
+      labour_cost_after, type, remark, 
+      create_by, create_time)
+    values (#{id,jdbcType=INTEGER}, #{productId,jdbcType=INTEGER}, #{labourCostBefore,jdbcType=DECIMAL}, 
+      #{labourCostAfter,jdbcType=DECIMAL}, #{type,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.ProductLabourCostHis">
+    insert into product_labour_cost_his
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="productId != null">
+        product_id,
+      </if>
+      <if test="labourCostBefore != null">
+        labour_cost_before,
+      </if>
+      <if test="labourCostAfter != null">
+        labour_cost_after,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="productId != null">
+        #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="labourCostBefore != null">
+        #{labourCostBefore,jdbcType=DECIMAL},
+      </if>
+      <if test="labourCostAfter != null">
+        #{labourCostAfter,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.ProductLabourCostHisExample" resultType="java.lang.Long">
+    select count(*) from product_labour_cost_his
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update product_labour_cost_his
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.productId != null">
+        product_id = #{record.productId,jdbcType=INTEGER},
+      </if>
+      <if test="record.labourCostBefore != null">
+        labour_cost_before = #{record.labourCostBefore,jdbcType=DECIMAL},
+      </if>
+      <if test="record.labourCostAfter != null">
+        labour_cost_after = #{record.labourCostAfter,jdbcType=DECIMAL},
+      </if>
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update product_labour_cost_his
+    set id = #{record.id,jdbcType=INTEGER},
+      product_id = #{record.productId,jdbcType=INTEGER},
+      labour_cost_before = #{record.labourCostBefore,jdbcType=DECIMAL},
+      labour_cost_after = #{record.labourCostAfter,jdbcType=DECIMAL},
+      type = #{record.type,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      create_by = #{record.createBy,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.ProductLabourCostHis">
+    update product_labour_cost_his
+    <set>
+      <if test="productId != null">
+        product_id = #{productId,jdbcType=INTEGER},
+      </if>
+      <if test="labourCostBefore != null">
+        labour_cost_before = #{labourCostBefore,jdbcType=DECIMAL},
+      </if>
+      <if test="labourCostAfter != null">
+        labour_cost_after = #{labourCostAfter,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.ProductLabourCostHis">
+    update product_labour_cost_his
+    set product_id = #{productId,jdbcType=INTEGER},
+      labour_cost_before = #{labourCostBefore,jdbcType=DECIMAL},
+      labour_cost_after = #{labourCostAfter,jdbcType=DECIMAL},
+      type = #{type,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      create_by = #{createBy,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
