@@ -180,7 +180,7 @@
                 </if>
 
                 <if test="saleShopId != null and saleShopId!=0 and saleShopId!=-1 ">and exists (select 1 from shop_sku ss2 where
-                    ss2.shop_id=#{saleShopId})
+                    ss2.shop_id=#{saleShopId} and ss2.sku_id=ss.sku_id)
                 </if>
             </trim>
         </where>
