@@ -179,7 +179,7 @@
                     ss2.shop_id=s2.shop_id and s2.type=1 and ss2.sku_id=ss.sku_id)
                 </if>
 
-                <if test="saleShopId != null and saleShopId!=0 and and saleShopId!=-1 ">and exists (select 1 from shop_sku ss2 where
+                <if test="saleShopId != null and saleShopId!=0 and saleShopId!=-1 ">and exists (select 1 from shop_sku ss2 where
                     ss2.shop_id=#{saleShopId})
                 </if>
             </trim>
