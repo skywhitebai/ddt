@@ -107,7 +107,7 @@
     <select id="listWarehouseStock" parameterType="com.sky.ddt.dto.stock.request.ListStockRequest"
             resultType="com.sky.ddt.dto.stock.response.ListStockResponse">
         select ss.shop_sku_id shopSkuId,ss.`shop_id` shopId,ss.shop_parent_sku shopParentSku,s.`shop_name`
-        shopName,ss.`shop_sku` shopSku,sku.sku,ss.sku_id skuId,0 stockQuantity,ss.produce_status produceStatussc
+        shopName,ss.`shop_sku` shopSku,sku.sku,ss.sku_id skuId,0 stockQuantity,ss.produce_status produceStatus
         ,sc.`create_time` createTime,sc.`update_time` updateTime,sku.create_time skuCreateTime
         ,IFNULL(sc.production_quantity,0) productionQuantity,
         IFNULL(ss.`inventory_quantity`,0) inventoryQuantity,

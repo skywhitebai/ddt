@@ -300,6 +300,11 @@
             remoteSort: false,
             idField: 'shopSkuId',
             queryParams: queryParams,  //异步查询的参数
+            rowStyler:function(index,row){
+                if(row.produceStatus==2){
+                    return 'background-color:pink;color:gray;';
+                }
+            },
             frozenColumns: [[
                 {field: 'ck', checkbox: true},   //选择
                 {title: '店铺sku', field: 'shopSku', width: 168},
