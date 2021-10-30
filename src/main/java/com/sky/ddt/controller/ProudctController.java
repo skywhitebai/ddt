@@ -96,4 +96,11 @@ public class ProudctController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return productService.importLabourCost(file, dealUserId);
     }
+    @RequestMapping("/importHsCode")
+    @ResponseBody
+    @MenuAnnotation("product/index")
+    public BaseResponse importHsCode(MultipartFile file) {
+        Integer dealUserId = getCurrentUserId();
+        return productService.importHsCode(file, dealUserId);
+    }
 }

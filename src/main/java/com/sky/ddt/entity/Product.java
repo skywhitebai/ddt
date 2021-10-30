@@ -14,6 +14,8 @@ public class Product {
 
     private String englishProductName;
 
+    private String hsCode;
+
     private BigDecimal labourCost;
 
     private String description;
@@ -72,6 +74,14 @@ public class Product {
 
     public void setEnglishProductName(String englishProductName) {
         this.englishProductName = englishProductName == null ? null : englishProductName.trim();
+    }
+
+    public String getHsCode() {
+        return hsCode;
+    }
+
+    public void setHsCode(String hsCode) {
+        this.hsCode = hsCode == null ? null : hsCode.trim();
     }
 
     public BigDecimal getLabourCost() {

@@ -668,6 +668,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
                 rowGoodsInfo = sheetInovice.createRow(contentIndex + i);
             }
             InvoiceGoodsInfo invoiceGoodsInfo = invoiceInfo.getInvoiceGoodsInfoList().get(i);
+            rowGoodsInfo.createCell(2).setCellValue(invoiceGoodsInfo.getHsCode());
             rowGoodsInfo.createCell(3).setCellValue(invoiceGoodsInfo.getGoodsName());
             rowGoodsInfo.createCell(4).setCellValue("无");
             rowGoodsInfo.createCell(5).setCellValue("无");
@@ -725,7 +726,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             //rowGoodsInfo.createCell(9).setCellValue(); 毛重
             rowGoodsInfo.createCell(10).setCellValue(invoicePackingInfo.getQuantity());
             rowGoodsInfo.createCell(11).setCellValue(invoicePackingInfo.getUnitPrice());
-            //rowGoodsInfo.createCell(12).setCellValue(); 海关编码
+            rowGoodsInfo.createCell(12).setCellValue(invoicePackingInfo.getHsCode());// 海关编码
             rowGoodsInfo.createCell(13).setCellValue(invoicePackingInfo.getBrand());
             //rowGoodsInfo.createCell(14).setCellValue(); 型号
             rowGoodsInfo.createCell(15).setCellValue(invoicePackingInfo.getMaterial());
@@ -760,6 +761,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             Row rowGoodsInfo = sheetInovice.createRow(5 + i);
             InvoiceGoodsInfo invoiceGoodsInfo = invoiceInfo.getInvoiceGoodsInfoList().get(i);
             rowGoodsInfo.createCell(1).setCellValue(invoiceGoodsInfo.getGoodsName());
+            rowGoodsInfo.createCell(2).setCellValue(invoiceGoodsInfo.getHsCode());
             rowGoodsInfo.createCell(3).setCellValue(invoiceGoodsInfo.getMaterial());
             rowGoodsInfo.createCell(4).setCellValue(invoiceGoodsInfo.getPurpose());
             rowGoodsInfo.createCell(5).setCellValue(invoiceGoodsInfo.getQuantity());
@@ -813,6 +815,8 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             rowGoodsInfo.createCell(1).setCellValue("不带电不带磁");
             rowGoodsInfo.createCell(2).setCellValue(invoicePackingInfo.getChineseProductName());
             rowGoodsInfo.createCell(3).setCellValue(invoicePackingInfo.getEnglishProductName());
+            rowGoodsInfo.createCell(4).setCellValue(invoicePackingInfo.getHsCode());
+            rowGoodsInfo.createCell(4).setCellValue(invoicePackingInfo.getHsCode());
             rowGoodsInfo.createCell(5).setCellValue(invoicePackingInfo.getQuantity());
             rowGoodsInfo.createCell(6).setCellValue(1);
             rowGoodsInfo.createCell(7).setCellValue(50);
@@ -839,6 +843,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             Row rowGoodsInfo = sheetInovice.createRow(5 + i);
             InvoiceGoodsInfo invoiceGoodsInfo = invoiceInfo.getInvoiceGoodsInfoList().get(i);
             rowGoodsInfo.createCell(1).setCellValue(invoiceGoodsInfo.getGoodsName());
+            rowGoodsInfo.createCell(2).setCellValue(invoiceGoodsInfo.getHsCode());
             rowGoodsInfo.createCell(3).setCellValue(invoiceGoodsInfo.getMaterial());
             rowGoodsInfo.createCell(4).setCellValue(invoiceGoodsInfo.getPurpose());
             rowGoodsInfo.createCell(5).setCellValue(invoiceGoodsInfo.getQuantity());
@@ -942,6 +947,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             rowGoodsInfo.getCell(1).setCellValue(invoiceGoodsInfo.getMaterial());
             rowGoodsInfo.getCell(2).setCellValue(invoiceGoodsInfo.getPurpose());
             rowGoodsInfo.getCell(3).setCellValue(invoiceGoodsInfo.getBrand());
+            rowGoodsInfo.getCell(4).setCellValue(invoiceGoodsInfo.getHsCode());
             rowGoodsInfo.getCell(6).setCellValue(invoiceGoodsInfo.getQuantity());
             rowGoodsInfo.getCell(7).setCellValue(invoiceGoodsInfo.getUnitPrice());
             rowGoodsInfo.getCell(8).setCellValue(invoiceGoodsInfo.getTotalPrice());
@@ -995,6 +1001,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             rowGoodsInfo.getCell(6).setCellStyle(priceStyle);
             rowGoodsInfo.createCell(7).setCellValue(invoicePackingInfo.getTotalPrice());
             rowGoodsInfo.getCell(7).setCellStyle(priceStyle);
+            rowGoodsInfo.createCell(8).setCellValue(invoicePackingInfo.getHsCode());
         }
     }
 
@@ -1142,6 +1149,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
                 invoiceGoodsInfo.setMaterial("混棉/Mixed cotton缎纹80%涤纶，10%氨纶，10%棉");
                 invoiceGoodsInfo.setPurpose("穿/Wear");
                 invoiceGoodsInfo.setBrand("无");
+                invoiceGoodsInfo.setHsCode(invoicePackingInfo.getHsCode());
                 invoiceGoodsInfo.setWeight(invoicePackingInfo.getWeight());
                 invoiceGoodsInfo.setQuantity(invoicePackingInfo.getQuantity());
                 invoiceGoodsInfo.setUnitPrice(unitPrice);
@@ -1194,6 +1202,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
                 invoicePackingInfo.setContainerNo(invoiceSkuInfo.getContainerNo());
                 invoicePackingInfo.setChineseProductName(invoiceSkuInfo.getChineseProductName());
                 invoicePackingInfo.setEnglishProductName(invoiceSkuInfo.getEnglishProductName());
+                invoicePackingInfo.setHsCode(invoiceSkuInfo.getHsCode());
                 invoicePackingInfo.setGoodsName(invoiceSkuInfo.getEnglishProductName() + " " + invoiceSkuInfo.getChineseProductName());
                 invoicePackingInfo.setQuantity(invoiceSkuInfo.getQuantity());
                 invoicePackingInfo.setLength(50.0);

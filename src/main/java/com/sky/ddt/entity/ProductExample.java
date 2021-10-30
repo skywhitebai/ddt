@@ -473,6 +473,76 @@ public class ProductExample {
             return (Criteria) this;
         }
 
+        public Criteria andHsCodeIsNull() {
+            addCriterion("hs_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHsCodeIsNotNull() {
+            addCriterion("hs_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andHsCodeEqualTo(String value) {
+            addCriterion("hs_code =", value, "hsCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andHsCodeNotEqualTo(String value) {
+            addCriterion("hs_code <>", value, "hsCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andHsCodeGreaterThan(String value) {
+            addCriterion("hs_code >", value, "hsCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andHsCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("hs_code >=", value, "hsCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andHsCodeLessThan(String value) {
+            addCriterion("hs_code <", value, "hsCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andHsCodeLessThanOrEqualTo(String value) {
+            addCriterion("hs_code <=", value, "hsCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andHsCodeLike(String value) {
+            addCriterion("hs_code like", value, "hsCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andHsCodeNotLike(String value) {
+            addCriterion("hs_code not like", value, "hsCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andHsCodeIn(List<String> values) {
+            addCriterion("hs_code in", values, "hsCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andHsCodeNotIn(List<String> values) {
+            addCriterion("hs_code not in", values, "hsCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andHsCodeBetween(String value1, String value2) {
+            addCriterion("hs_code between", value1, value2, "hsCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andHsCodeNotBetween(String value1, String value2) {
+            addCriterion("hs_code not between", value1, value2, "hsCode");
+            return (Criteria) this;
+        }
+
         public Criteria andLabourCostIsNull() {
             addCriterion("labour_cost is null");
             return (Criteria) this;

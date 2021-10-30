@@ -64,4 +64,6 @@ public interface IProductService {
     BaseResponse importDevelopmentLevel(MultipartFile file, Integer dealUserId);
 
     BaseResponse importLabourCost(MultipartFile file, Integer dealUserId);
+
+    BaseResponse importHsCode(MultipartFile file, Integer dealUserId);
 }

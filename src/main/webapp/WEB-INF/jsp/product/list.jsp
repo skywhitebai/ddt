@@ -61,6 +61,11 @@
        class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入工价</a>
+
+    <a href="javascript:void(0)" id="a_importhsCode" onclick="showDialogImport('hsCode')"
+       class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'"
+       style="">导入海关编码</a>
     <a href="javascript:void(0)" id="a_exportProduct" onclick="exportProduct()" class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导出产品</a>
@@ -104,6 +109,12 @@
                 </td>
             </tr>
             <tr>
+                <td>海关编码：</td>
+                <td>
+                    <input class="easyui-textbox" type="text" name="hsCode">
+                </td>
+            </tr>
+            <tr>
                 <td>产品描述：</td>
                 <td colspan="3">
                     <input class="easyui-textbox" data-options="multiline:true" name="description" value=""
@@ -136,6 +147,7 @@
                            precision="2">
                 </td>
             </tr>
+
             <tr class="view_hide">
                 <td>创建时间：</td>
                 <td>
@@ -262,6 +274,7 @@
                 {title: '产品编码', field: 'productCode', width: 100},
                 {title: '中文报关名', field: 'chineseProductName', width: 100},
                 {title: '英文报关名', field: 'englishProductName', width: 100},
+                {title: '海关编码', field: 'hsCode', width: 100},
                 {title: '开发人员', field: 'developerUserName', width: 100},
                 {title: '开发等级', field: 'developmentLevel', width: 65},
                 {
@@ -480,6 +493,11 @@
                 importTemplateUrl = "${pageContext.request.contextPath }/static/template/product/labourCostTemplate.xlsx";
                 importUrl = "${pageContext.request.contextPath }/product/importLabourCost";
                 break;
+                case 'hsCode':
+                    importTitle = "导入海关编码";
+                    importTemplateUrl = "${pageContext.request.contextPath }/static/template/product/hsCodeTemplate.xlsx";
+                    importUrl = "${pageContext.request.contextPath }/product/importHsCode";
+                    break;
         }
         if (isEmpty(importTitle)) {
             $.messager.alert("提示", "请选择正确的导入类型.");
@@ -545,6 +563,7 @@
         url = "${pageContext.request.contextPath }/product/exportProduct" + getUrlParams(getQueryParams());
         window.open(url);
     }
+
     var productLabourCostProductId;
 
     function showProductLabourCostHisDialog(productId) {

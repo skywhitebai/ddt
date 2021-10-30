@@ -39,7 +39,7 @@
         <!--<table tableName="sys_right" domainObjectName="Right">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        <table tableName="product_labour_cost_his">
+        <table tableName="product">
         </table>
     </context>
 </generatorConfiguration>

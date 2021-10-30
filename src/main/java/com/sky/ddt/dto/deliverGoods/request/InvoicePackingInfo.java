@@ -12,6 +12,7 @@ public class InvoicePackingInfo {
     String containerNo;
     String chineseProductName;
     String englishProductName;
+    String hsCode;
     String goodsName;
     Integer quantity;
     Double length;

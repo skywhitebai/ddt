@@ -15,6 +15,7 @@ public class InvoiceGoodsInfo {
     String material;
     String purpose;
     String brand;
+    String hsCode;
     Integer quantity;
     Double weight;
     Double unitPrice;

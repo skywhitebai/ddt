@@ -566,6 +566,7 @@ public class FbaPackingListService implements IFbaPackingListService {
                     invoiceSkuInfo.setShopSku(shopSkuFullProductName.getShopSku());
                     invoiceSkuInfo.setChineseProductName(shopSkuFullProductName.getChineseProductName());
                     invoiceSkuInfo.setEnglishProductName(shopSkuFullProductName.getEnglishProductName());
+                    invoiceSkuInfo.setHsCode(shopSkuFullProductName.getHsCode());
                     invoiceSkuInfo.setWeight(shopSkuFullProductName.getWeight());
                 }
             }

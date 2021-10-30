@@ -28,12 +28,15 @@ public class ProductConstant {
     public static final String DEVELOPMENT_LEVEL_ERRO ="开发等级必须为0-10的数字";
     public static final String LABOUR_COST_EMPTY ="工价不能为空";
     public static final String LABOUR_COST_ERRO  ="工价必须为0-10000的两位小数";
+    public static final String HS_CODE_EMPTY = "海关编码不能为空";
+    public static final String HS_CODE_TOO_LONG ="海关编码长度不能超过32" ;
     public static List<ExcelField> exportProductFieldList=new ArrayList<>();
     static {
         exportProductFieldList.add(new ExcelField("productName", "产品名", ExcelField.FieldTypeEnum.STRING));
         exportProductFieldList.add(new ExcelField("productCode", "产品编码", ExcelField.FieldTypeEnum.STRING));
         exportProductFieldList.add(new ExcelField("chineseProductName", "中文报关名", ExcelField.FieldTypeEnum.STRING));
         exportProductFieldList.add(new ExcelField("englishProductName", "英文报关名", ExcelField.FieldTypeEnum.STRING));
+        exportProductFieldList.add(new ExcelField("hsCode", "海关编码", ExcelField.FieldTypeEnum.STRING));
         exportProductFieldList.add(new ExcelField("developerUserName", "开发人员", ExcelField.FieldTypeEnum.STRING));
         exportProductFieldList.add(new ExcelField("developmentLevel", "开发等级", ExcelField.FieldTypeEnum.STRING));
         exportProductFieldList.add(new ExcelField("developmentTime", "开发时间", ExcelField.FieldTypeEnum.DATE_TIME));
