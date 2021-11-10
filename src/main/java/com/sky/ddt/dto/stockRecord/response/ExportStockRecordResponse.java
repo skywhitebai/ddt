@@ -9,6 +9,8 @@ import lombok.Data;
  */
 @Data
 public class ExportStockRecordResponse {
+    String shopName;
+    Integer stockRecordId;
     String shopSku;
     String sku;
     String fnsku;

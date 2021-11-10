@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @date 2019/11/19 15:49
  */
 @Controller
-@RequestMapping("finance")
+@RequestMapping("/finance")
 public class FinanceController extends SuperController {
 
     @Autowired
@@ -53,7 +53,17 @@ public class FinanceController extends SuperController {
     public String index() {
         return "finance/list";
     }
-
+    /**
+     * @param
+     * @return
+     * @description 财务统计列表页面
+     * @author baixueping
+     * @date 2019/11/19 15:51
+     */
+    @RequestMapping("/operatorList")
+    public String operatorList() {
+        return "finance/operatorList";
+    }
     @RequestMapping("list")
     @ResponseBody
     public DataGridResponse list(FinanceListRequest params) {

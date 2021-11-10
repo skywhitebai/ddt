@@ -76,6 +76,7 @@ public class StockRecordController extends SuperController {
             return BaseResponse.failMessage(StockRecordConstant.USER_NO_SHOP_RIGHT);
         }
         List<ExportStockRecordResponse> list = stockRecordService.listExportStockRecord(stockRecordId,type);
+        String shopName=stockRecord.getTitle().substring(0,stockRecord.getTitle().indexOf("补货单"));
         String title=stockRecord.getTitle().substring(0,stockRecord.getTitle().indexOf(" "));
 
         String[] headers;
@@ -99,12 +100,16 @@ public class StockRecordController extends SuperController {
         for (ExportStockRecordResponse exportStockRecordResponse:
                 list) {
             total+=exportStockRecordResponse.getStockQuantity();
+            exportStockRecordResponse.setShopName(shopName);
+            exportStockRecordResponse.setStockRecordId(stockRecordId);
         }
         ExportStockRecordResponse exportStockRecordResponseTotal=new ExportStockRecordResponse();
+        exportStockRecordResponseTotal.setFnsku("合计：");
         exportStockRecordResponseTotal.setStockQuantity(total);
         list.add(exportStockRecordResponseTotal);
         ExportStockRecordResponse exportStockRecordResponseRemark=new ExportStockRecordResponse();
-        exportStockRecordResponseRemark.setShopSku(stockRecord.getRemark());
+        exportStockRecordResponseRemark.setShopSku("备注：");
+        exportStockRecordResponseRemark.setSku(stockRecord.getRemark());
         list.add(exportStockRecordResponseRemark);
         BaseResponse exportResponse = new ExcelExportUtil<ExportStockRecordResponse>().export(response, list, headers, title);
         return exportResponse;

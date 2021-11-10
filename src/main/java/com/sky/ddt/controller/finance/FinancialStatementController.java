@@ -46,6 +46,18 @@ public class FinancialStatementController extends SuperController {
     public BaseResponse exportSalesmanFinancialStatement(String month) {
         return financialStatementService.exportFinancialStatement(response,month,"salesman");
     }
+    @RequestMapping("/exportCurrentUserDeveloperFinancialStatement")
+    @ResponseBody
+    @MenuAnnotation("finance/index")
+    public BaseResponse exportCurrentUserDeveloperFinancialStatement(String month) {
+        return financialStatementService.exportCurrentUserFinancialStatement(response,month,"developer",getCurrentUserId());
+    }
+    @RequestMapping("/exportCurrentUserSalesmanFinancialStatement")
+    @ResponseBody
+    @MenuAnnotation("finance/index")
+    public BaseResponse exportCurrentUserSalesmanFinancialStatement(String month) {
+        return financialStatementService.exportCurrentUserFinancialStatement(response,month,"salesman",getCurrentUserId());
+    }
     @RequestMapping("/exportFinancialStatementAll")
     @ResponseBody
     @MenuAnnotation("finance/index")

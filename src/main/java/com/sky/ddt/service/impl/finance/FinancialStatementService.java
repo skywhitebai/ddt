@@ -6,7 +6,6 @@ import com.sky.ddt.dao.custom.CustomFinanceMapper;
 import com.sky.ddt.dao.custom.CustomFinancialStatementMapper;
 import com.sky.ddt.dao.custom.CustomMonthlySalesMapper;
 import com.sky.ddt.dao.custom.CustomSkuMapper;
-import com.sky.ddt.dao.generate.SkuMapper;
 import com.sky.ddt.dto.finance.response.FbaCustomerReturnFeeResponse;
 import com.sky.ddt.dto.finance.response.FbaCustomerReturnSkuResponse;
 import com.sky.ddt.dto.finance.response.FinancialStatementResponse;
@@ -370,6 +369,72 @@ public class FinancialStatementService implements IFinancialStatementService {
         String fileName = getZipName(monthChinese, type);
         Map<String, byte[]> byteMap = workBook2Byte(workbookMap, fileName);
         ZipUtil.downloadBatchByFile(response, byteMap, fileName);
+        return BaseResponse.success();
+    }
+    /**
+     * @param response
+     * @param month
+     * @param type     @return
+     * @param currentUserId
+     * @description 导出制定月份财务数据
+     * @author baixueping
+     * @date 2020/12/15 14:42
+     */
+    @Override
+    public BaseResponse exportCurrentUserFinancialStatement(HttpServletResponse response, String month, String type, Integer currentUserId) {
+        //查询当月所有数据 判断是否全部已生成，如果有未生成的则报错
+        if (StringUtils.isEmpty(month)) {
+            return BaseResponse.failMessage("请选择月份");
+        }
+        Date monthDate = DateUtil.strMonthToDate(month);
+        if (monthDate == null) {
+            return BaseResponse.failMessage("月份格式错误");
+        }
+        BaseResponse<List<Integer>> checkFinancialStatusResponse = checkFinancialStatus(monthDate);
+        if (checkFinancialStatusResponse.isFail()) {
+            return checkFinancialStatusResponse;
+        }
+        //获取所有店铺sku销售数据
+        FinancialStatementExample example = new FinancialStatementExample();
+        FinancialStatementExample.Criteria criteria=example.createCriteria().andFinanceIdIn(checkFinancialStatusResponse.getData());
+        example.setOrderByClause("shop_parent_sku,sku");
+        if(type.equals("developer")){
+            criteria.andDeveloperUserIdEqualTo(currentUserId);
+        }else if(type.equals("salesman")){
+            criteria.andSalesmanUserIdEqualTo(currentUserId);
+        }
+        List<FinancialStatement> financialStatementList = customFinancialStatementMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(financialStatementList)) {
+            return BaseResponse.failMessage(FinancialStatementConstant.FINANCIAL_STATEMENT_NOT_EXIST);
+        }
+        String monthChinese = DateUtil.getMonthChinese(financialStatementList.get(0).getMonth());
+        if (month == null) {
+            month = "";
+        }
+        //根据用户信息，生成多个excel
+        Map<String, Workbook> workbookMap = getWorkbookMap(financialStatementList, type, monthChinese);
+        Workbook workbook=null;
+        for (String key : workbookMap.keySet()) {
+            workbook = workbookMap.get(key);
+
+        }
+        String fileName = getZipName(monthChinese, type);
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try {
+            workbook.write(outputStream);
+            ByteArrayInputStream tempIn = new ByteArrayInputStream(outputStream.toByteArray());
+            response.setHeader("Content-Length", String.valueOf(tempIn.available()));
+            OutputStream out = response.getOutputStream();
+            byte[] buffer = new byte[1024];
+            int a;
+            while ((a = tempIn.read(buffer)) != -1) {
+                out.write(buffer, 0, a);
+            }
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return BaseResponse.success();
     }
 

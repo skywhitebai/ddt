@@ -32,11 +32,20 @@ public interface IFinancialStatementService {
     /**
      * @param
      * @return
-     * @description 导出制定月份财务数据
+     * @description 导出当前用户指定月份财务数据
      * @author baixueping
      * @date 2020/12/15 14:42
      */
     BaseResponse exportFinancialStatement(HttpServletResponse response, String month, String type);
 
     BaseResponse exportFinancialStatementAll(HttpServletResponse response, String month);
+    /**
+     * @param
+     * @param currentUserId
+     * @return
+     * @description 导出当前用户指定月份财务数据
+     * @author baixueping
+     * @date 2020/12/15 14:42
+     */
+    BaseResponse exportCurrentUserFinancialStatement(HttpServletResponse response, String month, String developer, Integer currentUserId);
 }
