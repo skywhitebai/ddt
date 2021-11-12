@@ -20,7 +20,7 @@
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 <if test="shopId != null">and f.shop_id=#{shopId}</if>
-                <if test="monthDate != null ">and f.month=#{monthDate}</if>financeList
+                <if test="monthDate != null ">and f.month=#{monthDate}</if>
                 <if test="currentUserId != null ">and f.shop_id in (select shop_id from shop_user su where su.user_id=#{currentUserId})</if>
             </trim>
         </where>
