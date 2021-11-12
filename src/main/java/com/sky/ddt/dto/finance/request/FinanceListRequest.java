@@ -15,4 +15,5 @@ public class FinanceListRequest extends DataGridRequest {
     Integer shopId;
     String month;
     Date monthDate;
+    Integer currentUserId;
 }

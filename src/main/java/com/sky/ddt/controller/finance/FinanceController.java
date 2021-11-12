@@ -67,6 +67,7 @@ public class FinanceController extends SuperController {
     @RequestMapping("list")
     @ResponseBody
     public DataGridResponse list(FinanceListRequest params) {
+        params.setCurrentUserId(getCurrentUserId());
         PageInfo<FinanceListResponse> page = financeService.list(params);
         DataGridResponse dataGridResponse = new DataGridResponse();
         dataGridResponse.setTotal(page.getTotal());

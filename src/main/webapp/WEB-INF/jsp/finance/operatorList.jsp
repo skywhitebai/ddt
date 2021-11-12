@@ -275,6 +275,7 @@
                         }
                     }
                 },
+
                 {
                     title: '备注', field: 'remark', width: 288,
                     formatter: function (value, row, rowIndex) {
