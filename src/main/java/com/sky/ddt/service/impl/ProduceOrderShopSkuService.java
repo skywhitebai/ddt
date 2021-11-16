@@ -128,10 +128,10 @@ public class ProduceOrderShopSkuService implements IProduceOrderShopSkuService {
         ProduceOrderShopSku produceOrderShopSku = new ProduceOrderShopSku();
         BeanUtils.copyProperties(params, produceOrderShopSku);
         produceOrderShopSku.setShopSkuId(shopSku.getShopSkuId());
-        //判断是否时相同产品sku的店铺sku
+        /*//判断是否时相同产品sku的店铺sku
         if (customProduceOrderShopSkuMapper.existProduceOrderShopSkuNotSameSku(produceOrderShopSku)) {
             return BaseResponse.failMessage("生产单的店铺sku需要是同一个产品sku的");
-        }
+        }*/
         if (params.getId() == null) {
             produceOrderShopSku.setCreateTime(new Date());
             produceOrderShopSku.setCreateBy(dealUserId);
@@ -231,11 +231,11 @@ public class ProduceOrderShopSkuService implements IProduceOrderShopSkuService {
                         sbErroItem.append(",").append(ProduceOrderShopSkuConstant.SHOP_SKU_SHOP_ERRO);
                     } else {
                         map.put("shopSkuId", shopSku.getShopSkuId().toString());
-                        if (skuId == null) {
+                        /*if (skuId == null) {
                             skuId = shopSku.getSkuId();
                         } else if (skuId.equals(shopSku.getSkuId())) {
                             sbErroItem.append(",").append("店铺sku对应的产品sku必须为同一个");
-                        }
+                        }*/
                     }
                 }
             }

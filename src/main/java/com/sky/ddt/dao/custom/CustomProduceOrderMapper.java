@@ -3,6 +3,8 @@ package com.sky.ddt.dao.custom;
 import com.sky.ddt.dao.generate.ProduceOrderMapper;
 import com.sky.ddt.dto.produceOrder.request.GenerationCostRequest;
 import com.sky.ddt.dto.produceOrder.request.ListProduceOrderRequest;
+import com.sky.ddt.dto.produceOrder.request.ProduceOrderSkuInfo;
+import com.sky.ddt.dto.produceOrder.request.SkuCostPriceInfo;
 import com.sky.ddt.dto.produceOrder.response.ListProduceOrderResponse;
 import com.sky.ddt.entity.ProduceOrder;
 
@@ -28,4 +30,8 @@ public interface CustomProduceOrderMapper extends ProduceOrderMapper {
     List<String> listNotCostSku(GenerationCostRequest params);
 
     List<String> listNotLabourCostProduct(GenerationCostRequest params);
+
+    List<SkuCostPriceInfo> listSkuCostPriceInfo(GenerationCostRequest params);
+
+    List<ProduceOrderSkuInfo> listProduceOrderSkuInfo(GenerationCostRequest params);
 }

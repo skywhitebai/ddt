@@ -24,6 +24,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -371,10 +372,10 @@ public class ProduceOrderService implements IProduceOrderService {
         if (produceOrder == null) {
             return BaseResponse.failMessage("id不存在");
         }
-        if(ProduceOrderConstant.CostStatusEnum.CALCULATED.getStatus().equals(produceOrder.getCostStatus())){
+        if (ProduceOrderConstant.CostStatusEnum.CALCULATED.getStatus().equals(produceOrder.getCostStatus())) {
             return BaseResponse.failMessage("成本已核算不允许修改");
         }
-        ProduceOrder produceOrderNew=new ProduceOrder();
+        ProduceOrder produceOrderNew = new ProduceOrder();
         produceOrderNew.setId(params.getId());
         produceOrderNew.setCostRemark(params.getCostRemark());
         produceOrderNew.setUpdateTime(new Date());
@@ -388,10 +389,10 @@ public class ProduceOrderService implements IProduceOrderService {
         if (produceOrder == null) {
             return BaseResponse.failMessage("id不存在");
         }
-        if(ProduceOrderConstant.CostStatusEnum.CALCULATED.getStatus().equals(produceOrder.getCostStatus())){
+        if (ProduceOrderConstant.CostStatusEnum.CALCULATED.getStatus().equals(produceOrder.getCostStatus())) {
             return BaseResponse.failMessage("成本已核算不允许修改");
         }
-        ProduceOrder produceOrderNew=new ProduceOrder();
+        ProduceOrder produceOrderNew = new ProduceOrder();
         produceOrderNew.setId(params.getId());
         produceOrderNew.setFabricCost(params.getFabricCost());
         produceOrderNew.setUpdateTime(new Date());
@@ -405,10 +406,10 @@ public class ProduceOrderService implements IProduceOrderService {
         if (produceOrder == null) {
             return BaseResponse.failMessage("id不存在");
         }
-        if(ProduceOrderConstant.CostStatusEnum.CALCULATED.getStatus().equals(produceOrder.getCostStatus())){
+        if (ProduceOrderConstant.CostStatusEnum.CALCULATED.getStatus().equals(produceOrder.getCostStatus())) {
             return BaseResponse.failMessage("成本已核算不允许修改");
         }
-        ProduceOrder produceOrderNew=new ProduceOrder();
+        ProduceOrder produceOrderNew = new ProduceOrder();
         produceOrderNew.setId(params.getId());
         produceOrderNew.setAuxiliaryMaterialCost(params.getAuxiliaryMaterialCost());
         produceOrderNew.setUpdateTime(new Date());
@@ -419,35 +420,67 @@ public class ProduceOrderService implements IProduceOrderService {
     @Override
     public BaseResponse generationCost(GenerationCostRequest params) {
         //校验参数
-        if(!StringUtils.isEmpty(params.getMonth())){
+        if (!StringUtils.isEmpty(params.getMonth())) {
             String monthStr = params.getMonth() + "-01";
             Date monthDate = DateUtil.strToDate(monthStr);
-            if (monthDate!= null) {
+            if (monthDate != null) {
                 params.setMonthDate(monthDate);
-            }else{
+            } else {
                 return BaseResponse.failMessage("月份错误");
             }
         }
         //校验当月已完成未核算生产单是否有未填写成本的
-        List<ProduceOrder> notCostProduceOrderList=customProduceOrderMapper.listNotCostProductOrder(params);
-        if(!CollectionUtils.isEmpty(notCostProduceOrderList)){
-            String produceOrderBatchNumberS=notCostProduceOrderList.stream().map(item->item.getBatchNumber()).collect(Collectors.joining(","));
-            return BaseResponse.failMessage("存在没有布料成本的生产单:"+produceOrderBatchNumberS);
+        List<ProduceOrder> notCostProduceOrderList = customProduceOrderMapper.listNotCostProductOrder(params);
+        if (!CollectionUtils.isEmpty(notCostProduceOrderList)) {
+            String produceOrderBatchNumberS = notCostProduceOrderList.stream().map(item -> item.getBatchNumber()).collect(Collectors.joining(","));
+            return BaseResponse.failMessage("存在没有布料成本的生产单:" + produceOrderBatchNumberS);
         }
         //校验需要生成的产品sku是否有成本大于等于999的或者没有工价的
-        List<String> notCostSkuList= customProduceOrderMapper.listNotCostSku(params);
-        if(!CollectionUtils.isEmpty(notCostSkuList)){
-            String skus=notCostSkuList.stream().collect(Collectors.joining(","));
-            return BaseResponse.failMessage("产品sku成本价错误:"+skus);
+        List<String> notCostSkuList = customProduceOrderMapper.listNotCostSku(params);
+        if (!CollectionUtils.isEmpty(notCostSkuList)) {
+            String skus = notCostSkuList.stream().collect(Collectors.joining(","));
+            return BaseResponse.failMessage("产品sku成本价错误:" + skus);
         }
-        List<String> notLabourCostProductList=customProduceOrderMapper.listNotLabourCostProduct(params);
-        if(!CollectionUtils.isEmpty(notLabourCostProductList)){
-            String productCodes=notLabourCostProductList.stream().collect(Collectors.joining(","));
-            return BaseResponse.failMessage("产品工价不存在:"+productCodes);
+        List<String> notLabourCostProductList = customProduceOrderMapper.listNotLabourCostProduct(params);
+        if (!CollectionUtils.isEmpty(notLabourCostProductList)) {
+            String productCodes = notLabourCostProductList.stream().collect(Collectors.joining(","));
+            return BaseResponse.failMessage("产品工价不存在:" + productCodes);
         }
-        //生成成本价
+        //查询当月已完成未核算生产单
+        List<ProduceOrder> produceOrders = getGenerationProduceOrders(params);
+        if (CollectionUtils.isEmpty(produceOrders)) {
+            return BaseResponse.failMessage("没有未核算的生产单");
+        }
+        //查询当月生产单和产品sku数量对照关系
+        List<ProduceOrderSkuInfo> produceOrderSkuInfos=customProduceOrderMapper.listProduceOrderSkuInfo(params);
+        //查询当月已完成未核算生产单对应的产品sku
+        List<SkuCostPriceInfo> skuCostPriceInfos =customProduceOrderMapper.listSkuCostPriceInfo(params);
+        //计算每个sku对应的成本价
+        Map<Integer, GenerationCostInfo> map = new HashMap<>();
+        for (ProduceOrder produceOrder :
+                produceOrders) {
+            List<ProduceOrderSkuInfo> produceOrderShopSkuList = produceOrderSkuInfos.stream().filter(item -> item.getProduceOrderId().equals(produceOrder.getId())).collect(Collectors.toList());
+
+            //BigDecimal
+        }
         return null;
     }
+
+    private List<ProduceOrderShopSku> getGenerationProduceOrderShopSkus(List<Integer> produceOrderIds) {
+        ProduceOrderShopSkuExample example = new ProduceOrderShopSkuExample();
+        example.createCriteria().andProduceOrderIdIn(produceOrderIds);
+        return customProduceOrderShopSkuMapper.selectByExample(example);
+    }
+
+    private List<ProduceOrder> getGenerationProduceOrders(GenerationCostRequest params) {
+        ProduceOrderExample produceOrderExample = new ProduceOrderExample();
+        produceOrderExample.createCriteria().andStatusEqualTo(ProduceOrderConstant.StatusEnum.FINISHED_PRODUCTION.getStatus())
+                .andCostStatusEqualTo(ProduceOrderConstant.CostStatusEnum.NOT_CALCULATED.getStatus())
+                .andCompletionTimeGreaterThanOrEqualTo(params.getMonthDate())
+                .andCompletionTimeLessThan(DateUtil.plusMonth(1, params.getMonthDate()));
+        return customProduceOrderMapper.selectByExample(produceOrderExample);
+    }
+
 
     private void createProduceOrder(FactoryProductionOrder factoryProductionOrder, List<ListFactoryProductionOrderShopSkuResponse> listFactoryProductionOrderShopSkuResponseList, Integer dealUserId) {
         ProduceOrder produceOrder = new ProduceOrder();
