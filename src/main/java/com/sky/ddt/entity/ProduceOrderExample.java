@@ -1,5 +1,6 @@
 package com.sky.ddt.entity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -415,6 +416,126 @@ public class ProduceOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andCompletionTimeIsNull() {
+            addCriterion("completion_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompletionTimeIsNotNull() {
+            addCriterion("completion_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompletionTimeEqualTo(Date value) {
+            addCriterion("completion_time =", value, "completionTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompletionTimeNotEqualTo(Date value) {
+            addCriterion("completion_time <>", value, "completionTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompletionTimeGreaterThan(Date value) {
+            addCriterion("completion_time >", value, "completionTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompletionTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("completion_time >=", value, "completionTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompletionTimeLessThan(Date value) {
+            addCriterion("completion_time <", value, "completionTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompletionTimeLessThanOrEqualTo(Date value) {
+            addCriterion("completion_time <=", value, "completionTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompletionTimeIn(List<Date> values) {
+            addCriterion("completion_time in", values, "completionTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompletionTimeNotIn(List<Date> values) {
+            addCriterion("completion_time not in", values, "completionTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompletionTimeBetween(Date value1, Date value2) {
+            addCriterion("completion_time between", value1, value2, "completionTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCompletionTimeNotBetween(Date value1, Date value2) {
+            addCriterion("completion_time not between", value1, value2, "completionTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostStatusIsNull() {
+            addCriterion("cost_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostStatusIsNotNull() {
+            addCriterion("cost_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostStatusEqualTo(Integer value) {
+            addCriterion("cost_status =", value, "costStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostStatusNotEqualTo(Integer value) {
+            addCriterion("cost_status <>", value, "costStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostStatusGreaterThan(Integer value) {
+            addCriterion("cost_status >", value, "costStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("cost_status >=", value, "costStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostStatusLessThan(Integer value) {
+            addCriterion("cost_status <", value, "costStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("cost_status <=", value, "costStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostStatusIn(List<Integer> values) {
+            addCriterion("cost_status in", values, "costStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostStatusNotIn(List<Integer> values) {
+            addCriterion("cost_status not in", values, "costStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostStatusBetween(Integer value1, Integer value2) {
+            addCriterion("cost_status between", value1, value2, "costStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("cost_status not between", value1, value2, "costStatus");
+            return (Criteria) this;
+        }
+
         public Criteria andTypeIsNull() {
             addCriterion("type is null");
             return (Criteria) this;
@@ -532,6 +653,196 @@ public class ProduceOrderExample {
 
         public Criteria andEntityIdNotBetween(Integer value1, Integer value2) {
             addCriterion("entity_id not between", value1, value2, "entityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFabricCostIsNull() {
+            addCriterion("fabric_cost is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFabricCostIsNotNull() {
+            addCriterion("fabric_cost is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFabricCostEqualTo(BigDecimal value) {
+            addCriterion("fabric_cost =", value, "fabricCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andFabricCostNotEqualTo(BigDecimal value) {
+            addCriterion("fabric_cost <>", value, "fabricCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andFabricCostGreaterThan(BigDecimal value) {
+            addCriterion("fabric_cost >", value, "fabricCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andFabricCostGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("fabric_cost >=", value, "fabricCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andFabricCostLessThan(BigDecimal value) {
+            addCriterion("fabric_cost <", value, "fabricCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andFabricCostLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("fabric_cost <=", value, "fabricCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andFabricCostIn(List<BigDecimal> values) {
+            addCriterion("fabric_cost in", values, "fabricCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andFabricCostNotIn(List<BigDecimal> values) {
+            addCriterion("fabric_cost not in", values, "fabricCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andFabricCostBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("fabric_cost between", value1, value2, "fabricCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andFabricCostNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("fabric_cost not between", value1, value2, "fabricCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuxiliaryMaterialCostIsNull() {
+            addCriterion("auxiliary_material_cost is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuxiliaryMaterialCostIsNotNull() {
+            addCriterion("auxiliary_material_cost is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuxiliaryMaterialCostEqualTo(BigDecimal value) {
+            addCriterion("auxiliary_material_cost =", value, "auxiliaryMaterialCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuxiliaryMaterialCostNotEqualTo(BigDecimal value) {
+            addCriterion("auxiliary_material_cost <>", value, "auxiliaryMaterialCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuxiliaryMaterialCostGreaterThan(BigDecimal value) {
+            addCriterion("auxiliary_material_cost >", value, "auxiliaryMaterialCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuxiliaryMaterialCostGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("auxiliary_material_cost >=", value, "auxiliaryMaterialCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuxiliaryMaterialCostLessThan(BigDecimal value) {
+            addCriterion("auxiliary_material_cost <", value, "auxiliaryMaterialCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuxiliaryMaterialCostLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("auxiliary_material_cost <=", value, "auxiliaryMaterialCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuxiliaryMaterialCostIn(List<BigDecimal> values) {
+            addCriterion("auxiliary_material_cost in", values, "auxiliaryMaterialCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuxiliaryMaterialCostNotIn(List<BigDecimal> values) {
+            addCriterion("auxiliary_material_cost not in", values, "auxiliaryMaterialCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuxiliaryMaterialCostBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("auxiliary_material_cost between", value1, value2, "auxiliaryMaterialCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andAuxiliaryMaterialCostNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("auxiliary_material_cost not between", value1, value2, "auxiliaryMaterialCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostRemarkIsNull() {
+            addCriterion("cost_remark is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostRemarkIsNotNull() {
+            addCriterion("cost_remark is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostRemarkEqualTo(String value) {
+            addCriterion("cost_remark =", value, "costRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostRemarkNotEqualTo(String value) {
+            addCriterion("cost_remark <>", value, "costRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostRemarkGreaterThan(String value) {
+            addCriterion("cost_remark >", value, "costRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostRemarkGreaterThanOrEqualTo(String value) {
+            addCriterion("cost_remark >=", value, "costRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostRemarkLessThan(String value) {
+            addCriterion("cost_remark <", value, "costRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostRemarkLessThanOrEqualTo(String value) {
+            addCriterion("cost_remark <=", value, "costRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostRemarkLike(String value) {
+            addCriterion("cost_remark like", value, "costRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostRemarkNotLike(String value) {
+            addCriterion("cost_remark not like", value, "costRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostRemarkIn(List<String> values) {
+            addCriterion("cost_remark in", values, "costRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostRemarkNotIn(List<String> values) {
+            addCriterion("cost_remark not in", values, "costRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostRemarkBetween(String value1, String value2) {
+            addCriterion("cost_remark between", value1, value2, "costRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andCostRemarkNotBetween(String value1, String value2) {
+            addCriterion("cost_remark not between", value1, value2, "costRemark");
             return (Criteria) this;
         }
 

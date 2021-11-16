@@ -50,6 +50,11 @@
         INNER JOIN produce_order_shop_sku poss ON po.id=poss.produce_order_id AND ss.`shop_sku_id`=poss.`shop_sku_id`) t
         GROUP BY shopSku
     </select>
-
+    <select id="existProduceOrderShopSkuNotSameSku"
+            resultType="java.lang.Boolean">
+        SELECT case count(0) when 0 then false else true end from produce_order_shop_sku poss where poss.produce_order_id=#{produceOrderId}
+        <if test="id != null ">AND poss.id!=#{id}</if>
+        and poss.shop_sku_id not in(select ss.shop_sku_id from shop_sku ss where ss.sku_id=(select sku_id from shop_sku ss where ss.shop_sku_id=#{shopSkuId}) )
+    </select>
 
 </mapper>

@@ -62,11 +62,16 @@
         <option value="3">生产完毕</option>
         <option value="0">作废</option>
     </select>
+    生产完成月份：
+    <input class="easyui-validatebox textbox" id="s_month">
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
     <a href="javascript:void(0)" onclick="showDialogImport('produceOrder')" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="width: 110px">导入生产单</a>
+
+    <a href="javascript:void(0)" onclick="generationCost()" class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'">月度成本核算</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 
@@ -103,6 +108,26 @@
                 <td>状态：</td>
                 <td>
                     <input class="easyui-textbox" type="text" name="statusName" readonly="readonly">
+                </td>
+            </tr>
+            <tr>
+                <td>布料成本：</td>
+                <td>
+                    <input class="easyui-numberbox" name="fabricCost" id="fabricCost" min="0"
+                           max="1000000"
+                           precision="2">
+                </td>
+                <td>辅料成本：</td>
+                <td>
+                    <input class="easyui-numberbox" name="auxiliaryMaterialCost" id="auxiliaryMaterialCost" min="0"
+                           max="1000000"
+                           precision="2">
+                </td>
+            </tr>
+            <tr>
+                <td>成本备注：</td>
+                <td colspan="3">
+                    <input class="easyui-textbox" type="text" name="costRemark" style="width: 90%">
                 </td>
             </tr>
             <tr>
@@ -282,8 +307,10 @@
 </div>
 </body>
 <script type="text/javascript">
-    // 初始化内容
-    bindShop();
+    $(function () {
+        initMonth('s_month');
+        bindShop();
+    })
 
     function bindShop() {
         $.post('${pageContext.request.contextPath }/shop/comboboxlist', {}, function (data) {
@@ -310,7 +337,8 @@
             shopSku: $("#s_shopSku").val(),
             sku: $("#s_sku").val(),
             status: $("#s_status").val(),
-            type: $("#s_type").val()
+            type: $("#s_type").val(),
+            month: $("#s_month").val()
         };
         return queryParams;
     }
@@ -344,6 +372,15 @@
                     {title: '批号', field: 'batchNumber', width: 140},
                     {title: '状态', field: 'statusName', width: 50},
                     {
+                        title: '成本核算', field: 'costStatus', width: 50, formatter: function (value, row, index) {
+                            if (value == 1) {
+                                return '已核算';
+                            } else if (value == 2) {
+                                return '未核算';
+                            }
+                        }
+                    },
+                    {
                         title: '生产类型', field: 'type', width: 80, formatter: function (value, row, index) {
                             if (value == 1) {
                                 return '手工生产单';
@@ -352,9 +389,40 @@
                             }
                         }
                     },
+                    {
+                        title: '布料成本', field: 'fabricCost', width: 66,
+                        formatter: function (value, row, rowIndex) {
+                            if (isEmpty(value)) {
+                                return '<input class="easyui-numberbox " min="0.01" precision="2" onchange="saveFabricCost(this,' + row.id + ')">';
+                            } else {
+                                return '<input class="easyui-numberbox" min="0.01" precision="2" value="' + value + '" onchange="saveFabricCost(this,' + row.id + ')">';
+                            }
+                        }
+                    },
+                    {
+                        title: '辅料成本', field: 'auxiliaryMaterialCost', width: 66,
+                        formatter: function (value, row, rowIndex) {
+                            if (isEmpty(value)) {
+                                return '<input class="easyui-numberbox " min="0" precision="2" onchange="saveAuxiliaryMaterialCost(this,' + row.id + ')">';
+                            } else {
+                                return '<input class="easyui-numberbox" min="0" precision="2" value="' + value + '" onchange="saveAuxiliaryMaterialCost(this,' + row.id + ')">';
+                            }
+                        }
+                    },
+                    {
+                        title: '成本备注', field: 'costRemark', width: 288,
+                        formatter: function (value, row, rowIndex) {
+                            if (isEmpty(value)) {
+                                return '<input class="easyui-textbox" style="width:100%"  onchange="saveProduceOrderCostRemark(this,' + row.id + ')">';
+                            } else {
+                                return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProduceOrderCostRemark(this,' + row.id + ')">';
+                            }
+                        }
+                    },
                     {title: '生产数量', field: 'productionQuantityTotal', width: 66},
                     {title: '创建时间', field: 'createTime', width: 180},
                     {title: '修改时间', field: 'updateTime', width: 180},
+                    {title: '生产完成时间', field: 'completionTime', width: 180},
                     {
                         title: '操作', field: 'deal', width: 200, formatter: function (value, row, index) {
                             var content = '<a href="javascript:void(0)" onclick="exportProduceOrderShopSkuById(' + row.id + ')" class="easyui-linkbutton" >导出店铺sku</a>';
@@ -364,6 +432,7 @@
                             return content;
                         }
                     },
+
                     {title: '店铺父sku', field: 'shopParentSkus', width: 150},
                     {title: '备注', field: 'remark', width: 180}
                 ]],
@@ -598,7 +667,7 @@
                 {
                     title: '打印标签', field: 'shopSkuId', width: 80,
                     formatter: function (value, row, index) {
-                        return '<a href="javascript:;" onclick="showPrintProductLabel(\'' + row.sku + '\','+row.preWarehousingQuantity+')" title="打印产品标签">打印标签</a>';
+                        return '<a href="javascript:;" onclick="showPrintProductLabel(\'' + row.sku + '\',' + row.preWarehousingQuantity + ')" title="打印产品标签">打印标签</a>';
                     }
                 },
 
@@ -844,6 +913,7 @@
             }
         });
     }
+
     function savePreWarehousingQuantity(input, id) {
         var preWarehousingQuantity = $(input).val();
         if (isEmpty(preWarehousingQuantity)) {
@@ -868,17 +938,77 @@
             }
         });
     }
-    function showPrintProductLabel(sku,preWarehousingQuantity){
+
+    function showPrintProductLabel(sku, preWarehousingQuantity) {
         if (isEmpty(sku)) {
             window.open("${pageContext.request.contextPath }/produceOrder/printProductLabel");
         } else {
-            if(isEmpty(preWarehousingQuantity)){
+            if (isEmpty(preWarehousingQuantity)) {
                 window.open("${pageContext.request.contextPath }/produceOrder/printProductLabel?sku=" + sku);
-            }else{
-                window.open("${pageContext.request.contextPath }/produceOrder/printProductLabel?sku=" + sku+"&preWarehousingQuantity="+preWarehousingQuantity);
+            } else {
+                window.open("${pageContext.request.contextPath }/produceOrder/printProductLabel?sku=" + sku + "&preWarehousingQuantity=" + preWarehousingQuantity);
             }
-         }
+        }
     }
 
+    function generationCost() {
+        var month = $("#s_month").val();
+        if (isEmpty(month)) {
+            $.messager.alert("提示", "请选择月份");
+            return;
+        }
+        $.post('${pageContext.request.contextPath }/produceOrder/generationCost', {
+            month: month
+        }, function (data) {
+            if (data.code == '200') {
+                //保存成功
+                $.messager.alert("提示", data.message);
+            } else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+
+    function saveProduceOrderCostRemark(input, id) {
+        var costRemark = $(input).val();
+        $.post('${pageContext.request.contextPath }/produceOrder/saveProduceOrderCostRemark', {
+            id: id,
+            remark: costRemark
+        }, function (data) {
+            if (data.code == '200') {
+                bindData();
+            } else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+
+    function saveFabricCost(input, id) {
+        var fabricCost = $(input).val();
+        $.post('${pageContext.request.contextPath }/produceOrder/saveFabricCost', {
+            id: id,
+            fabricCost: fabricCost
+        }, function (data) {
+            if (data.code == '200') {
+                bindData();
+            } else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+
+    function saveAuxiliaryMaterialCost(input, id) {
+        var auxiliaryMaterialCost = $(input).val();
+        $.post('${pageContext.request.contextPath }/produceOrder/saveAuxiliaryMaterialCost', {
+            id: id,
+            auxiliaryMaterialCost: auxiliaryMaterialCost
+        }, function (data) {
+            if (data.code == '200') {
+                bindData();
+            } else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
 </script>
 </html>

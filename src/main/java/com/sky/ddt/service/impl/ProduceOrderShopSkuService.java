@@ -118,7 +118,7 @@ public class ProduceOrderShopSkuService implements IProduceOrderShopSkuService {
             sbErroEntity.append(ProduceOrderShopSkuConstant.SHOP_SKU_SHOP_ERRO);
         } else {
             //判断生产单是否已经存在这个店铺sku
-            if (existsShopSku(params.getProduceOrderId(),params.getId(), shopSku.getShopSkuId())) {
+            if (existsShopSku(params.getProduceOrderId(), params.getId(), shopSku.getShopSkuId())) {
                 sbErroEntity.append(ProduceOrderShopSkuConstant.PRODUCE_ORDER_SHOP_SKU_EXIST);
             }
         }
@@ -128,6 +128,10 @@ public class ProduceOrderShopSkuService implements IProduceOrderShopSkuService {
         ProduceOrderShopSku produceOrderShopSku = new ProduceOrderShopSku();
         BeanUtils.copyProperties(params, produceOrderShopSku);
         produceOrderShopSku.setShopSkuId(shopSku.getShopSkuId());
+        //判断是否时相同产品sku的店铺sku
+        if (customProduceOrderShopSkuMapper.existProduceOrderShopSkuNotSameSku(produceOrderShopSku)) {
+            return BaseResponse.failMessage("生产单的店铺sku需要是同一个产品sku的");
+        }
         if (params.getId() == null) {
             produceOrderShopSku.setCreateTime(new Date());
             produceOrderShopSku.setCreateBy(dealUserId);
@@ -197,6 +201,7 @@ public class ProduceOrderShopSkuService implements IProduceOrderShopSkuService {
         if (list == null || list.size() == 0) {
             return BaseResponse.failMessage("导入的数据内容为空");
         }
+        Integer skuId = null;
         //遍历list导入信息
         StringBuilder sbErro = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
@@ -226,6 +231,11 @@ public class ProduceOrderShopSkuService implements IProduceOrderShopSkuService {
                         sbErroItem.append(",").append(ProduceOrderShopSkuConstant.SHOP_SKU_SHOP_ERRO);
                     } else {
                         map.put("shopSkuId", shopSku.getShopSkuId().toString());
+                        if (skuId == null) {
+                            skuId = shopSku.getSkuId();
+                        } else if (skuId.equals(shopSku.getSkuId())) {
+                            sbErroItem.append(",").append("店铺sku对应的产品sku必须为同一个");
+                        }
                     }
                 }
             }
@@ -304,17 +314,17 @@ public class ProduceOrderShopSkuService implements IProduceOrderShopSkuService {
      */
     @Override
     public BaseResponse saveProductionQuantity(SaveProductionQuantityRequest params, Integer currentUserId) {
-        ProduceOrderShopSku produceOrderShopSku=customProduceOrderShopSkuMapper.selectByPrimaryKey(params.getId());
-        if(produceOrderShopSku==null){
+        ProduceOrderShopSku produceOrderShopSku = customProduceOrderShopSkuMapper.selectByPrimaryKey(params.getId());
+        if (produceOrderShopSku == null) {
             return BaseResponse.failMessage(ProduceOrderShopSkuConstant.ID_NOT_EXIST);
         }
-        ProduceOrder produceOrder=produceOrderService.getProduceOrderById(produceOrderShopSku.getProduceOrderId());
+        ProduceOrder produceOrder = produceOrderService.getProduceOrderById(produceOrderShopSku.getProduceOrderId());
         if (produceOrder == null) {
             return BaseResponse.failMessage(ProduceOrderShopSkuConstant.PRODUCE_ORDER_ID_NOT_EXIST);
         } else if (!ProduceOrderConstant.StatusEnum.PENDING_STORAGE.getStatus().equals(produceOrder.getStatus())) {
             return BaseResponse.failMessage(ProduceOrderShopSkuConstant.PRODUCE_ORDER_NOT_ALLOW_WAREHOUSING);
         }
-        ProduceOrderShopSku produceOrderShopSkuUpdate=new ProduceOrderShopSku();
+        ProduceOrderShopSku produceOrderShopSkuUpdate = new ProduceOrderShopSku();
         produceOrderShopSkuUpdate.setId(params.getId());
         produceOrderShopSkuUpdate.setProductionQuantity(params.getProductionQuantity());
         produceOrderShopSkuUpdate.setUpdateBy(currentUserId);
@@ -333,17 +343,17 @@ public class ProduceOrderShopSkuService implements IProduceOrderShopSkuService {
 
     @Override
     public BaseResponse savePreWarehousingQuantity(SavePreWarehousingQuantityRequest params, Integer currentUserId) {
-        ProduceOrderShopSku produceOrderShopSku=customProduceOrderShopSkuMapper.selectByPrimaryKey(params.getId());
-        if(produceOrderShopSku==null){
+        ProduceOrderShopSku produceOrderShopSku = customProduceOrderShopSkuMapper.selectByPrimaryKey(params.getId());
+        if (produceOrderShopSku == null) {
             return BaseResponse.failMessage(ProduceOrderShopSkuConstant.ID_NOT_EXIST);
         }
-        ProduceOrder produceOrder=produceOrderService.getProduceOrderById(produceOrderShopSku.getProduceOrderId());
+        ProduceOrder produceOrder = produceOrderService.getProduceOrderById(produceOrderShopSku.getProduceOrderId());
         if (produceOrder == null) {
             return BaseResponse.failMessage(ProduceOrderShopSkuConstant.PRODUCE_ORDER_ID_NOT_EXIST);
         } else if (!ProduceOrderConstant.StatusEnum.PENDING_STORAGE.getStatus().equals(produceOrder.getStatus())) {
             return BaseResponse.failMessage(ProduceOrderShopSkuConstant.PRODUCE_ORDER_NOT_ALLOW_WAREHOUSING);
         }
-        ProduceOrderShopSku produceOrderShopSkuUpdate=new ProduceOrderShopSku();
+        ProduceOrderShopSku produceOrderShopSkuUpdate = new ProduceOrderShopSku();
         produceOrderShopSkuUpdate.setId(params.getId());
         produceOrderShopSkuUpdate.setPreWarehousingQuantity(params.getPreWarehousingQuantity());
         produceOrderShopSkuUpdate.setUpdateBy(currentUserId);

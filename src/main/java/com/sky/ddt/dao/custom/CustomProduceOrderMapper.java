@@ -1,8 +1,10 @@
 package com.sky.ddt.dao.custom;
 
 import com.sky.ddt.dao.generate.ProduceOrderMapper;
+import com.sky.ddt.dto.produceOrder.request.GenerationCostRequest;
 import com.sky.ddt.dto.produceOrder.request.ListProduceOrderRequest;
 import com.sky.ddt.dto.produceOrder.response.ListProduceOrderResponse;
+import com.sky.ddt.entity.ProduceOrder;
 
 import java.util.List;
 
@@ -20,4 +22,10 @@ public interface CustomProduceOrderMapper extends ProduceOrderMapper {
      * @date 2020/3/27 11:33
      */
     List<ListProduceOrderResponse> listProduceOrder(ListProduceOrderRequest listProduceOrderRequest);
+
+    List<ProduceOrder> listNotCostProductOrder(GenerationCostRequest params);
+
+    List<String> listNotCostSku(GenerationCostRequest params);
+
+    List<String> listNotLabourCostProduct(GenerationCostRequest params);
 }

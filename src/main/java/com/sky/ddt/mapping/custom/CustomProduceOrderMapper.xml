@@ -1,35 +1,78 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.sky.ddt.dao.custom.CustomProduceOrderMapper" >
-    <resultMap id="ListProduceOrderMap" type="com.sky.ddt.dto.produceOrder.response.ListProduceOrderResponse" extends="com.sky.ddt.dao.generate.ProduceOrderMapper.BaseResultMap">
-        <result column="shop_name" property="shopName" />
-        <result column="productionQuantityTotal" property="productionQuantityTotal" />
-        <result column="shopParentSkus" property="shopParentSkus" />
+<mapper namespace="com.sky.ddt.dao.custom.CustomProduceOrderMapper">
+    <resultMap id="ListProduceOrderMap" type="com.sky.ddt.dto.produceOrder.response.ListProduceOrderResponse"
+               extends="com.sky.ddt.dao.generate.ProduceOrderMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+        <result column="productionQuantityTotal" property="productionQuantityTotal"/>
+        <result column="shopParentSkus" property="shopParentSkus"/>
     </resultMap>
-    <select id="listProduceOrder" parameterType="com.sky.ddt.dto.produceOrder.request.ListProduceOrderRequest" resultMap="ListProduceOrderMap">
+    <select id="listProduceOrder" parameterType="com.sky.ddt.dto.produceOrder.request.ListProduceOrderRequest"
+            resultMap="ListProduceOrderMap">
         select
-        <include refid="com.sky.ddt.dao.generate.ProduceOrderMapper.Base_Column_List" />
+        <include refid="com.sky.ddt.dao.generate.ProduceOrderMapper.Base_Column_List"/>
         ,(select s.shop_name from shop s where po.shop_id=s.shop_id) shop_name,
-        ifnull((select sum(poss.production_Quantity) from produce_order_shop_sku poss where poss.produce_order_id=po.id),0) productionQuantityTotal,
-        (SELECT GROUP_CONCAT(DISTINCT shop_parent_sku) shopParentSkus FROM `produce_order_shop_sku` poss,`shop_sku` ss WHERE poss.produce_order_id=po.id AND poss.shop_sku_id=ss.shop_sku_id AND shop_parent_sku IS NOT NULL AND shop_parent_sku!='') shopParentSkus
+        ifnull((select sum(poss.production_Quantity) from produce_order_shop_sku poss where
+        poss.produce_order_id=po.id),0) productionQuantityTotal,
+        (SELECT GROUP_CONCAT(DISTINCT shop_parent_sku) shopParentSkus FROM `produce_order_shop_sku` poss,`shop_sku` ss
+        WHERE poss.produce_order_id=po.id AND poss.shop_sku_id=ss.shop_sku_id AND shop_parent_sku IS NOT NULL AND
+        shop_parent_sku!='') shopParentSkus
 
         from produce_order po
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 <if test="shopId != null">and shop_id =#{shopId}</if>
-                <if test="productionTimeStart != null ">and  production_time<![CDATA[>=]]> #{productionTimeStart}</if>
-                <if test="productionTimeEnd != null ">and  production_time <![CDATA[<=]]> #{productionTimeEnd}</if>
-                <if test="batchNumber != null and batchNumber != '' ">and  batch_number like concat('%',#{batchNumber},'%')</if>
+                <if test="productionTimeStart != null ">and production_time<![CDATA[>=]]> #{productionTimeStart}</if>
+                <if test="productionTimeEnd != null ">and production_time <![CDATA[<=]]> #{productionTimeEnd}</if>
+                <if test="batchNumber != null and batchNumber != '' ">and batch_number like
+                    concat('%',#{batchNumber},'%')
+                </if>
                 <if test="shopSku != null and shopSku != '' ">
-                    and exists (select 1 from produce_order_shop_sku poss,shop_sku ss where poss.produce_order_id=po.id and poss.shop_sku_id=ss.shop_sku_id and ss.shop_sku like concat('%',#{shopSku},'%'))
+                    and exists (select 1 from produce_order_shop_sku poss,shop_sku ss where poss.produce_order_id=po.id
+                    and poss.shop_sku_id=ss.shop_sku_id and ss.shop_sku like concat('%',#{shopSku},'%'))
                 </if>
                 <if test="sku != null and sku != '' ">
-                    and exists (select 1 from produce_order_shop_sku poss,shop_sku ss,sku s where poss.produce_order_id=po.id and poss.shop_sku_id=ss.shop_sku_id and ss.sku_id=s.sku_id and s.sku like concat('%',#{sku},'%'))
+                    and exists (select 1 from produce_order_shop_sku poss,shop_sku ss,sku s where
+                    poss.produce_order_id=po.id and poss.shop_sku_id=ss.shop_sku_id and ss.sku_id=s.sku_id and s.sku
+                    like concat('%',#{sku},'%'))
                 </if>
-                <if test="status != null">and  po.status=#{status}</if>
-                <if test="type != null">and  po.type=#{type}</if>
+                <if test="status != null">and po.status=#{status}</if>
+                <if test="type != null">and po.type=#{type}</if>
+                <if test="monthDate != null ">and po.completion_time>=#{monthDate} and po.completion_time<![CDATA[ < ]]>
+                    date_add(NOW(), interval 1 MONTH)
+                </if>
             </trim>
         </where>
         order by po.batch_number desc
     </select>
+    <select id="listNotCostProductOrder" parameterType="com.sky.ddt.dto.produceOrder.request.GenerationCostRequest"
+            resultMap="com.sky.ddt.dao.generate.ProduceOrderMapper.BaseResultMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.ProduceOrderMapper.Base_Column_List"/>
+        from produce_order po
+        where po.completion_time>=#{monthDate} and po.completion_time<![CDATA[ < ]]>
+        date_add(NOW(), interval 1 MONTH) and po.status=3 and po.cost_status=0 and(po.fabric_cost is null or auxiliary_material_cost is null)
+        order by po.batch_number desc
+    </select>
+    <select id="listNotCostSku" parameterType="com.sky.ddt.dto.produceOrder.request.GenerationCostRequest"
+            resultType="java.lang.String">
+        select
+        sku.sku
+        from produce_order po,produce_order_shop_sku poss,shop_sku ss,sku
+        where po.id=poss.produce_order_id and poss.shop_sku_id=ss.shop_sku_id and ss.sku_id=sku.sku_id
+        and po.completion_time>=#{monthDate} and po.completion_time<![CDATA[ < ]]>
+        date_add(NOW(), interval 1 MONTH)  and po.status=3 and po.cost_status=0 and (sku.cost_price is null or sku.cost_price>=999)
+        group by sku.sku
+    </select>
+    <select id="listNotLabourCostProduct" parameterType="com.sky.ddt.dto.produceOrder.request.GenerationCostRequest"
+            resultType="java.lang.String">
+        select
+        p.product_code
+        from produce_order po,produce_order_shop_sku poss,shop_sku ss,sku,product p
+        where po.id=poss.produce_order_id and poss.shop_sku_id=ss.shop_sku_id and ss.sku_id=sku.sku_id and sku.product_id=p.product_id
+        and po.completion_time>=#{monthDate} and po.completion_time<![CDATA[ < ]]>
+        date_add(NOW(), interval 1 MONTH)  and po.status=3 and po.cost_status=0 and p.labour_cost is null
+        group by p.product_code
+    </select>
+
 </mapper>

@@ -1,5 +1,6 @@
 package com.sky.ddt.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class ProduceOrder {
@@ -13,9 +14,19 @@ public class ProduceOrder {
 
     private Integer status;
 
+    private Date completionTime;
+
+    private Integer costStatus;
+
     private Integer type;
 
     private Integer entityId;
+
+    private BigDecimal fabricCost;
+
+    private BigDecimal auxiliaryMaterialCost;
+
+    private String costRemark;
 
     private String remark;
 
@@ -67,6 +78,22 @@ public class ProduceOrder {
         this.status = status;
     }
 
+    public Date getCompletionTime() {
+        return completionTime;
+    }
+
+    public void setCompletionTime(Date completionTime) {
+        this.completionTime = completionTime;
+    }
+
+    public Integer getCostStatus() {
+        return costStatus;
+    }
+
+    public void setCostStatus(Integer costStatus) {
+        this.costStatus = costStatus;
+    }
+
     public Integer getType() {
         return type;
     }
@@ -81,6 +108,30 @@ public class ProduceOrder {
 
     public void setEntityId(Integer entityId) {
         this.entityId = entityId;
+    }
+
+    public BigDecimal getFabricCost() {
+        return fabricCost;
+    }
+
+    public void setFabricCost(BigDecimal fabricCost) {
+        this.fabricCost = fabricCost;
+    }
+
+    public BigDecimal getAuxiliaryMaterialCost() {
+        return auxiliaryMaterialCost;
+    }
+
+    public void setAuxiliaryMaterialCost(BigDecimal auxiliaryMaterialCost) {
+        this.auxiliaryMaterialCost = auxiliaryMaterialCost;
+    }
+
+    public String getCostRemark() {
+        return costRemark;
+    }
+
+    public void setCostRemark(String costRemark) {
+        this.costRemark = costRemark == null ? null : costRemark.trim();
     }
 
     public String getRemark() {

@@ -2,8 +2,7 @@ package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dto.factoryProductionOrder.response.ShopSkuProductionQuantityDto;
-import com.sky.ddt.dto.produceOrder.request.ListProduceOrderRequest;
-import com.sky.ddt.dto.produceOrder.request.SaveProduceOrderRequest;
+import com.sky.ddt.dto.produceOrder.request.*;
 import com.sky.ddt.dto.produceOrder.response.ListProduceOrderResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.FactoryProductionOrder;
@@ -98,4 +97,12 @@ public interface IProduceOrderService {
      * @date 2020/11/2 9:16
      */
     void createProduceOrder(FactoryProductionOrder factoryProductionOrder,  Integer dealUserId);
+
+    BaseResponse saveProduceOrderCostRemark(SaveProduceOrderCostRemarkRequest params);
+
+    BaseResponse saveFabricCost(SaveProduceOrderFabricCostRequest params);
+
+    BaseResponse saveAuxiliaryMaterialCost(SaveProduceOrderAuxiliaryMaterialCostRequest params);
+
+    BaseResponse generationCost(GenerationCostRequest params);
 }

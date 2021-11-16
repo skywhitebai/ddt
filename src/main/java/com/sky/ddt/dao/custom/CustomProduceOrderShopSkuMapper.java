@@ -5,6 +5,7 @@ import com.sky.ddt.dto.produceOrderShopSku.request.ListProduceOrderShopSkuProduc
 import com.sky.ddt.dto.produceOrderShopSku.request.ListProduceOrderShopSkuRequest;
 import com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuProductionQuantityResponse;
 import com.sky.ddt.dto.produceOrderShopSku.response.ListProduceOrderShopSkuResponse;
+import com.sky.ddt.entity.ProduceOrderShopSku;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -25,4 +26,6 @@ public interface CustomProduceOrderShopSkuMapper extends ProduceOrderShopSkuMapp
     List<ListProduceOrderShopSkuResponse> listProduceOrderShopSku(ListProduceOrderShopSkuRequest listProduceOrderShopSkuRequest);
 
     List<ListProduceOrderShopSkuProductionQuantityResponse> listProduceOrderShopSkuProductionQuantity(ListProduceOrderShopSkuProductionQuantityRequest params);
+
+    Boolean existProduceOrderShopSkuNotSameSku(ProduceOrderShopSku produceOrderShopSku);
 }

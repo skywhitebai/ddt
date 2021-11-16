@@ -7,8 +7,13 @@
     <result column="batch_number" jdbcType="VARCHAR" property="batchNumber" />
     <result column="shop_id" jdbcType="INTEGER" property="shopId" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="completion_time" jdbcType="TIMESTAMP" property="completionTime" />
+    <result column="cost_status" jdbcType="INTEGER" property="costStatus" />
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="entity_id" jdbcType="INTEGER" property="entityId" />
+    <result column="fabric_cost" jdbcType="DECIMAL" property="fabricCost" />
+    <result column="auxiliary_material_cost" jdbcType="DECIMAL" property="auxiliaryMaterialCost" />
+    <result column="cost_remark" jdbcType="VARCHAR" property="costRemark" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
@@ -74,7 +79,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, production_time, batch_number, shop_id, status, type, entity_id, remark, create_time, 
+    id, production_time, batch_number, shop_id, status, completion_time, cost_status, 
+    type, entity_id, fabric_cost, auxiliary_material_cost, cost_remark, remark, create_time, 
     create_by, update_time, update_by
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.ProduceOrderExample" resultMap="BaseResultMap">
@@ -108,24 +114,25 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.sky.ddt.entity.ProduceOrder">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into produce_order (production_time, batch_number, shop_id, 
-      status, type, entity_id, 
+    insert into produce_order (id, production_time, batch_number, 
+      shop_id, status, completion_time, 
+      cost_status, type, entity_id, 
+      fabric_cost, auxiliary_material_cost, cost_remark, 
       remark, create_time, create_by, 
       update_time, update_by)
-    values (#{productionTime,jdbcType=TIMESTAMP}, #{batchNumber,jdbcType=VARCHAR}, #{shopId,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{entityId,jdbcType=INTEGER}, 
+    values (#{id,jdbcType=INTEGER}, #{productionTime,jdbcType=TIMESTAMP}, #{batchNumber,jdbcType=VARCHAR}, 
+      #{shopId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{completionTime,jdbcType=TIMESTAMP}, 
+      #{costStatus,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{entityId,jdbcType=INTEGER}, 
+      #{fabricCost,jdbcType=DECIMAL}, #{auxiliaryMaterialCost,jdbcType=DECIMAL}, #{costRemark,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.ProduceOrder">
-    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into produce_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
       <if test="productionTime != null">
         production_time,
       </if>
@@ -138,11 +145,26 @@
       <if test="status != null">
         status,
       </if>
+      <if test="completionTime != null">
+        completion_time,
+      </if>
+      <if test="costStatus != null">
+        cost_status,
+      </if>
       <if test="type != null">
         type,
       </if>
       <if test="entityId != null">
         entity_id,
+      </if>
+      <if test="fabricCost != null">
+        fabric_cost,
+      </if>
+      <if test="auxiliaryMaterialCost != null">
+        auxiliary_material_cost,
+      </if>
+      <if test="costRemark != null">
+        cost_remark,
       </if>
       <if test="remark != null">
         remark,
@@ -161,6 +183,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
       <if test="productionTime != null">
         #{productionTime,jdbcType=TIMESTAMP},
       </if>
@@ -173,11 +198,26 @@
       <if test="status != null">
         #{status,jdbcType=INTEGER},
       </if>
+      <if test="completionTime != null">
+        #{completionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="costStatus != null">
+        #{costStatus,jdbcType=INTEGER},
+      </if>
       <if test="type != null">
         #{type,jdbcType=INTEGER},
       </if>
       <if test="entityId != null">
         #{entityId,jdbcType=INTEGER},
+      </if>
+      <if test="fabricCost != null">
+        #{fabricCost,jdbcType=DECIMAL},
+      </if>
+      <if test="auxiliaryMaterialCost != null">
+        #{auxiliaryMaterialCost,jdbcType=DECIMAL},
+      </if>
+      <if test="costRemark != null">
+        #{costRemark,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -220,11 +260,26 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
+      <if test="record.completionTime != null">
+        completion_time = #{record.completionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.costStatus != null">
+        cost_status = #{record.costStatus,jdbcType=INTEGER},
+      </if>
       <if test="record.type != null">
         type = #{record.type,jdbcType=INTEGER},
       </if>
       <if test="record.entityId != null">
         entity_id = #{record.entityId,jdbcType=INTEGER},
+      </if>
+      <if test="record.fabricCost != null">
+        fabric_cost = #{record.fabricCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.auxiliaryMaterialCost != null">
+        auxiliary_material_cost = #{record.auxiliaryMaterialCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.costRemark != null">
+        cost_remark = #{record.costRemark,jdbcType=VARCHAR},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -253,8 +308,13 @@
       batch_number = #{record.batchNumber,jdbcType=VARCHAR},
       shop_id = #{record.shopId,jdbcType=INTEGER},
       status = #{record.status,jdbcType=INTEGER},
+      completion_time = #{record.completionTime,jdbcType=TIMESTAMP},
+      cost_status = #{record.costStatus,jdbcType=INTEGER},
       type = #{record.type,jdbcType=INTEGER},
       entity_id = #{record.entityId,jdbcType=INTEGER},
+      fabric_cost = #{record.fabricCost,jdbcType=DECIMAL},
+      auxiliary_material_cost = #{record.auxiliaryMaterialCost,jdbcType=DECIMAL},
+      cost_remark = #{record.costRemark,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER},
@@ -279,11 +339,26 @@
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
+      <if test="completionTime != null">
+        completion_time = #{completionTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="costStatus != null">
+        cost_status = #{costStatus,jdbcType=INTEGER},
+      </if>
       <if test="type != null">
         type = #{type,jdbcType=INTEGER},
       </if>
       <if test="entityId != null">
         entity_id = #{entityId,jdbcType=INTEGER},
+      </if>
+      <if test="fabricCost != null">
+        fabric_cost = #{fabricCost,jdbcType=DECIMAL},
+      </if>
+      <if test="auxiliaryMaterialCost != null">
+        auxiliary_material_cost = #{auxiliaryMaterialCost,jdbcType=DECIMAL},
+      </if>
+      <if test="costRemark != null">
+        cost_remark = #{costRemark,jdbcType=VARCHAR},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -309,8 +384,13 @@
       batch_number = #{batchNumber,jdbcType=VARCHAR},
       shop_id = #{shopId,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
+      completion_time = #{completionTime,jdbcType=TIMESTAMP},
+      cost_status = #{costStatus,jdbcType=INTEGER},
       type = #{type,jdbcType=INTEGER},
       entity_id = #{entityId,jdbcType=INTEGER},
+      fabric_cost = #{fabricCost,jdbcType=DECIMAL},
+      auxiliary_material_cost = #{auxiliaryMaterialCost,jdbcType=DECIMAL},
+      cost_remark = #{costRemark,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER},

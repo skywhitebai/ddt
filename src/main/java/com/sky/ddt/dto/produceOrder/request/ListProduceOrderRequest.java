@@ -23,4 +23,6 @@ public class ListProduceOrderRequest extends DataGridRequest{
     String sku;
     Integer status;
     Integer type;
+    String month;
+    Date monthDate;
 }

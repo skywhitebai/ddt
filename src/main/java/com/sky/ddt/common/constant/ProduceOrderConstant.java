@@ -23,6 +23,7 @@ public class ProduceOrderConstant {
     public static final String EXIST_PENDING_STORAGE_WAREHOUSING_ORDER_NOT_ALLOW_FINISHED_PRODUCTION = "生产单存在待入库的入库单不允许生产完毕";
     public static final String SHOP_SKU_EMPTY = "店铺sku不能为空";
     public static final String SHOP_SKU_NOT_EXIST = "店铺sku不存在";
+    public static final String COST_REMARK_TOO_LONG = "成本备注长度不能超过500";
 
     @Getter
     public enum StatusEnum {
@@ -81,6 +82,36 @@ public class ProduceOrderConstant {
             for (TypeEnum typeEnum : TypeEnum.values()) {
                 if (typeEnum.type.equals(type)) {
                     return typeEnum.typeName;
+                }
+            }
+            return null;
+        }
+    }
+    @Getter
+    public enum CostStatusEnum {
+        NOT_CALCULATED(0, "未计算"),
+        CALCULATED(1, "已计算"),;
+        Integer status;
+        String statusName;
+
+        CostStatusEnum(Integer status, String statusName) {
+            this.status = status;
+            this.statusName = statusName;
+        }
+
+        public static boolean contains(Integer status) {
+            for (CostStatusEnum statusEnum : CostStatusEnum.values()) {
+                if (statusEnum.getStatus().equals(status)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static String getStatusName(Integer status) {
+            for (CostStatusEnum statusEnum : CostStatusEnum.values()) {
+                if (statusEnum.getStatus().equals(status)) {
+                    return statusEnum.statusName;
                 }
             }
             return null;

@@ -7,10 +7,8 @@ import com.sky.ddt.common.constant.ProduceOrderShopSkuConstant;
 import com.sky.ddt.common.constant.SbErroEntity;
 import com.sky.ddt.dao.custom.CustomProduceOrderMapper;
 import com.sky.ddt.dao.custom.CustomProduceOrderShopSkuMapper;
-import com.sky.ddt.dto.factoryProductionOrder.response.ShopSkuProductionQuantityDto;
 import com.sky.ddt.dto.factoryProductionOrderShopSku.response.ListFactoryProductionOrderShopSkuResponse;
-import com.sky.ddt.dto.produceOrder.request.ListProduceOrderRequest;
-import com.sky.ddt.dto.produceOrder.request.SaveProduceOrderRequest;
+import com.sky.ddt.dto.produceOrder.request.*;
 import com.sky.ddt.dto.produceOrder.response.ListProduceOrderResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.*;
@@ -113,6 +111,7 @@ public class ProduceOrderService implements IProduceOrderService {
             produceOrder.setProductionTime(new Date());
             produceOrder.setStatus(ProduceOrderConstant.StatusEnum.PENDING_STORAGE.getStatus());
             produceOrder.setType(ProduceOrderConstant.TypeEnum.MANUAL.getType());
+            produceOrder.setCostStatus(ProduceOrderConstant.CostStatusEnum.NOT_CALCULATED.getStatus());
             produceOrder.setCreateBy(dealUserId);
             produceOrder.setCreateTime(new Date());
             customProduceOrderMapper.insertSelective(produceOrder);
@@ -248,6 +247,7 @@ public class ProduceOrderService implements IProduceOrderService {
         ProduceOrder produceOrderUpdate = new ProduceOrder();
         produceOrderUpdate.setId(id);
         produceOrderUpdate.setStatus(ProduceOrderConstant.StatusEnum.FINISHED_PRODUCTION.getStatus());
+        produceOrderUpdate.setCompletionTime(new Date());
         produceOrderUpdate.setUpdateTime(new Date());
         produceOrderUpdate.setUpdateBy(dealUserId);
         customProduceOrderMapper.updateByPrimaryKeySelective(produceOrderUpdate);
@@ -350,23 +350,107 @@ public class ProduceOrderService implements IProduceOrderService {
 
     /**
      * @param factoryProductionOrder
-     *@param dealUserId  @return
+     * @param dealUserId             @return
      * @description 通过工厂生产单创建生产单
      * @author baixueping
      * @date 2020/11/2 9:16
      */
     @Override
     public void createProduceOrder(FactoryProductionOrder factoryProductionOrder, Integer dealUserId) {
-        List<ListFactoryProductionOrderShopSkuResponse> list=factoryProductionOrderShopSkuService.listFactoryProductionOrderShopSku(factoryProductionOrder.getId());
+        List<ListFactoryProductionOrderShopSkuResponse> list = factoryProductionOrderShopSkuService.listFactoryProductionOrderShopSku(factoryProductionOrder.getId());
         Map<String, List<ListFactoryProductionOrderShopSkuResponse>> collect = list.stream()
                 .collect(Collectors.groupingBy(ListFactoryProductionOrderShopSkuResponse::getShopParentSku));
         collect.forEach((key, value) -> {
-            createProduceOrder(factoryProductionOrder,value,dealUserId);
+            createProduceOrder(factoryProductionOrder, value, dealUserId);
         });
     }
 
+    @Override
+    public BaseResponse saveProduceOrderCostRemark(SaveProduceOrderCostRemarkRequest params) {
+        ProduceOrder produceOrder = customProduceOrderMapper.selectByPrimaryKey(params.getId());
+        if (produceOrder == null) {
+            return BaseResponse.failMessage("id不存在");
+        }
+        if(ProduceOrderConstant.CostStatusEnum.CALCULATED.getStatus().equals(produceOrder.getCostStatus())){
+            return BaseResponse.failMessage("成本已核算不允许修改");
+        }
+        ProduceOrder produceOrderNew=new ProduceOrder();
+        produceOrderNew.setId(params.getId());
+        produceOrderNew.setCostRemark(params.getCostRemark());
+        produceOrderNew.setUpdateTime(new Date());
+        customProduceOrderMapper.updateByPrimaryKeySelective(produceOrderNew);
+        return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse saveFabricCost(SaveProduceOrderFabricCostRequest params) {
+        ProduceOrder produceOrder = customProduceOrderMapper.selectByPrimaryKey(params.getId());
+        if (produceOrder == null) {
+            return BaseResponse.failMessage("id不存在");
+        }
+        if(ProduceOrderConstant.CostStatusEnum.CALCULATED.getStatus().equals(produceOrder.getCostStatus())){
+            return BaseResponse.failMessage("成本已核算不允许修改");
+        }
+        ProduceOrder produceOrderNew=new ProduceOrder();
+        produceOrderNew.setId(params.getId());
+        produceOrderNew.setFabricCost(params.getFabricCost());
+        produceOrderNew.setUpdateTime(new Date());
+        customProduceOrderMapper.updateByPrimaryKeySelective(produceOrderNew);
+        return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse saveAuxiliaryMaterialCost(SaveProduceOrderAuxiliaryMaterialCostRequest params) {
+        ProduceOrder produceOrder = customProduceOrderMapper.selectByPrimaryKey(params.getId());
+        if (produceOrder == null) {
+            return BaseResponse.failMessage("id不存在");
+        }
+        if(ProduceOrderConstant.CostStatusEnum.CALCULATED.getStatus().equals(produceOrder.getCostStatus())){
+            return BaseResponse.failMessage("成本已核算不允许修改");
+        }
+        ProduceOrder produceOrderNew=new ProduceOrder();
+        produceOrderNew.setId(params.getId());
+        produceOrderNew.setAuxiliaryMaterialCost(params.getAuxiliaryMaterialCost());
+        produceOrderNew.setUpdateTime(new Date());
+        customProduceOrderMapper.updateByPrimaryKeySelective(produceOrderNew);
+        return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse generationCost(GenerationCostRequest params) {
+        //校验参数
+        if(!StringUtils.isEmpty(params.getMonth())){
+            String monthStr = params.getMonth() + "-01";
+            Date monthDate = DateUtil.strToDate(monthStr);
+            if (monthDate!= null) {
+                params.setMonthDate(monthDate);
+            }else{
+                return BaseResponse.failMessage("月份错误");
+            }
+        }
+        //校验当月已完成未核算生产单是否有未填写成本的
+        List<ProduceOrder> notCostProduceOrderList=customProduceOrderMapper.listNotCostProductOrder(params);
+        if(!CollectionUtils.isEmpty(notCostProduceOrderList)){
+            String produceOrderBatchNumberS=notCostProduceOrderList.stream().map(item->item.getBatchNumber()).collect(Collectors.joining(","));
+            return BaseResponse.failMessage("存在没有布料成本的生产单:"+produceOrderBatchNumberS);
+        }
+        //校验需要生成的产品sku是否有成本大于等于999的或者没有工价的
+        List<String> notCostSkuList= customProduceOrderMapper.listNotCostSku(params);
+        if(!CollectionUtils.isEmpty(notCostSkuList)){
+            String skus=notCostSkuList.stream().collect(Collectors.joining(","));
+            return BaseResponse.failMessage("产品sku成本价错误:"+skus);
+        }
+        List<String> notLabourCostProductList=customProduceOrderMapper.listNotLabourCostProduct(params);
+        if(!CollectionUtils.isEmpty(notLabourCostProductList)){
+            String productCodes=notLabourCostProductList.stream().collect(Collectors.joining(","));
+            return BaseResponse.failMessage("产品工价不存在:"+productCodes);
+        }
+        //生成成本价
+        return null;
+    }
+
     private void createProduceOrder(FactoryProductionOrder factoryProductionOrder, List<ListFactoryProductionOrderShopSkuResponse> listFactoryProductionOrderShopSkuResponseList, Integer dealUserId) {
-        ProduceOrder produceOrder=new ProduceOrder();
+        ProduceOrder produceOrder = new ProduceOrder();
         produceOrder.setShopId(factoryProductionOrder.getShopId());
         produceOrder.setEntityId(factoryProductionOrder.getId());
         produceOrder.setBatchNumber(getBatchNumber());
