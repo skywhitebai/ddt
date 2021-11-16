@@ -89,7 +89,7 @@
     <select id="listSkuCostPriceInfo" parameterType="com.sky.ddt.dto.produceOrder.request.GenerationCostRequest"
             resultType="com.sky.ddt.dto.produceOrder.request.SkuCostPriceInfo">
 select
-        sku.sku_id skuId,sku.cost_price costPrice,p.labour_cost labourCost,(SUM(inventory_quantity)+ SUM(mfn_fulfillable_quantity))quantity
+        sku.sku_id skuId,sku.cost_price costPrice,p.labour_cost labourCost,ifnull((SUM(inventory_quantity)+ SUM(mfn_fulfillable_quantity)),0)quantity
         from produce_order po,produce_order_shop_sku poss,shop_sku ss,sku,product p,fba_import fi
         where po.id=poss.produce_order_id and poss.shop_sku_id=ss.shop_sku_id and ss.shop_sku_id=fi.shop_sku_id
         AND ss.sku_id=sku.sku_id and sku.product_id=p.product_id

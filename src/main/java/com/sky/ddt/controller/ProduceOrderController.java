@@ -113,6 +113,6 @@ public class ProduceOrderController extends SuperController {
     @ResponseBody
     @MenuAnnotation("produceOrder/index")
     public BaseResponse generationCost(@Validated GenerationCostRequest params) {
-        return produceOrderService.generationCost(params);
+        return produceOrderService.generationCost(params,getCurrentUserId());
     }
 }

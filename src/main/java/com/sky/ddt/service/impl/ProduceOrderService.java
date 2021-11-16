@@ -5,8 +5,10 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.ProduceOrderConstant;
 import com.sky.ddt.common.constant.ProduceOrderShopSkuConstant;
 import com.sky.ddt.common.constant.SbErroEntity;
+import com.sky.ddt.common.constant.SkuCostPriceHisConstant;
 import com.sky.ddt.dao.custom.CustomProduceOrderMapper;
 import com.sky.ddt.dao.custom.CustomProduceOrderShopSkuMapper;
+import com.sky.ddt.dao.custom.CustomSkuMapper;
 import com.sky.ddt.dto.factoryProductionOrderShopSku.response.ListFactoryProductionOrderShopSkuResponse;
 import com.sky.ddt.dto.produceOrder.request.*;
 import com.sky.ddt.dto.produceOrder.response.ListProduceOrderResponse;
@@ -23,10 +25,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,6 +50,10 @@ public class ProduceOrderService implements IProduceOrderService {
     CustomProduceOrderShopSkuMapper customProduceOrderShopSkuMapper;
     @Autowired
     IFactoryProductionOrderShopSkuService factoryProductionOrderShopSkuService;
+    @Autowired
+    CustomSkuMapper customSkuMapper;
+    @Autowired
+    ISkuCostPriceHisService skuCostPriceHisService;
 
     /**
      * @param listProduceOrderRequest@return
@@ -418,7 +422,7 @@ public class ProduceOrderService implements IProduceOrderService {
     }
 
     @Override
-    public BaseResponse generationCost(GenerationCostRequest params) {
+    public BaseResponse generationCost(GenerationCostRequest params, Integer currentUserId) {
         //校验参数
         if (!StringUtils.isEmpty(params.getMonth())) {
             String monthStr = params.getMonth() + "-01";
@@ -452,16 +456,61 @@ public class ProduceOrderService implements IProduceOrderService {
             return BaseResponse.failMessage("没有未核算的生产单");
         }
         //查询当月生产单和产品sku数量对照关系
-        List<ProduceOrderSkuInfo> produceOrderSkuInfos=customProduceOrderMapper.listProduceOrderSkuInfo(params);
+        List<ProduceOrderSkuInfo> produceOrderSkuInfos = customProduceOrderMapper.listProduceOrderSkuInfo(params);
         //查询当月已完成未核算生产单对应的产品sku
-        List<SkuCostPriceInfo> skuCostPriceInfos =customProduceOrderMapper.listSkuCostPriceInfo(params);
+        List<SkuCostPriceInfo> skuCostPriceInfos = customProduceOrderMapper.listSkuCostPriceInfo(params);
         //计算每个sku对应的成本价
-        Map<Integer, GenerationCostInfo> map = new HashMap<>();
+        Map<Integer, GenerationCostInfo> generationCostInfoHashMap = new HashMap<>();
+        //遍历生成产品sku价格和数量信息
         for (ProduceOrder produceOrder :
                 produceOrders) {
             List<ProduceOrderSkuInfo> produceOrderShopSkuList = produceOrderSkuInfos.stream().filter(item -> item.getProduceOrderId().equals(produceOrder.getId())).collect(Collectors.toList());
+            Integer quantity = produceOrderShopSkuList.stream().mapToInt(item -> item.getQuantity()).sum();
+            BigDecimal costTotal = MathUtil.addBigDecimal(produceOrder.getAuxiliaryMaterialCost(), produceOrder.getFabricCost());
+            BigDecimal costPre = MathUtil.divide(costTotal, quantity, 2).add(new BigDecimal(0.5));
+            for (ProduceOrderSkuInfo produceOrderSkuInfo : produceOrderShopSkuList) {
+                SkuCostPriceInfo skuCostPriceInfo = getSkuCostPriceInfo(skuCostPriceInfos, produceOrderSkuInfo.getSkuId());
+                BigDecimal cost =MathUtil.addBigDecimal(costPre,skuCostPriceInfo.getLabourPrice());
+                cost=MathUtil.divide(cost, new BigDecimal(0.85), 2);
+                BigDecimal costSum=MathUtil.multiply(cost,produceOrderSkuInfo.getQuantity(),2);
+                GenerationCostInfo generationCostInfo=getgenerationCostInfo(produceOrderSkuInfo.getSkuId(),generationCostInfoHashMap);
+                generationCostInfo.setCostPrice(MathUtil.addBigDecimal(costSum,generationCostInfo.getCostPrice()));
+                generationCostInfo.setQuantity(generationCostInfo.getQuantity()+produceOrderSkuInfo.getQuantity());
+            }
+        }
+        //计算价格
+        for (Integer skuId:
+                generationCostInfoHashMap.keySet()) {
+            GenerationCostInfo generationCostInfo=generationCostInfoHashMap.get(skuId);
+            SkuCostPriceInfo skuCostPriceInfo = getSkuCostPriceInfo(skuCostPriceInfos, skuId);
+            BigDecimal costTotal=MathUtil.addBigDecimal(generationCostInfo.getCostPrice(),MathUtil.multiply(skuCostPriceInfo.getCostPrice(),skuCostPriceInfo.getQuantity(),2));
+            BigDecimal costPrice=MathUtil.divide(costTotal,(generationCostInfo.getQuantity()+skuCostPriceInfo.getQuantity()),2);
+            Sku sku=new Sku();
+            sku.setSkuId(skuId);
+            sku.setCostPrice(costPrice);
+            sku.setUpdateTime(new Date());
+            sku.setUpdateBy(currentUserId);
+            customSkuMapper.updateByPrimaryKeySelective(sku);
+            skuCostPriceHisService.saveSkuCostPriceHis(skuId,skuCostPriceInfo.getCostPrice(),costPrice, SkuCostPriceHisConstant.TypeEnum.PRODUCE_ORDER,currentUserId);
+        }
+        return BaseResponse.success();
+    }
 
-            //BigDecimal
+    private GenerationCostInfo getgenerationCostInfo(Integer skuId, Map<Integer, GenerationCostInfo> generationCostInfoHashMap) {
+        GenerationCostInfo generationCostInfo=generationCostInfoHashMap.get(skuId);
+        if(generationCostInfo==null){
+            generationCostInfo=new GenerationCostInfo();
+            generationCostInfoHashMap.put(skuId,generationCostInfo);
+            generationCostInfo.setCostPrice(BigDecimal.ZERO);
+            generationCostInfo.setQuantity(0);
+        }
+        return generationCostInfo;
+    }
+
+    private SkuCostPriceInfo getSkuCostPriceInfo(List<SkuCostPriceInfo> skuCostPriceInfos, Integer skuId) {
+        Optional<SkuCostPriceInfo> first = skuCostPriceInfos.stream().filter(item -> item.getSkuId().equals(skuId)).findFirst();
+        if (first.isPresent()) {
+            return first.get();
         }
         return null;
     }

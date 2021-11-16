@@ -1,15 +1,12 @@
 package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
-import com.sky.ddt.dto.factoryProductionOrder.response.ShopSkuProductionQuantityDto;
 import com.sky.ddt.dto.produceOrder.request.*;
 import com.sky.ddt.dto.produceOrder.response.ListProduceOrderResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.FactoryProductionOrder;
 import com.sky.ddt.entity.ProduceOrder;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 /**
  * @author baixueping
@@ -104,5 +101,5 @@ public interface IProduceOrderService {
 
     BaseResponse saveAuxiliaryMaterialCost(SaveProduceOrderAuxiliaryMaterialCostRequest params);
 
-    BaseResponse generationCost(GenerationCostRequest params);
+    BaseResponse generationCost(GenerationCostRequest params, Integer currentUserId);
 }

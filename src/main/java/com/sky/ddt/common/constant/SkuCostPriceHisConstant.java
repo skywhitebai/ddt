@@ -12,7 +12,8 @@ public class SkuCostPriceHisConstant {
     public enum TypeEnum {
         SAVE(1, "页面修改"),
         IMPORT_SKU(2, "导入sku"),
-        IMPORT_COST_PRICE(3, "导入成本价");
+        IMPORT_COST_PRICE(3, "导入成本价"),
+        PRODUCE_ORDER(4, "生产单核算");;
 
         private Integer type;
         private String typeName;

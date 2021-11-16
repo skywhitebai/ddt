@@ -375,7 +375,7 @@
                         title: '成本核算', field: 'costStatus', width: 50, formatter: function (value, row, index) {
                             if (value == 1) {
                                 return '已核算';
-                            } else if (value == 2) {
+                            } else if (value == 0) {
                                 return '未核算';
                             }
                         }

@@ -327,4 +327,12 @@ public class MathUtil {
             return 0;
         }
     }
+
+    public static BigDecimal multiply(BigDecimal cost, Integer quantity,int digits) {
+        if(cost==null||quantity==null){
+            return null;
+        }
+        return cost.multiply(new BigDecimal(quantity)).setScale(digits,BigDecimal.ROUND_HALF_UP);
+
+    }
 }
