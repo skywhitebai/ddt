@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomCostCalculationMapper">
+
+    <select id="listCostCalculation" parameterType="com.sky.ddt.dto.costCalculation.request.ListCostCalculationRequest" resultMap="com.sky.ddt.dao.generate.CostCalculationMapper.BaseResultMap">
+        select * from cost_calculation cc
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="monthDate != null">and cc.month=#{monthDate}</if>
+                <if test="sku != null and sku != '' ">and exists(select 1 from cost_calculation_sku ccs where ccs.cost_calculation_id=cc.id and ccs.sku like concat('%',#{sku},'%'))</if>
+                </trim>
+        </where>
+        order by cc.create_time desc
+    </select>
+</mapper>

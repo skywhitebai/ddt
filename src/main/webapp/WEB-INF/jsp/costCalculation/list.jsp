@@ -24,41 +24,37 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath }/static/css/main.css?t=20200928" type="text/css">
     <script type="text/javascript"
             src="${pageContext.request.contextPath }/static/js/common/common.js?t=20201028"></script>
-    <title>店铺头程费管理</title>
+    <title>成本核算管理</title>
 </head>
 <body>
 <!--查询条件-->
 <div class="easyui-panel">
-    店铺：
-    <select id="s_shopId" style="width:150px;">
-    </select>
+    sku
+    <input class="easyui-validatebox textbox" id="s_sku">
     年月
     <input class="easyui-validatebox textbox" id="s_month">
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
-
-    <a href="javascript:void(0)" onclick="createShopHeadTripCost()" class="easyui-linkbutton"
-       data-options="iconCls:'icon-search'">生成店铺头程费</a>
-    <a href="javascript:void(0)" onclick="exportShopHeadTripCost()" class="easyui-linkbutton"
-       data-options="iconCls:'icon-search'">下载店铺头程费</a>
+   <%-- <a href="javascript:void(0)" onclick="exportShopHeadTripCost()" class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'">下载成本价</a>--%>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 
 </table>
 
 <!--编辑页面-->
-<div id="dlgShopSkuHeadTripCostHis" class="easyui-dialog" style="width: 850px; height: 500px; padding: 10px 20px"
+<div id="dlgCostCalculationSku" class="easyui-dialog" style="width: 850px; height: 500px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', top:50,align:'center'">
-    <input type="hidden" id="dlgShopSkuHeadTripCostHis_ShopHeadTripCostId">
+    <input type="hidden" id="dlgCostCalculationSku_costCalculationId">
     <!--查询条件-->
     <div class="easyui-panel">
-        店铺sku：
-        <input class="easyui-validatebox textbox" id="dlgShopSkuHeadTripCostHis_shopSku">
-        <a href="javascript:void(0)" onclick="bindShopSkuHeadTripCostHis()" class="easyui-linkbutton"
+        sku：
+        <input class="easyui-validatebox textbox" id="dlgCostCalculationSku_sku">
+        <a href="javascript:void(0)" onclick="bindCostCalculationSku()" class="easyui-linkbutton"
            data-options="iconCls:'icon-search'"
            style="width: 80px">查 询</a>
     </div>
-    <table id="dgShopSkuHeadTripCostHis" style="width: 100%; height: auto">
+    <table id="dgCostCalculationSku" style="width: 100%; height: auto">
     </table>
 </div>
 
@@ -70,21 +66,12 @@
 <script type="text/javascript">
     $(function () {
         initMonth('s_month');
-        bindShop();
         bindData();
     });
 
-    function bindShop() {
-        $('#s_shopId').combobox({
-            valueField: 'shopId',
-            textField: 'shopName',
-            url: "${pageContext.request.contextPath }/shop/userShopComboboxlist",//获取数据
-        });
-    }
-
     function getQueryParams() {
         queryParams = {
-            shopId: $("#s_shopId").combobox('getValue'),
+            sku: $("#s_sku").val(),
             month: $("#s_month").val()
         };
         return queryParams;
@@ -93,8 +80,8 @@
 
     function bindData() {
         dg = '#dg';
-        url = "${pageContext.request.contextPath }/shopHeadTripCost/list";
-        title = "店铺头程费管理";
+        url = "${pageContext.request.contextPath }/costCalculation/list";
+        title = "成本核算管理";
         queryParams = getQueryParams();
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -117,7 +104,6 @@
             queryParams: queryParams,  //异步查询的参数
             columns: [[
                 {field: 'ck', checkbox: true},   //选择
-                {title: '店铺名', field: 'shopName', width: 120},
                 {
                     title: '年月', field: 'month', width: 80, formatter: function (value, row, index) {
                         if (value) {
@@ -125,11 +111,11 @@
                         }
                     }
                 }, {
-                    title: '店铺sku头程费',
-                    field: 'shopSkuHeadTripCost',
+                    title: 'sku成本',
+                    field: 'costCalculationSku',
                     width: 120,
                     formatter: function (value, row, index) {
-                        return "<a href='#' onclick=\"showDlgShopSkuHeadTripCost(" + row.id + ")\" title='店铺sku头程费' >店铺sku头程费</a>";
+                        return "<a href='#' onclick=\"showDlgCostCalculationSku(" + row.id + ")\" title='sku成本' >sku成本</a>";
                     }
                 },
                 {
@@ -146,7 +132,7 @@
                     field: 'deal',
                     width: 120,
                     formatter: function (value, row, index) {
-                        return "<a href='#' onclick=\"exportShopSkuHeadTripCostHis(" + row.id + ")\" title='下载店铺sku头程费' >下载店铺sku头程费</a>";
+                        return "<a href='#' onclick=\"exportCostCalculationSku(" + row.id + ")\" title='下载成本核算' >下载成本核算</a>";
                     }
                 },
                 {title: '创建时间', field: 'createTime', width: 150},
@@ -167,106 +153,36 @@
 
     function saveRemark(input, id) {
         var remark = $(input).val();
-        $.post('${pageContext.request.contextPath }/shopHeadTripCost/saveShopHeadTripCostRemark', {
+        $.post('${pageContext.request.contextPath }/costCalculation/saveCostCalculationRemark', {
             id: id,
             remark: remark
         }, function (data) {
             if (data.code == '200') {
-                $.messager.alert("提示", "修改成功");
-                bindData();
             } else {
                 $.messager.alert("提示", data.message);
             }
         });
     }
 
-    function exportShopHeadTripCost() {
-        shopId=$("#s_shopId").combobox('getValue');
-        month=$("#s_month").val();
-        if(isEmpty(shopId)&&isEmpty(month)){
-            $.messager.alert("提示", "请选择店铺或者月份，防止数据过大下载失败");
-            return;
-        }
-        url = "${pageContext.request.contextPath }/shopSkuHeadTripCostHis/exportShopSkuHeadTripCostHis" + getUrlParams(getQueryParams());
+    function exportCostCalculationSku(id) {
+        url = "${pageContext.request.contextPath }/costCalculationSku/exportCostCalculationSku?costCalculationId" +id;
         window.open(url);
     }
 
-    function createShopHeadTripCost() {
-        var shopId = $("#s_shopId").combobox('getValue');
-        if (isEmpty(shopId)) {
-            $.messager.alert("提示", "请选择店铺");
-            return;
-        }
-        var month = $("#s_month").val();
-        if (isEmpty(month)) {
-            $.messager.alert("提示", "请选择月份");
-            return;
-        }
-        var shopName = $("#s_shopId").combobox('getText');
-        $.messager.confirm('提示', '生成时间较长，建议用户使用较少时生成，是否生成店铺：' + shopName + ',月份：' + month + '的头程费信息？', function (r) {
-            if (r) {
-                showCover();
-                $.post('${pageContext.request.contextPath }/shopHeadTripCost/createShopHeadTripCost', {
-                    shopId: shopId,
-                    month: month,
-                    type: 1
-                }, function (data) {
-                    hideCover();
-                    if (data.code == '200') {
-                        bindData();
-                        $.messager.alert("提示", "生成成功");
-                    } else {
-                        $.messager.alert("提示", data.message);
-                    }
-                });
-                //createShopHeadTripCostByType(shopId, month, 1, null);
-            }
-        });
-
+    function showDlgCostCalculationSku(id) {
+        $('#dlgCostCalculationSku').dialog('open').dialog('setTitle', 'sku成本信息');
+        $('#dlgCostCalculationSku_costCalculationId').val(id);
+        $('#dlgCostCalculationSku_sku').val(null);
+        bindCostCalculationSku();
     }
 
-    function createShopHeadTripCostByType(shopId, month, type, createRemark) {
-        showCover();
-        $.post('${pageContext.request.contextPath }/shopHeadTripCost/createShopHeadTripCost', {
-            shopId: shopId,
-            month: month,
-            createRemark: createRemark,
-            type: type
-        }, function (data) {
-            hideCover();
-            if (data.code == '200') {
-                hideCover();
-                bindData();
-                $.messager.alert("提示", "生成成功");
-            } else if (data.code == "301") {
-                $.messager.confirm('提示', data.message + ',是否要继续生成头程费信息？', function (r) {
-                    if (r) {
-                        createShopHeadTripCostByType(shopId, month, 2, data.message);
-                    } else {
-                        hideCover();
-                    }
-                });
-            } else {
-                $.messager.alert("提示", data.message);
-                hideCover();
-            }
-        });
-    }
-
-    function showDlgShopSkuHeadTripCost(id) {
-        $('#dlgShopSkuHeadTripCostHis').dialog('open').dialog('setTitle', '店铺sku头程费信息');
-        $('#dlgShopSkuHeadTripCostHis_ShopHeadTripCostId').val(id);
-        $('#dlgShopSkuHeadTripCostHis_shopSku').val(null);
-        bindShopSkuHeadTripCostHis();
-    }
-
-    function bindShopSkuHeadTripCostHis() {
-        dg = '#dgShopSkuHeadTripCostHis';
-        url = "${pageContext.request.contextPath }/shopSkuHeadTripCostHis/listShopSkuHeadTripCostHis";
-        title = "店铺sku头程费信息";
+    function bindCostCalculationSku() {
+        dg = '#dgCostCalculationSku';
+        url = "${pageContext.request.contextPath }/costCalculationSku/listCostCalculationSku";
+        title = "sku成本";
         queryParams = {
-            shopHeadTripCostId: $('#dlgShopSkuHeadTripCostHis_ShopHeadTripCostId').val(),
-            shopSku: $('#dlgShopSkuHeadTripCostHis_shopSku').val()
+            costCalculationId: $('#dlgCostCalculationSku_costCalculationId').val(),
+            sku: $('#dlgCostCalculationSku_sku').val()
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -288,14 +204,22 @@
             queryParams: queryParams,  //异步查询的参数
             columns: [[
                 {field: 'ck', checkbox: true},   //选择
-                {title: '店铺sku', field: 'shopSku', width: 160},
-                {title: '旧头程费', field: 'headTripCostBefore', width: 80},
-                {title: '新头程费', field: 'headTripCostAfter', width: 80},
-                {title: '上个月库存', field: 'inventoryQuantity', width: 80},
-                {title: 'fba发货数', field: 'fbaSendQuantity', width: 80},
-                {title: 'fba发货头程费', field: 'fbaHeadTripCost', width: 80},
-                {title: '总头程费', field: 'totalHeadTripCost', width: 80},
-                {title: '创建时备注', field: 'createRemark', width: 180}
+                {
+                    title: '年月', field: 'month', width: 80, formatter: function (value, row, index) {
+                        if (value) {
+                            return value.substr(0, 7);
+                        }
+                    }
+                },
+                {title: 'sku', field: 'sku', width: 160},
+                {title: '工价', field: 'labourCost', width: 80},
+                {title: '修改前成本', field: 'costPriceBefore', width: 80},
+                {title: '库存', field: 'inventoryQuantity', width: 80},
+                {title: '生产数量', field: 'productionQuantity', width: 80},
+                {title: '生产总成本', field: 'productionCostTotal', width: 80},
+                {title: '生产单个成本', field: 'productionCostPrice', width: 80},
+                {title: '修改后成本', field: 'costPriceAfter', width: 80},
+                {title: '创建时备注', field: 'createTime', width: 120}
             ]],
             toolbar: [{
                 id: 'btnReload',
@@ -308,11 +232,6 @@
             }]
         })
         $(dg).datagrid('clearSelections');
-    }
-
-    function exportShopSkuHeadTripCostHis(id) {
-        url = "${pageContext.request.contextPath }/shopSkuHeadTripCostHis/exportShopSkuHeadTripCostHis?shopHeadTripCostId=" + id;
-        window.open(url);
     }
 </script>
 
