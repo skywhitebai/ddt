@@ -39,7 +39,7 @@
                 <if test="status != null">and po.status=#{status}</if>
                 <if test="type != null">and po.type=#{type}</if>
                 <if test="monthDate != null ">and po.completion_time>=#{monthDate} and po.completion_time<![CDATA[ < ]]>
-                    date_add(NOW(), interval 1 MONTH)
+                    date_add(#{monthDate}, interval 1 MONTH)
                 </if>
             </trim>
         </where>
@@ -51,8 +51,7 @@
         <include refid="com.sky.ddt.dao.generate.ProduceOrderMapper.Base_Column_List"/>
         from produce_order po
         where po.completion_time>=#{monthDate} and po.completion_time<![CDATA[ < ]]>
-        date_add(NOW(), interval 1 MONTH) and po.status=3 and po.cost_status=0 and(po.fabric_cost is null or
-        auxiliary_material_cost is null)
+        date_add(#{monthDate}, interval 1 MONTH) and po.status=3 and po.cost_status=0 and po.fabric_cost is null
         order by po.batch_number desc
     </select>
     <select id="listNotCostSku" parameterType="com.sky.ddt.dto.produceOrder.request.GenerationCostRequest"
@@ -62,7 +61,7 @@
         from produce_order po,produce_order_shop_sku poss,shop_sku ss,sku
         where po.id=poss.produce_order_id and poss.shop_sku_id=ss.shop_sku_id and ss.sku_id=sku.sku_id
         and po.completion_time>=#{monthDate} and po.completion_time<![CDATA[ < ]]>
-        date_add(NOW(), interval 1 MONTH)  and po.status=3 and po.cost_status=0 and (sku.cost_price is null or sku.cost_price>=999)
+        date_add(#{monthDate}, interval 1 MONTH)  and po.status=3 and po.cost_status=0 and (sku.cost_price is null or sku.cost_price>=999)
         group by sku.sku
     </select>
     <select id="listNotLabourCostProduct" parameterType="com.sky.ddt.dto.produceOrder.request.GenerationCostRequest"
@@ -72,29 +71,35 @@
         from produce_order po,produce_order_shop_sku poss,shop_sku ss,sku,product p
         where po.id=poss.produce_order_id and poss.shop_sku_id=ss.shop_sku_id and ss.sku_id=sku.sku_id and sku.product_id=p.product_id
         and po.completion_time>=#{monthDate} and po.completion_time<![CDATA[ < ]]>
-        date_add(NOW(), interval 1 MONTH)  and po.status=3 and po.cost_status=0 and p.labour_cost is null
+        date_add(#{monthDate}, interval 1 MONTH)  and po.status=3 and po.cost_status=0 and p.labour_cost is null
         group by p.product_code
     </select>
     <select id="listProduceOrderSkuInfo" parameterType="com.sky.ddt.dto.produceOrder.request.GenerationCostRequest"
             resultType="com.sky.ddt.dto.produceOrder.request.ProduceOrderSkuInfo">
        select
-        sku.sku_id skuId,po.id produceOrderId,sum(production_quantity) quantity
-        from produce_order po,produce_order_shop_sku poss,shop_sku ss,sku
-        where po.id=poss.produce_order_id and poss.shop_sku_id=ss.shop_sku_id
+        sku.sku_id skuId,po.id produceOrderId,sum(warehousing_quantity) quantity
+        from produce_order po,shop_sku ss,sku,warehousing_order wo,warehousing_order_shop_sku woss
+        where wo.produce_order_id=po.id and woss.warehousing_order_id=wo.id and woss.shop_sku_id=ss.shop_sku_id
         AND ss.sku_id=sku.sku_id
         and po.completion_time>=#{monthDate} and po.completion_time<![CDATA[ < ]]>
-        date_add(NOW(), interval 1 MONTH)  and po.status=3 and po.cost_status=0
+        date_add(#{monthDate}, interval 1 MONTH)  and po.status=3 and po.cost_status=0
          GROUP BY  sku.sku_id,po.id
     </select>
     <select id="listSkuCostPriceInfo" parameterType="com.sky.ddt.dto.produceOrder.request.GenerationCostRequest"
             resultType="com.sky.ddt.dto.produceOrder.request.SkuCostPriceInfo">
-select
-        sku.sku_id skuId,sku.cost_price costPrice,p.labour_cost labourCost,ifnull((SUM(inventory_quantity)+ SUM(mfn_fulfillable_quantity)),0)quantity
-        from produce_order po,produce_order_shop_sku poss,shop_sku ss,sku,product p,fba_import fi
-        where po.id=poss.produce_order_id and poss.shop_sku_id=ss.shop_sku_id and ss.shop_sku_id=fi.shop_sku_id
-        AND ss.sku_id=sku.sku_id and sku.product_id=p.product_id
-        and po.completion_time>=#{monthDate} and po.completion_time<![CDATA[ < ]]>
-        date_add(NOW(), interval 1 MONTH)  and po.status=3 and po.cost_status=0
-group by sku.`sku_id`
+   SELECT ss.*,IFNULL(ss.inventory_quantity+IFNULL(SUM(ss.afn_total_quantity),0),0) quantity FROM
+  (select
+        sku.sku_id skuId,sku.sku,sku.cost_price costPrice,p.labour_cost labourCost,poss.`shop_sku_id`,siqh.`inventory_quantity`,id.`afn_total_quantity`
+        from
+        produce_order po
+        inner join produce_order_shop_sku poss on  po.id=poss.produce_order_id and po.completion_time>=#{monthDate} and po.completion_time<![CDATA[ < ]]>
+        date_add(#{monthDate}, interval 1 MONTH)
+	INNER join shop_sku ss on poss.shop_sku_id=ss.shop_sku_id
+	inner join sku on ss.sku_id=sku.`sku_id`
+	INNER JOIN product p on sku.product_id=p.product_id
+	LEFT join sku_inventory_quantity_his siqh on sku.sku_id=siqh.sku_id and siqh.month=date(#{monthDate})
+	left join inventory_details id on id.`shop_sku_id`=ss.`shop_sku_id` and id.`finance_id` in(select f.id from `finance` f where f.`month`=date_add(#{monthDate}, interval -1 MONTH))
+group by poss.`shop_sku_id`) ss
+group by skuId
     </select>
 </mapper>

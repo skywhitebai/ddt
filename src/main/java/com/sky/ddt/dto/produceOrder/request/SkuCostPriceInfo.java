@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 @Data
 public class SkuCostPriceInfo {
     Integer skuId;
+    String sku;
     BigDecimal labourCost;
     BigDecimal costPrice;
     //库存+fba库存

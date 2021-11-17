@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  */
 @Data
 public class GenerationCostInfo {
-    Integer shopSkuId;
+    Integer skuId;
     Integer quantity;
     BigDecimal costPrice;
 }

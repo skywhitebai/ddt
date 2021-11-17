@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.CostCalculationSkuMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.CostCalculationSku">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="cost_calculation_id" jdbcType="INTEGER" property="costCalculationId" />
+    <result column="month" jdbcType="TIMESTAMP" property="month" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="sku_id" jdbcType="INTEGER" property="skuId" />
+    <result column="labour_cost" jdbcType="DECIMAL" property="labourCost" />
+    <result column="cost_price_before" jdbcType="DECIMAL" property="costPriceBefore" />
+    <result column="inventory_quantity" jdbcType="INTEGER" property="inventoryQuantity" />
+    <result column="production_quantity" jdbcType="INTEGER" property="productionQuantity" />
+    <result column="production_cost_total" jdbcType="DECIMAL" property="productionCostTotal" />
+    <result column="production_cost_price" jdbcType="DECIMAL" property="productionCostPrice" />
+    <result column="cost_price_after" jdbcType="DECIMAL" property="costPriceAfter" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="update_by" jdbcType="INTEGER" property="updateBy" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, cost_calculation_id, month, sku, sku_id, labour_cost, cost_price_before, inventory_quantity, 
+    production_quantity, production_cost_total, production_cost_price, cost_price_after, 
+    create_time, create_by, update_time, update_by, remark
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.CostCalculationSkuExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from cost_calculation_sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cost_calculation_sku
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cost_calculation_sku
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.CostCalculationSkuExample">
+    delete from cost_calculation_sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.CostCalculationSku">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into cost_calculation_sku (cost_calculation_id, month, sku, 
+      sku_id, labour_cost, cost_price_before, 
+      inventory_quantity, production_quantity, 
+      production_cost_total, production_cost_price, 
+      cost_price_after, create_time, create_by, 
+      update_time, update_by, remark
+      )
+    values (#{costCalculationId,jdbcType=INTEGER}, #{month,jdbcType=TIMESTAMP}, #{sku,jdbcType=VARCHAR}, 
+      #{skuId,jdbcType=INTEGER}, #{labourCost,jdbcType=DECIMAL}, #{costPriceBefore,jdbcType=DECIMAL}, 
+      #{inventoryQuantity,jdbcType=INTEGER}, #{productionQuantity,jdbcType=INTEGER}, 
+      #{productionCostTotal,jdbcType=DECIMAL}, #{productionCostPrice,jdbcType=DECIMAL}, 
+      #{costPriceAfter,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.CostCalculationSku">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into cost_calculation_sku
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="costCalculationId != null">
+        cost_calculation_id,
+      </if>
+      <if test="month != null">
+        month,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="skuId != null">
+        sku_id,
+      </if>
+      <if test="labourCost != null">
+        labour_cost,
+      </if>
+      <if test="costPriceBefore != null">
+        cost_price_before,
+      </if>
+      <if test="inventoryQuantity != null">
+        inventory_quantity,
+      </if>
+      <if test="productionQuantity != null">
+        production_quantity,
+      </if>
+      <if test="productionCostTotal != null">
+        production_cost_total,
+      </if>
+      <if test="productionCostPrice != null">
+        production_cost_price,
+      </if>
+      <if test="costPriceAfter != null">
+        cost_price_after,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateBy != null">
+        update_by,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="costCalculationId != null">
+        #{costCalculationId,jdbcType=INTEGER},
+      </if>
+      <if test="month != null">
+        #{month,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="skuId != null">
+        #{skuId,jdbcType=INTEGER},
+      </if>
+      <if test="labourCost != null">
+        #{labourCost,jdbcType=DECIMAL},
+      </if>
+      <if test="costPriceBefore != null">
+        #{costPriceBefore,jdbcType=DECIMAL},
+      </if>
+      <if test="inventoryQuantity != null">
+        #{inventoryQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="productionQuantity != null">
+        #{productionQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="productionCostTotal != null">
+        #{productionCostTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="productionCostPrice != null">
+        #{productionCostPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="costPriceAfter != null">
+        #{costPriceAfter,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.CostCalculationSkuExample" resultType="java.lang.Long">
+    select count(*) from cost_calculation_sku
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cost_calculation_sku
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.costCalculationId != null">
+        cost_calculation_id = #{record.costCalculationId,jdbcType=INTEGER},
+      </if>
+      <if test="record.month != null">
+        month = #{record.month,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sku != null">
+        sku = #{record.sku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.skuId != null">
+        sku_id = #{record.skuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.labourCost != null">
+        labour_cost = #{record.labourCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.costPriceBefore != null">
+        cost_price_before = #{record.costPriceBefore,jdbcType=DECIMAL},
+      </if>
+      <if test="record.inventoryQuantity != null">
+        inventory_quantity = #{record.inventoryQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.productionQuantity != null">
+        production_quantity = #{record.productionQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.productionCostTotal != null">
+        production_cost_total = #{record.productionCostTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="record.productionCostPrice != null">
+        production_cost_price = #{record.productionCostPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.costPriceAfter != null">
+        cost_price_after = #{record.costPriceAfter,jdbcType=DECIMAL},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=INTEGER},
+      </if>
+      <if test="record.updateTime != null">
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateBy != null">
+        update_by = #{record.updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cost_calculation_sku
+    set id = #{record.id,jdbcType=INTEGER},
+      cost_calculation_id = #{record.costCalculationId,jdbcType=INTEGER},
+      month = #{record.month,jdbcType=TIMESTAMP},
+      sku = #{record.sku,jdbcType=VARCHAR},
+      sku_id = #{record.skuId,jdbcType=INTEGER},
+      labour_cost = #{record.labourCost,jdbcType=DECIMAL},
+      cost_price_before = #{record.costPriceBefore,jdbcType=DECIMAL},
+      inventory_quantity = #{record.inventoryQuantity,jdbcType=INTEGER},
+      production_quantity = #{record.productionQuantity,jdbcType=INTEGER},
+      production_cost_total = #{record.productionCostTotal,jdbcType=DECIMAL},
+      production_cost_price = #{record.productionCostPrice,jdbcType=DECIMAL},
+      cost_price_after = #{record.costPriceAfter,jdbcType=DECIMAL},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=INTEGER},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      update_by = #{record.updateBy,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.CostCalculationSku">
+    update cost_calculation_sku
+    <set>
+      <if test="costCalculationId != null">
+        cost_calculation_id = #{costCalculationId,jdbcType=INTEGER},
+      </if>
+      <if test="month != null">
+        month = #{month,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="skuId != null">
+        sku_id = #{skuId,jdbcType=INTEGER},
+      </if>
+      <if test="labourCost != null">
+        labour_cost = #{labourCost,jdbcType=DECIMAL},
+      </if>
+      <if test="costPriceBefore != null">
+        cost_price_before = #{costPriceBefore,jdbcType=DECIMAL},
+      </if>
+      <if test="inventoryQuantity != null">
+        inventory_quantity = #{inventoryQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="productionQuantity != null">
+        production_quantity = #{productionQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="productionCostTotal != null">
+        production_cost_total = #{productionCostTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="productionCostPrice != null">
+        production_cost_price = #{productionCostPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="costPriceAfter != null">
+        cost_price_after = #{costPriceAfter,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateBy != null">
+        update_by = #{updateBy,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.CostCalculationSku">
+    update cost_calculation_sku
+    set cost_calculation_id = #{costCalculationId,jdbcType=INTEGER},
+      month = #{month,jdbcType=TIMESTAMP},
+      sku = #{sku,jdbcType=VARCHAR},
+      sku_id = #{skuId,jdbcType=INTEGER},
+      labour_cost = #{labourCost,jdbcType=DECIMAL},
+      cost_price_before = #{costPriceBefore,jdbcType=DECIMAL},
+      inventory_quantity = #{inventoryQuantity,jdbcType=INTEGER},
+      production_quantity = #{productionQuantity,jdbcType=INTEGER},
+      production_cost_total = #{productionCostTotal,jdbcType=DECIMAL},
+      production_cost_price = #{productionCostPrice,jdbcType=DECIMAL},
+      cost_price_after = #{costPriceAfter,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=INTEGER},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_by = #{updateBy,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

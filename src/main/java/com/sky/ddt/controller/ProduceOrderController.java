@@ -96,20 +96,20 @@ public class ProduceOrderController extends SuperController {
     public BaseResponse saveProduceOrderCostRemark(@Validated SaveProduceOrderCostRemarkRequest params) {
         return produceOrderService.saveProduceOrderCostRemark(params);
     }
-    @RequestMapping("saveFabricCost")
+    @RequestMapping("/saveFabricCost")
     @ResponseBody
     @MenuAnnotation("produceOrder/index")
     public BaseResponse saveFabricCost(@Validated SaveProduceOrderFabricCostRequest params) {
         return produceOrderService.saveFabricCost(params);
     }
-    @RequestMapping("saveAuxiliaryMaterialCost")
+    @RequestMapping("/saveAuxiliaryMaterialCost")
     @ResponseBody
     @MenuAnnotation("produceOrder/index")
     public BaseResponse saveAuxiliaryMaterialCost(@Validated SaveProduceOrderAuxiliaryMaterialCostRequest params) {
         return produceOrderService.saveAuxiliaryMaterialCost(params);
     }
 
-    @RequestMapping("generationCost")
+    @RequestMapping("/generationCost")
     @ResponseBody
     @MenuAnnotation("produceOrder/index")
     public BaseResponse generationCost(@Validated GenerationCostRequest params) {

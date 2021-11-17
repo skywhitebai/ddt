@@ -9,6 +9,8 @@ import com.sky.ddt.common.constant.SkuCostPriceHisConstant;
 import com.sky.ddt.dao.custom.CustomProduceOrderMapper;
 import com.sky.ddt.dao.custom.CustomProduceOrderShopSkuMapper;
 import com.sky.ddt.dao.custom.CustomSkuMapper;
+import com.sky.ddt.dao.generate.CostCalculationMapper;
+import com.sky.ddt.dao.generate.CostCalculationSkuMapper;
 import com.sky.ddt.dto.factoryProductionOrderShopSku.response.ListFactoryProductionOrderShopSkuResponse;
 import com.sky.ddt.dto.produceOrder.request.*;
 import com.sky.ddt.dto.produceOrder.response.ListProduceOrderResponse;
@@ -54,6 +56,10 @@ public class ProduceOrderService implements IProduceOrderService {
     CustomSkuMapper customSkuMapper;
     @Autowired
     ISkuCostPriceHisService skuCostPriceHisService;
+    @Autowired
+    CostCalculationMapper costCalculationMapper;
+    @Autowired
+    CostCalculationSkuMapper costCalculationSkuMapper;
 
     /**
      * @param listProduceOrderRequest@return
@@ -433,6 +439,10 @@ public class ProduceOrderService implements IProduceOrderService {
                 return BaseResponse.failMessage("月份错误");
             }
         }
+        Date thisMonthFirstDay=DateUtil.getMonthFirstDay(new Date());
+        if(!params.getMonthDate().before(thisMonthFirstDay)){
+            return BaseResponse.failMessage("月份错误,必须为之前的月份");
+        }
         //校验当月已完成未核算生产单是否有未填写成本的
         List<ProduceOrder> notCostProduceOrderList = customProduceOrderMapper.listNotCostProductOrder(params);
         if (!CollectionUtils.isEmpty(notCostProduceOrderList)) {
@@ -470,7 +480,7 @@ public class ProduceOrderService implements IProduceOrderService {
             BigDecimal costPre = MathUtil.divide(costTotal, quantity, 2).add(new BigDecimal(0.5));
             for (ProduceOrderSkuInfo produceOrderSkuInfo : produceOrderShopSkuList) {
                 SkuCostPriceInfo skuCostPriceInfo = getSkuCostPriceInfo(skuCostPriceInfos, produceOrderSkuInfo.getSkuId());
-                BigDecimal cost =MathUtil.addBigDecimal(costPre,skuCostPriceInfo.getLabourPrice());
+                BigDecimal cost =MathUtil.addBigDecimal(costPre,skuCostPriceInfo.getLabourCost());
                 cost=MathUtil.divide(cost, new BigDecimal(0.85), 2);
                 BigDecimal costSum=MathUtil.multiply(cost,produceOrderSkuInfo.getQuantity(),2);
                 GenerationCostInfo generationCostInfo=getgenerationCostInfo(produceOrderSkuInfo.getSkuId(),generationCostInfoHashMap);
@@ -478,6 +488,12 @@ public class ProduceOrderService implements IProduceOrderService {
                 generationCostInfo.setQuantity(generationCostInfo.getQuantity()+produceOrderSkuInfo.getQuantity());
             }
         }
+        CostCalculation costCalculation=new CostCalculation();
+        costCalculation.setMonth(params.getMonthDate());
+        costCalculation.setCreateBy(currentUserId);
+        costCalculation.setCreateTime(new Date());
+        costCalculation.setUpdateTime(new Date());
+        costCalculationMapper.insertSelective(costCalculation);
         //计算价格
         for (Integer skuId:
                 generationCostInfoHashMap.keySet()) {
@@ -492,7 +508,29 @@ public class ProduceOrderService implements IProduceOrderService {
             sku.setUpdateBy(currentUserId);
             customSkuMapper.updateByPrimaryKeySelective(sku);
             skuCostPriceHisService.saveSkuCostPriceHis(skuId,skuCostPriceInfo.getCostPrice(),costPrice, SkuCostPriceHisConstant.TypeEnum.PRODUCE_ORDER,currentUserId);
+            CostCalculationSku costCalculationSku=new CostCalculationSku();
+            costCalculationSku.setCostCalculationId(costCalculation.getId());
+            costCalculationSku.setMonth(params.getMonthDate());
+            costCalculationSku.setSku(skuCostPriceInfo.getSku());
+            costCalculationSku.setSkuId(skuCostPriceInfo.getSkuId());
+            costCalculationSku.setLabourCost(skuCostPriceInfo.getLabourCost());
+            costCalculationSku.setCostPriceBefore(skuCostPriceInfo.getCostPrice());
+            costCalculationSku.setInventoryQuantity(skuCostPriceInfo.getQuantity());
+            costCalculationSku.setProductionQuantity(generationCostInfo.getQuantity());
+            costCalculationSku.setProductionCostTotal(generationCostInfo.getCostPrice());
+            costCalculationSku.setProductionCostPrice(MathUtil.divide(generationCostInfo.getCostPrice(),generationCostInfo.getQuantity(),2));
+            costCalculationSku.setCostPriceAfter(costPrice);
+            costCalculationSku.setCreateBy(currentUserId);
+            costCalculationSku.setCreateTime(new Date());
+            costCalculationSku.setUpdateTime(new Date());
+            costCalculationSkuMapper.insertSelective(costCalculationSku);
         }
+        List<Integer> produceOrderIds=produceOrders.stream().map(item->item.getId()).collect(Collectors.toList());
+        ProduceOrderExample produceOrderExample=new ProduceOrderExample();
+        produceOrderExample.createCriteria().andIdIn(produceOrderIds);
+        ProduceOrder produceOrder=new ProduceOrder();
+        produceOrder.setCostStatus(ProduceOrderConstant.CostStatusEnum.CALCULATED.getStatus());
+        customProduceOrderMapper.updateByExampleSelective(produceOrder,produceOrderExample);
         return BaseResponse.success();
     }
 
@@ -501,6 +539,7 @@ public class ProduceOrderService implements IProduceOrderService {
         if(generationCostInfo==null){
             generationCostInfo=new GenerationCostInfo();
             generationCostInfoHashMap.put(skuId,generationCostInfo);
+            generationCostInfo.setSkuId(skuId);
             generationCostInfo.setCostPrice(BigDecimal.ZERO);
             generationCostInfo.setQuantity(0);
         }
