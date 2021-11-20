@@ -20,7 +20,7 @@
                 <trim prefix="(" suffix=")" prefixOverrides="and">
                     <if test="shopHeadTripCostId != null">and sshtch.shop_head_trip_cost_id=#{shopHeadTripCostId}</if>
                     <if test="shopSku != null and shopSku!=''">and ss.shop_sku like concat('%',#{shopSku},'%')</if>
-                    <if test="shopSkuId!=null'">and sshtch.shop_sku_id=#{shopSkuId}</if>
+                    <if test="shopSkuId!=null">and sshtch.shop_sku_id=#{shopSkuId}</if>
                 </trim>
             </trim>
         </where>

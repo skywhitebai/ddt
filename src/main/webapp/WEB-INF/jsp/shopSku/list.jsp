@@ -379,10 +379,13 @@
                 {title: '英文报关名', field: 'englishProductName', width: 120},
                 {
                     title: '头程费',
-                    field: 'shopSkuHeadTripCost',
+                    field: 'headTripCost',
                     width: 120,
                     formatter: function (value, row, index) {
-                        return "<a href='#' onclick=\"showDlgShopSkuHeadTripCost(" + row.id + ")\" title='店铺sku头程费' >"+value+"</a>";
+                        if(isEmpty(value)){
+                            value='暂无头程费';
+                        }
+                        return "<a href='#' onclick=\"showDlgShopSkuHeadTripCost(" + row.shopSkuId + ")\" title='店铺sku头程费' >"+value+"</a>";
                     }
                 },
                 {title: '创建时间', field: 'createTime', width: 180},
@@ -720,8 +723,7 @@
         url = "${pageContext.request.contextPath }/shopSkuHeadTripCostHis/listShopSkuHeadTripCostHis";
         title = "店铺sku头程费信息";
         queryParams = {
-            shopHeadTripCostId: $('#dlgShopSkuHeadTripCostHis_ShopHeadTripCostId').val(),
-            shopSku: $('#dlgShopSkuHeadTripCostHis_shopSku').val()
+            shopSkuId: $('#dlgShopSkuHeadTripCostHis_shopSkuId').val()
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
