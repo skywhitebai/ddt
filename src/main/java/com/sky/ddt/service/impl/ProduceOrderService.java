@@ -60,6 +60,8 @@ public class ProduceOrderService implements IProduceOrderService {
     CostCalculationMapper costCalculationMapper;
     @Autowired
     CostCalculationSkuMapper costCalculationSkuMapper;
+    @Autowired
+    IImgService imgService;
 
     /**
      * @param listProduceOrderRequest@return
@@ -74,6 +76,7 @@ public class ProduceOrderService implements IProduceOrderService {
         if (!CollectionUtils.isEmpty(list)) {
             for (ListProduceOrderResponse listProduceOrderResponse : list) {
                 listProduceOrderResponse.setStatusName(ProduceOrderConstant.StatusEnum.getStatusName(listProduceOrderResponse.getStatus()));
+                listProduceOrderResponse.setImgUrl(imgService.getImgUrlBySkuId(listProduceOrderResponse.getSkuId()));
             }
         }
         PageInfo<ListProduceOrderResponse> page = new PageInfo<ListProduceOrderResponse>(list);

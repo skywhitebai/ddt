@@ -39,10 +39,7 @@
         <!--<table tableName="sys_right" domainObjectName="Right">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        <table tableName="cost_calculation_sku">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
-        <table tableName="cost_calculation">
+        <table tableName="produce_order">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

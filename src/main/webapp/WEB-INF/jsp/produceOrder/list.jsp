@@ -390,6 +390,18 @@
                         }
                     },
                     {
+                        title: '图片', field: 'imgUrl', width: 120,
+                        formatter: function (value, rowData, rowIndex) {
+                            var res = "";
+                            if (value != null && value != '') {
+                                res += '<a href="javascript:;" onclick="showImg(' + value + ')" ><img  src="' + value + '?x-oss-process=image/resize,m_fill,h_66,w_66"  style="width:66px; height:66px;"/></a> '
+                            } else {
+                                res += '暂无图片'
+                            }
+                            return res;
+                        }
+                    },
+                    {
                         title: '布料成本', field: 'fabricCost', width: 66,
                         formatter: function (value, row, rowIndex) {
                             if (isEmpty(value)) {

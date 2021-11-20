@@ -114,25 +114,28 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.sky.ddt.entity.ProduceOrder">
-    insert into produce_order (id, production_time, batch_number, 
-      shop_id, status, completion_time, 
-      cost_status, type, entity_id, 
-      fabric_cost, auxiliary_material_cost, cost_remark, 
-      remark, create_time, create_by, 
-      update_time, update_by)
-    values (#{id,jdbcType=INTEGER}, #{productionTime,jdbcType=TIMESTAMP}, #{batchNumber,jdbcType=VARCHAR}, 
-      #{shopId,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{completionTime,jdbcType=TIMESTAMP}, 
-      #{costStatus,jdbcType=INTEGER}, #{type,jdbcType=INTEGER}, #{entityId,jdbcType=INTEGER}, 
-      #{fabricCost,jdbcType=DECIMAL}, #{auxiliaryMaterialCost,jdbcType=DECIMAL}, #{costRemark,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER})
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into produce_order (production_time, batch_number, shop_id, 
+      status, completion_time, cost_status, 
+      type, entity_id, fabric_cost, 
+      auxiliary_material_cost, cost_remark, remark, 
+      create_time, create_by, update_time, 
+      update_by)
+    values (#{productionTime,jdbcType=TIMESTAMP}, #{batchNumber,jdbcType=VARCHAR}, #{shopId,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{completionTime,jdbcType=TIMESTAMP}, #{costStatus,jdbcType=INTEGER}, 
+      #{type,jdbcType=INTEGER}, #{entityId,jdbcType=INTEGER}, #{fabricCost,jdbcType=DECIMAL}, 
+      #{auxiliaryMaterialCost,jdbcType=DECIMAL}, #{costRemark,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.ProduceOrder">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into produce_order
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
       <if test="productionTime != null">
         production_time,
       </if>
@@ -183,9 +186,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=INTEGER},
-      </if>
       <if test="productionTime != null">
         #{productionTime,jdbcType=TIMESTAMP},
       </if>

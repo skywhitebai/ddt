@@ -166,3 +166,7 @@ function hasRight(rightStr){
 function getTimestamp() {
     return new Date().getTime();
 }
+
+function showImg(imgUrl) {
+    window.open(imgUrl);
+}
