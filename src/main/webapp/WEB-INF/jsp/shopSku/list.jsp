@@ -255,6 +255,18 @@
     </form>
 </div>
 
+<div id="dlgShopSkuHeadTripCostHis" class="easyui-dialog" style="width: 850px; height: 500px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', top:50,align:'center'">
+    <input type="hidden" id="dlgShopSkuHeadTripCostHis_shopSkuId">
+    <!--查询条件-->
+    <div class="easyui-panel">
+        <a href="javascript:void(0)" onclick="bindShopSkuHeadTripCostHis()" class="easyui-linkbutton"
+           data-options="iconCls:'icon-search'"
+           style="width: 80px">查 询</a>
+    </div>
+    <table id="dgShopSkuHeadTripCostHis" style="width: 100%; height: auto">
+    </table>
+</div>
 
 <div id="cover">
     <div id="coverMsg">
@@ -365,7 +377,14 @@
                 {title: '销售人员', field: 'salesmanUserName', width: 120},
                 {title: '中文报关名', field: 'chineseProductName', width: 120},
                 {title: '英文报关名', field: 'englishProductName', width: 120},
-                {title: '头程费', field: 'headTripCost', width: 60},
+                {
+                    title: '头程费',
+                    field: 'shopSkuHeadTripCost',
+                    width: 120,
+                    formatter: function (value, row, index) {
+                        return "<a href='#' onclick=\"showDlgShopSkuHeadTripCost(" + row.id + ")\" title='店铺sku头程费' >"+value+"</a>";
+                    }
+                },
                 {title: '创建时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
                 {title: '标题', field: 'title', width: 120},
@@ -694,6 +713,62 @@
                 });
             }
         });
+    }
+
+    function bindShopSkuHeadTripCostHis() {
+        dg = '#dgShopSkuHeadTripCostHis';
+        url = "${pageContext.request.contextPath }/shopSkuHeadTripCostHis/listShopSkuHeadTripCostHis";
+        title = "店铺sku头程费信息";
+        queryParams = {
+            shopHeadTripCostId: $('#dlgShopSkuHeadTripCostHis_ShopHeadTripCostId').val(),
+            shopSku: $('#dlgShopSkuHeadTripCostHis_shopSku').val()
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: false,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 15,
+            pageList: [10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'id',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '店铺sku', field: 'shopSku', width: 160},
+                {title: '旧头程费', field: 'headTripCostBefore', width: 80},
+                {title: '新头程费', field: 'headTripCostAfter', width: 80},
+                {title: '上个月库存', field: 'inventoryQuantity', width: 80},
+                {title: 'fba发货数', field: 'fbaSendQuantity', width: 80},
+                {title: 'fba发货头程费', field: 'fbaHeadTripCost', width: 80},
+                {title: '总头程费', field: 'totalHeadTripCost', width: 80},
+                {title: '创建时备注', field: 'createRemark', width: 180},
+                {title: '创建时间', field: 'createTime', width: 180}
+            ]],
+            toolbar: [{
+                id: 'btnReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        $(dg).datagrid('clearSelections');
+    }
+    function showDlgShopSkuHeadTripCost(shopSkuId) {
+        $('#dlgShopSkuHeadTripCostHis').dialog('open').dialog('setTitle', '店铺sku头程费信息');
+        $('#dlgShopSkuHeadTripCostHis_shopSkuId').val(shopSkuId);
+        bindShopSkuHeadTripCostHis();
     }
 </script>
 </body>

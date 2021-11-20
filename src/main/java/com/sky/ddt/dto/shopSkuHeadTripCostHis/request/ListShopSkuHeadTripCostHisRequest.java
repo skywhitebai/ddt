@@ -14,5 +14,7 @@ import java.util.Date;
 public class ListShopSkuHeadTripCostHisRequest extends DataGridRequest {
     Integer shopHeadTripCostId;
     String shopSku;
+    Integer shopSkuId;
+
 
 }
