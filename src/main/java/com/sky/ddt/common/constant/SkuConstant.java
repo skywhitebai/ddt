@@ -31,6 +31,8 @@ public class SkuConstant {
     public static final BigDecimal HEAD_TRIP_COST_RATE= BigDecimal.valueOf(0.055);
     public static final BigDecimal HEAD_TRIP_COST_MIN_RATE= BigDecimal.valueOf(0.04);
     public static final String SIZE_ERRO ="尺码错误，尺码必须为F、XS到6XL" ;
+    public static final String SUGGESTED_RETAIL_PRICE_EMPTY = "建议零售价不能为空";
+    public static final String SUGGESTED_RETAIL_PRICE_ERRO = "建议零售价必须为大于0的数字";
 
     @Getter
     public enum SkuSizeEnum {

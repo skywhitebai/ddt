@@ -773,4 +773,67 @@ public class SkuService implements ISkuService {
         example.createCriteria().andProductIdIn(productIds);
         return customSkuMapper.countByExample(example) > 0;
     }
+
+    @Override
+    public BaseResponse importSuggestedRetailPrice(MultipartFile file, Integer dealUserId) {
+        //读取excel 转换为list
+        List<Map<String, String>> list = ExcelUtil.getListByExcel(file);
+        if (list == null || list.size() == 0) {
+            return BaseResponse.failMessage("导入的数据内容为空");
+        }
+        //遍历list导入信息
+        StringBuilder sbErro = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            Map<String, String> map = list.get(i);
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            StringBuilder sbErroItem = new StringBuilder();
+            if (StringUtils.isEmpty(map.get("产品sku"))) {
+                sbErroItem.append(",").append(SkuConstant.SKU_EMPTY);
+            } else {
+                Sku sku = getSkuBySku(map.get("产品sku"));
+                if (sku == null) {
+                    sbErroItem.append(",").append(SkuConstant.SKU_NOT_EXIST);
+                } else {
+                    map.put("skuId", sku.getSkuId().toString());
+                }
+            }
+            if (StringUtils.isEmpty(map.get("建议零售价"))) {
+                sbErroItem.append(",").append(SkuConstant.SUGGESTED_RETAIL_PRICE_EMPTY);
+            }
+            if (sbErroItem.length() > 0) {
+                sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
+            }
+        }
+        if (sbErro.length() > 0) {
+            return BaseResponse.failMessage(sbErro.substring(1));
+        }
+        for (Map<String, String> map : list) {
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            Sku sku = new Sku();
+            sku.setSkuId(MathUtil.strToInteger(map.get("skuId")));
+            sku.setSuggestedRetailPrice(map.get("建议零售价"));
+            customSkuMapper.updateByPrimaryKeySelective(sku);
+        }
+        return BaseResponse.success();
+    }
 }

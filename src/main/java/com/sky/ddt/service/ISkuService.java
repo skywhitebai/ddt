@@ -143,4 +143,12 @@ public interface ISkuService {
     BaseResponse importColour(MultipartFile file, Integer dealUserId);
 
     boolean existSku(List<Integer> productIds);
+ /**
+  * @param
+  * @return
+  * @author sky
+  * @Description: 导入建议零售价
+  * @date
+  */
+    BaseResponse importSuggestedRetailPrice(MultipartFile file, Integer dealUserId);
 }

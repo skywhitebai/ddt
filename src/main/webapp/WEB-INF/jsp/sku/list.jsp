@@ -52,6 +52,10 @@
        class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入成本价</a>
+    <a href="javascript:void(0)" id="a_importCostPrice" onclick="showDialogImport('suggestedRetailPrice')"
+       class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'"
+       style="">导入建议零售价</a>
     <a href="javascript:void(0)" id="a_importWeight" onclick="showDialogImport('weight')"
        class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
@@ -542,8 +546,7 @@
                 if (res.code == '200') {
                     closeDialog();
                     bindData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
@@ -571,8 +574,7 @@
                     if (data.code == '200') {
                         $('#dlg').dialog('close');
                         bindData();
-                    }
-                    else {
+                    } else {
                         $.messager.alert("提示", data.message);
                     }
                 });
@@ -628,8 +630,7 @@
                 if (res.code == '200') {
                     $.messager.alert("提示", "上传成功");
                     bindImgData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
@@ -710,8 +711,7 @@
                     if (data.code == '200') {
                         $('#dlg').dialog('close');
                         bindImgData();
-                    }
-                    else {
+                    } else {
                         $.messager.alert("提示", data.message);
                     }
                 });
@@ -872,6 +872,11 @@
                 importTemplateUrl = "${pageContext.request.contextPath }/static/template/sku/colourTemplate.xlsx";
                 importUrl = "${pageContext.request.contextPath }/sku/importColour";
                 break;
+            case 'suggestedRetailPrice':
+                importTitle = "导入建议零售价";
+                importTemplateUrl = "${pageContext.request.contextPath }/static/template/sku/suggestedRetailPriceTemplate.xlsx";
+                importUrl = "${pageContext.request.contextPath }/sku/importSuggestedRetailPrice";
+                break;
 
         }
         if (isEmpty(importTitle)) {
@@ -918,8 +923,7 @@
                 if (res.code == '200') {
                     $.messager.alert("提示", "上传成功");
                     bindData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
@@ -942,6 +946,7 @@
             window.open("${pageContext.request.contextPath }/sku/printTmallLable?sku=" + sku);
         }
     }
+
     function showPrintProduceLabelBysSelect() {
         var rows = $('#dg').datagrid('getSelections');
         if (rows && rows.length == 1) {
@@ -950,7 +955,8 @@
             $.messager.alert("提示", "请选择一条记录.");
         }
     }
-    function showPrintProduceLabel(sku){
+
+    function showPrintProduceLabel(sku) {
         if (isEmpty(sku)) {
             window.open("${pageContext.request.contextPath }/sku/printProduceLabel");
         } else {

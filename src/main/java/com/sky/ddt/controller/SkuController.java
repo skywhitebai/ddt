@@ -118,7 +118,12 @@ public class SkuController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return skuService.importCostPrice(file, dealUserId);
     }
-
+    @RequestMapping("/importSuggestedRetailPrice")
+    @ResponseBody
+    public BaseResponse importSuggestedRetailPrice(MultipartFile file) {
+        Integer dealUserId = getCurrentUserId();
+        return skuService.importSuggestedRetailPrice(file, dealUserId);
+    }
     @RequestMapping("/importWeight")
     @ResponseBody
     @RightAnnotation("sku/importWeight")
