@@ -7,6 +7,7 @@
         <result column="productionQuantityTotal" property="productionQuantityTotal"/>
         <result column="shopParentSkus" property="shopParentSkus"/>
         <result column="skuId" property="skuId"/>
+        <result column="warehousingQuantityTotal" property="warehousingQuantityTotal"/>
     </resultMap>
     <select id="listProduceOrder" parameterType="com.sky.ddt.dto.produceOrder.request.ListProduceOrderRequest"
             resultMap="ListProduceOrderMap">
@@ -17,7 +18,9 @@
         poss.produce_order_id=po.id),0) productionQuantityTotal,
         (SELECT GROUP_CONCAT(DISTINCT shop_parent_sku) shopParentSkus FROM `produce_order_shop_sku` poss,`shop_sku` ss
         WHERE poss.produce_order_id=po.id AND poss.shop_sku_id=ss.shop_sku_id AND shop_parent_sku IS NOT NULL AND
-        shop_parent_sku!='') shopParentSkus,(select max(ss.sku_id) from produce_order_shop_sku poss,shop_sku ss where poss.produce_order_id=po.id and poss.shop_sku_id=ss.shop_sku_id) skuId
+        shop_parent_sku!='') shopParentSkus,(select max(ss.sku_id) from produce_order_shop_sku poss,shop_sku ss where poss.produce_order_id=po.id and poss.shop_sku_id=ss.shop_sku_id) skuId,
+        (select sum(warehousing_quantity) from warehousing_order wo,warehousing_order_shop_sku woss where wo.status = 2
+        and wo.type = 1 and wo.produce_order_id=po.id and wo.id=woss.warehousing_order_id) warehousingQuantityTotal
 
         from produce_order po
         <where>

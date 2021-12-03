@@ -48,13 +48,11 @@ public class FinancialStatementController extends SuperController {
     }
     @RequestMapping("/exportCurrentUserDeveloperFinancialStatement")
     @ResponseBody
-    @MenuAnnotation("finance/index")
     public BaseResponse exportCurrentUserDeveloperFinancialStatement(String month) {
         return financialStatementService.exportCurrentUserFinancialStatement(response,month,"developer",getCurrentUserId());
     }
     @RequestMapping("/exportCurrentUserSalesmanFinancialStatement")
     @ResponseBody
-    @MenuAnnotation("finance/index")
     public BaseResponse exportCurrentUserSalesmanFinancialStatement(String month) {
         return financialStatementService.exportCurrentUserFinancialStatement(response,month,"salesman",getCurrentUserId());
     }

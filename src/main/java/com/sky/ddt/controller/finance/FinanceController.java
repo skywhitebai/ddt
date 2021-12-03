@@ -78,7 +78,6 @@ public class FinanceController extends SuperController {
     //importFinance
     @RequestMapping("/importFinance")
     @ResponseBody
-    @MenuAnnotation("finance/index")
     @LogRequest(action = Action.Skip)
     public BaseResponse importFinance(ImportFinanceRequest params) {
         Integer dealUserId = getCurrentUserId();

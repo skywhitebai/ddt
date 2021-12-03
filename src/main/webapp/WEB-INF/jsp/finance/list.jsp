@@ -123,7 +123,7 @@
     function bindData() {
         dg = '#dg';
         url = "${pageContext.request.contextPath }/finance/list";
-        title = "订单管理";
+        title = "财务列表";
         queryParams = {
             shopId: $("#s_shopId").combobox('getValue'),
             month: $("#s_month").val()

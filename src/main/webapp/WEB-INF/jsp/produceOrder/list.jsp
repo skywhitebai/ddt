@@ -432,6 +432,7 @@
                         }
                     },
                     {title: '生产数量', field: 'productionQuantityTotal', width: 66},
+                    {title: '入库数量', field: 'warehousingQuantityTotal', width: 66},
                     {title: '创建时间', field: 'createTime', width: 180},
                     {title: '修改时间', field: 'updateTime', width: 180},
                     {title: '生产完成时间', field: 'completionTime', width: 180},

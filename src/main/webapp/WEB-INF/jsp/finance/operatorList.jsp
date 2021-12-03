@@ -55,8 +55,8 @@
     <a href="javascript:void(0)" onclick="showDlgImport('manualAdjustment',null)" class="easyui-linkbutton">导入人工核准</a>
     <br>
     <a href="javascript:void(0)" onclick="exportFbaCustomerReturnPerUnitFeeNotExistSku()" class="easyui-linkbutton">导出退款操作费找不到sku的订单号</a>
-    <a href="javascript:void(0)" onclick="exportDeveloperFinancialStatement()" class="easyui-linkbutton">导出开发人员财务报表</a>
-    <a href="javascript:void(0)" onclick="exportSalesmanFinancialStatement()" class="easyui-linkbutton">导出销售人员财务报表</a>
+    <a href="javascript:void(0)" onclick="exportDeveloperFinancialStatement()" class="easyui-linkbutton">当月开发财务报表下载</a>
+    <a href="javascript:void(0)" onclick="exportSalesmanFinancialStatement()" class="easyui-linkbutton">当月销售财务报表下载</a>
 
     <br>
 </div>
@@ -122,7 +122,7 @@
     function bindData() {
         dg = '#dg';
         url = "${pageContext.request.contextPath }/finance/list";
-        title = "订单管理";
+        title = "运营财务列表";
         queryParams = {
             shopId: $("#s_shopId").combobox('getValue'),
             month: $("#s_month").val()
