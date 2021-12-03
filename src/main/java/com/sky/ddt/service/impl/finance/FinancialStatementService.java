@@ -32,6 +32,7 @@ import org.springframework.util.StringUtils;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -424,6 +425,7 @@ public class FinancialStatementService implements IFinancialStatementService {
             workbook.write(outputStream);
             ByteArrayInputStream tempIn = new ByteArrayInputStream(outputStream.toByteArray());
             response.setHeader("Content-Length", String.valueOf(tempIn.available()));
+            response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8") + DateUtil.getFormatStryyyyMMddHHmmss(new Date()) + ".xlsx");//默认Excel名称
             OutputStream out = response.getOutputStream();
             byte[] buffer = new byte[1024];
             int a;
