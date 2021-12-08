@@ -16,4 +16,5 @@ public class ListProduceOrderResponse extends ProduceOrder {
     String shopParentSkus;
     Integer skuId;
     String imgUrl;
+    Integer warehousingQuantityTotal;
 }

@@ -19,7 +19,7 @@
         ss.*
         ,p.product_code,p.product_name,p.chinese_product_name,
         p.english_product_name,sku.sku,sku.colour,sku.colour_number,s.shop_name,u.user_name
-        salesmanUserName
+        salesmanUserName,format(((ss.head_trip_cost+sku.cost_price)/6+5)/0.7/0.83/0.7,2) suggestedRetailPrice
         from shop_sku ss
         left join sku on ss.sku_id=sku.sku_id
         left join product p on sku.product_id=p.product_id

@@ -366,6 +366,7 @@
                     }
                 },
                 {title: '店铺sku', field: 'shopSku', width: 120},
+                {title: '建议零售价', field: 'suggestedRetailPrice', width: 80},
                 {title: '颜色', field: 'colour', width: 100},
                 {title: '色号', field: 'colourNumber', width: 100},
                 {title: '店铺父sku', field: 'shopParentSku', width: 120},

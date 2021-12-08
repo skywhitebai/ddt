@@ -3,6 +3,8 @@ package com.sky.ddt.dto.shopSku.response;
 import com.sky.ddt.entity.ShopSku;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * @author baixueping
  * @description 店铺sku
@@ -20,5 +22,6 @@ public class ListShopSkuResponse extends ShopSku{
     String imgUrl;
     String colour;
     String colourNumber;
+    private BigDecimal suggestedRetailPrice;
 
 }
