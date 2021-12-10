@@ -22,6 +22,6 @@ public class ListShopSkuResponse extends ShopSku{
     String imgUrl;
     String colour;
     String colourNumber;
-    private BigDecimal suggestedRetailPrice;
+    private String suggestedRetailPrice;
 
 }
