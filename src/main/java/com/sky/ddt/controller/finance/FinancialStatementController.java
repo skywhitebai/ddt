@@ -49,12 +49,12 @@ public class FinancialStatementController extends SuperController {
     @RequestMapping("/exportCurrentUserDeveloperFinancialStatement")
     @ResponseBody
     public BaseResponse exportCurrentUserDeveloperFinancialStatement(String month) {
-        return financialStatementService.exportCurrentUserFinancialStatement(response,month,"developer",getCurrentUserId());
+        return financialStatementService.exportCurrentUserFinancialStatement(response,month,"developer",getCurrentUserInfo());
     }
     @RequestMapping("/exportCurrentUserSalesmanFinancialStatement")
     @ResponseBody
     public BaseResponse exportCurrentUserSalesmanFinancialStatement(String month) {
-        return financialStatementService.exportCurrentUserFinancialStatement(response,month,"salesman",getCurrentUserId());
+        return financialStatementService.exportCurrentUserFinancialStatement(response,month,"salesman",getCurrentUserInfo());
     }
     @RequestMapping("/exportFinancialStatementAll")
     @ResponseBody

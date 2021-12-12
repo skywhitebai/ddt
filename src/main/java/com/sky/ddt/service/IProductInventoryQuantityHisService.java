@@ -4,6 +4,8 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dto.inventoryQuantityHis.request.ListInventoryQuantityHisRequest;
 import com.sky.ddt.dto.inventoryQuantityHis.response.ListInventoryQuantityHisResponse;
 
+import java.util.List;
+
 /**
  * @author sky
  * @Description 产品库存
@@ -20,4 +22,6 @@ public interface IProductInventoryQuantityHisService {
     void saveProductInventoryQuantityHis();
 
     PageInfo<ListInventoryQuantityHisResponse> listProductInventoryQuantityHis(ListInventoryQuantityHisRequest params);
+
+    List<ListInventoryQuantityHisResponse> listExportProductInventoryQuantityHis(ListInventoryQuantityHisRequest params);
 }

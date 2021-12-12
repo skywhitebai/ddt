@@ -271,6 +271,44 @@ public class FinanceService implements IFinanceService {
         return BaseResponse.success();
     }
 
+    @Override
+    public BaseResponse unlockFinance(Integer id, Integer dealUserId) {
+        if (id == null) {
+            return BaseResponse.failMessage(FinanceConstant.ID_EMPTY);
+        }
+        Finance finance = getFinance(id);
+        if (finance == null) {
+            return BaseResponse.failMessage(FinanceConstant.ID_NOT_EXIST);
+        }
+        if (!FinanceConstant.FinanceStatusEnum.LOCKED.getStatus().equals(finance.getStatus())) {
+            return BaseResponse.failMessage(FinanceConstant.NOT_ALLOW_UNLOCK);
+        }
+        Finance financeUpdate = new Finance();
+        financeUpdate.setId(finance.getId());
+        financeUpdate.setStatus(FinanceConstant.FinanceStatusEnum.GENERATED.getStatus());
+        customFinanceMapper.updateByPrimaryKeySelective(financeUpdate);
+        return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse unlockFinanceStatistic(Integer id, Integer dealUserId) {
+        if (id == null) {
+            return BaseResponse.failMessage(FinanceConstant.ID_EMPTY);
+        }
+        Finance finance = getFinance(id);
+        if (finance == null) {
+            return BaseResponse.failMessage(FinanceConstant.ID_NOT_EXIST);
+        }
+        if (!FinanceConstant.FinanceStatusEnum.LOCKED.getStatus().equals(finance.getStatisticStatus())) {
+            return BaseResponse.failMessage(FinanceConstant.NOT_ALLOW_UNLOCK);
+        }
+        Finance financeUpdate = new Finance();
+        financeUpdate.setId(finance.getId());
+        financeUpdate.setStatisticStatus(FinanceConstant.FinanceStatusEnum.GENERATED.getStatus());
+        customFinanceMapper.updateByPrimaryKeySelective(financeUpdate);
+        return BaseResponse.success();
+    }
+
     /**
      * @param id
      * @param dealUserId

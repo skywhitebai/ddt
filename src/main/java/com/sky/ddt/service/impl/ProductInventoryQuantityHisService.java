@@ -42,6 +42,11 @@ public class ProductInventoryQuantityHisService implements IProductInventoryQuan
         return page;
     }
 
+    @Override
+    public List<ListInventoryQuantityHisResponse> listExportProductInventoryQuantityHis(ListInventoryQuantityHisRequest params) {
+        return customProductInventoryQuantityHisMapper.listProductInventoryQuantityHis(params);
+    }
+
     private boolean existThisMonth(Date month) {
         ProductInventoryQuantityHisExample example=new ProductInventoryQuantityHisExample();
         example.createCriteria().andMonthEqualTo(month);

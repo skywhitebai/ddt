@@ -28,6 +28,7 @@ public class FinanceConstant {
     public static final String[] EXPORT_FBA_CUSTOMER_RETURN_PER_UNIT_FEE_NOT_EXIST_SKU_HEAD = {"order_id", "total", "date_time"};
     public static final String FINANCE_ID_EMPTY = "财务id不能为空";
     public static final String REMARK_TOO_LONG = "备注长度不能超过500";
+    public static final String NOT_ALLOW_UNLOCK = "财务报表未锁定，不允许解锁";
 
     @Getter
     public enum FinanceTypeEnum {

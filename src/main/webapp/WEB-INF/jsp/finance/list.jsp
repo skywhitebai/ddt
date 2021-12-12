@@ -275,7 +275,8 @@
                                 + '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="exportFinancialStatement(' + row.id + ')" class="easyui-linkbutton" >下载报表</a>'
                                 + '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="lockFinance(' + row.id + ')" title="锁定后不能再重新生成" class="easyui-linkbutton" >锁定</a>';
                         } else if (row.status == 2) {
-                            return '<a href="javascript:void(0)" onclick="exportFinancialStatement(' + row.id + ')" class="easyui-linkbutton" >下载报表</a>';
+                            return '<a href="javascript:void(0)" onclick="exportFinancialStatement(' + row.id + ')" class="easyui-linkbutton" >下载报表</a>'
+                                + '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="unlockFinance(' + row.id + ')" title="解锁" class="easyui-linkbutton" >解锁</a>';
                         }
                     }
                 },
@@ -293,7 +294,8 @@
                                 + '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="lockFinanceStatistic(' + row.id + ')" title="锁定后不能再重新生成" class="easyui-linkbutton" >锁定</a>';
                         } else if (value == 2) {
                             return '<a href="javascript:void(0)" onclick="showFinanceStatistic(' + row.id + ')" class="easyui-linkbutton" >查看</a>'
-                                + '&nbsp;&nbsp;已锁定';
+                                + '&nbsp;&nbsp;已锁定'
+                                + '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="unlockFinanceStatistic(' + row.id + ')" title="解锁" class="easyui-linkbutton" >解锁</a>';
                         }
                     }
                 },
@@ -579,10 +581,34 @@
         });
     }
 
+    function unlockFinance(id) {
+        $.post('${pageContext.request.contextPath }/finance/unlockFinance', {id: id}, function (data) {
+            if (data.code == '200') {
+                $.messager.alert("提示", "解锁成功");
+                bindData();
+            }
+            else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+
     function lockFinanceStatistic(id) {
         $.post('${pageContext.request.contextPath }/finance/lockFinanceStatistic', {id: id}, function (data) {
             if (data.code == '200') {
                 $.messager.alert("提示", "锁定成功");
+                bindData();
+            }
+            else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+
+    function unlockFinanceStatistic(id) {
+        $.post('${pageContext.request.contextPath }/finance/unlockFinanceStatistic', {id: id}, function (data) {
+            if (data.code == '200') {
+                $.messager.alert("提示", "解锁成功");
                 bindData();
             }
             else {

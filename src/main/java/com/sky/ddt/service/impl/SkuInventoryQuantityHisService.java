@@ -42,6 +42,11 @@ public class SkuInventoryQuantityHisService implements ISkuInventoryQuantityHisS
         return page;
     }
 
+    @Override
+    public List<ListInventoryQuantityHisResponse> listExportSkuInventoryQuantityHis(ListInventoryQuantityHisRequest params) {
+        return customSkuInventoryQuantityHisMapper.listSkuInventoryQuantityHis(params);
+    }
+
     private boolean existThisMonth(Date month) {
         SkuInventoryQuantityHisExample example=new SkuInventoryQuantityHisExample();
         example.createCriteria().andMonthEqualTo(month);

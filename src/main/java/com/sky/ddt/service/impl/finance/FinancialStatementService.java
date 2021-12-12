@@ -2,6 +2,7 @@ package com.sky.ddt.service.impl.finance;
 
 import com.sky.ddt.common.constant.FinanceConstant;
 import com.sky.ddt.common.constant.FinancialStatementConstant;
+import com.sky.ddt.common.login.CurrentUserInfo;
 import com.sky.ddt.dao.custom.CustomFinanceMapper;
 import com.sky.ddt.dao.custom.CustomFinancialStatementMapper;
 import com.sky.ddt.dao.custom.CustomMonthlySalesMapper;
@@ -367,22 +368,23 @@ public class FinancialStatementService implements IFinancialStatementService {
         //根据用户信息，生成多个excel
         Map<String, Workbook> workbookMap = getWorkbookMap(financialStatementList, type, monthChinese);
         //Map<String, ByteArrayOutputStream> byteArrayOutputStreamMap = workBook2Stream(workbookMap);
-        String fileName = getZipName(monthChinese, type);
+        String fileName = getZipName(monthChinese, type, "");
         Map<String, byte[]> byteMap = workBook2Byte(workbookMap, fileName);
         ZipUtil.downloadBatchByFile(response, byteMap, fileName);
         return BaseResponse.success();
     }
+
     /**
      * @param response
      * @param month
-     * @param type     @return
-     * @param currentUserId
+     * @param type            @return
+     * @param currentUserInfo
      * @description 导出制定月份财务数据
      * @author baixueping
      * @date 2020/12/15 14:42
      */
     @Override
-    public BaseResponse exportCurrentUserFinancialStatement(HttpServletResponse response, String month, String type, Integer currentUserId) {
+    public BaseResponse exportCurrentUserFinancialStatement(HttpServletResponse response, String month, String type, CurrentUserInfo currentUserInfo) {
         //查询当月所有数据 判断是否全部已生成，如果有未生成的则报错
         if (StringUtils.isEmpty(month)) {
             return BaseResponse.failMessage("请选择月份");
@@ -397,12 +399,12 @@ public class FinancialStatementService implements IFinancialStatementService {
         }
         //获取所有店铺sku销售数据
         FinancialStatementExample example = new FinancialStatementExample();
-        FinancialStatementExample.Criteria criteria=example.createCriteria().andFinanceIdIn(checkFinancialStatusResponse.getData());
+        FinancialStatementExample.Criteria criteria = example.createCriteria().andFinanceIdIn(checkFinancialStatusResponse.getData());
         example.setOrderByClause("shop_parent_sku,sku");
-        if(type.equals("developer")){
-            criteria.andDeveloperUserIdEqualTo(currentUserId);
-        }else if(type.equals("salesman")){
-            criteria.andSalesmanUserIdEqualTo(currentUserId);
+        if (type.equals("developer")) {
+            criteria.andDeveloperUserIdEqualTo(currentUserInfo.getUserId());
+        } else if (type.equals("salesman")) {
+            criteria.andSalesmanUserIdEqualTo(currentUserInfo.getUserId());
         }
         List<FinancialStatement> financialStatementList = customFinancialStatementMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(financialStatementList)) {
@@ -414,12 +416,12 @@ public class FinancialStatementService implements IFinancialStatementService {
         }
         //根据用户信息，生成多个excel
         Map<String, Workbook> workbookMap = getWorkbookMap(financialStatementList, type, monthChinese);
-        Workbook workbook=null;
+        Workbook workbook = null;
         for (String key : workbookMap.keySet()) {
             workbook = workbookMap.get(key);
 
         }
-        String fileName = getZipName(monthChinese, type);
+        String fileName = getZipName(monthChinese, type, currentUserInfo.getRealName());
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             workbook.write(outputStream);
@@ -458,14 +460,20 @@ public class FinancialStatementService implements IFinancialStatementService {
         return map;
     }
 
-    private String getZipName(String monthChinese, String type) {
+    private String getZipName(String monthChinese, String type, String realName) {
+        String name = "";
         if ("developer".equals(type)) {
-            return "开发人员" + monthChinese + "财务报表";
+            name = "开发人员";
         } else if ("salesman".equals(type)) {
-            return "销售人员" + monthChinese + "财务报表";
+            name = "销售人员";
         } else {
             return "类型错误";
         }
+        if (!StringUtils.isEmpty(realName)) {
+            name = name + "-" + realName;
+        }
+        name = name + "-" + monthChinese + "财务报表";
+        return name;
     }
 
     public static Map<String, ByteArrayOutputStream> workBook2Stream(Map<String, Workbook> workbookMap) {
@@ -754,13 +762,13 @@ public class FinancialStatementService implements IFinancialStatementService {
     }
 
     private void setRoiAndInventoryTurnover(FinancialStatement financialStatement) {
-        BigDecimal cost =MathUtil.subtractBigDecimal(MathUtil.addBigDecimal(financialStatement.getProcurementCost(), financialStatement.getFbaHeadTripCost()), financialStatement.getHeadDeductionFee());
+        BigDecimal cost = MathUtil.subtractBigDecimal(MathUtil.addBigDecimal(financialStatement.getProcurementCost(), financialStatement.getFbaHeadTripCost()), financialStatement.getHeadDeductionFee());
         if (cost.compareTo(BigDecimal.ZERO) != 0) {
-            BigDecimal roi =MathUtil.divide(financialStatement.getMainBusinessProfit(),cost, 2);
+            BigDecimal roi = MathUtil.divide(financialStatement.getMainBusinessProfit(), cost, 2);
             financialStatement.setRoi(roi);
             BigDecimal inventoryCost = MathUtil.addBigDecimal(financialStatement.getInitialInventoryCost(), financialStatement.getFinalInventoryCost());
             inventoryCost = MathUtil.divide(inventoryCost, new BigDecimal(2), 2);
-            BigDecimal inventoryTurnover=MathUtil.divide(inventoryCost.multiply(new BigDecimal(30)), cost, 2);
+            BigDecimal inventoryTurnover = MathUtil.divide(inventoryCost.multiply(new BigDecimal(30)), cost, 2);
             financialStatement.setInventoryTurnover(inventoryTurnover);
         } else {
             financialStatement.setRoi(BigDecimal.ZERO);
@@ -769,11 +777,11 @@ public class FinancialStatementService implements IFinancialStatementService {
     }
 
     private void setGrossMarginOnSales(FinancialStatement financialStatement) {
-        if (financialStatement.getProductSales()!=null
-                && financialStatement.getProductSales().compareTo(BigDecimal.ZERO) != 0){
+        if (financialStatement.getProductSales() != null
+                && financialStatement.getProductSales().compareTo(BigDecimal.ZERO) != 0) {
             BigDecimal grossMarginOnSales = financialStatement.getMainBusinessProfit().divide(financialStatement.getProductSales().multiply(getRateOfDollarExchangeRmb(financialStatement)), 4, BigDecimal.ROUND_HALF_UP);
             financialStatement.setGrossMarginOnSales(grossMarginOnSales);
-        } else{
+        } else {
             financialStatement.setGrossMarginOnSales(BigDecimal.ZERO);
         }
     }

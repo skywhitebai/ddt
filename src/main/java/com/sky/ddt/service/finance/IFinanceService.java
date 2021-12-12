@@ -92,4 +92,8 @@ public interface IFinanceService {
     BaseResponse saveFinanceRemark(SaveFinanceRemarkRequest params, Integer dealUserId);
 
     BaseResponse lockFinanceStatistic(Integer id, Integer dealUserId);
+
+    BaseResponse unlockFinance(Integer id, Integer dealUserId);
+
+    BaseResponse unlockFinanceStatistic(Integer id, Integer dealUserId);
 }

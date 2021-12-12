@@ -1,5 +1,6 @@
 package com.sky.ddt.service.finance;
 
+import com.sky.ddt.common.login.CurrentUserInfo;
 import com.sky.ddt.dto.response.BaseResponse;
 
 import javax.servlet.http.HttpServletResponse;
@@ -41,11 +42,11 @@ public interface IFinancialStatementService {
     BaseResponse exportFinancialStatementAll(HttpServletResponse response, String month);
     /**
      * @param
-     * @param currentUserId
+     * @param currentUserInfo
      * @return
      * @description 导出当前用户指定月份财务数据
      * @author baixueping
      * @date 2020/12/15 14:42
      */
-    BaseResponse exportCurrentUserFinancialStatement(HttpServletResponse response, String month, String developer, Integer currentUserId);
+    BaseResponse exportCurrentUserFinancialStatement(HttpServletResponse response, String month, String developer, CurrentUserInfo currentUserInfo);
 }

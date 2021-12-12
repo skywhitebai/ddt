@@ -43,6 +43,8 @@
     </form>
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
+    <a href="javascript:void(0)" onclick="exportData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+       style="width: 80px">下载</a>
 </div>
 <!--列表-->
 <table id="dg" style="width: 100%; height: auto">
@@ -116,6 +118,11 @@
             }
         )
         $(dg).datagrid('clearSelections');
+    }
+    function exportData() {
+        queryParams = getQueryParams();
+        url = "${pageContext.request.contextPath }/inventoryQuantityHis/exportInventoryQuantityHis" + getUrlParams(queryParams);
+        window.open(url);
     }
 </script>
 </html>
