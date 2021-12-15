@@ -27,7 +27,7 @@ public class AnnouncementService implements IAnnouncementService {
         PageHelper.startPage(params.getPage(),params.getRows(),true);
         AnnouncementExample example=new AnnouncementExample();
         if(!StringUtils.isEmpty(params.getTitle())){
-            example.createCriteria().andTitleLike(params.getTitle());
+            example.createCriteria().andTitleLike("%"+params.getTitle()+"%");
         }
         if(params.getStatus()!=null){
             example.createCriteria().andStatusEqualTo(params.getStatus());

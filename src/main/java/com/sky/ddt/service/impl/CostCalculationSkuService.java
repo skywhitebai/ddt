@@ -32,7 +32,7 @@ public class CostCalculationSkuService implements ICostCalculationSkuService {
             criteria.andCostCalculationIdEqualTo(params.getCostCalculationId());
         }
         if(!StringUtils.isEmpty(params.getSku())){
-            criteria.andSkuLike(params.getSku());
+            criteria.andSkuLike("%"+params.getSku()+"%");
         }
         costCalculationSkuExample.setOrderByClause("create_time desc,sku asc");
         List<CostCalculationSku> list = customCostCalculationSkuMapper.selectByExample(costCalculationSkuExample);

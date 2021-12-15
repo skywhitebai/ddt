@@ -26,6 +26,7 @@
                 <if test="createTimeEnd != null ">and create_time <![CDATA[<]]>
                     DATE_ADD(date(#{createTimeEnd}),INTERVAL 1 DAY)
                 </if>
+                <if test="transportTypeId != null ">and transport_type_id= #{transportTypeId}</if>
                 <if test="payAmountStatus != null and payAmountStatus==1">and pay_amount is not null</if>
                 <if test="payAmountStatus != null and payAmountStatus==0">and pay_amount is null</if>
             </trim>

@@ -22,6 +22,7 @@ public class ListInternalOrderNumberRequest extends DataGridRequest {
     Date createTimeEnd;
     Integer payAmountStatus;
     String month;
+    Integer transportTypeId;
 
     public Date getCreateTimeStart() {
         if(StringUtils.isEmpty(month)){

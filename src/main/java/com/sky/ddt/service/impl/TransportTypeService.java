@@ -42,7 +42,7 @@ public class TransportTypeService implements ITransportTypeService {
         PageHelper.startPage(params.getPage(), params.getRows(), true);
         TransportTypeExample example = new TransportTypeExample();
         if (!StringUtils.isEmpty(params.getTransportTypeName())) {
-            example.createCriteria().andTransportTypeNameLike(params.getTransportTypeName());
+            example.createCriteria().andTransportTypeNameLike("%"+params.getTransportTypeName()+"%");
         }
         example.setOrderByClause(" sort desc ");
         List<TransportType> list = customTransportTypeMapper.selectByExample(example);

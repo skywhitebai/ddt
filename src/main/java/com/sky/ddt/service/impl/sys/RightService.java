@@ -52,10 +52,10 @@ public class RightService implements IRightService {
             criteria.andMenuIdEqualTo(params.getMenuId());
         }
         if (!StringUtils.isEmpty(params.getRightName())) {
-            criteria.andRightNameLike(params.getRightName());
+            criteria.andRightNameLike("%"+params.getRightName()+"%");
         }
         if (!StringUtils.isEmpty(params.getRightStr())) {
-            criteria.andRightStrLike(params.getRightStr());
+            criteria.andRightStrLike("%"+params.getRightStr()+"%");
         }
         example.setOrderByClause("update_time desc");
         List<Right> list = customRightMapper.selectByExample(example);
