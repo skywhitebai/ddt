@@ -91,9 +91,9 @@
     </select>
     <select id="listSkuCostPriceInfo" parameterType="com.sky.ddt.dto.produceOrder.request.GenerationCostRequest"
             resultType="com.sky.ddt.dto.produceOrder.request.SkuCostPriceInfo">
-   SELECT ss.*,IFNULL(ss.inventory_quantity+IFNULL(SUM(ss.afn_total_quantity),0),0) quantity FROM
+   SELECT ss.*,IFNULL(ss.inventory_quantity+IFNULL(ss.afn_total_quantity,0),0) quantity FROM
   (select
-        sku.sku_id skuId,sku.sku,sku.cost_price costPrice,p.labour_cost labourCost,poss.`shop_sku_id`,siqh.`inventory_quantity`,id.`afn_total_quantity`
+        sku.sku_id skuId,sku.sku,sku.cost_price costPrice,p.labour_cost labourCost,poss.`shop_sku_id`,siqh.`inventory_quantity`,SUM(id.`afn_total_quantity`) afn_total_quantity
         from
         produce_order po
         inner join produce_order_shop_sku poss on  po.id=poss.produce_order_id and po.completion_time>=#{monthDate} and po.completion_time<![CDATA[ < ]]>
@@ -102,7 +102,7 @@
 	inner join sku on ss.sku_id=sku.`sku_id`
 	INNER JOIN product p on sku.product_id=p.product_id
 	LEFT join sku_inventory_quantity_his siqh on sku.sku_id=siqh.sku_id and siqh.month=date(#{monthDate})
-	left join inventory_details id on id.`shop_sku_id`=ss.`shop_sku_id` and id.`finance_id` in(select f.id from `finance` f where f.`month`=date_add(#{monthDate}, interval -1 MONTH))
+	left join inventory_details id on id.`shop_sku_id` IN(SELECT shop_sku_id FROM shop_sku ss2 WHERE ss2.sku_id=ss.sku_id)  and id.`finance_id` in(select f.id from `finance` f where f.`month`=date_add(#{monthDate}, interval -1 MONTH))
 group by poss.`shop_sku_id`) ss
 group by skuId
     </select>
