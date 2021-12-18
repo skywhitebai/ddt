@@ -9,7 +9,7 @@
     <select id="listFactoryProductionOrderShopSku"
             resultMap="listFactoryProductionOrderShopSkuMap">
         SELECT
-                fposs.*,ss.shop_parent_sku
+                fposs.*,ifnull(ss.shop_parent_sku,'') shop_parent_sku
         from factory_production_order_shop_sku fposs,shop_sku ss
         where fposs.factory_production_order_id=#{factoryProductionOrderId}
         and fposs.shop_sku_id=ss.shop_sku_id

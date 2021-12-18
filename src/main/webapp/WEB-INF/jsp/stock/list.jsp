@@ -322,9 +322,28 @@
                 {title: '预计42天销量', field: 'estimateSales42Days', width: 90},
                 {title: '预计56天销量', field: 'estimateSales56Days', width: 90},
                 {title: '预计90天销量', field: 'estimateSales90Days', width: 90},*/
+                {title: 'fba可售库存', field: 'afnFulfillableQuantity', width: 90},
+                {
+                    title: '当前库存周转', field: 'ableCanSaleDay', width: 90,
+                    formatter: function (value, row, rowIndex) {
+                        var res = "";
+                        if (value >= 30) {
+                            res = value;
+                        } else {
+                            res += '<span style="color:red">' + value + '</span>'
+                        }
+                        return res;
+                    },
+                    styler: function (value, row, rowIndex) {
+                        if (value < 30) {
+                            return 'background-color:yellow;'
+                        }
+                    }
+                },
+                {title: '在途', field: 'onTheWayQuantity', width: 90},
                 {title: 'fba总可售库存', field: 'fbaTotalCanSaleQuantity', width: 90},
                 {
-                    title: '预计可售天数', field: 'estimateCanSaleDay', width: 90,
+                    title: '预计总可售天数', field: 'estimateCanSaleDay', width: 95,
                     formatter: function (value, row, rowIndex) {
                         var res = "";
                         if (value >= 30) {
@@ -357,7 +376,6 @@
                     formatter: cellFormatter
                 },
                 {title: '店铺sku', field: 'shopSku', width: 168},
-                {title: 'fba可售库存', field: 'afnFulfillableQuantity', width: 90},
                 {title: '店铺库存', field: 'inventoryQuantity', width: 90},
                 {
                     title: '其他店铺库存', field: 'inventoryQuantityOtherShop', width: 90,
