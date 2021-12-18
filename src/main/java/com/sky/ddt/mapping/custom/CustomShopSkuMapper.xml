@@ -142,8 +142,8 @@ SELECT CONCAT( #{shopId},'-',s.`sku`) shop_sku,p.product_code,s.sku_id,#{shopId}
 WHERE s.product_id=p.product_id and NOT EXISTS (SELECT 1 FROM shop_sku ss WHERE ss.`shop_sku`= CONCAT( #{shopId},'-',s.`sku`) )
     </insert>
     <insert id="insertWarehouseShopSku" parameterType="com.sky.ddt.entity.Sku">
-INSERT INTO shop_sku(shop_sku,sku_id,shop_id,create_by)
-SELECT CONCAT( s.`shop_id`,#{sku}) shop_sku,#{skuId} sku_id,s.`shop_id`,#{createBy}
+INSERT INTO shop_sku(shop_sku,sku_id,shop_id,create_by,shop_parent_sku)
+SELECT CONCAT( s.`shop_id`,#{sku}) shop_sku,#{skuId} sku_id,s.`shop_id`,#{createBy},(select p.product_code from product p,sku s where s.sku_id=#{skuId} and s.product_id=p.product_id)
 from
 shop  s where s.type=2
     </insert>

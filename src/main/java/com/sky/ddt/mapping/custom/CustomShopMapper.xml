@@ -65,6 +65,6 @@
                 <if test="type != null">and s.type = #{type}</if>
             </trim>
         </where>
-        order by s.create_time
+        order by s.shop_name asc
     </select>
 </mapper>
