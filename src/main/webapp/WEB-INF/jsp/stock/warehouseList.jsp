@@ -364,6 +364,16 @@
                     formatter: cellFormatter
                 },
                 {title: '店铺sku', field: 'shopSku', width: 168},
+                {
+                    title: '实际生产数量', field: 'productionQuantity', width: 100,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-numberbox " min="0" precision="0" onchange="saveProductionQuantity(this,' + row.shopSkuId + ')">';
+                        } else {
+                            return '<input class="easyui-numberbox" min="0" precision="0" value="' + value + '" onchange="saveProductionQuantity(this,' + row.shopSkuId + ')">';
+                        }
+                    }
+                },
                 {title: 'fba可售库存', field: 'afnFulfillableQuantity', width: 90},
                 {title: '总库存', field: 'inventoryQuantityTotal', width: 90},
                 {title: '本仓库库存', field: 'inventoryQuantity', width: 90},
@@ -397,16 +407,6 @@
                     title: '其他仓库生产中数量', field: 'produceOrderShopSkuProductionQuantityWarehouse', width: 90,
                     formatter: function (value, row, rowIndex) {
                         return '<a href="javascript:;" title="查看其他店铺库存" onclick="showProduceOrderShopSkuProductionQuantityDialog(' + row.skuId + ',' + row.shopId + ',2)" >' + value + '</a>';
-                    }
-                },
-                {
-                    title: '实际生产数量', field: 'productionQuantity', width: 100,
-                    formatter: function (value, row, rowIndex) {
-                        if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0" onchange="saveProductionQuantity(this,' + row.shopSkuId + ')">';
-                        } else {
-                            return '<input class="easyui-numberbox" min="0" precision="0" value="' + value + '" onchange="saveProductionQuantity(this,' + row.shopSkuId + ')">';
-                        }
                     }
                 },
                 {title: '店铺名', field: 'shopName', width: 140},
