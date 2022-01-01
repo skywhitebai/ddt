@@ -16,7 +16,8 @@
                 src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.5.5.4/jquery.easyui.min.js"></script>
         <script type="text/javascript"
                 src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.5.5.4/locale/easyui-lang-zh_CN.js"></script>
-        <link rel="stylesheet" href="${pageContext.request.contextPath }/static//css/main.css?t=20200928" type="text/css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath }/static//css/main.css?t=20200928"
+              type="text/css">
         <script type="text/javascript"
                 src="${pageContext.request.contextPath }/static/js/common/common.js?t=20201028"></script>
         <title>fba装箱单列表</title>
@@ -46,8 +47,8 @@
        data-options="iconCls:'icon-search'"
        style="">导入fba装箱单信息</a>
     <a href="javascript:void(0)" onclick="showDialogImportFbaPackingList2()" class="easyui-linkbutton"
-                                 data-options="iconCls:'icon-search'"
-                                 style="">新的导入fba装箱单信息</a>
+       data-options="iconCls:'icon-search'"
+       style="">新的导入fba装箱单信息</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 </table>
@@ -151,7 +152,8 @@
         <b>新的fba装箱单导入</b>
     </div>
     <form id="frm_importFbaPackingList2" method="post" novalidate="novalidate" enctype="multipart/form-data">
-        FBAshipment id：<input class="easyui-textbox" name="fbaShipmentId" id="dlg_importFbaPackingList2_fbaShipmentId"><br>
+        FBAshipment id：<input class="easyui-textbox" name="fbaShipmentId"
+                              id="dlg_importFbaPackingList2_fbaShipmentId"><br>
         Ship to（地址）：<input class="easyui-textbox" name="shipTo" id="dlg_importFbaPackingList2_shipTo"><br>
         <input type="file" id="importFbaPackingListFile2" name="file" accept=".xls,.xlsx"/>
         <div style="text-align:center;">
@@ -182,7 +184,7 @@
 </div>
 
 <!--编辑页面-->
-<div id="dlg_InvoiceInfo" class="easyui-dialog" style="width: 1000px; height: 500px; padding: 10px 20px"
+<div id="dlg_InvoiceInfo" class="easyui-dialog" style="width: 1150px; height: 500px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', align:'center'">
     <input type="hidden" id="dlg_InvoiceInfo_fbaPackingListId">
     <!--查询条件-->
@@ -220,6 +222,7 @@
     function showDialogImportFbaPackingList() {
         $('#dlg_importFbaPackingList').dialog('open').dialog('setTitle', 'fba装箱单导入');
     }
+
     function showDialogImportFbaPackingList2() {
         $('#dlg_importFbaPackingList2').dialog('open').dialog('setTitle', '新的fba装箱单导入');
         $("#dlg_importFbaPackingList2_fbaShipmentId").val("");
@@ -229,9 +232,11 @@
     function closeDialogImportFbaPackingList() {
         $('#dlg_importFbaPackingList').dialog('close');
     }
+
     function closeDialogImportFbaPackingList2() {
         $('#dlg_importFbaPackingList2').dialog('close');
     }
+
     function closeDialog() {
         $('#dlg').dialog('close');
     }
@@ -263,13 +268,13 @@
                 if (res.code == '200') {
                     $.messager.alert("提示", "上传成功");
                     bindData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
         });
     }
+
     function importFbaPackingList2() {
         var importFbaPackingListFile = $("#importFbaPackingListFile2").val();
         if (importFbaPackingListFile == '') {
@@ -281,7 +286,7 @@
             $.messager.alert("提示", "请填写fbaShipmentId");
             return;
         }
-        var shipTo= $("#dlg_importFbaPackingList2_shipTo").val();
+        var shipTo = $("#dlg_importFbaPackingList2_shipTo").val();
         if (shipTo == '') {
             $.messager.alert("提示", "请填写shipTo");
             return;
@@ -307,8 +312,7 @@
                 if (res.code == '200') {
                     $.messager.alert("提示", "上传成功");
                     bindData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
@@ -372,7 +376,7 @@
                     formatter: function (value, row, index) {
                         if (row.status == 0) {
                             return '已取消';
-                        }else if (value == 1) {
+                        } else if (value == 1) {
                             return '已生成出库单';
                         } else {
                             return '<a href="javascript:;" onclick="generateOutboundOrder(\'' + row.id + '\')" title="生成出库单">生成出库单</a>';
@@ -398,7 +402,7 @@
                     //实现刷新栏目中的数据
                     $(dg).datagrid("reload");
                 }
-            },'-', {
+            }, '-', {
                 id: 'btnDelete',
                 text: '取消',
                 iconCls: 'icon-remove',
@@ -414,6 +418,7 @@
         })
         $(dg).datagrid('clearSelections');
     }
+
     function cancelFbaPackingList() {
         var rows = $('#dg').datagrid('getSelections');
         if (rows && rows.length == 1) {
@@ -422,8 +427,7 @@
                     $.post('${pageContext.request.contextPath }/fbaPackingList/cancelFbaPackingList', {id: rows[0].id}, function (data) {
                         if (data.code == '200') {
                             bindData();
-                        }
-                        else {
+                        } else {
                             $.messager.alert("提示", data.message);
                         }
                     });
@@ -433,6 +437,7 @@
             $.messager.alert("提示", "请选择一条记录.");
         }
     }
+
     function showViewDialog() {
         var rows = $('#dg').datagrid('getSelections');
         if (rows && rows.length == 1) {
@@ -553,13 +558,14 @@
                 {title: 'sku数量', field: 'shopSkuCount', width: 50},
                 {title: '商品数量', field: 'shopSkuQuantity', width: 50},
                 {
-                    title: '操作', field: 'deal', width: 500,
+                    title: '操作', field: 'deal', width: 650,
                     formatter: function (value, row, index) {
                         return '<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'ky\')" title="生成空运发票">生成空运发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'kp\')" title="生成空派发票">生成空派发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'hy\')" title="生成海运发票">生成海运发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'hy2\')" title="生成新的海运发票">生成新的海运发票</a>'
-                            + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'dl\')" title="生成DL海运发票">生成DL海运发票</a>';
+                            + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'dl\')" title="生成DL海运发票">生成DL海运发票</a>'
+                            + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'dlx\')" title="生成德立讯发票">生成德立讯发票</a>';
                     }
                 }
             ]],

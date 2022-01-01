@@ -20,7 +20,8 @@ public class StockConsatnt {
         KP("kp"),
         HY("hy"),
         HY2("hy2"),
-        DL("dl"),;
+        DL("dl"),
+        DLX("dlx"),;
         String type;
 
         public String getType() {
