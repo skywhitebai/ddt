@@ -599,7 +599,9 @@ public class DeliverGoodsService implements IDeliverGoodsService {
     }
 
     private void updateSheetInoviceDlx(Sheet sheetInovice, InvoiceInfo invoiceInfo, CellStyle priceStyle) {
-        sheetInovice.getRow(3).getCell(3).setCellValue(invoiceInfo.getShipmentId());
+        sheetInovice.getRow(4).getCell(3).setCellValue(invoiceInfo.getShipmentId());
+        sheetInovice.getRow(12).getCell(3).setCellValue(invoiceInfo.getShipTo());
+        sheetInovice.getRow(14).getCell(3).setCellValue(getPostalCode(invoiceInfo.getShipTo()));
         Double totalWeight=0.00;
         //设置每箱信息
         for (int i = 0; i < invoiceInfo.getInvoicePackingInfoList().size(); i++) {
