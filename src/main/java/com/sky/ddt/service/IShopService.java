@@ -101,4 +101,6 @@ public interface IShopService {
      * @date 2019/9/9 17:47
      */
     Shop getShop(Integer shopId);
+
+    Shop getShopByShopName(String shopName);
 }

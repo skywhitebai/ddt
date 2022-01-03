@@ -36,7 +36,7 @@ import java.util.List;
  * @date 2019/3/26
  */
 @Controller
-@RequestMapping("shop")
+@RequestMapping("/shop")
 public class ShopController extends SuperController {
 
     @Autowired

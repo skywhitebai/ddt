@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomStorageLocationMapper">
+    <resultMap id="listStorageLocationMap"
+               type="com.sky.ddt.dto.storageLocation.response.ListStorageLocationResponse"
+               extends="com.sky.ddt.dao.generate.StorageLocationMapper.BaseResultMap">
+        <result column="shopName" property="shopName"/>
+    </resultMap>
+    <select id="listStorageLocation" parameterType="com.sky.ddt.dto.storageLocation.request.ListStorageLocationRequest" resultMap="listStorageLocationMap">
+        select
+        *,(select shop_name from shop s where s.shop_id=sl.shop_id) shopName
+        from storage_location sl
+        order by sl.location_no asc
+    </select>
+</mapper>

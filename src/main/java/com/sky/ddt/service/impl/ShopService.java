@@ -157,14 +157,14 @@ public class ShopService implements IShopService {
         if (existShopName(params.getShopName(), params.getShopId())) {
             return BaseResponse.failMessage(ShopConstant.SHOP_NAME_EXIST);
         }
-        if(!ShopConstant.TypeEnum.contains(params.getType())){
+        if (!ShopConstant.TypeEnum.contains(params.getType())) {
             return BaseResponse.failMessage(ShopConstant.TYPE_ERRO);
         }
-        if(ShopConstant.TypeEnum.SHOP.getType().equals(params.getType())){
-            if(StringUtils.isEmpty(params.getSellerId())){
+        if (ShopConstant.TypeEnum.SHOP.getType().equals(params.getType())) {
+            if (StringUtils.isEmpty(params.getSellerId())) {
                 return BaseResponse.failMessage(ShopConstant.SELLER_ID_EMPTY);
             }
-            if(StringUtils.isEmpty(params.getShopMarketplaceId())){
+            if (StringUtils.isEmpty(params.getShopMarketplaceId())) {
                 return BaseResponse.failMessage(ShopConstant.SHOP_MARKETPLACE_ID_EMPTY);
             }
             if (existSellerId(params.getSellerId(), params.getShopId())) {
@@ -180,7 +180,7 @@ public class ShopService implements IShopService {
             shop.setCreateBy(dealUserId);
             shop.setCreateTime(new Date());
             customShopMapper.insertSelective(shop);
-            if(ShopConstant.TypeEnum.WAREHOUSE.getType().equals(params.getType())){
+            if (ShopConstant.TypeEnum.WAREHOUSE.getType().equals(params.getType())) {
                 //添加仓库信息
                 customShopSkuMapper.initWareHouseShopSku(shop);
             }
@@ -189,7 +189,7 @@ public class ShopService implements IShopService {
             if (shop == null) {
                 return BaseResponse.failMessage(ShopConstant.SHOP_ID_NOT_EXIST);
             }
-            if(!params.getType().equals(shop.getType())){
+            if (!params.getType().equals(shop.getType())) {
                 return BaseResponse.failMessage(ShopConstant.TYPE_NOT_ALLOW_CHANGE);
             }
             setShop(shop, params);
@@ -208,7 +208,7 @@ public class ShopService implements IShopService {
      * @date 2019/7/24 15:50
      */
     private void setShop(Shop shop, ShopSaveRequest params) {
-        if(shop==null||params==null){
+        if (shop == null || params == null) {
             return;
         }
         shop.setShopName(params.getShopName());
@@ -282,8 +282,8 @@ public class ShopService implements IShopService {
     /**
      * 获取店铺下拉菜单
      *
-     * @return
      * @param shopComboboxlistRequest
+     * @return
      */
     @Override
     public List<ShopComboboxResponse> comboboxlist(ShopComboboxlistRequest shopComboboxlistRequest) {
@@ -348,10 +348,24 @@ public class ShopService implements IShopService {
      */
     @Override
     public Shop getShop(Integer shopId) {
-        if(shopId==null){
+        if (shopId == null) {
             return null;
         }
         return customShopMapper.selectByPrimaryKey(shopId);
+    }
+
+    @Override
+    public Shop getShopByShopName(String shopName) {
+        if (StringUtils.isEmpty(shopName)) {
+            return null;
+        }
+        ShopExample shopExample = new ShopExample();
+        shopExample.createCriteria().andShopNameEqualTo(shopName).andStatusEqualTo(Boolean.TRUE);
+        List<Shop> list = customShopMapper.selectByExample(shopExample);
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        return list.get(0);
     }
 
     private void insertShopClientHis(String ip, String macAddress, Shop shop) {

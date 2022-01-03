@@ -608,7 +608,8 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             Row rowGoodsInfo = sheetInovice.createRow(25 + i);
             InvoicePackingInfo invoicePackingInfo = invoiceInfo.getInvoicePackingInfoList().get(i);
             rowGoodsInfo.createCell(0).setCellValue(invoicePackingInfo.getContainerNo());
-            rowGoodsInfo.createCell(1).setCellValue(21);
+            Double weight=invoicePackingInfo.getWeight()*invoicePackingInfo.getQuantity();
+            rowGoodsInfo.createCell(1).setCellValue(weight);
             rowGoodsInfo.createCell(3).setCellValue(invoicePackingInfo.getLength());
             rowGoodsInfo.createCell(4).setCellValue(invoicePackingInfo.getWidth());
             rowGoodsInfo.createCell(5).setCellValue(invoicePackingInfo.getHeight());
@@ -624,7 +625,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             rowGoodsInfo.createCell(16).setCellValue("N");
             rowGoodsInfo.createCell(17).setCellValue(invoicePackingInfo.getWeight());
             rowGoodsInfo.createCell(18).setCellValue(invoicePackingInfo.getQuantity());
-            totalWeight+=invoicePackingInfo.getWeight()*invoicePackingInfo.getQuantity();
+            totalWeight+=weight;
         }
         sheetInovice.getRow(2).getCell(3).setCellValue(totalWeight);
     }

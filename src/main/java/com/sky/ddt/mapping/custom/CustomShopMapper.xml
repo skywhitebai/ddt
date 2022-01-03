@@ -52,6 +52,7 @@
                     =#{shopMarketplaceId}
                 </if>
                 <if test="status != null ">and s.status = #{status}</if>
+                <if test="type != null ">and s.type = #{type}</if>
             </trim>
         </where>
         order by s.create_time
