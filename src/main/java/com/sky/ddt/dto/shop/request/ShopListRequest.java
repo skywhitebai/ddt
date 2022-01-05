@@ -15,5 +15,6 @@ public class ShopListRequest extends DataGridRequest {
     private String shopMarketplaceId;
 
     private Boolean status;
+    private Integer type;
 
 }
