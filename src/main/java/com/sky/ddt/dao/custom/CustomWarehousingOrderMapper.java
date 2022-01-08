@@ -4,6 +4,7 @@ import com.sky.ddt.dao.generate.WarehousingOrderMapper;
 import com.sky.ddt.dto.warehousingOrder.request.ListWarehousingOrderRequest;
 import com.sky.ddt.dto.warehousingOrder.response.ExportWarehousingOrderResponse;
 import com.sky.ddt.dto.warehousingOrder.response.ListWarehousingOrderResponse;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -31,5 +32,5 @@ public interface CustomWarehousingOrderMapper extends WarehousingOrderMapper {
      */
     List<ExportWarehousingOrderResponse> listExportWarehousingOrder(ListWarehousingOrderRequest params);
 
-    void updateShopSkuStorageLocation(Integer id, Integer dealUserId);
+    void updateShopSkuStorageLocation(@Param("id") Integer id,@Param("dealUserId")  Integer dealUserId);
 }
