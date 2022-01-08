@@ -3,6 +3,7 @@ package com.sky.ddt.dao.custom;
 import com.sky.ddt.dao.generate.StorageLocationMapper;
 import com.sky.ddt.dto.storageLocation.request.ListStorageLocationRequest;
 import com.sky.ddt.dto.storageLocation.response.ListStorageLocationResponse;
+import com.sky.ddt.dto.storageLocation.response.StorageLocationCmoboboxResponse;
 
 import java.util.List;
 
@@ -13,4 +14,6 @@ import java.util.List;
  */
 public interface CustomStorageLocationMapper extends StorageLocationMapper {
     List<ListStorageLocationResponse> listStorageLocation(ListStorageLocationRequest params);
+
+    List<StorageLocationCmoboboxResponse> comboboxlist();
 }

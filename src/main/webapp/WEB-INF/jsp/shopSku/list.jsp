@@ -60,22 +60,27 @@
     </select>
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
-    <a href="javascript:void(0)" id="a_importShopSkuStatus" onclick="showDialogImport('shopSkuStatus')" class="easyui-linkbutton a_hide"
+    <a href="javascript:void(0)" id="a_importShopSkuStatus" onclick="showDialogImport('shopSkuStatus')"
+       class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入店铺sku状态</a>
-    <a href="javascript:void(0)" id="a_importShopSku" onclick="showDialogImport('shopSku')" class="easyui-linkbutton a_hide"
+    <a href="javascript:void(0)" id="a_importShopSku" onclick="showDialogImport('shopSku')"
+       class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入店铺sku</a>
     <a href="javascript:void(0)" id="a_exportShopSku" onclick="exportShopSku()" class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导出店铺sku</a>
-    <a href="javascript:void(0)" id="a_importShopParentSku" onclick="showDialogImport('shopParentSku')" class="easyui-linkbutton a_hide"
+    <a href="javascript:void(0)" id="a_importShopParentSku" onclick="showDialogImport('shopParentSku')"
+       class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入店铺父sku</a>
-    <a href="javascript:void(0)" id="a_importSalesmanUser" onclick="showDialogImport('salesmanUser')" class="easyui-linkbutton a_hide"
+    <a href="javascript:void(0)" id="a_importSalesmanUser" onclick="showDialogImport('salesmanUser')"
+       class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入店铺sku销售人员</a>
-    <a href="javascript:void(0)" id="a_importProduceStatus" onclick="showDialogImport('produceStatus')" class="easyui-linkbutton a_hide"
+    <a href="javascript:void(0)" id="a_importProduceStatus" onclick="showDialogImport('produceStatus')"
+       class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入店铺sku生产状态</a>
     <a href="javascript:void(0)" onclick="showTransformShopSku()" class="easyui-linkbutton"
@@ -215,7 +220,7 @@
                 </td>
                 <td>库位：</td>
                 <td>
-                    <input class="easyui-textbox" type="text" name="storageLocation" >
+                    <input class="easyui-textbox" type="text" name="storageLocation">
                 </td>
             </tr>
             <tr>
@@ -267,6 +272,65 @@
     <table id="dgShopSkuHeadTripCostHis" style="width: 100%; height: auto">
     </table>
 </div>
+<div id="dlgShopSkuStorageLocation" class="easyui-dialog" style="width: 850px; height: 500px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', top:50,align:'center'">
+    <input type="hidden" id="dlgShopSkuStorageLocation_shopSkuId">
+    <!--查询条件-->
+    <div class="easyui-panel">
+        <a href="javascript:void(0)" onclick="bindShopSkuStorageLocation()" class="easyui-linkbutton"
+           data-options="iconCls:'icon-search'"
+           style="width: 80px">查 询</a>
+    </div>
+    <table id="dgShopSkuStorageLocation" style="width: 100%; height: auto">
+    </table>
+</div>
+<div id="dlgShopSkuStorageLocationInfo" class="easyui-dialog" style="width: 700px; height: 560px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons',top:50,align:'center'">
+    <div class="ftitle">
+        <b>库位管理</b>
+        <hr/>
+    </div>
+    <form id="frmShopSkuStorageLocationInfo" method="post" novalidate="novalidate">
+        <table>
+            <tr style="display: none">
+                <td>shop_sku_id：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" id="frmShopSkuStorageLocationInfo_shopSkuId"
+                           name="shopSkuId">
+                    <input class="easyui-validatebox textbox" name="id">
+                </td>
+            </tr>
+            <tr style="display: none">
+                <td>仓库名：</td>
+                <td>
+                    <select id="s_shopSkuStorageLocationInfo_shopId" style="width:150px;" name="shopId">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>库位：</td>
+                <td>
+                    <select id="s_shopSkuStorageLocationInfo_storageLocationId" style="width:150px;"
+                            name="storageLocationId">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>备注：</td>
+                <td colspan="3">
+                    <input class="easyui-textbox" type="text" name="remark" style="width: 90%">
+                </td>
+            </tr>
+        </table>
+        <div style="text-align:center;">
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-ok'" id="btn_saveShopSkuStorageLocation"
+               onclick="saveShopSkuStorageLocation()">确定</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-cancel'" onclick="closeShopSkuStorageLocationInfo()">关闭</a>
+        </div>
+    </form>
+</div>
 
 <div id="cover">
     <div id="coverMsg">
@@ -279,6 +343,23 @@
     bindData();
     bindSalesmanUserId();
     initOperationRight();
+    bindStorageLocation();
+    //bindShopSkuStorageLocationShop();
+    function bindStorageLocation() {
+        $('#s_shopSkuStorageLocationInfo_storageLocationId').combobox({
+            valueField: 'id',
+            textField: 'locationNo',
+            url: "${pageContext.request.contextPath }/storageLocation/comboboxlist",//获取数据
+        });
+    }
+
+    function bindShopSkuStorageLocationShop() {
+        $('#s_shopId').combobox({
+            valueField: 'id',
+            textField: 'locationNo',
+            url: "${pageContext.request.contextPath }/shop/comboboxlist?type=2",//获取数据
+        });
+    }
 
     function initOperationRight() {
         if (hasRight("shopSku/importShopSkuStatus")) {
@@ -308,6 +389,7 @@
             $("#btnDelete").hide()
         }
     }
+
     function bindShop() {
         $('#s_shopId').combobox({
             valueField: 'shopId',
@@ -338,8 +420,9 @@
             striped: true,
             collapsible: true,
             pagination: true,
-            //singleSelect: true,
+            singleSelect: true,
             pageSize: 15,
+            nowrap:false,
             pageList: [10, 15, 20, 30, 50],
             rownumbers: true,
             //sortName: 'ID',    //根据某个字段给easyUI排序
@@ -374,7 +457,17 @@
                 {title: 'ASIN', field: 'asin', width: 120},
                 {title: '店铺父ASIN', field: 'parentSsin', width: 120},
                 {title: '库存', field: 'inventoryQuantity', width: 60},
-                {title: '库位', field: 'storageLocation', width: 120},
+                {
+                    title: '库位',
+                    field: 'locationNos',
+                    width: 120,
+                    formatter: function (value, row, index) {
+                        if (isEmpty(value)) {
+                            value = '暂无库位';
+                        }
+                        return "<a href='#' onclick=\"showDlgShopSkuStorageLocation(" + row.shopSkuId + ")\" title='"+value+"' >" + value + "</a>";
+                    }
+                },
                 {title: '销售人员', field: 'salesmanUserName', width: 120},
                 {title: '中文报关名', field: 'chineseProductName', width: 120},
                 {title: '英文报关名', field: 'englishProductName', width: 120},
@@ -383,10 +476,10 @@
                     field: 'headTripCost',
                     width: 120,
                     formatter: function (value, row, index) {
-                        if(isEmpty(value)){
-                            value='暂无头程费';
+                        if (isEmpty(value)) {
+                            value = '暂无头程费';
                         }
-                        return "<a href='#' onclick=\"showDlgShopSkuHeadTripCost(" + row.shopSkuId + ")\" title='店铺sku头程费' >"+value+"</a>";
+                        return "<a href='#' onclick=\"showDlgShopSkuHeadTripCost(" + row.shopSkuId + ")\" title='店铺sku头程费' >" + value + "</a>";
                     }
                 },
                 {title: '创建时间', field: 'createTime', width: 180},
@@ -411,7 +504,7 @@
                         if (value == 1) {
                             return '<a href="javascript:;" title="正常生产" onclick="setProduceStatus(' + row.shopSkuId + ",'" + row.shopSku + "'" + ',2)" >正常生产</a>';
                         } else if (value == 2) {
-                            return '<a href="javascript:;" title="暂停生产" onclick="setProduceStatus(' + row.shopSkuId + ",'" + row.shopSku + "'"  + ',1)" >暂停生产</a>';
+                            return '<a href="javascript:;" title="暂停生产" onclick="setProduceStatus(' + row.shopSkuId + ",'" + row.shopSku + "'" + ',1)" >暂停生产</a>';
                         }
                     }
                 },
@@ -536,8 +629,7 @@
                 if (res.code == '200') {
                     closeDialog();
                     bindData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
@@ -561,8 +653,7 @@
                     if (data.code == '200') {
                         $('#dlg').dialog('close');
                         bindData();
-                    }
-                    else {
+                    } else {
                         $.messager.alert("提示", data.message);
                     }
                 });
@@ -692,23 +783,26 @@
                 if (res.code == '200') {
                     $.messager.alert("提示", "上传成功");
                     bindData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
         });
     }
+
     function setProduceStatus(shopSkuId, shopSku, produceStatus) {
         var produceStatusName;
-        if(produceStatus==1){
-            produceStatusName="正常生产";
-        }else if(produceStatus==2){
-            produceStatusName="暂停生产";
+        if (produceStatus == 1) {
+            produceStatusName = "正常生产";
+        } else if (produceStatus == 2) {
+            produceStatusName = "暂停生产";
         }
-        $.messager.confirm('提示', '确认修改【' + shopSku + '】的生产状态为【'+produceStatusName+'】吗？', function (r) {
+        $.messager.confirm('提示', '确认修改【' + shopSku + '】的生产状态为【' + produceStatusName + '】吗？', function (r) {
             if (r) {
-                $.post('${pageContext.request.contextPath }/shopSku/setShopSkuProduceStatus', {shopSkuId: shopSkuId,produceStatus:produceStatus}, function (data) {
+                $.post('${pageContext.request.contextPath }/shopSku/setShopSkuProduceStatus', {
+                    shopSkuId: shopSkuId,
+                    produceStatus: produceStatus
+                }, function (data) {
                     if (data.code == '200') {
                         bindData();
                     } else {
@@ -768,10 +862,180 @@
         })
         $(dg).datagrid('clearSelections');
     }
+
     function showDlgShopSkuHeadTripCost(shopSkuId) {
         $('#dlgShopSkuHeadTripCostHis').dialog('open').dialog('setTitle', '店铺sku头程费信息');
         $('#dlgShopSkuHeadTripCostHis_shopSkuId').val(shopSkuId);
         bindShopSkuHeadTripCostHis();
+    }
+
+    function showDlgShopSkuStorageLocation(shopSkuId) {
+        $('#dlgShopSkuStorageLocation').dialog('open').dialog('setTitle', '库位管理');
+        $('#dlgShopSkuStorageLocation_shopSkuId').val(shopSkuId);
+        bindShopSkuStorageLocation();
+    }
+
+    function getShopSkuStorageLocationQueryParams() {
+        queryParams = {
+            shopSkuId: $("#dlgShopSkuStorageLocation_shopSkuId").val()
+        };
+        return queryParams;
+    }
+
+    function bindShopSkuStorageLocation() {
+        dg = '#dgShopSkuStorageLocation';
+        url = "${pageContext.request.contextPath }/shopSkuStorageLocation/listShopSkuStorageLocation";
+        title = "库位管理";
+        queryParams = getShopSkuStorageLocationQueryParams();
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: true,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 15,
+            pageList: [10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'id',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '仓库名', field: 'shopName', width: 120},
+                {title: '库位', field: 'locationNo', width: 120},
+                {title: '店铺sku', field: 'shopSku', width: 120},
+                {title: '创建时间', field: 'createTime', width: 180},
+                {title: '修改时间', field: 'updateTime', width: 180},
+                {title: '备注', field: 'remark', width: 120}
+            ]],
+            toolbar: [{
+                id: 'btnAddShopSkuStorageLocation',
+                text: '添加',
+                iconCls: 'icon-add',
+                handler: function () {
+                    showAddShopSkuStorageLocationDialog();//实现添加记录的页面
+                }
+            }, '-', {
+                id: 'btnView',
+                text: '查看',
+                iconCls: 'icon-search',
+                handler: function () {
+                    showViewShopSkuStorageLocationDialog();//实现查看记录详细信息的方法
+                }
+            }, '-', {
+                id: 'btnEditShopSkuStorageLocation',
+                text: '修改',
+                iconCls: 'icon-edit',
+                handler: function () {
+                    showEditShopSkuStorageLocationDialog();//实现修改记录的方法
+                }
+            }, '-', {
+                id: 'btnDeleteShopSkuStorageLocation',
+                text: '删除',
+                iconCls: 'icon-remove',
+                handler: function () {
+                    deleteShopSkuStorageLocationInfo();//实现直接删除数据的方法
+                }
+            },
+                '-', {
+                    id: 'btnReloadShopSkuStorageLocation',
+                    text: '刷新',
+                    iconCls: 'icon-reload',
+                    handler: function () {
+                        //实现刷新栏目中的数据
+                        $(dg).datagrid("reload");
+                    }
+                }],
+            onDblClickRow: function (rowIndex, rowData) {
+                $(dg).datagrid('uncheckAll');
+                $(dg).datagrid('checkRow', rowIndex);
+                showViewShopSkuStorageLocationDialog();
+            }
+        })
+        $(dg).datagrid('clearSelections');
+    }
+
+
+
+    function showAddShopSkuStorageLocationDialog() {
+        $('#dlgShopSkuStorageLocationInfo').dialog('open').dialog('setTitle', '添加');
+        $("#btn_saveShopSkuStorageLocation").show();
+        $(".view_hide").hide();
+        $("#frmShopSkuStorageLocationInfo_shopSkuId").val($("#dlgShopSkuStorageLocation_shopSkuId").val());
+    }
+
+    function showViewShopSkuStorageLocationDialog() {
+        var rows = $('#dgShopSkuStorageLocation').datagrid('getSelections');
+        if (rows && rows.length == 1) {
+            $('#dlgShopSkuStorageLocationInfo').dialog('open').dialog('setTitle', '查看');
+            $('#frmShopSkuStorageLocationInfo').form('load', rows[0]);
+            $("#btn_saveShopSkuStorageLocation").hide();
+            $(".view_hide").show();
+        } else {
+            $.messager.alert("提示", "请选择一条记录.");
+        }
+    }
+
+    function showEditShopSkuStorageLocationDialog() {
+        var rows = $('#dgShopSkuStorageLocation').datagrid('getSelections');
+        if (rows && rows.length == 1) {
+            $('#dlgShopSkuStorageLocationInfo').dialog('open').dialog('setTitle', '修改');
+            $('#frmShopSkuStorageLocationInfo').form('load', rows[0]);
+            $("#btn_saveShopSkuStorageLocation").show();
+            $(".view_hide").hide();
+        } else {
+            $.messager.alert("提示", "请选择一条记录.");
+        }
+    }
+
+    function deleteShopSkuStorageLocationInfo() {
+        var rows = $('#dgShopSkuStorageLocation').datagrid('getSelections');
+        if (!rows || rows.length == 1) {
+            $.messager.alert("提示", "请选择一条要删除的数据.");
+            return;
+        }
+        $.messager.confirm('提示', '确认删除这' + rows.length + '条数据吗？', function (r) {
+            if (r) {
+                var shopSkuStorageLocationId = rows[0].id;
+                $.post('${pageContext.request.contextPath }/shopSkuStorageLocation/deleteShopSkuStorageLocation', {shopSkuStorageLocationId: shopSkuStorageLocationId}, function (data) {
+                    if (data.code == '200') {
+                        $('#dlg').dialog('close');
+                        bindShopSkuStorageLocation();
+                    } else {
+                        $.messager.alert("提示", data.message);
+                    }
+                });
+            }
+        });
+    }
+
+    function closeShopSkuStorageLocationInfo() {
+        $('#dlgShopSkuStorageLocationInfo').dialog('close');
+    }
+
+    function saveShopSkuStorageLocation() {
+        $('#frmShopSkuStorageLocationInfo').form('submit', {
+            url: '${pageContext.request.contextPath }/shopSkuStorageLocation/saveShopSkuStorageLocation',
+            onSubmit: function () {
+                var validate = $(this).form('validate');
+                return validate;
+            },
+            success: function (data) {
+                res = eval('(' + data + ')');
+                if (res.code == '200') {
+                    closeShopSkuStorageLocationInfo();
+                    bindShopSkuStorageLocation();
+                } else {
+                    $.messager.alert("提示", res.message);
+                }
+            }
+        });
     }
 </script>
 </body>

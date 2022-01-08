@@ -12,14 +12,16 @@
         <result column="imgUrl" property="imgUrl"/>
         <result column="colour" property="colour"/>
         <result column="colour_number" property="colourNumber"/>
+        <result column="locationNos" property="locationNos"/>
     </resultMap>
     <select id="listShopSku" parameterType="com.sky.ddt.dto.shopSku.request.ListShopSkuRequest"
             resultMap="ShopSkuListMap">
         select
         ss.*
         ,p.product_code,p.product_name,p.chinese_product_name,
-        p.english_product_name,sku.sku,sku.colour,sku.colour_number,s.shop_name,u.user_name
-        salesmanUserName, concat(format(((ss.head_trip_cost+sku.cost_price)/6+4)/0.66/0.83,2),'-',format(((ss.head_trip_cost+sku.cost_price)/6+5)/0.7/0.83/0.7,2)) suggestedRetailPrice
+        p.english_product_name,sku.sku,sku.colour,sku.colour_number,s.shop_name,u.user_name salesmanUserName,
+         concat(format(((ss.head_trip_cost+sku.cost_price)/6+4)/0.66/0.83,2),'-',format(((ss.head_trip_cost+sku.cost_price)/6+5)/0.7/0.83/0.7,2)) suggestedRetailPrice,
+         (select GROUP_CONCAT(sl.location_no SEPARATOR ',') from shop_sku_storage_location sssl,storage_location sl where sssl.shop_sku_id=ss.shop_sku_id and sssl.storage_location_id=sl.id group by ss.shop_sku_id) locationNos
         from shop_sku ss
         left join sku on ss.sku_id=sku.sku_id
         left join product p on sku.product_id=p.product_id

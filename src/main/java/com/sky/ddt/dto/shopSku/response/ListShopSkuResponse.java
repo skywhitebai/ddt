@@ -23,5 +23,7 @@ public class ListShopSkuResponse extends ShopSku{
     String colour;
     String colourNumber;
     private String suggestedRetailPrice;
+    //库位信息
+    String locationNos;
 
 }

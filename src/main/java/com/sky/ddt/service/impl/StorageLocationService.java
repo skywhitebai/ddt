@@ -9,6 +9,7 @@ import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.storageLocation.request.ListStorageLocationRequest;
 import com.sky.ddt.dto.storageLocation.request.SaveStorageLocationRequest;
 import com.sky.ddt.dto.storageLocation.response.ListStorageLocationResponse;
+import com.sky.ddt.dto.storageLocation.response.StorageLocationCmoboboxResponse;
 import com.sky.ddt.entity.*;
 import com.sky.ddt.service.IShopService;
 import com.sky.ddt.service.IStorageLocationService;
@@ -109,7 +110,7 @@ public class StorageLocationService implements IStorageLocationService {
             if (StringUtils.isEmpty(map.get("库位编号"))) {
                 sbErroItem.append(",").append("库位编号信息不能为空");
             }
-            if (!StringUtils.isEmpty(map.get("备注"))&&map.get("备注").length()>200) {
+            if (!StringUtils.isEmpty(map.get("备注")) && map.get("备注").length() > 200) {
                 sbErroItem.append(",").append("备注不能超过200");
             }
             if (sbErroItem.length() > 0) {
@@ -132,17 +133,17 @@ public class StorageLocationService implements IStorageLocationService {
                 continue;
             }
 
-            StorageLocation storageLocation= new StorageLocation();
+            StorageLocation storageLocation = new StorageLocation();
             storageLocation.setShopId(Integer.valueOf(map.get("shopId")));
             storageLocation.setRemark(map.get("备注"));
             storageLocation.setLocationNo(map.get("库位编号"));
-            StorageLocation storageLocationOld=getStorageLocation(storageLocation);
-            if(storageLocationOld!=null){
+            StorageLocation storageLocationOld = getStorageLocation(storageLocation);
+            if (storageLocationOld != null) {
                 storageLocation.setId(storageLocationOld.getId());
                 storageLocation.setUpdateBy(dealUserId);
                 storageLocation.setUpdateTime(new Date());
                 customStorageLocationMapper.updateByPrimaryKeySelective(storageLocation);
-            }else{
+            } else {
                 storageLocation.setCreateBy(dealUserId);
                 storageLocation.setCreateTime(new Date());
                 customStorageLocationMapper.insertSelective(storageLocation);
@@ -151,13 +152,27 @@ public class StorageLocationService implements IStorageLocationService {
         return BaseResponse.success();
     }
 
+    @Override
+    public StorageLocation getStorageLocation(Integer storageLocationId) {
+        if (storageLocationId == null) {
+            return null;
+        }
+        StorageLocation storageLocation = customStorageLocationMapper.selectByPrimaryKey(storageLocationId);
+        return storageLocation;
+    }
+
+    @Override
+    public List<StorageLocationCmoboboxResponse> comboboxlist() {
+        return customStorageLocationMapper.comboboxlist();
+    }
+
     private StorageLocation getStorageLocation(StorageLocation storageLocation) {
         StorageLocationExample example = new StorageLocationExample();
         StorageLocationExample.Criteria criteria = example.createCriteria();
         criteria.andLocationNoEqualTo(storageLocation.getLocationNo());
         criteria.andShopIdEqualTo(storageLocation.getShopId());
-        List<StorageLocation> list= customStorageLocationMapper.selectByExample(example) ;
-        if(CollectionUtils.isEmpty(list)){
+        List<StorageLocation> list = customStorageLocationMapper.selectByExample(example);
+        if (CollectionUtils.isEmpty(list)) {
             return null;
         }
         return list.get(0);
@@ -168,7 +183,7 @@ public class StorageLocationService implements IStorageLocationService {
             return shopMap.get(shopName);
         }
         Shop shop = shopService.getShopByShopName(shopName);
-        shopMap.put(shopName,shop);
+        shopMap.put(shopName, shop);
         return shop;
     }
 

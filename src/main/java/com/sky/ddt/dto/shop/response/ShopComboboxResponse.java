@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class ShopComboboxResponse{
-
     Integer shopId;
     String shopName;
 }

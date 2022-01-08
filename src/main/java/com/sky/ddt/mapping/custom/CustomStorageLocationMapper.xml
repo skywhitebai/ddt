@@ -12,4 +12,9 @@
         from storage_location sl
         order by sl.location_no asc
     </select>
+    <select id="comboboxlist"  resultType="com.sky.ddt.dto.storageLocation.response.StorageLocationCmoboboxResponse">
+        select id,location_no locationNo
+        from storage_location sl
+        order by sl.location_no asc
+    </select>
 </mapper>
