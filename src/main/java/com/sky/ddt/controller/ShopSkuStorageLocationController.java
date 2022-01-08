@@ -46,4 +46,10 @@ public class ShopSkuStorageLocationController extends SuperController{
         return shopSkuStorageLocationService.saveShopSkuStorageLocation(params,dealUserId);
     }
     //删除库位信息
+    @RequestMapping("/deleteShopSkuStorageLocation")
+    @ResponseBody
+    @MenuAnnotation("shopSku/index")
+    public BaseResponse deleteShopSkuStorageLocation(Integer shopSkuStorageLocationId) {
+        return shopSkuStorageLocationService.deleteShopSkuStorageLocation(shopSkuStorageLocationId);
+    }
 }

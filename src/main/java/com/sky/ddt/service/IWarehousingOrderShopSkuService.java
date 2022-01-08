@@ -98,4 +98,6 @@ public interface IWarehousingOrderShopSkuService {
      * @date 2020/7/17 10:17
      */
     BaseResponse saveWarehousingQuantity(SaveWarehousingQuantityRequest params, Integer dealUserId);
+
+    WarehousingOrderShopSku getById(Integer warehousingOrderShopSkuId);
 }

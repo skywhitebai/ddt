@@ -66,8 +66,9 @@
     </select>
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
-    <a href="javascript:void(0)" onclick="exportWarehousingOrder()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
-       >下载入库单</a>
+    <a href="javascript:void(0)" onclick="exportWarehousingOrder()" class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'"
+    >下载入库单</a>
 </div>
 <!--入库单列表-->
 <table id="dg" style="width: 100%; height: auto">
@@ -320,6 +321,69 @@
 
     </table>
 </div>
+
+<div id="dlgWarehousingOrderShopSkuStorageLocation" class="easyui-dialog"
+     style="width: 850px; height: 500px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', top:50,align:'center'">
+    <input type="hidden" id="dlgWarehousingOrderShopSkuStorageLocation_warehousingOrderShopSkuId">
+    <!--查询条件-->
+    <div class="easyui-panel">
+        <a href="javascript:void(0)" onclick="bindWarehousingOrderShopSkuStorageLocation()" class="easyui-linkbutton"
+           data-options="iconCls:'icon-search'"
+           style="width: 80px">查 询</a>
+    </div>
+    <table id="dgWarehousingOrderShopSkuStorageLocation" style="width: 100%; height: auto">
+    </table>
+</div>
+<div id="dlgWarehousingOrderShopSkuStorageLocationInfo" class="easyui-dialog"
+     style="width: 700px; height: 560px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons',top:50,align:'center'">
+    <div class="ftitle">
+        <b>库位管理</b>
+        <hr/>
+    </div>
+    <form id="frmWarehousingOrderShopSkuStorageLocationInfo" method="post" novalidate="novalidate">
+        <table>
+            <tr style="display: none">
+                <td>warehousingOrderShopSkuId：</td>
+                <td>
+                    <input class="easyui-validatebox textbox"
+                           id="frmWarehousingOrderShopSkuStorageLocationInfo_warehousingOrderShopSkuId"
+                           name="warehousingOrderShopSkuId">
+                    <input class="easyui-validatebox textbox" name="id">
+                </td>
+            </tr>
+            <tr style="display: none">
+                <td>仓库名：</td>
+                <td>
+                    <select id="s_WarehousingOrderShopSkuStorageLocationInfo_shopId" style="width:150px;" name="shopId">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>库位：</td>
+                <td>
+                    <select id="s_WarehousingOrderShopSkuStorageLocationInfo_storageLocationId" style="width:150px;"
+                            name="storageLocationId">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>备注：</td>
+                <td colspan="3">
+                    <input class="easyui-textbox" type="text" name="remark" style="width: 90%">
+                </td>
+            </tr>
+        </table>
+        <div style="text-align:center;">
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-ok'" id="btn_saveWarehousingOrderShopSkuStorageLocation"
+               onclick="saveWarehousingOrderShopSkuStorageLocation()">确定</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-cancel'" onclick="closeWarehousingOrderShopSkuStorageLocationInfo()">关闭</a>
+        </div>
+    </form>
+</div>
 <div id="cover">
     <div id="coverMsg">
         <img src="${pageContext.request.contextPath }/static/img/loading.gif" width="100px">
@@ -329,7 +393,18 @@
 </body>
 <script type="text/javascript">
     // 初始化内容
-    bindShop();
+    $(document).ready(function () {
+        bindStorageLocation();
+        bindShop();
+    });
+
+    function bindStorageLocation() {
+        $('#s_WarehousingOrderShopSkuStorageLocationInfo_storageLocationId').combobox({
+            valueField: 'id',
+            textField: 'locationNo',
+            url: "${pageContext.request.contextPath }/storageLocation/comboboxlist",//获取数据
+        });
+    }
 
     function bindShop() {
         $.post('${pageContext.request.contextPath }/shop/comboboxlist', {}, function (data) {
@@ -395,10 +470,10 @@
                     {title: '店铺名', field: 'shopName', width: 120},
                     {
                         title: '入库时间', field: 'warehousingTime', width: 140, formatter: function (value, row, index) {
-                        if (!isEmpty(value)) {
-                            return value.substring(0, 10);
+                            if (!isEmpty(value)) {
+                                return value.substring(0, 10);
+                            }
                         }
-                    }
                     },
                     {title: '入库类型', field: 'typeName', width: 120},
                     {title: '生产单批号', field: 'produceOrderBatchNumber', width: 120},
@@ -410,12 +485,12 @@
                     {title: '备注', field: 'remark', width: 180},
                     {
                         title: '操作', field: 'deal', width: 200, formatter: function (value, row, index) {
-                        var content = '<a href="javascript:void(0)" onclick="exportWarehousingOrderShopSkuById(' + row.id + ')" class="easyui-linkbutton" >导出店铺sku</a>';
-                        if (row.status == 1) {
-                            content += '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="showImportWarehousingOrderShopSkuById(' + row.id + ')" class="easyui-linkbutton" >导入店铺sku</a>';
+                            var content = '<a href="javascript:void(0)" onclick="exportWarehousingOrderShopSkuById(' + row.id + ')" class="easyui-linkbutton" >导出店铺sku</a>';
+                            if (row.status == 1) {
+                                content += '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="showImportWarehousingOrderShopSkuById(' + row.id + ')" class="easyui-linkbutton" >导入店铺sku</a>';
+                            }
+                            return content;
                         }
-                        return content;
-                    }
                     }
                 ]],
                 toolbar: [{
@@ -483,9 +558,10 @@
     }
 
     function exportWarehousingOrder() {
-        var url = "${pageContext.request.contextPath }/warehousingOrder/exportWarehousingOrder"+getUrlParams(getQueryParams());
+        var url = "${pageContext.request.contextPath }/warehousingOrder/exportWarehousingOrder" + getUrlParams(getQueryParams());
         window.open(url);
     }
+
     //入库
     function warehousing() {
         var rows = $('#dg').datagrid('getSelections');
@@ -506,8 +582,7 @@
         $.post('${pageContext.request.contextPath }/warehousingOrder/warehousing', {id: id}, function (data) {
             if (data.code == '200') {
                 bindData();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
@@ -579,8 +654,7 @@
                 if (res.code == '200') {
                     closeDialog();
                     bindData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
@@ -595,8 +669,7 @@
                     $.post('${pageContext.request.contextPath }/warehousingOrder/cancelWarehousingOrder', {id: rows[0].id}, function (data) {
                         if (data.code == '200') {
                             bindData();
-                        }
-                        else {
+                        } else {
                             $.messager.alert("提示", data.message);
                         }
                     });
@@ -661,6 +734,17 @@
                         } else {
                             return '<input class="easyui-numberbox" min="1" precision="0" value="' + value + '" onchange="saveWarehousingQuantity(this,' + row.id + ')">';
                         }
+                    }
+                },
+                {
+                    title: '库位',
+                    field: 'locationNos',
+                    width: 120,
+                    formatter: function (value, row, index) {
+                        if (isEmpty(value)) {
+                            value = '暂无库位';
+                        }
+                        return "<a href='#' onclick=\"showDlgWarehousingOrderShopSkuStorageLocation(" + row.id + ")\" title='" + value + "' >" + value + "</a>";
                     }
                 },
                 {title: '创建时间', field: 'createTime', width: 180},
@@ -767,8 +851,7 @@
                 if (res.code == '200') {
                     closeWarehousingOrderShopSkuInfoDialog();
                     bindWarehousingOrderShopSkuData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
@@ -783,8 +866,7 @@
                     $.post('${pageContext.request.contextPath }/warehousingOrderShopSku/deleteWarehousingOrderShopSku', {id: rows[0].id}, function (data) {
                         if (data.code == '200') {
                             bindWarehousingOrderShopSkuData();
-                        }
-                        else {
+                        } else {
                             $.messager.alert("提示", data.message);
                         }
                     });
@@ -830,8 +912,7 @@
                 res = eval("(" + data + ")")
                 if (res.code == '200') {
                     $.messager.alert("提示", "上传成功");
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
@@ -893,9 +974,9 @@
                     {title: '状态', field: 'statusName', width: 100},
                     {
                         title: '操作', field: 'deal', width: 60, formatter: function (value, row, index) {
-                        var content = '<a href="javascript:void(0)" onclick="selectProduceOrder(\'' + row.batchNumber + '\',' + row.shopId + ')" class="easyui-linkbutton" >选择</a>';
-                        return content;
-                    }
+                            var content = '<a href="javascript:void(0)" onclick="selectProduceOrder(\'' + row.batchNumber + '\',' + row.shopId + ')" class="easyui-linkbutton" >选择</a>';
+                            return content;
+                        }
                     }
                 ]],
                 toolbar: [{
@@ -918,6 +999,7 @@
         $('#shopId').combobox('setValue', shopId);
         $('#type').combobox('setValue', "1");
     }
+
     function saveWarehousingQuantity(input, id) {
         var warehousingQuantity = $(input).val();
         if (isEmpty(warehousingQuantity)) {
@@ -937,12 +1019,177 @@
             if (data.code == '200') {
                 //保存成功
                 $.messager.alert("提示", data.message);
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
     }
 
+    function showDlgWarehousingOrderShopSkuStorageLocation(warehousingOrderShopSkuId) {
+        $('#dlgWarehousingOrderShopSkuStorageLocation').dialog('open').dialog('setTitle', '库位管理');
+        $('#dlgWarehousingOrderShopSkuStorageLocation_warehousingOrderShopSkuId').val(warehousingOrderShopSkuId);
+        bindWarehousingOrderShopSkuStorageLocation();
+    }
+
+    function getWarehousingOrderShopSkuStorageLocationQueryParams() {
+        queryParams = {
+            warehousingOrderShopSkuId: $("#dlgWarehousingOrderShopSkuStorageLocation_warehousingOrderShopSkuId").val()
+        };
+        return queryParams;
+    }
+
+    function bindWarehousingOrderShopSkuStorageLocation() {
+        dg = '#dgWarehousingOrderShopSkuStorageLocation';
+        url = "${pageContext.request.contextPath }/warehousingOrderShopSkuStorageLocation/listWarehousingOrderShopSkuStorageLocation";
+        title = "库位管理";
+        queryParams = getWarehousingOrderShopSkuStorageLocationQueryParams();
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: true,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 15,
+            pageList: [10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'id',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '仓库名', field: 'shopName', width: 120},
+                {title: '库位', field: 'locationNo', width: 120},
+                {title: '店铺sku', field: 'shopSku', width: 120},
+                {title: '创建时间', field: 'createTime', width: 180},
+                {title: '修改时间', field: 'updateTime', width: 180},
+                {title: '备注', field: 'remark', width: 120}
+            ]],
+            toolbar: [{
+                id: 'btnAddWarehousingOrderShopSkuStorageLocation',
+                text: '添加',
+                iconCls: 'icon-add',
+                handler: function () {
+                    showAddWarehousingOrderShopSkuStorageLocationDialog();//实现添加记录的页面
+                }
+            }, '-', {
+                id: 'btnView',
+                text: '查看',
+                iconCls: 'icon-search',
+                handler: function () {
+                    showViewWarehousingOrderShopSkuStorageLocationDialog();//实现查看记录详细信息的方法
+                }
+            }, '-', {
+                id: 'btnEditWarehousingOrderShopSkuStorageLocation',
+                text: '修改',
+                iconCls: 'icon-edit',
+                handler: function () {
+                    showEditWarehousingOrderShopSkuStorageLocationDialog();//实现修改记录的方法
+                }
+            }, '-', {
+                id: 'btnDeleteWarehousingOrderShopSkuStorageLocation',
+                text: '删除',
+                iconCls: 'icon-remove',
+                handler: function () {
+                    deleteWarehousingOrderShopSkuStorageLocationInfo();//实现直接删除数据的方法
+                }
+            },
+                '-', {
+                    id: 'btnReloadWarehousingOrderShopSkuStorageLocation',
+                    text: '刷新',
+                    iconCls: 'icon-reload',
+                    handler: function () {
+                        //实现刷新栏目中的数据
+                        $(dg).datagrid("reload");
+                    }
+                }],
+            onDblClickRow: function (rowIndex, rowData) {
+                $(dg).datagrid('uncheckAll');
+                $(dg).datagrid('checkRow', rowIndex);
+                showViewWarehousingOrderShopSkuStorageLocationDialog();
+            }
+        })
+        $(dg).datagrid('clearSelections');
+    }
+
+    function showAddWarehousingOrderShopSkuStorageLocationDialog() {
+        $('#dlgWarehousingOrderShopSkuStorageLocationInfo').dialog('open').dialog('setTitle', '添加');
+        $("#btn_saveWarehousingOrderShopSkuStorageLocation").show();
+        $(".view_hide").hide();
+        $("#frmWarehousingOrderShopSkuStorageLocationInfo_warehousingOrderShopSkuId").val($("#dlgWarehousingOrderShopSkuStorageLocation_warehousingOrderShopSkuId").val());
+    }
+
+    function showViewWarehousingOrderShopSkuStorageLocationDialog() {
+        var rows = $('#dgWarehousingOrderShopSkuStorageLocation').datagrid('getSelections');
+        if (rows && rows.length == 1) {
+            $('#dlgWarehousingOrderShopSkuStorageLocationInfo').dialog('open').dialog('setTitle', '查看');
+            $('#frmWarehousingOrderShopSkuStorageLocationInfo').form('load', rows[0]);
+            $("#btn_saveWarehousingOrderShopSkuStorageLocation").hide();
+            $(".view_hide").show();
+        } else {
+            $.messager.alert("提示", "请选择一条记录.");
+        }
+    }
+
+    function showEditWarehousingOrderShopSkuStorageLocationDialog() {
+        var rows = $('#dgWarehousingOrderShopSkuStorageLocation').datagrid('getSelections');
+        if (rows && rows.length == 1) {
+            $('#dlgWarehousingOrderShopSkuStorageLocationInfo').dialog('open').dialog('setTitle', '修改');
+            $('#frmWarehousingOrderShopSkuStorageLocationInfo').form('load', rows[0]);
+            $("#btn_saveWarehousingOrderShopSkuStorageLocation").show();
+            $(".view_hide").hide();
+        } else {
+            $.messager.alert("提示", "请选择一条记录.");
+        }
+    }
+
+    function deleteWarehousingOrderShopSkuStorageLocationInfo() {
+        var rows = $('#dgWarehousingOrderShopSkuStorageLocation').datagrid('getSelections');
+        if (!rows || rows.length == 1) {
+            $.messager.alert("提示", "请选择一条要删除的数据.");
+            return;
+        }
+        $.messager.confirm('提示', '确认删除这' + rows.length + '条数据吗？', function (r) {
+            if (r) {
+                var warehousingOrderShopSkuStorageLocationId = rows[0].id;
+                $.post('${pageContext.request.contextPath }/WarehousingOrderShopSkuStorageLocation/deleteWarehousingOrderShopSkuStorageLocation', {warehousingOrderShopSkuStorageLocationId: warehousingOrderShopSkuStorageLocationId}, function (data) {
+                    if (data.code == '200') {
+                        $('#dlg').dialog('close');
+                        bindWarehousingOrderShopSkuStorageLocation();
+                    } else {
+                        $.messager.alert("提示", data.message);
+                    }
+                });
+            }
+        });
+    }
+
+    function closeWarehousingOrderShopSkuStorageLocationInfo() {
+        $('#dlgWarehousingOrderShopSkuStorageLocationInfo').dialog('close');
+    }
+
+    function saveWarehousingOrderShopSkuStorageLocation() {
+        $('#frmWarehousingOrderShopSkuStorageLocationInfo').form('submit', {
+            url: '${pageContext.request.contextPath }/warehousingOrderShopSkuStorageLocation/saveWarehousingOrderShopSkuStorageLocation',
+            onSubmit: function () {
+                var validate = $(this).form('validate');
+                return validate;
+            },
+            success: function (data) {
+                res = eval('(' + data + ')');
+                if (res.code == '200') {
+                    closeWarehousingOrderShopSkuStorageLocationInfo();
+                    bindWarehousingOrderShopSkuStorageLocation();
+                } else {
+                    $.messager.alert("提示", res.message);
+                }
+            }
+        });
+    }
 </script>
 </html>

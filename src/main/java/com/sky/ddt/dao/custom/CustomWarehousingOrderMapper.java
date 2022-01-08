@@ -30,4 +30,6 @@ public interface CustomWarehousingOrderMapper extends WarehousingOrderMapper {
      * @date 2020/11/5 14:45
      */
     List<ExportWarehousingOrderResponse> listExportWarehousingOrder(ListWarehousingOrderRequest params);
+
+    void updateShopSkuStorageLocation(Integer id, Integer dealUserId);
 }

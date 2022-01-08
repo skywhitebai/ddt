@@ -15,4 +15,6 @@ public interface IShopSkuStorageLocationService {
     PageInfo<ListShopSkuStorageLocationResponse> listShopSkuStorageLocation(ListShopSkuStorageLocationRequest params);
 
     BaseResponse saveShopSkuStorageLocation(SaveShopSkuStorageLocationRequest params, Integer dealUserId);
+
+    BaseResponse deleteShopSkuStorageLocation(Integer shopSkuStorageLocationId);
 }

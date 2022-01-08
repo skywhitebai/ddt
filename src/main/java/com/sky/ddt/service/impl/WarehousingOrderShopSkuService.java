@@ -352,6 +352,14 @@ public class WarehousingOrderShopSkuService implements IWarehousingOrderShopSkuS
         return BaseResponse.success();
     }
 
+    @Override
+    public WarehousingOrderShopSku getById(Integer warehousingOrderShopSkuId) {
+        if(warehousingOrderShopSkuId==null){
+            return null;
+        }
+        return customWarehousingOrderShopSkuMapper.selectByPrimaryKey(warehousingOrderShopSkuId);
+    }
+
     private WarehousingOrderShopSku getWarehousingOrderShopSku(Integer warehousingOrderId, Integer shopSkuId) {
         if (warehousingOrderId == null || shopSkuId == null) {
             return null;

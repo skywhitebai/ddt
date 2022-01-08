@@ -80,6 +80,14 @@ public class ShopSkuStorageLocationService implements IShopSkuStorageLocationSer
         return BaseResponse.success();
     }
 
+    @Override
+    public BaseResponse deleteShopSkuStorageLocation(Integer shopSkuStorageLocationId) {
+        if(shopSkuStorageLocationId!=null){
+           customShopSkuStorageLocationMapper.deleteByPrimaryKey(shopSkuStorageLocationId);
+        }
+        return BaseResponse.success();
+    }
+
     private boolean existShopSkuStorageLocation(SaveShopSkuStorageLocationRequest params) {
         ShopSkuStorageLocationExample example=new ShopSkuStorageLocationExample();
         ShopSkuStorageLocationExample.Criteria criteria=example.createCriteria();

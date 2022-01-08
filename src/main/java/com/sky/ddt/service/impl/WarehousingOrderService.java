@@ -296,6 +296,8 @@ public class WarehousingOrderService implements IWarehousingOrderService {
         if (WarehousingOrderConstant.TypeEnum.PRODUCTION_ORDER_WAREHOUSING.getType().equals(warehousingOrder.getType())) {
             produceOrderService.updateProduceOrderPartialStorage(warehousingOrder.getProduceOrderId(), dealUserId);
         }
+        //修改仓库sku的库位信息
+        customWarehousingOrderMapper.updateShopSkuStorageLocation(id,dealUserId);
         return BaseResponse.success();
     }
 

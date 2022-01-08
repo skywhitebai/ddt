@@ -7,23 +7,24 @@
         <result column="shop_name" property="shopName"/>
         <result column="sku" property="sku"/>
         <result column="productionQuantity" property="productionQuantity"/>
+        <result column="locationNos" property="locationNos"/>
     </resultMap>
 
     <select id="listWarehousingOrderShopSku"
             parameterType="com.sky.ddt.dto.warehousingOrderShopSku.request.ListWarehousingOrderShopSkuRequest"
             resultMap="ListWarehousingOrderShopSkuMap">
-        select
+        SELECT
         woss.id, woss.warehousing_order_id, woss.shop_sku_id, woss.shop_sku, woss.warehousing_quantity, woss.remark, woss.create_time, woss.
-    create_by, woss.update_time, woss.update_by
+    create_by, woss.update_time, woss.update_by,(SELECT GROUP_CONCAT(sl.location_no SEPARATOR ',') FROM warehousing_order_shop_sku_storage_location wosssl,storage_location sl WHERE wosssl.warehousing_order_shop_sku_id=woss.id AND wosssl.storage_location_id=sl.id GROUP BY woss.id) locationNos
         ,s.shop_name
-        ,sku.sku,(select production_quantity from produce_order_shop_sku poss,produce_order po WHERE
-        po.id=poss.produce_order_id and po.id=wo.produce_order_id and
+        ,sku.sku,(SELECT production_quantity FROM produce_order_shop_sku poss,produce_order po WHERE
+        po.id=poss.produce_order_id AND po.id=wo.produce_order_id AND
         woss.shop_sku_id=poss.shop_sku_id) productionQuantity
-        from warehousing_order_shop_sku woss
-        left join warehousing_order wo on woss.warehousing_order_id=wo.id
-        left join shop_sku ss on woss.shop_sku_id=ss.shop_sku_id
-        left join sku on sku.sku_id=ss.sku_id
-        left join shop s on wo.shop_id=s.shop_id
+        FROM warehousing_order_shop_sku woss
+        LEFT JOIN warehousing_order wo ON woss.warehousing_order_id=wo.id
+        LEFT JOIN shop_sku ss ON woss.shop_sku_id=ss.shop_sku_id
+        LEFT JOIN sku ON sku.sku_id=ss.sku_id
+        LEFT JOIN shop s ON wo.shop_id=s.shop_id
         where woss.warehousing_order_id=#{warehousingOrderId}
         order by woss.shop_sku
     </select>

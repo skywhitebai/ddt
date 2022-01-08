@@ -13,4 +13,5 @@ public class ListWarehousingOrderShopSkuResponse extends WarehousingOrderShopSku
     String shopName;
     String sku;
     Integer productionQuantity;
+    String locationNos;
 }
