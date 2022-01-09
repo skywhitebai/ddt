@@ -32,5 +32,5 @@ public interface CustomWarehousingOrderMapper extends WarehousingOrderMapper {
      */
     List<ExportWarehousingOrderResponse> listExportWarehousingOrder(ListWarehousingOrderRequest params);
 
-    void updateShopSkuStorageLocation(@Param("id") Integer id,@Param("dealUserId")  Integer dealUserId);
+    void insertShopSkuStorageLocationByWarehousingOrder(@Param("id") Integer id,@Param("dealUserId")  Integer dealUserId);
 }

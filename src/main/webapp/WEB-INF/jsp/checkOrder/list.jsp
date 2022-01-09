@@ -257,6 +257,69 @@
 
     </table>
 </div>
+
+<div id="dlgCheckOrderShopSkuStorageLocation" class="easyui-dialog"
+     style="width: 850px; height: 500px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', top:50,align:'center'">
+    <input type="hidden" id="dlgCheckOrderShopSkuStorageLocation_checkOrderShopSkuId">
+    <!--查询条件-->
+    <div class="easyui-panel">
+        <a href="javascript:void(0)" onclick="bindCheckOrderShopSkuStorageLocation()" class="easyui-linkbutton"
+           data-options="iconCls:'icon-search'"
+           style="width: 80px">查 询</a>
+    </div>
+    <table id="dgCheckOrderShopSkuStorageLocation" style="width: 100%; height: auto">
+    </table>
+</div>
+<div id="dlgCheckOrderShopSkuStorageLocationInfo" class="easyui-dialog"
+     style="width: 700px; height: 560px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons',top:50,align:'center'">
+    <div class="ftitle">
+        <b>库位管理</b>
+        <hr/>
+    </div>
+    <form id="frmCheckOrderShopSkuStorageLocationInfo" method="post" novalidate="novalidate">
+        <table>
+            <tr style="display: none">
+                <td>checkOrderShopSkuId：</td>
+                <td>
+                    <input class="easyui-validatebox textbox"
+                           id="frmCheckOrderShopSkuStorageLocationInfo_checkOrderShopSkuId"
+                           name="checkOrderShopSkuId">
+                    <input class="easyui-validatebox textbox" name="id">
+                </td>
+            </tr>
+            <tr style="display: none">
+                <td>仓库名：</td>
+                <td>
+                    <select id="s_CheckOrderShopSkuStorageLocationInfo_shopId" style="width:150px;" name="shopId">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>库位：</td>
+                <td>
+                    <select id="s_CheckOrderShopSkuStorageLocationInfo_storageLocationId" style="width:150px;"
+                            name="storageLocationId">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>备注：</td>
+                <td colspan="3">
+                    <input class="easyui-textbox" type="text" name="remark" style="width: 90%">
+                </td>
+            </tr>
+        </table>
+        <div style="text-align:center;">
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-ok'" id="btn_saveCheckOrderShopSkuStorageLocation"
+               onclick="saveCheckOrderShopSkuStorageLocation()">确定</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-cancel'" onclick="closeCheckOrderShopSkuStorageLocationInfo()">关闭</a>
+        </div>
+    </form>
+</div>
 <div id="cover">
     <div id="coverMsg">
         <img src="${pageContext.request.contextPath }/static/img/loading.gif" width="100px">
@@ -266,7 +329,18 @@
 
 <script type="text/javascript">
     // 初始化内容
-    bindShop();
+    $(document).ready(function () {
+        bindStorageLocation();
+        bindShop();
+    });
+
+    function bindStorageLocation() {
+        $('#s_CheckOrderShopSkuStorageLocationInfo_storageLocationId').combobox({
+            valueField: 'id',
+            textField: 'locationNo',
+            url: "${pageContext.request.contextPath }/storageLocation/comboboxlist",//获取数据
+        });
+    }
 
     function bindShop() {
         $.post('${pageContext.request.contextPath }/shop/comboboxlist', {}, function (data) {
@@ -567,6 +641,17 @@
                         }
                     }
                 },
+                {
+                    title: '库位',
+                    field: 'locationNos',
+                    width: 120,
+                    formatter: function (value, row, index) {
+                        if (isEmpty(value)) {
+                            value = '暂无库位';
+                        }
+                        return "<a href='#' onclick=\"showDlgCheckOrderShopSkuStorageLocation(" + row.id + ")\" title='" + value + "' >" + value + "</a>";
+                    }
+                },
                 {title: '创建时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
                 {title: '备注', field: 'remark', width: 180}
@@ -773,6 +858,171 @@
             }
         });
     }
+    function showDlgCheckOrderShopSkuStorageLocation(checkOrderShopSkuId) {
+        $('#dlgCheckOrderShopSkuStorageLocation').dialog('open').dialog('setTitle', '库位管理');
+        $('#dlgCheckOrderShopSkuStorageLocation_checkOrderShopSkuId').val(checkOrderShopSkuId);
+        bindCheckOrderShopSkuStorageLocation();
+    }
 
+    function getCheckOrderShopSkuStorageLocationQueryParams() {
+        queryParams = {
+            checkOrderShopSkuId: $("#dlgCheckOrderShopSkuStorageLocation_checkOrderShopSkuId").val()
+        };
+        return queryParams;
+    }
+
+    function bindCheckOrderShopSkuStorageLocation() {
+        dg = '#dgCheckOrderShopSkuStorageLocation';
+        url = "${pageContext.request.contextPath }/checkOrderShopSkuStorageLocation/listCheckOrderShopSkuStorageLocation";
+        title = "库位管理";
+        queryParams = getCheckOrderShopSkuStorageLocationQueryParams();
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: true,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 15,
+            pageList: [10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'id',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '仓库名', field: 'shopName', width: 120},
+                {title: '库位', field: 'locationNo', width: 120},
+                {title: '店铺sku', field: 'shopSku', width: 120},
+                {title: '创建时间', field: 'createTime', width: 180},
+                {title: '修改时间', field: 'updateTime', width: 180},
+                {title: '备注', field: 'remark', width: 120}
+            ]],
+            toolbar: [{
+                id: 'btnAddCheckOrderShopSkuStorageLocation',
+                text: '添加',
+                iconCls: 'icon-add',
+                handler: function () {
+                    showAddCheckOrderShopSkuStorageLocationDialog();//实现添加记录的页面
+                }
+            }, '-', {
+                id: 'btnView',
+                text: '查看',
+                iconCls: 'icon-search',
+                handler: function () {
+                    showViewCheckOrderShopSkuStorageLocationDialog();//实现查看记录详细信息的方法
+                }
+            }, '-', {
+                id: 'btnEditCheckOrderShopSkuStorageLocation',
+                text: '修改',
+                iconCls: 'icon-edit',
+                handler: function () {
+                    showEditCheckOrderShopSkuStorageLocationDialog();//实现修改记录的方法
+                }
+            }, '-', {
+                id: 'btnDeleteCheckOrderShopSkuStorageLocation',
+                text: '删除',
+                iconCls: 'icon-remove',
+                handler: function () {
+                    deleteCheckOrderShopSkuStorageLocationInfo();//实现直接删除数据的方法
+                }
+            },
+                '-', {
+                    id: 'btnReloadCheckOrderShopSkuStorageLocation',
+                    text: '刷新',
+                    iconCls: 'icon-reload',
+                    handler: function () {
+                        //实现刷新栏目中的数据
+                        $(dg).datagrid("reload");
+                    }
+                }],
+            onDblClickRow: function (rowIndex, rowData) {
+                $(dg).datagrid('uncheckAll');
+                $(dg).datagrid('checkRow', rowIndex);
+                showViewCheckOrderShopSkuStorageLocationDialog();
+            }
+        })
+        $(dg).datagrid('clearSelections');
+    }
+
+    function showAddCheckOrderShopSkuStorageLocationDialog() {
+        $('#dlgCheckOrderShopSkuStorageLocationInfo').dialog('open').dialog('setTitle', '添加');
+        $("#btn_saveCheckOrderShopSkuStorageLocation").show();
+        $(".view_hide").hide();
+        $("#frmCheckOrderShopSkuStorageLocationInfo_checkOrderShopSkuId").val($("#dlgCheckOrderShopSkuStorageLocation_checkOrderShopSkuId").val());
+    }
+
+    function showViewCheckOrderShopSkuStorageLocationDialog() {
+        var rows = $('#dgCheckOrderShopSkuStorageLocation').datagrid('getSelections');
+        if (rows && rows.length == 1) {
+            $('#dlgCheckOrderShopSkuStorageLocationInfo').dialog('open').dialog('setTitle', '查看');
+            $('#frmCheckOrderShopSkuStorageLocationInfo').form('load', rows[0]);
+            $("#btn_saveCheckOrderShopSkuStorageLocation").hide();
+            $(".view_hide").show();
+        } else {
+            $.messager.alert("提示", "请选择一条记录.");
+        }
+    }
+
+    function showEditCheckOrderShopSkuStorageLocationDialog() {
+        var rows = $('#dgCheckOrderShopSkuStorageLocation').datagrid('getSelections');
+        if (rows && rows.length == 1) {
+            $('#dlgCheckOrderShopSkuStorageLocationInfo').dialog('open').dialog('setTitle', '修改');
+            $('#frmCheckOrderShopSkuStorageLocationInfo').form('load', rows[0]);
+            $("#btn_saveCheckOrderShopSkuStorageLocation").show();
+            $(".view_hide").hide();
+        } else {
+            $.messager.alert("提示", "请选择一条记录.");
+        }
+    }
+
+    function deleteCheckOrderShopSkuStorageLocationInfo() {
+        var rows = $('#dgCheckOrderShopSkuStorageLocation').datagrid('getSelections');
+        if (!rows || rows.length != 1) {
+            $.messager.alert("提示", "请选择一条要删除的数据.");
+            return;
+        }
+        $.messager.confirm('提示', '确认删除这' + rows.length + '条数据吗？', function (r) {
+            if (r) {
+                var checkOrderShopSkuStorageLocationId = rows[0].id;
+                $.post('${pageContext.request.contextPath }/checkOrderShopSkuStorageLocation/deleteCheckOrderShopSkuStorageLocation', {checkOrderShopSkuStorageLocationId: checkOrderShopSkuStorageLocationId}, function (data) {
+                    if (data.code == '200') {
+                        $('#dlg').dialog('close');
+                        bindCheckOrderShopSkuStorageLocation();
+                    } else {
+                        $.messager.alert("提示", data.message);
+                    }
+                });
+            }
+        });
+    }
+
+    function closeCheckOrderShopSkuStorageLocationInfo() {
+        $('#dlgCheckOrderShopSkuStorageLocationInfo').dialog('close');
+    }
+
+    function saveCheckOrderShopSkuStorageLocation() {
+        $('#frmCheckOrderShopSkuStorageLocationInfo').form('submit', {
+            url: '${pageContext.request.contextPath }/checkOrderShopSkuStorageLocation/saveCheckOrderShopSkuStorageLocation',
+            onSubmit: function () {
+                var validate = $(this).form('validate');
+                return validate;
+            },
+            success: function (data) {
+                res = eval('(' + data + ')');
+                if (res.code == '200') {
+                    closeCheckOrderShopSkuStorageLocationInfo();
+                    bindCheckOrderShopSkuStorageLocation();
+                } else {
+                    $.messager.alert("提示", res.message);
+                }
+            }
+        });
+    }
 </script>
 </html>

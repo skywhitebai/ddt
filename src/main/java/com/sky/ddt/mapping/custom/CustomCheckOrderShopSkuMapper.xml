@@ -6,19 +6,21 @@
                extends="com.sky.ddt.dao.generate.CheckOrderShopSkuMapper.BaseResultMap">
         <result column="shop_name" property="shopName"/>
         <result column="sku" property="sku"/>
+        <result column="locationNos" property="locationNos"/>
     </resultMap>
     <select id="listCheckOrderShopSku"
             parameterType="com.sky.ddt.dto.checkOrderShopSku.request.ListCheckOrderShopSkuRequest"
             resultMap="ListCheckOrderShopSkuMap">
-        select
+        SELECT
         coss.id, coss.check_order_id, coss.shop_sku_id, coss.shop_sku, coss.inventory_quantity_new,coss.remark, coss.create_time, coss.create_by, coss.update_time, coss.update_by
         ,s.shop_name
         ,sku.sku
-        from check_order_shop_sku coss
-        left join check_order co on coss.check_order_id=co.id
-        left join shop_sku ss on coss.shop_sku_id=ss.shop_sku_id
-        left join sku on sku.sku_id=ss.sku_id
-        left join shop s on co.shop_id=s.shop_id
+        ,(SELECT GROUP_CONCAT(sl.location_no SEPARATOR ',') FROM check_order_shop_sku_storage_location cosssl,storage_location sl WHERE cosssl.check_order_shop_sku_id=coss.id AND cosssl.storage_location_id=sl.id GROUP BY coss.id) locationNos
+        FROM check_order_shop_sku coss
+        LEFT JOIN check_order co ON coss.check_order_id=co.id
+        LEFT JOIN shop_sku ss ON coss.shop_sku_id=ss.shop_sku_id
+        LEFT JOIN sku ON sku.sku_id=ss.sku_id
+        LEFT JOIN shop s ON co.shop_id=s.shop_id
         where coss.check_order_id=#{checkOrderId}
         order by coss.shop_sku
     </select>

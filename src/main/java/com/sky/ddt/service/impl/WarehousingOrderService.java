@@ -297,7 +297,7 @@ public class WarehousingOrderService implements IWarehousingOrderService {
             produceOrderService.updateProduceOrderPartialStorage(warehousingOrder.getProduceOrderId(), dealUserId);
         }
         //修改仓库sku的库位信息
-        customWarehousingOrderMapper.updateShopSkuStorageLocation(id,dealUserId);
+        customWarehousingOrderMapper.insertShopSkuStorageLocationByWarehousingOrder(id,dealUserId);
         return BaseResponse.success();
     }
 

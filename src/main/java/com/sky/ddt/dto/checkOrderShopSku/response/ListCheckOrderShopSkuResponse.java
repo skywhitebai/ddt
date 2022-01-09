@@ -12,4 +12,5 @@ import lombok.Data;
 public class ListCheckOrderShopSkuResponse extends CheckOrderShopSku{
     String shopName;
     String sku;
+    String locationNos;
 }

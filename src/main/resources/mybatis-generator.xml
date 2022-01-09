@@ -39,7 +39,7 @@
         <!--<table tableName="sys_right" domainObjectName="Right">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>-->
-        <table tableName="shop_sku_storage_location">
+        <table tableName="check_order_shop_sku_storage_location">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
             <!--<generatedKey column="sku_id" sqlStatement="MySql" identity="true"/>-->
         </table>

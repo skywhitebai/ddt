@@ -995,7 +995,7 @@
 
     function deleteShopSkuStorageLocationInfo() {
         var rows = $('#dgShopSkuStorageLocation').datagrid('getSelections');
-        if (!rows || rows.length == 1) {
+        if (!rows || rows.length != 1) {
             $.messager.alert("提示", "请选择一条要删除的数据.");
             return;
         }

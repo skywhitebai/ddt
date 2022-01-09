@@ -30,7 +30,6 @@ public class WarehousingOrderShopSkuStorageLocationController extends SuperContr
     //列表查询库位信息
     @RequestMapping("/listWarehousingOrderShopSkuStorageLocation")
     @ResponseBody
-    @MenuAnnotation("shopSku/index")
     public DataGridResponse listWarehousingOrderShopSkuStorageLocation(ListWarehousingOrderShopSkuStorageLocationRequest params) {
         PageInfo<ListWarehousingOrderShopSkuStorageLocationResponse> page = warehousingOrderShopSkuStorageLocationService.listWarehousingOrderShopSkuStorageLocation(params);
         DataGridResponse dataGridResponse = new DataGridResponse();
@@ -41,7 +40,6 @@ public class WarehousingOrderShopSkuStorageLocationController extends SuperContr
     //添加库位信息
     @RequestMapping("/saveWarehousingOrderShopSkuStorageLocation")
     @ResponseBody
-    @MenuAnnotation("shopSku/index")
     public BaseResponse saveWarehousingOrderShopSkuStorageLocation(@Validated SaveWarehousingOrderShopSkuStorageLocationRequest params) {
         Integer dealUserId=getCurrentUserId();
         return warehousingOrderShopSkuStorageLocationService.saveWarehousingOrderShopSkuStorageLocation(params,dealUserId);
@@ -49,7 +47,6 @@ public class WarehousingOrderShopSkuStorageLocationController extends SuperContr
     //删除库位信息
     @RequestMapping("/deleteWarehousingOrderShopSkuStorageLocation")
     @ResponseBody
-    @MenuAnnotation("shopSku/index")
     public BaseResponse deleteWarehousingOrderShopSkuStorageLocation(Integer WarehousingOrderShopSkuStorageLocationId) {
         return warehousingOrderShopSkuStorageLocationService.deleteWarehousingOrderShopSkuStorageLocation(WarehousingOrderShopSkuStorageLocationId);
     }

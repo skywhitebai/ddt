@@ -37,4 +37,9 @@
         </where>
         order by co.create_time desc
     </select>
+    <insert id="insertShopSkuStorageLocationByCheckOrder">
+       INSERT INTO `shop_sku_storage_location`(shop_sku_id,storage_location_id,create_by)
+SELECT DISTINCT coss.`shop_sku_id`,cosssl.storage_location_id,#{dealUserId} FROM `check_order_shop_sku` coss,`check_order_shop_sku_storage_location` cosssl
+WHERE coss.`check_order_id`=#{id} AND coss.`id`=cosssl.`check_order_shop_sku_id` AND NOT EXISTS(SELECT 1 FROM `shop_sku_storage_location` sssl WHERE sssl.shop_sku_id=coss.`shop_sku_id` AND sssl.storage_location_id=cosssl.storage_location_id )
+    </insert>
 </mapper>

@@ -1150,14 +1150,14 @@
 
     function deleteWarehousingOrderShopSkuStorageLocationInfo() {
         var rows = $('#dgWarehousingOrderShopSkuStorageLocation').datagrid('getSelections');
-        if (!rows || rows.length == 1) {
+        if (!rows || rows.length != 1) {
             $.messager.alert("提示", "请选择一条要删除的数据.");
             return;
         }
         $.messager.confirm('提示', '确认删除这' + rows.length + '条数据吗？', function (r) {
             if (r) {
                 var warehousingOrderShopSkuStorageLocationId = rows[0].id;
-                $.post('${pageContext.request.contextPath }/WarehousingOrderShopSkuStorageLocation/deleteWarehousingOrderShopSkuStorageLocation', {warehousingOrderShopSkuStorageLocationId: warehousingOrderShopSkuStorageLocationId}, function (data) {
+                $.post('${pageContext.request.contextPath }/warehousingOrderShopSkuStorageLocation/deleteWarehousingOrderShopSkuStorageLocation', {warehousingOrderShopSkuStorageLocationId: warehousingOrderShopSkuStorageLocationId}, function (data) {
                     if (data.code == '200') {
                         $('#dlg').dialog('close');
                         bindWarehousingOrderShopSkuStorageLocation();

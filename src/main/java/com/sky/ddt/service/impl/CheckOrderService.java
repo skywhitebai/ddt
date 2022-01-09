@@ -177,6 +177,8 @@ public class CheckOrderService implements ICheckOrderService {
         }
         //修改盘点单状态为已确认
         updateCheckOrderConfirm(id, dealUserId);
+        //修改仓库sku的库位信息
+        customCheckOrderMapper.insertShopSkuStorageLocationByCheckOrder(id,dealUserId);
         return BaseResponse.success();
     }
 

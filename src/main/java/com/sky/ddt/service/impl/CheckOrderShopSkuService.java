@@ -322,6 +322,14 @@ public class CheckOrderShopSkuService implements ICheckOrderShopSkuService {
         return BaseResponse.success();
     }
 
+    @Override
+    public CheckOrderShopSku getById(Integer checkOrderShopSkuId) {
+        if(checkOrderShopSkuId==null){
+            return null;
+        }
+        return customCheckOrderShopSkuMapper.selectByPrimaryKey(checkOrderShopSkuId);
+    }
+
     private CheckOrderShopSku getCheckOrderShopSku(Integer checkOrderId, Integer shopSkuId) {
         if (checkOrderId == null || shopSkuId == null) {
             return null;

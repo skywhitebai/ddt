@@ -88,4 +88,6 @@ public interface ICheckOrderShopSkuService {
      * @date 2020/7/17 11:06
      */
     BaseResponse saveInventoryQuantityNew(SaveInventoryQuantityNewRequest params, Integer dealUserId);
+
+    CheckOrderShopSku getById(Integer checkOrderShopSkuId);
 }

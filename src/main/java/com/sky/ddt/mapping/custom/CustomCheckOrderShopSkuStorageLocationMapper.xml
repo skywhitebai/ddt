@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomCheckOrderShopSkuStorageLocationMapper">
+    <resultMap id="listCheckOrderShopSkuStorageLocationMap"
+               type="com.sky.ddt.dto.CheckOrderShopSkuStorageLocation.response.ListCheckOrderShopSkuStorageLocationResponse"
+               extends="com.sky.ddt.dao.generate.CheckOrderShopSkuStorageLocationMapper.BaseResultMap">
+        <result column="shopName" property="shopName"/>
+        <result column="shopSku" property="shopSku"/>
+        <result column="locationNo" property="locationNo"/>
+    </resultMap>
+    <select id="listCheckOrderShopSkuStorageLocation" parameterType="com.sky.ddt.dto.CheckOrderShopSkuStorageLocation.request.ListCheckOrderShopSkuStorageLocationRequest" resultMap="listCheckOrderShopSkuStorageLocationMap">
+        select
+        cosssl.*,(select shop_name from shop s where s.shop_id=sl.shop_id) shopName,ss.shop_sku shopSku,sl.location_no locationNo
+        from check_order_shop_sku_storage_location cosssl,check_order_shop_sku coss,storage_location sl,shop_sku ss
+        where
+        cosssl.check_order_shop_sku_id=coss.id and coss.shop_sku_id=ss.shop_sku_id and cosssl.storage_location_id=sl.id
+        <if test="checkOrderShopSkuId != null">and cosssl.check_order_shop_sku_id=#{checkOrderShopSkuId}</if>
+        order by sl.location_no asc
+    </select>
+</mapper>

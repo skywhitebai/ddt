@@ -3,6 +3,7 @@ package com.sky.ddt.dao.custom;
 import com.sky.ddt.dao.generate.CheckOrderMapper;
 import com.sky.ddt.dto.checkOrder.request.ListCheckOrderRequest;
 import com.sky.ddt.dto.checkOrder.response.ListCheckOrderResponse;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface CustomCheckOrderMapper extends CheckOrderMapper {
      * @date 2020/5/11 10:06
     */
     List<ListCheckOrderResponse> listCheckOrder(ListCheckOrderRequest params);
+
+    void insertShopSkuStorageLocationByCheckOrder(@Param("id") Integer id, @Param("dealUserId")  Integer dealUserId);
 }
