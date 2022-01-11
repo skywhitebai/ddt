@@ -2,6 +2,7 @@ package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.dto.warehousingOrderShopSkuStorageLocation.request.BatchSaveWarehousingOrderShopSkuStorageLocationRequest;
 import com.sky.ddt.dto.warehousingOrderShopSkuStorageLocation.request.ListWarehousingOrderShopSkuStorageLocationRequest;
 import com.sky.ddt.dto.warehousingOrderShopSkuStorageLocation.request.SaveWarehousingOrderShopSkuStorageLocationRequest;
 import com.sky.ddt.dto.warehousingOrderShopSkuStorageLocation.response.ListWarehousingOrderShopSkuStorageLocationResponse;
@@ -17,4 +18,6 @@ public interface IWarehousingOrderShopSkuStorageLocationService {
     BaseResponse saveWarehousingOrderShopSkuStorageLocation(SaveWarehousingOrderShopSkuStorageLocationRequest params, Integer dealUserId);
 
     BaseResponse deleteWarehousingOrderShopSkuStorageLocation(Integer warehousingOrderShopSkuStorageLocationId);
+
+    void batchSaveWarehousingOrderShopSkuStorageLocation(BatchSaveWarehousingOrderShopSkuStorageLocationRequest batchSaveWarehousingOrderShopSkuStorageLocationRequest);
 }

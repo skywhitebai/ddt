@@ -26,6 +26,7 @@ public class WarehousingOrderShopSkuConstant {
     public static final String ONLY_PENDING_STORAGE_ALLOW_IMPORT_SHOP_SKU = "只有待入库的入库单允许导入店铺sku";
     public static final String ID_EMPTY ="入库单店铺skuid不存在";
     public static final String ONLY_PENDING_STORAGE_ALLOW_DELETE_SHOP_SKU ="只有待入库的入库单允许删除店铺sku";
+    public static final String LOCATION_NO_NOT_EXIST ="库位信息不存在" ;
     public static List<ExcelField> exportWarehousingOrderShopSkuFieldList=new ArrayList<>();
     static{
         exportWarehousingOrderShopSkuFieldList.add(new ExcelField("shopName", "店铺名", ExcelField.FieldTypeEnum.STRING));

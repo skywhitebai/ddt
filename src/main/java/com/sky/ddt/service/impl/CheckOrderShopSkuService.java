@@ -7,18 +7,15 @@ import com.sky.ddt.common.constant.CheckOrderShopSkuConstant;
 import com.sky.ddt.common.constant.SbErroEntity;
 import com.sky.ddt.common.constant.WarehousingOrderShopSkuConstant;
 import com.sky.ddt.dao.custom.CustomCheckOrderShopSkuMapper;
+import com.sky.ddt.dto.CheckOrderShopSkuStorageLocation.request.BatchSaveCheckOrderShopSkuStorageLocationRequest;
 import com.sky.ddt.dto.checkOrderShopSku.request.ListCheckOrderShopSkuRequest;
 import com.sky.ddt.dto.checkOrderShopSku.request.SaveCheckOrderShopSkuRequest;
 import com.sky.ddt.dto.checkOrderShopSku.request.SaveInventoryQuantityNewRequest;
 import com.sky.ddt.dto.checkOrderShopSku.response.ListCheckOrderShopSkuResponse;
 import com.sky.ddt.dto.response.BaseResponse;
-import com.sky.ddt.entity.CheckOrder;
-import com.sky.ddt.entity.CheckOrderShopSku;
-import com.sky.ddt.entity.CheckOrderShopSkuExample;
-import com.sky.ddt.entity.ShopSku;
-import com.sky.ddt.service.ICheckOrderService;
-import com.sky.ddt.service.ICheckOrderShopSkuService;
-import com.sky.ddt.service.IShopSkuService;
+import com.sky.ddt.dto.warehousingOrderShopSkuStorageLocation.request.BatchSaveWarehousingOrderShopSkuStorageLocationRequest;
+import com.sky.ddt.entity.*;
+import com.sky.ddt.service.*;
 import com.sky.ddt.util.ExcelUtil;
 import com.sky.ddt.util.MathUtil;
 import org.springframework.beans.BeanUtils;
@@ -28,10 +25,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author baixueping
@@ -46,6 +40,10 @@ public class CheckOrderShopSkuService implements ICheckOrderShopSkuService {
     ICheckOrderService checkOrderService;
     @Autowired
     IShopSkuService shopSkuService;
+    @Autowired
+    IStorageLocationService storageLocationService;
+    @Autowired
+    ICheckOrderShopSkuStorageLocationService checkOrderShopSkuStorageLocationService;
 
     @Override
     public boolean existCheckOrderShopSku(Integer checkOrderId) {
@@ -180,6 +178,7 @@ public class CheckOrderShopSkuService implements ICheckOrderShopSkuService {
         }
         //遍历list导入信息
         StringBuilder sbErro = new StringBuilder();
+        Map<String, List<Integer>> locationMap = new HashMap<>();
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
             //忽略空行
@@ -216,6 +215,23 @@ public class CheckOrderShopSkuService implements ICheckOrderShopSkuService {
                 if (inventoryQuantityNew == null | inventoryQuantityNew < 0) {
                     sbErroItem.append(",").append(CheckOrderShopSkuConstant.INVENTORY_QUANTITY_NEW_ERRO);
                 }
+            }
+            if (!StringUtils.isEmpty(map.get("库位"))) {
+                List<Integer> locationIdList = new ArrayList<>();
+                String locationNos = map.get("库位").replace("，", ",");
+                List<String> locationNoList = Arrays.asList(locationNos.split(","));
+                List<StorageLocation> storageLocationList = storageLocationService.listStorageLocationByLocationNoList(locationNoList);
+                for (String locationNo : locationNoList) {
+                    Optional<StorageLocation> optionalStorageLocation = storageLocationList.stream().filter(item -> item.getLocationNo().equals(locationNo)).findFirst();
+                    if (optionalStorageLocation.isPresent()) {
+                        locationIdList.add(optionalStorageLocation.get().getId());
+                    } else {
+                        sbErroItem.append(",").append(WarehousingOrderShopSkuConstant.LOCATION_NO_NOT_EXIST);
+                        break;
+                    }
+
+                }
+                locationMap.put(map.get("店铺sku"),locationIdList);
             }
             if (sbErroItem.length() > 0) {
                 sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
@@ -256,6 +272,16 @@ public class CheckOrderShopSkuService implements ICheckOrderShopSkuService {
                 checkOrderShopSku.setCreateTime(new Date());
                 customCheckOrderShopSkuMapper.insertSelective(checkOrderShopSku);
             }
+            List<Integer> storageLocationList=locationMap.get(map.get("店铺sku"));
+            if(!CollectionUtils.isEmpty(storageLocationList)){
+                BatchSaveCheckOrderShopSkuStorageLocationRequest batchSaveWarehousingOrderShopSkuStorageLocationRequest=new BatchSaveCheckOrderShopSkuStorageLocationRequest();
+                batchSaveWarehousingOrderShopSkuStorageLocationRequest.setCheckOrderShopSkuId(checkOrderShopSku.getId());
+                batchSaveWarehousingOrderShopSkuStorageLocationRequest.setStorageLocationIdList(storageLocationList);
+                batchSaveWarehousingOrderShopSkuStorageLocationRequest.setCreateBy(dealUserId);
+                //更新库位信息
+                checkOrderShopSkuStorageLocationService.batchSaveCheckOrderShopSkuStorageLocation(batchSaveWarehousingOrderShopSkuStorageLocationRequest);
+            }
+
         }
         return BaseResponse.success();
     }

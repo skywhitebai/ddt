@@ -17,4 +17,13 @@
         <if test="warehousingOrderShopSkuId != null">and wosssl.warehousing_order_shop_sku_id=#{warehousingOrderShopSkuId}</if>
         order by sl.location_no asc
     </select>
+    <insert id="batchSaveWarehousingOrderShopSkuStorageLocation">
+insert into warehousing_order_shop_sku_storage_location(warehousing_order_shop_sku_id,storage_location_id,create_by)
+        select #{warehousingOrderShopSkuId} warehousingOrderShopSkuId, sl.id storage_location_id,#{createBy}
+        from storage_location sl where sl.id in
+        <foreach close=")" collection="storageLocationIdList" item="listItem" open="(" separator=",">
+            #{listItem}
+        </foreach>
+        and not exists (select 1 from warehousing_order_shop_sku_storage_location wosssl where wosssl.warehousing_order_shop_sku_id=#{warehousingOrderShopSkuId} and wosssl.storage_location_id=sl.id )
+    </insert>
 </mapper>

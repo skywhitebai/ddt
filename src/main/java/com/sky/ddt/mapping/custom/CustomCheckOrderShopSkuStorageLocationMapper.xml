@@ -17,4 +17,13 @@
         <if test="checkOrderShopSkuId != null">and cosssl.check_order_shop_sku_id=#{checkOrderShopSkuId}</if>
         order by sl.location_no asc
     </select>
+    <insert id="batchSaveCheckOrderShopSkuStorageLocation">
+        insert into check_order_shop_sku_storage_location(check_order_shop_sku_id,storage_location_id,create_by)
+        select #{checkOrderShopSkuId} checkOrderShopSkuId, sl.id storage_location_id,#{createBy}
+        from storage_location sl where sl.id in
+        <foreach close=")" collection="storageLocationIdList" item="listItem" open="(" separator=",">
+            #{listItem}
+        </foreach>
+        and not exists (select 1 from check_order_shop_sku_storage_location cosssl where cosssl.check_order_shop_sku_id=#{checkOrderShopSkuId} and cosssl.storage_location_id=sl.id )
+    </insert>
 </mapper>

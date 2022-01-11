@@ -3,8 +3,7 @@ package com.sky.ddt.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dao.custom.CustomCheckOrderShopSkuStorageLocationMapper;
-import com.sky.ddt.dto.CheckOrderShopSkuStorageLocation.request.ListCheckOrderShopSkuStorageLocationRequest;
-import com.sky.ddt.dto.CheckOrderShopSkuStorageLocation.request.SaveCheckOrderShopSkuStorageLocationRequest;
+import com.sky.ddt.dto.CheckOrderShopSkuStorageLocation.request.*;
 import com.sky.ddt.dto.CheckOrderShopSkuStorageLocation.response.ListCheckOrderShopSkuStorageLocationResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.CheckOrderShopSkuStorageLocation.request.ListCheckOrderShopSkuStorageLocationRequest;
@@ -20,6 +19,7 @@ import com.sky.ddt.service.ICheckOrderShopSkuService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
@@ -96,5 +96,13 @@ public class CheckOrderShopSkuStorageLocationService implements ICheckOrderShopS
             customCheckOrderShopSkuStorageLocationMapper.deleteByPrimaryKey(checkOrderShopSkuStorageLocationId);
         }
         return BaseResponse.success();
+    }
+
+    @Override
+    public void batchSaveCheckOrderShopSkuStorageLocation(BatchSaveCheckOrderShopSkuStorageLocationRequest batchSaveWarehousingOrderShopSkuStorageLocationRequest) {
+        if(batchSaveWarehousingOrderShopSkuStorageLocationRequest.getCheckOrderShopSkuId()==null|| CollectionUtils.isEmpty(batchSaveWarehousingOrderShopSkuStorageLocationRequest.getStorageLocationIdList())){
+            return;
+        }
+        customCheckOrderShopSkuStorageLocationMapper.batchSaveCheckOrderShopSkuStorageLocation(batchSaveWarehousingOrderShopSkuStorageLocationRequest);
     }
 }

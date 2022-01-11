@@ -26,4 +26,6 @@ public interface IStorageLocationService {
     StorageLocation getStorageLocation(Integer storageLocationId);
 
     List<StorageLocationCmoboboxResponse> comboboxlist();
+
+    List<StorageLocation> listStorageLocationByLocationNoList(List<String> locationNoList);
 }

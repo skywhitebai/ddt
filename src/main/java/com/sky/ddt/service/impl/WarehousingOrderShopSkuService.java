@@ -11,10 +11,9 @@ import com.sky.ddt.dto.warehousingOrderShopSku.request.ListWarehousingOrderShopS
 import com.sky.ddt.dto.warehousingOrderShopSku.request.SaveWarehousingOrderShopSkuRequest;
 import com.sky.ddt.dto.warehousingOrderShopSku.request.SaveWarehousingQuantityRequest;
 import com.sky.ddt.dto.warehousingOrderShopSku.response.ListWarehousingOrderShopSkuResponse;
+import com.sky.ddt.dto.warehousingOrderShopSkuStorageLocation.request.BatchSaveWarehousingOrderShopSkuStorageLocationRequest;
 import com.sky.ddt.entity.*;
-import com.sky.ddt.service.IShopSkuService;
-import com.sky.ddt.service.IWarehousingOrderService;
-import com.sky.ddt.service.IWarehousingOrderShopSkuService;
+import com.sky.ddt.service.*;
 import com.sky.ddt.util.ExcelUtil;
 import com.sky.ddt.util.MathUtil;
 import org.springframework.beans.BeanUtils;
@@ -24,10 +23,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author baixueping
@@ -42,6 +38,10 @@ public class WarehousingOrderShopSkuService implements IWarehousingOrderShopSkuS
     IWarehousingOrderService warehousingOrderService;
     @Autowired
     IShopSkuService shopSkuService;
+    @Autowired
+    IStorageLocationService storageLocationService;
+    @Autowired
+    IWarehousingOrderShopSkuStorageLocationService warehousingOrderShopSkuStorageLocationService;
 
     /**
      * @param listWarehousingOrderShopSkuRequest@return
@@ -135,15 +135,15 @@ public class WarehousingOrderShopSkuService implements IWarehousingOrderShopSkuS
         if (id == null) {
             return BaseResponse.failMessage(WarehousingOrderShopSkuConstant.ID_EMPTY);
         }
-        WarehousingOrderShopSku warehousingOrderShopSku=customWarehousingOrderShopSkuMapper.selectByPrimaryKey(id);
-        if(warehousingOrderShopSku==null){
+        WarehousingOrderShopSku warehousingOrderShopSku = customWarehousingOrderShopSkuMapper.selectByPrimaryKey(id);
+        if (warehousingOrderShopSku == null) {
             return BaseResponse.failMessage(WarehousingOrderShopSkuConstant.ID_NOT_EXIST);
         }
-        WarehousingOrder warehousingOrder=warehousingOrderService.getWarehousingOrderById(warehousingOrderShopSku.getWarehousingOrderId());
-        if(warehousingOrder==null){
+        WarehousingOrder warehousingOrder = warehousingOrderService.getWarehousingOrderById(warehousingOrderShopSku.getWarehousingOrderId());
+        if (warehousingOrder == null) {
             return BaseResponse.failMessage(WarehousingOrderShopSkuConstant.WAREHOUSING_ORDER_ID_NOT_EXIST);
         }
-        if(!WarehousingOrderConstant.StatusEnum.PENDING_STORAGE.getStatus().equals(warehousingOrder.getStatus())){
+        if (!WarehousingOrderConstant.StatusEnum.PENDING_STORAGE.getStatus().equals(warehousingOrder.getStatus())) {
             return BaseResponse.failMessage(WarehousingOrderShopSkuConstant.ONLY_PENDING_STORAGE_ALLOW_DELETE_SHOP_SKU);
         }
         customWarehousingOrderShopSkuMapper.deleteByPrimaryKey(id);
@@ -160,7 +160,7 @@ public class WarehousingOrderShopSkuService implements IWarehousingOrderShopSkuS
      */
     @Override
     public boolean existProduceOrderShopSku(Integer produceOrderId, Integer shopSkuId) {
-        if (produceOrderId == null || shopSkuId==null) {
+        if (produceOrderId == null || shopSkuId == null) {
             return false;
         }
         return customWarehousingOrderShopSkuMapper.existProduceOrderShopSku(produceOrderId, shopSkuId);
@@ -227,6 +227,7 @@ public class WarehousingOrderShopSkuService implements IWarehousingOrderShopSkuS
         }
         //遍历list导入信息
         StringBuilder sbErro = new StringBuilder();
+        Map<String, List<Integer>> locationMap = new HashMap<>();
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
             //忽略空行
@@ -263,6 +264,23 @@ public class WarehousingOrderShopSkuService implements IWarehousingOrderShopSkuS
                 if (warehousingQuantity == null | warehousingQuantity <= 0) {
                     sbErroItem.append(",").append(WarehousingOrderShopSkuConstant.WAREHOUSING_QUANTITY_ERRO);
                 }
+            }
+            if (!StringUtils.isEmpty(map.get("库位"))) {
+                List<Integer> locationIdList = new ArrayList<>();
+                String locationNos = map.get("库位").replace("，", ",");
+                List<String> locationNoList = Arrays.asList(locationNos.split(","));
+                List<StorageLocation> storageLocationList = storageLocationService.listStorageLocationByLocationNoList(locationNoList);
+                for (String locationNo : locationNoList) {
+                    Optional<StorageLocation> optionalStorageLocation = storageLocationList.stream().filter(item -> item.getLocationNo().equals(locationNo)).findFirst();
+                    if (optionalStorageLocation.isPresent()) {
+                        locationIdList.add(optionalStorageLocation.get().getId());
+                    } else {
+                        sbErroItem.append(",").append(WarehousingOrderShopSkuConstant.LOCATION_NO_NOT_EXIST);
+                        break;
+                    }
+
+                }
+                locationMap.put(map.get("店铺sku"),locationIdList);
             }
             if (sbErroItem.length() > 0) {
                 sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
@@ -303,6 +321,16 @@ public class WarehousingOrderShopSkuService implements IWarehousingOrderShopSkuS
                 warehousingOrderShopSku.setCreateTime(new Date());
                 customWarehousingOrderShopSkuMapper.insertSelective(warehousingOrderShopSku);
             }
+            List<Integer> storageLocationList=locationMap.get(map.get("店铺sku"));
+            if(!CollectionUtils.isEmpty(storageLocationList)){
+                BatchSaveWarehousingOrderShopSkuStorageLocationRequest batchSaveWarehousingOrderShopSkuStorageLocationRequest = new BatchSaveWarehousingOrderShopSkuStorageLocationRequest();
+                batchSaveWarehousingOrderShopSkuStorageLocationRequest.setWarehousingOrderShopSkuId(warehousingOrderShopSku.getId());
+                batchSaveWarehousingOrderShopSkuStorageLocationRequest.setStorageLocationIdList(storageLocationList);
+                batchSaveWarehousingOrderShopSkuStorageLocationRequest.setCreateBy(dealUserId);
+                //更新库位信息
+                warehousingOrderShopSkuStorageLocationService.batchSaveWarehousingOrderShopSkuStorageLocation(batchSaveWarehousingOrderShopSkuStorageLocationRequest);
+            }
+
         }
         return BaseResponse.success();
     }
@@ -333,17 +361,17 @@ public class WarehousingOrderShopSkuService implements IWarehousingOrderShopSkuS
      */
     @Override
     public BaseResponse saveWarehousingQuantity(SaveWarehousingQuantityRequest params, Integer dealUserId) {
-        WarehousingOrderShopSku warehousingOrderShopSku=customWarehousingOrderShopSkuMapper.selectByPrimaryKey(params.getId());
-        if(warehousingOrderShopSku==null){
+        WarehousingOrderShopSku warehousingOrderShopSku = customWarehousingOrderShopSkuMapper.selectByPrimaryKey(params.getId());
+        if (warehousingOrderShopSku == null) {
             return BaseResponse.failMessage(WarehousingOrderShopSkuConstant.ID_NOT_EXIST);
         }
-        WarehousingOrder warehousingOrder=warehousingOrderService.getWarehousingOrderById(warehousingOrderShopSku.getWarehousingOrderId());
-        if(warehousingOrder==null){
+        WarehousingOrder warehousingOrder = warehousingOrderService.getWarehousingOrderById(warehousingOrderShopSku.getWarehousingOrderId());
+        if (warehousingOrder == null) {
             return BaseResponse.failMessage(WarehousingOrderShopSkuConstant.WAREHOUSING_ORDER_ID_NOT_EXIST);
-        }else if (!WarehousingOrderConstant.StatusEnum.PENDING_STORAGE.getStatus().equals(warehousingOrder.getStatus())) {
+        } else if (!WarehousingOrderConstant.StatusEnum.PENDING_STORAGE.getStatus().equals(warehousingOrder.getStatus())) {
             return BaseResponse.failMessage(WarehousingOrderShopSkuConstant.WAREHOUSING_ORDER_NOT_ALLOW_WAREHOUSING);
         }
-        WarehousingOrderShopSku warehousingOrderShopSkuUpdate=new WarehousingOrderShopSku();
+        WarehousingOrderShopSku warehousingOrderShopSkuUpdate = new WarehousingOrderShopSku();
         warehousingOrderShopSkuUpdate.setId(params.getId());
         warehousingOrderShopSkuUpdate.setWarehousingQuantity(params.getWarehousingQuantity());
         warehousingOrderShopSkuUpdate.setUpdateBy(dealUserId);
@@ -354,7 +382,7 @@ public class WarehousingOrderShopSkuService implements IWarehousingOrderShopSkuS
 
     @Override
     public WarehousingOrderShopSku getById(Integer warehousingOrderShopSkuId) {
-        if(warehousingOrderShopSkuId==null){
+        if (warehousingOrderShopSkuId == null) {
             return null;
         }
         return customWarehousingOrderShopSkuMapper.selectByPrimaryKey(warehousingOrderShopSkuId);

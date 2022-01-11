@@ -1,6 +1,7 @@
 package com.sky.ddt.dao.custom;
 
 import com.sky.ddt.dao.generate.WarehousingOrderShopSkuStorageLocationMapper;
+import com.sky.ddt.dto.warehousingOrderShopSkuStorageLocation.request.BatchSaveWarehousingOrderShopSkuStorageLocationRequest;
 import com.sky.ddt.dto.warehousingOrderShopSkuStorageLocation.request.ListWarehousingOrderShopSkuStorageLocationRequest;
 import com.sky.ddt.dto.warehousingOrderShopSkuStorageLocation.response.ListWarehousingOrderShopSkuStorageLocationResponse;
 
@@ -13,4 +14,6 @@ import java.util.List;
  */
 public interface CustomWarehousingOrderShopSkuStorageLocationMapper extends WarehousingOrderShopSkuStorageLocationMapper {
     List<ListWarehousingOrderShopSkuStorageLocationResponse> listWarehousingOrderShopSkuStorageLocation(ListWarehousingOrderShopSkuStorageLocationRequest params);
+
+    void batchSaveWarehousingOrderShopSkuStorageLocation(BatchSaveWarehousingOrderShopSkuStorageLocationRequest batchSaveWarehousingOrderShopSkuStorageLocationRequest);
 }

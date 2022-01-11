@@ -166,6 +166,16 @@ public class StorageLocationService implements IStorageLocationService {
         return customStorageLocationMapper.comboboxlist();
     }
 
+    @Override
+    public List<StorageLocation> listStorageLocationByLocationNoList(List<String> locationNoList) {
+        if(CollectionUtils.isEmpty(locationNoList)){
+            return new ArrayList<>();
+        }
+        StorageLocationExample storageLocationExample=new StorageLocationExample();
+        storageLocationExample.createCriteria().andLocationNoIn(locationNoList);
+        return customStorageLocationMapper.selectByExample(storageLocationExample);
+    }
+
     private StorageLocation getStorageLocation(StorageLocation storageLocation) {
         StorageLocationExample example = new StorageLocationExample();
         StorageLocationExample.Criteria criteria = example.createCriteria();
