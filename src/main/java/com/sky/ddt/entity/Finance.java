@@ -18,6 +18,10 @@ public class Finance {
 
     private Boolean monthlyAdvertisingFee;
 
+    private Boolean displayAdvertising;
+
+    private Boolean brandAdvertising;
+
     private Boolean removeOrders;
 
     private Boolean destructionFee;
@@ -42,8 +46,6 @@ public class Finance {
 
     private Integer status;
 
-    private Integer statisticStatus;
-
     private String remark;
 
     private Date createTime;
@@ -55,6 +57,8 @@ public class Finance {
     private Integer updateBy;
 
     private BigDecimal rateOfDollarExchangeRmb;
+
+    private Integer statisticStatus;
 
     public Integer getId() {
         return id;
@@ -110,6 +114,22 @@ public class Finance {
 
     public void setMonthlyAdvertisingFee(Boolean monthlyAdvertisingFee) {
         this.monthlyAdvertisingFee = monthlyAdvertisingFee;
+    }
+
+    public Boolean getDisplayAdvertising() {
+        return displayAdvertising;
+    }
+
+    public void setDisplayAdvertising(Boolean displayAdvertising) {
+        this.displayAdvertising = displayAdvertising;
+    }
+
+    public Boolean getBrandAdvertising() {
+        return brandAdvertising;
+    }
+
+    public void setBrandAdvertising(Boolean brandAdvertising) {
+        this.brandAdvertising = brandAdvertising;
     }
 
     public Boolean getRemoveOrders() {
@@ -208,14 +228,6 @@ public class Finance {
         this.status = status;
     }
 
-    public Integer getStatisticStatus() {
-        return statisticStatus;
-    }
-
-    public void setStatisticStatus(Integer statisticStatus) {
-        this.statisticStatus = statisticStatus;
-    }
-
     public String getRemark() {
         return remark;
     }
@@ -262,5 +274,13 @@ public class Finance {
 
     public void setRateOfDollarExchangeRmb(BigDecimal rateOfDollarExchangeRmb) {
         this.rateOfDollarExchangeRmb = rateOfDollarExchangeRmb;
+    }
+
+    public Integer getStatisticStatus() {
+        return statisticStatus;
+    }
+
+    public void setStatisticStatus(Integer statisticStatus) {
+        this.statisticStatus = statisticStatus;
     }
 }

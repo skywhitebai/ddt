@@ -526,6 +526,126 @@ public class FinanceExample {
             return (Criteria) this;
         }
 
+        public Criteria andDisplayAdvertisingIsNull() {
+            addCriterion("display_advertising is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingIsNotNull() {
+            addCriterion("display_advertising is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingEqualTo(Boolean value) {
+            addCriterion("display_advertising =", value, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingNotEqualTo(Boolean value) {
+            addCriterion("display_advertising <>", value, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingGreaterThan(Boolean value) {
+            addCriterion("display_advertising >", value, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("display_advertising >=", value, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingLessThan(Boolean value) {
+            addCriterion("display_advertising <", value, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingLessThanOrEqualTo(Boolean value) {
+            addCriterion("display_advertising <=", value, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingIn(List<Boolean> values) {
+            addCriterion("display_advertising in", values, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingNotIn(List<Boolean> values) {
+            addCriterion("display_advertising not in", values, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingBetween(Boolean value1, Boolean value2) {
+            addCriterion("display_advertising between", value1, value2, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("display_advertising not between", value1, value2, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIsNull() {
+            addCriterion("brand_advertising is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIsNotNull() {
+            addCriterion("brand_advertising is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingEqualTo(Boolean value) {
+            addCriterion("brand_advertising =", value, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingNotEqualTo(Boolean value) {
+            addCriterion("brand_advertising <>", value, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingGreaterThan(Boolean value) {
+            addCriterion("brand_advertising >", value, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingGreaterThanOrEqualTo(Boolean value) {
+            addCriterion("brand_advertising >=", value, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingLessThan(Boolean value) {
+            addCriterion("brand_advertising <", value, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingLessThanOrEqualTo(Boolean value) {
+            addCriterion("brand_advertising <=", value, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIn(List<Boolean> values) {
+            addCriterion("brand_advertising in", values, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingNotIn(List<Boolean> values) {
+            addCriterion("brand_advertising not in", values, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingBetween(Boolean value1, Boolean value2) {
+            addCriterion("brand_advertising between", value1, value2, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingNotBetween(Boolean value1, Boolean value2) {
+            addCriterion("brand_advertising not between", value1, value2, "brandAdvertising");
+            return (Criteria) this;
+        }
+
         public Criteria andRemoveOrdersIsNull() {
             addCriterion("remove_orders is null");
             return (Criteria) this;
@@ -1246,66 +1366,6 @@ public class FinanceExample {
             return (Criteria) this;
         }
 
-        public Criteria andStatisticStatusIsNull() {
-            addCriterion("statistic_status is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatisticStatusIsNotNull() {
-            addCriterion("statistic_status is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatisticStatusEqualTo(Integer value) {
-            addCriterion("statistic_status =", value, "statisticStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatisticStatusNotEqualTo(Integer value) {
-            addCriterion("statistic_status <>", value, "statisticStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatisticStatusGreaterThan(Integer value) {
-            addCriterion("statistic_status >", value, "statisticStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatisticStatusGreaterThanOrEqualTo(Integer value) {
-            addCriterion("statistic_status >=", value, "statisticStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatisticStatusLessThan(Integer value) {
-            addCriterion("statistic_status <", value, "statisticStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatisticStatusLessThanOrEqualTo(Integer value) {
-            addCriterion("statistic_status <=", value, "statisticStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatisticStatusIn(List<Integer> values) {
-            addCriterion("statistic_status in", values, "statisticStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatisticStatusNotIn(List<Integer> values) {
-            addCriterion("statistic_status not in", values, "statisticStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatisticStatusBetween(Integer value1, Integer value2) {
-            addCriterion("statistic_status between", value1, value2, "statisticStatus");
-            return (Criteria) this;
-        }
-
-        public Criteria andStatisticStatusNotBetween(Integer value1, Integer value2) {
-            addCriterion("statistic_status not between", value1, value2, "statisticStatus");
-            return (Criteria) this;
-        }
-
         public Criteria andRemarkIsNull() {
             addCriterion("remark is null");
             return (Criteria) this;
@@ -1673,6 +1733,66 @@ public class FinanceExample {
 
         public Criteria andRateOfDollarExchangeRmbNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("rate_of_dollar_exchange_rmb not between", value1, value2, "rateOfDollarExchangeRmb");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusIsNull() {
+            addCriterion("statistic_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusIsNotNull() {
+            addCriterion("statistic_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusEqualTo(Integer value) {
+            addCriterion("statistic_status =", value, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusNotEqualTo(Integer value) {
+            addCriterion("statistic_status <>", value, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusGreaterThan(Integer value) {
+            addCriterion("statistic_status >", value, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("statistic_status >=", value, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusLessThan(Integer value) {
+            addCriterion("statistic_status <", value, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("statistic_status <=", value, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusIn(List<Integer> values) {
+            addCriterion("statistic_status in", values, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusNotIn(List<Integer> values) {
+            addCriterion("statistic_status not in", values, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusBetween(Integer value1, Integer value2) {
+            addCriterion("statistic_status between", value1, value2, "statisticStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andStatisticStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("statistic_status not between", value1, value2, "statisticStatus");
             return (Criteria) this;
         }
     }

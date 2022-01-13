@@ -9,6 +9,8 @@
     <result column="lighting_deal" jdbcType="BIT" property="lightingDeal" />
     <result column="monthly_storage_fee" jdbcType="BIT" property="monthlyStorageFee" />
     <result column="monthly_advertising_fee" jdbcType="BIT" property="monthlyAdvertisingFee" />
+    <result column="display_advertising" jdbcType="BIT" property="displayAdvertising" />
+    <result column="brand_advertising" jdbcType="BIT" property="brandAdvertising" />
     <result column="remove_orders" jdbcType="BIT" property="removeOrders" />
     <result column="destruction_fee" jdbcType="BIT" property="destructionFee" />
     <result column="destruction_details" jdbcType="BIT" property="destructionDetails" />
@@ -21,13 +23,13 @@
     <result column="head_deduction" jdbcType="BIT" property="headDeduction" />
     <result column="manual_adjustment" jdbcType="BIT" property="manualAdjustment" />
     <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="statistic_status" jdbcType="INTEGER" property="statisticStatus" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_by" jdbcType="INTEGER" property="updateBy" />
     <result column="rate_of_dollar_exchange_rmb" jdbcType="DECIMAL" property="rateOfDollarExchangeRmb" />
+    <result column="statistic_status" jdbcType="INTEGER" property="statisticStatus" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -89,10 +91,10 @@
   </sql>
   <sql id="Base_Column_List">
     id, shop_id, month, monthly_sales, lighting_deal, monthly_storage_fee, monthly_advertising_fee, 
-    remove_orders, destruction_fee, destruction_details, fba_customer_return_fee, coupon, 
-    early_reviewer_program_fee, long_storage_fee, refund_operation_fee, inventory_details, 
-    head_deduction, manual_adjustment, status, statistic_status, remark, create_time, 
-    create_by, update_time, update_by, rate_of_dollar_exchange_rmb
+    display_advertising, brand_advertising, remove_orders, destruction_fee, destruction_details, 
+    fba_customer_return_fee, coupon, early_reviewer_program_fee, long_storage_fee, refund_operation_fee, 
+    inventory_details, head_deduction, manual_adjustment, status, remark, create_time, 
+    create_by, update_time, update_by, rate_of_dollar_exchange_rmb, statistic_status
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FinanceExample" resultMap="BaseResultMap">
     select
@@ -130,22 +132,24 @@
     </selectKey>
     insert into finance (shop_id, month, monthly_sales, 
       lighting_deal, monthly_storage_fee, monthly_advertising_fee, 
-      remove_orders, destruction_fee, destruction_details, 
-      fba_customer_return_fee, coupon, early_reviewer_program_fee, 
-      long_storage_fee, refund_operation_fee, inventory_details, 
-      head_deduction, manual_adjustment, status, 
-      statistic_status, remark, create_time, 
-      create_by, update_time, update_by, 
-      rate_of_dollar_exchange_rmb)
+      display_advertising, brand_advertising, remove_orders, 
+      destruction_fee, destruction_details, fba_customer_return_fee, 
+      coupon, early_reviewer_program_fee, long_storage_fee, 
+      refund_operation_fee, inventory_details, head_deduction, 
+      manual_adjustment, status, remark, 
+      create_time, create_by, update_time, 
+      update_by, rate_of_dollar_exchange_rmb, statistic_status
+      )
     values (#{shopId,jdbcType=INTEGER}, #{month,jdbcType=TIMESTAMP}, #{monthlySales,jdbcType=BIT}, 
       #{lightingDeal,jdbcType=BIT}, #{monthlyStorageFee,jdbcType=BIT}, #{monthlyAdvertisingFee,jdbcType=BIT}, 
-      #{removeOrders,jdbcType=BIT}, #{destructionFee,jdbcType=BIT}, #{destructionDetails,jdbcType=BIT}, 
-      #{fbaCustomerReturnFee,jdbcType=BIT}, #{coupon,jdbcType=BIT}, #{earlyReviewerProgramFee,jdbcType=BIT}, 
-      #{longStorageFee,jdbcType=BIT}, #{refundOperationFee,jdbcType=BIT}, #{inventoryDetails,jdbcType=BIT}, 
-      #{headDeduction,jdbcType=BIT}, #{manualAdjustment,jdbcType=BIT}, #{status,jdbcType=INTEGER}, 
-      #{statisticStatus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
-      #{rateOfDollarExchangeRmb,jdbcType=DECIMAL})
+      #{displayAdvertising,jdbcType=BIT}, #{brandAdvertising,jdbcType=BIT}, #{removeOrders,jdbcType=BIT}, 
+      #{destructionFee,jdbcType=BIT}, #{destructionDetails,jdbcType=BIT}, #{fbaCustomerReturnFee,jdbcType=BIT}, 
+      #{coupon,jdbcType=BIT}, #{earlyReviewerProgramFee,jdbcType=BIT}, #{longStorageFee,jdbcType=BIT}, 
+      #{refundOperationFee,jdbcType=BIT}, #{inventoryDetails,jdbcType=BIT}, #{headDeduction,jdbcType=BIT}, 
+      #{manualAdjustment,jdbcType=BIT}, #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=INTEGER}, #{rateOfDollarExchangeRmb,jdbcType=DECIMAL}, #{statisticStatus,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.Finance">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -170,6 +174,12 @@
       </if>
       <if test="monthlyAdvertisingFee != null">
         monthly_advertising_fee,
+      </if>
+      <if test="displayAdvertising != null">
+        display_advertising,
+      </if>
+      <if test="brandAdvertising != null">
+        brand_advertising,
       </if>
       <if test="removeOrders != null">
         remove_orders,
@@ -207,9 +217,6 @@
       <if test="status != null">
         status,
       </if>
-      <if test="statisticStatus != null">
-        statistic_status,
-      </if>
       <if test="remark != null">
         remark,
       </if>
@@ -227,6 +234,9 @@
       </if>
       <if test="rateOfDollarExchangeRmb != null">
         rate_of_dollar_exchange_rmb,
+      </if>
+      <if test="statisticStatus != null">
+        statistic_status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -247,6 +257,12 @@
       </if>
       <if test="monthlyAdvertisingFee != null">
         #{monthlyAdvertisingFee,jdbcType=BIT},
+      </if>
+      <if test="displayAdvertising != null">
+        #{displayAdvertising,jdbcType=BIT},
+      </if>
+      <if test="brandAdvertising != null">
+        #{brandAdvertising,jdbcType=BIT},
       </if>
       <if test="removeOrders != null">
         #{removeOrders,jdbcType=BIT},
@@ -284,9 +300,6 @@
       <if test="status != null">
         #{status,jdbcType=INTEGER},
       </if>
-      <if test="statisticStatus != null">
-        #{statisticStatus,jdbcType=INTEGER},
-      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -304,6 +317,9 @@
       </if>
       <if test="rateOfDollarExchangeRmb != null">
         #{rateOfDollarExchangeRmb,jdbcType=DECIMAL},
+      </if>
+      <if test="statisticStatus != null">
+        #{statisticStatus,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -336,6 +352,12 @@
       </if>
       <if test="record.monthlyAdvertisingFee != null">
         monthly_advertising_fee = #{record.monthlyAdvertisingFee,jdbcType=BIT},
+      </if>
+      <if test="record.displayAdvertising != null">
+        display_advertising = #{record.displayAdvertising,jdbcType=BIT},
+      </if>
+      <if test="record.brandAdvertising != null">
+        brand_advertising = #{record.brandAdvertising,jdbcType=BIT},
       </if>
       <if test="record.removeOrders != null">
         remove_orders = #{record.removeOrders,jdbcType=BIT},
@@ -373,9 +395,6 @@
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
-      <if test="record.statisticStatus != null">
-        statistic_status = #{record.statisticStatus,jdbcType=INTEGER},
-      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -394,6 +413,9 @@
       <if test="record.rateOfDollarExchangeRmb != null">
         rate_of_dollar_exchange_rmb = #{record.rateOfDollarExchangeRmb,jdbcType=DECIMAL},
       </if>
+      <if test="record.statisticStatus != null">
+        statistic_status = #{record.statisticStatus,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -408,6 +430,8 @@
       lighting_deal = #{record.lightingDeal,jdbcType=BIT},
       monthly_storage_fee = #{record.monthlyStorageFee,jdbcType=BIT},
       monthly_advertising_fee = #{record.monthlyAdvertisingFee,jdbcType=BIT},
+      display_advertising = #{record.displayAdvertising,jdbcType=BIT},
+      brand_advertising = #{record.brandAdvertising,jdbcType=BIT},
       remove_orders = #{record.removeOrders,jdbcType=BIT},
       destruction_fee = #{record.destructionFee,jdbcType=BIT},
       destruction_details = #{record.destructionDetails,jdbcType=BIT},
@@ -420,13 +444,13 @@
       head_deduction = #{record.headDeduction,jdbcType=BIT},
       manual_adjustment = #{record.manualAdjustment,jdbcType=BIT},
       status = #{record.status,jdbcType=INTEGER},
-      statistic_status = #{record.statisticStatus,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       update_by = #{record.updateBy,jdbcType=INTEGER},
-      rate_of_dollar_exchange_rmb = #{record.rateOfDollarExchangeRmb,jdbcType=DECIMAL}
+      rate_of_dollar_exchange_rmb = #{record.rateOfDollarExchangeRmb,jdbcType=DECIMAL},
+      statistic_status = #{record.statisticStatus,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -451,6 +475,12 @@
       </if>
       <if test="monthlyAdvertisingFee != null">
         monthly_advertising_fee = #{monthlyAdvertisingFee,jdbcType=BIT},
+      </if>
+      <if test="displayAdvertising != null">
+        display_advertising = #{displayAdvertising,jdbcType=BIT},
+      </if>
+      <if test="brandAdvertising != null">
+        brand_advertising = #{brandAdvertising,jdbcType=BIT},
       </if>
       <if test="removeOrders != null">
         remove_orders = #{removeOrders,jdbcType=BIT},
@@ -488,9 +518,6 @@
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
-      <if test="statisticStatus != null">
-        statistic_status = #{statisticStatus,jdbcType=INTEGER},
-      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -509,6 +536,9 @@
       <if test="rateOfDollarExchangeRmb != null">
         rate_of_dollar_exchange_rmb = #{rateOfDollarExchangeRmb,jdbcType=DECIMAL},
       </if>
+      <if test="statisticStatus != null">
+        statistic_status = #{statisticStatus,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -520,6 +550,8 @@
       lighting_deal = #{lightingDeal,jdbcType=BIT},
       monthly_storage_fee = #{monthlyStorageFee,jdbcType=BIT},
       monthly_advertising_fee = #{monthlyAdvertisingFee,jdbcType=BIT},
+      display_advertising = #{displayAdvertising,jdbcType=BIT},
+      brand_advertising = #{brandAdvertising,jdbcType=BIT},
       remove_orders = #{removeOrders,jdbcType=BIT},
       destruction_fee = #{destructionFee,jdbcType=BIT},
       destruction_details = #{destructionDetails,jdbcType=BIT},
@@ -532,13 +564,13 @@
       head_deduction = #{headDeduction,jdbcType=BIT},
       manual_adjustment = #{manualAdjustment,jdbcType=BIT},
       status = #{status,jdbcType=INTEGER},
-      statistic_status = #{statisticStatus,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=INTEGER},
-      rate_of_dollar_exchange_rmb = #{rateOfDollarExchangeRmb,jdbcType=DECIMAL}
+      rate_of_dollar_exchange_rmb = #{rateOfDollarExchangeRmb,jdbcType=DECIMAL},
+      statistic_status = #{statisticStatus,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

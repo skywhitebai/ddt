@@ -42,6 +42,10 @@
     <a href="javascript:void(0)" onclick="showDlgImport('monthlySales',null)" class="easyui-linkbutton">导入月流水信息</a>
     <a href="javascript:void(0)" onclick="showDlgImport('monthlyAdvertisingFee',null)"
        class="easyui-linkbutton">导入月广告费</a>
+    <a href="javascript:void(0)" onclick="showDlgImport('displayAdvertising',null)"
+       class="easyui-linkbutton">导入展示广告费</a>
+    <a href="javascript:void(0)" onclick="showDlgImport('brandAdvertising',null)"
+       class="easyui-linkbutton">导入品牌广告费</a>
     <a href="javascript:void(0)" onclick="showDlgImport('lightingDeal',null)" class="easyui-linkbutton">导入秒杀</a>
     <a href="javascript:void(0)" onclick="showDlgImport('monthlyStorageFee',null)" class="easyui-linkbutton">导入月仓储费</a>
     <a href="javascript:void(0)" onclick="showDlgImport('longStorageFee',null)" class="easyui-linkbutton">导入长期仓储费</a>
@@ -151,100 +155,118 @@
                 {title: '店铺名', field: 'shopName', width: 120},
                 {
                     title: '年月', field: 'month', width: 80, formatter: function (value, row, index) {
-                    if (value) {
-                        return value.substr(0, 7);
+                        if (value) {
+                            return value.substr(0, 7);
+                        }
                     }
-                }
                 },
                 {
                     title: '月销售流水', field: 'monthlySales', width: 100, formatter: function (value, row, index) {
-                    if (value) {
-                        return "<a href='#' onclick=\"showDlgImport('monthlySales','" + row.month + "')\"' title='更新月销售流水' >已导入</a>";
-                    } else {
-                        return "<a href='#' onclick=\"showDlgImport('monthlySales','" + row.month + "')\"' title='导入月销售流水' >未导入</a>";
+                        if (value) {
+                            return "<a href='#' onclick=\"showDlgImport('monthlySales','" + row.month + "')\"' title='更新月销售流水' >已导入</a>";
+                        } else {
+                            return "<a href='#' onclick=\"showDlgImport('monthlySales','" + row.month + "')\"' title='导入月销售流水' >未导入</a>";
+                        }
                     }
-                }
                 },
                 {
                     title: '月广告费', field: 'monthlyAdvertisingFee', width: 80, formatter: function (value, row, index) {
-                    if (value) {
-                        return "<a href='#' onclick=\"showDlgImport('monthlyAdvertisingFee','" + row.month + "')\"' title='更新月广告费' >已导入</a>";
-                    } else {
-                        return "<a href='#' onclick=\"showDlgImport('monthlyAdvertisingFee','" + row.month + "')\"' title='导入月广告费' >未导入</a>";
+                        if (value) {
+                            return "<a href='#' onclick=\"showDlgImport('monthlyAdvertisingFee','" + row.month + "')\"' title='更新月广告费' >已导入</a>";
+                        } else {
+                            return "<a href='#' onclick=\"showDlgImport('monthlyAdvertisingFee','" + row.month + "')\"' title='导入月广告费' >未导入</a>";
+                        }
                     }
-                }
+                },
+                {
+                    title: '月广告费', field: 'displayAdvertising', width: 80, formatter: function (value, row, index) {
+                        if (value) {
+                            return "<a href='#' onclick=\"showDlgImport('displayAdvertising','" + row.month + "')\"' title='更新展示广告费' >已导入</a>";
+                        } else {
+                            return "<a href='#' onclick=\"showDlgImport('displayAdvertising','" + row.month + "')\"' title='导入展示广告费' >未导入</a>";
+                        }
+                    }
+                },
+                {
+                    title: '月广告费', field: 'brandAdvertising', width: 80, formatter: function (value, row, index) {
+                        if (value) {
+                            return "<a href='#' onclick=\"showDlgImport('brandAdvertising','" + row.month + "')\"' title='更新品牌广告费' >已导入</a>";
+                        } else {
+                            return "<a href='#' onclick=\"showDlgImport('brandAdvertising','" + row.month + "')\"' title='导入品牌广告费' >未导入</a>";
+                        }
+                    }
                 },
                 {
                     title: '秒杀', field: 'lightingDeal', width: 80, formatter: function (value, row, index) {
-                    if (value) {
-                        return "<a href='#' onclick=\"showDlgImport('lightingDeal','" + row.month + "')\"' title='更新秒杀' >已导入</a>";
-                    } else {
-                        return "<a href='#' onclick=\"showDlgImport('lightingDeal','" + row.month + "')\"' title='导入秒杀' >未导入</a>";
+                        if (value) {
+                            return "<a href='#' onclick=\"showDlgImport('lightingDeal','" + row.month + "')\"' title='更新秒杀' >已导入</a>";
+                        } else {
+                            return "<a href='#' onclick=\"showDlgImport('lightingDeal','" + row.month + "')\"' title='导入秒杀' >未导入</a>";
+                        }
                     }
-                }
                 },
                 {
                     title: '月仓储费', field: 'monthlyStorageFee', width: 80, formatter: function (value, row, index) {
-                    if (value) {
-                        return "<a href='#' onclick=\"showDlgImport('monthlyStorageFee','" + row.month + "')\"' title='更新月仓储费' >已导入</a>";
-                    } else {
-                        return "<a href='#' onclick=\"showDlgImport('monthlyStorageFee','" + row.month + "')\"' title='导入月仓储费' >未导入</a>";
+                        if (value) {
+                            return "<a href='#' onclick=\"showDlgImport('monthlyStorageFee','" + row.month + "')\"' title='更新月仓储费' >已导入</a>";
+                        } else {
+                            return "<a href='#' onclick=\"showDlgImport('monthlyStorageFee','" + row.month + "')\"' title='导入月仓储费' >未导入</a>";
+                        }
                     }
-                }
                 },
                 {
                     title: '长期仓储费', field: 'longStorageFee', width: 80, formatter: function (value, row, index) {
-                    if (value) {
-                        return "<a href='#' onclick=\"showDlgImport('longStorageFee','" + row.month + "')\"' title='更新长期仓储费' >已导入</a>";
-                    } else {
-                        return "<a href='#' onclick=\"showDlgImport('longStorageFee','" + row.month + "')\"' title='导入长期仓储费' >未导入</a>";
+                        if (value) {
+                            return "<a href='#' onclick=\"showDlgImport('longStorageFee','" + row.month + "')\"' title='更新长期仓储费' >已导入</a>";
+                        } else {
+                            return "<a href='#' onclick=\"showDlgImport('longStorageFee','" + row.month + "')\"' title='导入长期仓储费' >未导入</a>";
+                        }
                     }
-                }
                 },
                 {
                     title: '优惠券', field: 'coupon', width: 80, formatter: function (value, row, index) {
-                    if (value) {
-                        return "<a href='#' onclick=\"showDlgImport('coupon','" + row.month + "')\"' title='更新优惠券' >已导入</a>";
-                    } else {
-                        return "<a href='#' onclick=\"showDlgImport('coupon','" + row.month + "')\"' title='导入优惠券' >未导入</a>";
+                        if (value) {
+                            return "<a href='#' onclick=\"showDlgImport('coupon','" + row.month + "')\"' title='更新优惠券' >已导入</a>";
+                        } else {
+                            return "<a href='#' onclick=\"showDlgImport('coupon','" + row.month + "')\"' title='导入优惠券' >未导入</a>";
+                        }
                     }
-                }
                 },
                 {
                     title: '早评', field: 'earlyReviewerProgramFee', width: 80, formatter: function (value, row, index) {
-                    if (value) {
-                        return "<a href='#' onclick=\"showDlgImport('earlyReviewerProgramFee','" + row.month + "')\"' title='更新早评' >已导入</a>";
-                    } else {
-                        return "<a href='#' onclick=\"showDlgImport('earlyReviewerProgramFee','" + row.month + "')\"' title='导入早评' >未导入</a>";
+                        if (value) {
+                            return "<a href='#' onclick=\"showDlgImport('earlyReviewerProgramFee','" + row.month + "')\"' title='更新早评' >已导入</a>";
+                        } else {
+                            return "<a href='#' onclick=\"showDlgImport('earlyReviewerProgramFee','" + row.month + "')\"' title='导入早评' >未导入</a>";
+                        }
                     }
-                }
                 },
                 {
                     title: '销毁费用', field: 'destructionFee', width: 80, formatter: function (value, row, index) {
-                    if (value) {
-                        return "<a href='#' onclick=\"showDlgImport('destructionFee','" + row.month + "')\"' title='更新销毁费用' >已导入</a>";
-                    } else {
-                        return "<a href='#' onclick=\"showDlgImport('destructionFee','" + row.month + "')\"' title='导入销毁费用' >未导入</a>";
+                        if (value) {
+                            return "<a href='#' onclick=\"showDlgImport('destructionFee','" + row.month + "')\"' title='更新销毁费用' >已导入</a>";
+                        } else {
+                            return "<a href='#' onclick=\"showDlgImport('destructionFee','" + row.month + "')\"' title='导入销毁费用' >未导入</a>";
+                        }
                     }
-                }
                 },
                 {
                     title: '销毁明细', field: 'destructionDetails', width: 80, formatter: function (value, row, index) {
-                    if (value) {
-                        return "<a href='#' onclick=\"showDlgImport('destructionDetails','" + row.month + "')\"' title='更新销毁明细' >已导入</a>";
-                    } else {
-                        return "<a href='#' onclick=\"showDlgImport('destructionDetails','" + row.month + "')\"' title='导入销毁明细' >未导入</a>";
+                        if (value) {
+                            return "<a href='#' onclick=\"showDlgImport('destructionDetails','" + row.month + "')\"' title='更新销毁明细' >已导入</a>";
+                        } else {
+                            return "<a href='#' onclick=\"showDlgImport('destructionDetails','" + row.month + "')\"' title='导入销毁明细' >未导入</a>";
+                        }
                     }
-                }
                 },
                 {
                     title: '库存明细', field: 'inventoryDetails', width: 80, formatter: function (value, row, index) {
-                    if (value) {
-                        return "<a href='#' onclick=\"showDlgImport('inventoryDetails','" + row.month + "')\"' title='更新库存明细' >已导入</a>";
-                    } else {
-                        return "<a href='#' onclick=\"showDlgImport('inventoryDetails','" + row.month + "')\"' title='导入库存明细' >未导入</a>";
+                        if (value) {
+                            return "<a href='#' onclick=\"showDlgImport('inventoryDetails','" + row.month + "')\"' title='更新库存明细' >已导入</a>";
+                        } else {
+                            return "<a href='#' onclick=\"showDlgImport('inventoryDetails','" + row.month + "')\"' title='导入库存明细' >未导入</a>";
+                        }
                     }
-                }
                 },
                 /* {
                      title: '头程抵扣', field: 'headDeduction', width: 80, formatter: function (value, row, index) {
@@ -257,12 +279,12 @@
                  },*/
                 {
                     title: '人工核准', field: 'manualAdjustment', width: 80, formatter: function (value, row, index) {
-                    if (value) {
-                        return "<a href='#' onclick=\"showDlgImport('manualAdjustment','" + row.month + "')\"' title='更新人工核准' >已导入</a>";
-                    } else {
-                        return "<a href='#' onclick=\"showDlgImport('manualAdjustment','" + row.month + "')\"' title='导入人工核准' >未导入</a>";
+                        if (value) {
+                            return "<a href='#' onclick=\"showDlgImport('manualAdjustment','" + row.month + "')\"' title='更新人工核准' >已导入</a>";
+                        } else {
+                            return "<a href='#' onclick=\"showDlgImport('manualAdjustment','" + row.month + "')\"' title='导入人工核准' >未导入</a>";
+                        }
                     }
-                }
                 },
 
                 {
@@ -361,6 +383,12 @@
             case 'monthlyAdvertisingFee':
                 importTitle = "导入月广告费";
                 break;
+            case 'displayAdvertising':
+                importTitle = "导入展示广告费";
+                break;
+            case 'brandAdvertising':
+                importTitle = "导入品牌广告费";
+                break;
             case 'manualAdjustment':
                 importTitle = "导入人工核准";
                 break;
@@ -387,6 +415,7 @@
         $('#dlgFinanceStatistic').dialog('open').dialog('setTitle', '回款信息');
         bindFinanceStatistic();
     }
+
     function saveManualAdjustment(input, id) {
         var manualAdjustment = $(input).val();
         if (isEmpty(manualAdjustment)) {
@@ -399,12 +428,12 @@
             if (data.code == '200') {
                 //保存成功
                 bindFinanceStatistic();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
     }
+
     function saveFinanceStatisticRemark(input, id) {
         var remark = $(input).val();
         $.post('${pageContext.request.contextPath }/financeStatistic/saveFinanceStatisticRemark', {
@@ -414,15 +443,15 @@
             if (data.code == '200') {
                 //保存成功
                 bindFinanceStatistic();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
     }
+
     function bindFinanceStatistic() {
         dg = '#dgFinanceStatistic';
-        url = "${pageContext.request.contextPath }/financeStatistic/listFinanceStatistic";
+        url = "${pageContext.request.contextPath }/financeStatistic/listFinanceStatistic?type=shop";
         title = "回款信息";
         queryParams = {
             financeId: financeIdLocal
@@ -528,8 +557,7 @@
                 if (res.code == '200') {
                     $.messager.alert("提示", "上传成功");
                     bindData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
                 //关闭遮罩
@@ -544,8 +572,7 @@
             if (data.code == '200') {
                 $.messager.alert("提示", "生成成功");
                 bindData();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
@@ -558,8 +585,7 @@
             if (data.code == '200') {
                 $.messager.alert("提示", "生成成功");
                 bindData();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
@@ -574,8 +600,7 @@
             if (data.code == '200') {
                 $.messager.alert("提示", "锁定成功");
                 bindData();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
@@ -586,8 +611,7 @@
             if (data.code == '200') {
                 $.messager.alert("提示", "解锁成功");
                 bindData();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
@@ -598,8 +622,7 @@
             if (data.code == '200') {
                 $.messager.alert("提示", "锁定成功");
                 bindData();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
@@ -610,8 +633,7 @@
             if (data.code == '200') {
                 $.messager.alert("提示", "解锁成功");
                 bindData();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
@@ -635,8 +657,7 @@
             if (data.code == '200') {
                 $.messager.alert("提示", "修改成功");
                 bindData();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });

@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.DisplayAdvertisingMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.DisplayAdvertising">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="finance_id" jdbcType="INTEGER" property="financeId" />
+    <result column="start_date" jdbcType="DATE" property="startDate" />
+    <result column="end_date" jdbcType="DATE" property="endDate" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
+    <result column="campaign_name" jdbcType="VARCHAR" property="campaignName" />
+    <result column="portfolio_name" jdbcType="VARCHAR" property="portfolioName" />
+    <result column="cost_type" jdbcType="VARCHAR" property="costType" />
+    <result column="ad_group_name" jdbcType="VARCHAR" property="adGroupName" />
+    <result column="bid_optimization" jdbcType="VARCHAR" property="bidOptimization" />
+    <result column="advertised_sku" jdbcType="VARCHAR" property="advertisedSku" />
+    <result column="shop_sku_id" jdbcType="INTEGER" property="shopSkuId" />
+    <result column="advertised_asin" jdbcType="VARCHAR" property="advertisedAsin" />
+    <result column="impressions" jdbcType="INTEGER" property="impressions" />
+    <result column="viewable_impressions" jdbcType="INTEGER" property="viewableImpressions" />
+    <result column="clicks" jdbcType="INTEGER" property="clicks" />
+    <result column="click_thru_rate" jdbcType="DECIMAL" property="clickThruRate" />
+    <result column="page_views_day_14" jdbcType="INTEGER" property="pageViewsDay14" />
+    <result column="spend" jdbcType="DECIMAL" property="spend" />
+    <result column="cost_per_click" jdbcType="DECIMAL" property="costPerClick" />
+    <result column="cost_per_1000_viewable_impressions" jdbcType="INTEGER" property="costPer1000ViewableImpressions" />
+    <result column="total_advertising_cost_of_sales" jdbcType="DECIMAL" property="totalAdvertisingCostOfSales" />
+    <result column="total return on advertising spend" jdbcType="DECIMAL" property="totalReturnOnAdvertisingSpend" />
+    <result column="total_orders_day_14" jdbcType="INTEGER" property="totalOrdersDay14" />
+    <result column="tTotal_units_day_14" jdbcType="INTEGER" property="ttotalUnitsDay14" />
+    <result column="total_sales_day_14" jdbcType="DECIMAL" property="totalSalesDay14" />
+    <result column="conversion_rate_day_14" jdbcType="DECIMAL" property="conversionRateDay14" />
+    <result column="new_to_brand_orders_day_14" jdbcType="INTEGER" property="newToBrandOrdersDay14" />
+    <result column="new_to_brand_sales_day_14" jdbcType="DECIMAL" property="newToBrandSalesDay14" />
+    <result column="new_to_brand_units_day_14" jdbcType="INTEGER" property="newToBrandUnitsDay14" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, finance_id, start_date, end_date, currency, campaign_name, portfolio_name, cost_type, 
+    ad_group_name, bid_optimization, advertised_sku, shop_sku_id, advertised_asin, impressions, 
+    viewable_impressions, clicks, click_thru_rate, page_views_day_14, spend, cost_per_click, 
+    cost_per_1000_viewable_impressions, total_advertising_cost_of_sales, "total return on advertising spend", 
+    total_orders_day_14, tTotal_units_day_14, total_sales_day_14, conversion_rate_day_14, 
+    new_to_brand_orders_day_14, new_to_brand_sales_day_14, new_to_brand_units_day_14
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.DisplayAdvertisingExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from display_advertising
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from display_advertising
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from display_advertising
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.DisplayAdvertisingExample">
+    delete from display_advertising
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.DisplayAdvertising">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into display_advertising (finance_id, start_date, end_date, 
+      currency, campaign_name, portfolio_name, 
+      cost_type, ad_group_name, bid_optimization, 
+      advertised_sku, shop_sku_id, advertised_asin, 
+      impressions, viewable_impressions, clicks, 
+      click_thru_rate, page_views_day_14, spend, 
+      cost_per_click, cost_per_1000_viewable_impressions, 
+      total_advertising_cost_of_sales, "total return on advertising spend", 
+      total_orders_day_14, tTotal_units_day_14, total_sales_day_14, 
+      conversion_rate_day_14, new_to_brand_orders_day_14, 
+      new_to_brand_sales_day_14, new_to_brand_units_day_14
+      )
+    values (#{financeId,jdbcType=INTEGER}, #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, 
+      #{currency,jdbcType=VARCHAR}, #{campaignName,jdbcType=VARCHAR}, #{portfolioName,jdbcType=VARCHAR}, 
+      #{costType,jdbcType=VARCHAR}, #{adGroupName,jdbcType=VARCHAR}, #{bidOptimization,jdbcType=VARCHAR}, 
+      #{advertisedSku,jdbcType=VARCHAR}, #{shopSkuId,jdbcType=INTEGER}, #{advertisedAsin,jdbcType=VARCHAR}, 
+      #{impressions,jdbcType=INTEGER}, #{viewableImpressions,jdbcType=INTEGER}, #{clicks,jdbcType=INTEGER}, 
+      #{clickThruRate,jdbcType=DECIMAL}, #{pageViewsDay14,jdbcType=INTEGER}, #{spend,jdbcType=DECIMAL}, 
+      #{costPerClick,jdbcType=DECIMAL}, #{costPer1000ViewableImpressions,jdbcType=INTEGER}, 
+      #{totalAdvertisingCostOfSales,jdbcType=DECIMAL}, #{totalReturnOnAdvertisingSpend,jdbcType=DECIMAL}, 
+      #{totalOrdersDay14,jdbcType=INTEGER}, #{ttotalUnitsDay14,jdbcType=INTEGER}, #{totalSalesDay14,jdbcType=DECIMAL}, 
+      #{conversionRateDay14,jdbcType=DECIMAL}, #{newToBrandOrdersDay14,jdbcType=INTEGER}, 
+      #{newToBrandSalesDay14,jdbcType=DECIMAL}, #{newToBrandUnitsDay14,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.DisplayAdvertising">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into display_advertising
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="financeId != null">
+        finance_id,
+      </if>
+      <if test="startDate != null">
+        start_date,
+      </if>
+      <if test="endDate != null">
+        end_date,
+      </if>
+      <if test="currency != null">
+        currency,
+      </if>
+      <if test="campaignName != null">
+        campaign_name,
+      </if>
+      <if test="portfolioName != null">
+        portfolio_name,
+      </if>
+      <if test="costType != null">
+        cost_type,
+      </if>
+      <if test="adGroupName != null">
+        ad_group_name,
+      </if>
+      <if test="bidOptimization != null">
+        bid_optimization,
+      </if>
+      <if test="advertisedSku != null">
+        advertised_sku,
+      </if>
+      <if test="shopSkuId != null">
+        shop_sku_id,
+      </if>
+      <if test="advertisedAsin != null">
+        advertised_asin,
+      </if>
+      <if test="impressions != null">
+        impressions,
+      </if>
+      <if test="viewableImpressions != null">
+        viewable_impressions,
+      </if>
+      <if test="clicks != null">
+        clicks,
+      </if>
+      <if test="clickThruRate != null">
+        click_thru_rate,
+      </if>
+      <if test="pageViewsDay14 != null">
+        page_views_day_14,
+      </if>
+      <if test="spend != null">
+        spend,
+      </if>
+      <if test="costPerClick != null">
+        cost_per_click,
+      </if>
+      <if test="costPer1000ViewableImpressions != null">
+        cost_per_1000_viewable_impressions,
+      </if>
+      <if test="totalAdvertisingCostOfSales != null">
+        total_advertising_cost_of_sales,
+      </if>
+      <if test="totalReturnOnAdvertisingSpend != null">
+        "total return on advertising spend",
+      </if>
+      <if test="totalOrdersDay14 != null">
+        total_orders_day_14,
+      </if>
+      <if test="ttotalUnitsDay14 != null">
+        tTotal_units_day_14,
+      </if>
+      <if test="totalSalesDay14 != null">
+        total_sales_day_14,
+      </if>
+      <if test="conversionRateDay14 != null">
+        conversion_rate_day_14,
+      </if>
+      <if test="newToBrandOrdersDay14 != null">
+        new_to_brand_orders_day_14,
+      </if>
+      <if test="newToBrandSalesDay14 != null">
+        new_to_brand_sales_day_14,
+      </if>
+      <if test="newToBrandUnitsDay14 != null">
+        new_to_brand_units_day_14,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="financeId != null">
+        #{financeId,jdbcType=INTEGER},
+      </if>
+      <if test="startDate != null">
+        #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null">
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="campaignName != null">
+        #{campaignName,jdbcType=VARCHAR},
+      </if>
+      <if test="portfolioName != null">
+        #{portfolioName,jdbcType=VARCHAR},
+      </if>
+      <if test="costType != null">
+        #{costType,jdbcType=VARCHAR},
+      </if>
+      <if test="adGroupName != null">
+        #{adGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="bidOptimization != null">
+        #{bidOptimization,jdbcType=VARCHAR},
+      </if>
+      <if test="advertisedSku != null">
+        #{advertisedSku,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSkuId != null">
+        #{shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="advertisedAsin != null">
+        #{advertisedAsin,jdbcType=VARCHAR},
+      </if>
+      <if test="impressions != null">
+        #{impressions,jdbcType=INTEGER},
+      </if>
+      <if test="viewableImpressions != null">
+        #{viewableImpressions,jdbcType=INTEGER},
+      </if>
+      <if test="clicks != null">
+        #{clicks,jdbcType=INTEGER},
+      </if>
+      <if test="clickThruRate != null">
+        #{clickThruRate,jdbcType=DECIMAL},
+      </if>
+      <if test="pageViewsDay14 != null">
+        #{pageViewsDay14,jdbcType=INTEGER},
+      </if>
+      <if test="spend != null">
+        #{spend,jdbcType=DECIMAL},
+      </if>
+      <if test="costPerClick != null">
+        #{costPerClick,jdbcType=DECIMAL},
+      </if>
+      <if test="costPer1000ViewableImpressions != null">
+        #{costPer1000ViewableImpressions,jdbcType=INTEGER},
+      </if>
+      <if test="totalAdvertisingCostOfSales != null">
+        #{totalAdvertisingCostOfSales,jdbcType=DECIMAL},
+      </if>
+      <if test="totalReturnOnAdvertisingSpend != null">
+        #{totalReturnOnAdvertisingSpend,jdbcType=DECIMAL},
+      </if>
+      <if test="totalOrdersDay14 != null">
+        #{totalOrdersDay14,jdbcType=INTEGER},
+      </if>
+      <if test="ttotalUnitsDay14 != null">
+        #{ttotalUnitsDay14,jdbcType=INTEGER},
+      </if>
+      <if test="totalSalesDay14 != null">
+        #{totalSalesDay14,jdbcType=DECIMAL},
+      </if>
+      <if test="conversionRateDay14 != null">
+        #{conversionRateDay14,jdbcType=DECIMAL},
+      </if>
+      <if test="newToBrandOrdersDay14 != null">
+        #{newToBrandOrdersDay14,jdbcType=INTEGER},
+      </if>
+      <if test="newToBrandSalesDay14 != null">
+        #{newToBrandSalesDay14,jdbcType=DECIMAL},
+      </if>
+      <if test="newToBrandUnitsDay14 != null">
+        #{newToBrandUnitsDay14,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.DisplayAdvertisingExample" resultType="java.lang.Long">
+    select count(*) from display_advertising
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update display_advertising
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.financeId != null">
+        finance_id = #{record.financeId,jdbcType=INTEGER},
+      </if>
+      <if test="record.startDate != null">
+        start_date = #{record.startDate,jdbcType=DATE},
+      </if>
+      <if test="record.endDate != null">
+        end_date = #{record.endDate,jdbcType=DATE},
+      </if>
+      <if test="record.currency != null">
+        currency = #{record.currency,jdbcType=VARCHAR},
+      </if>
+      <if test="record.campaignName != null">
+        campaign_name = #{record.campaignName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.portfolioName != null">
+        portfolio_name = #{record.portfolioName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.costType != null">
+        cost_type = #{record.costType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.adGroupName != null">
+        ad_group_name = #{record.adGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.bidOptimization != null">
+        bid_optimization = #{record.bidOptimization,jdbcType=VARCHAR},
+      </if>
+      <if test="record.advertisedSku != null">
+        advertised_sku = #{record.advertisedSku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopSkuId != null">
+        shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.advertisedAsin != null">
+        advertised_asin = #{record.advertisedAsin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.impressions != null">
+        impressions = #{record.impressions,jdbcType=INTEGER},
+      </if>
+      <if test="record.viewableImpressions != null">
+        viewable_impressions = #{record.viewableImpressions,jdbcType=INTEGER},
+      </if>
+      <if test="record.clicks != null">
+        clicks = #{record.clicks,jdbcType=INTEGER},
+      </if>
+      <if test="record.clickThruRate != null">
+        click_thru_rate = #{record.clickThruRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.pageViewsDay14 != null">
+        page_views_day_14 = #{record.pageViewsDay14,jdbcType=INTEGER},
+      </if>
+      <if test="record.spend != null">
+        spend = #{record.spend,jdbcType=DECIMAL},
+      </if>
+      <if test="record.costPerClick != null">
+        cost_per_click = #{record.costPerClick,jdbcType=DECIMAL},
+      </if>
+      <if test="record.costPer1000ViewableImpressions != null">
+        cost_per_1000_viewable_impressions = #{record.costPer1000ViewableImpressions,jdbcType=INTEGER},
+      </if>
+      <if test="record.totalAdvertisingCostOfSales != null">
+        total_advertising_cost_of_sales = #{record.totalAdvertisingCostOfSales,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalReturnOnAdvertisingSpend != null">
+        "total return on advertising spend" = #{record.totalReturnOnAdvertisingSpend,jdbcType=DECIMAL},
+      </if>
+      <if test="record.totalOrdersDay14 != null">
+        total_orders_day_14 = #{record.totalOrdersDay14,jdbcType=INTEGER},
+      </if>
+      <if test="record.ttotalUnitsDay14 != null">
+        tTotal_units_day_14 = #{record.ttotalUnitsDay14,jdbcType=INTEGER},
+      </if>
+      <if test="record.totalSalesDay14 != null">
+        total_sales_day_14 = #{record.totalSalesDay14,jdbcType=DECIMAL},
+      </if>
+      <if test="record.conversionRateDay14 != null">
+        conversion_rate_day_14 = #{record.conversionRateDay14,jdbcType=DECIMAL},
+      </if>
+      <if test="record.newToBrandOrdersDay14 != null">
+        new_to_brand_orders_day_14 = #{record.newToBrandOrdersDay14,jdbcType=INTEGER},
+      </if>
+      <if test="record.newToBrandSalesDay14 != null">
+        new_to_brand_sales_day_14 = #{record.newToBrandSalesDay14,jdbcType=DECIMAL},
+      </if>
+      <if test="record.newToBrandUnitsDay14 != null">
+        new_to_brand_units_day_14 = #{record.newToBrandUnitsDay14,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update display_advertising
+    set id = #{record.id,jdbcType=INTEGER},
+      finance_id = #{record.financeId,jdbcType=INTEGER},
+      start_date = #{record.startDate,jdbcType=DATE},
+      end_date = #{record.endDate,jdbcType=DATE},
+      currency = #{record.currency,jdbcType=VARCHAR},
+      campaign_name = #{record.campaignName,jdbcType=VARCHAR},
+      portfolio_name = #{record.portfolioName,jdbcType=VARCHAR},
+      cost_type = #{record.costType,jdbcType=VARCHAR},
+      ad_group_name = #{record.adGroupName,jdbcType=VARCHAR},
+      bid_optimization = #{record.bidOptimization,jdbcType=VARCHAR},
+      advertised_sku = #{record.advertisedSku,jdbcType=VARCHAR},
+      shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
+      advertised_asin = #{record.advertisedAsin,jdbcType=VARCHAR},
+      impressions = #{record.impressions,jdbcType=INTEGER},
+      viewable_impressions = #{record.viewableImpressions,jdbcType=INTEGER},
+      clicks = #{record.clicks,jdbcType=INTEGER},
+      click_thru_rate = #{record.clickThruRate,jdbcType=DECIMAL},
+      page_views_day_14 = #{record.pageViewsDay14,jdbcType=INTEGER},
+      spend = #{record.spend,jdbcType=DECIMAL},
+      cost_per_click = #{record.costPerClick,jdbcType=DECIMAL},
+      cost_per_1000_viewable_impressions = #{record.costPer1000ViewableImpressions,jdbcType=INTEGER},
+      total_advertising_cost_of_sales = #{record.totalAdvertisingCostOfSales,jdbcType=DECIMAL},
+      "total return on advertising spend" = #{record.totalReturnOnAdvertisingSpend,jdbcType=DECIMAL},
+      total_orders_day_14 = #{record.totalOrdersDay14,jdbcType=INTEGER},
+      tTotal_units_day_14 = #{record.ttotalUnitsDay14,jdbcType=INTEGER},
+      total_sales_day_14 = #{record.totalSalesDay14,jdbcType=DECIMAL},
+      conversion_rate_day_14 = #{record.conversionRateDay14,jdbcType=DECIMAL},
+      new_to_brand_orders_day_14 = #{record.newToBrandOrdersDay14,jdbcType=INTEGER},
+      new_to_brand_sales_day_14 = #{record.newToBrandSalesDay14,jdbcType=DECIMAL},
+      new_to_brand_units_day_14 = #{record.newToBrandUnitsDay14,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.DisplayAdvertising">
+    update display_advertising
+    <set>
+      <if test="financeId != null">
+        finance_id = #{financeId,jdbcType=INTEGER},
+      </if>
+      <if test="startDate != null">
+        start_date = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null">
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
+      </if>
+      <if test="campaignName != null">
+        campaign_name = #{campaignName,jdbcType=VARCHAR},
+      </if>
+      <if test="portfolioName != null">
+        portfolio_name = #{portfolioName,jdbcType=VARCHAR},
+      </if>
+      <if test="costType != null">
+        cost_type = #{costType,jdbcType=VARCHAR},
+      </if>
+      <if test="adGroupName != null">
+        ad_group_name = #{adGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="bidOptimization != null">
+        bid_optimization = #{bidOptimization,jdbcType=VARCHAR},
+      </if>
+      <if test="advertisedSku != null">
+        advertised_sku = #{advertisedSku,jdbcType=VARCHAR},
+      </if>
+      <if test="shopSkuId != null">
+        shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="advertisedAsin != null">
+        advertised_asin = #{advertisedAsin,jdbcType=VARCHAR},
+      </if>
+      <if test="impressions != null">
+        impressions = #{impressions,jdbcType=INTEGER},
+      </if>
+      <if test="viewableImpressions != null">
+        viewable_impressions = #{viewableImpressions,jdbcType=INTEGER},
+      </if>
+      <if test="clicks != null">
+        clicks = #{clicks,jdbcType=INTEGER},
+      </if>
+      <if test="clickThruRate != null">
+        click_thru_rate = #{clickThruRate,jdbcType=DECIMAL},
+      </if>
+      <if test="pageViewsDay14 != null">
+        page_views_day_14 = #{pageViewsDay14,jdbcType=INTEGER},
+      </if>
+      <if test="spend != null">
+        spend = #{spend,jdbcType=DECIMAL},
+      </if>
+      <if test="costPerClick != null">
+        cost_per_click = #{costPerClick,jdbcType=DECIMAL},
+      </if>
+      <if test="costPer1000ViewableImpressions != null">
+        cost_per_1000_viewable_impressions = #{costPer1000ViewableImpressions,jdbcType=INTEGER},
+      </if>
+      <if test="totalAdvertisingCostOfSales != null">
+        total_advertising_cost_of_sales = #{totalAdvertisingCostOfSales,jdbcType=DECIMAL},
+      </if>
+      <if test="totalReturnOnAdvertisingSpend != null">
+        "total return on advertising spend" = #{totalReturnOnAdvertisingSpend,jdbcType=DECIMAL},
+      </if>
+      <if test="totalOrdersDay14 != null">
+        total_orders_day_14 = #{totalOrdersDay14,jdbcType=INTEGER},
+      </if>
+      <if test="ttotalUnitsDay14 != null">
+        tTotal_units_day_14 = #{ttotalUnitsDay14,jdbcType=INTEGER},
+      </if>
+      <if test="totalSalesDay14 != null">
+        total_sales_day_14 = #{totalSalesDay14,jdbcType=DECIMAL},
+      </if>
+      <if test="conversionRateDay14 != null">
+        conversion_rate_day_14 = #{conversionRateDay14,jdbcType=DECIMAL},
+      </if>
+      <if test="newToBrandOrdersDay14 != null">
+        new_to_brand_orders_day_14 = #{newToBrandOrdersDay14,jdbcType=INTEGER},
+      </if>
+      <if test="newToBrandSalesDay14 != null">
+        new_to_brand_sales_day_14 = #{newToBrandSalesDay14,jdbcType=DECIMAL},
+      </if>
+      <if test="newToBrandUnitsDay14 != null">
+        new_to_brand_units_day_14 = #{newToBrandUnitsDay14,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.DisplayAdvertising">
+    update display_advertising
+    set finance_id = #{financeId,jdbcType=INTEGER},
+      start_date = #{startDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      currency = #{currency,jdbcType=VARCHAR},
+      campaign_name = #{campaignName,jdbcType=VARCHAR},
+      portfolio_name = #{portfolioName,jdbcType=VARCHAR},
+      cost_type = #{costType,jdbcType=VARCHAR},
+      ad_group_name = #{adGroupName,jdbcType=VARCHAR},
+      bid_optimization = #{bidOptimization,jdbcType=VARCHAR},
+      advertised_sku = #{advertisedSku,jdbcType=VARCHAR},
+      shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
+      advertised_asin = #{advertisedAsin,jdbcType=VARCHAR},
+      impressions = #{impressions,jdbcType=INTEGER},
+      viewable_impressions = #{viewableImpressions,jdbcType=INTEGER},
+      clicks = #{clicks,jdbcType=INTEGER},
+      click_thru_rate = #{clickThruRate,jdbcType=DECIMAL},
+      page_views_day_14 = #{pageViewsDay14,jdbcType=INTEGER},
+      spend = #{spend,jdbcType=DECIMAL},
+      cost_per_click = #{costPerClick,jdbcType=DECIMAL},
+      cost_per_1000_viewable_impressions = #{costPer1000ViewableImpressions,jdbcType=INTEGER},
+      total_advertising_cost_of_sales = #{totalAdvertisingCostOfSales,jdbcType=DECIMAL},
+      "total return on advertising spend" = #{totalReturnOnAdvertisingSpend,jdbcType=DECIMAL},
+      total_orders_day_14 = #{totalOrdersDay14,jdbcType=INTEGER},
+      tTotal_units_day_14 = #{ttotalUnitsDay14,jdbcType=INTEGER},
+      total_sales_day_14 = #{totalSalesDay14,jdbcType=DECIMAL},
+      conversion_rate_day_14 = #{conversionRateDay14,jdbcType=DECIMAL},
+      new_to_brand_orders_day_14 = #{newToBrandOrdersDay14,jdbcType=INTEGER},
+      new_to_brand_sales_day_14 = #{newToBrandSalesDay14,jdbcType=DECIMAL},
+      new_to_brand_units_day_14 = #{newToBrandUnitsDay14,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
