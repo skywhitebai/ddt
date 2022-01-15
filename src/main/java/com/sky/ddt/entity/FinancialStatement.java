@@ -98,6 +98,10 @@ public class FinancialStatement {
 
     private BigDecimal costOfAdvertising;
 
+    private BigDecimal displayAdvertising;
+
+    private BigDecimal brandAdvertising;
+
     private BigDecimal fbaInventoryReimbursementCustomerReturn;
 
     private BigDecimal fbaInventoryReimbursementDamagedWarehouse;
@@ -562,6 +566,22 @@ public class FinancialStatement {
 
     public void setCostOfAdvertising(BigDecimal costOfAdvertising) {
         this.costOfAdvertising = costOfAdvertising;
+    }
+
+    public BigDecimal getDisplayAdvertising() {
+        return displayAdvertising;
+    }
+
+    public void setDisplayAdvertising(BigDecimal displayAdvertising) {
+        this.displayAdvertising = displayAdvertising;
+    }
+
+    public BigDecimal getBrandAdvertising() {
+        return brandAdvertising;
+    }
+
+    public void setBrandAdvertising(BigDecimal brandAdvertising) {
+        this.brandAdvertising = brandAdvertising;
     }
 
     public BigDecimal getFbaInventoryReimbursementCustomerReturn() {

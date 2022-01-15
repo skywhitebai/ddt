@@ -44,6 +44,8 @@ public class FinanceConstant {
         INVENTORY_DETAILS("inventoryDetails"),
         HEAD_DEDUCTION("headDeduction"),
         MANUAL_ADJUSTMENT("manualAdjustment"),
+        BRAND_ADVERTISING("brandAdvertising"),
+        DISPLAY_ADVERTISING("displayAdvertising"),
 
         REMOVE_ORDERS("removeOrders"),
         RETURN_ORDER("returnOrder"),;

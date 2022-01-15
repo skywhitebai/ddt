@@ -52,7 +52,7 @@ public class DisplayAdvertising {
 
     private Integer totalOrdersDay14;
 
-    private Integer ttotalUnitsDay14;
+    private Integer totalUnitsDay14;
 
     private BigDecimal totalSalesDay14;
 
@@ -63,6 +63,10 @@ public class DisplayAdvertising {
     private BigDecimal newToBrandSalesDay14;
 
     private Integer newToBrandUnitsDay14;
+
+    private Date createTime;
+
+    private Integer createBy;
 
     public Integer getId() {
         return id;
@@ -256,12 +260,12 @@ public class DisplayAdvertising {
         this.totalOrdersDay14 = totalOrdersDay14;
     }
 
-    public Integer getTtotalUnitsDay14() {
-        return ttotalUnitsDay14;
+    public Integer getTotalUnitsDay14() {
+        return totalUnitsDay14;
     }
 
-    public void setTtotalUnitsDay14(Integer ttotalUnitsDay14) {
-        this.ttotalUnitsDay14 = ttotalUnitsDay14;
+    public void setTotalUnitsDay14(Integer totalUnitsDay14) {
+        this.totalUnitsDay14 = totalUnitsDay14;
     }
 
     public BigDecimal getTotalSalesDay14() {
@@ -302,5 +306,21 @@ public class DisplayAdvertising {
 
     public void setNewToBrandUnitsDay14(Integer newToBrandUnitsDay14) {
         this.newToBrandUnitsDay14 = newToBrandUnitsDay14;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Integer getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(Integer createBy) {
+        this.createBy = createBy;
     }
 }

@@ -49,6 +49,8 @@
     <result column="sellerPayments_report_fee_subscription" jdbcType="DECIMAL" property="sellerpaymentsReportFeeSubscription" />
     <result column="lightning_deal_fee" jdbcType="DECIMAL" property="lightningDealFee" />
     <result column="cost_of_advertising" jdbcType="DECIMAL" property="costOfAdvertising" />
+    <result column="display_advertising" jdbcType="DECIMAL" property="displayAdvertising" />
+    <result column="brand_advertising" jdbcType="DECIMAL" property="brandAdvertising" />
     <result column="fba_inventory_reimbursement_customer_return" jdbcType="DECIMAL" property="fbaInventoryReimbursementCustomerReturn" />
     <result column="fba_inventory_reimbursement_damaged_warehouse" jdbcType="DECIMAL" property="fbaInventoryReimbursementDamagedWarehouse" />
     <result column="fba_inventory_reimbursement_customer_service_issue" jdbcType="DECIMAL" property="fbaInventoryReimbursementCustomerServiceIssue" />
@@ -164,19 +166,19 @@
     refund_promotional_rebates, refund_promotional_rebates_tax, refund_marketplace_withheld_tax, 
     refund_selling_fees, refund_fba_fees, refund_other_transaction_fees, refund_other, 
     refund_total, sellerPayments_report_fee_subscription, lightning_deal_fee, cost_of_advertising, 
-    fba_inventory_reimbursement_customer_return, fba_inventory_reimbursement_damaged_warehouse, 
-    fba_inventory_reimbursement_customer_service_issue, fba_inventory_reimbursement_fee_correction, 
-    fba_inventory_reimbursement_general_adjustment, fba_inventory_reimbursement_lost_inbound, 
-    fba_inventory_reimbursement_lost_warehouse, non_subscription_fee_adjustment, fba_inventory_placement_service_fee, 
-    fba_customer_return_per_unit_fee, fba_inventory_storage_fee, fba_long_term_storage_fee, 
-    fba_removal_order_disposal_fee, coupon_redemption_fee, early_reviewer_program_fee, 
-    money_back, money_back_rate, main_business_income, total_effective_receipts, sellable_requested_quantity, 
-    sellable_cost, unsellable_requested_quantity, unsellable_cost, procurement_cost, 
-    fba_head_trip_cost, head_deduction_fee, main_business_profit, gross_margin_on_sales, 
-    roi, initial_quantity, initial_inventory_cost, final_quantity, final_inventory_cost, 
-    inventory_turnover, manual_adjustment, new_product, refund_rate, create_time, create_by, 
-    advertising_sales_percentage, product_month, rate_of_dollar_exchange_rmb, cost_price, 
-    head_trip_cost, development_level
+    display_advertising, brand_advertising, fba_inventory_reimbursement_customer_return, 
+    fba_inventory_reimbursement_damaged_warehouse, fba_inventory_reimbursement_customer_service_issue, 
+    fba_inventory_reimbursement_fee_correction, fba_inventory_reimbursement_general_adjustment, 
+    fba_inventory_reimbursement_lost_inbound, fba_inventory_reimbursement_lost_warehouse, 
+    non_subscription_fee_adjustment, fba_inventory_placement_service_fee, fba_customer_return_per_unit_fee, 
+    fba_inventory_storage_fee, fba_long_term_storage_fee, fba_removal_order_disposal_fee, 
+    coupon_redemption_fee, early_reviewer_program_fee, money_back, money_back_rate, main_business_income, 
+    total_effective_receipts, sellable_requested_quantity, sellable_cost, unsellable_requested_quantity, 
+    unsellable_cost, procurement_cost, fba_head_trip_cost, head_deduction_fee, main_business_profit, 
+    gross_margin_on_sales, roi, initial_quantity, initial_inventory_cost, final_quantity, 
+    final_inventory_cost, inventory_turnover, manual_adjustment, new_product, refund_rate, 
+    create_time, create_by, advertising_sales_percentage, product_month, rate_of_dollar_exchange_rmb, 
+    cost_price, head_trip_cost, development_level
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FinancialStatementExample" resultMap="BaseResultMap">
     select
@@ -229,7 +231,8 @@
       refund_marketplace_withheld_tax, refund_selling_fees, 
       refund_fba_fees, refund_other_transaction_fees, 
       refund_other, refund_total, sellerPayments_report_fee_subscription, 
-      lightning_deal_fee, cost_of_advertising, fba_inventory_reimbursement_customer_return, 
+      lightning_deal_fee, cost_of_advertising, display_advertising, 
+      brand_advertising, fba_inventory_reimbursement_customer_return, 
       fba_inventory_reimbursement_damaged_warehouse, fba_inventory_reimbursement_customer_service_issue, 
       fba_inventory_reimbursement_fee_correction, fba_inventory_reimbursement_general_adjustment, 
       fba_inventory_reimbursement_lost_inbound, fba_inventory_reimbursement_lost_warehouse, 
@@ -266,7 +269,8 @@
       #{refundMarketplaceWithheldTax,jdbcType=DECIMAL}, #{refundSellingFees,jdbcType=DECIMAL}, 
       #{refundFbaFees,jdbcType=DECIMAL}, #{refundOtherTransactionFees,jdbcType=DECIMAL}, 
       #{refundOther,jdbcType=DECIMAL}, #{refundTotal,jdbcType=DECIMAL}, #{sellerpaymentsReportFeeSubscription,jdbcType=DECIMAL}, 
-      #{lightningDealFee,jdbcType=DECIMAL}, #{costOfAdvertising,jdbcType=DECIMAL}, #{fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL}, 
+      #{lightningDealFee,jdbcType=DECIMAL}, #{costOfAdvertising,jdbcType=DECIMAL}, #{displayAdvertising,jdbcType=DECIMAL}, 
+      #{brandAdvertising,jdbcType=DECIMAL}, #{fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL}, 
       #{fbaInventoryReimbursementDamagedWarehouse,jdbcType=DECIMAL}, #{fbaInventoryReimbursementCustomerServiceIssue,jdbcType=DECIMAL}, 
       #{fbaInventoryReimbursementFeeCorrection,jdbcType=DECIMAL}, #{fbaInventoryReimbursementGeneralAdjustment,jdbcType=DECIMAL}, 
       #{fbaInventoryReimbursementLostInbound,jdbcType=DECIMAL}, #{fbaInventoryReimbursementLostWarehouse,jdbcType=DECIMAL}, 
@@ -430,6 +434,12 @@
       </if>
       <if test="costOfAdvertising != null">
         cost_of_advertising,
+      </if>
+      <if test="displayAdvertising != null">
+        display_advertising,
+      </if>
+      <if test="brandAdvertising != null">
+        brand_advertising,
       </if>
       <if test="fbaInventoryReimbursementCustomerReturn != null">
         fba_inventory_reimbursement_customer_return,
@@ -705,6 +715,12 @@
       </if>
       <if test="costOfAdvertising != null">
         #{costOfAdvertising,jdbcType=DECIMAL},
+      </if>
+      <if test="displayAdvertising != null">
+        #{displayAdvertising,jdbcType=DECIMAL},
+      </if>
+      <if test="brandAdvertising != null">
+        #{brandAdvertising,jdbcType=DECIMAL},
       </if>
       <if test="fbaInventoryReimbursementCustomerReturn != null">
         #{fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL},
@@ -993,6 +1009,12 @@
       <if test="record.costOfAdvertising != null">
         cost_of_advertising = #{record.costOfAdvertising,jdbcType=DECIMAL},
       </if>
+      <if test="record.displayAdvertising != null">
+        display_advertising = #{record.displayAdvertising,jdbcType=DECIMAL},
+      </if>
+      <if test="record.brandAdvertising != null">
+        brand_advertising = #{record.brandAdvertising,jdbcType=DECIMAL},
+      </if>
       <if test="record.fbaInventoryReimbursementCustomerReturn != null">
         fba_inventory_reimbursement_customer_return = #{record.fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL},
       </if>
@@ -1182,6 +1204,8 @@
       sellerPayments_report_fee_subscription = #{record.sellerpaymentsReportFeeSubscription,jdbcType=DECIMAL},
       lightning_deal_fee = #{record.lightningDealFee,jdbcType=DECIMAL},
       cost_of_advertising = #{record.costOfAdvertising,jdbcType=DECIMAL},
+      display_advertising = #{record.displayAdvertising,jdbcType=DECIMAL},
+      brand_advertising = #{record.brandAdvertising,jdbcType=DECIMAL},
       fba_inventory_reimbursement_customer_return = #{record.fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL},
       fba_inventory_reimbursement_damaged_warehouse = #{record.fbaInventoryReimbursementDamagedWarehouse,jdbcType=DECIMAL},
       fba_inventory_reimbursement_customer_service_issue = #{record.fbaInventoryReimbursementCustomerServiceIssue,jdbcType=DECIMAL},
@@ -1372,6 +1396,12 @@
       <if test="costOfAdvertising != null">
         cost_of_advertising = #{costOfAdvertising,jdbcType=DECIMAL},
       </if>
+      <if test="displayAdvertising != null">
+        display_advertising = #{displayAdvertising,jdbcType=DECIMAL},
+      </if>
+      <if test="brandAdvertising != null">
+        brand_advertising = #{brandAdvertising,jdbcType=DECIMAL},
+      </if>
       <if test="fbaInventoryReimbursementCustomerReturn != null">
         fba_inventory_reimbursement_customer_return = #{fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL},
       </if>
@@ -1558,6 +1588,8 @@
       sellerPayments_report_fee_subscription = #{sellerpaymentsReportFeeSubscription,jdbcType=DECIMAL},
       lightning_deal_fee = #{lightningDealFee,jdbcType=DECIMAL},
       cost_of_advertising = #{costOfAdvertising,jdbcType=DECIMAL},
+      display_advertising = #{displayAdvertising,jdbcType=DECIMAL},
+      brand_advertising = #{brandAdvertising,jdbcType=DECIMAL},
       fba_inventory_reimbursement_customer_return = #{fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL},
       fba_inventory_reimbursement_damaged_warehouse = #{fbaInventoryReimbursementDamagedWarehouse,jdbcType=DECIMAL},
       fba_inventory_reimbursement_customer_service_issue = #{fbaInventoryReimbursementCustomerServiceIssue,jdbcType=DECIMAL},

@@ -1653,63 +1653,63 @@ public class DisplayAdvertisingExample {
             return (Criteria) this;
         }
 
-        public Criteria andTtotalUnitsDay14IsNull() {
-            addCriterion("tTotal_units_day_14 is null");
+        public Criteria andTotalUnitsDay14IsNull() {
+            addCriterion("total_units_day_14 is null");
             return (Criteria) this;
         }
 
-        public Criteria andTtotalUnitsDay14IsNotNull() {
-            addCriterion("tTotal_units_day_14 is not null");
+        public Criteria andTotalUnitsDay14IsNotNull() {
+            addCriterion("total_units_day_14 is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTtotalUnitsDay14EqualTo(Integer value) {
-            addCriterion("tTotal_units_day_14 =", value, "ttotalUnitsDay14");
+        public Criteria andTotalUnitsDay14EqualTo(Integer value) {
+            addCriterion("total_units_day_14 =", value, "totalUnitsDay14");
             return (Criteria) this;
         }
 
-        public Criteria andTtotalUnitsDay14NotEqualTo(Integer value) {
-            addCriterion("tTotal_units_day_14 <>", value, "ttotalUnitsDay14");
+        public Criteria andTotalUnitsDay14NotEqualTo(Integer value) {
+            addCriterion("total_units_day_14 <>", value, "totalUnitsDay14");
             return (Criteria) this;
         }
 
-        public Criteria andTtotalUnitsDay14GreaterThan(Integer value) {
-            addCriterion("tTotal_units_day_14 >", value, "ttotalUnitsDay14");
+        public Criteria andTotalUnitsDay14GreaterThan(Integer value) {
+            addCriterion("total_units_day_14 >", value, "totalUnitsDay14");
             return (Criteria) this;
         }
 
-        public Criteria andTtotalUnitsDay14GreaterThanOrEqualTo(Integer value) {
-            addCriterion("tTotal_units_day_14 >=", value, "ttotalUnitsDay14");
+        public Criteria andTotalUnitsDay14GreaterThanOrEqualTo(Integer value) {
+            addCriterion("total_units_day_14 >=", value, "totalUnitsDay14");
             return (Criteria) this;
         }
 
-        public Criteria andTtotalUnitsDay14LessThan(Integer value) {
-            addCriterion("tTotal_units_day_14 <", value, "ttotalUnitsDay14");
+        public Criteria andTotalUnitsDay14LessThan(Integer value) {
+            addCriterion("total_units_day_14 <", value, "totalUnitsDay14");
             return (Criteria) this;
         }
 
-        public Criteria andTtotalUnitsDay14LessThanOrEqualTo(Integer value) {
-            addCriterion("tTotal_units_day_14 <=", value, "ttotalUnitsDay14");
+        public Criteria andTotalUnitsDay14LessThanOrEqualTo(Integer value) {
+            addCriterion("total_units_day_14 <=", value, "totalUnitsDay14");
             return (Criteria) this;
         }
 
-        public Criteria andTtotalUnitsDay14In(List<Integer> values) {
-            addCriterion("tTotal_units_day_14 in", values, "ttotalUnitsDay14");
+        public Criteria andTotalUnitsDay14In(List<Integer> values) {
+            addCriterion("total_units_day_14 in", values, "totalUnitsDay14");
             return (Criteria) this;
         }
 
-        public Criteria andTtotalUnitsDay14NotIn(List<Integer> values) {
-            addCriterion("tTotal_units_day_14 not in", values, "ttotalUnitsDay14");
+        public Criteria andTotalUnitsDay14NotIn(List<Integer> values) {
+            addCriterion("total_units_day_14 not in", values, "totalUnitsDay14");
             return (Criteria) this;
         }
 
-        public Criteria andTtotalUnitsDay14Between(Integer value1, Integer value2) {
-            addCriterion("tTotal_units_day_14 between", value1, value2, "ttotalUnitsDay14");
+        public Criteria andTotalUnitsDay14Between(Integer value1, Integer value2) {
+            addCriterion("total_units_day_14 between", value1, value2, "totalUnitsDay14");
             return (Criteria) this;
         }
 
-        public Criteria andTtotalUnitsDay14NotBetween(Integer value1, Integer value2) {
-            addCriterion("tTotal_units_day_14 not between", value1, value2, "ttotalUnitsDay14");
+        public Criteria andTotalUnitsDay14NotBetween(Integer value1, Integer value2) {
+            addCriterion("total_units_day_14 not between", value1, value2, "totalUnitsDay14");
             return (Criteria) this;
         }
 
@@ -2010,6 +2010,126 @@ public class DisplayAdvertisingExample {
 
         public Criteria andNewToBrandUnitsDay14NotBetween(Integer value1, Integer value2) {
             addCriterion("new_to_brand_units_day_14 not between", value1, value2, "newToBrandUnitsDay14");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIsNull() {
+            addCriterion("create_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIsNotNull() {
+            addCriterion("create_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeEqualTo(Date value) {
+            addCriterion("create_time =", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotEqualTo(Date value) {
+            addCriterion("create_time <>", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeGreaterThan(Date value) {
+            addCriterion("create_time >", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeGreaterThanOrEqualTo(Date value) {
+            addCriterion("create_time >=", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLessThan(Date value) {
+            addCriterion("create_time <", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeLessThanOrEqualTo(Date value) {
+            addCriterion("create_time <=", value, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeIn(List<Date> values) {
+            addCriterion("create_time in", values, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotIn(List<Date> values) {
+            addCriterion("create_time not in", values, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeBetween(Date value1, Date value2) {
+            addCriterion("create_time between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateTimeNotBetween(Date value1, Date value2) {
+            addCriterion("create_time not between", value1, value2, "createTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateByIsNull() {
+            addCriterion("create_by is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateByIsNotNull() {
+            addCriterion("create_by is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateByEqualTo(Integer value) {
+            addCriterion("create_by =", value, "createBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateByNotEqualTo(Integer value) {
+            addCriterion("create_by <>", value, "createBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateByGreaterThan(Integer value) {
+            addCriterion("create_by >", value, "createBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateByGreaterThanOrEqualTo(Integer value) {
+            addCriterion("create_by >=", value, "createBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateByLessThan(Integer value) {
+            addCriterion("create_by <", value, "createBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateByLessThanOrEqualTo(Integer value) {
+            addCriterion("create_by <=", value, "createBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateByIn(List<Integer> values) {
+            addCriterion("create_by in", values, "createBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateByNotIn(List<Integer> values) {
+            addCriterion("create_by not in", values, "createBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateByBetween(Integer value1, Integer value2) {
+            addCriterion("create_by between", value1, value2, "createBy");
+            return (Criteria) this;
+        }
+
+        public Criteria andCreateByNotBetween(Integer value1, Integer value2) {
+            addCriterion("create_by not between", value1, value2, "createBy");
             return (Criteria) this;
         }
     }

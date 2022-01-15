@@ -113,6 +113,8 @@ public class FinancialStatementService implements IFinancialStatementService {
             moneyBack = moneyBack.add(financialStatementResponse.getCouponRedemptionFee());
             moneyBack = moneyBack.add(financialStatementResponse.getEarlyReviewerProgramFee());
             moneyBack = moneyBack.add(financialStatementResponse.getManualAdjustment());
+            moneyBack = moneyBack.add(financialStatementResponse.getDisplayAdvertising());
+            moneyBack = moneyBack.add(financialStatementResponse.getBrandAdvertising());
             financialStatementResponse.setMoneyBack(moneyBack);
             if (financialStatementResponse.getProductSales().compareTo(BigDecimal.ZERO) != 0) {
                 BigDecimal moneyBackRate = financialStatementResponse.getMoneyBack().divide(financialStatementResponse.getProductSales(), 4, BigDecimal.ROUND_HALF_UP);
@@ -164,20 +166,7 @@ public class FinancialStatementService implements IFinancialStatementService {
                     financialStatementResponse.setRefundRate(BigDecimal.ZERO);
                 }
             }
-            if (financialStatementResponse.getCostOfAdvertising().compareTo(BigDecimal.ZERO) == 0) {
-                financialStatementResponse.setAdvertisingSalesPercentage(BigDecimal.ZERO);
-            } else {
-                if (BigDecimal.ZERO.compareTo(financialStatementResponse.getProductSales()) == 0) {
-                    financialStatementResponse.setAdvertisingSalesPercentage(new BigDecimal(10000));
-                } else {
-                    BigDecimal advertisingSalesPercentage = MathUtil.divide(financialStatementResponse.getCostOfAdvertising().multiply(new BigDecimal(-1)), financialStatementResponse.getProductSales(), 4);
-                    if (advertisingSalesPercentage != null) {
-                        financialStatementResponse.setAdvertisingSalesPercentage(advertisingSalesPercentage);
-                    } else {
-                        financialStatementResponse.setAdvertisingSalesPercentage(BigDecimal.ZERO);
-                    }
-                }
-            }
+            setAdvertisingSalesPercentage(financialStatementResponse);
         }
 
 
@@ -206,6 +195,26 @@ public class FinancialStatementService implements IFinancialStatementService {
         financeUpdate.setId(financeId);
         customFinanceMapper.updateByPrimaryKeySelective(financeUpdate);
         return BaseResponse.success();
+    }
+
+    private void setAdvertisingSalesPercentage(FinancialStatementResponse financialStatementResponse) {
+        if (financialStatementResponse.getCostOfAdvertising().compareTo(BigDecimal.ZERO) == 0
+                && financialStatementResponse.getDisplayAdvertising().compareTo(BigDecimal.ZERO) == 0
+                && financialStatementResponse.getBrandAdvertising().compareTo(BigDecimal.ZERO) == 0) {
+            financialStatementResponse.setAdvertisingSalesPercentage(BigDecimal.ZERO);
+        } else {
+            if (BigDecimal.ZERO.compareTo(financialStatementResponse.getProductSales()) == 0) {
+                financialStatementResponse.setAdvertisingSalesPercentage(new BigDecimal(10000));
+            } else {
+                BigDecimal adCount = financialStatementResponse.getCostOfAdvertising().add(financialStatementResponse.getBrandAdvertising()).add(financialStatementResponse.getDisplayAdvertising());
+                BigDecimal advertisingSalesPercentage = MathUtil.divide(adCount.multiply(new BigDecimal(-1)), financialStatementResponse.getProductSales(), 4);
+                if (advertisingSalesPercentage != null) {
+                    financialStatementResponse.setAdvertisingSalesPercentage(advertisingSalesPercentage);
+                } else {
+                    financialStatementResponse.setAdvertisingSalesPercentage(BigDecimal.ZERO);
+                }
+            }
+        }
     }
 
     private void setfbaCustomerReturnPerUnitFee(List<FinancialStatementResponse> financialStatementResponseList) {
@@ -1164,6 +1173,12 @@ public class FinancialStatementService implements IFinancialStatementService {
             }
             if (financialStatement.getHeadTripCost() != null) {
                 row.createCell(111).setCellValue(financialStatement.getHeadTripCost().doubleValue());
+            }
+            if (financialStatement.getDisplayAdvertising() != null) {
+                row.createCell(112).setCellValue(financialStatement.getDisplayAdvertising().doubleValue());
+            }
+            if (financialStatement.getBrandAdvertising() != null) {
+                row.createCell(113).setCellValue(financialStatement.getBrandAdvertising().doubleValue());
             }
             rowIndex++;
         }

@@ -42,6 +42,10 @@
     <a href="javascript:void(0)" onclick="showDlgImport('monthlySales',null)" class="easyui-linkbutton">导入月流水信息</a>
     <a href="javascript:void(0)" onclick="showDlgImport('monthlyAdvertisingFee',null)"
        class="easyui-linkbutton">导入月广告费</a>
+    <a href="javascript:void(0)" onclick="showDlgImport('displayAdvertising',null)"
+       class="easyui-linkbutton">导入展示广告费</a>
+    <a href="javascript:void(0)" onclick="showDlgImport('brandAdvertising',null)"
+       class="easyui-linkbutton">导入品牌广告费</a>
     <a href="javascript:void(0)" onclick="showDlgImport('lightingDeal',null)" class="easyui-linkbutton">导入秒杀</a>
     <a href="javascript:void(0)" onclick="showDlgImport('monthlyStorageFee',null)" class="easyui-linkbutton">导入月仓储费</a>
     <a href="javascript:void(0)" onclick="showDlgImport('longStorageFee',null)" class="easyui-linkbutton">导入长期仓储费</a>
@@ -172,6 +176,24 @@
                         return "<a href='#' onclick=\"showDlgImport('monthlyAdvertisingFee','" + row.month + "')\"' title='导入月广告费' >未导入</a>";
                     }
                 }
+                },
+                {
+                    title: '展示广告', field: 'displayAdvertising', width: 80, formatter: function (value, row, index) {
+                        if (value) {
+                            return "<a href='#' onclick=\"showDlgImport('displayAdvertising','" + row.month + "')\"' title='更新展示广告费' >已导入</a>";
+                        } else {
+                            return "<a href='#' onclick=\"showDlgImport('displayAdvertising','" + row.month + "')\"' title='导入展示广告费' >未导入</a>";
+                        }
+                    }
+                },
+                {
+                    title: '品牌广告', field: 'brandAdvertising', width: 80, formatter: function (value, row, index) {
+                        if (value) {
+                            return "<a href='#' onclick=\"showDlgImport('brandAdvertising','" + row.month + "')\"' title='更新品牌广告费' >已导入</a>";
+                        } else {
+                            return "<a href='#' onclick=\"showDlgImport('brandAdvertising','" + row.month + "')\"' title='导入品牌广告费' >未导入</a>";
+                        }
+                    }
                 },
                 {
                     title: '秒杀', field: 'lightingDeal', width: 80, formatter: function (value, row, index) {
@@ -338,6 +360,11 @@
             case 'monthlyAdvertisingFee':
                 importTitle = "导入月广告费";
                 break;
+            case 'displayAdvertising':
+                importTitle = "导入展示广告费";
+                break;
+            case 'brandAdvertising':
+                importTitle = "导入品牌广告费";
             case 'manualAdjustment':
                 importTitle = "导入人工核准";
                 break;

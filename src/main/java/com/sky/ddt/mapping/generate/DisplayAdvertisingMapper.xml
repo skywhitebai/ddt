@@ -26,12 +26,14 @@
     <result column="total_advertising_cost_of_sales" jdbcType="DECIMAL" property="totalAdvertisingCostOfSales" />
     <result column="total return on advertising spend" jdbcType="DECIMAL" property="totalReturnOnAdvertisingSpend" />
     <result column="total_orders_day_14" jdbcType="INTEGER" property="totalOrdersDay14" />
-    <result column="tTotal_units_day_14" jdbcType="INTEGER" property="ttotalUnitsDay14" />
+    <result column="total_units_day_14" jdbcType="INTEGER" property="totalUnitsDay14" />
     <result column="total_sales_day_14" jdbcType="DECIMAL" property="totalSalesDay14" />
     <result column="conversion_rate_day_14" jdbcType="DECIMAL" property="conversionRateDay14" />
     <result column="new_to_brand_orders_day_14" jdbcType="INTEGER" property="newToBrandOrdersDay14" />
     <result column="new_to_brand_sales_day_14" jdbcType="DECIMAL" property="newToBrandSalesDay14" />
     <result column="new_to_brand_units_day_14" jdbcType="INTEGER" property="newToBrandUnitsDay14" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -96,8 +98,9 @@
     ad_group_name, bid_optimization, advertised_sku, shop_sku_id, advertised_asin, impressions, 
     viewable_impressions, clicks, click_thru_rate, page_views_day_14, spend, cost_per_click, 
     cost_per_1000_viewable_impressions, total_advertising_cost_of_sales, "total return on advertising spend", 
-    total_orders_day_14, tTotal_units_day_14, total_sales_day_14, conversion_rate_day_14, 
-    new_to_brand_orders_day_14, new_to_brand_sales_day_14, new_to_brand_units_day_14
+    total_orders_day_14, total_units_day_14, total_sales_day_14, conversion_rate_day_14, 
+    new_to_brand_orders_day_14, new_to_brand_sales_day_14, new_to_brand_units_day_14, 
+    create_time, create_by
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.DisplayAdvertisingExample" resultMap="BaseResultMap">
     select
@@ -141,10 +144,10 @@
       click_thru_rate, page_views_day_14, spend, 
       cost_per_click, cost_per_1000_viewable_impressions, 
       total_advertising_cost_of_sales, "total return on advertising spend", 
-      total_orders_day_14, tTotal_units_day_14, total_sales_day_14, 
+      total_orders_day_14, total_units_day_14, total_sales_day_14, 
       conversion_rate_day_14, new_to_brand_orders_day_14, 
-      new_to_brand_sales_day_14, new_to_brand_units_day_14
-      )
+      new_to_brand_sales_day_14, new_to_brand_units_day_14, 
+      create_time, create_by)
     values (#{financeId,jdbcType=INTEGER}, #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, 
       #{currency,jdbcType=VARCHAR}, #{campaignName,jdbcType=VARCHAR}, #{portfolioName,jdbcType=VARCHAR}, 
       #{costType,jdbcType=VARCHAR}, #{adGroupName,jdbcType=VARCHAR}, #{bidOptimization,jdbcType=VARCHAR}, 
@@ -153,10 +156,10 @@
       #{clickThruRate,jdbcType=DECIMAL}, #{pageViewsDay14,jdbcType=INTEGER}, #{spend,jdbcType=DECIMAL}, 
       #{costPerClick,jdbcType=DECIMAL}, #{costPer1000ViewableImpressions,jdbcType=INTEGER}, 
       #{totalAdvertisingCostOfSales,jdbcType=DECIMAL}, #{totalReturnOnAdvertisingSpend,jdbcType=DECIMAL}, 
-      #{totalOrdersDay14,jdbcType=INTEGER}, #{ttotalUnitsDay14,jdbcType=INTEGER}, #{totalSalesDay14,jdbcType=DECIMAL}, 
+      #{totalOrdersDay14,jdbcType=INTEGER}, #{totalUnitsDay14,jdbcType=INTEGER}, #{totalSalesDay14,jdbcType=DECIMAL}, 
       #{conversionRateDay14,jdbcType=DECIMAL}, #{newToBrandOrdersDay14,jdbcType=INTEGER}, 
-      #{newToBrandSalesDay14,jdbcType=DECIMAL}, #{newToBrandUnitsDay14,jdbcType=INTEGER}
-      )
+      #{newToBrandSalesDay14,jdbcType=DECIMAL}, #{newToBrandUnitsDay14,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.DisplayAdvertising">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -233,8 +236,8 @@
       <if test="totalOrdersDay14 != null">
         total_orders_day_14,
       </if>
-      <if test="ttotalUnitsDay14 != null">
-        tTotal_units_day_14,
+      <if test="totalUnitsDay14 != null">
+        total_units_day_14,
       </if>
       <if test="totalSalesDay14 != null">
         total_sales_day_14,
@@ -250,6 +253,12 @@
       </if>
       <if test="newToBrandUnitsDay14 != null">
         new_to_brand_units_day_14,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -322,8 +331,8 @@
       <if test="totalOrdersDay14 != null">
         #{totalOrdersDay14,jdbcType=INTEGER},
       </if>
-      <if test="ttotalUnitsDay14 != null">
-        #{ttotalUnitsDay14,jdbcType=INTEGER},
+      <if test="totalUnitsDay14 != null">
+        #{totalUnitsDay14,jdbcType=INTEGER},
       </if>
       <if test="totalSalesDay14 != null">
         #{totalSalesDay14,jdbcType=DECIMAL},
@@ -339,6 +348,12 @@
       </if>
       <if test="newToBrandUnitsDay14 != null">
         #{newToBrandUnitsDay14,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -423,8 +438,8 @@
       <if test="record.totalOrdersDay14 != null">
         total_orders_day_14 = #{record.totalOrdersDay14,jdbcType=INTEGER},
       </if>
-      <if test="record.ttotalUnitsDay14 != null">
-        tTotal_units_day_14 = #{record.ttotalUnitsDay14,jdbcType=INTEGER},
+      <if test="record.totalUnitsDay14 != null">
+        total_units_day_14 = #{record.totalUnitsDay14,jdbcType=INTEGER},
       </if>
       <if test="record.totalSalesDay14 != null">
         total_sales_day_14 = #{record.totalSalesDay14,jdbcType=DECIMAL},
@@ -440,6 +455,12 @@
       </if>
       <if test="record.newToBrandUnitsDay14 != null">
         new_to_brand_units_day_14 = #{record.newToBrandUnitsDay14,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -472,12 +493,14 @@
       total_advertising_cost_of_sales = #{record.totalAdvertisingCostOfSales,jdbcType=DECIMAL},
       "total return on advertising spend" = #{record.totalReturnOnAdvertisingSpend,jdbcType=DECIMAL},
       total_orders_day_14 = #{record.totalOrdersDay14,jdbcType=INTEGER},
-      tTotal_units_day_14 = #{record.ttotalUnitsDay14,jdbcType=INTEGER},
+      total_units_day_14 = #{record.totalUnitsDay14,jdbcType=INTEGER},
       total_sales_day_14 = #{record.totalSalesDay14,jdbcType=DECIMAL},
       conversion_rate_day_14 = #{record.conversionRateDay14,jdbcType=DECIMAL},
       new_to_brand_orders_day_14 = #{record.newToBrandOrdersDay14,jdbcType=INTEGER},
       new_to_brand_sales_day_14 = #{record.newToBrandSalesDay14,jdbcType=DECIMAL},
-      new_to_brand_units_day_14 = #{record.newToBrandUnitsDay14,jdbcType=INTEGER}
+      new_to_brand_units_day_14 = #{record.newToBrandUnitsDay14,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -554,8 +577,8 @@
       <if test="totalOrdersDay14 != null">
         total_orders_day_14 = #{totalOrdersDay14,jdbcType=INTEGER},
       </if>
-      <if test="ttotalUnitsDay14 != null">
-        tTotal_units_day_14 = #{ttotalUnitsDay14,jdbcType=INTEGER},
+      <if test="totalUnitsDay14 != null">
+        total_units_day_14 = #{totalUnitsDay14,jdbcType=INTEGER},
       </if>
       <if test="totalSalesDay14 != null">
         total_sales_day_14 = #{totalSalesDay14,jdbcType=DECIMAL},
@@ -571,6 +594,12 @@
       </if>
       <if test="newToBrandUnitsDay14 != null">
         new_to_brand_units_day_14 = #{newToBrandUnitsDay14,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
@@ -600,12 +629,14 @@
       total_advertising_cost_of_sales = #{totalAdvertisingCostOfSales,jdbcType=DECIMAL},
       "total return on advertising spend" = #{totalReturnOnAdvertisingSpend,jdbcType=DECIMAL},
       total_orders_day_14 = #{totalOrdersDay14,jdbcType=INTEGER},
-      tTotal_units_day_14 = #{ttotalUnitsDay14,jdbcType=INTEGER},
+      total_units_day_14 = #{totalUnitsDay14,jdbcType=INTEGER},
       total_sales_day_14 = #{totalSalesDay14,jdbcType=DECIMAL},
       conversion_rate_day_14 = #{conversionRateDay14,jdbcType=DECIMAL},
       new_to_brand_orders_day_14 = #{newToBrandOrdersDay14,jdbcType=INTEGER},
       new_to_brand_sales_day_14 = #{newToBrandSalesDay14,jdbcType=DECIMAL},
-      new_to_brand_units_day_14 = #{newToBrandUnitsDay14,jdbcType=INTEGER}
+      new_to_brand_units_day_14 = #{newToBrandUnitsDay14,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

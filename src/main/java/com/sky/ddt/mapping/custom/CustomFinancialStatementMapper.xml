@@ -78,7 +78,7 @@
         IFNULL(idi.initialQuantity,0)*(IFNULL(sku.`cost_price`,0)+IFNULL(ss.`head_trip_cost`,0)) initialInventoryCost,
         IFNULL(idf.finalQuantity,0) finalQuantity,
         IFNULL(idf.finalQuantity,0)*(IFNULL(sku.`cost_price`,0)+IFNULL(ss.`head_trip_cost`,0)) finalInventoryCost,
-        IFNULL(ma.manualAdjustment,0) manualAdjustment,
+        IFNULL(ma.manualAdjustment,0) manualAdjustment,IFNULL(da.displayAdvertising,0) displayAdvertising,IFNULL(ba.brandAdvertising,0) brandAdvertising,
         case when ss.create_time is null then 0 when DATE_ADD(ss.create_time,INTERVAL 14 month)<![CDATA[  > ]]>f.month then 1 else 0 end newProduct,
         TIMESTAMPDIFF(MONTH,ss.create_time,f.month) productMonth
         FROM `finance` f
@@ -158,7 +158,6 @@
         SUM(CASE WHEN  dd.`disposition`='Unsellable' THEN IFNULL(dd.`requested_quantity`,0) ELSE 0 END)  unsellableRequestedQuantity,
         shop_sku_id FROM `destruction_details` dd WHERE `finance_id`=#{financeId}  GROUP BY `shop_sku_id`) dd
         ON dd.shop_sku_id=ss.shop_sku_id
-
         LEFT JOIN
         (SELECT SUM(IFNULL(idi.afn_total_quantity,0)) initialQuantity,shop_sku_id FROM `inventory_details` idi WHERE idi.finance_id =
         (SELECT MAX(fi.id) FROM `finance` fi,finance f WHERE fi.shop_id=f.shop_id AND fi.month=DATE_SUB(f.month,INTERVAL 1 MONTH) AND f.id=#{financeId})  GROUP BY `shop_sku_id`) idi
@@ -169,6 +168,12 @@
         LEFT JOIN
         (SELECT SUM(IFNULL(ma.fee,0)) manualAdjustment,shop_sku_id FROM `manual_adjustment` ma WHERE `finance_id`=#{financeId} GROUP BY `shop_sku_id`) ma
         ON ma.shop_sku_id=ss.shop_sku_id
+        LEFT JOIN
+        (SELECT SUM(IFNULL(total_advertising_cost_of_sales,0))*-1 displayAdvertising,shop_sku_id FROM `display_advertising` WHERE `finance_id`=#{financeId} GROUP BY `shop_sku_id`) da
+        ON da.shop_sku_id=ss.shop_sku_id
+        LEFT JOIN
+        (SELECT SUM(IFNULL(fee,0))*-1 brandAdvertising,shop_sku_id FROM `brand_advertising` WHERE `finance_id`=#{financeId} GROUP BY `shop_sku_id`) ba
+        ON ba.shop_sku_id=ss.shop_sku_id
 
         WHERE f.`id`=#{financeId}
         ORDER BY ss.`shop_parent_sku`,sku.`sku`

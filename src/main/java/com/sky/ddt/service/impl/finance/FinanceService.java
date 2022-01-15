@@ -64,6 +64,10 @@ public class FinanceService implements IFinanceService {
     IInventoryDetailsService inventoryDetailsService;
     @Autowired
     IManualAdjustmentService manualAdjustmentService;
+    @Autowired
+    IBrandAdvertisingService brandAdvertisingService;
+    @Autowired
+    IDisplayAdvertisingService displayAdvertisingService;
 
     /**
      * @param params@return
@@ -147,6 +151,10 @@ public class FinanceService implements IFinanceService {
             return inventoryDetailsService.importInventoryDetails(params, dealUserId);
         }else if (FinanceConstant.FinanceTypeEnum.MANUAL_ADJUSTMENT.getType().equals(params.getType())) {
             return manualAdjustmentService.importManualAdjustment(params, dealUserId);
+        }else if (FinanceConstant.FinanceTypeEnum.BRAND_ADVERTISING.getType().equals(params.getType())) {
+            return brandAdvertisingService.importBrandAdvertising(params, dealUserId);
+        }else if (FinanceConstant.FinanceTypeEnum.DISPLAY_ADVERTISING.getType().equals(params.getType())) {
+            return displayAdvertisingService.importDisplayAdvertising(params, dealUserId);
         }
 
 

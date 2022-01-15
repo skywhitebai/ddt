@@ -179,7 +179,7 @@
                     }
                 },
                 {
-                    title: '月广告费', field: 'displayAdvertising', width: 80, formatter: function (value, row, index) {
+                    title: '展示广告', field: 'displayAdvertising', width: 80, formatter: function (value, row, index) {
                         if (value) {
                             return "<a href='#' onclick=\"showDlgImport('displayAdvertising','" + row.month + "')\"' title='更新展示广告费' >已导入</a>";
                         } else {
@@ -188,7 +188,7 @@
                     }
                 },
                 {
-                    title: '月广告费', field: 'brandAdvertising', width: 80, formatter: function (value, row, index) {
+                    title: '品牌广告', field: 'brandAdvertising', width: 80, formatter: function (value, row, index) {
                         if (value) {
                             return "<a href='#' onclick=\"showDlgImport('brandAdvertising','" + row.month + "')\"' title='更新品牌广告费' >已导入</a>";
                         } else {

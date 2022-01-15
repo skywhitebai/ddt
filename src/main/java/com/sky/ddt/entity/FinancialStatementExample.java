@@ -2996,6 +2996,126 @@ public class FinancialStatementExample {
             return (Criteria) this;
         }
 
+        public Criteria andDisplayAdvertisingIsNull() {
+            addCriterion("display_advertising is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingIsNotNull() {
+            addCriterion("display_advertising is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingEqualTo(BigDecimal value) {
+            addCriterion("display_advertising =", value, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingNotEqualTo(BigDecimal value) {
+            addCriterion("display_advertising <>", value, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingGreaterThan(BigDecimal value) {
+            addCriterion("display_advertising >", value, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("display_advertising >=", value, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingLessThan(BigDecimal value) {
+            addCriterion("display_advertising <", value, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("display_advertising <=", value, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingIn(List<BigDecimal> values) {
+            addCriterion("display_advertising in", values, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingNotIn(List<BigDecimal> values) {
+            addCriterion("display_advertising not in", values, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("display_advertising between", value1, value2, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("display_advertising not between", value1, value2, "displayAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIsNull() {
+            addCriterion("brand_advertising is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIsNotNull() {
+            addCriterion("brand_advertising is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingEqualTo(BigDecimal value) {
+            addCriterion("brand_advertising =", value, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingNotEqualTo(BigDecimal value) {
+            addCriterion("brand_advertising <>", value, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingGreaterThan(BigDecimal value) {
+            addCriterion("brand_advertising >", value, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("brand_advertising >=", value, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingLessThan(BigDecimal value) {
+            addCriterion("brand_advertising <", value, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("brand_advertising <=", value, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIn(List<BigDecimal> values) {
+            addCriterion("brand_advertising in", values, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingNotIn(List<BigDecimal> values) {
+            addCriterion("brand_advertising not in", values, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("brand_advertising between", value1, value2, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("brand_advertising not between", value1, value2, "brandAdvertising");
+            return (Criteria) this;
+        }
+
         public Criteria andFbaInventoryReimbursementCustomerReturnIsNull() {
             addCriterion("fba_inventory_reimbursement_customer_return is null");
             return (Criteria) this;
