@@ -542,6 +542,7 @@
         $(".view_status").hide();
         $("#btn_save").show();
         $(".view_hide").hide();
+        displayCost(1);
     }
 
     function showViewDialog() {
@@ -565,8 +566,23 @@
             $(".view_status").show();
             $("#btn_save").show();
             $(".view_hide").hide();
+            if (rows.costStatus == 1) {
+                displayCost(0);
+            } else {
+                displayCost(1);
+            }
         } else {
             $.messager.alert("提示", "请选择一条记录.");
+        }
+    }
+
+    function displayCost(type) {
+        if (type == 1) {
+            $("#auxiliaryMaterialCost").numberbox("disable", false);
+            $("#fabricCost").numberbox("disable", false);
+        } else {
+            $("#auxiliaryMaterialCost").numberbox("disable", true);
+            $("#fabricCost").numberbox("disable", true);
         }
     }
 
@@ -986,10 +1002,10 @@
         var costRemark = $(input).val();
         $.post('${pageContext.request.contextPath }/produceOrder/saveProduceOrderCostRemark', {
             id: id,
-            remark: costRemark
+            costRemark: costRemark
         }, function (data) {
             if (data.code == '200') {
-                bindData();
+                //bindData();
             } else {
                 $.messager.alert("提示", data.message);
             }

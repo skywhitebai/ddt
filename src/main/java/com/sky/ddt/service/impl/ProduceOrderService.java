@@ -95,16 +95,23 @@ public class ProduceOrderService implements IProduceOrderService {
     public BaseResponse saveProduceOrder(SaveProduceOrderRequest params, Integer dealUserId) {
         SbErroEntity sbErroEntity = new SbErroEntity();
         //如果是更新，则判断id是否存在
+        ProduceOrder produceOrderOld=null;
         if (params.getId() != null) {
-            ProduceOrder produceOrder = getProduceOrderById(params.getId());
-            if (produceOrder == null) {
+            produceOrderOld = getProduceOrderById(params.getId());
+            if (produceOrderOld == null) {
                 sbErroEntity.append(ProduceOrderConstant.ID_NOT_EXIST);
             } else {
                 //判断是否修改了店铺id
-                if (!produceOrder.getShopId().equals(params.getShopId())) {
+                if (!produceOrderOld.getShopId().equals(params.getShopId())) {
                     if (produceOrderShopSkuService.existProduceOrderShopSku(params.getId())) {
                         sbErroEntity.append(ProduceOrderConstant.NOT_ALLOW_CHANGE_SHOP_ID);
                     }
+                }
+
+                if (ProduceOrderConstant.CostStatusEnum.CALCULATED.getStatus().equals(produceOrderOld.getCostStatus())) {
+                    //不允许修改成本
+                    params.setFabricCost(null);
+                    params.setAuxiliaryMaterialCost(null);
                 }
             }
         }
@@ -385,9 +392,9 @@ public class ProduceOrderService implements IProduceOrderService {
         if (produceOrder == null) {
             return BaseResponse.failMessage("id不存在");
         }
-        if (ProduceOrderConstant.CostStatusEnum.CALCULATED.getStatus().equals(produceOrder.getCostStatus())) {
+        /*if (ProduceOrderConstant.CostStatusEnum.CALCULATED.getStatus().equals(produceOrder.getCostStatus())) {
             return BaseResponse.failMessage("成本已核算不允许修改");
-        }
+        }*/
         ProduceOrder produceOrderNew = new ProduceOrder();
         produceOrderNew.setId(params.getId());
         produceOrderNew.setCostRemark(params.getCostRemark());

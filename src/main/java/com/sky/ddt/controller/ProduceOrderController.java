@@ -24,7 +24,7 @@ import java.util.Date;
  * @date 2020/3/25 10:30
  */
 @Controller
-@RequestMapping("produceOrder")
+@RequestMapping("/produceOrder")
 public class ProduceOrderController extends SuperController {
 
     @Autowired
@@ -54,7 +54,7 @@ public class ProduceOrderController extends SuperController {
         return dataGridResponse;
     }
 
-    @RequestMapping("saveProduceOrder")
+    @RequestMapping("/saveProduceOrder")
     @ResponseBody
     @MenuAnnotation("produceOrder/index")
     public BaseResponse saveProduceOrder(@Validated SaveProduceOrderRequest params) {
