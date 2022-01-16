@@ -255,4 +255,6 @@ public interface IShopSkuService {
     ShopSku getShopSkuByFnsku(String fnsku);
 
     BaseResponse importProduceStatus(MultipartFile file, Integer dealUserId);
+
+    BaseResponse importShopSkuStorageLocation(MultipartFile file, Integer dealUserId);
 }

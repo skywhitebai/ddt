@@ -62,6 +62,10 @@ public class ShopSkuService implements IShopSkuService {
     IImgService imgService;
     @Autowired
     IInventoryChangeRecordService inventoryChangeRecordService;
+    @Autowired
+    IStorageLocationService storageLocationService;
+    @Autowired
+    IShopSkuStorageLocationService shopSkuStorageLocationService;
 
     /**
      * @param file
@@ -1117,6 +1121,91 @@ public class ShopSkuService implements IShopSkuService {
             shopSkuUpdate.setUpdateBy(dealUserId);
             shopSkuUpdate.setUpdateTime(new Date());
             customShopSkuMapper.updateByPrimaryKeySelective(shopSkuUpdate);
+        }
+        return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse importShopSkuStorageLocation(MultipartFile file, Integer dealUserId) {
+        if (file == null) {
+            return BaseResponse.failMessage("请选择要上传的文件");
+        }
+        List<Map<String, String>> list = ExcelUtil.getListByExcel(file);
+        if (list == null || list.size() == 0) {
+            return BaseResponse.failMessage("导入的数据内容为空");
+        }
+        //遍历list导入信息
+        StringBuilder sbErro = new StringBuilder();
+        Map<String, List<Integer>> locationMap = new HashMap<>();
+        for (int i = 0; i < list.size(); i++) {
+            Map<String, String> map = list.get(i);
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            StringBuilder sbErroItem = new StringBuilder();
+            if (StringUtils.isEmpty(map.get("店铺sku"))) {
+                sbErroItem.append(",").append(ShopSkuConstant.SHOP_SKU_EMPTY);
+            } else {
+                //是否要判断sku是否本店铺的
+                ShopSku shopSku = getShopSkuByShopSku(map.get("店铺sku"));
+                if (shopSku == null) {
+                    sbErroItem.append(",").append(WarehousingOrderShopSkuConstant.SHOP_SKU_NOT_EXIST);
+                } else {
+                    map.put("shopSkuId", shopSku.getShopSkuId().toString());
+                }
+            }
+            if (!StringUtils.isEmpty(map.get("库位"))) {
+                List<Integer> locationIdList = new ArrayList<>();
+                String locationNos = map.get("库位").replace("，", ",");
+                List<String> locationNoList = Arrays.asList(locationNos.split(","));
+                List<StorageLocation> storageLocationList = storageLocationService.listStorageLocationByLocationNoList(locationNoList);
+                for (String locationNo : locationNoList) {
+                    Optional<StorageLocation> optionalStorageLocation = storageLocationList.stream().filter(item -> item.getLocationNo().equals(locationNo)).findFirst();
+                    if (optionalStorageLocation.isPresent()) {
+                        locationIdList.add(optionalStorageLocation.get().getId());
+                    } else {
+                        sbErroItem.append(",").append(WarehousingOrderShopSkuConstant.LOCATION_NO_NOT_EXIST);
+                        break;
+                    }
+
+                }
+                locationMap.put(map.get("店铺sku"),locationIdList);
+            }
+            if (sbErroItem.length() > 0) {
+                sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
+            }
+        }
+        if (sbErro.length() > 0) {
+            return BaseResponse.failMessage(sbErro.substring(1));
+        }
+        for (Map<String, String> map : list) {
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            List<Integer> storageLocationList=locationMap.get(map.get("店铺sku"));
+            if(!CollectionUtils.isEmpty(storageLocationList)){
+                BatchSaveShopSkuStorageLocationRequest batchSaveShopSkuStorageLocationRequest=new BatchSaveShopSkuStorageLocationRequest();
+                batchSaveShopSkuStorageLocationRequest.setShopSkuId(MathUtil.strToInteger(map.get("shopSkuId")));
+                batchSaveShopSkuStorageLocationRequest.setStorageLocationIdList(storageLocationList);
+                batchSaveShopSkuStorageLocationRequest.setCreateBy(dealUserId);
+                shopSkuStorageLocationService.batchSaveShopSkuStorageLocation(batchSaveShopSkuStorageLocationRequest);
+            }
         }
         return BaseResponse.success();
     }

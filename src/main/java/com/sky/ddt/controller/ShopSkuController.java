@@ -217,4 +217,10 @@ public class ShopSkuController extends SuperController {
         dataGridResponse.setRows(page.getList());
         return dataGridResponse;
     }
+    @RequestMapping("/importShopSkuStorageLocation")
+    @ResponseBody
+    public BaseResponse importShopSkuStorageLocation(MultipartFile file) {
+        Integer dealUserId = getCurrentUserId();
+        return shopSkuService.importShopSkuStorageLocation(file, dealUserId);
+    }
 }

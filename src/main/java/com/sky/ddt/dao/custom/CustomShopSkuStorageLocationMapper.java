@@ -1,6 +1,7 @@
 package com.sky.ddt.dao.custom;
 
 import com.sky.ddt.dao.generate.ShopSkuStorageLocationMapper;
+import com.sky.ddt.dto.shopSku.request.BatchSaveShopSkuStorageLocationRequest;
 import com.sky.ddt.dto.shopSkuStorageLocation.request.ListShopSkuStorageLocationRequest;
 import com.sky.ddt.dto.shopSkuStorageLocation.response.ListShopSkuStorageLocationResponse;
 
@@ -13,4 +14,6 @@ import java.util.List;
  */
 public interface CustomShopSkuStorageLocationMapper extends ShopSkuStorageLocationMapper {
     List<ListShopSkuStorageLocationResponse> listShopSkuStorageLocation(ListShopSkuStorageLocationRequest params);
+
+    void batchSaveShopSkuStorageLocation(BatchSaveShopSkuStorageLocationRequest batchSaveShopSkuStorageLocationRequest);
 }

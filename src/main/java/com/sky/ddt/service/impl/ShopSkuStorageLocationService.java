@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dao.custom.CustomShopSkuMapper;
 import com.sky.ddt.dao.custom.CustomShopSkuStorageLocationMapper;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.dto.shopSku.request.BatchSaveShopSkuStorageLocationRequest;
 import com.sky.ddt.dto.shopSku.response.ListShopSkuResponse;
 import com.sky.ddt.dto.shopSkuStorageLocation.request.ListShopSkuStorageLocationRequest;
 import com.sky.ddt.dto.shopSkuStorageLocation.request.SaveShopSkuStorageLocationRequest;
@@ -86,6 +87,11 @@ public class ShopSkuStorageLocationService implements IShopSkuStorageLocationSer
            customShopSkuStorageLocationMapper.deleteByPrimaryKey(shopSkuStorageLocationId);
         }
         return BaseResponse.success();
+    }
+
+    @Override
+    public void batchSaveShopSkuStorageLocation(BatchSaveShopSkuStorageLocationRequest batchSaveShopSkuStorageLocationRequest) {
+        customShopSkuStorageLocationMapper.batchSaveShopSkuStorageLocation(batchSaveShopSkuStorageLocationRequest);
     }
 
     private boolean existShopSkuStorageLocation(SaveShopSkuStorageLocationRequest params) {

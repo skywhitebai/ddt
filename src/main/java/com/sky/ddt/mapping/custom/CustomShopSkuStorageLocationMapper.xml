@@ -17,4 +17,13 @@
         <if test="shopSkuId != null">and sssl.shop_sku_id=#{shopSkuId}</if>
         order by sl.location_no asc
     </select>
+    <insert id="batchSaveShopSkuStorageLocation">
+        insert into shop_sku_storage_location(shop_sku_id,storage_location_id,create_by)
+        select #{shopSkuId} shopSkuId, sl.id storage_location_id,#{createBy}
+        from storage_location sl where sl.id in
+        <foreach close=")" collection="storageLocationIdList" item="listItem" open="(" separator=",">
+            #{listItem}
+        </foreach>
+        and not exists (select 1 from shop_sku_storage_location sssl where sssl.shop_sku_id=#{shopSkuId} and sssl.storage_location_id=sl.id )
+    </insert>
 </mapper>

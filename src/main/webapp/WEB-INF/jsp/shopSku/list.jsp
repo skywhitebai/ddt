@@ -83,6 +83,10 @@
        class="easyui-linkbutton a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入店铺sku生产状态</a>
+    <a href="javascript:void(0)" id="a_importShopSkuStorageLocation" onclick="showDialogImport('storageLocation')"
+       class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'"
+       style="">导入店铺sku库位</a>
     <a href="javascript:void(0)" onclick="showTransformShopSku()" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">店铺sku信息转换</a>
@@ -331,7 +335,6 @@
         </div>
     </form>
 </div>
-
 <div id="cover">
     <div id="coverMsg">
         <img src="${pageContext.request.contextPath }/static/img/loading.gif" width="100px">
@@ -735,6 +738,11 @@
                 importTitle = "导入店铺sku生产状态";
                 importTemplateUrl = "${pageContext.request.contextPath }/static/template/shopSku/shopSkuProduceStatusTemplate.xlsx";
                 importUrl = "${pageContext.request.contextPath }/shopSku/importProduceStatus";
+                break;
+            case 'storageLocation':
+                importTitle = "导入库位";
+                importTemplateUrl = "${pageContext.request.contextPath }/static/template/shopSku/shopSkuStorageLocationTemplate.xlsx";
+                importUrl = "${pageContext.request.contextPath }/shopSku/importShopSkuStorageLocation";
                 break;
         }
         if (isEmpty(importTitle)) {
