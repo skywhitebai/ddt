@@ -24,4 +24,8 @@
         where coss.check_order_id=#{checkOrderId}
         order by coss.shop_sku
     </select>
+    <select id="listNotExistStorageLocation" resultType="java.lang.String">
+        select coss.`shop_sku` from `check_order_shop_sku` coss where coss.`check_order_id`=#{checkOrderId}
+        and inventory_quantity_new!=0 and  not exists(select 1 from `check_order_shop_sku_storage_location` cosssl where cosssl.`check_order_shop_sku_id`=coss.id)
+    </select>
 </mapper>

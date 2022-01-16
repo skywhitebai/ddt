@@ -244,7 +244,7 @@
 </div>
 
 <!--导入信息-->
-<div id="dlgImport" class="easyui-dialog" style="width: 600px; height: 300px; padding: 10px 20px"
+<div id="dlgImport" class="easyui-dialog" style="width: 600px; height: 300px; padding: 10px 20px;top:130px;"
      data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', align:'center'">
     <div class="ftitle">
         <b id="importTitle"></b>
@@ -347,6 +347,7 @@
     bindSalesmanUserId();
     initOperationRight();
     bindStorageLocation();
+
     //bindShopSkuStorageLocationShop();
     function bindStorageLocation() {
         $('#s_shopSkuStorageLocationInfo_storageLocationId').combobox({
@@ -467,7 +468,7 @@
                         if (isEmpty(value)) {
                             value = '暂无库位';
                         }
-                        return "<a href='#' onclick=\"showDlgShopSkuStorageLocation(" + row.shopSkuId + ")\" title='"+value+"' >" + value + "</a>";
+                        return "<a href='#' onclick=\"showDlgShopSkuStorageLocation(" + row.shopSkuId + ")\" title='" + value + "' >" + value + "</a>";
                     }
                 },
                 {title: '销售人员', field: 'salesmanUserName', width: 120},
@@ -967,7 +968,6 @@
         })
         $(dg).datagrid('clearSelections');
     }
-
 
 
     function showAddShopSkuStorageLocationDialog() {

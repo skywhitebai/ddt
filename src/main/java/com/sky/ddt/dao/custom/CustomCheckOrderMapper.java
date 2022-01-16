@@ -23,4 +23,6 @@ public interface CustomCheckOrderMapper extends CheckOrderMapper {
     List<ListCheckOrderResponse> listCheckOrder(ListCheckOrderRequest params);
 
     void insertShopSkuStorageLocationByCheckOrder(@Param("id") Integer id, @Param("dealUserId")  Integer dealUserId);
+
+    void deleteShopSkuStorageLocationByCheckOrder(@Param("checkOrderId") Integer checkOrderId);
 }

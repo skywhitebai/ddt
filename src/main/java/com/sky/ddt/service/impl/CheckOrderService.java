@@ -6,6 +6,7 @@ import com.sky.ddt.common.constant.CheckOrderConstant;
 import com.sky.ddt.common.constant.InventoryChangeRecordConstant;
 import com.sky.ddt.common.constant.SbErroEntity;
 import com.sky.ddt.dao.custom.CustomCheckOrderMapper;
+import com.sky.ddt.dao.custom.CustomCheckOrderShopSkuMapper;
 import com.sky.ddt.dto.checkOrder.request.ListCheckOrderRequest;
 import com.sky.ddt.dto.checkOrder.request.SaveCheckOrderRequest;
 import com.sky.ddt.dto.checkOrder.response.ListCheckOrderResponse;
@@ -26,8 +27,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author baixueping
@@ -44,6 +47,8 @@ public class CheckOrderService implements ICheckOrderService {
     IShopService shopService;
     @Autowired
     IShopSkuService shopSkuService;
+    @Autowired
+    CustomCheckOrderShopSkuMapper customCheckOrderShopSkuMapper;
 
     /**
      * @param params@return
@@ -159,6 +164,11 @@ public class CheckOrderService implements ICheckOrderService {
         if (!CheckOrderConstant.StatusEnum.PENDING_CONFIRM.getStatus().equals(checkOrder.getStatus())) {
             return BaseResponse.failMessage(CheckOrderConstant.ONLY_PENDING_CONFIRM_ALLOW_CONFIRM);
         }
+        //判断是否存在没有库位的店铺sku
+        BaseResponse checkStorageLocationResponse=checkStorageLocation(id);
+        if(checkStorageLocationResponse.isFail()){
+            return checkStorageLocationResponse;
+        }
         //获取盘点单店铺sku信息
         List<CheckOrderShopSku> checkOrderShopSkuList=checkOrderShopSkuService.listCheckOrderShopSku(id);
         if(CollectionUtils.isEmpty(checkOrderShopSkuList)){
@@ -177,9 +187,20 @@ public class CheckOrderService implements ICheckOrderService {
         }
         //修改盘点单状态为已确认
         updateCheckOrderConfirm(id, dealUserId);
-        //修改仓库sku的库位信息
+        //删除不存在的库位信息
+        customCheckOrderMapper.deleteShopSkuStorageLocationByCheckOrder(id);
+        //插入仓库sku的库位信息
         customCheckOrderMapper.insertShopSkuStorageLocationByCheckOrder(id,dealUserId);
         return BaseResponse.success();
+    }
+
+    private BaseResponse checkStorageLocation(Integer id) {
+        List<String> notExistStorageLocation = customCheckOrderShopSkuMapper.listNotExistStorageLocation(id);
+        if (CollectionUtils.isEmpty(notExistStorageLocation)) {
+            return BaseResponse.success();
+        }
+        String str = notExistStorageLocation.stream().collect(Collectors.joining(","));
+        return BaseResponse.failMessage("店铺sku:" + str + "需要完善库位信息");
     }
 
     private void updateCheckOrderConfirm(Integer id, Integer dealUserId) {

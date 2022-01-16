@@ -3,6 +3,7 @@ package com.sky.ddt.dao.custom;
 import com.sky.ddt.dao.generate.CheckOrderShopSkuMapper;
 import com.sky.ddt.dto.checkOrderShopSku.request.ListCheckOrderShopSkuRequest;
 import com.sky.ddt.dto.checkOrderShopSku.response.ListCheckOrderShopSkuResponse;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface CustomCheckOrderShopSkuMapper extends CheckOrderShopSkuMapper {
      * @date 2020/5/11 15:09
      */
     List<ListCheckOrderShopSkuResponse> listCheckOrderShopSku(ListCheckOrderShopSkuRequest params);
+
+    List<String> listNotExistStorageLocation(@Param("checkOrderId") Integer checkOrderId);
 }
