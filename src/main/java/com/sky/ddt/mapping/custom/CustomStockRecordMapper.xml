@@ -24,7 +24,8 @@
             resultType="com.sky.ddt.dto.stockRecord.response.ExportStockRecordResponse">
         SELECT
         ss.shop_sku shopSku,sku.sku,ss.fnsku,
-        case #{type} when 'ky' then sri.stock_quantity_ky when 'kp' then sri.stock_quantity_kp when 'hy' then sri.stock_quantity_hy when 'production' then sri.production_quantity else  sri.stock_quantity end stockQuantity
+        case #{type} when 'ky' then sri.stock_quantity_ky when 'kp' then sri.stock_quantity_kp when 'hy' then sri.stock_quantity_hy when 'production' then sri.production_quantity else  sri.stock_quantity end stockQuantity,
+        (select GROUP_CONCAT(sl.location_no SEPARATOR ',') from shop_sku_storage_location sssl,storage_location sl where sssl.shop_sku_id=sri.shop_sku_id and sssl.storage_location_id=sl.id group by ss.shop_sku_id) locationNos
         from stock_record_item sri left join shop_sku ss on sri.shop_sku_id=ss.shop_sku_id
         left join sku on ss.sku_id=sku.sku_id
         where sri.stock_record_id=#{stockRecordId}

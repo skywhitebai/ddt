@@ -77,11 +77,11 @@ public class ExcelExportUtil<T> {
                     Method getMethod = tCls.getMethod(getMethodName,
                             new Class[]{});
                     Object value = getMethod.invoke(t, new Object[]{});
+                    XSSFCell cell = row.createCell(i);
+                    cell.setCellStyle(xssfCellStyle);
                     if (value == null) {
                         continue;
                     }
-                    XSSFCell cell = row.createCell(i);
-                    cell.setCellStyle(xssfCellStyle);
                     if (value.getClass().equals(Date.class)) {
                         String textValue = DateUtil.getFormatDateStr((Date) value);
                         cell.setCellValue(textValue);

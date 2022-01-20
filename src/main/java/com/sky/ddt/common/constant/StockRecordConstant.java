@@ -12,9 +12,9 @@ public class StockRecordConstant {
     public static final String SHOP_ID_NOT_EXIST = "店铺id不存在";
     public static final String STOCK_RECORD_ID_EMPTY ="补货单id不能为空" ;
     public static final String STOCK_RECORD_ID_NOT_EXIST = "补货单id不存在" ;
-    public static final String []EXPORT_STOCK_RECORD_HEAD ={"店铺名称","补货单id","店铺sku","产品sku","fnsku","补货数量"};
-    public static final String[] EXPORT_STOCK_RECORD_HEAD_KY = {"店铺名称","补货单id","店铺sku","产品sku","fnsku","空运补货数量"};
-    public static final String[] EXPORT_STOCK_RECORD_HEAD_KP = {"店铺名称","补货单id","店铺sku","产品sku","fnsku","空派补货数量"};
-    public static final String[] EXPORT_STOCK_RECORD_HEAD_HY = {"店铺名称","补货单id","店铺sku","产品sku","fnsku","海运补货数量"};
-    public static String[] EXPORT_PRODUCTION_HEAD = {"店铺名称","补货单id","店铺sku","产品sku","fnsku","生产数量"};
+    public static final String []EXPORT_STOCK_RECORD_HEAD ={"店铺名称","补货单id","库位","店铺sku","产品sku","fnsku","补货数量"};
+    public static final String[] EXPORT_STOCK_RECORD_HEAD_KY = {"店铺名称","补货单id","库位","店铺sku","产品sku","fnsku","空运补货数量"};
+    public static final String[] EXPORT_STOCK_RECORD_HEAD_KP = {"店铺名称","补货单id","库位","店铺sku","产品sku","fnsku","空派补货数量"};
+    public static final String[] EXPORT_STOCK_RECORD_HEAD_HY = {"店铺名称","补货单id","库位","店铺sku","产品sku","fnsku","海运补货数量"};
+    public static final String[] EXPORT_PRODUCTION_HEAD = {"店铺名称","补货单id","库位","店铺sku","产品sku","fnsku","生产数量"};
 }
