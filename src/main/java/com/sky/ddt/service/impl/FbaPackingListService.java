@@ -2,16 +2,14 @@ package com.sky.ddt.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sky.ddt.common.constant.FbaPackingListConstant;
-import com.sky.ddt.common.constant.OutboundOrderConstant;
-import com.sky.ddt.common.constant.SbErroEntity;
-import com.sky.ddt.common.constant.StockConsatnt;
+import com.sky.ddt.common.constant.*;
 import com.sky.ddt.common.enums.YesOrNoEnum;
 import com.sky.ddt.dao.custom.CustomFbaPackingListMapper;
 import com.sky.ddt.dao.custom.CustomFbaPackingListShopSkuMapper;
 import com.sky.ddt.dao.custom.CustomOutboundOrderMapper;
 import com.sky.ddt.dto.deliverGoods.request.InvoiceInfo;
 import com.sky.ddt.dto.deliverGoods.request.InvoiceSkuInfo;
+import com.sky.ddt.dto.fbaPackingList.request.GenerateOutboundOrderRequest;
 import com.sky.ddt.dto.fbaPackingList.request.ImportFbaPackingList2Request;
 import com.sky.ddt.dto.fbaPackingList.request.ListFbaPackingListRequest;
 import com.sky.ddt.dto.fbaPackingList.request.ListInvoiceInfoRequest;
@@ -56,6 +54,8 @@ public class FbaPackingListService implements IFbaPackingListService {
     IDeliverGoodsService deliverGoodsService;
     @Autowired
     CustomOutboundOrderMapper customOutboundOrderMapper;
+    @Autowired
+    IShopService shopService;
 
 
     /**
@@ -286,25 +286,31 @@ public class FbaPackingListService implements IFbaPackingListService {
     }
 
     /**
-     * @param id         @return
+     * @param params     @return
      * @param dealUserId
      * @description 生成入库单
      * @author baixueping
      * @date 2020/8/3 20:15
      */
     @Override
-    public BaseResponse generateOutboundOrder(Integer id, Integer dealUserId) {
-        if (id == null) {
-            return BaseResponse.failMessage(FbaPackingListConstant.ID_EMPTY);
-        }
-        FbaPackingList fbaPackingList = customFbaPackingListMapper.selectByPrimaryKey(id);
+    public BaseResponse generateOutboundOrder(GenerateOutboundOrderRequest params, Integer dealUserId) {
+        SbErroEntity sbErroEntity = new SbErroEntity();
+        FbaPackingList fbaPackingList = customFbaPackingListMapper.selectByPrimaryKey(params.getId());
         if (fbaPackingList == null) {
-            return BaseResponse.failMessage(FbaPackingListConstant.ID_NOT_EXIST);
+            sbErroEntity.append(FbaPackingListConstant.ID_NOT_EXIST);
+        } else if (!YesOrNoEnum.YES.getValue().equals(fbaPackingList.getStatus())) {
+            sbErroEntity.append(FbaPackingListConstant.NOT_ALLOW_GENERATE_OUTBOUND_ORDER);
         }
-        if (!YesOrNoEnum.YES.getValue().equals(fbaPackingList.getStatus())) {
-            return BaseResponse.failMessage(FbaPackingListConstant.NOT_ALLOW_GENERATE_OUTBOUND_ORDER);
+        Shop outboundShop = shopService.getShop(params.getOutboundShopId());
+        if (outboundShop == null) {
+            sbErroEntity.append(OutboundOrderConstant.OUTBOUND_SHOP_ID_NOT_EXIST);
+        } else if (!ShopConstant.TypeEnum.WAREHOUSE.getType().equals(outboundShop.getType())) {
+            sbErroEntity.append(OutboundOrderConstant.OUTBOUND_SHOP_TYPE_ERRO);
         }
-        return outboundOrderService.generateOutboundOrder(fbaPackingList, dealUserId);
+        if (sbErroEntity.isFail()) {
+            return sbErroEntity.getResponse();
+        }
+        return outboundOrderService.generateOutboundOrder(fbaPackingList,params.getOutboundShopId(), dealUserId);
     }
 
     /**
@@ -373,7 +379,7 @@ public class FbaPackingListService implements IFbaPackingListService {
         if (params.getFile() == null) {
             return BaseResponse.failMessage("请选择要上传的文件");
         }
-        if(StringUtils.isEmpty(params.getFbaShipmentId())){
+        if (StringUtils.isEmpty(params.getFbaShipmentId())) {
             return BaseResponse.failMessage("fbaShipmentId不能为空");
         }
         Workbook wb = ExcelUtil.readExcel(params.getFile());
@@ -393,10 +399,10 @@ public class FbaPackingListService implements IFbaPackingListService {
         Row row3 = sheet.getRow(2);
         if (row3 != null) {
             //SKU 总数：7（140 件商品）
-            String skuInfo = ExcelUtil.getCellFormatValueString(row3.getCell(0)).replace("(","（").replace("）","）");
+            String skuInfo = ExcelUtil.getCellFormatValueString(row3.getCell(0)).replace("(", "（").replace("）", "）");
             if (!StringUtils.isEmpty(skuInfo)) {
-                String []skuInfoArray=skuInfo.split("（");
-                if(skuInfoArray.length==2){
+                String[] skuInfoArray = skuInfo.split("（");
+                if (skuInfoArray.length == 2) {
                     String totalSkusStr = skuInfoArray[0].replace("SKU 总数：", "").replace(" ", "");
                     Integer totalSkus = MathUtil.strToInteger(totalSkusStr);
                     fbaPackingList.setTotalSkus(totalSkus);
@@ -503,9 +509,9 @@ public class FbaPackingListService implements IFbaPackingListService {
                 FbaPackingListShopSku fbaPackingListShopSku = new FbaPackingListShopSku();
                 fbaPackingListShopSku.setShopSkuId(shopSkuId);
                 fbaPackingListShopSku.setQuantity(quantity);
-                String fbaShipmentIdNumInfo=fbaShipmentIdNum.toString();
-                while (fbaShipmentIdNumInfo.length()<3){
-                    fbaShipmentIdNumInfo="0"+fbaShipmentIdNumInfo;
+                String fbaShipmentIdNumInfo = fbaShipmentIdNum.toString();
+                while (fbaShipmentIdNumInfo.length() < 3) {
+                    fbaShipmentIdNumInfo = "0" + fbaShipmentIdNumInfo;
                 }
                 fbaPackingListShopSku.setFbaShipmentId(params.getFbaShipmentId() + "U" + fbaShipmentIdNumInfo);
                 fbaPackingListShopSku.setRemark(shopSku);

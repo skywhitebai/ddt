@@ -64,6 +64,7 @@
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 <if test="userId != null ">s.shop_id in(select shop_id from shop_user where user_id =#{userId})</if>
                 <if test="type != null">and s.type = #{type}</if>
+                <if test="status != null">and s.status = #{status}</if>
             </trim>
         </where>
         order by s.shop_name asc

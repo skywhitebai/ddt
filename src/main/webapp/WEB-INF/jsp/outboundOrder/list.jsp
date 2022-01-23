@@ -38,6 +38,9 @@
     店铺：
     <select class="easyui-combobox" id="s_shopId" style="width:150px;">
     </select>
+    出库仓库名：
+    <select class="easyui-combobox" id="s_outboundShopId" style="width:150px;">
+    </select>
     创建时间：
     <input class="easyui-datebox" id="s_createTimeStart">
     -
@@ -97,6 +100,13 @@
                 </td>
             </tr>
             <tr>
+                <td>出库仓库名：</td>
+                <td colspan="3">
+                    <select id="outboundShopId" name="outboundShopId" style="width: 90%" data-options="required:true">
+                    </select>
+                </td>
+            </tr>
+            <tr>
                 <td>FBA编号：</td>
                 <td>
                     <input class="easyui-textbox" type="text" id="fbaNo" name="fbaNo">
@@ -151,6 +161,10 @@
                 <td>店铺名：</td>
                 <td>
                     <input class="easyui-textbox" type="text" name="shopName" readonly="readonly">
+                </td>
+                <td>出库仓库名：</td>
+                <td>
+                    <input class="easyui-textbox" type="text" name="outboundShopName" readonly="readonly">
                 </td>
                 <td>批号：</td>
                 <td>
@@ -311,11 +325,25 @@
             });
             bindData();
         });
+        $.post('${pageContext.request.contextPath }/shop/comboboxlist?type=2', {}, function (data) {
+            $('#s_outboundShopId').combobox({
+                data: data,
+                valueField: 'shopId',
+                textField: 'shopName'
+            });
+            $('#outboundShopId').combobox({
+                data: data,
+                valueField: 'shopId',
+                textField: 'shopName'
+            });
+            bindData();
+        });
     }
 
     function getQueryParams() {
         queryParams = {
             shopId: $('#s_shopId').combobox('getValue'),
+            outboundShopId: $('#s_outboundShopId').combobox('getValue'),
             createTimeStart: $("#s_createTimeStart").val(),
             createTimeEnd: $("#s_createTimeEnd").val(),
             outboundTimeStart: $("#s_outboundTimeStart").val(),
@@ -324,7 +352,8 @@
             fbaNo: $("#s_fbaNo").val(),
             shopSku: $("#s_shopSku").val(),
             sku: $("#s_sku").val(),
-            status: $("#s_status").val()
+            status: $("#s_status").val(),
+            type: $("#s_type").val()
         };
         return queryParams;
     }
@@ -355,6 +384,7 @@
                 columns: [[
                     {field: 'ck', outboundbox: true},   //选择
                     {title: '店铺名', field: 'shopName', width: 120},
+                    {title: '出库仓库名', field: 'outboundShopName', width: 120},
                     {title: 'FBA编号', field: 'fbaNo', width: 120},
                     {title: '出库时间', field: 'outboundTime', width: 140},
                     {title: '批号', field: 'batchNumber', width: 140},
@@ -602,9 +632,8 @@
                 {title: '店铺名', field: 'shopName', width: 120},
                 {title: '产品sku', field: 'sku', width: 140},
                 {title: '店铺sku', field: 'shopSku', width: 140},
-                {title: '库存', field: 'inventoryQuantity', width: 38},
-                {title: '其他店铺库存', field: 'inventoryQuantityOtherShop', width: 88},
                 {title: '仓库库存', field: 'inventoryQuantityWarehouse', width: 75},
+                {title: '其他仓库库存', field: 'inventoryQuantityOtherWarehouse', width: 75},
                 {
                     title: '出库数量', field: 'outboundQuantity', width: 66,
                     formatter: function (value, row, rowIndex) {

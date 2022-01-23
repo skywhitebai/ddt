@@ -61,10 +61,11 @@ public interface IOutboundOrderService {
 
     /**
      * @param
+     * @param outboundShopId
      * @return
      * @description fba装箱单生成出库单
      * @author baixueping
      * @date 2020/8/4 14:42
      */
-    BaseResponse generateOutboundOrder(FbaPackingList fbaPackingList, Integer dealUserId);
+    BaseResponse generateOutboundOrder(FbaPackingList fbaPackingList, Integer outboundShopId, Integer dealUserId);
 }

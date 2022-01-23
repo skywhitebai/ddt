@@ -3,6 +3,7 @@ package com.sky.ddt.controller;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
+import com.sky.ddt.dto.fbaPackingList.request.GenerateOutboundOrderRequest;
 import com.sky.ddt.dto.fbaPackingList.request.ImportFbaPackingList2Request;
 import com.sky.ddt.dto.fbaPackingList.request.ListFbaPackingListRequest;
 import com.sky.ddt.dto.fbaPackingList.request.ListInvoiceInfoRequest;
@@ -70,9 +71,9 @@ public class FbaPackingListController extends SuperController {
     @RequestMapping("/generateOutboundOrder")
     @MenuAnnotation("fbaPackingList/index")
     @ResponseBody
-    public BaseResponse generateOutboundOrder(Integer id) {
+    public BaseResponse generateOutboundOrder(@Validated GenerateOutboundOrderRequest params) {
         Integer dealUserId=getCurrentUserId();
-        return fbaPackingListService.generateOutboundOrder(id,dealUserId);
+        return fbaPackingListService.generateOutboundOrder(params,dealUserId);
     }
     @RequestMapping("/downInvoice")
     @MenuAnnotation("fbaPackingList/index")

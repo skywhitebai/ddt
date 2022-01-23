@@ -25,6 +25,10 @@ public class OutboundOrderConstant {
     public static final String NOT_EXIST_SHOP_SKU_NOT_ALLOW_OUTBOUND ="出库单没有店铺sku，不允许出库" ;
     public static final String SHOP_SKU_SHOP_ID_NOT_SAME ="店铺sku的店铺不一致" ;
     public static final String FBA_PACKING_LIST_ID_EXIST ="fba装箱单的出库单已生成，不允许重复生成" ;
+    public static final String SHOP_TYPE_ERRO ="店铺类型错误" ;
+    public static final String OUTBOUND_SHOP_ID_NOT_EXIST ="出库仓库id错误" ;
+    public static final String OUTBOUND_SHOP_TYPE_ERRO ="出库仓库类型错误" ;
+    public static final String OUTBOUND_SHOP_ID_EMPTY ="出库仓库不能为空" ;
 
     @Getter
     public enum StatusEnum {

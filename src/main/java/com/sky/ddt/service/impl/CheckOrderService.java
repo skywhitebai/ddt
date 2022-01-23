@@ -179,7 +179,6 @@ public class CheckOrderService implements ICheckOrderService {
             updateShopSkuInventoryQuantityRequest.setChangeTypeEnum(InventoryChangeRecordConstant.ChangeTypeEnum.CHECK);
             updateShopSkuInventoryQuantityRequest.setDealUserId(dealUserId);
             updateShopSkuInventoryQuantityRequest.setQuantity(checkOrderShopSku.getInventoryQuantityNew());
-            updateShopSkuInventoryQuantityRequest.setShopSku(checkOrderShopSku.getShopSku());
             updateShopSkuInventoryQuantityRequest.setShopSkuId(checkOrderShopSku.getShopSkuId());
             updateShopSkuInventoryQuantityRequest.setEntityId(checkOrderShopSku.getId());
             updateShopSkuInventoryQuantityRequest.setMainEntityId(checkOrderShopSku.getCheckOrderId());

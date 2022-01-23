@@ -2,17 +2,16 @@ package com.sky.ddt.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sky.ddt.common.constant.CheckOrderConstant;
-import com.sky.ddt.common.constant.InventoryChangeRecordConstant;
-import com.sky.ddt.common.constant.OutboundOrderConstant;
-import com.sky.ddt.common.constant.SbErroEntity;
+import com.sky.ddt.common.constant.*;
 import com.sky.ddt.dao.custom.CustomOutboundOrderMapper;
 import com.sky.ddt.dao.custom.CustomOutboundOrderShopSkuMapper;
 import com.sky.ddt.dto.outboundOrder.request.SaveOutboundOrderRequest;
 import com.sky.ddt.dto.outboundOrder.response.ListOutboundOrderResponse;
 import com.sky.ddt.dto.outboundOrder.request.ListOutboundOrderRequest;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.dto.shopSku.request.ListOutboundShopSkuRequest;
 import com.sky.ddt.dto.shopSku.request.UpdateShopSkuInventoryQuantityRequest;
+import com.sky.ddt.dto.shopSku.response.ListOutboundShopSkuResponse;
 import com.sky.ddt.entity.*;
 import com.sky.ddt.service.IOutboundOrderService;
 import com.sky.ddt.service.IOutboundOrderShopSkuService;
@@ -23,9 +22,9 @@ import com.sky.ddt.util.MathUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -94,6 +93,14 @@ public class OutboundOrderService implements IOutboundOrderService {
         Shop shop = shopService.getShop(params.getShopId());
         if (shop == null) {
             sbErroEntity.append(OutboundOrderConstant.SHOP_ID_NOT_EXIST);
+        } else if (!ShopConstant.TypeEnum.SHOP.getType().equals(shop.getType())) {
+            sbErroEntity.append(OutboundOrderConstant.SHOP_TYPE_ERRO);
+        }
+        Shop outboundShop = shopService.getShop(params.getOutboundShopId());
+        if (outboundShop == null) {
+            sbErroEntity.append(OutboundOrderConstant.OUTBOUND_SHOP_ID_NOT_EXIST);
+        }else if(!ShopConstant.TypeEnum.WAREHOUSE.getType().equals(outboundShop.getType())){
+            sbErroEntity.append(OutboundOrderConstant.OUTBOUND_SHOP_TYPE_ERRO);
         }
         if (sbErroEntity.isFail()) {
             return sbErroEntity.getResponse();
@@ -162,6 +169,9 @@ public class OutboundOrderService implements IOutboundOrderService {
         if (outboundOrder == null) {
             return BaseResponse.failMessage(OutboundOrderConstant.ID_NOT_EXIST);
         }
+        if(outboundOrder.getOutboundShopId()==null){
+            return BaseResponse.failMessage(OutboundOrderConstant.OUTBOUND_SHOP_ID_EMPTY);
+        }
         if (!OutboundOrderConstant.StatusEnum.PENDING_OUTBOUND.getStatus().equals(outboundOrder.getStatus())) {
             return BaseResponse.failMessage(OutboundOrderConstant.ONLY_PENDING_OUTBOUND_ALLOW_OUTBOUND);
         }
@@ -170,20 +180,23 @@ public class OutboundOrderService implements IOutboundOrderService {
             return BaseResponse.failMessage(OutboundOrderConstant.NOT_EXIST_SHOP_SKU_NOT_ALLOW_OUTBOUND);
         }
         List<Integer> shopSkuIdList = outboundOrderShopSkuList.stream().map(OutboundOrderShopSku -> OutboundOrderShopSku.getShopSkuId()).collect(Collectors.toList());
-        List<ShopSku> shopSkuList = shopSkuService.listShopSku(shopSkuIdList);
+        ListOutboundShopSkuRequest listOutboundShopSkuRequest=new ListOutboundShopSkuRequest();
+        listOutboundShopSkuRequest.setShopId(outboundOrder.getOutboundShopId());
+        listOutboundShopSkuRequest.setShopSkuIdList(shopSkuIdList);
+        List<ListOutboundShopSkuResponse> outboundShopSkuList = shopSkuService.listOutboundShopSku(listOutboundShopSkuRequest);
         //校验库存是否满足出库条件
         SbErroEntity sbErroEntity = new SbErroEntity();
         List<UpdateShopSkuInventoryQuantityRequest> updateShopSkuInventoryQuantityRequestList = new ArrayList<>();
         for (OutboundOrderShopSku outboundOrderShopSku :
                 outboundOrderShopSkuList) {
-            ShopSku shopSku = getShopSku(outboundOrderShopSku.getShopSkuId(), shopSkuList);
-            if (shopSku == null) {
-                sbErroEntity.append("店铺skuId：" + outboundOrderShopSku.getShopSkuId() + "不存在");
+            ListOutboundShopSkuResponse outboundShopSku = getShopSku(outboundOrderShopSku.getShopSkuId(), outboundShopSkuList);
+            if (outboundShopSku == null) {
+                sbErroEntity.append("店铺skuId：" + outboundOrderShopSku.getShopSkuId() + "对应的仓库sku不存在");
                 continue;
             }
-            Integer inventoryQuantity = MathUtil.subtractInteger(shopSku.getInventoryQuantity(), outboundOrderShopSku.getOutboundQuantity());
+            Integer inventoryQuantity = MathUtil.subtractInteger(outboundShopSku.getInventoryQuantity(), outboundOrderShopSku.getOutboundQuantity());
             if (inventoryQuantity < 0) {
-                sbErroEntity.append(String.format("出库失败，店铺sku[%s]库存不足", shopSku.getShopSku()));
+                sbErroEntity.append(String.format("出库失败，店铺sku[%s]对应的仓库sku[%s]库存不足", outboundShopSku.getShopSku(), outboundShopSku.getOutboundShopSku()));
                 continue;
             }
             if (sbErroEntity.isFail()) {
@@ -194,13 +207,16 @@ public class OutboundOrderService implements IOutboundOrderService {
             updateShopSkuInventoryQuantityRequest.setChangeTypeEnum(InventoryChangeRecordConstant.ChangeTypeEnum.OUT_BOUND);
             updateShopSkuInventoryQuantityRequest.setDealUserId(dealUserId);
             updateShopSkuInventoryQuantityRequest.setQuantity(outboundOrderShopSku.getOutboundQuantity());
-            updateShopSkuInventoryQuantityRequest.setShopSkuId(outboundOrderShopSku.getShopSkuId());
+            updateShopSkuInventoryQuantityRequest.setShopSkuId(outboundShopSku.getOutboundShopSkuId());
+            ShopSku shopSku=new ShopSku();
+            shopSku.setShopSku(outboundShopSku.getOutboundShopSku());
+            shopSku.setInventoryQuantity(outboundShopSku.getInventoryQuantity());
+            updateShopSkuInventoryQuantityRequest.setShopSkuInfo(shopSku);
             updateShopSkuInventoryQuantityRequest.setEntityId(outboundOrderShopSku.getId());
             updateShopSkuInventoryQuantityRequest.setMainEntityId(outboundOrderShopSku.getOutboundOrderId());
-            updateShopSkuInventoryQuantityRequest.setShopSkuInfo(shopSku);
             updateShopSkuInventoryQuantityRequestList.add(updateShopSkuInventoryQuantityRequest);
         }
-        if(sbErroEntity.isFail()){
+        if (sbErroEntity.isFail()) {
             return sbErroEntity.getResponse();
         }
         for (UpdateShopSkuInventoryQuantityRequest updateShopSkuInventoryQuantityRequest :
@@ -212,8 +228,8 @@ public class OutboundOrderService implements IOutboundOrderService {
         return BaseResponse.success();
     }
 
-    private ShopSku getShopSku(Integer shopSkuId, List<ShopSku> shopSkuList) {
-        for (ShopSku shopSku :
+    private ListOutboundShopSkuResponse getShopSku(Integer shopSkuId, List<ListOutboundShopSkuResponse> shopSkuList) {
+        for (ListOutboundShopSkuResponse shopSku :
                 shopSkuList) {
             if (shopSku.getShopSkuId().equals(shopSkuId)) {
                 return shopSku;
@@ -242,6 +258,7 @@ public class OutboundOrderService implements IOutboundOrderService {
 
     /**
      * @param fbaPackingList
+     * @param outboundShopId
      * @param dealUserId
      * @return
      * @description fba装箱单生成出库单
@@ -249,7 +266,7 @@ public class OutboundOrderService implements IOutboundOrderService {
      * @date 2020/8/4 14:42
      */
     @Override
-    public BaseResponse generateOutboundOrder(FbaPackingList fbaPackingList, Integer dealUserId) {
+    public BaseResponse generateOutboundOrder(FbaPackingList fbaPackingList, Integer outboundShopId, Integer dealUserId) {
         if (existEnableOutboundOrderByFbaPackingListId(fbaPackingList.getId())) {
             return BaseResponse.failMessage(OutboundOrderConstant.FBA_PACKING_LIST_ID_EXIST);
         }
@@ -257,6 +274,7 @@ public class OutboundOrderService implements IOutboundOrderService {
         OutboundOrder outboundOrder = new OutboundOrder();
         outboundOrder.setType(OutboundOrderConstant.TypeEnum.FBA_PACKING_LIST_OUTBOUND.getType());
         outboundOrder.setShopId(fbaPackingList.getShopId());
+        outboundOrder.setOutboundShopId(outboundShopId);
         outboundOrder.setStatus(OutboundOrderConstant.StatusEnum.PENDING_OUTBOUND.getStatus());
         outboundOrder.setBatchNumber(getBatchNumber());
         outboundOrder.setCreateBy(dealUserId);

@@ -1210,6 +1210,11 @@ public class ShopSkuService implements IShopSkuService {
         return BaseResponse.success();
     }
 
+    @Override
+    public List<ListOutboundShopSkuResponse> listOutboundShopSku(ListOutboundShopSkuRequest listOutboundShopSkuRequest) {
+        return customShopSkuMapper.listOutboundShopSku(listOutboundShopSkuRequest);
+    }
+
     /**
      * @param file
      * @param dealUserId

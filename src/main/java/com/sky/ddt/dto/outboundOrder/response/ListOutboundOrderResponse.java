@@ -12,6 +12,7 @@ import lombok.Data;
 @Data
 public class ListOutboundOrderResponse extends OutboundOrder {
     String shopName;
+    String outboundShopName;
     String statusName;
     Integer outboundQuantityTotal;
 }

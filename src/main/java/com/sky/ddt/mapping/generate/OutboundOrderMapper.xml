@@ -5,11 +5,12 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="outbound_time" jdbcType="TIMESTAMP" property="outboundTime" />
     <result column="shop_id" jdbcType="INTEGER" property="shopId" />
+    <result column="outbound_shop_id" jdbcType="INTEGER" property="outboundShopId" />
     <result column="batch_number" jdbcType="VARCHAR" property="batchNumber" />
     <result column="fba_no" jdbcType="VARCHAR" property="fbaNo" />
     <result column="type" jdbcType="INTEGER" property="type" />
-    <result column="fba_packing_list_id" jdbcType="INTEGER" property="fbaPackingListId" />
     <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="fba_packing_list_id" jdbcType="INTEGER" property="fbaPackingListId" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
@@ -75,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, outbound_time, shop_id, batch_number, fba_no, type, fba_packing_list_id, status, 
-    remark, create_time, create_by, update_time, update_by
+    id, outbound_time, shop_id, outbound_shop_id, batch_number, fba_no, type, status, 
+    fba_packing_list_id, remark, create_time, create_by, update_time, update_by
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.OutboundOrderExample" resultMap="BaseResultMap">
     select
@@ -112,16 +113,16 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into outbound_order (outbound_time, shop_id, batch_number, 
-      fba_no, type, fba_packing_list_id, 
-      status, remark, create_time, 
-      create_by, update_time, update_by
-      )
-    values (#{outboundTime,jdbcType=TIMESTAMP}, #{shopId,jdbcType=INTEGER}, #{batchNumber,jdbcType=VARCHAR}, 
-      #{fbaNo,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{fbaPackingListId,jdbcType=INTEGER}, 
-      #{status,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}
-      )
+    insert into outbound_order (outbound_time, shop_id, outbound_shop_id, 
+      batch_number, fba_no, type, 
+      status, fba_packing_list_id, remark, 
+      create_time, create_by, update_time, 
+      update_by)
+    values (#{outboundTime,jdbcType=TIMESTAMP}, #{shopId,jdbcType=INTEGER}, #{outboundShopId,jdbcType=INTEGER}, 
+      #{batchNumber,jdbcType=VARCHAR}, #{fbaNo,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, 
+      #{status,jdbcType=INTEGER}, #{fbaPackingListId,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.OutboundOrder">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -135,6 +136,9 @@
       <if test="shopId != null">
         shop_id,
       </if>
+      <if test="outboundShopId != null">
+        outbound_shop_id,
+      </if>
       <if test="batchNumber != null">
         batch_number,
       </if>
@@ -144,11 +148,11 @@
       <if test="type != null">
         type,
       </if>
-      <if test="fbaPackingListId != null">
-        fba_packing_list_id,
-      </if>
       <if test="status != null">
         status,
+      </if>
+      <if test="fbaPackingListId != null">
+        fba_packing_list_id,
       </if>
       <if test="remark != null">
         remark,
@@ -173,6 +177,9 @@
       <if test="shopId != null">
         #{shopId,jdbcType=INTEGER},
       </if>
+      <if test="outboundShopId != null">
+        #{outboundShopId,jdbcType=INTEGER},
+      </if>
       <if test="batchNumber != null">
         #{batchNumber,jdbcType=VARCHAR},
       </if>
@@ -182,11 +189,11 @@
       <if test="type != null">
         #{type,jdbcType=INTEGER},
       </if>
-      <if test="fbaPackingListId != null">
-        #{fbaPackingListId,jdbcType=INTEGER},
-      </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
+      </if>
+      <if test="fbaPackingListId != null">
+        #{fbaPackingListId,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -223,6 +230,9 @@
       <if test="record.shopId != null">
         shop_id = #{record.shopId,jdbcType=INTEGER},
       </if>
+      <if test="record.outboundShopId != null">
+        outbound_shop_id = #{record.outboundShopId,jdbcType=INTEGER},
+      </if>
       <if test="record.batchNumber != null">
         batch_number = #{record.batchNumber,jdbcType=VARCHAR},
       </if>
@@ -232,11 +242,11 @@
       <if test="record.type != null">
         type = #{record.type,jdbcType=INTEGER},
       </if>
-      <if test="record.fbaPackingListId != null">
-        fba_packing_list_id = #{record.fbaPackingListId,jdbcType=INTEGER},
-      </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.fbaPackingListId != null">
+        fba_packing_list_id = #{record.fbaPackingListId,jdbcType=INTEGER},
       </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
@@ -263,11 +273,12 @@
     set id = #{record.id,jdbcType=INTEGER},
       outbound_time = #{record.outboundTime,jdbcType=TIMESTAMP},
       shop_id = #{record.shopId,jdbcType=INTEGER},
+      outbound_shop_id = #{record.outboundShopId,jdbcType=INTEGER},
       batch_number = #{record.batchNumber,jdbcType=VARCHAR},
       fba_no = #{record.fbaNo,jdbcType=VARCHAR},
       type = #{record.type,jdbcType=INTEGER},
-      fba_packing_list_id = #{record.fbaPackingListId,jdbcType=INTEGER},
       status = #{record.status,jdbcType=INTEGER},
+      fba_packing_list_id = #{record.fbaPackingListId,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER},
@@ -286,6 +297,9 @@
       <if test="shopId != null">
         shop_id = #{shopId,jdbcType=INTEGER},
       </if>
+      <if test="outboundShopId != null">
+        outbound_shop_id = #{outboundShopId,jdbcType=INTEGER},
+      </if>
       <if test="batchNumber != null">
         batch_number = #{batchNumber,jdbcType=VARCHAR},
       </if>
@@ -295,11 +309,11 @@
       <if test="type != null">
         type = #{type,jdbcType=INTEGER},
       </if>
-      <if test="fbaPackingListId != null">
-        fba_packing_list_id = #{fbaPackingListId,jdbcType=INTEGER},
-      </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="fbaPackingListId != null">
+        fba_packing_list_id = #{fbaPackingListId,jdbcType=INTEGER},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -323,11 +337,12 @@
     update outbound_order
     set outbound_time = #{outboundTime,jdbcType=TIMESTAMP},
       shop_id = #{shopId,jdbcType=INTEGER},
+      outbound_shop_id = #{outboundShopId,jdbcType=INTEGER},
       batch_number = #{batchNumber,jdbcType=VARCHAR},
       fba_no = #{fbaNo,jdbcType=VARCHAR},
       type = #{type,jdbcType=INTEGER},
-      fba_packing_list_id = #{fbaPackingListId,jdbcType=INTEGER},
       status = #{status,jdbcType=INTEGER},
+      fba_packing_list_id = #{fbaPackingListId,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER},

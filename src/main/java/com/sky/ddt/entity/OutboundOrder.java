@@ -9,15 +9,17 @@ public class OutboundOrder {
 
     private Integer shopId;
 
+    private Integer outboundShopId;
+
     private String batchNumber;
 
     private String fbaNo;
 
     private Integer type;
 
-    private Integer fbaPackingListId;
-
     private Integer status;
+
+    private Integer fbaPackingListId;
 
     private String remark;
 
@@ -53,6 +55,14 @@ public class OutboundOrder {
         this.shopId = shopId;
     }
 
+    public Integer getOutboundShopId() {
+        return outboundShopId;
+    }
+
+    public void setOutboundShopId(Integer outboundShopId) {
+        this.outboundShopId = outboundShopId;
+    }
+
     public String getBatchNumber() {
         return batchNumber;
     }
@@ -77,20 +87,20 @@ public class OutboundOrder {
         this.type = type;
     }
 
-    public Integer getFbaPackingListId() {
-        return fbaPackingListId;
-    }
-
-    public void setFbaPackingListId(Integer fbaPackingListId) {
-        this.fbaPackingListId = fbaPackingListId;
-    }
-
     public Integer getStatus() {
         return status;
     }
 
     public void setStatus(Integer status) {
         this.status = status;
+    }
+
+    public Integer getFbaPackingListId() {
+        return fbaPackingListId;
+    }
+
+    public void setFbaPackingListId(Integer fbaPackingListId) {
+        this.fbaPackingListId = fbaPackingListId;
     }
 
     public String getRemark() {

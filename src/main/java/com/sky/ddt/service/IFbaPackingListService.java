@@ -1,6 +1,7 @@
 package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
+import com.sky.ddt.dto.fbaPackingList.request.GenerateOutboundOrderRequest;
 import com.sky.ddt.dto.fbaPackingList.request.ImportFbaPackingList2Request;
 import com.sky.ddt.dto.fbaPackingList.request.ListFbaPackingListRequest;
 import com.sky.ddt.dto.fbaPackingList.request.ListInvoiceInfoRequest;
@@ -48,13 +49,14 @@ public interface IFbaPackingListService {
 
     /**
      * @param
+     * @param params
      * @param dealUserId
      * @return
      * @description 生成生产单
      * @author baixueping
      * @date 2020/8/3 20:15
      */
-    BaseResponse generateOutboundOrder(Integer id, Integer dealUserId);
+    BaseResponse generateOutboundOrder(GenerateOutboundOrderRequest params, Integer dealUserId);
 
     /**
      * @param

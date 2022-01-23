@@ -284,7 +284,6 @@ public class WarehousingOrderService implements IWarehousingOrderService {
             updateShopSkuInventoryQuantityRequest.setChangeTypeEnum(InventoryChangeRecordConstant.ChangeTypeEnum.WAREHOUSING);
             updateShopSkuInventoryQuantityRequest.setDealUserId(dealUserId);
             updateShopSkuInventoryQuantityRequest.setQuantity(warehousingOrderShopSku.getWarehousingQuantity());
-            updateShopSkuInventoryQuantityRequest.setShopSku(warehousingOrderShopSku.getShopSku());
             updateShopSkuInventoryQuantityRequest.setShopSkuId(warehousingOrderShopSku.getShopSkuId());
             updateShopSkuInventoryQuantityRequest.setEntityId(warehousingOrderShopSku.getId());
             updateShopSkuInventoryQuantityRequest.setMainEntityId(warehousingOrderShopSku.getWarehousingOrderId());

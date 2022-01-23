@@ -14,6 +14,7 @@ import java.util.Date;
 @Data
 public class ListOutboundOrderRequest extends DataGridRequest {
     Integer shopId;
+    Integer outboundShopId;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     Date outboundTimeStart;
     @DateTimeFormat(pattern = "yyyy-MM-dd")

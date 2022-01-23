@@ -199,6 +199,37 @@
     </table>
 </div>
 
+<div id="dlgGenerateOutboundOrder" class="easyui-dialog" style="width: 700px; height: 500px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
+    <div class="ftitle">
+        <b>生成出库单</b>
+        <hr/>
+    </div>
+    <form id="frmGenerateOutboundOrder" method="post" novalidate="novalidate">
+        <table>
+            <tr style="display: none">
+                <td>id：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="id" id="frmGenerateOutboundOrder_fbaPackingListId">
+                </td>
+            </tr>
+            <tr>
+                <td>出库仓库：</td>
+                <td style="width: 200px">
+                    <select id="outboundShopId" name="outboundShopId" style="width: 90%" data-options="required:true">
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <div style="text-align:center;">
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-ok'" id="btn_save" onclick="generateOutboundOrder()">确定</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-cancel'" onclick="closeGenerateOutboundOrder()">关闭</a>
+        </div>
+    </form>
+</div>
+
 <div id="cover">
     <div id="coverMsg">
         <img src="${pageContext.request.contextPath }/static/img/loading.gif" width="100px">
@@ -217,6 +248,22 @@
             textField: 'shopName',
             url: "${pageContext.request.contextPath }/shop/userShopComboboxlist",//获取数据
         });
+        $('#outboundShopId').combobox({
+            valueField: 'shopId',
+            textField: 'shopName',
+            url: "${pageContext.request.contextPath }/shop/comboboxlist?type=2",//获取数据
+        });
+    }
+
+    notBindOutboundShopStatus = true;
+
+    function bindOutboundShop() {
+        $('#outboundShopId').combobox({
+            valueField: 'shopId',
+            textField: 'shopName',
+            url: "${pageContext.request.contextPath }/shop/comboboxlist?type=2&status=1",//获取数据
+        });
+        bindOutboundShopStatus = true;
     }
 
     function showDialogImportFbaPackingList() {
@@ -379,7 +426,7 @@
                         } else if (value == 1) {
                             return '已生成出库单';
                         } else {
-                            return '<a href="javascript:;" onclick="generateOutboundOrder(\'' + row.id + '\')" title="生成出库单">生成出库单</a>';
+                            return '<a href="javascript:;" onclick="showGenerateOutboundOrder(\'' + row.id + '\')" title="生成出库单">生成出库单</a>';
                         }
                     }
                 },
@@ -512,15 +559,39 @@
         bindInvoiceInfo();
     }
 
-    function generateOutboundOrder(id) {
-        $.post('${pageContext.request.contextPath }/fbaPackingList/generateOutboundOrder', {id: id}, function (data) {
-            if (data.code == '200') {
-                $.messager.alert("提示", "生成成功");
-                bindData();
-            } else {
-                $.messager.alert("提示", data.message);
-            }
+    function showGenerateOutboundOrder(id) {
+        if (notBindOutboundShopStatus) {
+            bindOutboundShop();
+        }
+        $('#dlgGenerateOutboundOrder').dialog('open').dialog('setTitle', '生成出库单');
+        $('#frmGenerateOutboundOrder_fbaPackingListId').val(id);
+    }
 
+    function closeGenerateOutboundOrder() {
+        $('#dlgGenerateOutboundOrder').dialog('close');
+    }
+
+    function generateOutboundOrder() {
+        var outboundShopId = $("#outboundShopId").val();
+        if (outboundShopId == '') {
+            $.messager.alert("提示", '请选择仓库');
+            return;
+        }
+        $('#frmGenerateOutboundOrder').form('submit', {
+            url: '${pageContext.request.contextPath }/fbaPackingList/generateOutboundOrder',
+            onSubmit: function () {
+                var validate = $(this).form('validate');
+                return validate;
+            },
+            success: function (data) {
+                res = eval('(' + data + ')');
+                if (res.code == '200') {
+                    closeGenerateOutboundOrder();
+                    bindData();
+                } else {
+                    $.messager.alert("提示", res.message);
+                }
+            }
         });
     }
 

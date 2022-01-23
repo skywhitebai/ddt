@@ -285,6 +285,66 @@ public class OutboundOrderExample {
             return (Criteria) this;
         }
 
+        public Criteria andOutboundShopIdIsNull() {
+            addCriterion("outbound_shop_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutboundShopIdIsNotNull() {
+            addCriterion("outbound_shop_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutboundShopIdEqualTo(Integer value) {
+            addCriterion("outbound_shop_id =", value, "outboundShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutboundShopIdNotEqualTo(Integer value) {
+            addCriterion("outbound_shop_id <>", value, "outboundShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutboundShopIdGreaterThan(Integer value) {
+            addCriterion("outbound_shop_id >", value, "outboundShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutboundShopIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("outbound_shop_id >=", value, "outboundShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutboundShopIdLessThan(Integer value) {
+            addCriterion("outbound_shop_id <", value, "outboundShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutboundShopIdLessThanOrEqualTo(Integer value) {
+            addCriterion("outbound_shop_id <=", value, "outboundShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutboundShopIdIn(List<Integer> values) {
+            addCriterion("outbound_shop_id in", values, "outboundShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutboundShopIdNotIn(List<Integer> values) {
+            addCriterion("outbound_shop_id not in", values, "outboundShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutboundShopIdBetween(Integer value1, Integer value2) {
+            addCriterion("outbound_shop_id between", value1, value2, "outboundShopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andOutboundShopIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("outbound_shop_id not between", value1, value2, "outboundShopId");
+            return (Criteria) this;
+        }
+
         public Criteria andBatchNumberIsNull() {
             addCriterion("batch_number is null");
             return (Criteria) this;
@@ -485,66 +545,6 @@ public class OutboundOrderExample {
             return (Criteria) this;
         }
 
-        public Criteria andFbaPackingListIdIsNull() {
-            addCriterion("fba_packing_list_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFbaPackingListIdIsNotNull() {
-            addCriterion("fba_packing_list_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andFbaPackingListIdEqualTo(Integer value) {
-            addCriterion("fba_packing_list_id =", value, "fbaPackingListId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFbaPackingListIdNotEqualTo(Integer value) {
-            addCriterion("fba_packing_list_id <>", value, "fbaPackingListId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFbaPackingListIdGreaterThan(Integer value) {
-            addCriterion("fba_packing_list_id >", value, "fbaPackingListId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFbaPackingListIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("fba_packing_list_id >=", value, "fbaPackingListId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFbaPackingListIdLessThan(Integer value) {
-            addCriterion("fba_packing_list_id <", value, "fbaPackingListId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFbaPackingListIdLessThanOrEqualTo(Integer value) {
-            addCriterion("fba_packing_list_id <=", value, "fbaPackingListId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFbaPackingListIdIn(List<Integer> values) {
-            addCriterion("fba_packing_list_id in", values, "fbaPackingListId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFbaPackingListIdNotIn(List<Integer> values) {
-            addCriterion("fba_packing_list_id not in", values, "fbaPackingListId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFbaPackingListIdBetween(Integer value1, Integer value2) {
-            addCriterion("fba_packing_list_id between", value1, value2, "fbaPackingListId");
-            return (Criteria) this;
-        }
-
-        public Criteria andFbaPackingListIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("fba_packing_list_id not between", value1, value2, "fbaPackingListId");
-            return (Criteria) this;
-        }
-
         public Criteria andStatusIsNull() {
             addCriterion("status is null");
             return (Criteria) this;
@@ -602,6 +602,66 @@ public class OutboundOrderExample {
 
         public Criteria andStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("status not between", value1, value2, "status");
+            return (Criteria) this;
+        }
+
+        public Criteria andFbaPackingListIdIsNull() {
+            addCriterion("fba_packing_list_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFbaPackingListIdIsNotNull() {
+            addCriterion("fba_packing_list_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFbaPackingListIdEqualTo(Integer value) {
+            addCriterion("fba_packing_list_id =", value, "fbaPackingListId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFbaPackingListIdNotEqualTo(Integer value) {
+            addCriterion("fba_packing_list_id <>", value, "fbaPackingListId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFbaPackingListIdGreaterThan(Integer value) {
+            addCriterion("fba_packing_list_id >", value, "fbaPackingListId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFbaPackingListIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("fba_packing_list_id >=", value, "fbaPackingListId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFbaPackingListIdLessThan(Integer value) {
+            addCriterion("fba_packing_list_id <", value, "fbaPackingListId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFbaPackingListIdLessThanOrEqualTo(Integer value) {
+            addCriterion("fba_packing_list_id <=", value, "fbaPackingListId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFbaPackingListIdIn(List<Integer> values) {
+            addCriterion("fba_packing_list_id in", values, "fbaPackingListId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFbaPackingListIdNotIn(List<Integer> values) {
+            addCriterion("fba_packing_list_id not in", values, "fbaPackingListId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFbaPackingListIdBetween(Integer value1, Integer value2) {
+            addCriterion("fba_packing_list_id between", value1, value2, "fbaPackingListId");
+            return (Criteria) this;
+        }
+
+        public Criteria andFbaPackingListIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("fba_packing_list_id not between", value1, value2, "fbaPackingListId");
             return (Criteria) this;
         }
 

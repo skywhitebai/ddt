@@ -5,10 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.shopHeadTripCost.response.ShopSkuHeadTripCostInfo;
 import com.sky.ddt.dto.shopSku.request.*;
-import com.sky.ddt.dto.shopSku.response.ExportShopSkuResponse;
-import com.sky.ddt.dto.shopSku.response.ListInventoryQuantityResponse;
-import com.sky.ddt.dto.shopSku.response.ListShopSkuResponse;
-import com.sky.ddt.dto.shopSku.response.ShopSkuFullProductName;
+import com.sky.ddt.dto.shopSku.response.*;
 import com.sky.ddt.entity.ShopSku;
 import com.sky.ddt.entity.Sku;
 import org.springframework.web.multipart.MultipartFile;
@@ -257,4 +254,6 @@ public interface IShopSkuService {
     BaseResponse importProduceStatus(MultipartFile file, Integer dealUserId);
 
     BaseResponse importShopSkuStorageLocation(MultipartFile file, Integer dealUserId);
+
+    List<ListOutboundShopSkuResponse> listOutboundShopSku(ListOutboundShopSkuRequest listOutboundShopSkuRequest);
 }

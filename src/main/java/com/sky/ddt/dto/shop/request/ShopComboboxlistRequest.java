@@ -11,4 +11,5 @@ import lombok.Data;
 public class ShopComboboxlistRequest {
     Integer userId;
     Integer type;
+    Integer status;
 }

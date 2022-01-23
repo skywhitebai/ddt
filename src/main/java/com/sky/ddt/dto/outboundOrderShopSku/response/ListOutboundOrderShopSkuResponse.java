@@ -14,15 +14,11 @@ public class ListOutboundOrderShopSkuResponse extends OutboundOrderShopSku {
     String shopSku;
     String sku;
     /**
-     * 店铺库存
-     */
-    Integer inventoryQuantity;
-    /**
-     * 其他店铺库存
-     */
-    Integer inventoryQuantityOtherShop;
-    /**
      * 仓库库存
      */
     Integer inventoryQuantityWarehouse;
+    /**
+     * 其他仓库库存
+     */
+    Integer inventoryQuantityOtherWarehouse;
 }

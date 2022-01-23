@@ -103,4 +103,6 @@ public interface CustomShopSkuMapper extends ShopSkuMapper {
     List<ShopSku> getShopSkuByShopParentSkuAndSize(GetShopSkuByShopParentSkuAndSizeRequest getShopSkuByShopParentSkuAndSizeRequest);
 
     List<ListInventoryQuantityResponse> listInventoryQuantity(ListInventoryQuantityRequest params);
+
+    List<ListOutboundShopSkuResponse> listOutboundShopSku(ListOutboundShopSkuRequest listOutboundShopSkuRequest);
 }

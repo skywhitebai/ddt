@@ -13,7 +13,6 @@ import lombok.Data;
 public class UpdateShopSkuInventoryQuantityRequest {
     Integer quantity;
     InventoryChangeRecordConstant.ChangeTypeEnum changeTypeEnum;
-    String shopSku;
     Integer shopSkuId;
     Integer dealUserId;
     Integer entityId;

@@ -7,9 +7,8 @@
         <result column="shop_name" property="shopName"/>
         <result column="shop_sku" property="shopSku"/>
         <result column="sku" property="sku"/>
-        <result column="inventory_quantity" property="inventoryQuantity"/>
-        <result column="inventory_quantity_other_shop" property="inventoryQuantityOtherShop"/>
         <result column="inventory_quantity_warehouse" property="inventoryQuantityWarehouse"/>
+        <result column="inventory_quantity_other_warehouse" property="inventoryQuantityOtherWarehouse"/>
     </resultMap>
     <select id="listOutboundOrderShopSku"
             parameterType="com.sky.ddt.dto.outboundOrderShopSku.request.ListOutboundOrderShopSkuRequest"
@@ -20,11 +19,10 @@
         ,s.shop_name,
         ss.shop_sku
         ,sku.sku,
-        ss.inventory_quantity,
-        IFNULL((select sum(sso.inventory_quantity) from shop_sku sso,shop so WHERE sso.shop_id=so.shop_id and so.type=1 AND
-        sso.sku_id=ss.sku_id and sso.shop_sku_id!=ss.shop_sku_id),0) inventory_quantity_other_shop,
         IFNULL((select sum(ssw.inventory_quantity) from shop_sku ssw,shop sw WHERE ssw.shop_id=sw.shop_id and sw.type=2 AND
-        ssw.sku_id=ss.sku_id and ssw.shop_sku_id!=ss.shop_sku_id),0) inventory_quantity_warehouse
+        ssw.sku_id=ss.sku_id and sw.shop_id=oo.outbound_shop_id),0) inventory_quantity_warehouse,
+        IFNULL((select sum(ssw.inventory_quantity) from shop_sku ssw,shop sw WHERE ssw.shop_id=sw.shop_id and sw.type=2 AND
+        ssw.sku_id=ss.sku_id and sw.shop_id!=oo.outbound_shop_id),0) inventory_quantity_other_warehouse
 
         from outbound_order_shop_sku ooss
         left join shop_sku ss on ooss.shop_sku_id=ss.shop_sku_id

@@ -5,6 +5,7 @@
                type="com.sky.ddt.dto.outboundOrder.response.ListOutboundOrderResponse"
                extends="com.sky.ddt.dao.generate.OutboundOrderMapper.BaseResultMap">
         <result column="shop_name" property="shopName"/>
+        <result column="outboundShopName" property="outboundShopName"/>
         <result column="outboundQuantityTotal" property="outboundQuantityTotal"/>
     </resultMap>
     <select id="listOutboundOrder" parameterType="com.sky.ddt.dto.outboundOrder.request.ListOutboundOrderRequest"
@@ -12,11 +13,13 @@
         select
         <include refid="com.sky.ddt.dao.generate.OutboundOrderMapper.Base_Column_List"/>
         ,(select s.shop_name from shop s where oo.shop_id=s.shop_id) shop_name,
+        (select shop_name from shop s where s.shop_id=oo.outbound_shop_id) outboundShopName,
         ifnull((select sum(ooss.outbound_quantity) from outbound_order_shop_sku ooss where ooss.outbound_order_id=oo.id),0) outboundQuantityTotal
         from outbound_order oo
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 <if test="shopId != null">and shop_id =#{shopId}</if>
+                <if test="outboundShopId != null">and outbound_shop_id =#{outboundShopId}</if>
                 <if test="outboundTimeStart != null ">and outbound_time<![CDATA[>=]]> #{outboundTimeStart}</if>
                 <if test="outboundTimeEnd != null ">and outbound_time <![CDATA[<]]>
                     DATE_ADD(date(#{outboundTimeEnd}),INTERVAL 1 DAY)

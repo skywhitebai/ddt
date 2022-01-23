@@ -15,6 +15,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class SaveOutboundOrderRequest {
     Integer id;
+    Integer outboundShopId;
     @NotNull(message = OutboundOrderConstant.SHOP_ID_EMPTY)
     Integer shopId;
     @Length(max = 50, message = OutboundOrderConstant.FBA_NO_TOO_LONG)
