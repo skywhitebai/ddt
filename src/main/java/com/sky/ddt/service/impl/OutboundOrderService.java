@@ -93,8 +93,6 @@ public class OutboundOrderService implements IOutboundOrderService {
         Shop shop = shopService.getShop(params.getShopId());
         if (shop == null) {
             sbErroEntity.append(OutboundOrderConstant.SHOP_ID_NOT_EXIST);
-        } else if (!ShopConstant.TypeEnum.SHOP.getType().equals(shop.getType())) {
-            sbErroEntity.append(OutboundOrderConstant.SHOP_TYPE_ERRO);
         }
         Shop outboundShop = shopService.getShop(params.getOutboundShopId());
         if (outboundShop == null) {
