@@ -463,7 +463,7 @@ public class ProduceOrderService implements IProduceOrderService {
         List<String> notCostSkuList = customProduceOrderMapper.listNotCostSku(params);
         if (!CollectionUtils.isEmpty(notCostSkuList)) {
             String skus = notCostSkuList.stream().collect(Collectors.joining(","));
-            return BaseResponse.failMessage("产品sku成本价错误:" + skus);
+            return BaseResponse.failMessage("产品sku成本价错误，成本大于等于999或者没有工价:" + skus);
         }
         List<String> notLabourCostProductList = customProduceOrderMapper.listNotLabourCostProduct(params);
         if (!CollectionUtils.isEmpty(notLabourCostProductList)) {
