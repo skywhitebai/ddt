@@ -83,7 +83,7 @@
        select
         sku.sku_id skuId,po.id produceOrderId,sum(warehousing_quantity) quantity
         from produce_order po,shop_sku ss,sku,warehousing_order wo,warehousing_order_shop_sku woss
-        where wo.produce_order_id=po.id and woss.warehousing_order_id=wo.id and woss.shop_sku_id=ss.shop_sku_id
+        where wo.produce_order_id=po.id and woss.warehousing_order_id=wo.id and status!=0 and woss.shop_sku_id=ss.shop_sku_id
         AND ss.sku_id=sku.sku_id
         and po.completion_time>=#{monthDate} and po.completion_time<![CDATA[ < ]]>
         date_add(#{monthDate}, interval 1 MONTH)  and po.status=3 and po.cost_status=0

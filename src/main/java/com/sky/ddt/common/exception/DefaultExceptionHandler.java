@@ -59,7 +59,7 @@ public class DefaultExceptionHandler extends DefaultHandlerExceptionResolver {
         view.setAttributesMap(attributes);
         mv.setView(view);
         ex.printStackTrace();
-        logger.error("错误信息" + ExcpUtil.getStackTraceString(ex));
+        logger.error("错误信息" + ex.getMessage(),ex);
         return mv;
     }
 }

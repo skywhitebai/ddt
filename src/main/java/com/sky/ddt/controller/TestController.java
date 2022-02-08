@@ -26,16 +26,26 @@ public class TestController extends SuperController {
         List<Map<String, String>> res = ExcelUtil.getListByExcel(file);
         return res;
     }
+
     @RequestMapping("/testDate")
     @Login(action = Action.Skip)
     @ResponseBody
     public BaseResponse testDate(DateTestRequest params) {
         return BaseResponse.successData(params);
     }
+
     @RequestMapping("/getLocalDateTime")
     @Login(action = Action.Skip)
     @ResponseBody
     public BaseResponse getLocalDateTime(@RequestBody GetLocalDateTimeRequest prams) {
         return BaseResponse.successData(prams);
+    }
+
+    @RequestMapping("/testException")
+    @Login(action = Action.Skip)
+    @ResponseBody
+    public BaseResponse testException() {
+        Integer a = null;
+        return BaseResponse.successData(0/a);
     }
 }
