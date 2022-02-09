@@ -236,7 +236,7 @@ public class ExcelUtil {
         //读取标题行
         for (int j = 0; j < colnum; j++) {
             cellData = (String) getCellFormatValue(row.getCell(j));
-            columns.add(cellData);
+            columns.add(cellData.trim());
         }
         //用来存放表中数据
         List<Map<String, String>> list = new ArrayList<Map<String, String>>();

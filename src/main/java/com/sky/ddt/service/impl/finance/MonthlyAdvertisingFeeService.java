@@ -104,16 +104,16 @@ public class MonthlyAdvertisingFeeService implements IMonthlyAdvertisingFeeServi
             CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "Click-Thru Rate (CTR)", "clickThroughRate", false);
             CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "Cost Per Click (CPC)", "costPerClick", false);
             CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "Spend", "cost", false);
-            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "7 Day Total Sales ", "totalSalesIn7Days", false);
-            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "Total Advertising Cost of Sales (ACoS) ", "advertisingCostSalesRatio", false);
+            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "7 Day Total Sales", "totalSalesIn7Days", false);
+            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "Total Advertising Cost of Sales (ACoS)", "advertisingCostSalesRatio", false);
             CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "Total Return on Advertising Spend (RoAS)", "inputOutputRatio", false);
             CheckUtil.checkAndSetInteger(importRequest, sbErroItem, map, "7 Day Total Orders (#)", "totalOrdersIn7Days", true);
             CheckUtil.checkAndSetInteger(importRequest, sbErroItem, map, "7 Day Total Units (#)", "totalSalesQuantityIn7Days", true);
             CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "7 Day Conversion Rate", "conversionIn7Days", false);
             CheckUtil.checkAndSetInteger(importRequest, sbErroItem, map, "7 Day Advertised SKU Units (#)", "adSkuSalesQuantityIn7Days", true);
             CheckUtil.checkAndSetInteger(importRequest, sbErroItem, map, "7 Day Other SKU Units (#)", "otherSkuSalesQuantityIn7Days", true);
-            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "7 Day Advertised SKU Sales ", "adSkuSalesIn7Days", true);
-            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "7 Day Other SKU Sales ", "otherSkuSalesIn7Days", true);
+            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "7 Day Advertised SKU Sales", "adSkuSalesIn7Days", true);
+            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "7 Day Other SKU Sales", "otherSkuSalesIn7Days", true);
             importRequestList.add(importRequest);
             if (sbErroItem.length() > 0) {
                 sbErro.append(",第" + map.get("rowNum") + "行").append(sbErroItem);

@@ -1534,62 +1534,62 @@ public class DisplayAdvertisingExample {
         }
 
         public Criteria andTotalReturnOnAdvertisingSpendIsNull() {
-            addCriterion("\"total return on advertising spend\" is null");
+            addCriterion("total_return_on_advertising_spend is null");
             return (Criteria) this;
         }
 
         public Criteria andTotalReturnOnAdvertisingSpendIsNotNull() {
-            addCriterion("\"total return on advertising spend\" is not null");
+            addCriterion("total_return_on_advertising_spend is not null");
             return (Criteria) this;
         }
 
         public Criteria andTotalReturnOnAdvertisingSpendEqualTo(BigDecimal value) {
-            addCriterion("\"total return on advertising spend\" =", value, "totalReturnOnAdvertisingSpend");
+            addCriterion("total_return_on_advertising_spend =", value, "totalReturnOnAdvertisingSpend");
             return (Criteria) this;
         }
 
         public Criteria andTotalReturnOnAdvertisingSpendNotEqualTo(BigDecimal value) {
-            addCriterion("\"total return on advertising spend\" <>", value, "totalReturnOnAdvertisingSpend");
+            addCriterion("total_return_on_advertising_spend <>", value, "totalReturnOnAdvertisingSpend");
             return (Criteria) this;
         }
 
         public Criteria andTotalReturnOnAdvertisingSpendGreaterThan(BigDecimal value) {
-            addCriterion("\"total return on advertising spend\" >", value, "totalReturnOnAdvertisingSpend");
+            addCriterion("total_return_on_advertising_spend >", value, "totalReturnOnAdvertisingSpend");
             return (Criteria) this;
         }
 
         public Criteria andTotalReturnOnAdvertisingSpendGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("\"total return on advertising spend\" >=", value, "totalReturnOnAdvertisingSpend");
+            addCriterion("total_return_on_advertising_spend >=", value, "totalReturnOnAdvertisingSpend");
             return (Criteria) this;
         }
 
         public Criteria andTotalReturnOnAdvertisingSpendLessThan(BigDecimal value) {
-            addCriterion("\"total return on advertising spend\" <", value, "totalReturnOnAdvertisingSpend");
+            addCriterion("total_return_on_advertising_spend <", value, "totalReturnOnAdvertisingSpend");
             return (Criteria) this;
         }
 
         public Criteria andTotalReturnOnAdvertisingSpendLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("\"total return on advertising spend\" <=", value, "totalReturnOnAdvertisingSpend");
+            addCriterion("total_return_on_advertising_spend <=", value, "totalReturnOnAdvertisingSpend");
             return (Criteria) this;
         }
 
         public Criteria andTotalReturnOnAdvertisingSpendIn(List<BigDecimal> values) {
-            addCriterion("\"total return on advertising spend\" in", values, "totalReturnOnAdvertisingSpend");
+            addCriterion("total_return_on_advertising_spend in", values, "totalReturnOnAdvertisingSpend");
             return (Criteria) this;
         }
 
         public Criteria andTotalReturnOnAdvertisingSpendNotIn(List<BigDecimal> values) {
-            addCriterion("\"total return on advertising spend\" not in", values, "totalReturnOnAdvertisingSpend");
+            addCriterion("total_return_on_advertising_spend not in", values, "totalReturnOnAdvertisingSpend");
             return (Criteria) this;
         }
 
         public Criteria andTotalReturnOnAdvertisingSpendBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("\"total return on advertising spend\" between", value1, value2, "totalReturnOnAdvertisingSpend");
+            addCriterion("total_return_on_advertising_spend between", value1, value2, "totalReturnOnAdvertisingSpend");
             return (Criteria) this;
         }
 
         public Criteria andTotalReturnOnAdvertisingSpendNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("\"total return on advertising spend\" not between", value1, value2, "totalReturnOnAdvertisingSpend");
+            addCriterion("total_return_on_advertising_spend not between", value1, value2, "totalReturnOnAdvertisingSpend");
             return (Criteria) this;
         }
 

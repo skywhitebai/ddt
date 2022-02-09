@@ -24,7 +24,7 @@
     <result column="cost_per_click" jdbcType="DECIMAL" property="costPerClick" />
     <result column="cost_per_1000_viewable_impressions" jdbcType="INTEGER" property="costPer1000ViewableImpressions" />
     <result column="total_advertising_cost_of_sales" jdbcType="DECIMAL" property="totalAdvertisingCostOfSales" />
-    <result column="total return on advertising spend" jdbcType="DECIMAL" property="totalReturnOnAdvertisingSpend" />
+    <result column="total_return_on_advertising_spend" jdbcType="DECIMAL" property="totalReturnOnAdvertisingSpend" />
     <result column="total_orders_day_14" jdbcType="INTEGER" property="totalOrdersDay14" />
     <result column="total_units_day_14" jdbcType="INTEGER" property="totalUnitsDay14" />
     <result column="total_sales_day_14" jdbcType="DECIMAL" property="totalSalesDay14" />
@@ -97,7 +97,7 @@
     id, finance_id, start_date, end_date, currency, campaign_name, portfolio_name, cost_type, 
     ad_group_name, bid_optimization, advertised_sku, shop_sku_id, advertised_asin, impressions, 
     viewable_impressions, clicks, click_thru_rate, page_views_day_14, spend, cost_per_click, 
-    cost_per_1000_viewable_impressions, total_advertising_cost_of_sales, "total return on advertising spend", 
+    cost_per_1000_viewable_impressions, total_advertising_cost_of_sales, total_return_on_advertising_spend, 
     total_orders_day_14, total_units_day_14, total_sales_day_14, conversion_rate_day_14, 
     new_to_brand_orders_day_14, new_to_brand_sales_day_14, new_to_brand_units_day_14, 
     create_time, create_by
@@ -143,7 +143,7 @@
       impressions, viewable_impressions, clicks, 
       click_thru_rate, page_views_day_14, spend, 
       cost_per_click, cost_per_1000_viewable_impressions, 
-      total_advertising_cost_of_sales, "total return on advertising spend", 
+      total_advertising_cost_of_sales, total_return_on_advertising_spend, 
       total_orders_day_14, total_units_day_14, total_sales_day_14, 
       conversion_rate_day_14, new_to_brand_orders_day_14, 
       new_to_brand_sales_day_14, new_to_brand_units_day_14, 
@@ -231,7 +231,7 @@
         total_advertising_cost_of_sales,
       </if>
       <if test="totalReturnOnAdvertisingSpend != null">
-        "total return on advertising spend",
+        total_return_on_advertising_spend,
       </if>
       <if test="totalOrdersDay14 != null">
         total_orders_day_14,
@@ -433,7 +433,7 @@
         total_advertising_cost_of_sales = #{record.totalAdvertisingCostOfSales,jdbcType=DECIMAL},
       </if>
       <if test="record.totalReturnOnAdvertisingSpend != null">
-        "total return on advertising spend" = #{record.totalReturnOnAdvertisingSpend,jdbcType=DECIMAL},
+        total_return_on_advertising_spend = #{record.totalReturnOnAdvertisingSpend,jdbcType=DECIMAL},
       </if>
       <if test="record.totalOrdersDay14 != null">
         total_orders_day_14 = #{record.totalOrdersDay14,jdbcType=INTEGER},
@@ -491,7 +491,7 @@
       cost_per_click = #{record.costPerClick,jdbcType=DECIMAL},
       cost_per_1000_viewable_impressions = #{record.costPer1000ViewableImpressions,jdbcType=INTEGER},
       total_advertising_cost_of_sales = #{record.totalAdvertisingCostOfSales,jdbcType=DECIMAL},
-      "total return on advertising spend" = #{record.totalReturnOnAdvertisingSpend,jdbcType=DECIMAL},
+      total_return_on_advertising_spend = #{record.totalReturnOnAdvertisingSpend,jdbcType=DECIMAL},
       total_orders_day_14 = #{record.totalOrdersDay14,jdbcType=INTEGER},
       total_units_day_14 = #{record.totalUnitsDay14,jdbcType=INTEGER},
       total_sales_day_14 = #{record.totalSalesDay14,jdbcType=DECIMAL},
@@ -572,7 +572,7 @@
         total_advertising_cost_of_sales = #{totalAdvertisingCostOfSales,jdbcType=DECIMAL},
       </if>
       <if test="totalReturnOnAdvertisingSpend != null">
-        "total return on advertising spend" = #{totalReturnOnAdvertisingSpend,jdbcType=DECIMAL},
+        total_return_on_advertising_spend = #{totalReturnOnAdvertisingSpend,jdbcType=DECIMAL},
       </if>
       <if test="totalOrdersDay14 != null">
         total_orders_day_14 = #{totalOrdersDay14,jdbcType=INTEGER},
@@ -627,7 +627,7 @@
       cost_per_click = #{costPerClick,jdbcType=DECIMAL},
       cost_per_1000_viewable_impressions = #{costPer1000ViewableImpressions,jdbcType=INTEGER},
       total_advertising_cost_of_sales = #{totalAdvertisingCostOfSales,jdbcType=DECIMAL},
-      "total return on advertising spend" = #{totalReturnOnAdvertisingSpend,jdbcType=DECIMAL},
+      total_return_on_advertising_spend = #{totalReturnOnAdvertisingSpend,jdbcType=DECIMAL},
       total_orders_day_14 = #{totalOrdersDay14,jdbcType=INTEGER},
       total_units_day_14 = #{totalUnitsDay14,jdbcType=INTEGER},
       total_sales_day_14 = #{totalSalesDay14,jdbcType=DECIMAL},

@@ -96,15 +96,15 @@ public class DisplayAdvertisingService implements IDisplayAdvertisingService {
             CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "Spend", "spend", false);
             CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "Cost Per Click (CPC)", "costPerClick", false);
             CheckUtil.checkAndSetInteger(importRequest, sbErroItem, map, "Cost per 1,000 viewable impressions (VCPM)", "costPer1000ViewableImpressions", false);
-            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "", "totalAdvertisingCostOfSales", false);
-            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "", "totalReturnOnAdvertisingSpend", false);
-            CheckUtil.checkAndSetInteger(importRequest, sbErroItem, map, "", "totalOrdersDay14", false);
-            CheckUtil.checkAndSetInteger(importRequest, sbErroItem, map, "", "ttotalUnitsDay14", false);
-            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "", "totalSalesDay14", false);
-            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "", "conversionRateDay14", false);
-            CheckUtil.checkAndSetInteger(importRequest, sbErroItem, map, "", "newToBrandOrdersDay14", false);
-            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "", "newToBrandSalesDay14", false);
-            CheckUtil.checkAndSetInteger(importRequest, sbErroItem, map, "", "newToBrandUnitsDay14", false);
+            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "Total Advertising Cost of Sales (ACOS)", "totalAdvertisingCostOfSales", false);
+            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "Total Return on Advertising Spend (ROAS)", "totalReturnOnAdvertisingSpend", false);
+            CheckUtil.checkAndSetInteger(importRequest, sbErroItem, map, "14 Day Total Orders (#)", "totalOrdersDay14", false);
+            CheckUtil.checkAndSetInteger(importRequest, sbErroItem, map, "14 Day Total Units (#)", "totalUnitsDay14", false);
+            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "14 Day Total Sales", "totalSalesDay14", false);
+            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "14 Day Conversion Rate", "conversionRateDay14", false);
+            CheckUtil.checkAndSetInteger(importRequest, sbErroItem, map, "14 Day New-to-brand Orders (#)", "newToBrandOrdersDay14", false);
+            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "14 Day New-to-brand Sales", "newToBrandSalesDay14", false);
+            CheckUtil.checkAndSetInteger(importRequest, sbErroItem, map, "14 Day New-to-brand Units (#)", "newToBrandUnitsDay14", false);
             importRequestList.add(importRequest);
             if (sbErroItem.length() > 0) {
                 sbErro.append(",第" + map.get("rowNum") + "行").append(sbErroItem);
