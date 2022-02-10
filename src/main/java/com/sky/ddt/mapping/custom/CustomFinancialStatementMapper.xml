@@ -169,7 +169,7 @@
         (SELECT SUM(IFNULL(ma.fee,0)) manualAdjustment,shop_sku_id FROM `manual_adjustment` ma WHERE `finance_id`=#{financeId} GROUP BY `shop_sku_id`) ma
         ON ma.shop_sku_id=ss.shop_sku_id
         LEFT JOIN
-        (SELECT SUM(IFNULL(total_advertising_cost_of_sales,0))*-1 displayAdvertising,shop_sku_id FROM `display_advertising` WHERE `finance_id`=#{financeId} GROUP BY `shop_sku_id`) da
+        (SELECT SUM(IFNULL(spend,0))*-1 displayAdvertising,shop_sku_id FROM `display_advertising` WHERE `finance_id`=#{financeId} GROUP BY `shop_sku_id`) da
         ON da.shop_sku_id=ss.shop_sku_id
         LEFT JOIN
         (SELECT SUM(IFNULL(fee,0))*-1 brandAdvertising,shop_sku_id FROM `brand_advertising` WHERE `finance_id`=#{financeId} GROUP BY `shop_sku_id`) ba
