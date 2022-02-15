@@ -15,4 +15,5 @@ public class ListStockRecordItemResponse extends StockRecordItem {
     String sku;
     String imgUrl;
     Integer skuId;
+    String locationNos;
 }

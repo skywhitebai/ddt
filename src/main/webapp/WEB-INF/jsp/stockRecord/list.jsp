@@ -185,7 +185,7 @@
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
             title: title,
             iconCls: 'icon-view',
-            nowrap: true,
+            nowrap: false,
             autoRowHeight: true,
             striped: true,
             collapsible: true,
@@ -215,14 +215,15 @@
                         return res;
                     }
                 },
-                {title: '发货数量', field: 'stockQuantity', width: 90},
-                {title: '空运发货', field: 'stockQuantityKy', width: 90},
-                {title: '空派发货', field: 'stockQuantityKp', width: 90},
-                {title: '海运发货', field: 'stockQuantityHy', width: 90},
-                {title: '生产数量', field: 'productionQuantity', width: 90},
-                {title: '销售人员', field: 'salesmanRealName', width: 90},
+                {title: '发货数量', field: 'stockQuantity', width: 80},
+                {title: '空运发货', field: 'stockQuantityKy', width: 80},
+                {title: '空派发货', field: 'stockQuantityKp', width: 80},
+                {title: '海运发货', field: 'stockQuantityHy', width: 80},
+                {title: '生产数量', field: 'productionQuantity', width: 80},
+                {title: '销售人员', field: 'salesmanRealName', width: 80},
+                {title: '库位', field: 'locationNos', width: 160},
                 {
-                    title: '操作', field: 'shopSkuId', width: 90,
+                    title: '操作', field: 'shopSkuId', width: 60,
                     formatter: function (value, row, rowIndex) {
                         return "<a href='${pageContext.request.contextPath }/shopSku/print?shopSku=" + row.shopSku + "&quantity=" + row.stockQuantity + "'  title='打印标签'  target='_blank'>打印标签</a>";
                     }
