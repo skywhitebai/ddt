@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomFinancialDocumentMapper">
+
+    <resultMap id="listFinancialDocumentMap"
+               type="com.sky.ddt.dto.financialDocument.response.ListFinancialDocumentResponse"
+               extends="com.sky.ddt.dao.generate.FinancialDocumentMapper.BaseResultMap">
+    </resultMap>
+    <select id="listFinancialDocument"
+            parameterType="com.sky.ddt.dto.financialDocument.request.ListFinancialDocumentRequest"
+            resultMap="listFinancialDocumentMap">
+        select
+        *
+        from financial_document fd
+        <if test="_parameter != null">
+            <include refid="financial_document_Query_Where_Clause"/>
+        </if>
+        order by fd.create_time desc
+    </select>
+    <sql id="financial_document_Query_Where_Clause">
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="number != null and number !=''">and fd.number like concat('%',#{number},'%')</if>
+                <if test="status != null ">and fd.status=#{status}</if>
+                <if test="title != null and title !=''">and fd.title like concat('%',#{title},'%')</if>
+                <if test="financialDateStart != null ">and financial_date <![CDATA[>=]]> #{financialDateStart}</if>
+                <if test="financialDateEnd != null ">and financial_date <![CDATA[<=]]>
+                    DATE_ADD(date(#{financialDateEnd}),INTERVAL 1 DAY)
+                </if>
+
+            </trim>
+        </where>
+    </sql>
+</mapper>
