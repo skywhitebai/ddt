@@ -209,6 +209,8 @@ public class OutboundOrderService implements IOutboundOrderService {
             ShopSku shopSku=new ShopSku();
             shopSku.setShopSku(outboundShopSku.getOutboundShopSku());
             shopSku.setInventoryQuantity(outboundShopSku.getInventoryQuantity());
+            //预扣库存 避免一个生产单对应多个仓库sku计算错误的问题
+            updateOutboundShopSkuInventoryQuantity(inventoryQuantity,outboundShopSku.getOutboundShopSkuId(),outboundShopSkuList);
             updateShopSkuInventoryQuantityRequest.setShopSkuInfo(shopSku);
             updateShopSkuInventoryQuantityRequest.setEntityId(outboundOrderShopSku.getId());
             updateShopSkuInventoryQuantityRequest.setMainEntityId(outboundOrderShopSku.getOutboundOrderId());
@@ -224,6 +226,10 @@ public class OutboundOrderService implements IOutboundOrderService {
         //修改出库单状态为已出库
         updateOutboundOrderOutbound(id, dealUserId);
         return BaseResponse.success();
+    }
+
+    private void updateOutboundShopSkuInventoryQuantity(Integer inventoryQuantity, Integer outboundShopSkuId, List<ListOutboundShopSkuResponse> outboundShopSkuList) {
+        outboundShopSkuList.stream().filter(item->item.getOutboundShopSkuId().equals(outboundShopSkuId)).forEach(item->item.setInventoryQuantity(inventoryQuantity));
     }
 
     private ListOutboundShopSkuResponse getShopSku(Integer shopSkuId, List<ListOutboundShopSkuResponse> shopSkuList) {
