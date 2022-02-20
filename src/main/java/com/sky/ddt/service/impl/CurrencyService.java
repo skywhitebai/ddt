@@ -6,6 +6,7 @@ import com.sky.ddt.common.constant.TransportTypeConstant;
 import com.sky.ddt.dao.custom.CustomCurrencyMapper;
 import com.sky.ddt.dto.currency.req.ListCurrencyReq;
 import com.sky.ddt.dto.currency.req.SaveCurrencyReq;
+import com.sky.ddt.dto.currency.resp.CurrencyComboxResp;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.Currency;
 import com.sky.ddt.entity.CurrencyExample;
@@ -71,6 +72,11 @@ public class CurrencyService implements ICurrencyService {
             customCurrencyMapper.updateByPrimaryKeySelective(currency);
         }
         return BaseResponse.success();
+    }
+
+    @Override
+    public List<CurrencyComboxResp> currencyComboboxlist() {
+        return customCurrencyMapper.currencyComboboxlist();
     }
 
     private boolean existCurrencyCode(Currency currency) {

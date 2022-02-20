@@ -41,6 +41,8 @@
         <option value="1">店铺</option>
         <option value="2">仓库</option>
     </select>
+    国家：
+    <input class="easyui-combobox" id="s_countryId">
     状态：
     <select class="easyui-combobox" id="s_status" style="width:100px;">
         <option value="">全部</option>
@@ -85,11 +87,19 @@
             <tr>
                 <td>卖家id：</td>
                 <td>
-                    <input class="easyui-validatebox textbox" name="sellerId" >
+                    <input class="easyui-validatebox textbox" name="sellerId">
                 </td>
                 <td>商城编号：</td>
                 <td>
-                    <input class="easyui-validatebox textbox" name="shopMarketplaceId" >
+                    <input class="easyui-validatebox textbox" name="shopMarketplaceId">
+                </td>
+            </tr>
+            <tr>
+                <td>国家：</td>
+                <td>
+                    <select class="easyui-combobox" id="countryId" name="countryId" style="width:100px;"
+                            data-options="required:true">
+                    </select>
                 </td>
             </tr>
             <tr>
@@ -244,8 +254,28 @@
     </form>
 </div>
 <script type="text/javascript">
-    bindData();
-    bindUser();
+    init();
+
+    function init() {
+        bindCountry();
+        bindUser();
+        bindData();
+    }
+
+    function bindCountry() {
+        $.post('${pageContext.request.contextPath }/country/countryComboboxlist', {}, function (data) {
+            $('#s_countryId').combobox({
+                data: data,
+                valueField: 'id',
+                textField: 'countryName'
+            });
+            $('#countryId').combobox({
+                data: data,
+                valueField: 'id',
+                textField: 'countryName'
+            });
+        });
+    }
 
     function bindData() {
         dg = '#dg';
@@ -255,6 +285,7 @@
             shopName: $("#s_shopName").val(),
             sellerId: $("#s_sellerId").val(),
             shopMarketplaceId: $("#s_shopMarketplaceId").val(),
+            country: $("#s_country").val(),
             status: $("#s_status").val(),
             type: $("#s_type").val()
         };
@@ -273,7 +304,7 @@
             rownumbers: true,
             //sortName: 'ID',    //根据某个字段给easyUI排序
             //sortOrder: 'asc',
-            nowrap:false,
+            nowrap: false,
             remoteSort: false,
             idField: 'shopId',
             queryParams: queryParams,  //异步查询的参数
@@ -281,15 +312,16 @@
                 {field: 'ck', checkbox: true},   //选择
                 {title: '店铺名', field: 'shopName', width: 120},
                 {title: '店铺员工', field: 'shopUserRealNames', width: 150},
-                {title: '店铺类型', field: 'type', width: 140,
+                {
+                    title: '店铺类型', field: 'type', width: 140,
                     formatter: function (value, rowData, rowIndex) {
                         if (value == null) {
                             return '';
                         }
-                        if(value==1){
+                        if (value == 1) {
                             return '店铺';
                         }
-                        if(value==2){
+                        if (value == 2) {
                             return '仓库';
                         }
                     }
@@ -304,6 +336,8 @@
                         return "<a href='" + value + "' target='_blank'>店铺链接</a>";
                     }
                 },
+                {title: '国家', field: 'countryName', width: 140},
+                {title: '汇率', field: 'exchangeRate', width: 60},
                 {title: '商城编号', field: 'shopMarketplaceId', width: 140},
                 {
                     title: '状态', field: 'status', width: 50,
@@ -396,33 +430,33 @@
         if (isEmpty(senderAddress)) {
             return '';
         }
-        var str="";
-        if(!isEmpty(senderAddress.shipToCountry)){
-            str=str+senderAddress.shipToCountry+', ';
+        var str = "";
+        if (!isEmpty(senderAddress.shipToCountry)) {
+            str = str + senderAddress.shipToCountry + ', ';
         }
-        if(!isEmpty(senderAddress.addressName)){
-            str=str+senderAddress.addressName+', ';
+        if (!isEmpty(senderAddress.addressName)) {
+            str = str + senderAddress.addressName + ', ';
         }
-        if(!isEmpty(senderAddress.addressFieldOne)){
-            str=str+senderAddress.addressFieldOne+', ';
+        if (!isEmpty(senderAddress.addressFieldOne)) {
+            str = str + senderAddress.addressFieldOne + ', ';
         }
-        if(!isEmpty(senderAddress.addressFieldTwo)){
-            str=str+senderAddress.addressFieldTwo+', ';
+        if (!isEmpty(senderAddress.addressFieldTwo)) {
+            str = str + senderAddress.addressFieldTwo + ', ';
         }
-        if(!isEmpty(senderAddress.addressCity)){
-            str=str+senderAddress.addressCity+', ';
+        if (!isEmpty(senderAddress.addressCity)) {
+            str = str + senderAddress.addressCity + ', ';
         }
-        if(!isEmpty(senderAddress.addressCountryCode)){
-            str=str+senderAddress.addressCountryCode+', ';
+        if (!isEmpty(senderAddress.addressCountryCode)) {
+            str = str + senderAddress.addressCountryCode + ', ';
         }
-        if(!isEmpty(senderAddress.addressStateOrRegion)){
-            str=str+senderAddress.addressStateOrRegion+', ';
+        if (!isEmpty(senderAddress.addressStateOrRegion)) {
+            str = str + senderAddress.addressStateOrRegion + ', ';
         }
-        if(!isEmpty(senderAddress.addressPostalCode)){
-            str=str+senderAddress.addressPostalCode+', ';
+        if (!isEmpty(senderAddress.addressPostalCode)) {
+            str = str + senderAddress.addressPostalCode + ', ';
         }
-        if(!isEmpty(senderAddress.addressDistrict)){
-            str=str+senderAddress.addressDistrict+', ';
+        if (!isEmpty(senderAddress.addressDistrict)) {
+            str = str + senderAddress.addressDistrict + ', ';
         }
         return str;
     }
@@ -488,8 +522,7 @@
                 if (res.code == '200') {
                     closeDialog();
                     bindData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
@@ -517,8 +550,7 @@
                     if (data.code == '200') {
                         $('#dlg').dialog('close');
                         bindData();
-                    }
-                    else {
+                    } else {
                         $.messager.alert("提示", data.message);
                     }
                 });
@@ -627,8 +659,7 @@
             if (data.code == '200') {
                 closeAddShopUserDialog();
                 bindShopUserData();
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
@@ -650,8 +681,7 @@
                     if (data.code == '200') {
                         $('#dlg').dialog('close');
                         bindShopUserData();
-                    }
-                    else {
+                    } else {
                         $.messager.alert("提示", data.message);
                     }
                 });
@@ -682,8 +712,7 @@
                 if (data.data != null) {
                     $('#frm_ShopSenderAddress').form('load', data.data);
                 }
-            }
-            else {
+            } else {
                 $.messager.alert("提示", data.message);
             }
         });
@@ -747,8 +776,7 @@
                 if (res.code == '200') {
                     bindData();
                     closeShopSenderAddressDialog();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }

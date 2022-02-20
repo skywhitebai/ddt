@@ -18,10 +18,6 @@ public class Finance {
 
     private Boolean monthlyAdvertisingFee;
 
-    private Boolean displayAdvertising;
-
-    private Boolean brandAdvertising;
-
     private Boolean removeOrders;
 
     private Boolean destructionFee;
@@ -56,9 +52,19 @@ public class Finance {
 
     private Integer updateBy;
 
-    private BigDecimal rateOfDollarExchangeRmb;
+    private BigDecimal exchangeRate;
+
+    private Integer currencyId;
+
+    private String currencyName;
+
+    private String currencyCode;
 
     private Integer statisticStatus;
+
+    private Boolean displayAdvertising;
+
+    private Boolean brandAdvertising;
 
     public Integer getId() {
         return id;
@@ -114,22 +120,6 @@ public class Finance {
 
     public void setMonthlyAdvertisingFee(Boolean monthlyAdvertisingFee) {
         this.monthlyAdvertisingFee = monthlyAdvertisingFee;
-    }
-
-    public Boolean getDisplayAdvertising() {
-        return displayAdvertising;
-    }
-
-    public void setDisplayAdvertising(Boolean displayAdvertising) {
-        this.displayAdvertising = displayAdvertising;
-    }
-
-    public Boolean getBrandAdvertising() {
-        return brandAdvertising;
-    }
-
-    public void setBrandAdvertising(Boolean brandAdvertising) {
-        this.brandAdvertising = brandAdvertising;
     }
 
     public Boolean getRemoveOrders() {
@@ -268,12 +258,36 @@ public class Finance {
         this.updateBy = updateBy;
     }
 
-    public BigDecimal getRateOfDollarExchangeRmb() {
-        return rateOfDollarExchangeRmb;
+    public BigDecimal getExchangeRate() {
+        return exchangeRate;
     }
 
-    public void setRateOfDollarExchangeRmb(BigDecimal rateOfDollarExchangeRmb) {
-        this.rateOfDollarExchangeRmb = rateOfDollarExchangeRmb;
+    public void setExchangeRate(BigDecimal exchangeRate) {
+        this.exchangeRate = exchangeRate;
+    }
+
+    public Integer getCurrencyId() {
+        return currencyId;
+    }
+
+    public void setCurrencyId(Integer currencyId) {
+        this.currencyId = currencyId;
+    }
+
+    public String getCurrencyName() {
+        return currencyName;
+    }
+
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName == null ? null : currencyName.trim();
+    }
+
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode == null ? null : currencyCode.trim();
     }
 
     public Integer getStatisticStatus() {
@@ -282,5 +296,21 @@ public class Finance {
 
     public void setStatisticStatus(Integer statisticStatus) {
         this.statisticStatus = statisticStatus;
+    }
+
+    public Boolean getDisplayAdvertising() {
+        return displayAdvertising;
+    }
+
+    public void setDisplayAdvertising(Boolean displayAdvertising) {
+        this.displayAdvertising = displayAdvertising;
+    }
+
+    public Boolean getBrandAdvertising() {
+        return brandAdvertising;
+    }
+
+    public void setBrandAdvertising(Boolean brandAdvertising) {
+        this.brandAdvertising = brandAdvertising;
     }
 }

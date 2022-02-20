@@ -11,6 +11,8 @@ public class Shop {
 
     private String sellerId;
 
+    private Integer countryId;
+
     private String shopMarketplaceId;
 
     private String mwsAuthToken;
@@ -77,6 +79,14 @@ public class Shop {
 
     public void setSellerId(String sellerId) {
         this.sellerId = sellerId == null ? null : sellerId.trim();
+    }
+
+    public Integer getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(Integer countryId) {
+        this.countryId = countryId;
     }
 
     public String getShopMarketplaceId() {

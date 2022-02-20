@@ -21,6 +21,8 @@ public class ShopSaveRequest {
     @Length(max = 30, message = "卖家id长度不能超过30")
     private String sellerId;
 
+    @NotNull(message = "国家不能为空")
+    private Integer countryId;
 
     @Length(max = 50, message = "商城编号长度不能超过50")
     private String shopMarketplaceId;

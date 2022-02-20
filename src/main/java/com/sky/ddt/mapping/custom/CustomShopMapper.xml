@@ -22,6 +22,11 @@
         <result column="update_time" property="updateTime" />
         <result column="remark" property="remark" />
         <result column="shopUserRealNames" property="shopUserRealNames" />
+        <result column="exchange_rate" property="exchangeRate" />
+        <result column="currency_code" property="currencyCode" />
+        <result column="currency_name" property="currencyName" />
+        <result column="country_name" property="countryName" />
+        <result column="country_id" property="countryId" />
 
         <association property="shopSenderAddress" javaType="com.sky.ddt.entity.ShopSenderAddress">
             <id column="shop_id" jdbcType="INTEGER" property="shopId" />
@@ -41,8 +46,9 @@
         s.shop_id,s.shop_name,s.shop_url,s.seller_id,s.shop_marketplace_id,s.status,s.create_time,s.update_time,s.remark,s.type,
         ssa.ship_to_country, ssa.address_name, ssa.address_field_one, ssa.address_field_two, ssa.address_city,
         ssa.address_country_code, ssa.address_state_or_region,ssa.address_postal_code, ssa.address_district,
-        (SELECT GROUP_CONCAT(u.real_name SEPARATOR ',') shopUserRealNames FROM `user` u,`shop_user` su WHERE u.user_id=su.user_id AND su.shop_id=s.shop_id) shopUserRealNames
-        from shop s
+        (SELECT GROUP_CONCAT(u.real_name SEPARATOR ',') shopUserRealNames FROM `user` u,`shop_user` su WHERE u.user_id=su.user_id AND su.shop_id=s.shop_id) shopUserRealNames,
+        c.country_name,cc.currency_code,cc.currency_name,cc.exchange_rate,s.country_id
+        from shop s left join country c on s.country_id=c.id left join currency cc on c.currency_id= cc.id
         left join shop_sender_address ssa on s.shop_id=ssa.shop_id
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
@@ -68,5 +74,11 @@
             </trim>
         </where>
         order by s.shop_name asc
+    </select>
+
+    <select id="getCurrencyByShopId" resultMap="com.sky.ddt.dao.generate.CurrencyMapper.BaseResultMap">
+        select c.*
+        from shop s,country ct,currency c
+        where s.shop_id=#{shop_id} and s.country_id=ct.id and ct.currency_id=c.id
     </select>
 </mapper>

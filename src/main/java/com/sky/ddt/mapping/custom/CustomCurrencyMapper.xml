@@ -2,4 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.ddt.dao.custom.CustomCurrencyMapper">
 
+    <select id="currencyComboboxlist"
+            resultType="com.sky.ddt.dto.currency.resp.CurrencyComboxResp">
+        select
+       id,currency_name currencyName
+       from currency c
+    order by c.create_time desc
+    </select>
 </mapper>

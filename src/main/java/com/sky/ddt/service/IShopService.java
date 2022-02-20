@@ -5,6 +5,7 @@ import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.shop.request.*;
 import com.sky.ddt.dto.shop.response.ShopComboboxResponse;
 import com.sky.ddt.dto.shop.response.ShopListResponse;
+import com.sky.ddt.entity.Currency;
 import com.sky.ddt.entity.Shop;
 
 import java.util.Date;
@@ -103,4 +104,6 @@ public interface IShopService {
     Shop getShop(Integer shopId);
 
     Shop getShopByShopName(String shopName);
+
+    Currency getCurrency(Integer shopId);
 }

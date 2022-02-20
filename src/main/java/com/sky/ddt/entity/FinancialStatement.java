@@ -98,10 +98,6 @@ public class FinancialStatement {
 
     private BigDecimal costOfAdvertising;
 
-    private BigDecimal displayAdvertising;
-
-    private BigDecimal brandAdvertising;
-
     private BigDecimal fbaInventoryReimbursementCustomerReturn;
 
     private BigDecimal fbaInventoryReimbursementDamagedWarehouse;
@@ -184,13 +180,21 @@ public class FinancialStatement {
 
     private Integer productMonth;
 
-    private BigDecimal rateOfDollarExchangeRmb;
+    private BigDecimal exchangeRate;
+
+    private String currencyName;
+
+    private String currencyCode;
 
     private BigDecimal costPrice;
 
     private BigDecimal headTripCost;
 
     private Integer developmentLevel;
+
+    private BigDecimal displayAdvertising;
+
+    private BigDecimal brandAdvertising;
 
     public Integer getId() {
         return id;
@@ -568,22 +572,6 @@ public class FinancialStatement {
         this.costOfAdvertising = costOfAdvertising;
     }
 
-    public BigDecimal getDisplayAdvertising() {
-        return displayAdvertising;
-    }
-
-    public void setDisplayAdvertising(BigDecimal displayAdvertising) {
-        this.displayAdvertising = displayAdvertising;
-    }
-
-    public BigDecimal getBrandAdvertising() {
-        return brandAdvertising;
-    }
-
-    public void setBrandAdvertising(BigDecimal brandAdvertising) {
-        this.brandAdvertising = brandAdvertising;
-    }
-
     public BigDecimal getFbaInventoryReimbursementCustomerReturn() {
         return fbaInventoryReimbursementCustomerReturn;
     }
@@ -912,12 +900,28 @@ public class FinancialStatement {
         this.productMonth = productMonth;
     }
 
-    public BigDecimal getRateOfDollarExchangeRmb() {
-        return rateOfDollarExchangeRmb;
+    public BigDecimal getExchangeRate() {
+        return exchangeRate;
     }
 
-    public void setRateOfDollarExchangeRmb(BigDecimal rateOfDollarExchangeRmb) {
-        this.rateOfDollarExchangeRmb = rateOfDollarExchangeRmb;
+    public void setExchangeRate(BigDecimal exchangeRate) {
+        this.exchangeRate = exchangeRate;
+    }
+
+    public String getCurrencyName() {
+        return currencyName;
+    }
+
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName == null ? null : currencyName.trim();
+    }
+
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode == null ? null : currencyCode.trim();
     }
 
     public BigDecimal getCostPrice() {
@@ -942,5 +946,21 @@ public class FinancialStatement {
 
     public void setDevelopmentLevel(Integer developmentLevel) {
         this.developmentLevel = developmentLevel;
+    }
+
+    public BigDecimal getDisplayAdvertising() {
+        return displayAdvertising;
+    }
+
+    public void setDisplayAdvertising(BigDecimal displayAdvertising) {
+        this.displayAdvertising = displayAdvertising;
+    }
+
+    public BigDecimal getBrandAdvertising() {
+        return brandAdvertising;
+    }
+
+    public void setBrandAdvertising(BigDecimal brandAdvertising) {
+        this.brandAdvertising = brandAdvertising;
     }
 }

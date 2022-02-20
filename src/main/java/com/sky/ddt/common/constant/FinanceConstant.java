@@ -21,8 +21,6 @@ public class FinanceConstant {
     public static final String NOT_ALLOW_LOCK = "财务报表不允许锁定";
     public static final String NOT_ALLOW_CREATE_FINANCIAL_STATEMENT = "财务报表已锁定，不允许重复生成";
     public static final String GET_FINANCIAL_STATEMENT_RESPONSE_FAIL = "获取财务统计信息失败";
-    //人民币兑美元汇率
-    public static final BigDecimal RATE_OF_DOLLAR_EXCHANGE_RMB = new BigDecimal(6);
     //亚马逊店铺费
     public static final BigDecimal SELLERPAYMENTS_REPORT_FEE_SUBSCRIPTION = new BigDecimal(-39.99);
     public static final String[] EXPORT_FBA_CUSTOMER_RETURN_PER_UNIT_FEE_NOT_EXIST_SKU_HEAD = {"order_id", "total", "date_time"};

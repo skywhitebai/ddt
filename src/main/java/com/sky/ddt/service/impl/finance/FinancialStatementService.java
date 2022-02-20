@@ -12,6 +12,8 @@ import com.sky.ddt.dto.finance.response.FbaCustomerReturnSkuResponse;
 import com.sky.ddt.dto.finance.response.FinancialStatementResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.*;
+import com.sky.ddt.entity.Currency;
+import com.sky.ddt.service.IShopService;
 import com.sky.ddt.service.finance.IFinanceService;
 import com.sky.ddt.service.finance.IFinanceStatisticService;
 import com.sky.ddt.service.finance.IFinancialStatementService;
@@ -57,6 +59,8 @@ public class FinancialStatementService implements IFinancialStatementService {
     CustomSkuMapper customSkuMapper;
     @Autowired
     IFinanceStatisticService financeStatisticService;
+    @Autowired
+    IShopService shopService;
 
     /**
      * @param financeId
@@ -77,6 +81,11 @@ public class FinancialStatementService implements IFinancialStatementService {
         }
         if (FinanceConstant.FinanceStatusEnum.LOCKED.getStatus().equals(finance.getStatus())) {
             return BaseResponse.failMessage(FinanceConstant.NOT_ALLOW_CREATE_FINANCIAL_STATEMENT);
+        }
+        //获取汇率
+        Currency currency = getCurrency(finance.getShopId());
+        if (currency == null) {
+            return BaseResponse.failMessage("店铺汇率不能为空");
         }
         //获取
         List<FinancialStatementResponse> financialStatementResponseList = customFinancialStatementMapper.getFinancialStatementResponse(financeId);
@@ -122,8 +131,10 @@ public class FinancialStatementService implements IFinancialStatementService {
             } else {
                 financialStatementResponse.setMoneyBackRate(BigDecimal.ZERO);
             }
-            financialStatementResponse.setRateOfDollarExchangeRmb(FinanceConstant.RATE_OF_DOLLAR_EXCHANGE_RMB);
-            financialStatementResponse.setMainBusinessIncome(financialStatementResponse.getMoneyBack().multiply(FinanceConstant.RATE_OF_DOLLAR_EXCHANGE_RMB));
+            financialStatementResponse.setExchangeRate(currency.getExchangeRate());
+            financialStatementResponse.setCurrencyCode(currency.getCurrencyCode());
+            financialStatementResponse.setCurrencyName(currency.getCurrencyName());
+            financialStatementResponse.setMainBusinessIncome(financialStatementResponse.getMoneyBack().multiply(financialStatementResponse.getExchangeRate()));
             financialStatementResponse.setTotalEffectiveReceipts(financialStatementResponse.getMainBusinessIncome());
             BigDecimal mainBusinessProfit = BigDecimal.ZERO.add(financialStatementResponse.getTotalEffectiveReceipts())
                     .subtract(financialStatementResponse.getSellableCost())
@@ -133,7 +144,7 @@ public class FinancialStatementService implements IFinancialStatementService {
                     .add(financialStatementResponse.getHeadDeductionFee());
             financialStatementResponse.setMainBusinessProfit(mainBusinessProfit);
             if (financialStatementResponse.getProductSales().compareTo(BigDecimal.ZERO) != 0) {
-                BigDecimal grossMarginOnSales = financialStatementResponse.getMainBusinessProfit().divide(financialStatementResponse.getProductSales().multiply(FinanceConstant.RATE_OF_DOLLAR_EXCHANGE_RMB), 4, BigDecimal.ROUND_HALF_UP);
+                BigDecimal grossMarginOnSales = financialStatementResponse.getMainBusinessProfit().divide(financialStatementResponse.getProductSales().multiply(financialStatementResponse.getExchangeRate()), 4, BigDecimal.ROUND_HALF_UP);
                 financialStatementResponse.setGrossMarginOnSales(grossMarginOnSales);
             } else {
                 financialStatementResponse.setGrossMarginOnSales(BigDecimal.ZERO);
@@ -191,10 +202,16 @@ public class FinancialStatementService implements IFinancialStatementService {
         }
         Finance financeUpdate = new Finance();
         financeUpdate.setStatus(FinanceConstant.FinanceStatusEnum.GENERATED.getStatus());
-        financeUpdate.setRateOfDollarExchangeRmb(FinanceConstant.RATE_OF_DOLLAR_EXCHANGE_RMB);
+        financeUpdate.setExchangeRate(currency.getExchangeRate());
+        financeUpdate.setCurrencyCode(currency.getCurrencyCode());
+        financeUpdate.setCurrencyName(currency.getCurrencyName());
         financeUpdate.setId(financeId);
         customFinanceMapper.updateByPrimaryKeySelective(financeUpdate);
         return BaseResponse.success();
+    }
+
+    private Currency getCurrency(Integer shopId) {
+        return shopService.getCurrency(shopId);
     }
 
     private void setAdvertisingSalesPercentage(FinancialStatementResponse financialStatementResponse) {
@@ -525,6 +542,7 @@ public class FinancialStatementService implements IFinancialStatementService {
         Workbook wb = ExcelUtil.readExcel(path);
         Sheet sheet = wb.getSheetAt(0);
         setExcelTitle(sheet, excelTitle);
+        setCurrency(sheet, financialStatementList);
         setFinancialStatement(sheet, financialStatementList);
         setFinancialCountInfo(sheet, financialStatementList, excelTitle);
         Sheet sheetShopParentSku = wb.getSheetAt(1);
@@ -533,15 +551,38 @@ public class FinancialStatementService implements IFinancialStatementService {
         return wb;
     }
 
-    private void setFinancialCountInfo(Sheet sheet, List<FinancialStatement> financialStatementList, String excelTitle) {
-        FinancialStatement financialStatementCount = new FinancialStatementResponse();
-        BigDecimal rateOfDollarExchangeRmb = FinanceConstant.RATE_OF_DOLLAR_EXCHANGE_RMB;
-        if (!CollectionUtils.isEmpty(financialStatementList)) {
-            if (financialStatementList.get(0).getRateOfDollarExchangeRmb() != null) {
-                rateOfDollarExchangeRmb = financialStatementList.get(0).getRateOfDollarExchangeRmb();
+    private void setCurrency(Sheet sheet, List<FinancialStatement> financialStatementList) {
+        if (CollectionUtils.isEmpty(financialStatementList)) {
+            return;
+        }
+        Row row2 = sheet.getRow(2);
+        String currencyName = financialStatementList.get(0).getCurrencyName();
+        if (!StringUtils.isEmpty(currencyName)) {
+            String cellValue = ExcelUtil.getCellFormatValueString(row2.getCell(0));
+            row2.getCell(0).setCellValue(cellValue.replace("美元", currencyName));
+        }
+        Row row = sheet.getRow(3);
+        String currencyCode = financialStatementList.get(0).getCurrencyCode();
+        if (!StringUtils.isEmpty(currencyCode)) {
+            for (int i = 0; i < row.getLastCellNum(); i++) {
+                String cellValue = ExcelUtil.getCellFormatValueString(row.getCell(i));
+                if (cellValue.contains("单位:USD")) {
+                    row.getCell(i).setCellValue(cellValue.replace("USD", currencyCode));
+                }
             }
         }
-        financialStatementCount.setRateOfDollarExchangeRmb(rateOfDollarExchangeRmb);
+
+    }
+
+    private void setFinancialCountInfo(Sheet sheet, List<FinancialStatement> financialStatementList, String excelTitle) {
+        FinancialStatement financialStatementCount = new FinancialStatementResponse();
+        BigDecimal rateOfDollarExchangeRmb = BigDecimal.ZERO;
+        if (!CollectionUtils.isEmpty(financialStatementList)) {
+            if (financialStatementList.get(0).getExchangeRate() != null) {
+                rateOfDollarExchangeRmb = financialStatementList.get(0).getExchangeRate();
+            }
+        }
+        financialStatementCount.setExchangeRate(rateOfDollarExchangeRmb);
         BigDecimal newMainBusinessProfit = BigDecimal.ZERO;
         BigDecimal oldMainBusinessProfit = BigDecimal.ZERO;
         for (FinancialStatement financialStatement :
@@ -788,19 +829,11 @@ public class FinancialStatementService implements IFinancialStatementService {
     private void setGrossMarginOnSales(FinancialStatement financialStatement) {
         if (financialStatement.getProductSales() != null
                 && financialStatement.getProductSales().compareTo(BigDecimal.ZERO) != 0) {
-            BigDecimal grossMarginOnSales = financialStatement.getMainBusinessProfit().divide(financialStatement.getProductSales().multiply(getRateOfDollarExchangeRmb(financialStatement)), 4, BigDecimal.ROUND_HALF_UP);
+            BigDecimal grossMarginOnSales = financialStatement.getMainBusinessProfit().divide(financialStatement.getProductSales().multiply(financialStatement.getExchangeRate()), 4, BigDecimal.ROUND_HALF_UP);
             financialStatement.setGrossMarginOnSales(grossMarginOnSales);
         } else {
             financialStatement.setGrossMarginOnSales(BigDecimal.ZERO);
         }
-    }
-
-    private BigDecimal getRateOfDollarExchangeRmb(FinancialStatement financialStatement) {
-        BigDecimal rateOfDollarExchangeRmb = FinanceConstant.RATE_OF_DOLLAR_EXCHANGE_RMB;
-        if (financialStatement.getRateOfDollarExchangeRmb() != null) {
-            rateOfDollarExchangeRmb = financialStatement.getRateOfDollarExchangeRmb();
-        }
-        return rateOfDollarExchangeRmb;
     }
 
     private void setMoneyBackRate(FinancialStatement financialStatement) {
@@ -1077,7 +1110,7 @@ public class FinancialStatementService implements IFinancialStatementService {
     }
 
     private void setFinancialStatement(Sheet sheet, List<FinancialStatement> financialStatementList) {
-        setRateOfDollarExchangeRmb(sheet, financialStatementList);
+        setExchangeRate(sheet, financialStatementList);
         //设置开发等级
         int rowIndex = 6;
         for (int i = 0; i < financialStatementList.size(); i++) {
@@ -1184,14 +1217,14 @@ public class FinancialStatementService implements IFinancialStatementService {
         }
     }
 
-    private void setRateOfDollarExchangeRmb(Sheet sheet, List<FinancialStatement> financialStatementList) {
+    private void setExchangeRate(Sheet sheet, List<FinancialStatement> financialStatementList) {
         if (CollectionUtils.isEmpty(financialStatementList)) {
             return;
         }
-        if (financialStatementList.get(0).getRateOfDollarExchangeRmb() == null) {
+        if (financialStatementList.get(0).getExchangeRate() == null) {
             return;
         }
-        sheet.getRow(2).getCell(5).setCellValue(financialStatementList.get(0).getRateOfDollarExchangeRmb().toString());
+        sheet.getRow(2).getCell(5).setCellValue(financialStatementList.get(0).getExchangeRate().toString());
 
     }
 

@@ -5,6 +5,7 @@ import com.sky.ddt.dto.shop.request.ShopComboboxlistRequest;
 import com.sky.ddt.dto.shop.request.ShopListRequest;
 import com.sky.ddt.dto.shop.response.ShopComboboxResponse;
 import com.sky.ddt.dto.shop.response.ShopListResponse;
+import com.sky.ddt.entity.Currency;
 import com.sky.ddt.entity.Shop;
 
 import java.util.Date;
@@ -30,4 +31,6 @@ public interface CustomShopMapper extends ShopMapper {
     List<ShopListResponse> listShop(ShopListRequest params);
 
     List<ShopComboboxResponse> comboboxlist(ShopComboboxlistRequest shopComboboxlistRequest);
+
+    Currency getCurrencyByShopId(Integer shopId);
 }

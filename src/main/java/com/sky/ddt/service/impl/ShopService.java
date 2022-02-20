@@ -12,10 +12,8 @@ import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.shop.request.*;
 import com.sky.ddt.dto.shop.response.ShopComboboxResponse;
 import com.sky.ddt.dto.shop.response.ShopListResponse;
-import com.sky.ddt.entity.Shop;
-import com.sky.ddt.entity.ShopClientHis;
-import com.sky.ddt.entity.ShopClientHisExample;
-import com.sky.ddt.entity.ShopExample;
+import com.sky.ddt.entity.*;
+import com.sky.ddt.service.ICountryService;
 import com.sky.ddt.service.IShopClientHisService;
 import com.sky.ddt.service.IShopService;
 import com.sky.ddt.service.IUserShopService;
@@ -45,6 +43,8 @@ public class ShopService implements IShopService {
     IUserShopService userShopService;
     @Autowired
     CustomShopSkuMapper customShopSkuMapper;
+    @Autowired
+    ICountryService countryService;
 
     /**
      * 获取店铺最后更新时间
@@ -174,6 +174,10 @@ public class ShopService implements IShopService {
                 return BaseResponse.failMessage(ShopConstant.SHOP_MARKETPLACE_ID_EXIST);
             }
         }
+        Country country=countryService.getCountry(params.getCountryId());
+        if(country==null){
+            return BaseResponse.failMessage("国家不能为空");
+        }
         if (params.getShopId() == null) {
             Shop shop = new Shop();
             setShop(shop, params);
@@ -218,6 +222,7 @@ public class ShopService implements IShopService {
         shop.setShopMarketplaceId(params.getShopMarketplaceId());
         shop.setStatus(params.getStatus());
         shop.setRemark(params.getRemark());
+        shop.setCountryId(params.getCountryId());
     }
 
     private boolean existShopName(String shopName, Integer shopId) {
@@ -366,6 +371,14 @@ public class ShopService implements IShopService {
             return null;
         }
         return list.get(0);
+    }
+
+    @Override
+    public Currency getCurrency(Integer shopId) {
+        if(shopId==null){
+            return null;
+        }
+        return customShopMapper.getCurrencyByShopId(shopId);
     }
 
     private void insertShopClientHis(String ip, String macAddress, Shop shop) {

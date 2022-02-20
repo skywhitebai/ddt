@@ -4,6 +4,7 @@ import com.sky.ddt.entity.Shop;
 import com.sky.ddt.entity.ShopSenderAddress;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
@@ -28,5 +29,10 @@ public class ShopListResponse {
     private String remark;
     private ShopSenderAddress shopSenderAddress;
     private String shopUserRealNames;
+    private BigDecimal exchangeRate;
+    private String currencyCode;
+    private String currencyName;
+    private Integer countryId;
+    private String countryName;
 
 }

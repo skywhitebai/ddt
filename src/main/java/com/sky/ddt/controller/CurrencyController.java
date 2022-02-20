@@ -4,8 +4,10 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.dto.currency.req.ListCurrencyReq;
 import com.sky.ddt.dto.currency.req.SaveCurrencyReq;
+import com.sky.ddt.dto.currency.resp.CurrencyComboxResp;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.dto.shop.response.ShopComboboxResponse;
 import com.sky.ddt.dto.transportType.request.ListTransportTypeRequest;
 import com.sky.ddt.dto.transportType.request.SaveTransportTypeRequest;
 import com.sky.ddt.entity.Currency;
@@ -15,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * @author sky
@@ -49,5 +53,11 @@ public class CurrencyController extends SuperController{
     public BaseResponse saveCurrency(SaveCurrencyReq params) {
         Integer dealUserId = getCurrentUserId();
         return currencyService.saveCurrency(params, dealUserId);
+    }
+    @RequestMapping("/currencyComboboxlist")
+    @ResponseBody
+    @MenuAnnotation("currency/index")
+    public List<CurrencyComboxResp> currencyComboboxlist() {
+        return currencyService.currencyComboboxlist();
     }
 }

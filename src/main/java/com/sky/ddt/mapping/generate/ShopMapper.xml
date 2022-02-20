@@ -6,6 +6,7 @@
     <result column="shop_name" jdbcType="VARCHAR" property="shopName" />
     <result column="shop_url" jdbcType="VARCHAR" property="shopUrl" />
     <result column="seller_id" jdbcType="VARCHAR" property="sellerId" />
+    <result column="country_id" jdbcType="INTEGER" property="countryId" />
     <result column="shop_marketplace_id" jdbcType="VARCHAR" property="shopMarketplaceId" />
     <result column="mws_auth_token" jdbcType="VARCHAR" property="mwsAuthToken" />
     <result column="amazon_access_key" jdbcType="VARCHAR" property="amazonAccessKey" />
@@ -84,10 +85,10 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    shop_id, shop_name, shop_url, seller_id, shop_marketplace_id, mws_auth_token, amazon_access_key, 
-    amazon_secret_key, client_ip, client_mac_address, order_last_updated_after, inventory_query_start_date_time, 
-    order_syn_quantity, order_syn_interval_minute, inventory_syn_interval_minute, status, 
-    type, remark, create_time, create_by, update_time, update_by
+    shop_id, shop_name, shop_url, seller_id, country_id, shop_marketplace_id, mws_auth_token, 
+    amazon_access_key, amazon_secret_key, client_ip, client_mac_address, order_last_updated_after, 
+    inventory_query_start_date_time, order_syn_quantity, order_syn_interval_minute, inventory_syn_interval_minute, 
+    status, type, remark, create_time, create_by, update_time, update_by
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.ShopExample" resultMap="BaseResultMap">
     select
@@ -120,32 +121,31 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.sky.ddt.entity.Shop">
-    <selectKey keyProperty="shopId" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
-    insert into shop (shop_name, shop_url, seller_id, 
-      shop_marketplace_id, mws_auth_token, amazon_access_key, 
-      amazon_secret_key, client_ip, client_mac_address, 
-      order_last_updated_after, inventory_query_start_date_time, 
-      order_syn_quantity, order_syn_interval_minute, 
-      inventory_syn_interval_minute, status, type, 
-      remark, create_time, create_by, 
-      update_time, update_by)
-    values (#{shopName,jdbcType=VARCHAR}, #{shopUrl,jdbcType=VARCHAR}, #{sellerId,jdbcType=VARCHAR}, 
-      #{shopMarketplaceId,jdbcType=VARCHAR}, #{mwsAuthToken,jdbcType=VARCHAR}, #{amazonAccessKey,jdbcType=VARCHAR}, 
-      #{amazonSecretKey,jdbcType=VARCHAR}, #{clientIp,jdbcType=VARCHAR}, #{clientMacAddress,jdbcType=VARCHAR}, 
-      #{orderLastUpdatedAfter,jdbcType=TIMESTAMP}, #{inventoryQueryStartDateTime,jdbcType=TIMESTAMP}, 
-      #{orderSynQuantity,jdbcType=INTEGER}, #{orderSynIntervalMinute,jdbcType=INTEGER}, 
-      #{inventorySynIntervalMinute,jdbcType=INTEGER}, #{status,jdbcType=BIT}, #{type,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER})
+    insert into shop (shop_id, shop_name, shop_url, 
+      seller_id, country_id, shop_marketplace_id, 
+      mws_auth_token, amazon_access_key, amazon_secret_key, 
+      client_ip, client_mac_address, order_last_updated_after, 
+      inventory_query_start_date_time, order_syn_quantity, 
+      order_syn_interval_minute, inventory_syn_interval_minute, 
+      status, type, remark, create_time, 
+      create_by, update_time, update_by
+      )
+    values (#{shopId,jdbcType=INTEGER}, #{shopName,jdbcType=VARCHAR}, #{shopUrl,jdbcType=VARCHAR}, 
+      #{sellerId,jdbcType=VARCHAR}, #{countryId,jdbcType=INTEGER}, #{shopMarketplaceId,jdbcType=VARCHAR}, 
+      #{mwsAuthToken,jdbcType=VARCHAR}, #{amazonAccessKey,jdbcType=VARCHAR}, #{amazonSecretKey,jdbcType=VARCHAR}, 
+      #{clientIp,jdbcType=VARCHAR}, #{clientMacAddress,jdbcType=VARCHAR}, #{orderLastUpdatedAfter,jdbcType=TIMESTAMP}, 
+      #{inventoryQueryStartDateTime,jdbcType=TIMESTAMP}, #{orderSynQuantity,jdbcType=INTEGER}, 
+      #{orderSynIntervalMinute,jdbcType=INTEGER}, #{inventorySynIntervalMinute,jdbcType=INTEGER}, 
+      #{status,jdbcType=BIT}, #{type,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.Shop">
-    <selectKey keyProperty="shopId" order="AFTER" resultType="java.lang.Integer">
-      SELECT LAST_INSERT_ID()
-    </selectKey>
     insert into shop
     <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="shopId != null">
+        shop_id,
+      </if>
       <if test="shopName != null">
         shop_name,
       </if>
@@ -154,6 +154,9 @@
       </if>
       <if test="sellerId != null">
         seller_id,
+      </if>
+      <if test="countryId != null">
+        country_id,
       </if>
       <if test="shopMarketplaceId != null">
         shop_marketplace_id,
@@ -211,6 +214,9 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="shopId != null">
+        #{shopId,jdbcType=INTEGER},
+      </if>
       <if test="shopName != null">
         #{shopName,jdbcType=VARCHAR},
       </if>
@@ -219,6 +225,9 @@
       </if>
       <if test="sellerId != null">
         #{sellerId,jdbcType=VARCHAR},
+      </if>
+      <if test="countryId != null">
+        #{countryId,jdbcType=INTEGER},
       </if>
       <if test="shopMarketplaceId != null">
         #{shopMarketplaceId,jdbcType=VARCHAR},
@@ -297,6 +306,9 @@
       <if test="record.sellerId != null">
         seller_id = #{record.sellerId,jdbcType=VARCHAR},
       </if>
+      <if test="record.countryId != null">
+        country_id = #{record.countryId,jdbcType=INTEGER},
+      </if>
       <if test="record.shopMarketplaceId != null">
         shop_marketplace_id = #{record.shopMarketplaceId,jdbcType=VARCHAR},
       </if>
@@ -362,6 +374,7 @@
       shop_name = #{record.shopName,jdbcType=VARCHAR},
       shop_url = #{record.shopUrl,jdbcType=VARCHAR},
       seller_id = #{record.sellerId,jdbcType=VARCHAR},
+      country_id = #{record.countryId,jdbcType=INTEGER},
       shop_marketplace_id = #{record.shopMarketplaceId,jdbcType=VARCHAR},
       mws_auth_token = #{record.mwsAuthToken,jdbcType=VARCHAR},
       amazon_access_key = #{record.amazonAccessKey,jdbcType=VARCHAR},
@@ -395,6 +408,9 @@
       </if>
       <if test="sellerId != null">
         seller_id = #{sellerId,jdbcType=VARCHAR},
+      </if>
+      <if test="countryId != null">
+        country_id = #{countryId,jdbcType=INTEGER},
       </if>
       <if test="shopMarketplaceId != null">
         shop_marketplace_id = #{shopMarketplaceId,jdbcType=VARCHAR},
@@ -458,6 +474,7 @@
     set shop_name = #{shopName,jdbcType=VARCHAR},
       shop_url = #{shopUrl,jdbcType=VARCHAR},
       seller_id = #{sellerId,jdbcType=VARCHAR},
+      country_id = #{countryId,jdbcType=INTEGER},
       shop_marketplace_id = #{shopMarketplaceId,jdbcType=VARCHAR},
       mws_auth_token = #{mwsAuthToken,jdbcType=VARCHAR},
       amazon_access_key = #{amazonAccessKey,jdbcType=VARCHAR},
