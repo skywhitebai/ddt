@@ -174,7 +174,7 @@
             columns: [[
                 {field: 'ck', checkbox: true},   //选择
                 {title: '国家名称', field: 'countryName', width: 120},
-                {title: '货币名称', field: 'currencyNamee', width: 60},
+                {title: '货币名称', field: 'currencyName', width: 60},
                 {title: '汇率', field: 'exchangeRate', width: 60},
                 {
                     title: '状态', field: 'status', width: 50,
