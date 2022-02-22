@@ -55,7 +55,7 @@
         where po.id=poss.produce_order_id and po.shop_id!=ss.shop_id and po.shop_id=s.shop_id and s.type=2 and
         poss.shop_sku_id=ss2.shop_sku_id and ss2.sku_id=ss.sku_id and po.status in(1,2)
         ),0) produceOrderShopSkuProductionQuantityWarehouse,
-        (select AVG(oi2.item_price) from order_import oi2 where oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 31 DAY) )itemPrice30
+        (select AVG(oi2.item_price) from order_import oi2 where oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 31 DAY) and oi2.shop_sku_id=ss.shop_sku_id )itemPrice30
         FROM
         shop_sku ss
         LEFT JOIN `order_import` oi ON ss.`shop_sku_id`=oi.`shop_sku_id` and
@@ -133,7 +133,8 @@
         produce_order po,produce_order_shop_sku poss,shop_sku ss2,shop s
         where po.id=poss.produce_order_id and po.shop_id!=ss.shop_id and po.shop_id=s.shop_id and s.type=2 and
         poss.shop_sku_id=ss2.shop_sku_id and ss2.sku_id=ss.sku_id and po.status in(1,2)
-        ),0) produceOrderShopSkuProductionQuantityWarehouse
+        ),0) produceOrderShopSkuProductionQuantityWarehouse,
+        (select AVG(oi2.item_price) from order_import oi2 where oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 31 DAY) and oi2.shop_sku_id in(select ss2.shop_sku_id from shop_sku ss2 where ss2.sku_id=ss.sku_id))itemPrice30
         from shop_sku ss
         LEFT JOIN shop s ON ss.`shop_id`=s.`shop_id`
         LEFT JOIN USER u on u.user_id=ss.salesman_user_id
