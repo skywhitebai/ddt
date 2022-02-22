@@ -420,20 +420,21 @@
                         }
                     }
                 },
-                {title: '店铺库存', field: 'inventoryQuantity', width: 90},
+                {title: '30天售价', field: 'itemPrice30', width: 90},
+                /*{title: '店铺库存', field: 'inventoryQuantity', width: 90},
                 {
                     title: '其他店铺库存', field: 'inventoryQuantityOtherShop', width: 90,
                     formatter: function (value, row, rowIndex) {
                         return '<a href="javascript:;" title="查看其他店铺库存" onclick="showInventoryQuantityDialog(' + row.skuId + ',' + row.shopId + ',1)" >' + value + '</a>';
                     }
-                },
+                },*/
                 {
                     title: '其他仓库库存', field: 'inventoryQuantityWarehouse', width: 90,
                     formatter: function (value, row, rowIndex) {
                         return '<a href="javascript:;" title="查看其他仓库库存" onclick="showInventoryQuantityDialog(' + row.skuId + ',' + row.shopId + ',2)" >' + value + '</a>';
                     }
                 },
-                {
+                /*{
                     title: '生产中数量', field: 'produceOrderShopSkuProductionQuantity', width: 90,
                     formatter: function (value, row, rowIndex) {
                         return '<a href="javascript:;" title="生产中数量" onclick="showProduceOrderShopSkuProductionQuantityDialog(' + row.skuId + ',' + row.shopId + ',0)" >' + value + '</a>';
@@ -444,7 +445,7 @@
                     formatter: function (value, row, rowIndex) {
                         return '<a href="javascript:;" title="查看其他店铺库存" onclick="showProduceOrderShopSkuProductionQuantityDialog(' + row.skuId + ',' + row.shopId + ',1)" >' + value + '</a>';
                     }
-                },
+                },*/
                 {
                     title: '其他仓库生产中数量', field: 'produceOrderShopSkuProductionQuantityWarehouse', width: 90,
                     formatter: function (value, row, rowIndex) {

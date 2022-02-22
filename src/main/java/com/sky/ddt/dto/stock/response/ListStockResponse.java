@@ -3,6 +3,7 @@ package com.sky.ddt.dto.stock.response;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -118,5 +119,6 @@ public class ListStockResponse {
      * 生产单其他仓库店铺sku生产数量
      */
     private Integer produceOrderShopSkuProductionQuantityWarehouse;
+    private BigDecimal itemPrice30;
 
 }

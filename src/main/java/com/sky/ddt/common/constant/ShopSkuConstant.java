@@ -57,7 +57,7 @@ public class ShopSkuConstant {
         exportShopSkuFieldList.add(new ExcelField("status", "状态", ExcelField.FieldTypeEnum.STRING));
         exportShopSkuFieldList.add(new ExcelField("produceStatus", "生产状态", ExcelField.FieldTypeEnum.STRING));
         exportShopSkuFieldList.add(new ExcelField("inventoryQuantity", "库存", ExcelField.FieldTypeEnum.NUMBER));
-        exportShopSkuFieldList.add(new ExcelField("storageLocation", "库位", ExcelField.FieldTypeEnum.STRING));
+        exportShopSkuFieldList.add(new ExcelField("locationNos", "库位", ExcelField.FieldTypeEnum.STRING));
         exportShopSkuFieldList.add(new ExcelField("weight", "重量", ExcelField.FieldTypeEnum.NUMBER));
         exportShopSkuFieldList.add(new ExcelField("costPrice", "成本价", ExcelField.FieldTypeEnum.NUMBER));
         exportShopSkuFieldList.add(new ExcelField("headTripCost", "头程费", ExcelField.FieldTypeEnum.NUMBER));

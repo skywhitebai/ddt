@@ -375,9 +375,10 @@
                     }
                 },
                 {title: 'fba可售库存', field: 'afnFulfillableQuantity', width: 90},
-                {title: '总库存', field: 'inventoryQuantityTotal', width: 90},
+                /*{title: '总库存', field: 'inventoryQuantityTotal', width: 90},*/
                 {title: '本仓库库存', field: 'inventoryQuantity', width: 90},
-                {
+                {title: '30天售价', field: 'itemPrice30', width: 90},
+                /*{
                     title: '其他店铺库存', field: 'inventoryQuantityOtherShop', width: 90,
                     formatter: function (value, row, rowIndex) {
                         return '<a href="javascript:;" title="查看其他店铺库存" onclick="showInventoryQuantityDialog(' + row.skuId + ',' + row.shopId + ',1)" >' + value + '</a>';
@@ -408,7 +409,7 @@
                     formatter: function (value, row, rowIndex) {
                         return '<a href="javascript:;" title="查看其他店铺库存" onclick="showProduceOrderShopSkuProductionQuantityDialog(' + row.skuId + ',' + row.shopId + ',2)" >' + value + '</a>';
                     }
-                },
+                },*/
                 {title: '店铺名', field: 'shopName', width: 140},
                 {title: '销售渠道', field: 'saleShopNames', width: 200},
                 {title: '销售负责人', field: 'salesmanRealName', width: 120},
