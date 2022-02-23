@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -113,6 +114,8 @@ public class StockCartService implements IStockCartService {
                 listStockResponse.setSalesForTheLast21Days(info.getSalesForTheLast21Days());
                 listStockResponse.setSalesForTheLast28Days(info.getSalesForTheLast28Days());
                 listStockResponse.setSalesForTheLast35Days(info.getSalesForTheLast35Days());
+                listStockResponse.setSalesForTheLastYear90Days(info.getSalesForTheLastYear90Days());
+                listStockResponse.setItemPrice30(info.getItemPrice30());
             }else{
                 listStockResponse.setAfnFulfillableQuantity(0);
                 listStockResponse.setOnTheWayQuantity(0);
@@ -127,6 +130,8 @@ public class StockCartService implements IStockCartService {
                 listStockResponse.setSalesForTheLast21Days(0);
                 listStockResponse.setSalesForTheLast28Days(0);
                 listStockResponse.setSalesForTheLast35Days(0);
+                listStockResponse.setSalesForTheLastYear90Days(0);
+                listStockResponse.setItemPrice30(BigDecimal.ZERO);
             }
         }
     }

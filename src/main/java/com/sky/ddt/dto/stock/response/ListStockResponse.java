@@ -28,6 +28,10 @@ public class ListStockResponse {
     Integer salesForTheLast21Days;
     Integer salesForTheLast28Days;
     Integer salesForTheLast35Days;
+    /**
+     * 去年90天销量
+     */
+    Integer salesForTheLastYear90Days;
     Double estimateAverageDailySales;
     Integer estimateSales14Days;
     Integer estimateSales28Days;

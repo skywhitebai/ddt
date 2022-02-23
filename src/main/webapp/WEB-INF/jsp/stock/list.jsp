@@ -375,6 +375,7 @@
                     title: '90天建议补货', field: 'replenishQuantity90Days', width: 90, styler: cellStyler,
                     formatter: cellFormatter
                 },
+                {title: '去年90天销量', field: 'salesForTheLastYear90Days', width: 90},
                 {title: '店铺sku', field: 'shopSku', width: 168},
                 {
                     title: '空运补货', field: 'stockQuantityKy', width: 90,
