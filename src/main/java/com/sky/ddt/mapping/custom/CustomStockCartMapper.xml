@@ -242,7 +242,7 @@
         group by ss.sku_id) c
         on a.skuId=c.skuId
         left join
-        (select sum(oi2.quantity) salesForTheLastYear90Days from order_import oi2,shop_sku ss
+        (select sum(oi2.quantity) salesForTheLastYear90Days,ss.sku_id skuId from order_import oi2,shop_sku ss
          where oi2.shop_sku_id=ss.shop_sku_id and oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 year) and oi2.`purchase_date`<![CDATA[<]]>DATE_add(DATE_SUB(DATE(NOW()),INTERVAL 1 year),INTERVAL 90 day)
          and ss.sku_id in
         <foreach close=")" collection="list" item="listItem" open="(" separator=",">
@@ -251,7 +251,7 @@
         group by ss.sku_id) d
         on a.skuId=c.skuId
         left join
-        (select AVG(oi2.item_price) itemPrice30 from order_import oi2,shop_sku ss
+        (select AVG(oi2.item_price) itemPrice30,ss.sku_id skuId from order_import oi2,shop_sku ss
         where  oi2.shop_sku_id=ss.shop_sku_id and oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 31 DAY)
         and ss.sku_id in
         <foreach close=")" collection="list" item="listItem" open="(" separator=",">
