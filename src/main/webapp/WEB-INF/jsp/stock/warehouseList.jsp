@@ -323,6 +323,7 @@
                 /*{title: '21天实销', field: 'salesForTheLast21Days', width: 70},
                 {title: '28天实销', field: 'salesForTheLast28Days', width: 70},*/
                 {title: '35天实销', field: 'salesForTheLast35Days', width: 70},
+                {title: '30天售价', field: 'itemPrice30', width: 90},
                 {title: '去年90天销量', field: 'salesForTheLastYear90Days', width: 90},
                 {title: '预计日均销量', field: 'estimateAverageDailySales', width: 90},
                 /*{title: '预计14天销量', field: 'estimateSales14Days', width: 90},
@@ -378,7 +379,6 @@
                 {title: 'fba可售库存', field: 'afnFulfillableQuantity', width: 90},
                 /*{title: '总库存', field: 'inventoryQuantityTotal', width: 90},*/
                 {title: '本仓库库存', field: 'inventoryQuantity', width: 90},
-                {title: '30天售价', field: 'itemPrice30', width: 90},
                 {title: '总生产中数量', field: 'produceOrderShopSkuProductionQuantityTotal', width: 90},
                 {
                     title: '本仓库生产中数量', field: 'produceOrderShopSkuProductionQuantity', width: 90,

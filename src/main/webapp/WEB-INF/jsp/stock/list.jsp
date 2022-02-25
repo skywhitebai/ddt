@@ -316,6 +316,8 @@
                 /*{title: '21天实销', field: 'salesForTheLast21Days', width: 70},
                 {title: '28天实销', field: 'salesForTheLast28Days', width: 70},*/
                 {title: '35天实销', field: 'salesForTheLast35Days', width: 70},
+                {title: '30天售价', field: 'itemPrice30', width: 90},
+                {title: '去年90天销量', field: 'salesForTheLastYear90Days', width: 90},
                 {title: '预计日均销量', field: 'estimateAverageDailySales', width: 90},
                 /*{title: '预计14天销量', field: 'estimateSales14Days', width: 90},
                 {title: '预计28天销量', field: 'estimateSales28Days', width: 90},
@@ -375,7 +377,6 @@
                     title: '90天建议补货', field: 'replenishQuantity90Days', width: 90, styler: cellStyler,
                     formatter: cellFormatter
                 },
-                {title: '去年90天销量', field: 'salesForTheLastYear90Days', width: 90},
                 {title: '店铺sku', field: 'shopSku', width: 168},
                 {
                     title: '空运补货', field: 'stockQuantityKy', width: 90,
@@ -421,7 +422,6 @@
                         }
                     }
                 },
-                {title: '30天售价', field: 'itemPrice30', width: 90},
                 /*{title: '店铺库存', field: 'inventoryQuantity', width: 90},
                 {
                     title: '其他店铺库存', field: 'inventoryQuantityOtherShop', width: 90,
