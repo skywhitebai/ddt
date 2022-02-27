@@ -4,7 +4,6 @@ import com.sky.ddt.common.constant.FinanceConstant;
 import com.sky.ddt.common.constant.RemoveOrdersConstant;
 import com.sky.ddt.dao.custom.CustomFinanceMapper;
 import com.sky.ddt.dao.custom.CustomInventoryDetailsMapper;
-import com.sky.ddt.dto.finance.request.DestructionFeeImportRequest;
 import com.sky.ddt.dto.finance.request.ImportFinanceRequest;
 import com.sky.ddt.dto.finance.request.InventoryDetailsImportRequest;
 import com.sky.ddt.dto.response.BaseResponse;
@@ -15,6 +14,7 @@ import com.sky.ddt.service.finance.IFinanceService;
 import com.sky.ddt.service.finance.IInventoryDetailsService;
 import com.sky.ddt.util.CheckUtil;
 import com.sky.ddt.util.ExcelUtil;
+import com.sky.ddt.utilddt.ShopSkuUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,10 +61,12 @@ public class InventoryDetailsService implements IInventoryDetailsService {
         }
         //遍历数据
         StringBuilder sbErro = new StringBuilder();
-        List<InventoryDetailsImportRequest> importRequestList=new ArrayList<>();
+        List<InventoryDetailsImportRequest> importRequestList = new ArrayList<>();
         Integer shopId = null;
         Integer shopIdSkuRowNum = null;
         String shopIdSku = null;
+        List<String> skuList = ShopSkuUtil.getList(list, "sku");
+        List<ShopSku> shopSkuList = shopSkuService.getShopSkuListByShpSku(skuList);
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
             //忽略空行
@@ -72,11 +74,11 @@ public class InventoryDetailsService implements IInventoryDetailsService {
                 continue;
             }
             StringBuilder sbErroItem = new StringBuilder();
-            InventoryDetailsImportRequest importRequest=new InventoryDetailsImportRequest();
+            InventoryDetailsImportRequest importRequest = new InventoryDetailsImportRequest();
             if (StringUtils.isEmpty(map.get("sku"))) {
                 sbErroItem.append(",").append(RemoveOrdersConstant.SKU_EMPTY);
             } else {
-                ShopSku shopSku = shopSkuService.getShopSkuByShopSku(map.get("sku"));
+                ShopSku shopSku = ShopSkuUtil.getShopSkuByShopSku(map.get("sku"), shopSkuList);
                 if (shopSku == null) {
                     sbErroItem.append(",").append(String.format(RemoveOrdersConstant.SKU_NOT_EXIST, map.get("sku")));
                 } else {
@@ -125,7 +127,7 @@ public class InventoryDetailsService implements IInventoryDetailsService {
         if (!financeResponse.isSuccess()) {
             return financeResponse;
         }
-        Finance finance=financeResponse.getData();
+        Finance finance = financeResponse.getData();
         if (FinanceConstant.FinanceStatusEnum.LOCKED.getStatus().equals(finance.getStatus())) {
             return BaseResponse.failMessage(FinanceConstant.FINANCE_LOCKED_NOT_ALLOW_IMPORT);
         }

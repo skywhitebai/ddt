@@ -2,13 +2,10 @@ package com.sky.ddt.service.impl.finance;
 
 import com.sky.ddt.common.constant.CouponConstant;
 import com.sky.ddt.common.constant.FinanceConstant;
-import com.sky.ddt.common.constant.MonthlyAdvertisingFeeConstant;
 import com.sky.ddt.dao.custom.CsutomBrandAdvertisingMapper;
 import com.sky.ddt.dao.custom.CustomFinanceMapper;
 import com.sky.ddt.dto.finance.request.BrandAdvertisingImportRequest;
 import com.sky.ddt.dto.finance.request.ImportFinanceRequest;
-import com.sky.ddt.dto.finance.request.ManualAdjustmentImportRequest;
-import com.sky.ddt.dto.finance.request.MonthlyAdvertisingFeeImportRequest;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.*;
 import com.sky.ddt.service.IShopSkuService;
@@ -16,6 +13,7 @@ import com.sky.ddt.service.finance.IBrandAdvertisingService;
 import com.sky.ddt.service.finance.IFinanceService;
 import com.sky.ddt.util.CheckUtil;
 import com.sky.ddt.util.ExcelUtil;
+import com.sky.ddt.utilddt.ShopSkuUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -58,6 +56,8 @@ public class BrandAdvertisingService implements IBrandAdvertisingService {
         Integer shopId = null;
         Integer shopIdSkuRowNum = null;
         String shopIdSku = null;
+        List<String> skuList = ShopSkuUtil.getList(list, "sku");
+        List<ShopSku> shopSkuList = shopSkuService.getShopSkuListByShpSku(skuList);
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
             //忽略空行
@@ -69,7 +69,7 @@ public class BrandAdvertisingService implements IBrandAdvertisingService {
             if (StringUtils.isEmpty(map.get("sku"))) {
                 sbErroItem.append(",").append(CouponConstant.SKU_EMPTY);
             } else {
-                ShopSku shopSku = shopSkuService.getShopSkuByShopSku(map.get("sku"));
+                ShopSku shopSku = ShopSkuUtil.getShopSkuByShopSku(map.get("sku"), shopSkuList);
                 if (shopSku == null) {
                     sbErroItem.append(",").append(CouponConstant.SKU_NOT_EXIST);
                 } else {

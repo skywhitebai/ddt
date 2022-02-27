@@ -258,4 +258,8 @@ public interface IShopSkuService {
     List<ListOutboundShopSkuResponse> listOutboundShopSku(ListOutboundShopSkuRequest listOutboundShopSkuRequest);
 
     List<ShopSku> getShopSkuListByShpSkuOrFnsku(List<String> skuList);
+
+    List<ShopSku> getShopSkuListByShpSku(List<String> shopSkuList);
+
+    List<ShopSku> getShopSkuListByAsin(List<String> asinList);
 }

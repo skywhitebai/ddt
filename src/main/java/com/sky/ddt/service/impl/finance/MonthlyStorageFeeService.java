@@ -15,6 +15,7 @@ import com.sky.ddt.util.CheckUtil;
 import com.sky.ddt.util.DateUtil;
 import com.sky.ddt.util.ExcelUtil;
 import com.sky.ddt.util.MathUtil;
+import com.sky.ddt.utilddt.ShopSkuUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,6 +67,8 @@ public class MonthlyStorageFeeService implements IMonthlyStorageFeeService {
         Integer shopId = null;
         Integer shopIdAsinRowNum = null;
         String shopIdAsin = null;
+        List<String> asinList = ShopSkuUtil.getList(list, "asin");
+        List<ShopSku> shopSkuList = shopSkuService.getShopSkuListByAsin(asinList);
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
             //忽略空行
@@ -77,7 +80,7 @@ public class MonthlyStorageFeeService implements IMonthlyStorageFeeService {
             if (StringUtils.isEmpty(map.get("asin"))) {
                 sbErroItem.append(",").append(MonthlyStorageFeeConstant.ASIN_EMPTY);
             } else {
-                ShopSku shopSku = shopSkuService.getShopSkuByAsin(map.get("asin"));
+                ShopSku shopSku = ShopSkuUtil.getShopSkuByAsin(map.get("asin"), shopSkuList);
                 if (shopSku == null) {
                     sbErroItem.append(",").append(MonthlyStorageFeeConstant.ASIN_NOT_EXIST);
                 } else {

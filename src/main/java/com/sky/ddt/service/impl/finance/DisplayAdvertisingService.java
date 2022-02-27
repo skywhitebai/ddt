@@ -12,6 +12,7 @@ import com.sky.ddt.service.finance.IDisplayAdvertisingService;
 import com.sky.ddt.service.finance.IFinanceService;
 import com.sky.ddt.util.CheckUtil;
 import com.sky.ddt.util.ExcelUtil;
+import com.sky.ddt.utilddt.ShopSkuUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +55,8 @@ public class DisplayAdvertisingService implements IDisplayAdvertisingService {
         Integer shopId = null;
         Integer shopIdSkuRowNum = null;
         String shopIdSku = null;
+        List<String> skuList = ShopSkuUtil.getList(list, "Advertised SKU");
+        List<ShopSku> shopSkuList = shopSkuService.getShopSkuListByShpSku(skuList);
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
             //忽略空行
@@ -72,7 +75,7 @@ public class DisplayAdvertisingService implements IDisplayAdvertisingService {
             if (StringUtils.isEmpty(map.get("Advertised SKU"))) {
                 sbErroItem.append(",").append(MonthlyAdvertisingFeeConstant.SKU_EMPTY);
             } else {
-                ShopSku shopSku = shopSkuService.getShopSkuByShopSku(map.get("Advertised SKU"));
+                ShopSku shopSku = ShopSkuUtil.getShopSkuByShopSku(map.get("Advertised SKU"), shopSkuList);
                 if (shopSku == null) {
                     sbErroItem.append(",").append(MonthlyAdvertisingFeeConstant.SKU_NOT_EXIST);
                 } else {

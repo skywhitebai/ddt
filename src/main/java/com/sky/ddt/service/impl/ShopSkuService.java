@@ -1226,6 +1226,26 @@ public class ShopSkuService implements IShopSkuService {
         return customShopSkuMapper.selectByExample(shopSkuExample);
     }
 
+    @Override
+    public List<ShopSku> getShopSkuListByShpSku(List<String> shopSkuList) {
+        if(CollectionUtils.isEmpty(shopSkuList)){
+            return new ArrayList<>();
+        }
+        ShopSkuExample shopSkuExample=new ShopSkuExample();
+        shopSkuExample.createCriteria().andShopSkuIn(shopSkuList);
+        return customShopSkuMapper.selectByExample(shopSkuExample);
+    }
+
+    @Override
+    public List<ShopSku> getShopSkuListByAsin(List<String> asinList) {
+        if(CollectionUtils.isEmpty(asinList)){
+            return new ArrayList<>();
+        }
+        ShopSkuExample shopSkuExample=new ShopSkuExample();
+        shopSkuExample.createCriteria().andAsinIn(asinList);
+        return customShopSkuMapper.selectByExample(shopSkuExample);
+    }
+
     /**
      * @param file
      * @param dealUserId
