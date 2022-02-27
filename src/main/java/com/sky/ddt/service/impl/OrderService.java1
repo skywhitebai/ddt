@@ -15,7 +15,7 @@ import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.*;
 import com.sky.ddt.service.IOrderService;
 import com.sky.ddt.util.DateUtil;
-import com.sky.ddt.util.ListTool;
+import com.sky.ddt.util.ListUtil;
 import com.sky.ddt.util.MathUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,7 +176,7 @@ public class OrderService implements IOrderService {
             orderItem.setPromotionDiscountTaxCurrencyCode(orderItemRequest.getPromotionDiscountTax().getCurrencyCode());
             orderItem.setPromotionDiscountTaxAmount(MathUtil.strToBigDecimal(orderItemRequest.getPromotionDiscountTax().getAmount()));
         }
-        orderItem.setPromotionIds(ListTool.listToStrByComma(orderItemRequest.getPromotionIds()));
+        orderItem.setPromotionIds(ListUtil.listToStrByComma(orderItemRequest.getPromotionIds()));
         if(orderItemRequest.getCODFee()!=null){
             orderItem.setCodFeeCurrencyCode(orderItemRequest.getCODFee().getCurrencyCode());
             orderItem.setCodFeeAmount(MathUtil.strToBigDecimal(orderItemRequest.getCODFee().getAmount()));

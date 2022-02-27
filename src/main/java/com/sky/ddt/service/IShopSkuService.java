@@ -256,4 +256,6 @@ public interface IShopSkuService {
     BaseResponse importShopSkuStorageLocation(MultipartFile file, Integer dealUserId);
 
     List<ListOutboundShopSkuResponse> listOutboundShopSku(ListOutboundShopSkuRequest listOutboundShopSkuRequest);
+
+    List<ShopSku> getShopSkuListByShpSkuOrFnsku(List<String> skuList);
 }

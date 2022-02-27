@@ -124,6 +124,8 @@ public class FinancialStatementService implements IFinancialStatementService {
             moneyBack = moneyBack.add(financialStatementResponse.getManualAdjustment());
             moneyBack = moneyBack.add(financialStatementResponse.getDisplayAdvertising());
             moneyBack = moneyBack.add(financialStatementResponse.getBrandAdvertising());
+            moneyBack = moneyBack.add(financialStatementResponse.getTbybOrderPayment());
+            moneyBack = moneyBack.add(financialStatementResponse.getTbybTrialShipment());
             financialStatementResponse.setMoneyBack(moneyBack);
             if (financialStatementResponse.getProductSales().compareTo(BigDecimal.ZERO) != 0) {
                 BigDecimal moneyBackRate = financialStatementResponse.getMoneyBack().divide(financialStatementResponse.getProductSales(), 4, BigDecimal.ROUND_HALF_UP);
@@ -656,6 +658,12 @@ public class FinancialStatementService implements IFinancialStatementService {
             financialStatementCount.setFinalQuantity(MathUtil.add(financialStatementCount.getFinalQuantity(), financialStatement.getFinalQuantity()));
             financialStatementCount.setFinalInventoryCost(MathUtil.addBigDecimal(financialStatementCount.getFinalInventoryCost(), financialStatement.getFinalInventoryCost()));
             financialStatementCount.setManualAdjustment(MathUtil.addBigDecimal(financialStatementCount.getManualAdjustment(), financialStatement.getManualAdjustment()));
+            financialStatementCount.setDisplayAdvertising(MathUtil.addBigDecimal(financialStatementCount.getDisplayAdvertising(), financialStatement.getDisplayAdvertising()));
+            financialStatementCount.setBrandAdvertising(MathUtil.addBigDecimal(financialStatementCount.getBrandAdvertising(), financialStatement.getBrandAdvertising()));
+            financialStatementCount.setLiquidations(MathUtil.addBigDecimal(financialStatementCount.getLiquidations(), financialStatement.getLiquidations()));
+            financialStatementCount.setLiquidationsAdjustments(MathUtil.addBigDecimal(financialStatementCount.getLiquidationsAdjustments(), financialStatement.getLiquidationsAdjustments()));
+            financialStatementCount.setTbybOrderPayment(MathUtil.addBigDecimal(financialStatementCount.getTbybOrderPayment(), financialStatement.getTbybOrderPayment()));
+            financialStatementCount.setTbybTrialShipment(MathUtil.addBigDecimal(financialStatementCount.getTbybTrialShipment(), financialStatement.getTbybTrialShipment()));
         }
         setMoneyBackRate(financialStatementCount);
         setGrossMarginOnSales(financialStatementCount);
@@ -735,6 +743,14 @@ public class FinancialStatementService implements IFinancialStatementService {
         row.createCell(104).setCellValue(financialStatementCount.getInventoryTurnover().doubleValue());
         row.createCell(105).setCellValue(financialStatementCount.getRefundRate().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
         row.createCell(107).setCellValue(financialStatementCount.getAdvertisingSalesPercentage().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
+
+        row.createCell(112).setCellValue(financialStatementCount.getDisplayAdvertising().doubleValue());
+        row.createCell(113).setCellValue(financialStatementCount.getBrandAdvertising().doubleValue());
+        row.createCell(114).setCellValue(financialStatementCount.getLiquidations().doubleValue());
+        row.createCell(115).setCellValue(financialStatementCount.getLiquidationsAdjustments().doubleValue());
+        row.createCell(116).setCellValue(financialStatementCount.getTbybOrderPayment().doubleValue());
+        row.createCell(117).setCellValue(financialStatementCount.getTbybTrialShipment().doubleValue());
+
         Row row2 = sheet.createRow(rowIndex + 1);
         Row row3 = sheet.createRow(rowIndex + 2);
         row2.createCell(7).setCellValue("负责人");
@@ -1002,6 +1018,16 @@ public class FinancialStatementService implements IFinancialStatementService {
             row.createCell(105).setCellValue(financialStatement.getAdvertisingSalesPercentage().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
             row.createCell(106).setCellValue("");
             row.createCell(107).setCellValue("");
+            if (financialStatement.getDisplayAdvertising() != null) {
+                row.createCell(108).setCellValue(financialStatement.getDisplayAdvertising().doubleValue());
+            }
+            if (financialStatement.getBrandAdvertising() != null) {
+                row.createCell(109).setCellValue(financialStatement.getBrandAdvertising().doubleValue());
+            }
+            row.createCell(110).setCellValue(financialStatement.getLiquidations().doubleValue());
+            row.createCell(111).setCellValue(financialStatement.getLiquidationsAdjustments().doubleValue());
+            row.createCell(112).setCellValue(financialStatement.getTbybOrderPayment().doubleValue());
+            row.createCell(113).setCellValue(financialStatement.getTbybTrialShipment().doubleValue());
             rowIndex++;
         }
     }
@@ -1083,6 +1109,12 @@ public class FinancialStatementService implements IFinancialStatementService {
             financialStatementShopParentSku.setFinalQuantity(MathUtil.addInteger(financialStatementShopParentSku.getFinalQuantity(), financialStatement.getFinalQuantity()));
             financialStatementShopParentSku.setFinalInventoryCost(MathUtil.addBigDecimal(financialStatementShopParentSku.getFinalInventoryCost(), financialStatement.getFinalInventoryCost()));
             financialStatementShopParentSku.setManualAdjustment(MathUtil.addBigDecimal(financialStatementShopParentSku.getManualAdjustment(), financialStatement.getManualAdjustment()));
+            financialStatementShopParentSku.setDisplayAdvertising(MathUtil.addBigDecimal(financialStatementShopParentSku.getDisplayAdvertising(), financialStatement.getDisplayAdvertising()));
+            financialStatementShopParentSku.setBrandAdvertising(MathUtil.addBigDecimal(financialStatementShopParentSku.getBrandAdvertising(), financialStatement.getBrandAdvertising()));
+            financialStatementShopParentSku.setLiquidations(MathUtil.addBigDecimal(financialStatementShopParentSku.getLiquidations(), financialStatement.getLiquidations()));
+            financialStatementShopParentSku.setLiquidationsAdjustments(MathUtil.addBigDecimal(financialStatementShopParentSku.getLiquidationsAdjustments(), financialStatement.getLiquidationsAdjustments()));
+            financialStatementShopParentSku.setTbybOrderPayment(MathUtil.addBigDecimal(financialStatementShopParentSku.getTbybOrderPayment(), financialStatement.getTbybOrderPayment()));
+            financialStatementShopParentSku.setTbybTrialShipment(MathUtil.addBigDecimal(financialStatementShopParentSku.getTbybTrialShipment(), financialStatement.getTbybTrialShipment()));
         }
         List<FinancialStatement> financialStatementShopParentSkuList = new ArrayList<>();
         for (Map.Entry<String, FinancialStatement> map : financialStatementMap.entrySet()) {
@@ -1201,18 +1233,14 @@ public class FinancialStatementService implements IFinancialStatementService {
             if (financialStatement.getDevelopmentLevel() != null) {
                 row.createCell(109).setCellValue(financialStatement.getDevelopmentLevel());
             }
-            if (financialStatement.getCostPrice() != null) {
-                row.createCell(110).setCellValue(financialStatement.getCostPrice().doubleValue());
-            }
-            if (financialStatement.getHeadTripCost() != null) {
-                row.createCell(111).setCellValue(financialStatement.getHeadTripCost().doubleValue());
-            }
-            if (financialStatement.getDisplayAdvertising() != null) {
-                row.createCell(112).setCellValue(financialStatement.getDisplayAdvertising().doubleValue());
-            }
-            if (financialStatement.getBrandAdvertising() != null) {
-                row.createCell(113).setCellValue(financialStatement.getBrandAdvertising().doubleValue());
-            }
+            row.createCell(110).setCellValue(financialStatement.getCostPrice().doubleValue());
+            row.createCell(111).setCellValue(financialStatement.getHeadTripCost().doubleValue());
+            row.createCell(112).setCellValue(financialStatement.getDisplayAdvertising().doubleValue());
+            row.createCell(113).setCellValue(financialStatement.getBrandAdvertising().doubleValue());
+            row.createCell(114).setCellValue(financialStatement.getLiquidations().doubleValue());
+            row.createCell(115).setCellValue(financialStatement.getLiquidationsAdjustments().doubleValue());
+            row.createCell(116).setCellValue(financialStatement.getTbybOrderPayment().doubleValue());
+            row.createCell(117).setCellValue(financialStatement.getTbybTrialShipment().doubleValue());
             rowIndex++;
         }
     }

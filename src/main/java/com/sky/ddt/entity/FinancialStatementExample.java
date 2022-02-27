@@ -5955,6 +5955,246 @@ public class FinancialStatementExample {
             addCriterion("brand_advertising not between", value1, value2, "brandAdvertising");
             return (Criteria) this;
         }
+
+        public Criteria andLiquidationsIsNull() {
+            addCriterion("liquidations is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsIsNotNull() {
+            addCriterion("liquidations is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsEqualTo(BigDecimal value) {
+            addCriterion("liquidations =", value, "liquidations");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsNotEqualTo(BigDecimal value) {
+            addCriterion("liquidations <>", value, "liquidations");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsGreaterThan(BigDecimal value) {
+            addCriterion("liquidations >", value, "liquidations");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("liquidations >=", value, "liquidations");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsLessThan(BigDecimal value) {
+            addCriterion("liquidations <", value, "liquidations");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("liquidations <=", value, "liquidations");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsIn(List<BigDecimal> values) {
+            addCriterion("liquidations in", values, "liquidations");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsNotIn(List<BigDecimal> values) {
+            addCriterion("liquidations not in", values, "liquidations");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("liquidations between", value1, value2, "liquidations");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("liquidations not between", value1, value2, "liquidations");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsAdjustmentsIsNull() {
+            addCriterion("liquidations_adjustments is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsAdjustmentsIsNotNull() {
+            addCriterion("liquidations_adjustments is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsAdjustmentsEqualTo(BigDecimal value) {
+            addCriterion("liquidations_adjustments =", value, "liquidationsAdjustments");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsAdjustmentsNotEqualTo(BigDecimal value) {
+            addCriterion("liquidations_adjustments <>", value, "liquidationsAdjustments");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsAdjustmentsGreaterThan(BigDecimal value) {
+            addCriterion("liquidations_adjustments >", value, "liquidationsAdjustments");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsAdjustmentsGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("liquidations_adjustments >=", value, "liquidationsAdjustments");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsAdjustmentsLessThan(BigDecimal value) {
+            addCriterion("liquidations_adjustments <", value, "liquidationsAdjustments");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsAdjustmentsLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("liquidations_adjustments <=", value, "liquidationsAdjustments");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsAdjustmentsIn(List<BigDecimal> values) {
+            addCriterion("liquidations_adjustments in", values, "liquidationsAdjustments");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsAdjustmentsNotIn(List<BigDecimal> values) {
+            addCriterion("liquidations_adjustments not in", values, "liquidationsAdjustments");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsAdjustmentsBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("liquidations_adjustments between", value1, value2, "liquidationsAdjustments");
+            return (Criteria) this;
+        }
+
+        public Criteria andLiquidationsAdjustmentsNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("liquidations_adjustments not between", value1, value2, "liquidationsAdjustments");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybOrderPaymentIsNull() {
+            addCriterion("tbyb_order_payment is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybOrderPaymentIsNotNull() {
+            addCriterion("tbyb_order_payment is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybOrderPaymentEqualTo(BigDecimal value) {
+            addCriterion("tbyb_order_payment =", value, "tbybOrderPayment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybOrderPaymentNotEqualTo(BigDecimal value) {
+            addCriterion("tbyb_order_payment <>", value, "tbybOrderPayment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybOrderPaymentGreaterThan(BigDecimal value) {
+            addCriterion("tbyb_order_payment >", value, "tbybOrderPayment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybOrderPaymentGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("tbyb_order_payment >=", value, "tbybOrderPayment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybOrderPaymentLessThan(BigDecimal value) {
+            addCriterion("tbyb_order_payment <", value, "tbybOrderPayment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybOrderPaymentLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("tbyb_order_payment <=", value, "tbybOrderPayment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybOrderPaymentIn(List<BigDecimal> values) {
+            addCriterion("tbyb_order_payment in", values, "tbybOrderPayment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybOrderPaymentNotIn(List<BigDecimal> values) {
+            addCriterion("tbyb_order_payment not in", values, "tbybOrderPayment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybOrderPaymentBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("tbyb_order_payment between", value1, value2, "tbybOrderPayment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybOrderPaymentNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("tbyb_order_payment not between", value1, value2, "tbybOrderPayment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybTrialShipmentIsNull() {
+            addCriterion("tbyb_trial_shipment is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybTrialShipmentIsNotNull() {
+            addCriterion("tbyb_trial_shipment is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybTrialShipmentEqualTo(BigDecimal value) {
+            addCriterion("tbyb_trial_shipment =", value, "tbybTrialShipment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybTrialShipmentNotEqualTo(BigDecimal value) {
+            addCriterion("tbyb_trial_shipment <>", value, "tbybTrialShipment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybTrialShipmentGreaterThan(BigDecimal value) {
+            addCriterion("tbyb_trial_shipment >", value, "tbybTrialShipment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybTrialShipmentGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("tbyb_trial_shipment >=", value, "tbybTrialShipment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybTrialShipmentLessThan(BigDecimal value) {
+            addCriterion("tbyb_trial_shipment <", value, "tbybTrialShipment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybTrialShipmentLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("tbyb_trial_shipment <=", value, "tbybTrialShipment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybTrialShipmentIn(List<BigDecimal> values) {
+            addCriterion("tbyb_trial_shipment in", values, "tbybTrialShipment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybTrialShipmentNotIn(List<BigDecimal> values) {
+            addCriterion("tbyb_trial_shipment not in", values, "tbybTrialShipment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybTrialShipmentBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("tbyb_trial_shipment between", value1, value2, "tbybTrialShipment");
+            return (Criteria) this;
+        }
+
+        public Criteria andTbybTrialShipmentNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("tbyb_trial_shipment not between", value1, value2, "tbybTrialShipment");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

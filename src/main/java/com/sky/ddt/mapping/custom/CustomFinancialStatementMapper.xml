@@ -52,6 +52,10 @@
         IFNULL(ms.fbaInventoryReimbursementLostWarehouse,0) fbaInventoryReimbursementLostWarehouse,
         IFNULL(ms.nonSubscriptionFeeAdjustment,0) nonSubscriptionFeeAdjustment,
         IFNULL(ms.fbaInventoryPlacementServiceFee,0) fbaInventoryPlacementServiceFee,
+        IFNULL(ms.liquidations,0) liquidations,
+        IFNULL(ms.liquidationsAdjustments,0) liquidationsAdjustments,
+        IFNULL(ms.tbybOrderPayment,0) tbybOrderPayment,
+        IFNULL(ms.tbybTrialShipment,0) tbybTrialShipment,
 
         IFNULL(msf.fbaInventoryStorageFee,0) fbaInventoryStorageFee,
         IFNULL(lsf.fbaLongTermStorageFee,0) fbaLongTermStorageFee,
@@ -129,7 +133,11 @@
         SUM(CASE WHEN  ms.`type`='Adjustment' AND ms.`description`='FBA Inventory Reimbursement - Lost:Inbound' THEN IFNULL(ms.`total`,0) ELSE 0 END)  fbaInventoryReimbursementLostInbound,
         SUM(CASE WHEN  ms.`type`='Adjustment' AND ms.`description`='FBA Inventory Reimbursement - Lost:Warehouse' THEN IFNULL(ms.`total`,0) ELSE 0 END)  fbaInventoryReimbursementLostWarehouse,
         SUM(CASE WHEN  ms.`type`='Adjustment' AND ms.`description`='Non-subscription Fee Adjustment' THEN IFNULL(ms.`total`,0) ELSE 0 END)  nonSubscriptionFeeAdjustment,
-        SUM(CASE WHEN  ms.`type`='Adjustment' AND ms.`description`='FBA Inventory Placement Service Fee' THEN IFNULL(ms.`total`,0) ELSE 0 END)  fbaInventoryPlacementServiceFee
+        SUM(CASE WHEN  ms.`type`='Adjustment' AND ms.`description`='FBA Inventory Placement Service Fee' THEN IFNULL(ms.`total`,0) ELSE 0 END)  fbaInventoryPlacementServiceFee,
+        SUM(CASE WHEN  ms.`type`='Liquidations' THEN IFNULL(ms.`total`,0) ELSE 0 END)  liquidations,
+        SUM(CASE WHEN  ms.`type`='Liquidations Adjustments' THEN IFNULL(ms.`total`,0) ELSE 0 END)  liquidationsAdjustments,
+        SUM(CASE WHEN  ms.`type`='TBYB Order Payment' THEN IFNULL(ms.`total`,0) ELSE 0 END)  tbybOrderPayment,
+        SUM(CASE WHEN  ms.`type`='TBYB Trial Shipment' THEN IFNULL(ms.`total`,0) ELSE 0 END)  tbybTrialShipment
         FROM `monthly_sales` ms WHERE `finance_id`=#{financeId} GROUP BY `shop_sku_id`) ms
         ON ms.`shop_sku_id`=ss.`shop_sku_id`
         LEFT JOIN

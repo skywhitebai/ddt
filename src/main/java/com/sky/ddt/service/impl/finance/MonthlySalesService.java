@@ -7,10 +7,7 @@ import com.sky.ddt.dao.custom.CustomMonthlySalesMapper;
 import com.sky.ddt.dto.finance.request.ImportFinanceRequest;
 import com.sky.ddt.dto.finance.request.MonthlySalesImportRequest;
 import com.sky.ddt.dto.response.BaseResponse;
-import com.sky.ddt.entity.Finance;
-import com.sky.ddt.entity.MonthlySales;
-import com.sky.ddt.entity.MonthlySalesExample;
-import com.sky.ddt.entity.ShopSku;
+import com.sky.ddt.entity.*;
 import com.sky.ddt.service.IShopSkuService;
 import com.sky.ddt.service.finance.IFinanceService;
 import com.sky.ddt.service.finance.IMonthlySalesService;
@@ -23,11 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author baixueping
@@ -69,6 +62,16 @@ public class MonthlySalesService implements IMonthlySalesService {
         Integer shopId = null;
         Integer shopIdSkuRowNum = null;
         String shopIdSku = null;
+        List<String> skuList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            Map<String, String> map = list.get(i);
+            String sku = map.get("sku");
+            if (!StringUtils.isEmpty(sku)) {
+                skuList.add(sku);
+            }
+        }
+        List<ShopSku> shopSkuList = shopSkuService.getShopSkuListByShpSkuOrFnsku(skuList);
+        ;
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
             //忽略空行
@@ -101,12 +104,12 @@ public class MonthlySalesService implements IMonthlySalesService {
             if (!StringUtils.isEmpty(sku)) {
                 ShopSku shopSku = null;
                 if (sku.startsWith("X") && sku.length() == 10) {
-                    shopSku = shopSkuService.getShopSkuByFnsku(sku);
+                    shopSku = getShopSkuByFnsku(sku, shopSkuList);
                     if (shopSku == null) {
-                        shopSku = shopSkuService.getShopSkuByShopSku(sku);
+                        shopSku = getShopSkuByShopSku(sku, shopSkuList);
                     }
                 } else {
-                    shopSku = shopSkuService.getShopSkuByShopSku(sku);
+                    shopSku = getShopSkuByShopSku(sku, shopSkuList);
                 }
                 if (shopSku == null) {
                     sbErroItem.append(",").append(MonthlySalesConstant.SKU_NOT_EXIST);
@@ -184,5 +187,21 @@ public class MonthlySalesService implements IMonthlySalesService {
         financeUpdate.setMonthlySales(true);
         customFinanceMapper.updateByPrimaryKeySelective(financeUpdate);
         return BaseResponse.success();
+    }
+
+    private ShopSku getShopSkuByShopSku(String sku, List<ShopSku> shopSkuList) {
+        Optional<ShopSku> f = shopSkuList.stream().filter(item -> item.getShopSku().equals(sku)).findFirst();
+        if (f.isPresent()) {
+            return f.get();
+        }
+        return null;
+    }
+
+    private ShopSku getShopSkuByFnsku(String sku, List<ShopSku> shopSkuList) {
+        Optional<ShopSku> f = shopSkuList.stream().filter(item -> item.getFnsku().equals(sku)).findFirst();
+        if (f.isPresent()) {
+            return f.get();
+        }
+        return null;
     }
 }

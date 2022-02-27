@@ -1215,6 +1215,17 @@ public class ShopSkuService implements IShopSkuService {
         return customShopSkuMapper.listOutboundShopSku(listOutboundShopSkuRequest);
     }
 
+    @Override
+    public List<ShopSku> getShopSkuListByShpSkuOrFnsku(List<String> skuList) {
+        if(CollectionUtils.isEmpty(skuList)){
+            return new ArrayList<>();
+        }
+        ShopSkuExample shopSkuExample=new ShopSkuExample();
+        shopSkuExample.createCriteria().andShopSkuIn(skuList);
+        shopSkuExample.or().andFnskuIn(skuList);
+        return customShopSkuMapper.selectByExample(shopSkuExample);
+    }
+
     /**
      * @param file
      * @param dealUserId

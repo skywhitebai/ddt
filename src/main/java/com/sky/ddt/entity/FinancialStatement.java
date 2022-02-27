@@ -196,6 +196,14 @@ public class FinancialStatement {
 
     private BigDecimal brandAdvertising;
 
+    private BigDecimal liquidations;
+
+    private BigDecimal liquidationsAdjustments;
+
+    private BigDecimal tbybOrderPayment;
+
+    private BigDecimal tbybTrialShipment;
+
     public Integer getId() {
         return id;
     }
@@ -962,5 +970,37 @@ public class FinancialStatement {
 
     public void setBrandAdvertising(BigDecimal brandAdvertising) {
         this.brandAdvertising = brandAdvertising;
+    }
+
+    public BigDecimal getLiquidations() {
+        return liquidations;
+    }
+
+    public void setLiquidations(BigDecimal liquidations) {
+        this.liquidations = liquidations;
+    }
+
+    public BigDecimal getLiquidationsAdjustments() {
+        return liquidationsAdjustments;
+    }
+
+    public void setLiquidationsAdjustments(BigDecimal liquidationsAdjustments) {
+        this.liquidationsAdjustments = liquidationsAdjustments;
+    }
+
+    public BigDecimal getTbybOrderPayment() {
+        return tbybOrderPayment;
+    }
+
+    public void setTbybOrderPayment(BigDecimal tbybOrderPayment) {
+        this.tbybOrderPayment = tbybOrderPayment;
+    }
+
+    public BigDecimal getTbybTrialShipment() {
+        return tbybTrialShipment;
+    }
+
+    public void setTbybTrialShipment(BigDecimal tbybTrialShipment) {
+        this.tbybTrialShipment = tbybTrialShipment;
     }
 }
