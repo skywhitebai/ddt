@@ -15,15 +15,15 @@ import java.util.Optional;
  */
 public class ShopSkuUtil {
     public static List<String> getList(List<Map<String, String>> list, String key) {
-        List<String> skuList = new ArrayList<>();
+        List<String> res = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
             String sku = map.get(key);
             if (!StringUtils.isEmpty(sku)) {
-                skuList.add(sku);
+                res.add(sku);
             }
         }
-        return skuList;
+        return res;
     }
 
     public static ShopSku getShopSkuByShopSku(String sku, List<ShopSku> shopSkuList) {

@@ -1227,7 +1227,7 @@ public class ShopSkuService implements IShopSkuService {
     }
 
     @Override
-    public List<ShopSku> getShopSkuListByShpSku(List<String> shopSkuList) {
+    public List<ShopSku> getShopSkuListByShopSku(List<String> shopSkuList) {
         if(CollectionUtils.isEmpty(shopSkuList)){
             return new ArrayList<>();
         }

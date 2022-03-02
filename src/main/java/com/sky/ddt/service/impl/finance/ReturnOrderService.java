@@ -8,8 +8,6 @@ import com.sky.ddt.dto.finance.request.ImportFinanceRequest;
 import com.sky.ddt.dto.finance.request.ReturnOrderImportRequest;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.Finance;
-import com.sky.ddt.entity.ReturnOrder;
-import com.sky.ddt.entity.ReturnOrderExample;
 import com.sky.ddt.entity.ShopSku;
 import com.sky.ddt.service.IShopSkuService;
 import com.sky.ddt.service.finance.IFinanceService;
@@ -17,13 +15,11 @@ import com.sky.ddt.service.finance.IReturnOrderService;
 import com.sky.ddt.util.CheckUtil;
 import com.sky.ddt.util.ExcelUtil;
 import com.sky.ddt.utilddt.ShopSkuUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -67,7 +63,7 @@ public class ReturnOrderService implements IReturnOrderService {
         Integer shopIdSkuRowNum = null;
         String shopIdSku = null;
         List<String> skuList = ShopSkuUtil.getList(list, "sku");
-        List<ShopSku> shopSkuList = shopSkuService.getShopSkuListByShpSku(skuList);
+        List<ShopSku> shopSkuList = shopSkuService.getShopSkuListByShopSku(skuList);
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
             //忽略空行

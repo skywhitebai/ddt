@@ -57,7 +57,7 @@ public class BrandAdvertisingService implements IBrandAdvertisingService {
         Integer shopIdSkuRowNum = null;
         String shopIdSku = null;
         List<String> skuList = ShopSkuUtil.getList(list, "sku");
-        List<ShopSku> shopSkuList = shopSkuService.getShopSkuListByShpSku(skuList);
+        List<ShopSku> shopSkuList = shopSkuService.getShopSkuListByShopSku(skuList);
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
             //忽略空行

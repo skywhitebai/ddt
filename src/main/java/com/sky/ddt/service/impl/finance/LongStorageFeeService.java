@@ -67,8 +67,9 @@ public class LongStorageFeeService implements ILongStorageFeeService {
         List<LongStorageFeeImportRequest> longStorageFeeImportRequestList = new ArrayList<>();
         Integer shopId = null;
         Integer shopIdSkuRowNum = null;
-        String shopIdSku = null;List<String> skuList = ShopSkuUtil.getList(list, "sku");
-        List<ShopSku> shopSkuList = shopSkuService.getShopSkuListByShpSku(skuList);
+        String shopIdSku = null;
+        List<String> skuList = ShopSkuUtil.getList(list, "sku");
+        List<ShopSku> shopSkuList = shopSkuService.getShopSkuListByShopSku(skuList);
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
             //忽略空行
