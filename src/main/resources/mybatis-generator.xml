@@ -41,7 +41,7 @@
             <!--<generatedKey column="sku_id" sqlStatement="MySql" identity="true"/>-->
         </table>
 
-        <table tableName="financial_statement">
+        <table tableName="internal_order_number_financial_remark_his">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>

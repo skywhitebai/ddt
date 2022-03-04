@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.InternalOrderNumberFinancialRemarkHisMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.InternalOrderNumberFinancialRemarkHis">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="internal_order_number_id" jdbcType="INTEGER" property="internalOrderNumberId" />
+    <result column="financial_remark" jdbcType="VARCHAR" property="financialRemark" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, internal_order_number_id, financial_remark, create_time, create_by
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.InternalOrderNumberFinancialRemarkHisExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from internal_order_number_financial_remark_his
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from internal_order_number_financial_remark_his
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from internal_order_number_financial_remark_his
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.InternalOrderNumberFinancialRemarkHisExample">
+    delete from internal_order_number_financial_remark_his
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.InternalOrderNumberFinancialRemarkHis">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into internal_order_number_financial_remark_his (internal_order_number_id, financial_remark, 
+      create_time, create_by)
+    values (#{internalOrderNumberId,jdbcType=INTEGER}, #{financialRemark,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.InternalOrderNumberFinancialRemarkHis">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into internal_order_number_financial_remark_his
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="internalOrderNumberId != null">
+        internal_order_number_id,
+      </if>
+      <if test="financialRemark != null">
+        financial_remark,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="internalOrderNumberId != null">
+        #{internalOrderNumberId,jdbcType=INTEGER},
+      </if>
+      <if test="financialRemark != null">
+        #{financialRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.InternalOrderNumberFinancialRemarkHisExample" resultType="java.lang.Long">
+    select count(*) from internal_order_number_financial_remark_his
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update internal_order_number_financial_remark_his
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.internalOrderNumberId != null">
+        internal_order_number_id = #{record.internalOrderNumberId,jdbcType=INTEGER},
+      </if>
+      <if test="record.financialRemark != null">
+        financial_remark = #{record.financialRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update internal_order_number_financial_remark_his
+    set id = #{record.id,jdbcType=INTEGER},
+      internal_order_number_id = #{record.internalOrderNumberId,jdbcType=INTEGER},
+      financial_remark = #{record.financialRemark,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.InternalOrderNumberFinancialRemarkHis">
+    update internal_order_number_financial_remark_his
+    <set>
+      <if test="internalOrderNumberId != null">
+        internal_order_number_id = #{internalOrderNumberId,jdbcType=INTEGER},
+      </if>
+      <if test="financialRemark != null">
+        financial_remark = #{financialRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.InternalOrderNumberFinancialRemarkHis">
+    update internal_order_number_financial_remark_his
+    set internal_order_number_id = #{internalOrderNumberId,jdbcType=INTEGER},
+      financial_remark = #{financialRemark,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

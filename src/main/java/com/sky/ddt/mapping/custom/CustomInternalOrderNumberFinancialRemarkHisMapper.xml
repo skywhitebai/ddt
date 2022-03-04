@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomInternalOrderNumberFinancialRemarkHisMapper">
+    <resultMap id="listInternalOrderNumberFinancialRemarkHisMap"
+               type="com.sky.ddt.dto.internalOrderNumberFinancialRemarkHis.resp.ListInternalOrderNumberFinancialRemarkHisResp"
+               extends="com.sky.ddt.dao.generate.InternalOrderNumberFinancialRemarkHisMapper.BaseResultMap">
+        <result column="createUserRealName" property="createUserRealName"/>
+    </resultMap>
+    <select id="listInternalOrderNumberFinancialRemarkHis" parameterType="com.sky.ddt.dto.internalOrderNumberFinancialRemarkHis.req.ListInternalOrderNumberFinancialRemarkHisReq" resultMap="listInternalOrderNumberFinancialRemarkHisMap">
+        select
+        *,(select real_name from user u where u.user_id=his.create_by) createUserRealName
+        from internal_order_number_financial_remark_his his
+        where internal_order_number_id=#{internalOrderNumberId}
+        order by his.create_time desc
+    </select>
+</mapper>
