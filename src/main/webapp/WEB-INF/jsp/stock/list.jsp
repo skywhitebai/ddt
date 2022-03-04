@@ -300,8 +300,8 @@
             remoteSort: false,
             idField: 'shopSkuId',
             queryParams: queryParams,  //异步查询的参数
-            rowStyler:function(index,row){
-                if(row.produceStatus==2){
+            rowStyler: function (index, row) {
+                if (row.produceStatus == 2) {
                     return 'background-color:pink;color:gray;';
                 }
             },
@@ -433,6 +433,9 @@
                     title: '其他仓库库存', field: 'inventoryQuantityWarehouse', width: 90,
                     formatter: function (value, row, rowIndex) {
                         return '<a href="javascript:;" title="查看其他仓库库存" onclick="showInventoryQuantityDialog(' + row.skuId + ',' + row.shopId + ',2)" >' + value + '</a>';
+                    },
+                    styler: function (value, row, rowIndex) {
+                        return 'background-color:orange;'
                     }
                 },
                 /*{
@@ -478,7 +481,7 @@
                         if (value == 1) {
                             return '<a href="javascript:;" title="正常生产" onclick="setProduceStatus(' + row.shopSkuId + ",'" + row.shopSku + "'" + ',2)" >正常生产</a>';
                         } else if (value == 2) {
-                            return '<a href="javascript:;" title="暂停生产" onclick="setProduceStatus(' + row.shopSkuId + ",'" + row.shopSku + "'"  + ',1)" ><font color="red">暂停</font> </a>';
+                            return '<a href="javascript:;" title="暂停生产" onclick="setProduceStatus(' + row.shopSkuId + ",'" + row.shopSku + "'" + ',1)" ><font color="red">暂停</font> </a>';
                         }
                     }
                 }
@@ -886,14 +889,17 @@
 
     function setProduceStatus(shopSkuId, shopSku, produceStatus) {
         var produceStatusName;
-        if(produceStatus==1){
-            produceStatusName="正常生产";
-        }else if(produceStatus==2){
-            produceStatusName="暂停生产";
+        if (produceStatus == 1) {
+            produceStatusName = "正常生产";
+        } else if (produceStatus == 2) {
+            produceStatusName = "暂停生产";
         }
-        $.messager.confirm('提示', '确认修改【' + shopSku + '】的生产状态为【'+produceStatusName+'】吗？', function (r) {
+        $.messager.confirm('提示', '确认修改【' + shopSku + '】的生产状态为【' + produceStatusName + '】吗？', function (r) {
             if (r) {
-                $.post('${pageContext.request.contextPath }/shopSku/setShopSkuProduceStatus', {shopSkuId: shopSkuId,produceStatus:produceStatus}, function (data) {
+                $.post('${pageContext.request.contextPath }/shopSku/setShopSkuProduceStatus', {
+                    shopSkuId: shopSkuId,
+                    produceStatus: produceStatus
+                }, function (data) {
                     if (data.code == '200') {
                         bindData();
                     } else {

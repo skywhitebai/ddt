@@ -307,8 +307,8 @@
             idField: 'shopSkuId',
             nowrap: false,
             queryParams: queryParams,  //异步查询的参数
-            rowStyler:function(index,row){
-                if(row.produceStatus==2){
+            rowStyler: function (index, row) {
+                if (row.produceStatus == 2) {
                     return 'background-color:pink;color:gray;';
                 }
             },
@@ -378,7 +378,12 @@
                 },
                 {title: 'fba可售库存', field: 'afnFulfillableQuantity', width: 90},
                 /*{title: '总库存', field: 'inventoryQuantityTotal', width: 90},*/
-                {title: '本仓库库存', field: 'inventoryQuantity', width: 90},
+                {
+                    title: '本仓库库存', field: 'inventoryQuantity', width: 90,
+                    styler: function (value, row, rowIndex) {
+                        return 'background-color:orange;'
+                    }
+                },
                 {title: '总生产中数量', field: 'produceOrderShopSkuProductionQuantityTotal', width: 90},
                 {
                     title: '本仓库生产中数量', field: 'produceOrderShopSkuProductionQuantity', width: 90,

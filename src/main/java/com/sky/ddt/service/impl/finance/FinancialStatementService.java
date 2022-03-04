@@ -124,6 +124,8 @@ public class FinancialStatementService implements IFinancialStatementService {
             moneyBack = moneyBack.add(financialStatementResponse.getManualAdjustment());
             moneyBack = moneyBack.add(financialStatementResponse.getDisplayAdvertising());
             moneyBack = moneyBack.add(financialStatementResponse.getBrandAdvertising());
+            moneyBack = moneyBack.add(financialStatementResponse.getLiquidations());
+            moneyBack = moneyBack.add(financialStatementResponse.getLiquidationsAdjustments());
             moneyBack = moneyBack.add(financialStatementResponse.getTbybOrderPayment());
             moneyBack = moneyBack.add(financialStatementResponse.getTbybTrialShipment());
             financialStatementResponse.setMoneyBack(moneyBack);
