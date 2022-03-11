@@ -90,7 +90,9 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
         internalOrderNumber.setCreateBy(dealUserId);
         internalOrderNumber.setCreateTime(new Date());
         customInternalOrderNumberMapper.insertSelective(internalOrderNumber);
-        internalOrderNumberFinancialRemarkHisService.addInternalOrderNumberFinancialRemarkHis(params.getFinancialRemark(),internalOrderNumber.getId(),dealUserId);
+        if(!StringUtils.isEmpty(params.getFinancialRemark())){
+            internalOrderNumberFinancialRemarkHisService.addInternalOrderNumberFinancialRemarkHis(params.getFinancialRemark(),internalOrderNumber.getId(),dealUserId);
+        }
         return BaseResponse.success();
     }
 
@@ -154,7 +156,9 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
         internalOrderNumberUpdate.setUpdateTime(new Date());
         internalOrderNumberUpdate.setUpdateBy(dealUserId);
         customInternalOrderNumberMapper.updateByPrimaryKeySelective(internalOrderNumberUpdate);
-        internalOrderNumberFinancialRemarkHisService.addInternalOrderNumberFinancialRemarkHis(params.getFinancialRemark(),params.getId(),dealUserId);
+        if(!internalOrderNumber.getFinancialRemark().equals(params.getFinancialRemark())){
+            internalOrderNumberFinancialRemarkHisService.addInternalOrderNumberFinancialRemarkHis(params.getFinancialRemark(),params.getId(),dealUserId);
+        }
         return BaseResponse.success();
     }
 

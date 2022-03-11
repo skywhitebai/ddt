@@ -200,7 +200,7 @@
                         if (isEmpty(value)) {
                             text= '<input class="textbox" onchange="saveFinancialRemark(this,' + row.id + ')">';
                         } else {
-                            text= '<input class="textbox" value="' + value + '" saveFinancialRemark="saveWeight(this,' + row.id + ')">';
+                            text= '<input class="textbox" value="' + value + '" onchange="saveFinancialRemark(this,' + row.id + ')">';
                         }
                         text=text+'<a href="#" onclick="showFinancialRemarkHis(' + row.id + ')" title="查看">查看</a>';
                         return text;
