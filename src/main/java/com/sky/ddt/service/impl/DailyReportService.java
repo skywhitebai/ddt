@@ -41,6 +41,9 @@ public class DailyReportService implements IDailyReportService {
         DailyReport dailyReportOld = getDailyReport(req.getReportDay(), req.getUserId());
         DailyReport dailyReport=new DailyReport();
         BeanUtils.copyProperties(req,dailyReport);
+        if(req.getReportDay().after(DateUtil.getToday())){
+            return BaseResponse.failMessage("不能提前填写日报");
+        }
         if(dailyReportOld==null){
             dailyReport.setCreateBy(req.getUserId());
             dailyReport.setCreateTime(new Date());

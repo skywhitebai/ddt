@@ -23,7 +23,7 @@
             src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.5.5.4/locale/easyui-lang-zh_CN.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath }/static/css/main.css?t=20200928" type="text/css">
     <script type="text/javascript"
-            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20201028"></script>
+            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20220324"></script>
 
     <title>日报系统</title>
 </head>
@@ -77,14 +77,10 @@
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
             title: title,
             iconCls: 'icon-view',
-            nowrap: true,
+            nowrap: false,
             autoRowHeight: true,
             striped: true,
             collapsible: true,
-            pagination: true,
-            //singleSelect: true,
-            pageSize: 15,
-            pageList: [10, 15, 20, 30, 50],
             rownumbers: true,
             //sortName: 'ID',    //根据某个字段给easyUI排序
             //sortOrder: 'asc',
@@ -103,8 +99,8 @@
                         }
                     }
                 },
-                {title: '今日总结', field: 'todayWorkContent', width: 200},
-                {title: '明日计划', field: 'tomorrowWorkPlan', width: 200},
+                {title: '今日总结', field: 'todayWorkContent', width: 500},
+                {title: '明日计划', field: 'tomorrowWorkPlan', width: 500},
                 {title: '创建时间', field: 'createTime', width: 140}
             ]],
             toolbar: [{

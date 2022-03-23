@@ -23,7 +23,7 @@
             src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.5.5.4/locale/easyui-lang-zh_CN.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath }/static/css/main.css?t=20200928" type="text/css">
     <script type="text/javascript"
-            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20201028"></script>
+            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20220324"></script>
 
     <title>日报系统</title>
 </head>
@@ -57,7 +57,7 @@
             <tr>
                 <td>
                     <input class="easyui-textbox" data-options="multiline:true" name="todayWorkContent"
-                           id="todayWorkContent" style="width:500px;height:100px">
+                           id="todayWorkContent" style="width:500px;height:150px">
                 </td>
             </tr>
             <tr>
@@ -66,7 +66,7 @@
             <tr>
                 <td>
                     <input class="easyui-textbox" data-options="multiline:true" name="tomorrowWorkPlan"
-                           id="tomorrowWorkPlan" style="width:500px;height:100px">
+                           id="tomorrowWorkPlan" style="width:500px;height:150px">
                 </td>
             </tr>
         </table>
