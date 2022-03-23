@@ -66,7 +66,9 @@ function fomatFloat(num, n) {
     }
     return s;
 }
-
+function StrToDate(datestr) {
+    return new Date(datestr);
+}
 function getday(date) {
     var year = date.getFullYear();
     var month = (date.getMonth() + 1).toString();
@@ -81,7 +83,7 @@ function getday(date) {
     return dateTime;
 }
 
-function getNowDay() {
+function getToDay() {
     return getday(new Date());
 }
 
@@ -90,6 +92,11 @@ function dayDiff(start, end) {
     return Math.floor(dateDiff / (24 * 3600 * 1000));//计算出相差天数
 }
 
+function addDayByStr(dayStr,days) {
+    day=StrToDate(dayStr);
+    newDay=addDate(day,days);
+    return getday(newDay);
+}
 function addDate(date, days) {
     return new Date(date.setDate(date.getDate() + days));
 }

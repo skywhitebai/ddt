@@ -36,13 +36,9 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名 -->
-        <table tableName="finance">
+        <table tableName="daily_report">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
             <!--<generatedKey column="sku_id" sqlStatement="MySql" identity="true"/>-->
-        </table>
-
-        <table tableName="internal_order_number_financial_remark_his">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
 </generatorConfiguration>

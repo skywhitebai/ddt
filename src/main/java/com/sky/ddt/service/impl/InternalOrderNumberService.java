@@ -90,7 +90,7 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
         internalOrderNumber.setCreateBy(dealUserId);
         internalOrderNumber.setCreateTime(new Date());
         customInternalOrderNumberMapper.insertSelective(internalOrderNumber);
-        if(!StringUtils.isEmpty(params.getFinancialRemark())){
+        if(StringUtils.isEmpty(params.getFinancialRemark())){
             internalOrderNumberFinancialRemarkHisService.addInternalOrderNumberFinancialRemarkHis(params.getFinancialRemark(),internalOrderNumber.getId(),dealUserId);
         }
         return BaseResponse.success();

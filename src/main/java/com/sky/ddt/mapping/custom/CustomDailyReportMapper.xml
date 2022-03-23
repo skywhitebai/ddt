@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomDailyReportMapper">
+
+    <resultMap id="countListDailyReportMap"
+               type="com.sky.ddt.dto.dailyReport.resp.CountListDailyReportResp"
+               extends="com.sky.ddt.dao.generate.DailyReportMapper.BaseResultMap">
+        <result column="realName" property="realName"/>
+    </resultMap>
+    <select id="countListDailyReport"
+            resultMap="countListDailyReportMap">
+        SELECT
+        <include refid="com.sky.ddt.dao.generate.DailyReportMapper.Base_Column_List"/>,
+        (select real_name from user u where u.user_id=dr.user_id ) realName
+        from daily_report dr where dr.report_day=#{reportDay}
+        order by create_time asc
+    </select>
+</mapper>

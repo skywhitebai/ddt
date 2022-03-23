@@ -55,7 +55,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
         bindShop();
-        $("#s_purchaseDate").datebox('setValue',getNowDay());
+        $("#s_purchaseDate").datebox('setValue',getToDay());
     });
 
     function bindShop() {
