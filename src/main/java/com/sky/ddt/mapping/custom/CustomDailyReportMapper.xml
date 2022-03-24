@@ -15,4 +15,19 @@
         from daily_report dr where dr.report_day=#{reportDay}
         order by create_time asc
     </select>
+    <select id="userListDailyReport"
+            resultMap="countListDailyReportMap">
+        SELECT
+        <include refid="com.sky.ddt.dao.generate.DailyReportMapper.Base_Column_List"/>,
+        (select real_name from user u where u.user_id=dr.user_id ) realName
+        from daily_report dr
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="userId != null">and user_id =#{userId}</if>
+                <if test="reportDayStart != null ">and report_day <![CDATA[>=]]> #{reportDayStart}</if>
+                <if test="reportDayEnd != null ">and report_day <![CDATA[<=]]> #{reportDayEnd}</if>
+            </trim>
+        </where>
+        order by report_day desc
+    </select>
 </mapper>

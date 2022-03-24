@@ -2,6 +2,7 @@ package com.sky.ddt.dao.custom;
 
 import com.sky.ddt.dao.generate.DailyReportMapper;
 import com.sky.ddt.dto.dailyReport.req.CountListDailyReportReq;
+import com.sky.ddt.dto.dailyReport.req.UserListDailyReportReq;
 import com.sky.ddt.dto.dailyReport.resp.CountListDailyReportResp;
 
 import java.util.List;
@@ -13,4 +14,6 @@ import java.util.List;
  */
 public interface CustomDailyReportMapper extends DailyReportMapper {
     List<CountListDailyReportResp> countListDailyReport(CountListDailyReportReq req);
+
+    List<CountListDailyReportResp> userListDailyReport(UserListDailyReportReq req);
 }

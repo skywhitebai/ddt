@@ -74,12 +74,12 @@
             <a href="javascript:void(0)" class="easyui-linkbutton"
                data-options="iconCls:'icon-ok'" id="btn_save" onclick="save()">确定</a>
             <a href="javascript:void(0)" class="easyui-linkbutton"
-               data-options="iconCls:'icon-cancel'" onclick="closeDialog()">关闭</a>
+               data-options="iconCls:'icon-edit'" onclick="showUserListDailyReport()">查看历史日报</a>
         </div>
         <div>
             日报填写建议：
             <br>
-            （1）今日总结列出当天工作内容，突出重点，一般第一条是最重要工作。
+            （1）今日总结列出当天工作内容，<span style="color: red">突出重点</span>，一般第一条是最重要工作。
             <br>
             （2）总结需写明需求或者功能，也可以列所遇困难和解决方案。
             <br>
@@ -98,7 +98,7 @@
 
     function initReportDay() {
         var reportDay = getQueryVariable("reportDay")
-        if (reportDay!=false) {
+        if (reportDay != false) {
             $("#reportDay").datebox('setValue', reportDay);
         } else {
             $("#reportDay").datebox('setValue', getToDay());
@@ -115,11 +115,11 @@
         $.post('${pageContext.request.contextPath }/dailyReport/getDailyReport', {reportDay: reportDay}, function (data) {
             var dailyReport = data.data;
             if (dailyReport != null) {
-                $("#todayWorkContent").textbox("setValue",dailyReport.todayWorkContent);
-                $("#tomorrowWorkPlan").textbox("setValue",dailyReport.tomorrowWorkPlan);
-            }else{
-                $("#todayWorkContent").textbox("setValue","");
-                $("#tomorrowWorkPlan").textbox("setValue","");
+                $("#todayWorkContent").textbox("setValue", dailyReport.todayWorkContent);
+                $("#tomorrowWorkPlan").textbox("setValue", dailyReport.tomorrowWorkPlan);
+            } else {
+                $("#todayWorkContent").textbox("setValue", "");
+                $("#tomorrowWorkPlan").textbox("setValue", "");
             }
         });
     }
@@ -161,6 +161,10 @@
         var newDay = addDayByStr(reportDay, days);
         $("#reportDay").datebox('setValue', newDay);
         bindData();
+    }
+
+    function showUserListDailyReport() {
+        window.open("${pageContext.request.contextPath }/dailyReport/userListIndex");
     }
 </script>
 </html>

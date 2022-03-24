@@ -4,6 +4,7 @@ import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.dto.dailyReport.req.CountListDailyReportReq;
 import com.sky.ddt.dto.dailyReport.req.GetDailyReportReq;
 import com.sky.ddt.dto.dailyReport.req.SaveDailyReportReq;
+import com.sky.ddt.dto.dailyReport.req.UserListDailyReportReq;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.DailyReport;
@@ -32,13 +33,11 @@ public class DailyReportController extends SuperController {
     }
 
     @RequestMapping("/countListIndex")
-    @MenuAnnotation("dailyReport/countListIndex")
     public String countListIndex() {
         return "dailyReport/countListIndex";
     }
 
     @RequestMapping("/userListIndex")
-    @MenuAnnotation("dailyReport/index")
     public String userListIndex() {
         return "dailyReport/userListIndex";
     }
@@ -60,6 +59,14 @@ public class DailyReportController extends SuperController {
     @ResponseBody
     public DataGridResponse countListDailyReport(@Validated CountListDailyReportReq req) {
         return dailyReportService.countListDailyReport(req);
+    }
+    @RequestMapping("/userListDailyReport")
+    @ResponseBody
+    public DataGridResponse userListDailyReport(@Validated UserListDailyReportReq req) {
+        if(req.getUserId()==null){
+            req.setUserId(getCurrentUserId());
+        }
+        return dailyReportService.userListDailyReport(req);
     }
 
 }

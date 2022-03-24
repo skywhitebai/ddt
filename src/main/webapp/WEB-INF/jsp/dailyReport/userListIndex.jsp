@@ -31,14 +31,8 @@
 
 <!--查询条件-->
 <div class="easyui-panel">
-    日期 <input class="easyui-datebox" id="reportDay" name="reportDay" onchange="bindData()">
-    <a href="javascript:void(0)" onclick="initDay(-1)" class="easyui-linkbutton"
-       data-options="iconCls:'icon-search'"
-       style="width: 80px">前一天</a>
-    <a href="javascript:void(0)" onclick="initDay(1)" class="easyui-linkbutton"
-       data-options="iconCls:'icon-search'"
-       style="width: 80px">后一天</a>
-    </td>
+    <input type="hidden" id="userId">
+    日期 <input class="easyui-datebox" id="reportDayStart">- <input class="easyui-datebox" id="reportDayEnd">
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
 </div>
@@ -48,30 +42,23 @@
 <script type="text/javascript">
     // 初始化内容
     $(document).ready(function () {
-        initReportDay();
+        initUserId();
     });
-
-    function initReportDay() {
-        var reportDay = getQueryVariable("reportDay")
-        if (reportDay != false) {
-            $("#reportDay").datebox('setValue', reportDay);
-        } else {
-            $("#reportDay").datebox('setValue', getToDay());
+    function initUserId() {
+        var userId = getQueryVariable("userId")
+        if (userId!=false) {
+            $("#userId").val(userId);
         }
         bindData();
     }
-
     function bindData() {
-        var reportDay = $("#reportDay").val();
-        if (isEmpty(reportDay)) {
-            $.messager.alert("提示", "请选择日期.");
-            return;
-        }
         dg = '#dg';
-        url = "${pageContext.request.contextPath }/dailyReport/countListDailyReport";
+        url = "${pageContext.request.contextPath }/dailyReport/userListDailyReport";
         title = "工作日报";
         queryParams = {
-            reportDay: reportDay
+            reportDayStart: $("#reportDayStart").val(),
+            reportDayEnd: $("#reportDayEnd").val(),
+            userId: $("#userId").val()
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -81,6 +68,10 @@
             autoRowHeight: true,
             striped: true,
             collapsible: true,
+            pagination: true,
+            singleSelect: true,
+            pageSize: 15,
+            pageList: [10, 15, 20, 30, 50, 100, 200, 500],
             rownumbers: true,
             //sortName: 'ID',    //根据某个字段给easyUI排序
             //sortOrder: 'asc',
@@ -102,18 +93,12 @@
                 {
                     title: '日期', field: 'reportDay', width: 110,
                     formatter: function (value, rowData, rowIndex) {
-                        return value.slice(0, 10);
+                        return value.slice(0,10);
                     }
                 },
                 {title: '今日总结', field: 'todayWorkContent', width: 500},
                 {title: '明日计划', field: 'tomorrowWorkPlan', width: 500},
-                {title: '创建时间', field: 'createTime', width: 140},
-                {
-                    title: '操作', field: 'deal', width: 66, formatter: function (value, row, index) {
-                        var content = '<a href="javascript:void(0)" onclick="showUserListDailyReport(' + row.userId + ')" class="easyui-linkbutton" >查看日报</a>';
-                        return content;
-                    }
-                }
+                {title: '创建时间', field: 'createTime', width: 140}
             ]],
             toolbar: [{
                 id: 'btnReload',
@@ -126,20 +111,6 @@
             }]
         })
         $(dg).datagrid('clearSelections');
-    }
-
-    function initDay(days) {
-        var reportDay = $("#reportDay").val();
-        if (isEmpty(reportDay)) {
-            $.messager.alert("提示", "请选择日期.");
-            return;
-        }
-        var newDay = addDayByStr(reportDay, days);
-        $("#reportDay").datebox('setValue', newDay);
-        bindData();
-    }
-    function showUserListDailyReport(userId) {
-        window.open("${pageContext.request.contextPath }/dailyReport/userListIndex?userId="+userId);
     }
 </script>
 </html>

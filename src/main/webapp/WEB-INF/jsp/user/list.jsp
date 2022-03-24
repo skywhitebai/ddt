@@ -289,6 +289,12 @@
                 {title: '最后登录时间', field: 'lastLoginTime', width: 180},
                 {title: '创建时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
+                {
+                    title: '操作', field: 'deal', width: 66, formatter: function (value, row, index) {
+                        var content = '<a href="javascript:void(0)" onclick="showUserListDailyReport(' + row.userId + ')" class="easyui-linkbutton" >查看日报</a>';
+                        return content;
+                    }
+                },
                 {title: '备注', field: 'remark', width: 300}
             ]],
             toolbar: [{
@@ -618,6 +624,10 @@
 
     function closeAddUserRoleDialog() {
         $('#dlgAddUserRole').dialog('close');
+    }
+
+    function showUserListDailyReport(userId) {
+        window.open("${pageContext.request.contextPath }/dailyReport/userListIndex?userId="+userId);
     }
 </script>
 </body>
