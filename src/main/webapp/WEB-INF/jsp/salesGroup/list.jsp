@@ -206,9 +206,9 @@
             columns: [[
                 {field: 'ck', checkbox: true},   //选择
                 {title: '分组名称', field: 'groupName', width: 120},
-                {title: '用户', field: 'realNames', width: 200},
-                {title: '创建时间', field: 'createTime', width: 180},
-                {title: '修改时间', field: 'updateTime', width: 180},
+                {title: '用户', field: 'realNames', width: 500},
+                {title: '创建时间', field: 'createTime', width: 170},
+                {title: '修改时间', field: 'updateTime', width: 170},
                 {title: '备注', field: 'remark', width: 120},
                 {
                     title: '状态', field: 'status', width: 50,

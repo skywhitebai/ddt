@@ -6,6 +6,8 @@
         SELECT f.id financeId,f.month,ss.shop_id shopId,s.`shop_name` shopName,p.`developer_user_id` developerUserId,
         ud.`real_name` developerUserName,ss.`salesman_user_id` salesmanUserId,us.`real_name` salesmanUserName,
         ss.`shop_parent_sku` shopParentSku,sku.`sku`,ss.head_trip_cost headTripCost,sku.cost_price costPrice,ss.shop_sku_id shopSkuId,ss.`shop_sku` shopSku,p.`product_code` productCode,
+        sg.id salesGroupId,
+        sg.group_name salesGroupName,
         p.development_level developmentLevel,
         IFNULL(ms.saleQuantity,0) saleQuantity,
         IFNULL(ms.productSales,0) productSales,
@@ -92,6 +94,8 @@
         LEFT JOIN product p ON sku.`product_id`=p.`product_id`
         LEFT JOIN USER ud ON p.`developer_user_id`=ud.`user_id`
         LEFT JOIN USER us ON ss.`salesman_user_id`=us.`user_id`
+        left join sales_group_user sgu on sgu.user_id=ss.`salesman_user_id`
+        left join sales_group sg on sg.id=sgu.sales_group_id
         LEFT JOIN
         (SELECT shop_sku_id,SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`quantity`,0) ELSE 0 END)  saleQuantity,
         SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`product_sales`,0) ELSE 0 END)  productSales,

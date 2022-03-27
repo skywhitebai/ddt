@@ -61,6 +61,7 @@
     <a href="javascript:void(0)" onclick="exportFbaCustomerReturnPerUnitFeeNotExistSku()" class="easyui-linkbutton">导出退款操作费找不到sku的订单号</a>
     <a href="javascript:void(0)" onclick="exportDeveloperFinancialStatement()" class="easyui-linkbutton">导出开发人员财务报表</a>
     <a href="javascript:void(0)" onclick="exportSalesmanFinancialStatement()" class="easyui-linkbutton">导出销售人员财务报表</a>
+    <a href="javascript:void(0)" onclick="exportSalesGroupFinancialStatement()" class="easyui-linkbutton">导出销售分组财务报表</a>
     <a href="javascript:void(0)" onclick="exportFinancialStatementAll()" class="easyui-linkbutton">下载所有店铺报表</a>
 
     <br>
@@ -680,7 +681,14 @@
         }
         window.open('${pageContext.request.contextPath }/financialStatement/exportSalesmanFinancialStatement?month=' + month);
     }
-
+    function exportSalesGroupFinancialStatement() {
+        var month = $("#s_month").val();
+        if (isEmpty(month)) {
+            $.messager.alert("提示", "请选择月份");
+            return;
+        }
+        window.open('${pageContext.request.contextPath }/financialStatement/exportSalesGroupFinancialStatement?month=' + month);
+    }
     function exportFinancialStatementAll() {
         var month = $("#s_month").val();
         if (isEmpty(month)) {

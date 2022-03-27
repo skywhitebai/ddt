@@ -1,9 +1,9 @@
 package com.sky.ddt.dao.custom;
 
 import com.sky.ddt.dao.generate.SalesGroupUserMapper;
-import com.sky.ddt.dto.salesGroup.req.ListSalesGroupReq;
 import com.sky.ddt.dto.salesGroupUser.req.ListSalesGroupUserReq;
 import com.sky.ddt.dto.salesGroupUser.resp.ListSalesGroupUserResp;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,4 +14,6 @@ import java.util.List;
  */
 public interface CustomSalesGroupUserMapper extends SalesGroupUserMapper {
     List<ListSalesGroupUserResp> listSalesGroupUser(ListSalesGroupUserReq req);
+
+    List<Integer> selectSelesGroupUserIdbyUserId(@Param("userId") Integer userId);
 }

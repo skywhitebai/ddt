@@ -3,10 +3,7 @@ package com.sky.ddt.service.impl.finance;
 import com.sky.ddt.common.constant.FinanceConstant;
 import com.sky.ddt.common.constant.FinancialStatementConstant;
 import com.sky.ddt.common.login.CurrentUserInfo;
-import com.sky.ddt.dao.custom.CustomFinanceMapper;
-import com.sky.ddt.dao.custom.CustomFinancialStatementMapper;
-import com.sky.ddt.dao.custom.CustomMonthlySalesMapper;
-import com.sky.ddt.dao.custom.CustomSkuMapper;
+import com.sky.ddt.dao.custom.*;
 import com.sky.ddt.dto.finance.response.FbaCustomerReturnFeeResponse;
 import com.sky.ddt.dto.finance.response.FbaCustomerReturnSkuResponse;
 import com.sky.ddt.dto.finance.response.FinancialStatementResponse;
@@ -61,6 +58,8 @@ public class FinancialStatementService implements IFinancialStatementService {
     IFinanceStatisticService financeStatisticService;
     @Autowired
     IShopService shopService;
+    @Autowired
+    CustomSalesGroupUserMapper customSalesGroupUserMapper;
 
     /**
      * @param financeId
@@ -435,6 +434,12 @@ public class FinancialStatementService implements IFinancialStatementService {
             criteria.andDeveloperUserIdEqualTo(currentUserInfo.getUserId());
         } else if (type.equals("salesman")) {
             criteria.andSalesmanUserIdEqualTo(currentUserInfo.getUserId());
+        }else if (type.equals(FinanceConstant.FinanceExprotType.SALESGROUP.getType())) {
+            List<Integer> userIdList=customSalesGroupUserMapper.selectSelesGroupUserIdbyUserId(currentUserInfo.getUserId());
+            if(CollectionUtils.isEmpty(userIdList)){
+                return BaseResponse.failMessage("用户没有分组");
+            }
+            criteria.andSalesmanUserIdIn(userIdList);
         }
         List<FinancialStatement> financialStatementList = customFinancialStatementMapper.selectByExample(example);
         if (CollectionUtils.isEmpty(financialStatementList)) {
@@ -496,6 +501,8 @@ public class FinancialStatementService implements IFinancialStatementService {
             name = "开发人员";
         } else if ("salesman".equals(type)) {
             name = "销售人员";
+        } else if (FinanceConstant.FinanceExprotType.SALESGROUP.getType().equals(type)) {
+            name = "销售分组";
         } else {
             return "类型错误";
         }
@@ -752,7 +759,7 @@ public class FinancialStatementService implements IFinancialStatementService {
         row.createCell(115).setCellValue(financialStatementCount.getLiquidationsAdjustments().doubleValue());
         row.createCell(116).setCellValue(financialStatementCount.getTbybOrderPayment().doubleValue());
         row.createCell(117).setCellValue(financialStatementCount.getTbybTrialShipment().doubleValue());
-
+        //118 groupName
         Row row2 = sheet.createRow(rowIndex + 1);
         Row row3 = sheet.createRow(rowIndex + 2);
         row2.createCell(7).setCellValue("负责人");
@@ -871,7 +878,7 @@ public class FinancialStatementService implements IFinancialStatementService {
 
     private List<FinancialStatement> getFinancialStatementListUserName(String userName, List<FinancialStatement> financialStatementList, String type) {
         List<FinancialStatement> financialStatements = new ArrayList<>();
-        if (FinanceConstant.FinanceUserType.DEVELOPER.getType().equals(type)) {
+        if (FinanceConstant.FinanceExprotType.DEVELOPER.getType().equals(type)) {
             financialStatements = financialStatementList.stream().filter(item -> {
                 if (StringUtils.isEmpty(item.getDeveloperUserName())) {
                     if (StringUtils.isEmpty(userName)) {
@@ -885,7 +892,7 @@ public class FinancialStatementService implements IFinancialStatementService {
                 }
                 return false;
             }).collect(Collectors.toList());
-        } else if (FinanceConstant.FinanceUserType.SALESMAN.getType().equals(type)) {
+        } else if (FinanceConstant.FinanceExprotType.SALESMAN.getType().equals(type)) {
             financialStatements = financialStatementList.stream().filter(item -> {
                 if (StringUtils.isEmpty(item.getSalesmanUserName())) {
                     if (StringUtils.isEmpty(userName)) {
@@ -895,6 +902,20 @@ public class FinancialStatementService implements IFinancialStatementService {
                     }
                 }
                 if (item.getSalesmanUserName().equals(userName)) {
+                    return true;
+                }
+                return false;
+            }).collect(Collectors.toList());
+        }else if (FinanceConstant.FinanceExprotType.SALESGROUP.getType().equals(type)) {
+            financialStatements = financialStatementList.stream().filter(item -> {
+                if (StringUtils.isEmpty(item.getSalesGroupName())) {
+                    if (StringUtils.isEmpty(userName)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+                if (item.getSalesGroupName().equals(userName)) {
                     return true;
                 }
                 return false;
@@ -911,6 +932,8 @@ public class FinancialStatementService implements IFinancialStatementService {
             userNameList = financialStatementList.stream().map(FinancialStatement::getDeveloperUserName).distinct().collect(Collectors.toList());
         } else if ("salesman".equals(type)) {
             userNameList = financialStatementList.stream().map(FinancialStatement::getSalesmanUserName).distinct().collect(Collectors.toList());
+        }else if ("salesGroup".equals(type)) {
+            userNameList = financialStatementList.stream().map(FinancialStatement::getSalesGroupName).distinct().collect(Collectors.toList());
         }
         return userNameList;
     }
@@ -1243,6 +1266,7 @@ public class FinancialStatementService implements IFinancialStatementService {
             row.createCell(115).setCellValue(financialStatement.getLiquidationsAdjustments().doubleValue());
             row.createCell(116).setCellValue(financialStatement.getTbybOrderPayment().doubleValue());
             row.createCell(117).setCellValue(financialStatement.getTbybTrialShipment().doubleValue());
+            row.createCell(118).setCellValue(financialStatement.getSalesGroupName());
             rowIndex++;
         }
     }

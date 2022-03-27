@@ -746,6 +746,136 @@ public class FinancialStatementExample {
             return (Criteria) this;
         }
 
+        public Criteria andSalesGroupIdIsNull() {
+            addCriterion("sales_group_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupIdIsNotNull() {
+            addCriterion("sales_group_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupIdEqualTo(Integer value) {
+            addCriterion("sales_group_id =", value, "salesGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupIdNotEqualTo(Integer value) {
+            addCriterion("sales_group_id <>", value, "salesGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupIdGreaterThan(Integer value) {
+            addCriterion("sales_group_id >", value, "salesGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("sales_group_id >=", value, "salesGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupIdLessThan(Integer value) {
+            addCriterion("sales_group_id <", value, "salesGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupIdLessThanOrEqualTo(Integer value) {
+            addCriterion("sales_group_id <=", value, "salesGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupIdIn(List<Integer> values) {
+            addCriterion("sales_group_id in", values, "salesGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupIdNotIn(List<Integer> values) {
+            addCriterion("sales_group_id not in", values, "salesGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupIdBetween(Integer value1, Integer value2) {
+            addCriterion("sales_group_id between", value1, value2, "salesGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("sales_group_id not between", value1, value2, "salesGroupId");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupNameIsNull() {
+            addCriterion("sales_group_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupNameIsNotNull() {
+            addCriterion("sales_group_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupNameEqualTo(String value) {
+            addCriterion("sales_group_name =", value, "salesGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupNameNotEqualTo(String value) {
+            addCriterion("sales_group_name <>", value, "salesGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupNameGreaterThan(String value) {
+            addCriterion("sales_group_name >", value, "salesGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupNameGreaterThanOrEqualTo(String value) {
+            addCriterion("sales_group_name >=", value, "salesGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupNameLessThan(String value) {
+            addCriterion("sales_group_name <", value, "salesGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupNameLessThanOrEqualTo(String value) {
+            addCriterion("sales_group_name <=", value, "salesGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupNameLike(String value) {
+            addCriterion("sales_group_name like", value, "salesGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupNameNotLike(String value) {
+            addCriterion("sales_group_name not like", value, "salesGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupNameIn(List<String> values) {
+            addCriterion("sales_group_name in", values, "salesGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupNameNotIn(List<String> values) {
+            addCriterion("sales_group_name not in", values, "salesGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupNameBetween(String value1, String value2) {
+            addCriterion("sales_group_name between", value1, value2, "salesGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesGroupNameNotBetween(String value1, String value2) {
+            addCriterion("sales_group_name not between", value1, value2, "salesGroupName");
+            return (Criteria) this;
+        }
+
         public Criteria andSkuIsNull() {
             addCriterion("sku is null");
             return (Criteria) this;

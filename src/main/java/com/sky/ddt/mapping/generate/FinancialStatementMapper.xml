@@ -12,6 +12,8 @@
     <result column="salesman_user_id" jdbcType="INTEGER" property="salesmanUserId" />
     <result column="salesman_user_name" jdbcType="VARCHAR" property="salesmanUserName" />
     <result column="shop_parent_sku" jdbcType="VARCHAR" property="shopParentSku" />
+    <result column="sales_group_id" jdbcType="INTEGER" property="salesGroupId" />
+    <result column="sales_group_name" jdbcType="VARCHAR" property="salesGroupName" />
     <result column="sku" jdbcType="VARCHAR" property="sku" />
     <result column="shop_sku" jdbcType="VARCHAR" property="shopSku" />
     <result column="shop_sku_id" jdbcType="INTEGER" property="shopSkuId" />
@@ -163,16 +165,16 @@
   </sql>
   <sql id="Base_Column_List">
     id, finance_id, month, shop_id, shop_name, developer_user_id, developer_user_name, 
-    salesman_user_id, salesman_user_name, shop_parent_sku, sku, shop_sku, shop_sku_id, 
-    product_code, sale_quantity, product_sales, product_sales_tax, shipping_credits, 
-    shipping_credits_tax, gift_wrap_credits, gift_wrap_credits_tax, promotional_rebates, 
-    promotional_rebates_tax, marketplace_withheld_tax, selling_fees, fba_fees, other_transaction_fees, 
-    other, total, refund_sale_quantity, refund_product_sales, refund_product_sales_tax, 
-    refund_shipping_credits, refund_shipping_credits_tax, refund_gift_wrap_credits, refund_gift_wrap_credits_tax, 
-    refund_promotional_rebates, refund_promotional_rebates_tax, refund_marketplace_withheld_tax, 
-    refund_selling_fees, refund_fba_fees, refund_other_transaction_fees, refund_other, 
-    refund_total, sellerPayments_report_fee_subscription, lightning_deal_fee, cost_of_advertising, 
-    fba_inventory_reimbursement_customer_return, fba_inventory_reimbursement_damaged_warehouse, 
+    salesman_user_id, salesman_user_name, shop_parent_sku, sales_group_id, sales_group_name, 
+    sku, shop_sku, shop_sku_id, product_code, sale_quantity, product_sales, product_sales_tax, 
+    shipping_credits, shipping_credits_tax, gift_wrap_credits, gift_wrap_credits_tax, 
+    promotional_rebates, promotional_rebates_tax, marketplace_withheld_tax, selling_fees, 
+    fba_fees, other_transaction_fees, other, total, refund_sale_quantity, refund_product_sales, 
+    refund_product_sales_tax, refund_shipping_credits, refund_shipping_credits_tax, refund_gift_wrap_credits, 
+    refund_gift_wrap_credits_tax, refund_promotional_rebates, refund_promotional_rebates_tax, 
+    refund_marketplace_withheld_tax, refund_selling_fees, refund_fba_fees, refund_other_transaction_fees, 
+    refund_other, refund_total, sellerPayments_report_fee_subscription, lightning_deal_fee, 
+    cost_of_advertising, fba_inventory_reimbursement_customer_return, fba_inventory_reimbursement_damaged_warehouse, 
     fba_inventory_reimbursement_customer_service_issue, fba_inventory_reimbursement_fee_correction, 
     fba_inventory_reimbursement_general_adjustment, fba_inventory_reimbursement_lost_inbound, 
     fba_inventory_reimbursement_lost_warehouse, non_subscription_fee_adjustment, fba_inventory_placement_service_fee, 
@@ -224,10 +226,11 @@
     insert into financial_statement (finance_id, month, shop_id, 
       shop_name, developer_user_id, developer_user_name, 
       salesman_user_id, salesman_user_name, shop_parent_sku, 
-      sku, shop_sku, shop_sku_id, 
-      product_code, sale_quantity, product_sales, 
-      product_sales_tax, shipping_credits, shipping_credits_tax, 
-      gift_wrap_credits, gift_wrap_credits_tax, promotional_rebates, 
+      sales_group_id, sales_group_name, sku, 
+      shop_sku, shop_sku_id, product_code, 
+      sale_quantity, product_sales, product_sales_tax, 
+      shipping_credits, shipping_credits_tax, gift_wrap_credits, 
+      gift_wrap_credits_tax, promotional_rebates, 
       promotional_rebates_tax, marketplace_withheld_tax, 
       selling_fees, fba_fees, other_transaction_fees, 
       other, total, refund_sale_quantity, 
@@ -263,10 +266,11 @@
     values (#{financeId,jdbcType=INTEGER}, #{month,jdbcType=TIMESTAMP}, #{shopId,jdbcType=INTEGER}, 
       #{shopName,jdbcType=VARCHAR}, #{developerUserId,jdbcType=INTEGER}, #{developerUserName,jdbcType=VARCHAR}, 
       #{salesmanUserId,jdbcType=INTEGER}, #{salesmanUserName,jdbcType=VARCHAR}, #{shopParentSku,jdbcType=VARCHAR}, 
-      #{sku,jdbcType=VARCHAR}, #{shopSku,jdbcType=VARCHAR}, #{shopSkuId,jdbcType=INTEGER}, 
-      #{productCode,jdbcType=VARCHAR}, #{saleQuantity,jdbcType=INTEGER}, #{productSales,jdbcType=DECIMAL}, 
-      #{productSalesTax,jdbcType=DECIMAL}, #{shippingCredits,jdbcType=DECIMAL}, #{shippingCreditsTax,jdbcType=DECIMAL}, 
-      #{giftWrapCredits,jdbcType=DECIMAL}, #{giftWrapCreditsTax,jdbcType=DECIMAL}, #{promotionalRebates,jdbcType=DECIMAL}, 
+      #{salesGroupId,jdbcType=INTEGER}, #{salesGroupName,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, 
+      #{shopSku,jdbcType=VARCHAR}, #{shopSkuId,jdbcType=INTEGER}, #{productCode,jdbcType=VARCHAR}, 
+      #{saleQuantity,jdbcType=INTEGER}, #{productSales,jdbcType=DECIMAL}, #{productSalesTax,jdbcType=DECIMAL}, 
+      #{shippingCredits,jdbcType=DECIMAL}, #{shippingCreditsTax,jdbcType=DECIMAL}, #{giftWrapCredits,jdbcType=DECIMAL}, 
+      #{giftWrapCreditsTax,jdbcType=DECIMAL}, #{promotionalRebates,jdbcType=DECIMAL}, 
       #{promotionalRebatesTax,jdbcType=DECIMAL}, #{marketplaceWithheldTax,jdbcType=DECIMAL}, 
       #{sellingFees,jdbcType=DECIMAL}, #{fbaFees,jdbcType=DECIMAL}, #{otherTransactionFees,jdbcType=DECIMAL}, 
       #{other,jdbcType=DECIMAL}, #{total,jdbcType=DECIMAL}, #{refundSaleQuantity,jdbcType=INTEGER}, 
@@ -332,6 +336,12 @@
       </if>
       <if test="shopParentSku != null">
         shop_parent_sku,
+      </if>
+      <if test="salesGroupId != null">
+        sales_group_id,
+      </if>
+      <if test="salesGroupName != null">
+        sales_group_name,
       </if>
       <if test="sku != null">
         sku,
@@ -631,6 +641,12 @@
       </if>
       <if test="shopParentSku != null">
         #{shopParentSku,jdbcType=VARCHAR},
+      </if>
+      <if test="salesGroupId != null">
+        #{salesGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="salesGroupName != null">
+        #{salesGroupName,jdbcType=VARCHAR},
       </if>
       <if test="sku != null">
         #{sku,jdbcType=VARCHAR},
@@ -943,6 +959,12 @@
       <if test="record.shopParentSku != null">
         shop_parent_sku = #{record.shopParentSku,jdbcType=VARCHAR},
       </if>
+      <if test="record.salesGroupId != null">
+        sales_group_id = #{record.salesGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="record.salesGroupName != null">
+        sales_group_name = #{record.salesGroupName,jdbcType=VARCHAR},
+      </if>
       <if test="record.sku != null">
         sku = #{record.sku,jdbcType=VARCHAR},
       </if>
@@ -1230,6 +1252,8 @@
       salesman_user_id = #{record.salesmanUserId,jdbcType=INTEGER},
       salesman_user_name = #{record.salesmanUserName,jdbcType=VARCHAR},
       shop_parent_sku = #{record.shopParentSku,jdbcType=VARCHAR},
+      sales_group_id = #{record.salesGroupId,jdbcType=INTEGER},
+      sales_group_name = #{record.salesGroupName,jdbcType=VARCHAR},
       sku = #{record.sku,jdbcType=VARCHAR},
       shop_sku = #{record.shopSku,jdbcType=VARCHAR},
       shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
@@ -1353,6 +1377,12 @@
       </if>
       <if test="shopParentSku != null">
         shop_parent_sku = #{shopParentSku,jdbcType=VARCHAR},
+      </if>
+      <if test="salesGroupId != null">
+        sales_group_id = #{salesGroupId,jdbcType=INTEGER},
+      </if>
+      <if test="salesGroupName != null">
+        sales_group_name = #{salesGroupName,jdbcType=VARCHAR},
       </if>
       <if test="sku != null">
         sku = #{sku,jdbcType=VARCHAR},
@@ -1638,6 +1668,8 @@
       salesman_user_id = #{salesmanUserId,jdbcType=INTEGER},
       salesman_user_name = #{salesmanUserName,jdbcType=VARCHAR},
       shop_parent_sku = #{shopParentSku,jdbcType=VARCHAR},
+      sales_group_id = #{salesGroupId,jdbcType=INTEGER},
+      sales_group_name = #{salesGroupName,jdbcType=VARCHAR},
       sku = #{sku,jdbcType=VARCHAR},
       shop_sku = #{shopSku,jdbcType=VARCHAR},
       shop_sku_id = #{shopSkuId,jdbcType=INTEGER},

@@ -24,6 +24,10 @@ public class FinancialStatement {
 
     private String shopParentSku;
 
+    private Integer salesGroupId;
+
+    private String salesGroupName;
+
     private String sku;
 
     private String shopSku;
@@ -282,6 +286,22 @@ public class FinancialStatement {
 
     public void setShopParentSku(String shopParentSku) {
         this.shopParentSku = shopParentSku == null ? null : shopParentSku.trim();
+    }
+
+    public Integer getSalesGroupId() {
+        return salesGroupId;
+    }
+
+    public void setSalesGroupId(Integer salesGroupId) {
+        this.salesGroupId = salesGroupId;
+    }
+
+    public String getSalesGroupName() {
+        return salesGroupName;
+    }
+
+    public void setSalesGroupName(String salesGroupName) {
+        this.salesGroupName = salesGroupName == null ? null : salesGroupName.trim();
     }
 
     public String getSku() {

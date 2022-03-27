@@ -84,11 +84,12 @@ public class FinanceConstant {
     }
 
     @Getter
-    public enum FinanceUserType {
+    public enum FinanceExprotType {
         DEVELOPER("developer"),
-        SALESMAN("salesman"),;
+        SALESMAN("salesman"),
+        SALESGROUP("salesGroup"),;
 
-        FinanceUserType(String type) {
+        FinanceExprotType(String type) {
             this.type = type;
         }
 

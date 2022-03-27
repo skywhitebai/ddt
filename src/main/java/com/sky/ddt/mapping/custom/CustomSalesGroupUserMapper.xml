@@ -22,4 +22,12 @@
         </where>
         order by sgu.create_time asc
     </select>
+    <select id="selectSelesGroupUserIdbyUserId"
+            resultType="java.lang.Integer">
+        SELECT
+        sgu.user_id
+        from sales_group_user sgu
+        where sgu.sales_group_id=(select sales_group_id from sales_group_user where user_id=#{userId})
+    </select>
+
 </mapper>
