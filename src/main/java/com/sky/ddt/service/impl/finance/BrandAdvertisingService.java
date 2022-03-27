@@ -2,7 +2,7 @@ package com.sky.ddt.service.impl.finance;
 
 import com.sky.ddt.common.constant.CouponConstant;
 import com.sky.ddt.common.constant.FinanceConstant;
-import com.sky.ddt.dao.custom.CsutomBrandAdvertisingMapper;
+import com.sky.ddt.dao.custom.CustomBrandAdvertisingMapper;
 import com.sky.ddt.dao.custom.CustomFinanceMapper;
 import com.sky.ddt.dto.finance.request.BrandAdvertisingImportRequest;
 import com.sky.ddt.dto.finance.request.ImportFinanceRequest;
@@ -32,7 +32,7 @@ import java.util.Map;
 @Service
 public class BrandAdvertisingService implements IBrandAdvertisingService {
     @Autowired
-    CsutomBrandAdvertisingMapper csutomBrandAdvertisingMapper;
+    CustomBrandAdvertisingMapper csutomBrandAdvertisingMapper;
     @Autowired
     IShopSkuService shopSkuService;
     @Autowired

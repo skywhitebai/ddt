@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomSalesGroupMapper">
+
+    <resultMap id="listSalesGroupMap"
+               type="com.sky.ddt.dto.salesGroup.resp.ListSalesGroupResp"
+               extends="com.sky.ddt.dao.generate.SalesGroupMapper.BaseResultMap">
+        <result column="realNames" property="realNames"/>
+    </resultMap>
+    <select id="listSalesGroup"
+            resultMap="listSalesGroupMap">
+        SELECT
+        <include refid="com.sky.ddt.dao.generate.SalesGroupMapper.Base_Column_List"/>,
+        (select GROUP_CONCAT(real_name SEPARATOR ',')  from user u,sales_group_user sgu where u.user_id=sgu.user_id and sgu.sales_group_id =sg.id) realNames
+        from sales_group sg
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="userId != null">and exists(select 1 from sales_group_user sgu where sgu.sales_group_id=sg.id and sgu.user_id=#{userId})</if>
+                <if test="groupName != null and groupName!=''">and group_name like like concat('%',#{groupName},'%')</if>
+                <if test="status != null ">and status = #{status}</if>
+            </trim>
+        </where>
+        order by group_name asc
+    </select>
+</mapper>

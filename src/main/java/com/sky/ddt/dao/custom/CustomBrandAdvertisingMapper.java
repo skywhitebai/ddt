@@ -7,5 +7,5 @@ import com.sky.ddt.dao.generate.BrandAdvertisingMapper;
  * @Description 品牌广告
  * @date 2022/1/13 23:25
  */
-public interface CsutomBrandAdvertisingMapper extends BrandAdvertisingMapper {
+public interface CustomBrandAdvertisingMapper extends BrandAdvertisingMapper {
 }

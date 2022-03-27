@@ -75,6 +75,8 @@
                data-options="iconCls:'icon-ok'" id="btn_save" onclick="save()">确定</a>
             <a href="javascript:void(0)" class="easyui-linkbutton"
                data-options="iconCls:'icon-edit'" onclick="showUserListDailyReport()">查看历史日报</a>
+           <%-- <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-edit'" onclick="showCountListDailyReport()">查看全部日报</a>--%>
         </div>
         <div>
             日报填写建议：
@@ -165,6 +167,9 @@
 
     function showUserListDailyReport() {
         window.open("${pageContext.request.contextPath }/dailyReport/userListIndex");
+    }
+    function showCountListDailyReport() {
+        window.open("${pageContext.request.contextPath }/dailyReport/countListIndex");
     }
 </script>
 </html>

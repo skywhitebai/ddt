@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomSalesGroupUserMapper">
+
+    <resultMap id="listSalesGroupUserMap"
+               type="com.sky.ddt.dto.salesGroupUser.resp.ListSalesGroupUserResp"
+               extends="com.sky.ddt.dao.generate.SalesGroupUserMapper.BaseResultMap">
+        <result column="realName" property="realName"/>
+        <result column="groupName" property="groupName"/>
+    </resultMap>
+    <select id="listSalesGroupUser"
+            resultMap="listSalesGroupUserMap">
+        SELECT
+        <include refid="com.sky.ddt.dao.generate.SalesGroupUserMapper.Base_Column_List"/>,
+        (select group_name from sales_group sg where sgu.sales_group_id =sg.id) groupName,
+        (select real_name from user u where u.user_id =sgu.user_id) realName
+        from sales_group_user sgu
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="salesGroupId != null">and sgu.sales_group_id = #{salesGroupId}</if>
+            </trim>
+        </where>
+        order by sgu.create_time asc
+    </select>
+</mapper>

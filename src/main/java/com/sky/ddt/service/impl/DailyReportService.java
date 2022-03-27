@@ -58,7 +58,7 @@ public class DailyReportService implements IDailyReportService {
             }
             customDailyReportMapper.insertSelective(dailyReport);
         }else{
-            if(dailyReport.getCreateTime().before(DateUtil.plusDay(-2,new Date()))){
+            if(dailyReportOld.getCreateTime().before(DateUtil.plusDay(-2,new Date()))){
                 return BaseResponse.failMessage("填写两天后不允许修改");
             }
             dailyReport.setUpdateBy(req.getUserId());
