@@ -136,8 +136,7 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
                     }
                     if (SkuConstant.SkuSizeEnum.F.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
                         listFactoryProductionOrderInfoResponse.setProductionQuantityF(shopSkuProductionQuantityDto.getProductionQuantity());
-                    } else
-                    if (SkuConstant.SkuSizeEnum.XS.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                    } else if (SkuConstant.SkuSizeEnum.XS.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
                         listFactoryProductionOrderInfoResponse.setProductionQuantityXS(shopSkuProductionQuantityDto.getProductionQuantity());
                     } else if (SkuConstant.SkuSizeEnum.S.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
                         listFactoryProductionOrderInfoResponse.setProductionQuantityS(shopSkuProductionQuantityDto.getProductionQuantity());
@@ -155,8 +154,48 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
                         listFactoryProductionOrderInfoResponse.setProductionQuantity4XL(shopSkuProductionQuantityDto.getProductionQuantity());
                     } else if (SkuConstant.SkuSizeEnum.XXXXXL.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
                         listFactoryProductionOrderInfoResponse.setProductionQuantity5XL(shopSkuProductionQuantityDto.getProductionQuantity());
-                    } else if (SkuConstant.SkuSizeEnum.XXXXXXL.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
-                        listFactoryProductionOrderInfoResponse.setProductionQuantity6XL(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US2.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS2(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US4.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS4(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US6.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS6(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US8.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS8(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US10.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS10(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US12.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS12(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US14.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS14(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US16.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS16(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US18.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS18(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US20.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS20(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US22.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS22(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.PLUS12.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantity12Plus(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.PLUS14.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantity14Plus(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.PLUS16.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantity16Plus(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.PLUS18.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantity18Plus(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.PLUS20.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantity20Plus(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.PLUS22.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantity22Plus(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.PLUS24.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantity24Plus(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.PLUS26.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantity26Plus(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.PLUS28.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantity28Plus(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.PLUS30.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantity30Plus(shopSkuProductionQuantityDto.getProductionQuantity());
                     } else {
                         sbErroEntity.append("店铺sku：" + shopSkuProductionQuantityDto.getShopSku() + ",尺码错误，请修改尺码");
                     }
@@ -171,10 +210,10 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         if (!listFactoryProductionOrderInfoResponse.getColour().equals(shopSkuProductionQuantityDto.getColour())) {
             return false;
         }
-        if(StringUtils.isEmpty(listFactoryProductionOrderInfoResponse.getColourNumber())&&StringUtils.isEmpty(shopSkuProductionQuantityDto.getColourNumber())){
+        if (StringUtils.isEmpty(listFactoryProductionOrderInfoResponse.getColourNumber()) && StringUtils.isEmpty(shopSkuProductionQuantityDto.getColourNumber())) {
             return true;
         }
-        if(listFactoryProductionOrderInfoResponse.getColourNumber().equals(shopSkuProductionQuantityDto.getColourNumber())){
+        if (listFactoryProductionOrderInfoResponse.getColourNumber().equals(shopSkuProductionQuantityDto.getColourNumber())) {
             return true;
         }
         return false;
@@ -198,8 +237,8 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
         if (!FactoryProductionOrderConstant.StatusEnum.PENDING_CONFIRM.getStatus().equals(factoryProductionOrder.getStatus())) {
             return BaseResponse.failMessage("只有待确认的工厂生产单允许修改数量");
         }
-        GetShopSkuByShopParentSkuAndSizeRequest getShopSkuByShopParentSkuAndSizeRequest=new GetShopSkuByShopParentSkuAndSizeRequest();
-        BeanUtils.copyProperties(params,getShopSkuByShopParentSkuAndSizeRequest);
+        GetShopSkuByShopParentSkuAndSizeRequest getShopSkuByShopParentSkuAndSizeRequest = new GetShopSkuByShopParentSkuAndSizeRequest();
+        BeanUtils.copyProperties(params, getShopSkuByShopParentSkuAndSizeRequest);
         getShopSkuByShopParentSkuAndSizeRequest.setShopId(factoryProductionOrder.getShopId());
         List<ShopSku> shopSkuList = shopSkuService.getShopSkuByShopParentSkuAndSize(getShopSkuByShopParentSkuAndSizeRequest);
         if (CollectionUtils.isEmpty(shopSkuList)) {

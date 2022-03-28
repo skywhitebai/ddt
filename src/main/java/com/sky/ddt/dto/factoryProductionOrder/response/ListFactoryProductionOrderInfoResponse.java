@@ -24,6 +24,27 @@ public class ListFactoryProductionOrderInfoResponse {
     Integer productionQuantity4XL;
     Integer productionQuantity5XL;
     Integer productionQuantity6XL;
+    Integer productionQuantityUS2;
+    Integer productionQuantityUS4;
+    Integer productionQuantityUS6;
+    Integer productionQuantityUS8;
+    Integer productionQuantityUS10;
+    Integer productionQuantityUS12;
+    Integer productionQuantityUS14;
+    Integer productionQuantityUS16;
+    Integer productionQuantityUS18;
+    Integer productionQuantityUS20;
+    Integer productionQuantityUS22;
+    Integer productionQuantity12Plus;
+    Integer productionQuantity14Plus;
+    Integer productionQuantity16Plus;
+    Integer productionQuantity18Plus;
+    Integer productionQuantity20Plus;
+    Integer productionQuantity22Plus;
+    Integer productionQuantity24Plus;
+    Integer productionQuantity26Plus;
+    Integer productionQuantity28Plus;
+    Integer productionQuantity30Plus;
     String remark;
 
     public String getColourInfo() {

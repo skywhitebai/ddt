@@ -189,7 +189,7 @@
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
             title: title,
             iconCls: 'icon-view',
-            nowrap: true,
+            nowrap: false,
             autoRowHeight: true,
             striped: true,
             collapsible: true,
