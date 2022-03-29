@@ -14,6 +14,8 @@ public class BrandAdvertising {
 
     private BigDecimal fee;
 
+    private BigDecimal totalSalesDay14;
+
     private Date createTime;
 
     private Integer createBy;
@@ -56,6 +58,14 @@ public class BrandAdvertising {
 
     public void setFee(BigDecimal fee) {
         this.fee = fee;
+    }
+
+    public BigDecimal getTotalSalesDay14() {
+        return totalSalesDay14;
+    }
+
+    public void setTotalSalesDay14(BigDecimal totalSalesDay14) {
+        this.totalSalesDay14 = totalSalesDay14;
     }
 
     public Date getCreateTime() {

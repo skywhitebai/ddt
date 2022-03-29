@@ -11,9 +11,9 @@
     <result column="developer_user_name" jdbcType="VARCHAR" property="developerUserName" />
     <result column="salesman_user_id" jdbcType="INTEGER" property="salesmanUserId" />
     <result column="salesman_user_name" jdbcType="VARCHAR" property="salesmanUserName" />
-    <result column="shop_parent_sku" jdbcType="VARCHAR" property="shopParentSku" />
     <result column="sales_group_id" jdbcType="INTEGER" property="salesGroupId" />
     <result column="sales_group_name" jdbcType="VARCHAR" property="salesGroupName" />
+    <result column="shop_parent_sku" jdbcType="VARCHAR" property="shopParentSku" />
     <result column="sku" jdbcType="VARCHAR" property="sku" />
     <result column="shop_sku" jdbcType="VARCHAR" property="shopSku" />
     <result column="shop_sku_id" jdbcType="INTEGER" property="shopSkuId" />
@@ -51,6 +51,7 @@
     <result column="sellerPayments_report_fee_subscription" jdbcType="DECIMAL" property="sellerpaymentsReportFeeSubscription" />
     <result column="lightning_deal_fee" jdbcType="DECIMAL" property="lightningDealFee" />
     <result column="cost_of_advertising" jdbcType="DECIMAL" property="costOfAdvertising" />
+    <result column="advertising_income" jdbcType="DECIMAL" property="advertisingIncome" />
     <result column="fba_inventory_reimbursement_customer_return" jdbcType="DECIMAL" property="fbaInventoryReimbursementCustomerReturn" />
     <result column="fba_inventory_reimbursement_damaged_warehouse" jdbcType="DECIMAL" property="fbaInventoryReimbursementDamagedWarehouse" />
     <result column="fba_inventory_reimbursement_customer_service_issue" jdbcType="DECIMAL" property="fbaInventoryReimbursementCustomerServiceIssue" />
@@ -93,13 +94,15 @@
     <result column="advertising_sales_percentage" jdbcType="DECIMAL" property="advertisingSalesPercentage" />
     <result column="product_month" jdbcType="INTEGER" property="productMonth" />
     <result column="exchange_rate" jdbcType="DECIMAL" property="exchangeRate" />
-    <result column="currency_name" jdbcType="VARCHAR" property="currencyName" />
-    <result column="currency_code" jdbcType="VARCHAR" property="currencyCode" />
     <result column="cost_price" jdbcType="DECIMAL" property="costPrice" />
     <result column="head_trip_cost" jdbcType="DECIMAL" property="headTripCost" />
     <result column="development_level" jdbcType="INTEGER" property="developmentLevel" />
     <result column="display_advertising" jdbcType="DECIMAL" property="displayAdvertising" />
+    <result column="display_advertising_income" jdbcType="DECIMAL" property="displayAdvertisingIncome" />
     <result column="brand_advertising" jdbcType="DECIMAL" property="brandAdvertising" />
+    <result column="brand_advertising_income" jdbcType="DECIMAL" property="brandAdvertisingIncome" />
+    <result column="currency_name" jdbcType="VARCHAR" property="currencyName" />
+    <result column="currency_code" jdbcType="VARCHAR" property="currencyCode" />
     <result column="liquidations" jdbcType="DECIMAL" property="liquidations" />
     <result column="liquidations_adjustments" jdbcType="DECIMAL" property="liquidationsAdjustments" />
     <result column="tbyb_order_payment" jdbcType="DECIMAL" property="tbybOrderPayment" />
@@ -165,7 +168,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, finance_id, month, shop_id, shop_name, developer_user_id, developer_user_name, 
-    salesman_user_id, salesman_user_name, shop_parent_sku, sales_group_id, sales_group_name, 
+    salesman_user_id, salesman_user_name, sales_group_id, sales_group_name, shop_parent_sku, 
     sku, shop_sku, shop_sku_id, product_code, sale_quantity, product_sales, product_sales_tax, 
     shipping_credits, shipping_credits_tax, gift_wrap_credits, gift_wrap_credits_tax, 
     promotional_rebates, promotional_rebates_tax, marketplace_withheld_tax, selling_fees, 
@@ -174,20 +177,21 @@
     refund_gift_wrap_credits_tax, refund_promotional_rebates, refund_promotional_rebates_tax, 
     refund_marketplace_withheld_tax, refund_selling_fees, refund_fba_fees, refund_other_transaction_fees, 
     refund_other, refund_total, sellerPayments_report_fee_subscription, lightning_deal_fee, 
-    cost_of_advertising, fba_inventory_reimbursement_customer_return, fba_inventory_reimbursement_damaged_warehouse, 
-    fba_inventory_reimbursement_customer_service_issue, fba_inventory_reimbursement_fee_correction, 
-    fba_inventory_reimbursement_general_adjustment, fba_inventory_reimbursement_lost_inbound, 
-    fba_inventory_reimbursement_lost_warehouse, non_subscription_fee_adjustment, fba_inventory_placement_service_fee, 
-    fba_customer_return_per_unit_fee, fba_inventory_storage_fee, fba_long_term_storage_fee, 
-    fba_removal_order_disposal_fee, coupon_redemption_fee, early_reviewer_program_fee, 
-    money_back, money_back_rate, main_business_income, total_effective_receipts, sellable_requested_quantity, 
-    sellable_cost, unsellable_requested_quantity, unsellable_cost, procurement_cost, 
-    fba_head_trip_cost, head_deduction_fee, main_business_profit, gross_margin_on_sales, 
-    roi, initial_quantity, initial_inventory_cost, final_quantity, final_inventory_cost, 
-    inventory_turnover, manual_adjustment, new_product, refund_rate, create_time, create_by, 
-    advertising_sales_percentage, product_month, exchange_rate, currency_name, currency_code, 
-    cost_price, head_trip_cost, development_level, display_advertising, brand_advertising, 
-    liquidations, liquidations_adjustments, tbyb_order_payment, tbyb_trial_shipment
+    cost_of_advertising, advertising_income, fba_inventory_reimbursement_customer_return, 
+    fba_inventory_reimbursement_damaged_warehouse, fba_inventory_reimbursement_customer_service_issue, 
+    fba_inventory_reimbursement_fee_correction, fba_inventory_reimbursement_general_adjustment, 
+    fba_inventory_reimbursement_lost_inbound, fba_inventory_reimbursement_lost_warehouse, 
+    non_subscription_fee_adjustment, fba_inventory_placement_service_fee, fba_customer_return_per_unit_fee, 
+    fba_inventory_storage_fee, fba_long_term_storage_fee, fba_removal_order_disposal_fee, 
+    coupon_redemption_fee, early_reviewer_program_fee, money_back, money_back_rate, main_business_income, 
+    total_effective_receipts, sellable_requested_quantity, sellable_cost, unsellable_requested_quantity, 
+    unsellable_cost, procurement_cost, fba_head_trip_cost, head_deduction_fee, main_business_profit, 
+    gross_margin_on_sales, roi, initial_quantity, initial_inventory_cost, final_quantity, 
+    final_inventory_cost, inventory_turnover, manual_adjustment, new_product, refund_rate, 
+    create_time, create_by, advertising_sales_percentage, product_month, exchange_rate, 
+    cost_price, head_trip_cost, development_level, display_advertising, display_advertising_income, 
+    brand_advertising, brand_advertising_income, currency_name, currency_code, liquidations, 
+    liquidations_adjustments, tbyb_order_payment, tbyb_trial_shipment
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FinancialStatementExample" resultMap="BaseResultMap">
     select
@@ -225,8 +229,8 @@
     </selectKey>
     insert into financial_statement (finance_id, month, shop_id, 
       shop_name, developer_user_id, developer_user_name, 
-      salesman_user_id, salesman_user_name, shop_parent_sku, 
-      sales_group_id, sales_group_name, sku, 
+      salesman_user_id, salesman_user_name, sales_group_id, 
+      sales_group_name, shop_parent_sku, sku, 
       shop_sku, shop_sku_id, product_code, 
       sale_quantity, product_sales, product_sales_tax, 
       shipping_credits, shipping_credits_tax, gift_wrap_credits, 
@@ -241,32 +245,34 @@
       refund_marketplace_withheld_tax, refund_selling_fees, 
       refund_fba_fees, refund_other_transaction_fees, 
       refund_other, refund_total, sellerPayments_report_fee_subscription, 
-      lightning_deal_fee, cost_of_advertising, fba_inventory_reimbursement_customer_return, 
-      fba_inventory_reimbursement_damaged_warehouse, fba_inventory_reimbursement_customer_service_issue, 
-      fba_inventory_reimbursement_fee_correction, fba_inventory_reimbursement_general_adjustment, 
-      fba_inventory_reimbursement_lost_inbound, fba_inventory_reimbursement_lost_warehouse, 
-      non_subscription_fee_adjustment, fba_inventory_placement_service_fee, 
-      fba_customer_return_per_unit_fee, fba_inventory_storage_fee, 
-      fba_long_term_storage_fee, fba_removal_order_disposal_fee, 
-      coupon_redemption_fee, early_reviewer_program_fee, 
-      money_back, money_back_rate, main_business_income, 
-      total_effective_receipts, sellable_requested_quantity, 
-      sellable_cost, unsellable_requested_quantity, 
-      unsellable_cost, procurement_cost, fba_head_trip_cost, 
-      head_deduction_fee, main_business_profit, gross_margin_on_sales, 
+      lightning_deal_fee, cost_of_advertising, advertising_income, 
+      fba_inventory_reimbursement_customer_return, fba_inventory_reimbursement_damaged_warehouse, 
+      fba_inventory_reimbursement_customer_service_issue, fba_inventory_reimbursement_fee_correction, 
+      fba_inventory_reimbursement_general_adjustment, fba_inventory_reimbursement_lost_inbound, 
+      fba_inventory_reimbursement_lost_warehouse, non_subscription_fee_adjustment, 
+      fba_inventory_placement_service_fee, fba_customer_return_per_unit_fee, 
+      fba_inventory_storage_fee, fba_long_term_storage_fee, 
+      fba_removal_order_disposal_fee, coupon_redemption_fee, 
+      early_reviewer_program_fee, money_back, money_back_rate, 
+      main_business_income, total_effective_receipts, 
+      sellable_requested_quantity, sellable_cost, 
+      unsellable_requested_quantity, unsellable_cost, 
+      procurement_cost, fba_head_trip_cost, head_deduction_fee, 
+      main_business_profit, gross_margin_on_sales, 
       roi, initial_quantity, initial_inventory_cost, 
       final_quantity, final_inventory_cost, inventory_turnover, 
       manual_adjustment, new_product, refund_rate, 
       create_time, create_by, advertising_sales_percentage, 
-      product_month, exchange_rate, currency_name, 
-      currency_code, cost_price, head_trip_cost, 
-      development_level, display_advertising, brand_advertising, 
+      product_month, exchange_rate, cost_price, 
+      head_trip_cost, development_level, display_advertising, 
+      display_advertising_income, brand_advertising, 
+      brand_advertising_income, currency_name, currency_code, 
       liquidations, liquidations_adjustments, 
       tbyb_order_payment, tbyb_trial_shipment)
     values (#{financeId,jdbcType=INTEGER}, #{month,jdbcType=TIMESTAMP}, #{shopId,jdbcType=INTEGER}, 
       #{shopName,jdbcType=VARCHAR}, #{developerUserId,jdbcType=INTEGER}, #{developerUserName,jdbcType=VARCHAR}, 
-      #{salesmanUserId,jdbcType=INTEGER}, #{salesmanUserName,jdbcType=VARCHAR}, #{shopParentSku,jdbcType=VARCHAR}, 
-      #{salesGroupId,jdbcType=INTEGER}, #{salesGroupName,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, 
+      #{salesmanUserId,jdbcType=INTEGER}, #{salesmanUserName,jdbcType=VARCHAR}, #{salesGroupId,jdbcType=INTEGER}, 
+      #{salesGroupName,jdbcType=VARCHAR}, #{shopParentSku,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, 
       #{shopSku,jdbcType=VARCHAR}, #{shopSkuId,jdbcType=INTEGER}, #{productCode,jdbcType=VARCHAR}, 
       #{saleQuantity,jdbcType=INTEGER}, #{productSales,jdbcType=DECIMAL}, #{productSalesTax,jdbcType=DECIMAL}, 
       #{shippingCredits,jdbcType=DECIMAL}, #{shippingCreditsTax,jdbcType=DECIMAL}, #{giftWrapCredits,jdbcType=DECIMAL}, 
@@ -281,26 +287,28 @@
       #{refundMarketplaceWithheldTax,jdbcType=DECIMAL}, #{refundSellingFees,jdbcType=DECIMAL}, 
       #{refundFbaFees,jdbcType=DECIMAL}, #{refundOtherTransactionFees,jdbcType=DECIMAL}, 
       #{refundOther,jdbcType=DECIMAL}, #{refundTotal,jdbcType=DECIMAL}, #{sellerpaymentsReportFeeSubscription,jdbcType=DECIMAL}, 
-      #{lightningDealFee,jdbcType=DECIMAL}, #{costOfAdvertising,jdbcType=DECIMAL}, #{fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL}, 
-      #{fbaInventoryReimbursementDamagedWarehouse,jdbcType=DECIMAL}, #{fbaInventoryReimbursementCustomerServiceIssue,jdbcType=DECIMAL}, 
-      #{fbaInventoryReimbursementFeeCorrection,jdbcType=DECIMAL}, #{fbaInventoryReimbursementGeneralAdjustment,jdbcType=DECIMAL}, 
-      #{fbaInventoryReimbursementLostInbound,jdbcType=DECIMAL}, #{fbaInventoryReimbursementLostWarehouse,jdbcType=DECIMAL}, 
-      #{nonSubscriptionFeeAdjustment,jdbcType=DECIMAL}, #{fbaInventoryPlacementServiceFee,jdbcType=DECIMAL}, 
-      #{fbaCustomerReturnPerUnitFee,jdbcType=DECIMAL}, #{fbaInventoryStorageFee,jdbcType=DECIMAL}, 
-      #{fbaLongTermStorageFee,jdbcType=DECIMAL}, #{fbaRemovalOrderDisposalFee,jdbcType=DECIMAL}, 
-      #{couponRedemptionFee,jdbcType=DECIMAL}, #{earlyReviewerProgramFee,jdbcType=DECIMAL}, 
-      #{moneyBack,jdbcType=DECIMAL}, #{moneyBackRate,jdbcType=DECIMAL}, #{mainBusinessIncome,jdbcType=DECIMAL}, 
-      #{totalEffectiveReceipts,jdbcType=DECIMAL}, #{sellableRequestedQuantity,jdbcType=INTEGER}, 
-      #{sellableCost,jdbcType=DECIMAL}, #{unsellableRequestedQuantity,jdbcType=INTEGER}, 
-      #{unsellableCost,jdbcType=DECIMAL}, #{procurementCost,jdbcType=DECIMAL}, #{fbaHeadTripCost,jdbcType=DECIMAL}, 
-      #{headDeductionFee,jdbcType=DECIMAL}, #{mainBusinessProfit,jdbcType=DECIMAL}, #{grossMarginOnSales,jdbcType=DECIMAL}, 
+      #{lightningDealFee,jdbcType=DECIMAL}, #{costOfAdvertising,jdbcType=DECIMAL}, #{advertisingIncome,jdbcType=DECIMAL}, 
+      #{fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL}, #{fbaInventoryReimbursementDamagedWarehouse,jdbcType=DECIMAL}, 
+      #{fbaInventoryReimbursementCustomerServiceIssue,jdbcType=DECIMAL}, #{fbaInventoryReimbursementFeeCorrection,jdbcType=DECIMAL}, 
+      #{fbaInventoryReimbursementGeneralAdjustment,jdbcType=DECIMAL}, #{fbaInventoryReimbursementLostInbound,jdbcType=DECIMAL}, 
+      #{fbaInventoryReimbursementLostWarehouse,jdbcType=DECIMAL}, #{nonSubscriptionFeeAdjustment,jdbcType=DECIMAL}, 
+      #{fbaInventoryPlacementServiceFee,jdbcType=DECIMAL}, #{fbaCustomerReturnPerUnitFee,jdbcType=DECIMAL}, 
+      #{fbaInventoryStorageFee,jdbcType=DECIMAL}, #{fbaLongTermStorageFee,jdbcType=DECIMAL}, 
+      #{fbaRemovalOrderDisposalFee,jdbcType=DECIMAL}, #{couponRedemptionFee,jdbcType=DECIMAL}, 
+      #{earlyReviewerProgramFee,jdbcType=DECIMAL}, #{moneyBack,jdbcType=DECIMAL}, #{moneyBackRate,jdbcType=DECIMAL}, 
+      #{mainBusinessIncome,jdbcType=DECIMAL}, #{totalEffectiveReceipts,jdbcType=DECIMAL}, 
+      #{sellableRequestedQuantity,jdbcType=INTEGER}, #{sellableCost,jdbcType=DECIMAL}, 
+      #{unsellableRequestedQuantity,jdbcType=INTEGER}, #{unsellableCost,jdbcType=DECIMAL}, 
+      #{procurementCost,jdbcType=DECIMAL}, #{fbaHeadTripCost,jdbcType=DECIMAL}, #{headDeductionFee,jdbcType=DECIMAL}, 
+      #{mainBusinessProfit,jdbcType=DECIMAL}, #{grossMarginOnSales,jdbcType=DECIMAL}, 
       #{roi,jdbcType=DECIMAL}, #{initialQuantity,jdbcType=INTEGER}, #{initialInventoryCost,jdbcType=DECIMAL}, 
       #{finalQuantity,jdbcType=INTEGER}, #{finalInventoryCost,jdbcType=DECIMAL}, #{inventoryTurnover,jdbcType=DECIMAL}, 
       #{manualAdjustment,jdbcType=DECIMAL}, #{newProduct,jdbcType=INTEGER}, #{refundRate,jdbcType=DECIMAL}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{advertisingSalesPercentage,jdbcType=DECIMAL}, 
-      #{productMonth,jdbcType=INTEGER}, #{exchangeRate,jdbcType=DECIMAL}, #{currencyName,jdbcType=VARCHAR}, 
-      #{currencyCode,jdbcType=VARCHAR}, #{costPrice,jdbcType=DECIMAL}, #{headTripCost,jdbcType=DECIMAL}, 
-      #{developmentLevel,jdbcType=INTEGER}, #{displayAdvertising,jdbcType=DECIMAL}, #{brandAdvertising,jdbcType=DECIMAL}, 
+      #{productMonth,jdbcType=INTEGER}, #{exchangeRate,jdbcType=DECIMAL}, #{costPrice,jdbcType=DECIMAL}, 
+      #{headTripCost,jdbcType=DECIMAL}, #{developmentLevel,jdbcType=INTEGER}, #{displayAdvertising,jdbcType=DECIMAL}, 
+      #{displayAdvertisingIncome,jdbcType=DECIMAL}, #{brandAdvertising,jdbcType=DECIMAL}, 
+      #{brandAdvertisingIncome,jdbcType=DECIMAL}, #{currencyName,jdbcType=VARCHAR}, #{currencyCode,jdbcType=VARCHAR}, 
       #{liquidations,jdbcType=DECIMAL}, #{liquidationsAdjustments,jdbcType=DECIMAL}, 
       #{tbybOrderPayment,jdbcType=DECIMAL}, #{tbybTrialShipment,jdbcType=DECIMAL})
   </insert>
@@ -334,14 +342,14 @@
       <if test="salesmanUserName != null">
         salesman_user_name,
       </if>
-      <if test="shopParentSku != null">
-        shop_parent_sku,
-      </if>
       <if test="salesGroupId != null">
         sales_group_id,
       </if>
       <if test="salesGroupName != null">
         sales_group_name,
+      </if>
+      <if test="shopParentSku != null">
+        shop_parent_sku,
       </if>
       <if test="sku != null">
         sku,
@@ -453,6 +461,9 @@
       </if>
       <if test="costOfAdvertising != null">
         cost_of_advertising,
+      </if>
+      <if test="advertisingIncome != null">
+        advertising_income,
       </if>
       <if test="fbaInventoryReimbursementCustomerReturn != null">
         fba_inventory_reimbursement_customer_return,
@@ -580,12 +591,6 @@
       <if test="exchangeRate != null">
         exchange_rate,
       </if>
-      <if test="currencyName != null">
-        currency_name,
-      </if>
-      <if test="currencyCode != null">
-        currency_code,
-      </if>
       <if test="costPrice != null">
         cost_price,
       </if>
@@ -598,8 +603,20 @@
       <if test="displayAdvertising != null">
         display_advertising,
       </if>
+      <if test="displayAdvertisingIncome != null">
+        display_advertising_income,
+      </if>
       <if test="brandAdvertising != null">
         brand_advertising,
+      </if>
+      <if test="brandAdvertisingIncome != null">
+        brand_advertising_income,
+      </if>
+      <if test="currencyName != null">
+        currency_name,
+      </if>
+      <if test="currencyCode != null">
+        currency_code,
       </if>
       <if test="liquidations != null">
         liquidations,
@@ -639,14 +656,14 @@
       <if test="salesmanUserName != null">
         #{salesmanUserName,jdbcType=VARCHAR},
       </if>
-      <if test="shopParentSku != null">
-        #{shopParentSku,jdbcType=VARCHAR},
-      </if>
       <if test="salesGroupId != null">
         #{salesGroupId,jdbcType=INTEGER},
       </if>
       <if test="salesGroupName != null">
         #{salesGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopParentSku != null">
+        #{shopParentSku,jdbcType=VARCHAR},
       </if>
       <if test="sku != null">
         #{sku,jdbcType=VARCHAR},
@@ -758,6 +775,9 @@
       </if>
       <if test="costOfAdvertising != null">
         #{costOfAdvertising,jdbcType=DECIMAL},
+      </if>
+      <if test="advertisingIncome != null">
+        #{advertisingIncome,jdbcType=DECIMAL},
       </if>
       <if test="fbaInventoryReimbursementCustomerReturn != null">
         #{fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL},
@@ -885,12 +905,6 @@
       <if test="exchangeRate != null">
         #{exchangeRate,jdbcType=DECIMAL},
       </if>
-      <if test="currencyName != null">
-        #{currencyName,jdbcType=VARCHAR},
-      </if>
-      <if test="currencyCode != null">
-        #{currencyCode,jdbcType=VARCHAR},
-      </if>
       <if test="costPrice != null">
         #{costPrice,jdbcType=DECIMAL},
       </if>
@@ -903,8 +917,20 @@
       <if test="displayAdvertising != null">
         #{displayAdvertising,jdbcType=DECIMAL},
       </if>
+      <if test="displayAdvertisingIncome != null">
+        #{displayAdvertisingIncome,jdbcType=DECIMAL},
+      </if>
       <if test="brandAdvertising != null">
         #{brandAdvertising,jdbcType=DECIMAL},
+      </if>
+      <if test="brandAdvertisingIncome != null">
+        #{brandAdvertisingIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="currencyName != null">
+        #{currencyName,jdbcType=VARCHAR},
+      </if>
+      <if test="currencyCode != null">
+        #{currencyCode,jdbcType=VARCHAR},
       </if>
       <if test="liquidations != null">
         #{liquidations,jdbcType=DECIMAL},
@@ -956,14 +982,14 @@
       <if test="record.salesmanUserName != null">
         salesman_user_name = #{record.salesmanUserName,jdbcType=VARCHAR},
       </if>
-      <if test="record.shopParentSku != null">
-        shop_parent_sku = #{record.shopParentSku,jdbcType=VARCHAR},
-      </if>
       <if test="record.salesGroupId != null">
         sales_group_id = #{record.salesGroupId,jdbcType=INTEGER},
       </if>
       <if test="record.salesGroupName != null">
         sales_group_name = #{record.salesGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.shopParentSku != null">
+        shop_parent_sku = #{record.shopParentSku,jdbcType=VARCHAR},
       </if>
       <if test="record.sku != null">
         sku = #{record.sku,jdbcType=VARCHAR},
@@ -1075,6 +1101,9 @@
       </if>
       <if test="record.costOfAdvertising != null">
         cost_of_advertising = #{record.costOfAdvertising,jdbcType=DECIMAL},
+      </if>
+      <if test="record.advertisingIncome != null">
+        advertising_income = #{record.advertisingIncome,jdbcType=DECIMAL},
       </if>
       <if test="record.fbaInventoryReimbursementCustomerReturn != null">
         fba_inventory_reimbursement_customer_return = #{record.fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL},
@@ -1202,12 +1231,6 @@
       <if test="record.exchangeRate != null">
         exchange_rate = #{record.exchangeRate,jdbcType=DECIMAL},
       </if>
-      <if test="record.currencyName != null">
-        currency_name = #{record.currencyName,jdbcType=VARCHAR},
-      </if>
-      <if test="record.currencyCode != null">
-        currency_code = #{record.currencyCode,jdbcType=VARCHAR},
-      </if>
       <if test="record.costPrice != null">
         cost_price = #{record.costPrice,jdbcType=DECIMAL},
       </if>
@@ -1220,8 +1243,20 @@
       <if test="record.displayAdvertising != null">
         display_advertising = #{record.displayAdvertising,jdbcType=DECIMAL},
       </if>
+      <if test="record.displayAdvertisingIncome != null">
+        display_advertising_income = #{record.displayAdvertisingIncome,jdbcType=DECIMAL},
+      </if>
       <if test="record.brandAdvertising != null">
         brand_advertising = #{record.brandAdvertising,jdbcType=DECIMAL},
+      </if>
+      <if test="record.brandAdvertisingIncome != null">
+        brand_advertising_income = #{record.brandAdvertisingIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="record.currencyName != null">
+        currency_name = #{record.currencyName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currencyCode != null">
+        currency_code = #{record.currencyCode,jdbcType=VARCHAR},
       </if>
       <if test="record.liquidations != null">
         liquidations = #{record.liquidations,jdbcType=DECIMAL},
@@ -1251,9 +1286,9 @@
       developer_user_name = #{record.developerUserName,jdbcType=VARCHAR},
       salesman_user_id = #{record.salesmanUserId,jdbcType=INTEGER},
       salesman_user_name = #{record.salesmanUserName,jdbcType=VARCHAR},
-      shop_parent_sku = #{record.shopParentSku,jdbcType=VARCHAR},
       sales_group_id = #{record.salesGroupId,jdbcType=INTEGER},
       sales_group_name = #{record.salesGroupName,jdbcType=VARCHAR},
+      shop_parent_sku = #{record.shopParentSku,jdbcType=VARCHAR},
       sku = #{record.sku,jdbcType=VARCHAR},
       shop_sku = #{record.shopSku,jdbcType=VARCHAR},
       shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
@@ -1291,6 +1326,7 @@
       sellerPayments_report_fee_subscription = #{record.sellerpaymentsReportFeeSubscription,jdbcType=DECIMAL},
       lightning_deal_fee = #{record.lightningDealFee,jdbcType=DECIMAL},
       cost_of_advertising = #{record.costOfAdvertising,jdbcType=DECIMAL},
+      advertising_income = #{record.advertisingIncome,jdbcType=DECIMAL},
       fba_inventory_reimbursement_customer_return = #{record.fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL},
       fba_inventory_reimbursement_damaged_warehouse = #{record.fbaInventoryReimbursementDamagedWarehouse,jdbcType=DECIMAL},
       fba_inventory_reimbursement_customer_service_issue = #{record.fbaInventoryReimbursementCustomerServiceIssue,jdbcType=DECIMAL},
@@ -1333,13 +1369,15 @@
       advertising_sales_percentage = #{record.advertisingSalesPercentage,jdbcType=DECIMAL},
       product_month = #{record.productMonth,jdbcType=INTEGER},
       exchange_rate = #{record.exchangeRate,jdbcType=DECIMAL},
-      currency_name = #{record.currencyName,jdbcType=VARCHAR},
-      currency_code = #{record.currencyCode,jdbcType=VARCHAR},
       cost_price = #{record.costPrice,jdbcType=DECIMAL},
       head_trip_cost = #{record.headTripCost,jdbcType=DECIMAL},
       development_level = #{record.developmentLevel,jdbcType=INTEGER},
       display_advertising = #{record.displayAdvertising,jdbcType=DECIMAL},
+      display_advertising_income = #{record.displayAdvertisingIncome,jdbcType=DECIMAL},
       brand_advertising = #{record.brandAdvertising,jdbcType=DECIMAL},
+      brand_advertising_income = #{record.brandAdvertisingIncome,jdbcType=DECIMAL},
+      currency_name = #{record.currencyName,jdbcType=VARCHAR},
+      currency_code = #{record.currencyCode,jdbcType=VARCHAR},
       liquidations = #{record.liquidations,jdbcType=DECIMAL},
       liquidations_adjustments = #{record.liquidationsAdjustments,jdbcType=DECIMAL},
       tbyb_order_payment = #{record.tbybOrderPayment,jdbcType=DECIMAL},
@@ -1375,14 +1413,14 @@
       <if test="salesmanUserName != null">
         salesman_user_name = #{salesmanUserName,jdbcType=VARCHAR},
       </if>
-      <if test="shopParentSku != null">
-        shop_parent_sku = #{shopParentSku,jdbcType=VARCHAR},
-      </if>
       <if test="salesGroupId != null">
         sales_group_id = #{salesGroupId,jdbcType=INTEGER},
       </if>
       <if test="salesGroupName != null">
         sales_group_name = #{salesGroupName,jdbcType=VARCHAR},
+      </if>
+      <if test="shopParentSku != null">
+        shop_parent_sku = #{shopParentSku,jdbcType=VARCHAR},
       </if>
       <if test="sku != null">
         sku = #{sku,jdbcType=VARCHAR},
@@ -1494,6 +1532,9 @@
       </if>
       <if test="costOfAdvertising != null">
         cost_of_advertising = #{costOfAdvertising,jdbcType=DECIMAL},
+      </if>
+      <if test="advertisingIncome != null">
+        advertising_income = #{advertisingIncome,jdbcType=DECIMAL},
       </if>
       <if test="fbaInventoryReimbursementCustomerReturn != null">
         fba_inventory_reimbursement_customer_return = #{fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL},
@@ -1621,12 +1662,6 @@
       <if test="exchangeRate != null">
         exchange_rate = #{exchangeRate,jdbcType=DECIMAL},
       </if>
-      <if test="currencyName != null">
-        currency_name = #{currencyName,jdbcType=VARCHAR},
-      </if>
-      <if test="currencyCode != null">
-        currency_code = #{currencyCode,jdbcType=VARCHAR},
-      </if>
       <if test="costPrice != null">
         cost_price = #{costPrice,jdbcType=DECIMAL},
       </if>
@@ -1639,8 +1674,20 @@
       <if test="displayAdvertising != null">
         display_advertising = #{displayAdvertising,jdbcType=DECIMAL},
       </if>
+      <if test="displayAdvertisingIncome != null">
+        display_advertising_income = #{displayAdvertisingIncome,jdbcType=DECIMAL},
+      </if>
       <if test="brandAdvertising != null">
         brand_advertising = #{brandAdvertising,jdbcType=DECIMAL},
+      </if>
+      <if test="brandAdvertisingIncome != null">
+        brand_advertising_income = #{brandAdvertisingIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="currencyName != null">
+        currency_name = #{currencyName,jdbcType=VARCHAR},
+      </if>
+      <if test="currencyCode != null">
+        currency_code = #{currencyCode,jdbcType=VARCHAR},
       </if>
       <if test="liquidations != null">
         liquidations = #{liquidations,jdbcType=DECIMAL},
@@ -1667,9 +1714,9 @@
       developer_user_name = #{developerUserName,jdbcType=VARCHAR},
       salesman_user_id = #{salesmanUserId,jdbcType=INTEGER},
       salesman_user_name = #{salesmanUserName,jdbcType=VARCHAR},
-      shop_parent_sku = #{shopParentSku,jdbcType=VARCHAR},
       sales_group_id = #{salesGroupId,jdbcType=INTEGER},
       sales_group_name = #{salesGroupName,jdbcType=VARCHAR},
+      shop_parent_sku = #{shopParentSku,jdbcType=VARCHAR},
       sku = #{sku,jdbcType=VARCHAR},
       shop_sku = #{shopSku,jdbcType=VARCHAR},
       shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
@@ -1707,6 +1754,7 @@
       sellerPayments_report_fee_subscription = #{sellerpaymentsReportFeeSubscription,jdbcType=DECIMAL},
       lightning_deal_fee = #{lightningDealFee,jdbcType=DECIMAL},
       cost_of_advertising = #{costOfAdvertising,jdbcType=DECIMAL},
+      advertising_income = #{advertisingIncome,jdbcType=DECIMAL},
       fba_inventory_reimbursement_customer_return = #{fbaInventoryReimbursementCustomerReturn,jdbcType=DECIMAL},
       fba_inventory_reimbursement_damaged_warehouse = #{fbaInventoryReimbursementDamagedWarehouse,jdbcType=DECIMAL},
       fba_inventory_reimbursement_customer_service_issue = #{fbaInventoryReimbursementCustomerServiceIssue,jdbcType=DECIMAL},
@@ -1749,13 +1797,15 @@
       advertising_sales_percentage = #{advertisingSalesPercentage,jdbcType=DECIMAL},
       product_month = #{productMonth,jdbcType=INTEGER},
       exchange_rate = #{exchangeRate,jdbcType=DECIMAL},
-      currency_name = #{currencyName,jdbcType=VARCHAR},
-      currency_code = #{currencyCode,jdbcType=VARCHAR},
       cost_price = #{costPrice,jdbcType=DECIMAL},
       head_trip_cost = #{headTripCost,jdbcType=DECIMAL},
       development_level = #{developmentLevel,jdbcType=INTEGER},
       display_advertising = #{displayAdvertising,jdbcType=DECIMAL},
+      display_advertising_income = #{displayAdvertisingIncome,jdbcType=DECIMAL},
       brand_advertising = #{brandAdvertising,jdbcType=DECIMAL},
+      brand_advertising_income = #{brandAdvertisingIncome,jdbcType=DECIMAL},
+      currency_name = #{currencyName,jdbcType=VARCHAR},
+      currency_code = #{currencyCode,jdbcType=VARCHAR},
       liquidations = #{liquidations,jdbcType=DECIMAL},
       liquidations_adjustments = #{liquidationsAdjustments,jdbcType=DECIMAL},
       tbyb_order_payment = #{tbybOrderPayment,jdbcType=DECIMAL},

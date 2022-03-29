@@ -14,7 +14,7 @@
         <if test="_parameter != null">
             <include refid="finance_Query_Where_Clause" />
         </if>
-        order by f.month desc
+        order by f.month desc,shop_name asc
     </select>
     <sql id="finance_Query_Where_Clause">
         <where>

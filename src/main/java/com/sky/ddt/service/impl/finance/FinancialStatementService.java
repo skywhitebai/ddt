@@ -434,9 +434,9 @@ public class FinancialStatementService implements IFinancialStatementService {
             criteria.andDeveloperUserIdEqualTo(currentUserInfo.getUserId());
         } else if (type.equals("salesman")) {
             criteria.andSalesmanUserIdEqualTo(currentUserInfo.getUserId());
-        }else if (type.equals(FinanceConstant.FinanceExprotType.SALESGROUP.getType())) {
-            List<Integer> userIdList=customSalesGroupUserMapper.selectSelesGroupUserIdbyUserId(currentUserInfo.getUserId());
-            if(CollectionUtils.isEmpty(userIdList)){
+        } else if (type.equals(FinanceConstant.FinanceExprotType.SALESGROUP.getType())) {
+            List<Integer> userIdList = customSalesGroupUserMapper.selectSelesGroupUserIdbyUserId(currentUserInfo.getUserId());
+            if (CollectionUtils.isEmpty(userIdList)) {
                 return BaseResponse.failMessage("用户没有分组");
             }
             criteria.andSalesmanUserIdIn(userIdList);
@@ -673,6 +673,9 @@ public class FinancialStatementService implements IFinancialStatementService {
             financialStatementCount.setLiquidationsAdjustments(MathUtil.addBigDecimal(financialStatementCount.getLiquidationsAdjustments(), financialStatement.getLiquidationsAdjustments()));
             financialStatementCount.setTbybOrderPayment(MathUtil.addBigDecimal(financialStatementCount.getTbybOrderPayment(), financialStatement.getTbybOrderPayment()));
             financialStatementCount.setTbybTrialShipment(MathUtil.addBigDecimal(financialStatementCount.getTbybTrialShipment(), financialStatement.getTbybTrialShipment()));
+            financialStatementCount.setAdvertisingIncome(MathUtil.addBigDecimal(financialStatementCount.getAdvertisingIncome(), financialStatement.getAdvertisingIncome()));
+            financialStatementCount.setDisplayAdvertisingIncome(MathUtil.addBigDecimal(financialStatementCount.getDisplayAdvertisingIncome(), financialStatement.getDisplayAdvertisingIncome()));
+            financialStatementCount.setBrandAdvertisingIncome(MathUtil.addBigDecimal(financialStatementCount.getBrandAdvertisingIncome(), financialStatement.getBrandAdvertisingIncome()));
         }
         setMoneyBackRate(financialStatementCount);
         setGrossMarginOnSales(financialStatementCount);
@@ -760,6 +763,9 @@ public class FinancialStatementService implements IFinancialStatementService {
         row.createCell(116).setCellValue(financialStatementCount.getTbybOrderPayment().doubleValue());
         row.createCell(117).setCellValue(financialStatementCount.getTbybTrialShipment().doubleValue());
         //118 groupName
+        row.createCell(119).setCellValue(financialStatementCount.getAdvertisingIncome().doubleValue());
+        row.createCell(120).setCellValue(financialStatementCount.getDisplayAdvertisingIncome().doubleValue());
+        row.createCell(121).setCellValue(financialStatementCount.getBrandAdvertisingIncome().doubleValue());
         Row row2 = sheet.createRow(rowIndex + 1);
         Row row3 = sheet.createRow(rowIndex + 2);
         row2.createCell(7).setCellValue("负责人");
@@ -906,7 +912,7 @@ public class FinancialStatementService implements IFinancialStatementService {
                 }
                 return false;
             }).collect(Collectors.toList());
-        }else if (FinanceConstant.FinanceExprotType.SALESGROUP.getType().equals(type)) {
+        } else if (FinanceConstant.FinanceExprotType.SALESGROUP.getType().equals(type)) {
             financialStatements = financialStatementList.stream().filter(item -> {
                 if (StringUtils.isEmpty(item.getSalesGroupName())) {
                     if (StringUtils.isEmpty(userName)) {
@@ -932,7 +938,7 @@ public class FinancialStatementService implements IFinancialStatementService {
             userNameList = financialStatementList.stream().map(FinancialStatement::getDeveloperUserName).distinct().collect(Collectors.toList());
         } else if ("salesman".equals(type)) {
             userNameList = financialStatementList.stream().map(FinancialStatement::getSalesmanUserName).distinct().collect(Collectors.toList());
-        }else if ("salesGroup".equals(type)) {
+        } else if ("salesGroup".equals(type)) {
             userNameList = financialStatementList.stream().map(FinancialStatement::getSalesGroupName).distinct().collect(Collectors.toList());
         }
         return userNameList;
@@ -1267,6 +1273,9 @@ public class FinancialStatementService implements IFinancialStatementService {
             row.createCell(116).setCellValue(financialStatement.getTbybOrderPayment().doubleValue());
             row.createCell(117).setCellValue(financialStatement.getTbybTrialShipment().doubleValue());
             row.createCell(118).setCellValue(financialStatement.getSalesGroupName());
+            row.createCell(119).setCellValue(financialStatement.getAdvertisingIncome().doubleValue());
+            row.createCell(120).setCellValue(financialStatement.getDisplayAdvertisingIncome().doubleValue());
+            row.createCell(121).setCellValue(financialStatement.getBrandAdvertisingIncome().doubleValue());
             rowIndex++;
         }
     }

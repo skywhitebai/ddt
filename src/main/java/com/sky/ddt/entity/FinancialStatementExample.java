@@ -676,76 +676,6 @@ public class FinancialStatementExample {
             return (Criteria) this;
         }
 
-        public Criteria andShopParentSkuIsNull() {
-            addCriterion("shop_parent_sku is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopParentSkuIsNotNull() {
-            addCriterion("shop_parent_sku is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopParentSkuEqualTo(String value) {
-            addCriterion("shop_parent_sku =", value, "shopParentSku");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopParentSkuNotEqualTo(String value) {
-            addCriterion("shop_parent_sku <>", value, "shopParentSku");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopParentSkuGreaterThan(String value) {
-            addCriterion("shop_parent_sku >", value, "shopParentSku");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopParentSkuGreaterThanOrEqualTo(String value) {
-            addCriterion("shop_parent_sku >=", value, "shopParentSku");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopParentSkuLessThan(String value) {
-            addCriterion("shop_parent_sku <", value, "shopParentSku");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopParentSkuLessThanOrEqualTo(String value) {
-            addCriterion("shop_parent_sku <=", value, "shopParentSku");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopParentSkuLike(String value) {
-            addCriterion("shop_parent_sku like", value, "shopParentSku");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopParentSkuNotLike(String value) {
-            addCriterion("shop_parent_sku not like", value, "shopParentSku");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopParentSkuIn(List<String> values) {
-            addCriterion("shop_parent_sku in", values, "shopParentSku");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopParentSkuNotIn(List<String> values) {
-            addCriterion("shop_parent_sku not in", values, "shopParentSku");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopParentSkuBetween(String value1, String value2) {
-            addCriterion("shop_parent_sku between", value1, value2, "shopParentSku");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopParentSkuNotBetween(String value1, String value2) {
-            addCriterion("shop_parent_sku not between", value1, value2, "shopParentSku");
-            return (Criteria) this;
-        }
-
         public Criteria andSalesGroupIdIsNull() {
             addCriterion("sales_group_id is null");
             return (Criteria) this;
@@ -873,6 +803,76 @@ public class FinancialStatementExample {
 
         public Criteria andSalesGroupNameNotBetween(String value1, String value2) {
             addCriterion("sales_group_name not between", value1, value2, "salesGroupName");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopParentSkuIsNull() {
+            addCriterion("shop_parent_sku is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopParentSkuIsNotNull() {
+            addCriterion("shop_parent_sku is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopParentSkuEqualTo(String value) {
+            addCriterion("shop_parent_sku =", value, "shopParentSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopParentSkuNotEqualTo(String value) {
+            addCriterion("shop_parent_sku <>", value, "shopParentSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopParentSkuGreaterThan(String value) {
+            addCriterion("shop_parent_sku >", value, "shopParentSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopParentSkuGreaterThanOrEqualTo(String value) {
+            addCriterion("shop_parent_sku >=", value, "shopParentSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopParentSkuLessThan(String value) {
+            addCriterion("shop_parent_sku <", value, "shopParentSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopParentSkuLessThanOrEqualTo(String value) {
+            addCriterion("shop_parent_sku <=", value, "shopParentSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopParentSkuLike(String value) {
+            addCriterion("shop_parent_sku like", value, "shopParentSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopParentSkuNotLike(String value) {
+            addCriterion("shop_parent_sku not like", value, "shopParentSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopParentSkuIn(List<String> values) {
+            addCriterion("shop_parent_sku in", values, "shopParentSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopParentSkuNotIn(List<String> values) {
+            addCriterion("shop_parent_sku not in", values, "shopParentSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopParentSkuBetween(String value1, String value2) {
+            addCriterion("shop_parent_sku between", value1, value2, "shopParentSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopParentSkuNotBetween(String value1, String value2) {
+            addCriterion("shop_parent_sku not between", value1, value2, "shopParentSku");
             return (Criteria) this;
         }
 
@@ -3123,6 +3123,66 @@ public class FinancialStatementExample {
 
         public Criteria andCostOfAdvertisingNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("cost_of_advertising not between", value1, value2, "costOfAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingIncomeIsNull() {
+            addCriterion("advertising_income is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingIncomeIsNotNull() {
+            addCriterion("advertising_income is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingIncomeEqualTo(BigDecimal value) {
+            addCriterion("advertising_income =", value, "advertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingIncomeNotEqualTo(BigDecimal value) {
+            addCriterion("advertising_income <>", value, "advertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingIncomeGreaterThan(BigDecimal value) {
+            addCriterion("advertising_income >", value, "advertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingIncomeGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("advertising_income >=", value, "advertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingIncomeLessThan(BigDecimal value) {
+            addCriterion("advertising_income <", value, "advertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingIncomeLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("advertising_income <=", value, "advertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingIncomeIn(List<BigDecimal> values) {
+            addCriterion("advertising_income in", values, "advertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingIncomeNotIn(List<BigDecimal> values) {
+            addCriterion("advertising_income not in", values, "advertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingIncomeBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("advertising_income between", value1, value2, "advertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingIncomeNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("advertising_income not between", value1, value2, "advertisingIncome");
             return (Criteria) this;
         }
 
@@ -5646,146 +5706,6 @@ public class FinancialStatementExample {
             return (Criteria) this;
         }
 
-        public Criteria andCurrencyNameIsNull() {
-            addCriterion("currency_name is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNameIsNotNull() {
-            addCriterion("currency_name is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNameEqualTo(String value) {
-            addCriterion("currency_name =", value, "currencyName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNameNotEqualTo(String value) {
-            addCriterion("currency_name <>", value, "currencyName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNameGreaterThan(String value) {
-            addCriterion("currency_name >", value, "currencyName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNameGreaterThanOrEqualTo(String value) {
-            addCriterion("currency_name >=", value, "currencyName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNameLessThan(String value) {
-            addCriterion("currency_name <", value, "currencyName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNameLessThanOrEqualTo(String value) {
-            addCriterion("currency_name <=", value, "currencyName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNameLike(String value) {
-            addCriterion("currency_name like", value, "currencyName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNameNotLike(String value) {
-            addCriterion("currency_name not like", value, "currencyName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNameIn(List<String> values) {
-            addCriterion("currency_name in", values, "currencyName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNameNotIn(List<String> values) {
-            addCriterion("currency_name not in", values, "currencyName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNameBetween(String value1, String value2) {
-            addCriterion("currency_name between", value1, value2, "currencyName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyNameNotBetween(String value1, String value2) {
-            addCriterion("currency_name not between", value1, value2, "currencyName");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyCodeIsNull() {
-            addCriterion("currency_code is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyCodeIsNotNull() {
-            addCriterion("currency_code is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyCodeEqualTo(String value) {
-            addCriterion("currency_code =", value, "currencyCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyCodeNotEqualTo(String value) {
-            addCriterion("currency_code <>", value, "currencyCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyCodeGreaterThan(String value) {
-            addCriterion("currency_code >", value, "currencyCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyCodeGreaterThanOrEqualTo(String value) {
-            addCriterion("currency_code >=", value, "currencyCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyCodeLessThan(String value) {
-            addCriterion("currency_code <", value, "currencyCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyCodeLessThanOrEqualTo(String value) {
-            addCriterion("currency_code <=", value, "currencyCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyCodeLike(String value) {
-            addCriterion("currency_code like", value, "currencyCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyCodeNotLike(String value) {
-            addCriterion("currency_code not like", value, "currencyCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyCodeIn(List<String> values) {
-            addCriterion("currency_code in", values, "currencyCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyCodeNotIn(List<String> values) {
-            addCriterion("currency_code not in", values, "currencyCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyCodeBetween(String value1, String value2) {
-            addCriterion("currency_code between", value1, value2, "currencyCode");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrencyCodeNotBetween(String value1, String value2) {
-            addCriterion("currency_code not between", value1, value2, "currencyCode");
-            return (Criteria) this;
-        }
-
         public Criteria andCostPriceIsNull() {
             addCriterion("cost_price is null");
             return (Criteria) this;
@@ -6026,6 +5946,66 @@ public class FinancialStatementExample {
             return (Criteria) this;
         }
 
+        public Criteria andDisplayAdvertisingIncomeIsNull() {
+            addCriterion("display_advertising_income is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingIncomeIsNotNull() {
+            addCriterion("display_advertising_income is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingIncomeEqualTo(BigDecimal value) {
+            addCriterion("display_advertising_income =", value, "displayAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingIncomeNotEqualTo(BigDecimal value) {
+            addCriterion("display_advertising_income <>", value, "displayAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingIncomeGreaterThan(BigDecimal value) {
+            addCriterion("display_advertising_income >", value, "displayAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingIncomeGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("display_advertising_income >=", value, "displayAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingIncomeLessThan(BigDecimal value) {
+            addCriterion("display_advertising_income <", value, "displayAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingIncomeLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("display_advertising_income <=", value, "displayAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingIncomeIn(List<BigDecimal> values) {
+            addCriterion("display_advertising_income in", values, "displayAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingIncomeNotIn(List<BigDecimal> values) {
+            addCriterion("display_advertising_income not in", values, "displayAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingIncomeBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("display_advertising_income between", value1, value2, "displayAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andDisplayAdvertisingIncomeNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("display_advertising_income not between", value1, value2, "displayAdvertisingIncome");
+            return (Criteria) this;
+        }
+
         public Criteria andBrandAdvertisingIsNull() {
             addCriterion("brand_advertising is null");
             return (Criteria) this;
@@ -6083,6 +6063,206 @@ public class FinancialStatementExample {
 
         public Criteria andBrandAdvertisingNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("brand_advertising not between", value1, value2, "brandAdvertising");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIncomeIsNull() {
+            addCriterion("brand_advertising_income is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIncomeIsNotNull() {
+            addCriterion("brand_advertising_income is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIncomeEqualTo(BigDecimal value) {
+            addCriterion("brand_advertising_income =", value, "brandAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIncomeNotEqualTo(BigDecimal value) {
+            addCriterion("brand_advertising_income <>", value, "brandAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIncomeGreaterThan(BigDecimal value) {
+            addCriterion("brand_advertising_income >", value, "brandAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIncomeGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("brand_advertising_income >=", value, "brandAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIncomeLessThan(BigDecimal value) {
+            addCriterion("brand_advertising_income <", value, "brandAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIncomeLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("brand_advertising_income <=", value, "brandAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIncomeIn(List<BigDecimal> values) {
+            addCriterion("brand_advertising_income in", values, "brandAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIncomeNotIn(List<BigDecimal> values) {
+            addCriterion("brand_advertising_income not in", values, "brandAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIncomeBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("brand_advertising_income between", value1, value2, "brandAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andBrandAdvertisingIncomeNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("brand_advertising_income not between", value1, value2, "brandAdvertisingIncome");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyNameIsNull() {
+            addCriterion("currency_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyNameIsNotNull() {
+            addCriterion("currency_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyNameEqualTo(String value) {
+            addCriterion("currency_name =", value, "currencyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyNameNotEqualTo(String value) {
+            addCriterion("currency_name <>", value, "currencyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyNameGreaterThan(String value) {
+            addCriterion("currency_name >", value, "currencyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyNameGreaterThanOrEqualTo(String value) {
+            addCriterion("currency_name >=", value, "currencyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyNameLessThan(String value) {
+            addCriterion("currency_name <", value, "currencyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyNameLessThanOrEqualTo(String value) {
+            addCriterion("currency_name <=", value, "currencyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyNameLike(String value) {
+            addCriterion("currency_name like", value, "currencyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyNameNotLike(String value) {
+            addCriterion("currency_name not like", value, "currencyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyNameIn(List<String> values) {
+            addCriterion("currency_name in", values, "currencyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyNameNotIn(List<String> values) {
+            addCriterion("currency_name not in", values, "currencyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyNameBetween(String value1, String value2) {
+            addCriterion("currency_name between", value1, value2, "currencyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyNameNotBetween(String value1, String value2) {
+            addCriterion("currency_name not between", value1, value2, "currencyName");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyCodeIsNull() {
+            addCriterion("currency_code is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyCodeIsNotNull() {
+            addCriterion("currency_code is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyCodeEqualTo(String value) {
+            addCriterion("currency_code =", value, "currencyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyCodeNotEqualTo(String value) {
+            addCriterion("currency_code <>", value, "currencyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyCodeGreaterThan(String value) {
+            addCriterion("currency_code >", value, "currencyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyCodeGreaterThanOrEqualTo(String value) {
+            addCriterion("currency_code >=", value, "currencyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyCodeLessThan(String value) {
+            addCriterion("currency_code <", value, "currencyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyCodeLessThanOrEqualTo(String value) {
+            addCriterion("currency_code <=", value, "currencyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyCodeLike(String value) {
+            addCriterion("currency_code like", value, "currencyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyCodeNotLike(String value) {
+            addCriterion("currency_code not like", value, "currencyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyCodeIn(List<String> values) {
+            addCriterion("currency_code in", values, "currencyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyCodeNotIn(List<String> values) {
+            addCriterion("currency_code not in", values, "currencyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyCodeBetween(String value1, String value2) {
+            addCriterion("currency_code between", value1, value2, "currencyCode");
+            return (Criteria) this;
+        }
+
+        public Criteria andCurrencyCodeNotBetween(String value1, String value2) {
+            addCriterion("currency_code not between", value1, value2, "currencyCode");
             return (Criteria) this;
         }
 

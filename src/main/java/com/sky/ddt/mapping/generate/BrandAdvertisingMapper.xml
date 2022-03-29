@@ -7,6 +7,7 @@
     <result column="sku" jdbcType="VARCHAR" property="sku" />
     <result column="shop_sku_id" jdbcType="INTEGER" property="shopSkuId" />
     <result column="fee" jdbcType="DECIMAL" property="fee" />
+    <result column="total_sales_day_14" jdbcType="DECIMAL" property="totalSalesDay14" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
   </resultMap>
@@ -69,7 +70,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, finance_id, sku, shop_sku_id, fee, create_time, create_by
+    id, finance_id, sku, shop_sku_id, fee, total_sales_day_14, create_time, create_by
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.BrandAdvertisingExample" resultMap="BaseResultMap">
     select
@@ -106,11 +107,11 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into brand_advertising (finance_id, sku, shop_sku_id, 
-      fee, create_time, create_by
-      )
+      fee, total_sales_day_14, create_time, 
+      create_by)
     values (#{financeId,jdbcType=INTEGER}, #{sku,jdbcType=VARCHAR}, #{shopSkuId,jdbcType=INTEGER}, 
-      #{fee,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}
-      )
+      #{fee,jdbcType=DECIMAL}, #{totalSalesDay14,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.BrandAdvertising">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -129,6 +130,9 @@
       </if>
       <if test="fee != null">
         fee,
+      </if>
+      <if test="totalSalesDay14 != null">
+        total_sales_day_14,
       </if>
       <if test="createTime != null">
         create_time,
@@ -149,6 +153,9 @@
       </if>
       <if test="fee != null">
         #{fee,jdbcType=DECIMAL},
+      </if>
+      <if test="totalSalesDay14 != null">
+        #{totalSalesDay14,jdbcType=DECIMAL},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -182,6 +189,9 @@
       <if test="record.fee != null">
         fee = #{record.fee,jdbcType=DECIMAL},
       </if>
+      <if test="record.totalSalesDay14 != null">
+        total_sales_day_14 = #{record.totalSalesDay14,jdbcType=DECIMAL},
+      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -200,6 +210,7 @@
       sku = #{record.sku,jdbcType=VARCHAR},
       shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
       fee = #{record.fee,jdbcType=DECIMAL},
+      total_sales_day_14 = #{record.totalSalesDay14,jdbcType=DECIMAL},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER}
     <if test="_parameter != null">
@@ -221,6 +232,9 @@
       <if test="fee != null">
         fee = #{fee,jdbcType=DECIMAL},
       </if>
+      <if test="totalSalesDay14 != null">
+        total_sales_day_14 = #{totalSalesDay14,jdbcType=DECIMAL},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -236,6 +250,7 @@
       sku = #{sku,jdbcType=VARCHAR},
       shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
       fee = #{fee,jdbcType=DECIMAL},
+      total_sales_day_14 = #{totalSalesDay14,jdbcType=DECIMAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}

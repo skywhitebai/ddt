@@ -416,6 +416,66 @@ public class BrandAdvertisingExample {
             return (Criteria) this;
         }
 
+        public Criteria andTotalSalesDay14IsNull() {
+            addCriterion("total_sales_day_14 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesDay14IsNotNull() {
+            addCriterion("total_sales_day_14 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesDay14EqualTo(BigDecimal value) {
+            addCriterion("total_sales_day_14 =", value, "totalSalesDay14");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesDay14NotEqualTo(BigDecimal value) {
+            addCriterion("total_sales_day_14 <>", value, "totalSalesDay14");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesDay14GreaterThan(BigDecimal value) {
+            addCriterion("total_sales_day_14 >", value, "totalSalesDay14");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesDay14GreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("total_sales_day_14 >=", value, "totalSalesDay14");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesDay14LessThan(BigDecimal value) {
+            addCriterion("total_sales_day_14 <", value, "totalSalesDay14");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesDay14LessThanOrEqualTo(BigDecimal value) {
+            addCriterion("total_sales_day_14 <=", value, "totalSalesDay14");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesDay14In(List<BigDecimal> values) {
+            addCriterion("total_sales_day_14 in", values, "totalSalesDay14");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesDay14NotIn(List<BigDecimal> values) {
+            addCriterion("total_sales_day_14 not in", values, "totalSalesDay14");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesDay14Between(BigDecimal value1, BigDecimal value2) {
+            addCriterion("total_sales_day_14 between", value1, value2, "totalSalesDay14");
+            return (Criteria) this;
+        }
+
+        public Criteria andTotalSalesDay14NotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("total_sales_day_14 not between", value1, value2, "totalSalesDay14");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

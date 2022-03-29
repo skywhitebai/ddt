@@ -85,6 +85,7 @@ public class BrandAdvertisingService implements IBrandAdvertisingService {
                 importRequest.setSku(map.get("sku"));
             }
             CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "fee", "fee", true);
+            CheckUtil.checkAndSetBigDecimal(importRequest, sbErroItem, map, "14 Day Total Sales", "totalSalesDay14", false);
             importRequestList.add(importRequest);
             if (sbErroItem.length() > 0) {
                 sbErro.append(",第" + map.get("rowNum") + "行").append(sbErroItem);

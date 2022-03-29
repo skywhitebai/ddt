@@ -44,6 +44,8 @@
 
         IFNULL(ld.lightningDealFee,0) lightningDealFee,
         IFNULL(maf.costOfAdvertising,0) costOfAdvertising,
+        IFNULL(maf.advertisingIncome,0) advertisingIncome,
+
 
         IFNULL(ms.fbaInventoryReimbursementCustomerReturn,0) fbaInventoryReimbursementCustomerReturn,
         IFNULL(ms.fbaInventoryReimbursementDamagedWarehouse,0) fbaInventoryReimbursementDamagedWarehouse,
@@ -84,7 +86,8 @@
         IFNULL(idi.initialQuantity,0)*(IFNULL(sku.`cost_price`,0)+IFNULL(ss.`head_trip_cost`,0)) initialInventoryCost,
         IFNULL(idf.finalQuantity,0) finalQuantity,
         IFNULL(idf.finalQuantity,0)*(IFNULL(sku.`cost_price`,0)+IFNULL(ss.`head_trip_cost`,0)) finalInventoryCost,
-        IFNULL(ma.manualAdjustment,0) manualAdjustment,IFNULL(da.displayAdvertising,0) displayAdvertising,IFNULL(ba.brandAdvertising,0) brandAdvertising,
+        IFNULL(ma.manualAdjustment,0) manualAdjustment,IFNULL(da.displayAdvertising,0) displayAdvertising,IFNULL(da.displayAdvertisingIncome,0) displayAdvertisingIncome,
+        IFNULL(ba.brandAdvertising,0) brandAdvertising,IFNULL(ba.brandAdvertisingIncome,0) brandAdvertisingIncome,
         case when ss.create_time is null then 0 when DATE_ADD(ss.create_time,INTERVAL 14 month)<![CDATA[  > ]]>f.month then 1 else 0 end newProduct,
         TIMESTAMPDIFF(MONTH,ss.create_time,f.month) productMonth
         FROM `finance` f
@@ -148,7 +151,7 @@
         (SELECT SUM(IFNULL(ld.`fee`,0))  lightningDealFee,ld.shop_sku_id FROM lighting_deal ld WHERE finance_id=#{financeId}  GROUP BY `shop_sku_id`) ld
         ON ld.shop_sku_id=ss.`shop_sku_id`
         LEFT JOIN
-        (SELECT SUM(IFNULL(maf.`cost`,0))*-1  costOfAdvertising,shop_sku_id FROM `monthly_advertising_fee` maf WHERE finance_id=#{financeId}  GROUP BY `shop_sku_id`) maf
+        (SELECT SUM(IFNULL(maf.`cost`,0))*-1  costOfAdvertising,SUM(IFNULL(maf.`total_sales_in_7_days`,0))  advertisingIncome,shop_sku_id FROM `monthly_advertising_fee` maf WHERE finance_id=#{financeId}  GROUP BY `shop_sku_id`) maf
         ON maf.shop_sku_id=ss.`shop_sku_id`
         LEFT JOIN
         (SELECT SUM(IFNULL(msf.`estimated_monthly_storage_fee`,0)*-1) fbaInventoryStorageFee,shop_sku_id FROM monthly_storage_fee msf WHERE finance_id=#{financeId}  GROUP BY `shop_sku_id`) msf
@@ -181,10 +184,10 @@
         (SELECT SUM(IFNULL(ma.fee,0)) manualAdjustment,shop_sku_id FROM `manual_adjustment` ma WHERE `finance_id`=#{financeId} GROUP BY `shop_sku_id`) ma
         ON ma.shop_sku_id=ss.shop_sku_id
         LEFT JOIN
-        (SELECT SUM(IFNULL(spend,0))*-1 displayAdvertising,shop_sku_id FROM `display_advertising` WHERE `finance_id`=#{financeId} GROUP BY `shop_sku_id`) da
+        (SELECT SUM(IFNULL(spend,0))*-1 displayAdvertising,SUM(IFNULL(total_sales_day_14,0)) displayAdvertisingIncome,shop_sku_id FROM `display_advertising` WHERE `finance_id`=#{financeId} GROUP BY `shop_sku_id`) da
         ON da.shop_sku_id=ss.shop_sku_id
         LEFT JOIN
-        (SELECT SUM(IFNULL(fee,0))*-1 brandAdvertising,shop_sku_id FROM `brand_advertising` WHERE `finance_id`=#{financeId} GROUP BY `shop_sku_id`) ba
+        (SELECT SUM(IFNULL(fee,0))*-1 brandAdvertising,SUM(IFNULL(total_sales_day_14,0))*-1 brandAdvertisingIncome,shop_sku_id FROM `brand_advertising` WHERE `finance_id`=#{financeId} GROUP BY `shop_sku_id`) ba
         ON ba.shop_sku_id=ss.shop_sku_id
 
         WHERE f.`id`=#{financeId}

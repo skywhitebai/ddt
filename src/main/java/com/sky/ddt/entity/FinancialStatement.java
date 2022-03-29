@@ -22,11 +22,11 @@ public class FinancialStatement {
 
     private String salesmanUserName;
 
-    private String shopParentSku;
-
     private Integer salesGroupId;
 
     private String salesGroupName;
+
+    private String shopParentSku;
 
     private String sku;
 
@@ -101,6 +101,8 @@ public class FinancialStatement {
     private BigDecimal lightningDealFee;
 
     private BigDecimal costOfAdvertising;
+
+    private BigDecimal advertisingIncome;
 
     private BigDecimal fbaInventoryReimbursementCustomerReturn;
 
@@ -186,10 +188,6 @@ public class FinancialStatement {
 
     private BigDecimal exchangeRate;
 
-    private String currencyName;
-
-    private String currencyCode;
-
     private BigDecimal costPrice;
 
     private BigDecimal headTripCost;
@@ -198,7 +196,15 @@ public class FinancialStatement {
 
     private BigDecimal displayAdvertising;
 
+    private BigDecimal displayAdvertisingIncome;
+
     private BigDecimal brandAdvertising;
+
+    private BigDecimal brandAdvertisingIncome;
+
+    private String currencyName;
+
+    private String currencyCode;
 
     private BigDecimal liquidations;
 
@@ -280,14 +286,6 @@ public class FinancialStatement {
         this.salesmanUserName = salesmanUserName == null ? null : salesmanUserName.trim();
     }
 
-    public String getShopParentSku() {
-        return shopParentSku;
-    }
-
-    public void setShopParentSku(String shopParentSku) {
-        this.shopParentSku = shopParentSku == null ? null : shopParentSku.trim();
-    }
-
     public Integer getSalesGroupId() {
         return salesGroupId;
     }
@@ -302,6 +300,14 @@ public class FinancialStatement {
 
     public void setSalesGroupName(String salesGroupName) {
         this.salesGroupName = salesGroupName == null ? null : salesGroupName.trim();
+    }
+
+    public String getShopParentSku() {
+        return shopParentSku;
+    }
+
+    public void setShopParentSku(String shopParentSku) {
+        this.shopParentSku = shopParentSku == null ? null : shopParentSku.trim();
     }
 
     public String getSku() {
@@ -598,6 +604,14 @@ public class FinancialStatement {
 
     public void setCostOfAdvertising(BigDecimal costOfAdvertising) {
         this.costOfAdvertising = costOfAdvertising;
+    }
+
+    public BigDecimal getAdvertisingIncome() {
+        return advertisingIncome;
+    }
+
+    public void setAdvertisingIncome(BigDecimal advertisingIncome) {
+        this.advertisingIncome = advertisingIncome;
     }
 
     public BigDecimal getFbaInventoryReimbursementCustomerReturn() {
@@ -936,22 +950,6 @@ public class FinancialStatement {
         this.exchangeRate = exchangeRate;
     }
 
-    public String getCurrencyName() {
-        return currencyName;
-    }
-
-    public void setCurrencyName(String currencyName) {
-        this.currencyName = currencyName == null ? null : currencyName.trim();
-    }
-
-    public String getCurrencyCode() {
-        return currencyCode;
-    }
-
-    public void setCurrencyCode(String currencyCode) {
-        this.currencyCode = currencyCode == null ? null : currencyCode.trim();
-    }
-
     public BigDecimal getCostPrice() {
         return costPrice;
     }
@@ -984,12 +982,44 @@ public class FinancialStatement {
         this.displayAdvertising = displayAdvertising;
     }
 
+    public BigDecimal getDisplayAdvertisingIncome() {
+        return displayAdvertisingIncome;
+    }
+
+    public void setDisplayAdvertisingIncome(BigDecimal displayAdvertisingIncome) {
+        this.displayAdvertisingIncome = displayAdvertisingIncome;
+    }
+
     public BigDecimal getBrandAdvertising() {
         return brandAdvertising;
     }
 
     public void setBrandAdvertising(BigDecimal brandAdvertising) {
         this.brandAdvertising = brandAdvertising;
+    }
+
+    public BigDecimal getBrandAdvertisingIncome() {
+        return brandAdvertisingIncome;
+    }
+
+    public void setBrandAdvertisingIncome(BigDecimal brandAdvertisingIncome) {
+        this.brandAdvertisingIncome = brandAdvertisingIncome;
+    }
+
+    public String getCurrencyName() {
+        return currencyName;
+    }
+
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName == null ? null : currencyName.trim();
+    }
+
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode == null ? null : currencyCode.trim();
     }
 
     public BigDecimal getLiquidations() {
