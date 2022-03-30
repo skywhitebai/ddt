@@ -1124,6 +1124,286 @@ public class ProductDevelopExample {
             addCriterion("development_level not between", value1, value2, "developmentLevel");
             return (Criteria) this;
         }
+
+        public Criteria andDevelopmentDocUrlIsNull() {
+            addCriterion("development_doc_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentDocUrlIsNotNull() {
+            addCriterion("development_doc_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentDocUrlEqualTo(String value) {
+            addCriterion("development_doc_url =", value, "developmentDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentDocUrlNotEqualTo(String value) {
+            addCriterion("development_doc_url <>", value, "developmentDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentDocUrlGreaterThan(String value) {
+            addCriterion("development_doc_url >", value, "developmentDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentDocUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("development_doc_url >=", value, "developmentDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentDocUrlLessThan(String value) {
+            addCriterion("development_doc_url <", value, "developmentDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentDocUrlLessThanOrEqualTo(String value) {
+            addCriterion("development_doc_url <=", value, "developmentDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentDocUrlLike(String value) {
+            addCriterion("development_doc_url like", value, "developmentDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentDocUrlNotLike(String value) {
+            addCriterion("development_doc_url not like", value, "developmentDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentDocUrlIn(List<String> values) {
+            addCriterion("development_doc_url in", values, "developmentDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentDocUrlNotIn(List<String> values) {
+            addCriterion("development_doc_url not in", values, "developmentDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentDocUrlBetween(String value1, String value2) {
+            addCriterion("development_doc_url between", value1, value2, "developmentDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andDevelopmentDocUrlNotBetween(String value1, String value2) {
+            addCriterion("development_doc_url not between", value1, value2, "developmentDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmDocUrlIsNull() {
+            addCriterion("confirm_doc_url is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmDocUrlIsNotNull() {
+            addCriterion("confirm_doc_url is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmDocUrlEqualTo(String value) {
+            addCriterion("confirm_doc_url =", value, "confirmDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmDocUrlNotEqualTo(String value) {
+            addCriterion("confirm_doc_url <>", value, "confirmDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmDocUrlGreaterThan(String value) {
+            addCriterion("confirm_doc_url >", value, "confirmDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmDocUrlGreaterThanOrEqualTo(String value) {
+            addCriterion("confirm_doc_url >=", value, "confirmDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmDocUrlLessThan(String value) {
+            addCriterion("confirm_doc_url <", value, "confirmDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmDocUrlLessThanOrEqualTo(String value) {
+            addCriterion("confirm_doc_url <=", value, "confirmDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmDocUrlLike(String value) {
+            addCriterion("confirm_doc_url like", value, "confirmDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmDocUrlNotLike(String value) {
+            addCriterion("confirm_doc_url not like", value, "confirmDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmDocUrlIn(List<String> values) {
+            addCriterion("confirm_doc_url in", values, "confirmDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmDocUrlNotIn(List<String> values) {
+            addCriterion("confirm_doc_url not in", values, "confirmDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmDocUrlBetween(String value1, String value2) {
+            addCriterion("confirm_doc_url between", value1, value2, "confirmDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andConfirmDocUrlNotBetween(String value1, String value2) {
+            addCriterion("confirm_doc_url not between", value1, value2, "confirmDocUrl");
+            return (Criteria) this;
+        }
+
+        public Criteria andRawMaterialIsNull() {
+            addCriterion("raw_material is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRawMaterialIsNotNull() {
+            addCriterion("raw_material is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRawMaterialEqualTo(String value) {
+            addCriterion("raw_material =", value, "rawMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andRawMaterialNotEqualTo(String value) {
+            addCriterion("raw_material <>", value, "rawMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andRawMaterialGreaterThan(String value) {
+            addCriterion("raw_material >", value, "rawMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andRawMaterialGreaterThanOrEqualTo(String value) {
+            addCriterion("raw_material >=", value, "rawMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andRawMaterialLessThan(String value) {
+            addCriterion("raw_material <", value, "rawMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andRawMaterialLessThanOrEqualTo(String value) {
+            addCriterion("raw_material <=", value, "rawMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andRawMaterialLike(String value) {
+            addCriterion("raw_material like", value, "rawMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andRawMaterialNotLike(String value) {
+            addCriterion("raw_material not like", value, "rawMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andRawMaterialIn(List<String> values) {
+            addCriterion("raw_material in", values, "rawMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andRawMaterialNotIn(List<String> values) {
+            addCriterion("raw_material not in", values, "rawMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andRawMaterialBetween(String value1, String value2) {
+            addCriterion("raw_material between", value1, value2, "rawMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andRawMaterialNotBetween(String value1, String value2) {
+            addCriterion("raw_material not between", value1, value2, "rawMaterial");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionSupplierIsNull() {
+            addCriterion("production_supplier is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionSupplierIsNotNull() {
+            addCriterion("production_supplier is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionSupplierEqualTo(String value) {
+            addCriterion("production_supplier =", value, "productionSupplier");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionSupplierNotEqualTo(String value) {
+            addCriterion("production_supplier <>", value, "productionSupplier");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionSupplierGreaterThan(String value) {
+            addCriterion("production_supplier >", value, "productionSupplier");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionSupplierGreaterThanOrEqualTo(String value) {
+            addCriterion("production_supplier >=", value, "productionSupplier");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionSupplierLessThan(String value) {
+            addCriterion("production_supplier <", value, "productionSupplier");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionSupplierLessThanOrEqualTo(String value) {
+            addCriterion("production_supplier <=", value, "productionSupplier");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionSupplierLike(String value) {
+            addCriterion("production_supplier like", value, "productionSupplier");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionSupplierNotLike(String value) {
+            addCriterion("production_supplier not like", value, "productionSupplier");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionSupplierIn(List<String> values) {
+            addCriterion("production_supplier in", values, "productionSupplier");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionSupplierNotIn(List<String> values) {
+            addCriterion("production_supplier not in", values, "productionSupplier");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionSupplierBetween(String value1, String value2) {
+            addCriterion("production_supplier between", value1, value2, "productionSupplier");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductionSupplierNotBetween(String value1, String value2) {
+            addCriterion("production_supplier not between", value1, value2, "productionSupplier");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -26,7 +26,7 @@
             src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.5.5.4/locale/easyui-lang-zh_CN.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath }/static/css/main.css?t=20200928" type="text/css">
     <script type="text/javascript"
-            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20201028"></script>
+            src="${pageContext.request.contextPath }/static/js/common/common.js?t=20220330"></script>
     <script type="text/javascript"
             src="${pageContext.request.contextPath }/static/js/common/cookieUtil.js?t=20200928"></script>
     <style>
@@ -61,7 +61,7 @@
 
 </table>
 <!--编辑页面-->
-<div id="dlg" class="easyui-dialog" style="width: 600px; height: 500px; padding: 10px 20px"
+<div id="dlg" class="easyui-dialog" style="width: 600px; height: 580px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', align:'center'">
     <div class="ftitle">
         <b>产品信息</b>
@@ -107,6 +107,35 @@
                 <td colspan="3">
                     <input class="easyui-textbox" data-options="multiline:true" name="description" value=""
                            style="width:95%;height:66px">
+                </td>
+            </tr>
+            <tr>
+                <td>开发文档链接（网盘）：</td>
+                <td colspan="3">
+                    <input class="easyui-textbox" data-options="multiline:true" name="developmentDocUrl" value=""
+                           style="width:95%;height:30px">
+                </td>
+            </tr>
+            <tr>
+                <td>确认文档链接（网盘）：</td>
+                <td colspan="3">
+                    <input class="easyui-textbox" data-options="multiline:true" name="confirmDocUrl" value=""
+                           style="width:95%;height:30px">
+                </td>
+            </tr>
+            <tr>
+                <td>原材料：</td>
+                <td colspan="3">
+                    <input class="easyui-textbox" name="rawMaterial" value=""
+                           style="width:95%;">
+                </td>
+            </tr>
+
+            <tr>
+                <td>生产供应商：</td>
+                <td colspan="3">
+                    <input class="easyui-textbox" name="productionSupplier" value=""
+                           style="width:95%;">
                 </td>
             </tr>
             <tr class="add_hide">
@@ -287,15 +316,35 @@
                         return res;
                     }
                 }, {
+                    title: '开发文档', field: 'developmentDocUrl', width: 100,
+                    formatter: function (value, rowData, rowIndex) {
+                        var res = "";
+                        if (value != null && value != '') {
+                            res += '<a href="javascript:;" onclick="windowOpen(\'' + value + '\')" >'+value+'</a>';
+                        }
+                        return res;
+                    }
+                },{
+                    title: '确认文档', field: 'confirmDocUrl', width: 100,
+                    formatter: function (value, rowData, rowIndex) {
+                        var res = "";
+                        if (value != null && value != '') {
+                            res += '<a href="javascript:;" onclick="windowOpen(\'' + value + '\')" >'+value+'</a>';
+                        }
+                        return res;
+                    }
+                },
+                {title: '原材料', field: 'rawMaterial', width: 100},
+                {title: '生产供应商', field: 'productionSupplier', width: 180}, {
                     title: '状态', field: 'status', width: 70,
                     formatter: function (value, rowData, rowIndex) {
                         if (value == 1) {
                             return '开发中';
-                        }else if (value == 2) {
+                        } else if (value == 2) {
                             return '开发完成';
                         } else if (value == 3) {
                             return '确认生产';
-                        }else if (value == 4) {
+                        } else if (value == 4) {
                             return '开发失败';
                         }
                     }

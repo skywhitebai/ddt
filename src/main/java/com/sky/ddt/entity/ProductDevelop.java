@@ -35,6 +35,14 @@ public class ProductDevelop {
 
     private Integer developmentLevel;
 
+    private String developmentDocUrl;
+
+    private String confirmDocUrl;
+
+    private String rawMaterial;
+
+    private String productionSupplier;
+
     public Integer getId() {
         return id;
     }
@@ -161,5 +169,37 @@ public class ProductDevelop {
 
     public void setDevelopmentLevel(Integer developmentLevel) {
         this.developmentLevel = developmentLevel;
+    }
+
+    public String getDevelopmentDocUrl() {
+        return developmentDocUrl;
+    }
+
+    public void setDevelopmentDocUrl(String developmentDocUrl) {
+        this.developmentDocUrl = developmentDocUrl == null ? null : developmentDocUrl.trim();
+    }
+
+    public String getConfirmDocUrl() {
+        return confirmDocUrl;
+    }
+
+    public void setConfirmDocUrl(String confirmDocUrl) {
+        this.confirmDocUrl = confirmDocUrl == null ? null : confirmDocUrl.trim();
+    }
+
+    public String getRawMaterial() {
+        return rawMaterial;
+    }
+
+    public void setRawMaterial(String rawMaterial) {
+        this.rawMaterial = rawMaterial == null ? null : rawMaterial.trim();
+    }
+
+    public String getProductionSupplier() {
+        return productionSupplier;
+    }
+
+    public void setProductionSupplier(String productionSupplier) {
+        this.productionSupplier = productionSupplier == null ? null : productionSupplier.trim();
     }
 }

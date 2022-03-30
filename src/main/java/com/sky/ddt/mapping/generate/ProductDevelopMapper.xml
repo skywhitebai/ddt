@@ -18,6 +18,10 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_by" jdbcType="INTEGER" property="updateBy" />
     <result column="development_level" jdbcType="INTEGER" property="developmentLevel" />
+    <result column="development_doc_url" jdbcType="VARCHAR" property="developmentDocUrl" />
+    <result column="confirm_doc_url" jdbcType="VARCHAR" property="confirmDocUrl" />
+    <result column="raw_material" jdbcType="VARCHAR" property="rawMaterial" />
+    <result column="production_supplier" jdbcType="VARCHAR" property="productionSupplier" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -80,7 +84,8 @@
   <sql id="Base_Column_List">
     id, product_name, product_code, description, chinese_product_name, english_product_name, 
     developer_user_id, development_time, status, product_id, remark, create_time, create_by, 
-    update_time, update_by, development_level
+    update_time, update_by, development_level, development_doc_url, confirm_doc_url, 
+    raw_material, production_supplier
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.ProductDevelopExample" resultMap="BaseResultMap">
     select
@@ -121,13 +126,15 @@
       developer_user_id, development_time, status, 
       product_id, remark, create_time, 
       create_by, update_time, update_by, 
-      development_level)
+      development_level, development_doc_url, confirm_doc_url, 
+      raw_material, production_supplier)
     values (#{productName,jdbcType=VARCHAR}, #{productCode,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
       #{chineseProductName,jdbcType=VARCHAR}, #{englishProductName,jdbcType=VARCHAR}, 
       #{developerUserId,jdbcType=INTEGER}, #{developmentTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
       #{productId,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
-      #{developmentLevel,jdbcType=INTEGER})
+      #{developmentLevel,jdbcType=INTEGER}, #{developmentDocUrl,jdbcType=VARCHAR}, #{confirmDocUrl,jdbcType=VARCHAR}, 
+      #{rawMaterial,jdbcType=VARCHAR}, #{productionSupplier,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.ProductDevelop">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -180,6 +187,18 @@
       <if test="developmentLevel != null">
         development_level,
       </if>
+      <if test="developmentDocUrl != null">
+        development_doc_url,
+      </if>
+      <if test="confirmDocUrl != null">
+        confirm_doc_url,
+      </if>
+      <if test="rawMaterial != null">
+        raw_material,
+      </if>
+      <if test="productionSupplier != null">
+        production_supplier,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="productName != null">
@@ -226,6 +245,18 @@
       </if>
       <if test="developmentLevel != null">
         #{developmentLevel,jdbcType=INTEGER},
+      </if>
+      <if test="developmentDocUrl != null">
+        #{developmentDocUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="confirmDocUrl != null">
+        #{confirmDocUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="rawMaterial != null">
+        #{rawMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="productionSupplier != null">
+        #{productionSupplier,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -286,6 +317,18 @@
       <if test="record.developmentLevel != null">
         development_level = #{record.developmentLevel,jdbcType=INTEGER},
       </if>
+      <if test="record.developmentDocUrl != null">
+        development_doc_url = #{record.developmentDocUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.confirmDocUrl != null">
+        confirm_doc_url = #{record.confirmDocUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rawMaterial != null">
+        raw_material = #{record.rawMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productionSupplier != null">
+        production_supplier = #{record.productionSupplier,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -308,7 +351,11 @@
       create_by = #{record.createBy,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       update_by = #{record.updateBy,jdbcType=INTEGER},
-      development_level = #{record.developmentLevel,jdbcType=INTEGER}
+      development_level = #{record.developmentLevel,jdbcType=INTEGER},
+      development_doc_url = #{record.developmentDocUrl,jdbcType=VARCHAR},
+      confirm_doc_url = #{record.confirmDocUrl,jdbcType=VARCHAR},
+      raw_material = #{record.rawMaterial,jdbcType=VARCHAR},
+      production_supplier = #{record.productionSupplier,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -361,6 +408,18 @@
       <if test="developmentLevel != null">
         development_level = #{developmentLevel,jdbcType=INTEGER},
       </if>
+      <if test="developmentDocUrl != null">
+        development_doc_url = #{developmentDocUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="confirmDocUrl != null">
+        confirm_doc_url = #{confirmDocUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="rawMaterial != null">
+        raw_material = #{rawMaterial,jdbcType=VARCHAR},
+      </if>
+      <if test="productionSupplier != null">
+        production_supplier = #{productionSupplier,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -380,7 +439,11 @@
       create_by = #{createBy,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=INTEGER},
-      development_level = #{developmentLevel,jdbcType=INTEGER}
+      development_level = #{developmentLevel,jdbcType=INTEGER},
+      development_doc_url = #{developmentDocUrl,jdbcType=VARCHAR},
+      confirm_doc_url = #{confirmDocUrl,jdbcType=VARCHAR},
+      raw_material = #{rawMaterial,jdbcType=VARCHAR},
+      production_supplier = #{productionSupplier,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

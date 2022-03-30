@@ -177,3 +177,6 @@ function getTimestamp() {
 function showImg(imgUrl) {
     window.open(imgUrl);
 }
+function windowOpen(url) {
+    window.open(url);
+}
