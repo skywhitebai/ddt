@@ -176,26 +176,20 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
                         listFactoryProductionOrderInfoResponse.setProductionQuantityUS20(shopSkuProductionQuantityDto.getProductionQuantity());
                     } else if (SkuConstant.SkuSizeEnum.US22.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
                         listFactoryProductionOrderInfoResponse.setProductionQuantityUS22(shopSkuProductionQuantityDto.getProductionQuantity());
-                    } else if (SkuConstant.SkuSizeEnum.PLUS12.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
-                        listFactoryProductionOrderInfoResponse.setProductionQuantity12Plus(shopSkuProductionQuantityDto.getProductionQuantity());
-                    } else if (SkuConstant.SkuSizeEnum.PLUS14.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
-                        listFactoryProductionOrderInfoResponse.setProductionQuantity14Plus(shopSkuProductionQuantityDto.getProductionQuantity());
-                    } else if (SkuConstant.SkuSizeEnum.PLUS16.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
-                        listFactoryProductionOrderInfoResponse.setProductionQuantity16Plus(shopSkuProductionQuantityDto.getProductionQuantity());
-                    } else if (SkuConstant.SkuSizeEnum.PLUS18.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
-                        listFactoryProductionOrderInfoResponse.setProductionQuantity18Plus(shopSkuProductionQuantityDto.getProductionQuantity());
-                    } else if (SkuConstant.SkuSizeEnum.PLUS20.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
-                        listFactoryProductionOrderInfoResponse.setProductionQuantity20Plus(shopSkuProductionQuantityDto.getProductionQuantity());
-                    } else if (SkuConstant.SkuSizeEnum.PLUS22.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
-                        listFactoryProductionOrderInfoResponse.setProductionQuantity22Plus(shopSkuProductionQuantityDto.getProductionQuantity());
-                    } else if (SkuConstant.SkuSizeEnum.PLUS24.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
-                        listFactoryProductionOrderInfoResponse.setProductionQuantity24Plus(shopSkuProductionQuantityDto.getProductionQuantity());
-                    } else if (SkuConstant.SkuSizeEnum.PLUS26.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
-                        listFactoryProductionOrderInfoResponse.setProductionQuantity26Plus(shopSkuProductionQuantityDto.getProductionQuantity());
-                    } else if (SkuConstant.SkuSizeEnum.PLUS28.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
-                        listFactoryProductionOrderInfoResponse.setProductionQuantity28Plus(shopSkuProductionQuantityDto.getProductionQuantity());
-                    } else if (SkuConstant.SkuSizeEnum.PLUS30.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
-                        listFactoryProductionOrderInfoResponse.setProductionQuantity30Plus(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US24.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS24(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US26.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS26(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US28.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS28(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US30.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS30(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US32.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS32(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US34.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS34(shopSkuProductionQuantityDto.getProductionQuantity());
+                    } else if (SkuConstant.SkuSizeEnum.US36.getSize().equals(shopSkuProductionQuantityDto.getSize().toUpperCase())) {
+                        listFactoryProductionOrderInfoResponse.setProductionQuantityUS36(shopSkuProductionQuantityDto.getProductionQuantity());
                     } else {
                         sbErroEntity.append("店铺sku：" + shopSkuProductionQuantityDto.getShopSku() + ",尺码错误，请修改尺码");
                     }
@@ -505,6 +499,25 @@ public class FactoryProductionOrderService implements IFactoryProductionOrderSer
             setCellValue(rowContent, 12, listFactoryProductionOrderInfoResponse.getProductionQuantity4XL());
             setCellValue(rowContent, 13, listFactoryProductionOrderInfoResponse.getProductionQuantity5XL());
             setCellValue(rowContent, 14, listFactoryProductionOrderInfoResponse.getProductionQuantity6XL());
+            setCellValue(rowContent, 15, listFactoryProductionOrderInfoResponse.getProductionQuantityUS2());
+            setCellValue(rowContent, 16, listFactoryProductionOrderInfoResponse.getProductionQuantityUS4());
+            setCellValue(rowContent, 17, listFactoryProductionOrderInfoResponse.getProductionQuantityUS6());
+            setCellValue(rowContent, 18, listFactoryProductionOrderInfoResponse.getProductionQuantityUS8());
+            setCellValue(rowContent, 19, listFactoryProductionOrderInfoResponse.getProductionQuantityUS10());
+            setCellValue(rowContent, 20, listFactoryProductionOrderInfoResponse.getProductionQuantityUS12());
+            setCellValue(rowContent, 21, listFactoryProductionOrderInfoResponse.getProductionQuantityUS14());
+            setCellValue(rowContent, 22, listFactoryProductionOrderInfoResponse.getProductionQuantityUS16());
+            setCellValue(rowContent, 23, listFactoryProductionOrderInfoResponse.getProductionQuantityUS18());
+            setCellValue(rowContent, 24, listFactoryProductionOrderInfoResponse.getProductionQuantityUS20());
+            setCellValue(rowContent, 25, listFactoryProductionOrderInfoResponse.getProductionQuantityUS22());
+            setCellValue(rowContent, 26, listFactoryProductionOrderInfoResponse.getProductionQuantityUS24());
+            setCellValue(rowContent, 27, listFactoryProductionOrderInfoResponse.getProductionQuantityUS26());
+            setCellValue(rowContent, 28, listFactoryProductionOrderInfoResponse.getProductionQuantityUS28());
+            setCellValue(rowContent, 29, listFactoryProductionOrderInfoResponse.getProductionQuantityUS30());
+            setCellValue(rowContent, 30, listFactoryProductionOrderInfoResponse.getProductionQuantityUS32());
+            setCellValue(rowContent, 31, listFactoryProductionOrderInfoResponse.getProductionQuantityUS34());
+            setCellValue(rowContent, 32, listFactoryProductionOrderInfoResponse.getProductionQuantityUS36());
+
 
         }
     }

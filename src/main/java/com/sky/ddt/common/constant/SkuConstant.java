@@ -58,16 +58,13 @@ public class SkuConstant {
         US18("US 18"),
         US20("US 20"),
         US22("US 22"),
-        PLUS12("12 Plus"),
-        PLUS14("14 Plus"),
-        PLUS16("16 Plus"),
-        PLUS18("18 Plus"),
-        PLUS20("20 Plus"),
-        PLUS22("22 Plus"),
-        PLUS24("24 Plus"),
-        PLUS26("26 Plus"),
-        PLUS28("28 Plus"),
-        PLUS30("30 Plus"),
+        US24("US 24"),
+        US26("US 26"),
+        US28("US 28"),
+        US30("US 30"),
+        US32("US 32"),
+        US34("US 34"),
+        US36("US 36"),
         ;
         private String size;
 

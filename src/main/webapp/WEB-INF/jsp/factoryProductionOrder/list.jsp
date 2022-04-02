@@ -530,107 +530,71 @@
                             return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'US 22\')">';
                         }
                     }
-                },
-                {
-                    title: '12 Plus', field: 'productionQuantity12Plus', width: 60,
+                },{
+                    title: 'US 24', field: 'productionQuantityUS24', width: 60,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'12 Plus\')">';
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'US 24\')">';
                         } else {
-                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'12 Plus\')">';
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'US 24\')">';
                         }
                     }
-                },
-                {
-                    title: '14 Plus', field: 'productionQuantity14Plus', width: 60,
+                },{
+                    title: 'US 26', field: 'productionQuantityUS26', width: 60,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'14 Plus\')">';
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'US 26\')">';
                         } else {
-                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'14 Plus\')">';
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'US 26\')">';
                         }
                     }
-                },
-                {
-                    title: '16 Plus', field: 'productionQuantity16Plus', width: 60,
+                },{
+                    title: 'US 28', field: 'productionQuantityUS28', width: 60,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'16 Plus\')">';
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'US 28\')">';
                         } else {
-                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'16 Plus\')">';
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'US 28\')">';
                         }
                     }
-                },
-                {
-                    title: '18 Plus', field: 'productionQuantity18Plus', width: 60,
+                },{
+                    title: 'US 30', field: 'productionQuantityUS30', width: 60,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'18 Plus\')">';
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'US 30\')">';
                         } else {
-                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'18 Plus\')">';
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'US 30\')">';
                         }
                     }
-                },
-                {
-                    title: '20 Plus', field: 'productionQuantity20Plus', width: 60,
+                },{
+                    title: 'US 32', field: 'productionQuantityUS32', width: 60,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'20 Plus\')">';
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'US 32\')">';
                         } else {
-                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'20 Plus\')">';
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'US 32\')">';
                         }
                     }
-                },
-                {
-                    title: '22 Plus', field: 'productionQuantity22Plus', width: 60,
+                },{
+                    title: 'US 34', field: 'productionQuantityUS34', width: 60,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'22 Plus\')">';
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'US 34\')">';
                         } else {
-                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'22 Plus\')">';
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'US 34\')">';
                         }
                     }
-                },
-                {
-                    title: '24 Plus', field: 'productionQuantity24Plus', width: 60,
+                },{
+                    title: 'US 36', field: 'productionQuantityUS36', width: 60,
                     formatter: function (value, row, rowIndex) {
                         if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'24 Plus\')">';
+                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'US 36\')">';
                         } else {
-                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'24 Plus\')">';
-                        }
-                    }
-                },
-                {
-                    title: '26 Plus', field: 'productionQuantity26Plus', width: 60,
-                    formatter: function (value, row, rowIndex) {
-                        if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'26 Plus\')">';
-                        } else {
-                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'26 Plus\')">';
-                        }
-                    }
-                },
-                {
-                    title: '28 Plus', field: 'productionQuantity28Plus', width: 60,
-                    formatter: function (value, row, rowIndex) {
-                        if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'28 Plus\')">';
-                        } else {
-                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'28 Plus\')">';
-                        }
-                    }
-                },
-                {
-                    title: '30 Plus', field: 'productionQuantity30Plus', width: 60,
-                    formatter: function (value, row, rowIndex) {
-                        if (isEmpty(value)) {
-                            return '<input class="easyui-numberbox " min="0" precision="0"  onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'30 Plus\')">';
-                        } else {
-                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'30 Plus\')">';
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveProductionQuantity(this,\'' + row.shopParentSku + '\',\'' + row.colour + '\',\'US 36\')">';
                         }
                     }
                 }
+
             ]],
             toolbar: [{
                 id: 'btnReload',
