@@ -6,6 +6,7 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.*;
 import com.sky.ddt.common.exception.NoticeException;
 import com.sky.ddt.dao.custom.CustomOrderImportMapper;
+import com.sky.ddt.dao.custom.CustomShopSkuHeadTripCostHisMapper;
 import com.sky.ddt.dao.custom.CustomShopSkuMapper;
 import com.sky.ddt.dao.custom.CustomShopUserMapper;
 import com.sky.ddt.dto.inventoryChangeRecord.request.AddInventoryChangeRecordRequest;
@@ -66,6 +67,8 @@ public class ShopSkuService implements IShopSkuService {
     IStorageLocationService storageLocationService;
     @Autowired
     IShopSkuStorageLocationService shopSkuStorageLocationService;
+    @Autowired
+    CustomShopSkuHeadTripCostHisMapper customShopSkuHeadTripCostHisMapper;
 
     /**
      * @param file
@@ -159,9 +162,6 @@ public class ShopSkuService implements IShopSkuService {
             }
             if (StringUtils.isEmpty(map.get("标题"))) {
                 sbErroItem.append(",").append(ShopSkuConstant.TITLE_EMPTY);
-            }
-            if (!StringUtils.isEmpty(map.get("库位")) && map.get("库位").length() > 200) {
-                sbErroItem.append(",").append(ShopSkuConstant.STORAGE_LOCATION_TOO_LONG);
             }
             if (sbErroItem.length() > 0) {
                 sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
@@ -1177,7 +1177,7 @@ public class ShopSkuService implements IShopSkuService {
                     }
 
                 }
-                locationMap.put(map.get("店铺sku"),locationIdList);
+                locationMap.put(map.get("店铺sku"), locationIdList);
             }
             if (sbErroItem.length() > 0) {
                 sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
@@ -1198,9 +1198,9 @@ public class ShopSkuService implements IShopSkuService {
             if (isEmpty) {
                 continue;
             }
-            List<Integer> storageLocationList=locationMap.get(map.get("店铺sku"));
-            if(!CollectionUtils.isEmpty(storageLocationList)){
-                BatchSaveShopSkuStorageLocationRequest batchSaveShopSkuStorageLocationRequest=new BatchSaveShopSkuStorageLocationRequest();
+            List<Integer> storageLocationList = locationMap.get(map.get("店铺sku"));
+            if (!CollectionUtils.isEmpty(storageLocationList)) {
+                BatchSaveShopSkuStorageLocationRequest batchSaveShopSkuStorageLocationRequest = new BatchSaveShopSkuStorageLocationRequest();
                 batchSaveShopSkuStorageLocationRequest.setShopSkuId(MathUtil.strToInteger(map.get("shopSkuId")));
                 batchSaveShopSkuStorageLocationRequest.setStorageLocationIdList(storageLocationList);
                 batchSaveShopSkuStorageLocationRequest.setCreateBy(dealUserId);
@@ -1217,10 +1217,10 @@ public class ShopSkuService implements IShopSkuService {
 
     @Override
     public List<ShopSku> getShopSkuListByShpSkuOrFnsku(List<String> skuList) {
-        if(CollectionUtils.isEmpty(skuList)){
+        if (CollectionUtils.isEmpty(skuList)) {
             return new ArrayList<>();
         }
-        ShopSkuExample shopSkuExample=new ShopSkuExample();
+        ShopSkuExample shopSkuExample = new ShopSkuExample();
         shopSkuExample.createCriteria().andShopSkuIn(skuList);
         shopSkuExample.or().andFnskuIn(skuList);
         return customShopSkuMapper.selectByExample(shopSkuExample);
@@ -1228,22 +1228,104 @@ public class ShopSkuService implements IShopSkuService {
 
     @Override
     public List<ShopSku> getShopSkuListByShopSku(List<String> shopSkuList) {
-        if(CollectionUtils.isEmpty(shopSkuList)){
+        if (CollectionUtils.isEmpty(shopSkuList)) {
             return new ArrayList<>();
         }
-        ShopSkuExample shopSkuExample=new ShopSkuExample();
+        ShopSkuExample shopSkuExample = new ShopSkuExample();
         shopSkuExample.createCriteria().andShopSkuIn(shopSkuList);
         return customShopSkuMapper.selectByExample(shopSkuExample);
     }
 
     @Override
     public List<ShopSku> getShopSkuListByAsin(List<String> asinList) {
-        if(CollectionUtils.isEmpty(asinList)){
+        if (CollectionUtils.isEmpty(asinList)) {
             return new ArrayList<>();
         }
-        ShopSkuExample shopSkuExample=new ShopSkuExample();
+        ShopSkuExample shopSkuExample = new ShopSkuExample();
         shopSkuExample.createCriteria().andAsinIn(asinList);
         return customShopSkuMapper.selectByExample(shopSkuExample);
+    }
+
+    @Override
+    public BaseResponse importShopSkuHeadTripCost(MultipartFile file, Integer dealUserId) {
+        //读取excel 转换为list
+        List<Map<String, String>> list = ExcelUtil.getListByExcel(file);
+        if (list == null || list.size() == 0) {
+            return BaseResponse.failMessage("导入的数据内容为空");
+        }
+        //遍历list导入信息
+        StringBuilder sbErro = new StringBuilder();
+        Map<String, BigDecimal> headTripCostBeforeMap = new HashMap<>();
+        for (int i = 0; i < list.size(); i++) {
+            Map<String, String> map = list.get(i);
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            StringBuilder sbErroItem = new StringBuilder();
+            if (StringUtils.isEmpty(map.get("店铺sku"))) {
+                sbErroItem.append(",").append(ShopSkuConstant.SHOP_SKU_EMPTY);
+            } else {
+                ShopSku shopSku = getShopSkuByShopSku(map.get("店铺sku"));
+                if (shopSku == null) {
+                    sbErroItem.append(",").append(ShopSkuConstant.SHOP_SKU_NOT_EXIST);
+                } else {
+                    map.put("shopSkuId", shopSku.getShopSkuId().toString());
+                    headTripCostBeforeMap.put(map.get("店铺sku"), shopSku.getHeadTripCost());
+                }
+            }
+            if (StringUtils.isEmpty(map.get("头程费"))) {
+                sbErroItem.append(",").append("头程费不能为空");
+                BigDecimal headTripCost = MathUtil.strToBigDecimal(map.get("头程费"));
+                if (headTripCost == null || headTripCost.compareTo(BigDecimal.ZERO) <= 0) {
+                    sbErroItem.append(",").append("成本价必须为大于0的数字");
+                }
+            } else {
+            }
+            if (sbErroItem.length() > 0) {
+                sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
+            }
+        }
+        if (sbErro.length() > 0) {
+            return BaseResponse.failMessage(sbErro.substring(1));
+        }
+        for (Map<String, String> map : list) {
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            ShopSku shopSkuUpdate = new ShopSku();
+            shopSkuUpdate.setShopSkuId(MathUtil.strToInteger(map.get("shopSkuId")));
+            shopSkuUpdate.setHeadTripCost(MathUtil.strToBigDecimal(map.get("头程费")));
+            shopSkuUpdate.setUpdateBy(dealUserId);
+            shopSkuUpdate.setUpdateTime(new Date());
+            customShopSkuMapper.updateByPrimaryKeySelective(shopSkuUpdate);
+            ShopSkuHeadTripCostHis shopSkuHeadTripCostHis = new ShopSkuHeadTripCostHis();
+            shopSkuHeadTripCostHis.setCreateBy(dealUserId);
+            shopSkuHeadTripCostHis.setCreateTime(new Date());
+            shopSkuHeadTripCostHis.setHeadTripCostBefore(headTripCostBeforeMap.get(map.get("店铺sku")));
+            shopSkuHeadTripCostHis.setHeadTripCostAfter(MathUtil.strToBigDecimal(map.get("头程费")));
+            shopSkuHeadTripCostHis.setShopSkuId(shopSkuUpdate.getShopSkuId());
+            shopSkuHeadTripCostHis.setCreateRemark("人工导入修改");
+            if (!MathUtil.equalBigDecimal(shopSkuHeadTripCostHis.getHeadTripCostAfter(), shopSkuHeadTripCostHis.getHeadTripCostBefore())) {
+                customShopSkuHeadTripCostHisMapper.insertSelective(shopSkuHeadTripCostHis);
+            }
+        }
+        return BaseResponse.success();
     }
 
     /**
@@ -1510,7 +1592,8 @@ public class ShopSkuService implements IShopSkuService {
     }
 
     @Override
-    public List<ShopSku> getShopSkuByShopParentSkuAndSize(GetShopSkuByShopParentSkuAndSizeRequest getShopSkuByShopParentSkuAndSizeRequest) {
+    public List<ShopSku> getShopSkuByShopParentSkuAndSize(GetShopSkuByShopParentSkuAndSizeRequest
+                                                                  getShopSkuByShopParentSkuAndSizeRequest) {
         return customShopSkuMapper.getShopSkuByShopParentSkuAndSize(getShopSkuByShopParentSkuAndSizeRequest);
     }
 
@@ -1571,7 +1654,8 @@ public class ShopSkuService implements IShopSkuService {
      * @author baixueping
      * @date 2019/11/4 16:07
      */
-    private Integer getSaleCount(Integer shopSkuId, List<SalesCountDayResponse> salesCountDayResponseList, Date dateTime) {
+    private Integer getSaleCount(Integer shopSkuId, List<SalesCountDayResponse> salesCountDayResponseList, Date
+            dateTime) {
         for (SalesCountDayResponse salesCountDayResponse : salesCountDayResponseList) {
             if (shopSkuId.equals(salesCountDayResponse.getShopSkuId())
                     && DateUtil.getFormatDateStrYMD(dateTime).equals(salesCountDayResponse.getPurchaseDate())) {
@@ -1584,7 +1668,8 @@ public class ShopSkuService implements IShopSkuService {
     }
 
 
-    private Integer getSaleCountShopParentSku(String shopParentSku, List<SalesCountDayResponse> salesCountDayResponseList, Date dateTime) {
+    private Integer getSaleCountShopParentSku(String
+                                                      shopParentSku, List<SalesCountDayResponse> salesCountDayResponseList, Date dateTime) {
         for (SalesCountDayResponse salesCountDayResponse : salesCountDayResponseList) {
             if (shopParentSku.equals(salesCountDayResponse.getShopParentSku())
                     && DateUtil.getFormatDateStrYMD(dateTime).equals(salesCountDayResponse.getPurchaseDate())) {
@@ -1697,7 +1782,8 @@ public class ShopSkuService implements IShopSkuService {
         return page;
     }
 
-    private TranformShopSkuInfoResponse getSkuInfo(List<TranformShopSkuInfoResponse> tranformShopSkuInfoResponseList, String shopSku) {
+    private TranformShopSkuInfoResponse getSkuInfo
+            (List<TranformShopSkuInfoResponse> tranformShopSkuInfoResponseList, String shopSku) {
         if (CollectionUtils.isEmpty(tranformShopSkuInfoResponseList) || StringUtils.isEmpty(shopSku)) {
             return null;
         }

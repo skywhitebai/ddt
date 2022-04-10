@@ -87,6 +87,10 @@
        class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">导入店铺sku库位</a>
+    <a href="javascript:void(0)" id="a_importShopSkuHeadTripCost" onclick="showDialogImport('headTripCost')"
+       class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'"
+       style="">导入店铺sku头程费</a>
     <a href="javascript:void(0)" onclick="showTransformShopSku()" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">店铺sku信息转换</a>
@@ -745,6 +749,12 @@
                 importTemplateUrl = "${pageContext.request.contextPath }/static/template/shopSku/shopSkuStorageLocationTemplate.xlsx";
                 importUrl = "${pageContext.request.contextPath }/shopSku/importShopSkuStorageLocation";
                 break;
+            case 'headTripCost':
+                importTitle = "导入头程费";
+                importTemplateUrl = "${pageContext.request.contextPath }/static/template/shopSku/shopSkuHeadTripCostTemplate.xlsx";
+                importUrl = "${pageContext.request.contextPath }/shopSku/importShopSkuHeadTripCost";
+                break;
+
         }
         if (isEmpty(importTitle)) {
             $.messager.alert("提示", "请选择正确的导入类型.");

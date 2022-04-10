@@ -15,4 +15,6 @@ public interface ISalesGroupUserService {
     PageInfo<ListSalesGroupUserResp> listSalesGroupUser(ListSalesGroupUserReq req);
 
     BaseResponse saveSalesGroupUser(SaveSalesGroupUserReq req, Integer currentUserId);
+
+    BaseResponse deleteSalesGroupUser(Integer id, Integer currentUserId);
 }

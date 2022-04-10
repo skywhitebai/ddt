@@ -149,22 +149,6 @@ public class SkuService implements ISkuService {
             } else if (!SkuConstant.SkuSizeEnum.containSize(map.get("尺码").toUpperCase())) {
                 sbErroItem.append(",").append(SkuConstant.SIZE_ERRO);
             }
-            if (StringUtils.isEmpty(map.get("重量"))) {
-                sbErroItem.append(",").append(SkuConstant.WEIGHT_EMPTY);
-            } else {
-                Double weight = MathUtil.strToDouble(map.get("重量"));
-                if (weight == null || weight <= 0) {
-                    sbErroItem.append(",").append(SkuConstant.WEIGHT_ERRO);
-                }
-            }
-            if (StringUtils.isEmpty(map.get("成本价"))) {
-                sbErroItem.append(",").append(SkuConstant.COST_PRICE_EMPTY);
-            } else {
-                BigDecimal costPrice = MathUtil.strToBigDecimal(map.get("成本价"));
-                if (costPrice == null || costPrice.compareTo(BigDecimal.ZERO) <= 0) {
-                    sbErroItem.append(",").append(SkuConstant.COST_PRICE_ERRO);
-                }
-            }
             if (sbErroItem.length() > 0) {
                 sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
             }
@@ -193,16 +177,12 @@ public class SkuService implements ISkuService {
                 sku.setUpdateBy(dealUserId);
                 sku.setUpdateTime(new Date());
                 customSkuMapper.updateByPrimaryKeySelective(sku);
-                skuCostPriceHisService.saveSkuCostPriceHis(sku.getSkuId(), skuOld.getCostPrice(), sku.getCostPrice(), SkuCostPriceHisConstant.TypeEnum.IMPORT_SKU, dealUserId);
-                skuWeightHisService.saveSkuWeightHis(skuOld, sku, SkuWeightHisConstant.WeightHisTypeEnum.SAVE, dealUserId);
             } else {
                 Sku sku = new Sku();
                 setSkuByMap(map, sku);
                 sku.setCreateBy(dealUserId);
                 sku.setCreateTime(new Date());
                 customSkuMapper.insertSelective(sku);
-                skuCostPriceHisService.saveSkuCostPriceHis(sku.getSkuId(), null, sku.getCostPrice(), SkuCostPriceHisConstant.TypeEnum.IMPORT_SKU, dealUserId);
-                skuWeightHisService.saveSkuWeightHis(skuOld, sku, SkuWeightHisConstant.WeightHisTypeEnum.SAVE, dealUserId);
                 customShopSkuMapper.insertWarehouseShopSku(sku);
             }
         }
@@ -215,8 +195,6 @@ public class SkuService implements ISkuService {
         sku.setColour(map.get("颜色"));
         sku.setColourNumber(map.get("色号"));
         sku.setSize(map.get("尺码").toUpperCase());
-        sku.setWeight(MathUtil.strToBigDecimal(map.get("重量")));
-        sku.setCostPrice(MathUtil.strToBigDecimal(map.get("成本价")));
         sku.setRemark(map.get("备注"));
         sku.setHeadTripCost(getHeadTripCost(sku.getWeight()));
         sku.setHeadTripCostMin(getHeadTripCostMin(sku.getWeight()));

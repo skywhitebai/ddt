@@ -223,4 +223,11 @@ public class ShopSkuController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return shopSkuService.importShopSkuStorageLocation(file, dealUserId);
     }
+
+    @RequestMapping("/importShopSkuHeadTripCost")
+    @ResponseBody
+    public BaseResponse importShopSkuHeadTripCost(MultipartFile file) {
+        Integer dealUserId = getCurrentUserId();
+        return shopSkuService.importShopSkuHeadTripCost(file, dealUserId);
+    }
 }

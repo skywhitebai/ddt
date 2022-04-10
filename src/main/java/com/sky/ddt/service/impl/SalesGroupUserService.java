@@ -48,13 +48,19 @@ public class SalesGroupUserService implements ISalesGroupUserService {
         if (existSalesGroupUser(req)) {
             return BaseResponse.failMessage("用户id已存在");
         }
-        if(req.getId()==null){
+        if (req.getId() == null) {
             salesGroupUser.setCreateBy(currentUserId);
             salesGroupUser.setCreateTime(new Date());
             customSalesGroupUserMapper.insertSelective(salesGroupUser);
-        }else{
+        } else {
             customSalesGroupUserMapper.updateByPrimaryKeySelective(salesGroupUser);
         }
+        return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse deleteSalesGroupUser(Integer id, Integer currentUserId) {
+        customSalesGroupUserMapper.deleteByPrimaryKey(id);
         return BaseResponse.success();
     }
 

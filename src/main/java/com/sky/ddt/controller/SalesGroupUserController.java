@@ -15,6 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author sky
  * @Description 销售分组用户管理
@@ -36,5 +38,10 @@ public class SalesGroupUserController extends SuperController {
     @ResponseBody
     public BaseResponse saveSalesGroupUser(@Validated SaveSalesGroupUserReq req){
         return salesGroupUserService.saveSalesGroupUser(req,getCurrentUserId());
+    }
+    @RequestMapping("/deleteSalesGroupUser")
+    @ResponseBody
+    public BaseResponse deleteSalesGroupUser(@NotNull(message = "id不能为空") Integer id){
+        return salesGroupUserService.deleteSalesGroupUser(id,getCurrentUserId());
     }
 }

@@ -262,4 +262,6 @@ public interface IShopSkuService {
     List<ShopSku> getShopSkuListByShopSku(List<String> shopSkuList);
 
     List<ShopSku> getShopSkuListByAsin(List<String> asinList);
+
+    BaseResponse importShopSkuHeadTripCost(MultipartFile file, Integer dealUserId);
 }

@@ -233,7 +233,7 @@ public class MathUtil {
                 return false;
             }
         }
-        return num1.equals(num2);
+        return num1.compareTo(num2)==0;
     }
 
     public static Integer subtractInteger(Integer a, Integer b) {
