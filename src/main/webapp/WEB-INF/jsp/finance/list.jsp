@@ -495,6 +495,13 @@
                     }
                 },
                 {title: '当月净入', field: 'netIncome', width: 95},
+                {title: '销售量', field: 'saleQuantity', width: 95},
+                {title: '销售额', field: 'productSales', width: 95},
+                {title: '回款率', field: 'moneyBackRate', width: 95},
+                {title: '退款率', field: 'refundRate', width: 95},
+                {title: '广告占比', field: 'advertisingSalesPercentage', width: 95},
+                {title: 'ROI', field: 'roi', width: 95},
+                {title: '库存周转天数', field: 'inventoryTurnover', width: 95},
                 {
                     title: '备注', field: 'remark', width: 300,
                     formatter: function (value, row, rowIndex) {

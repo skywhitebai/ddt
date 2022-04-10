@@ -4,9 +4,15 @@
 
     <select id="getFinanceStatisticInfo"
             resultMap="com.sky.ddt.dao.generate.FinanceStatisticMapper.BaseResultMap">
- SELECT a.*,b.*FROM (SELECT fs.finance_id,fs.month,fs.shop_id,fs.shop_name,SUM(initial_inventory_cost) initial_inventory_cost,SUM(final_inventory_cost) final_inventory_cost,
-        SUM(fs.procurement_cost+fs.fba_head_trip_cost) sale_cost,SUM(main_business_income) main_business_income,SUM(main_business_profit) main_business_profit,
-        SUM(fs.procurement_cost) sale_procurement_cost,SUM(fs.fba_head_trip_cost) sale_fba_head_trip_cost
+ SELECT a.*,b.* FROM (SELECT fs.finance_id,fs.month,fs.shop_id,fs.shop_name,SUM(initial_inventory_cost) initial_inventory_cost,SUM(final_inventory_cost) final_inventory_cost,
+        SUM(IFNULL(fs.procurement_cost,0)+IFNULL(fs.fba_head_trip_cost,0)) sale_cost,SUM(main_business_income) main_business_income,SUM(main_business_profit) main_business_profit,
+        SUM(fs.procurement_cost) sale_procurement_cost,SUM(fs.fba_head_trip_cost) sale_fba_head_trip_cost,sum(fs.sale_quantity) sale_quantity,
+        sum(fs.product_sales) product_sales,
+        IFNULL(sum(fs.money_back)/sum(fs.product_sales),0) money_back_rate,
+         IFNULL(sum(fs.refund_sale_quantity)/sum(fs.sale_quantity),0) refund_rate,
+         IFNULL(sum(IFNULL(fs.cost_of_advertising,0)+IFNULL(fs.brand_advertising,0)+IFNULL(fs.display_advertising,0))/sum(fs.product_sales),0)*-1 advertising_sales_percentage,
+         IFNULL(sum(fs.main_business_profit)/SUM(IFNULL(fs.procurement_cost,0)+IFNULL(fs.fba_head_trip_cost,0)),0) roi,
+         IFNULL(sum(IFNULL(fs.initial_inventory_cost,0)+IFNULL(fs.final_inventory_cost,0))/2/SUM(IFNULL(fs.procurement_cost,0)+IFNULL(fs.fba_head_trip_cost,0))*30,0) inventory_turnover
         FROM `financial_statement` fs
         WHERE fs.`finance_id`=#{financeId}) a ,
         (SELECT SUM(sshtch.fba_send_quantity*(sshtch.head_trip_cost_after+sku.cost_price)) send_cost,SUM(sshtch.fba_send_quantity*sku.cost_price) send_cost_price,SUM(sshtch.fba_send_quantity*sshtch.head_trip_cost_after) send_head_trip_cost_after

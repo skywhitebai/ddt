@@ -80,21 +80,25 @@ public class ExcelExportByExcelFieldUtil<T> {
                         if (StringUtils.isEmpty(value)) {
                             continue;
                         }
-                        URL url=null;
+                        URL url = null;
                         String imgUrl = value.toString();
-                        try{
-                            String imgUrlReal=imgUrl;
-                            if(imgUrlReal.contains("allmiin.cn")){
-                                imgUrlReal=imgUrlReal.replace("allmiin.cn","ddt-file.oss-cn-beijing.aliyuncs.com");
+                        try {
+                            String imgUrlReal = imgUrl;
+                            if (imgUrlReal.contains("allmiin.cn")) {
+                                imgUrlReal = imgUrlReal.replace("allmiin.cn", "ddt-file.oss-cn-beijing.aliyuncs.com");
                             }
                             url = new URL(imgUrlReal);
-                        }catch (Exception ex){
+                        } catch (Exception ex) {
                             cell.setCellValue(imgUrl);
                             continue;
                         }
                         row.setHeight((short) 1000);
-                        sheet.setColumnWidth(i,2000);
+                        sheet.setColumnWidth(i, 2000);
                         setExcelImg(workbook, patriarch, index, i, url);
+                    } else if (ExcelField.FieldTypeEnum.NUMBER_RATE_NEED_MULTIPLY_100.equals(excelFieldList.get(i).getFieldType())) {
+                        BigDecimal bigDecimal = new BigDecimal(String.valueOf(value));
+                        String str = bigDecimal.multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%";
+                        cell.setCellValue(str);
                     } else if (value.getClass().equals(Date.class)) {
                         String textValue = DateUtil.getFormatDateStr((Date) value);
                         cell.setCellValue(textValue);
@@ -129,6 +133,7 @@ public class ExcelExportByExcelFieldUtil<T> {
             return BaseResponse.fail();
         }
     }
+
     /**
      * 导出写图片
      */
@@ -146,7 +151,7 @@ public class ExcelExportByExcelFieldUtil<T> {
             XSSFClientAnchor anchor = new XSSFClientAnchor(0, 0, 1000, 1000,
                     cloumIndex, rowIndex, cloumIndex + 1, rowIndex + 1);
             anchor.setAnchorType(0);
-            Picture pict=patriarch.createPicture(anchor, wb.addPicture(
+            Picture pict = patriarch.createPicture(anchor, wb.addPicture(
                     outputStream.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
             /*pict.resize();*/
             outputStream.close();

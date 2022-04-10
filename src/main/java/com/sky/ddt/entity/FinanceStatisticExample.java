@@ -1016,6 +1016,426 @@ public class FinanceStatisticExample {
             return (Criteria) this;
         }
 
+        public Criteria andSaleQuantityIsNull() {
+            addCriterion("sale_quantity is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleQuantityIsNotNull() {
+            addCriterion("sale_quantity is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleQuantityEqualTo(Integer value) {
+            addCriterion("sale_quantity =", value, "saleQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleQuantityNotEqualTo(Integer value) {
+            addCriterion("sale_quantity <>", value, "saleQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleQuantityGreaterThan(Integer value) {
+            addCriterion("sale_quantity >", value, "saleQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleQuantityGreaterThanOrEqualTo(Integer value) {
+            addCriterion("sale_quantity >=", value, "saleQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleQuantityLessThan(Integer value) {
+            addCriterion("sale_quantity <", value, "saleQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleQuantityLessThanOrEqualTo(Integer value) {
+            addCriterion("sale_quantity <=", value, "saleQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleQuantityIn(List<Integer> values) {
+            addCriterion("sale_quantity in", values, "saleQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleQuantityNotIn(List<Integer> values) {
+            addCriterion("sale_quantity not in", values, "saleQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleQuantityBetween(Integer value1, Integer value2) {
+            addCriterion("sale_quantity between", value1, value2, "saleQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleQuantityNotBetween(Integer value1, Integer value2) {
+            addCriterion("sale_quantity not between", value1, value2, "saleQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSalesIsNull() {
+            addCriterion("product_sales is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSalesIsNotNull() {
+            addCriterion("product_sales is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSalesEqualTo(BigDecimal value) {
+            addCriterion("product_sales =", value, "productSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSalesNotEqualTo(BigDecimal value) {
+            addCriterion("product_sales <>", value, "productSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSalesGreaterThan(BigDecimal value) {
+            addCriterion("product_sales >", value, "productSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSalesGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("product_sales >=", value, "productSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSalesLessThan(BigDecimal value) {
+            addCriterion("product_sales <", value, "productSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSalesLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("product_sales <=", value, "productSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSalesIn(List<BigDecimal> values) {
+            addCriterion("product_sales in", values, "productSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSalesNotIn(List<BigDecimal> values) {
+            addCriterion("product_sales not in", values, "productSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSalesBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("product_sales between", value1, value2, "productSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andProductSalesNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("product_sales not between", value1, value2, "productSales");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyBackRateIsNull() {
+            addCriterion("money_back_rate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyBackRateIsNotNull() {
+            addCriterion("money_back_rate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyBackRateEqualTo(BigDecimal value) {
+            addCriterion("money_back_rate =", value, "moneyBackRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyBackRateNotEqualTo(BigDecimal value) {
+            addCriterion("money_back_rate <>", value, "moneyBackRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyBackRateGreaterThan(BigDecimal value) {
+            addCriterion("money_back_rate >", value, "moneyBackRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyBackRateGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("money_back_rate >=", value, "moneyBackRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyBackRateLessThan(BigDecimal value) {
+            addCriterion("money_back_rate <", value, "moneyBackRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyBackRateLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("money_back_rate <=", value, "moneyBackRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyBackRateIn(List<BigDecimal> values) {
+            addCriterion("money_back_rate in", values, "moneyBackRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyBackRateNotIn(List<BigDecimal> values) {
+            addCriterion("money_back_rate not in", values, "moneyBackRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyBackRateBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("money_back_rate between", value1, value2, "moneyBackRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andMoneyBackRateNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("money_back_rate not between", value1, value2, "moneyBackRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundRateIsNull() {
+            addCriterion("refund_rate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundRateIsNotNull() {
+            addCriterion("refund_rate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundRateEqualTo(BigDecimal value) {
+            addCriterion("refund_rate =", value, "refundRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundRateNotEqualTo(BigDecimal value) {
+            addCriterion("refund_rate <>", value, "refundRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundRateGreaterThan(BigDecimal value) {
+            addCriterion("refund_rate >", value, "refundRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundRateGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("refund_rate >=", value, "refundRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundRateLessThan(BigDecimal value) {
+            addCriterion("refund_rate <", value, "refundRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundRateLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("refund_rate <=", value, "refundRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundRateIn(List<BigDecimal> values) {
+            addCriterion("refund_rate in", values, "refundRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundRateNotIn(List<BigDecimal> values) {
+            addCriterion("refund_rate not in", values, "refundRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundRateBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("refund_rate between", value1, value2, "refundRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andRefundRateNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("refund_rate not between", value1, value2, "refundRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageIsNull() {
+            addCriterion("advertising_sales_percentage is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageIsNotNull() {
+            addCriterion("advertising_sales_percentage is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageEqualTo(BigDecimal value) {
+            addCriterion("advertising_sales_percentage =", value, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageNotEqualTo(BigDecimal value) {
+            addCriterion("advertising_sales_percentage <>", value, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageGreaterThan(BigDecimal value) {
+            addCriterion("advertising_sales_percentage >", value, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("advertising_sales_percentage >=", value, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageLessThan(BigDecimal value) {
+            addCriterion("advertising_sales_percentage <", value, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("advertising_sales_percentage <=", value, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageIn(List<BigDecimal> values) {
+            addCriterion("advertising_sales_percentage in", values, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageNotIn(List<BigDecimal> values) {
+            addCriterion("advertising_sales_percentage not in", values, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("advertising_sales_percentage between", value1, value2, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andAdvertisingSalesPercentageNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("advertising_sales_percentage not between", value1, value2, "advertisingSalesPercentage");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoiIsNull() {
+            addCriterion("roi is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoiIsNotNull() {
+            addCriterion("roi is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoiEqualTo(BigDecimal value) {
+            addCriterion("roi =", value, "roi");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoiNotEqualTo(BigDecimal value) {
+            addCriterion("roi <>", value, "roi");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoiGreaterThan(BigDecimal value) {
+            addCriterion("roi >", value, "roi");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoiGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("roi >=", value, "roi");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoiLessThan(BigDecimal value) {
+            addCriterion("roi <", value, "roi");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoiLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("roi <=", value, "roi");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoiIn(List<BigDecimal> values) {
+            addCriterion("roi in", values, "roi");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoiNotIn(List<BigDecimal> values) {
+            addCriterion("roi not in", values, "roi");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoiBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("roi between", value1, value2, "roi");
+            return (Criteria) this;
+        }
+
+        public Criteria andRoiNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("roi not between", value1, value2, "roi");
+            return (Criteria) this;
+        }
+
+        public Criteria andInventoryTurnoverIsNull() {
+            addCriterion("inventory_turnover is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInventoryTurnoverIsNotNull() {
+            addCriterion("inventory_turnover is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andInventoryTurnoverEqualTo(BigDecimal value) {
+            addCriterion("inventory_turnover =", value, "inventoryTurnover");
+            return (Criteria) this;
+        }
+
+        public Criteria andInventoryTurnoverNotEqualTo(BigDecimal value) {
+            addCriterion("inventory_turnover <>", value, "inventoryTurnover");
+            return (Criteria) this;
+        }
+
+        public Criteria andInventoryTurnoverGreaterThan(BigDecimal value) {
+            addCriterion("inventory_turnover >", value, "inventoryTurnover");
+            return (Criteria) this;
+        }
+
+        public Criteria andInventoryTurnoverGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("inventory_turnover >=", value, "inventoryTurnover");
+            return (Criteria) this;
+        }
+
+        public Criteria andInventoryTurnoverLessThan(BigDecimal value) {
+            addCriterion("inventory_turnover <", value, "inventoryTurnover");
+            return (Criteria) this;
+        }
+
+        public Criteria andInventoryTurnoverLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("inventory_turnover <=", value, "inventoryTurnover");
+            return (Criteria) this;
+        }
+
+        public Criteria andInventoryTurnoverIn(List<BigDecimal> values) {
+            addCriterion("inventory_turnover in", values, "inventoryTurnover");
+            return (Criteria) this;
+        }
+
+        public Criteria andInventoryTurnoverNotIn(List<BigDecimal> values) {
+            addCriterion("inventory_turnover not in", values, "inventoryTurnover");
+            return (Criteria) this;
+        }
+
+        public Criteria andInventoryTurnoverBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("inventory_turnover between", value1, value2, "inventoryTurnover");
+            return (Criteria) this;
+        }
+
+        public Criteria andInventoryTurnoverNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("inventory_turnover not between", value1, value2, "inventoryTurnover");
+            return (Criteria) this;
+        }
+
         public Criteria andRemarkIsNull() {
             addCriterion("remark is null");
             return (Criteria) this;

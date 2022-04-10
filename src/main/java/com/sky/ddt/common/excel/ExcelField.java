@@ -30,7 +30,9 @@ public class ExcelField {
         STRING("文本"),
         NUMBER("数字"),
         IMG_URL("图片链接"),
-        DATE_TIME("时间"),;
+        DATE_TIME("时间"),
+        NUMBER_RATE("比例"),
+        NUMBER_RATE_NEED_MULTIPLY_100("比例需要乘以100显示百分数"),;
         String fieldTypeName;
 
         FieldTypeEnum(java.lang.String fieldTypeName) {

@@ -159,7 +159,7 @@ public class FinancialStatementService implements IFinancialStatementService {
                 BigDecimal inventoryTurnover = financialStatementResponse.getInitialInventoryCost()
                         .add(financialStatementResponse.getFinalInventoryCost())
                         .divide(new BigDecimal(2))
-                        .multiply(new BigDecimal(31))
+                        .multiply(new BigDecimal(30))
                         .divide(cost, 2, BigDecimal.ROUND_HALF_UP);
                 financialStatementResponse.setInventoryTurnover(inventoryTurnover);
             } else {
@@ -217,7 +217,7 @@ public class FinancialStatementService implements IFinancialStatementService {
         return shopService.getCurrency(shopId);
     }
 
-    private void setAdvertisingSalesPercentage(FinancialStatementResponse financialStatementResponse) {
+    private void setAdvertisingSalesPercentage(FinancialStatement financialStatementResponse) {
         if (financialStatementResponse.getCostOfAdvertising().compareTo(BigDecimal.ZERO) == 0
                 && financialStatementResponse.getDisplayAdvertising().compareTo(BigDecimal.ZERO) == 0
                 && financialStatementResponse.getBrandAdvertising().compareTo(BigDecimal.ZERO) == 0) {
@@ -806,23 +806,6 @@ public class FinancialStatementService implements IFinancialStatementService {
         row3.createCell(24).setCellValue(financialStatementCount.getMainBusinessProfit().doubleValue());
         row2.createCell(25).setCellValue("毛利率");
         row3.createCell(25).setCellValue(financialStatementCount.getGrossMarginOnSales().doubleValue());
-    }
-
-    private void setAdvertisingSalesPercentage(FinancialStatement financialStatement) {
-        if (financialStatement.getCostOfAdvertising().compareTo(BigDecimal.ZERO) == 0) {
-            financialStatement.setAdvertisingSalesPercentage(BigDecimal.ZERO);
-        } else {
-            if (BigDecimal.ZERO.compareTo(financialStatement.getProductSales()) == 0) {
-                financialStatement.setAdvertisingSalesPercentage(new BigDecimal(10000));
-            } else {
-                BigDecimal advertisingSalesPercentage = MathUtil.divide(financialStatement.getCostOfAdvertising().multiply(new BigDecimal(-1)), financialStatement.getProductSales(), 4);
-                if (advertisingSalesPercentage != null) {
-                    financialStatement.setAdvertisingSalesPercentage(advertisingSalesPercentage);
-                } else {
-                    financialStatement.setAdvertisingSalesPercentage(BigDecimal.ZERO);
-                }
-            }
-        }
     }
 
     private void setRefundRate(FinancialStatement financialStatement) {

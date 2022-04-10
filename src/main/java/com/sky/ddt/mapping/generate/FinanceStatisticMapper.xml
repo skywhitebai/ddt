@@ -17,6 +17,13 @@
     <result column="manual_adjustment" jdbcType="DECIMAL" property="manualAdjustment" />
     <result column="net_income" jdbcType="DECIMAL" property="netIncome" />
     <result column="main_business_profit" jdbcType="DECIMAL" property="mainBusinessProfit" />
+    <result column="sale_quantity" jdbcType="INTEGER" property="saleQuantity" />
+    <result column="product_sales" jdbcType="DECIMAL" property="productSales" />
+    <result column="money_back_rate" jdbcType="DECIMAL" property="moneyBackRate" />
+    <result column="refund_rate" jdbcType="DECIMAL" property="refundRate" />
+    <result column="advertising_sales_percentage" jdbcType="DECIMAL" property="advertisingSalesPercentage" />
+    <result column="roi" jdbcType="DECIMAL" property="roi" />
+    <result column="inventory_turnover" jdbcType="DECIMAL" property="inventoryTurnover" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
@@ -84,8 +91,9 @@
   <sql id="Base_Column_List">
     id, finance_id, month, shop_id, shop_name, initial_inventory_cost, final_inventory_cost, 
     send_cost, send_cost_price, send_head_trip_cost_after, sale_cost, main_business_income, 
-    manual_adjustment, net_income, main_business_profit, remark, create_time, create_by, 
-    update_time, update_by
+    manual_adjustment, net_income, main_business_profit, sale_quantity, product_sales, 
+    money_back_rate, refund_rate, advertising_sales_percentage, roi, inventory_turnover, 
+    remark, create_time, create_by, update_time, update_by
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FinanceStatisticExample" resultMap="BaseResultMap">
     select
@@ -125,16 +133,20 @@
       shop_name, initial_inventory_cost, final_inventory_cost, 
       send_cost, send_cost_price, send_head_trip_cost_after, 
       sale_cost, main_business_income, manual_adjustment, 
-      net_income, main_business_profit, remark, 
-      create_time, create_by, update_time, 
-      update_by)
+      net_income, main_business_profit, sale_quantity, 
+      product_sales, money_back_rate, refund_rate, 
+      advertising_sales_percentage, roi, inventory_turnover, 
+      remark, create_time, create_by, 
+      update_time, update_by)
     values (#{financeId,jdbcType=INTEGER}, #{month,jdbcType=TIMESTAMP}, #{shopId,jdbcType=INTEGER}, 
       #{shopName,jdbcType=VARCHAR}, #{initialInventoryCost,jdbcType=DECIMAL}, #{finalInventoryCost,jdbcType=DECIMAL}, 
       #{sendCost,jdbcType=DECIMAL}, #{sendCostPrice,jdbcType=DECIMAL}, #{sendHeadTripCostAfter,jdbcType=DECIMAL}, 
       #{saleCost,jdbcType=DECIMAL}, #{mainBusinessIncome,jdbcType=DECIMAL}, #{manualAdjustment,jdbcType=DECIMAL}, 
-      #{netIncome,jdbcType=DECIMAL}, #{mainBusinessProfit,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=INTEGER})
+      #{netIncome,jdbcType=DECIMAL}, #{mainBusinessProfit,jdbcType=DECIMAL}, #{saleQuantity,jdbcType=INTEGER}, 
+      #{productSales,jdbcType=DECIMAL}, #{moneyBackRate,jdbcType=DECIMAL}, #{refundRate,jdbcType=DECIMAL}, 
+      #{advertisingSalesPercentage,jdbcType=DECIMAL}, #{roi,jdbcType=DECIMAL}, #{inventoryTurnover,jdbcType=DECIMAL}, 
+      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.FinanceStatistic">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -183,6 +195,27 @@
       </if>
       <if test="mainBusinessProfit != null">
         main_business_profit,
+      </if>
+      <if test="saleQuantity != null">
+        sale_quantity,
+      </if>
+      <if test="productSales != null">
+        product_sales,
+      </if>
+      <if test="moneyBackRate != null">
+        money_back_rate,
+      </if>
+      <if test="refundRate != null">
+        refund_rate,
+      </if>
+      <if test="advertisingSalesPercentage != null">
+        advertising_sales_percentage,
+      </if>
+      <if test="roi != null">
+        roi,
+      </if>
+      <if test="inventoryTurnover != null">
+        inventory_turnover,
       </if>
       <if test="remark != null">
         remark,
@@ -242,6 +275,27 @@
       </if>
       <if test="mainBusinessProfit != null">
         #{mainBusinessProfit,jdbcType=DECIMAL},
+      </if>
+      <if test="saleQuantity != null">
+        #{saleQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="productSales != null">
+        #{productSales,jdbcType=DECIMAL},
+      </if>
+      <if test="moneyBackRate != null">
+        #{moneyBackRate,jdbcType=DECIMAL},
+      </if>
+      <if test="refundRate != null">
+        #{refundRate,jdbcType=DECIMAL},
+      </if>
+      <if test="advertisingSalesPercentage != null">
+        #{advertisingSalesPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="roi != null">
+        #{roi,jdbcType=DECIMAL},
+      </if>
+      <if test="inventoryTurnover != null">
+        #{inventoryTurnover,jdbcType=DECIMAL},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -314,6 +368,27 @@
       <if test="record.mainBusinessProfit != null">
         main_business_profit = #{record.mainBusinessProfit,jdbcType=DECIMAL},
       </if>
+      <if test="record.saleQuantity != null">
+        sale_quantity = #{record.saleQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.productSales != null">
+        product_sales = #{record.productSales,jdbcType=DECIMAL},
+      </if>
+      <if test="record.moneyBackRate != null">
+        money_back_rate = #{record.moneyBackRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.refundRate != null">
+        refund_rate = #{record.refundRate,jdbcType=DECIMAL},
+      </if>
+      <if test="record.advertisingSalesPercentage != null">
+        advertising_sales_percentage = #{record.advertisingSalesPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="record.roi != null">
+        roi = #{record.roi,jdbcType=DECIMAL},
+      </if>
+      <if test="record.inventoryTurnover != null">
+        inventory_turnover = #{record.inventoryTurnover,jdbcType=DECIMAL},
+      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -351,6 +426,13 @@
       manual_adjustment = #{record.manualAdjustment,jdbcType=DECIMAL},
       net_income = #{record.netIncome,jdbcType=DECIMAL},
       main_business_profit = #{record.mainBusinessProfit,jdbcType=DECIMAL},
+      sale_quantity = #{record.saleQuantity,jdbcType=INTEGER},
+      product_sales = #{record.productSales,jdbcType=DECIMAL},
+      money_back_rate = #{record.moneyBackRate,jdbcType=DECIMAL},
+      refund_rate = #{record.refundRate,jdbcType=DECIMAL},
+      advertising_sales_percentage = #{record.advertisingSalesPercentage,jdbcType=DECIMAL},
+      roi = #{record.roi,jdbcType=DECIMAL},
+      inventory_turnover = #{record.inventoryTurnover,jdbcType=DECIMAL},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER},
@@ -405,6 +487,27 @@
       <if test="mainBusinessProfit != null">
         main_business_profit = #{mainBusinessProfit,jdbcType=DECIMAL},
       </if>
+      <if test="saleQuantity != null">
+        sale_quantity = #{saleQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="productSales != null">
+        product_sales = #{productSales,jdbcType=DECIMAL},
+      </if>
+      <if test="moneyBackRate != null">
+        money_back_rate = #{moneyBackRate,jdbcType=DECIMAL},
+      </if>
+      <if test="refundRate != null">
+        refund_rate = #{refundRate,jdbcType=DECIMAL},
+      </if>
+      <if test="advertisingSalesPercentage != null">
+        advertising_sales_percentage = #{advertisingSalesPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="roi != null">
+        roi = #{roi,jdbcType=DECIMAL},
+      </if>
+      <if test="inventoryTurnover != null">
+        inventory_turnover = #{inventoryTurnover,jdbcType=DECIMAL},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -439,6 +542,13 @@
       manual_adjustment = #{manualAdjustment,jdbcType=DECIMAL},
       net_income = #{netIncome,jdbcType=DECIMAL},
       main_business_profit = #{mainBusinessProfit,jdbcType=DECIMAL},
+      sale_quantity = #{saleQuantity,jdbcType=INTEGER},
+      product_sales = #{productSales,jdbcType=DECIMAL},
+      money_back_rate = #{moneyBackRate,jdbcType=DECIMAL},
+      refund_rate = #{refundRate,jdbcType=DECIMAL},
+      advertising_sales_percentage = #{advertisingSalesPercentage,jdbcType=DECIMAL},
+      roi = #{roi,jdbcType=DECIMAL},
+      inventory_turnover = #{inventoryTurnover,jdbcType=DECIMAL},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER},

@@ -34,6 +34,20 @@ public class FinanceStatistic {
 
     private BigDecimal mainBusinessProfit;
 
+    private Integer saleQuantity;
+
+    private BigDecimal productSales;
+
+    private BigDecimal moneyBackRate;
+
+    private BigDecimal refundRate;
+
+    private BigDecimal advertisingSalesPercentage;
+
+    private BigDecimal roi;
+
+    private BigDecimal inventoryTurnover;
+
     private String remark;
 
     private Date createTime;
@@ -162,6 +176,62 @@ public class FinanceStatistic {
 
     public void setMainBusinessProfit(BigDecimal mainBusinessProfit) {
         this.mainBusinessProfit = mainBusinessProfit;
+    }
+
+    public Integer getSaleQuantity() {
+        return saleQuantity;
+    }
+
+    public void setSaleQuantity(Integer saleQuantity) {
+        this.saleQuantity = saleQuantity;
+    }
+
+    public BigDecimal getProductSales() {
+        return productSales;
+    }
+
+    public void setProductSales(BigDecimal productSales) {
+        this.productSales = productSales;
+    }
+
+    public BigDecimal getMoneyBackRate() {
+        return moneyBackRate;
+    }
+
+    public void setMoneyBackRate(BigDecimal moneyBackRate) {
+        this.moneyBackRate = moneyBackRate;
+    }
+
+    public BigDecimal getRefundRate() {
+        return refundRate;
+    }
+
+    public void setRefundRate(BigDecimal refundRate) {
+        this.refundRate = refundRate;
+    }
+
+    public BigDecimal getAdvertisingSalesPercentage() {
+        return advertisingSalesPercentage;
+    }
+
+    public void setAdvertisingSalesPercentage(BigDecimal advertisingSalesPercentage) {
+        this.advertisingSalesPercentage = advertisingSalesPercentage;
+    }
+
+    public BigDecimal getRoi() {
+        return roi;
+    }
+
+    public void setRoi(BigDecimal roi) {
+        this.roi = roi;
+    }
+
+    public BigDecimal getInventoryTurnover() {
+        return inventoryTurnover;
+    }
+
+    public void setInventoryTurnover(BigDecimal inventoryTurnover) {
+        this.inventoryTurnover = inventoryTurnover;
     }
 
     public String getRemark() {

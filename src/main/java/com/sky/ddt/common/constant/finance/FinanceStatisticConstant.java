@@ -26,6 +26,13 @@ public class FinanceStatisticConstant {
         exportFinanceStatisticFieldList.add(new ExcelField("manualAdjustment", "账外调整", ExcelField.FieldTypeEnum.NUMBER));
         exportFinanceStatisticFieldList.add(new ExcelField("netIncome", "当月净入", ExcelField.FieldTypeEnum.NUMBER));
         exportFinanceStatisticFieldList.add(new ExcelField("mainBusinessProfit", "毛利润", ExcelField.FieldTypeEnum.NUMBER));
+        exportFinanceStatisticFieldList.add(new ExcelField("saleQuantity", "销售量", ExcelField.FieldTypeEnum.NUMBER));
+        exportFinanceStatisticFieldList.add(new ExcelField("productSales", "销售额", ExcelField.FieldTypeEnum.NUMBER));
+        exportFinanceStatisticFieldList.add(new ExcelField("moneyBackRate", "回款率", ExcelField.FieldTypeEnum.NUMBER_RATE_NEED_MULTIPLY_100));
+        exportFinanceStatisticFieldList.add(new ExcelField("refundRate", "退款率", ExcelField.FieldTypeEnum.NUMBER_RATE_NEED_MULTIPLY_100));
+        exportFinanceStatisticFieldList.add(new ExcelField("advertisingSalesPercentage", "广告占比", ExcelField.FieldTypeEnum.NUMBER_RATE_NEED_MULTIPLY_100));
+        exportFinanceStatisticFieldList.add(new ExcelField("roi", "ROI", ExcelField.FieldTypeEnum.NUMBER));
+        exportFinanceStatisticFieldList.add(new ExcelField("inventoryTurnover", "库存周转天数", ExcelField.FieldTypeEnum.NUMBER));
         exportFinanceStatisticFieldList.add(new ExcelField("createTime", "创建时间", ExcelField.FieldTypeEnum.DATE_TIME));
         exportFinanceStatisticFieldList.add(new ExcelField("updateTime", "修改时间", ExcelField.FieldTypeEnum.DATE_TIME));
     }
