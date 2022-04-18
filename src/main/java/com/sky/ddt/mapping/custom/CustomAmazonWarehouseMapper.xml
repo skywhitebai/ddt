@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomAmazonWarehouseMapper">
+
+    <resultMap id="listAmazonWarehouseMap"
+               type="com.sky.ddt.dto.amazonWarehouse.resp.ListAmazonWarehouseResp"
+               extends="com.sky.ddt.dao.generate.AmazonWarehouseMapper.BaseResultMap">
+    </resultMap>
+    <select id="listAmazonWarehouse"
+            parameterType="com.sky.ddt.dto.amazonWarehouse.req.ListAmazonWarehouseReq"
+            resultMap="listAmazonWarehouseMap">
+        select
+        aw.*
+        from amazon_warehouse aw
+        <if test="_parameter != null">
+            <include refid="amazonWarehouse_Query_Where_Clause"/>
+        </if>
+        order by aw.create_time desc
+    </select>
+    <sql id="amazonWarehouse_Query_Where_Clause">
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="fulfillmentCenterId != null and fulfillmentCenterId !=''">and aw.fulfillment_center_id like
+                    concat('%',#{fulfillmentCenterId},'%')
+                </if>
+                <if test="state != null and state !=''">and aw.state like
+                    concat('%',#{state},'%')
+                </if>
+            </trim>
+        </where>
+    </sql>
+    <select id="amazonWarehouseComboboxlist"
+            resultType="com.sky.ddt.dto.amazonWarehouse.resp.AmazonWarehouseComboxResp">
+        select
+       id,concat(state,':',fulfillment_center_id) fulfillmentCenterId
+       from amazon_warehouse aw
+    order by aw.create_time desc
+    </select>
+</mapper>
