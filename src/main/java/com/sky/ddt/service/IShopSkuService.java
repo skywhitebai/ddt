@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author baixueping
@@ -264,4 +265,6 @@ public interface IShopSkuService {
     List<ShopSku> getShopSkuListByAsin(List<String> asinList);
 
     BaseResponse importShopSkuHeadTripCost(MultipartFile file, Integer dealUserId);
+
+    Map<String, Integer> getShopSkuIdMap(List<String> shopSkuList);
 }

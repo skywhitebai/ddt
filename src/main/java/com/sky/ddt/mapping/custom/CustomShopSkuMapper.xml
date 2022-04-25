@@ -238,4 +238,17 @@ shop  s where s.type=2
             </trim>
         </where>
     </select>
+    <select id="listShopSkuIdInfo"
+            resultType="com.sky.ddt.dto.shopSku.response.ShopSkuIdInfo">
+        select
+        ss.shop_sku_id shopSkuId,ss.shop_sku shopSku from shop_sku ss
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                and ss.shop_sku in
+                <foreach close=")" collection="shopSkuList" item="shopSku" open="(" separator=",">
+                    #{shopSku}
+                </foreach>
+            </trim>
+        </where>
+    </select>
 </mapper>

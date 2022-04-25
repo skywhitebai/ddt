@@ -335,4 +335,11 @@ public class MathUtil {
         return cost.multiply(new BigDecimal(quantity)).setScale(digits,BigDecimal.ROUND_HALF_UP);
 
     }
+
+    public static boolean isNotInteger(String numStr) {
+        if(strToInteger(numStr)==null){
+            return true;
+        }
+        return false;
+    }
 }

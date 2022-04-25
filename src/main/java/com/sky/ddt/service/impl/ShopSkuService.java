@@ -1328,6 +1328,22 @@ public class ShopSkuService implements IShopSkuService {
         return BaseResponse.success();
     }
 
+    @Override
+    public Map<String, Integer> getShopSkuIdMap(List<String> shopSkuList) {
+        if(CollectionUtils.isEmpty(shopSkuList)){
+            return new HashMap<>();
+        }
+        List<ShopSkuIdInfo> list=customShopSkuMapper.listShopSkuIdInfo(shopSkuList);
+        if(CollectionUtils.isEmpty(list)){
+            return new HashMap<>();
+        }
+        Map<String,Integer> shopSkuIdMap=new HashMap<>(list.size());
+        for(ShopSkuIdInfo shopSkuIdInfo:list){
+            shopSkuIdMap.put(shopSkuIdInfo.getShopSku(),shopSkuIdInfo.getShopSkuId());
+        }
+        return shopSkuIdMap;
+    }
+
     /**
      * @param file
      * @param dealUserId
