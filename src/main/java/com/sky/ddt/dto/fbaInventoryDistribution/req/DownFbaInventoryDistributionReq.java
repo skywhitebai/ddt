@@ -1,0 +1,21 @@
+package com.sky.ddt.dto.fbaInventoryDistribution.req;
+
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.validation.constraints.NotNull;
+import java.util.Date;
+
+/**
+ * @author sky
+ * @Description
+ * @date 2022/4/26 23:22
+ */
+@Data
+public class DownFbaInventoryDistributionReq {
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull(message = "日期不能为空")
+    private Date snapshotDay;
+    @NotNull(message = "店铺id不能为空")
+    private Integer shopId;
+}

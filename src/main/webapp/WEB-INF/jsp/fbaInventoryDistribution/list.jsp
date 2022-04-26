@@ -37,7 +37,9 @@
 <body>
 <!--查询条件-->
 <div class="easyui-panel">
-    <!--只显示用户有的店铺-->
+    店铺：
+    <select id="s_shopId" style="width:150px;">
+    </select>
     snapshotDay：
     <input class="easyui-datebox" id="s_snapshotDay">
     fnsku：
@@ -50,6 +52,10 @@
     <input class="easyui-validatebox textbox" id="s_fulfillmentCenterId">
     detailedDisposition：
     <input class="easyui-validatebox textbox" id="s_detailedDisposition">
+    数量：
+    <input class="easyui-numberbox" precision="2" id="s_quantityMin">
+    detailedDisposition：
+    <input class="easyui-numberbox" precision="2" id="s_quantityMax">
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
 
@@ -57,6 +63,10 @@
        class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">导入库存分布信息</a>
+    <a href="javascript:void(0)" id="a_downFbaInventoryDistribution" onclick="downFbaInventoryDistribution()"
+       class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'"
+       style="">下载库存分布信息</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 
@@ -84,8 +94,17 @@
 </div>
 </body>
 <script type="text/javascript">
-    bindData();
-
+    $(function () {
+        bindShop();
+        bindData();
+    });
+    function bindShop() {
+        $('#s_shopId').combobox({
+            valueField: 'shopId',
+            textField: 'shopName',
+            url: "${pageContext.request.contextPath }/shop/comboboxlist",//获取数据
+        });
+    }
     function getQueryParams() {
         queryParams = {
             snapshotDay: $("#s_snapshotDay").val(),
@@ -93,7 +112,10 @@
             sku: $("#s_sku").val(),
             productName: $("#s_productName").val(),
             fulfillmentCenterId: $("#s_fulfillmentCenterId").val(),
-            detailedDisposition: $("#s_detailedDisposition").val()
+            detailedDisposition: $("#s_detailedDisposition").val(),
+            shopId: $("#s_shopId").val(),
+            quantityMin: $("#s_quantityMin").val(),
+            quantityMax: $("#s_quantityMax").val()
         };
         return queryParams;
     }
@@ -235,6 +257,21 @@
 
     function closeDialogImport() {
         $('#dlgImport').dialog('close');
+    }
+
+    function downFbaInventoryDistribution() {
+        var shopId = $("#s_shopId").val();
+        if(isEmpty(shopId)){
+            $.messager.alert("提示", "请选择店铺");
+            return;
+        }
+        var snapshotDay = $("#s_snapshotDay").val();
+        if(isEmpty(snapshotDay)){
+            $.messager.alert("提示", "请选择日期");
+            return;
+        }
+        window.open('${pageContext.request.contextPath }/fbaInventoryDistribution/downFbaInventoryDistribution?snapshotDay=' + snapshotDay+"&shopId="+shopId);
+
     }
 </script>
 </html>

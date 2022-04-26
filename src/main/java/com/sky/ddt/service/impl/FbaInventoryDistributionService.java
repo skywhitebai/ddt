@@ -3,9 +3,14 @@ package com.sky.ddt.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dao.custom.CustomFbaInventoryDistributionMapper;
+import com.sky.ddt.dto.fbaInventoryDistribution.req.DownFbaInventoryDistributionReq;
 import com.sky.ddt.dto.fbaInventoryDistribution.req.ListFbaInventoryDistributionReq;
 import com.sky.ddt.dto.fbaInventoryDistribution.resp.FbaInventoryDistributionExistInfo;
+import com.sky.ddt.dto.fbaInventoryDistribution.resp.FulfillmentCenterIdQuantity;
+import com.sky.ddt.dto.fbaInventoryDistribution.resp.ListFbaInventoryDistributionResp;
+import com.sky.ddt.dto.fbaInventoryDistribution.resp.SkuFulfillmentCenterIdQuantity;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.dto.shopSku.response.ShopSkuInfo;
 import com.sky.ddt.entity.*;
 import com.sky.ddt.service.IFbaInventoryDistributionService;
 import com.sky.ddt.service.IShopSkuService;
@@ -18,10 +23,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -37,11 +40,10 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
     IShopSkuService shopSkuService;
 
     @Override
-    public PageInfo<FbaInventoryDistribution> listFbaInventoryDistribution(ListFbaInventoryDistributionReq params) {
+    public PageInfo<ListFbaInventoryDistributionResp> listFbaInventoryDistribution(ListFbaInventoryDistributionReq params) {
         PageHelper.startPage(params.getPage(), params.getRows(), true);
-        FbaInventoryDistributionExample fbaInventoryDistributionExample = buildFbaInventoryDistributionExample(params);
-        List<FbaInventoryDistribution> list = customFbaInventoryDistributionMapper.selectByExample(fbaInventoryDistributionExample);
-        PageInfo<FbaInventoryDistribution> page = new PageInfo<>(list);
+        List<ListFbaInventoryDistributionResp> list = customFbaInventoryDistributionMapper.listFbaInventoryDistribution(params);
+        PageInfo<ListFbaInventoryDistributionResp> page = new PageInfo<>(list);
         return page;
     }
 
@@ -54,7 +56,7 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
         }
         //遍历list导入信息
         StringBuilder sbErro = new StringBuilder();
-        Map<String, Integer> shopSkuMap = getShopSkuMap(list);
+        Map<String, ShopSkuInfo> shopSkuMap = getShopSkuMap(list);
         String snapshotDate = "";
         Date snapshotDay = null;
         for (int i = 0; i < list.size(); i++) {
@@ -91,10 +93,8 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
             }
             if (StringUtils.isEmpty(map.get("sku"))) {
                 sbErroItem.append(",").append("sku不能为空");
-            } else {
-                if (shopSkuMap.get(map.get("sku")) == null) {
-                    sbErroItem.append(",").append("sku[" + map.get("sku") + "]不存在");
-                }
+            } else if (shopSkuMap.get(map.get("sku")) == null) {
+                sbErroItem.append(",").append("sku[" + map.get("sku") + "]不存在");
             }
             if (StringUtils.isEmpty(map.get("product-name"))) {
                 sbErroItem.append(",").append("product-name不能为空");
@@ -136,7 +136,8 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
             fbaInventoryDistribution.setSnapshotDate(map.get("snapshot-date"));
             fbaInventoryDistribution.setFnsku(map.get("fnsku"));
             fbaInventoryDistribution.setSku(map.get("sku"));
-            fbaInventoryDistribution.setShopSkuId(shopSkuMap.get(map.get("sku")));
+            fbaInventoryDistribution.setShopId(shopSkuMap.get(map.get("sku")).getShopId());
+            fbaInventoryDistribution.setShopSkuId(shopSkuMap.get(map.get("sku")).getShopSkuId());
             fbaInventoryDistribution.setProductName(map.get("product-name"));
             fbaInventoryDistribution.setQuantity(MathUtil.strToInteger(map.get("quantity")));
             fbaInventoryDistribution.setFulfillmentCenterId(map.get("fulfillment-center-id"));
@@ -156,6 +157,70 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
         return BaseResponse.success();
     }
 
+    @Override
+    public BaseResponse downFbaInventoryDistribution(DownFbaInventoryDistributionReq params, HttpServletResponse response) {
+        if (params == null) {
+            return BaseResponse.failMessage("日期不能为空");
+        }
+        FbaInventoryDistributionExample fbaInventoryDistributionExample = new FbaInventoryDistributionExample();
+        fbaInventoryDistributionExample.createCriteria().andSnapshotDayEqualTo(params.getSnapshotDay()).andShopIdEqualTo(params.getShopId());
+        List<FbaInventoryDistribution> list = customFbaInventoryDistributionMapper.selectByExample(fbaInventoryDistributionExample);
+        if (CollectionUtils.isEmpty(list)) {
+            return BaseResponse.failMessage("库位分布信息不存在");
+        }
+        return exportFbaInventoryDistribution(list, response);
+    }
+
+    private BaseResponse exportFbaInventoryDistribution(List<FbaInventoryDistribution> list, HttpServletResponse response) {
+        //构建列数据
+        Set<String> fulfillmentCenterIdSet = list.stream().map(item -> item.getFulfillmentCenterId()).collect(Collectors.toSet());
+        //统计每个库位数量，按数量从多到少排序
+        List<FulfillmentCenterIdQuantity> fulfillmentCenterIdQuantityList = getFulfillmentCenterIdQuantityList(list);
+        //构建sku及库位信息 Map<Sku,Map<String,Integer>> 排序 数量从多到少排序
+        List<SkuFulfillmentCenterIdQuantity> skuFulfillmentCenterIdQuantityList=getSkuFulfillmentCenterIdQuantityList(list);
+        //构建excel
+        //导出
+        return BaseResponse.success();
+    }
+
+    private List<SkuFulfillmentCenterIdQuantity> getSkuFulfillmentCenterIdQuantityList(List<FbaInventoryDistribution> list) {
+        //先按sku分组，然后求出每组数量，然后排序返回
+        Map<String,SkuFulfillmentCenterIdQuantity> map=new HashMap<>();
+        for (FbaInventoryDistribution fbaInventoryDistribution :
+                list) {
+            SkuFulfillmentCenterIdQuantity skuFulfillmentCenterIdQuantity = map.get(fbaInventoryDistribution.getSku());
+            if(skuFulfillmentCenterIdQuantity==null){
+                skuFulfillmentCenterIdQuantity=new SkuFulfillmentCenterIdQuantity();
+                skuFulfillmentCenterIdQuantity.setFulfillmentCenterIdQuantityList(new ArrayList<>());
+            }
+            //设置总数
+            skuFulfillmentCenterIdQuantity.setQuantity(MathUtil.addInteger(skuFulfillmentCenterIdQuantity.getQuantity(), fbaInventoryDistribution.getQuantity()));
+            skuFulfillmentCenterIdQuantity.getFulfillmentCenterIdQuantityList().add(getFulfillmentCenterIdQuantity(fbaInventoryDistribution));
+            map.put(fbaInventoryDistribution.getFulfillmentCenterId(), skuFulfillmentCenterIdQuantity);
+        }
+        List<SkuFulfillmentCenterIdQuantity> skuFulfillmentCenterIdQuantityList=map.values().stream().sorted((a1,a2)->{return a1.getQuantity()-a2.getQuantity();}).collect(Collectors.toList());
+        return skuFulfillmentCenterIdQuantityList;
+    }
+
+    private FulfillmentCenterIdQuantity getFulfillmentCenterIdQuantity(FbaInventoryDistribution fbaInventoryDistribution) {
+        FulfillmentCenterIdQuantity fulfillmentCenterIdQuantity=new FulfillmentCenterIdQuantity();
+        fulfillmentCenterIdQuantity.setFulfillmentCenterId(fbaInventoryDistribution.getFulfillmentCenterId());;
+        fulfillmentCenterIdQuantity.setQuantity(fbaInventoryDistribution.getQuantity());
+        return fulfillmentCenterIdQuantity;
+    }
+
+    private List<FulfillmentCenterIdQuantity> getFulfillmentCenterIdQuantityList(List<FbaInventoryDistribution> list) {
+        Map<String, FulfillmentCenterIdQuantity> map = new HashMap<>();
+        for (FbaInventoryDistribution fbaInventoryDistribution :
+                list) {
+            FulfillmentCenterIdQuantity fulfillmentCenterIdQuantity = map.getOrDefault(fbaInventoryDistribution.getFulfillmentCenterId(), new FulfillmentCenterIdQuantity());
+            fulfillmentCenterIdQuantity.setQuantity(MathUtil.addInteger(fulfillmentCenterIdQuantity.getQuantity(), fbaInventoryDistribution.getQuantity()));
+            map.put(fbaInventoryDistribution.getFulfillmentCenterId(), fulfillmentCenterIdQuantity);
+        }
+        List<FulfillmentCenterIdQuantity> fulfillmentCenterIdQuantityList=map.values().stream().sorted((a1,a2)->{return a1.getQuantity()-a2.getQuantity();}).collect(Collectors.toList());
+        return fulfillmentCenterIdQuantityList;
+    }
+
     private Map<String, Integer> getfbaInventoryDistributionMap(Date snapshotDay, List<Map<String, String>> list) {
         List<FbaInventoryDistributionExistInfo> fbaInventoryDistributionExistInfoList = customFbaInventoryDistributionMapper.listFbaInventoryDistributionExist(snapshotDay, list);
         if (CollectionUtils.isEmpty(fbaInventoryDistributionExistInfoList)) {
@@ -168,13 +233,13 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
         return fbaInventoryDistributionMap;
     }
 
-    private Map<String, Integer> getShopSkuMap(List<Map<String, String>> list) {
-        Map<String, Integer> shopSkuMap = new HashMap<>();
+    private Map<String, ShopSkuInfo> getShopSkuMap(List<Map<String, String>> list) {
+        Map<String, ShopSkuInfo> shopSkuMap = new HashMap<>();
         List<String> shopSkuList = list.stream().map(item -> item.get("sku")).collect(Collectors.toList());
         if (CollectionUtils.isEmpty(shopSkuList)) {
             return shopSkuMap;
         }
-        shopSkuMap = shopSkuService.getShopSkuIdMap(shopSkuList);
+        shopSkuMap = shopSkuService.getShopSkuInfoMap(shopSkuList);
         return shopSkuMap;
     }
 

@@ -1333,13 +1333,29 @@ public class ShopSkuService implements IShopSkuService {
         if(CollectionUtils.isEmpty(shopSkuList)){
             return new HashMap<>();
         }
-        List<ShopSkuIdInfo> list=customShopSkuMapper.listShopSkuIdInfo(shopSkuList);
+        List<ShopSkuInfo> list=customShopSkuMapper.listShopSkuInfo(shopSkuList);
         if(CollectionUtils.isEmpty(list)){
             return new HashMap<>();
         }
         Map<String,Integer> shopSkuIdMap=new HashMap<>(list.size());
-        for(ShopSkuIdInfo shopSkuIdInfo:list){
-            shopSkuIdMap.put(shopSkuIdInfo.getShopSku(),shopSkuIdInfo.getShopSkuId());
+        for(ShopSkuInfo shopSkuInfo :list){
+            shopSkuIdMap.put(shopSkuInfo.getShopSku(), shopSkuInfo.getShopSkuId());
+        }
+        return shopSkuIdMap;
+    }
+
+    @Override
+    public Map<String, ShopSkuInfo> getShopSkuInfoMap(List<String> shopSkuList) {
+        if(CollectionUtils.isEmpty(shopSkuList)){
+            return new HashMap<>();
+        }
+        List<ShopSkuInfo> list=customShopSkuMapper.listShopSkuInfo(shopSkuList);
+        if(CollectionUtils.isEmpty(list)){
+            return new HashMap<>();
+        }
+        Map<String,ShopSkuInfo> shopSkuIdMap=new HashMap<>(list.size());
+        for(ShopSkuInfo shopSkuInfo :list){
+            shopSkuIdMap.put(shopSkuInfo.getShopSku(), shopSkuInfo);
         }
         return shopSkuIdMap;
     }

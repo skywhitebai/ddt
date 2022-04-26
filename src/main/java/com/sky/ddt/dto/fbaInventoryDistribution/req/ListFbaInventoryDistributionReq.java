@@ -16,8 +16,11 @@ public class ListFbaInventoryDistributionReq extends DataGridRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date snapshotDay;
     private String fnsku;
+    private Integer shopId;
     private String sku;
     private String productName;
     private String fulfillmentCenterId;
     private String detailedDisposition;
+    private Integer quantityMin;
+    private Integer quantityMax;
 }

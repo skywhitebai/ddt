@@ -238,10 +238,10 @@ shop  s where s.type=2
             </trim>
         </where>
     </select>
-    <select id="listShopSkuIdInfo"
-            resultType="com.sky.ddt.dto.shopSku.response.ShopSkuIdInfo">
+    <select id="listShopSkuInfo"
+            resultType="com.sky.ddt.dto.shopSku.response.ShopSkuInfo">
         select
-        ss.shop_sku_id shopSkuId,ss.shop_sku shopSku from shop_sku ss
+        ss.shop_sku_id shopSkuId,ss.shop_sku shopSku,shop_id shopId from shop_sku ss
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 and ss.shop_sku in

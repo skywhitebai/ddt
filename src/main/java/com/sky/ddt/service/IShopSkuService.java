@@ -267,4 +267,6 @@ public interface IShopSkuService {
     BaseResponse importShopSkuHeadTripCost(MultipartFile file, Integer dealUserId);
 
     Map<String, Integer> getShopSkuIdMap(List<String> shopSkuList);
+
+    Map<String, ShopSkuInfo> getShopSkuInfoMap(List<String> shopSkuList);
 }

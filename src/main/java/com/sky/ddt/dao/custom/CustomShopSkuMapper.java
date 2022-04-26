@@ -106,5 +106,5 @@ public interface CustomShopSkuMapper extends ShopSkuMapper {
 
     List<ListOutboundShopSkuResponse> listOutboundShopSku(ListOutboundShopSkuRequest listOutboundShopSkuRequest);
 
-    List<ShopSkuIdInfo> listShopSkuIdInfo(@Param("shopSkuList")List<String> shopSkuList);
+    List<ShopSkuInfo> listShopSkuInfo(@Param("shopSkuList")List<String> shopSkuList);
 }
