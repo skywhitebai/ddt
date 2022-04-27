@@ -7,9 +7,9 @@
     <result column="snapshot_date" jdbcType="VARCHAR" property="snapshotDate" />
     <result column="fnsku" jdbcType="VARCHAR" property="fnsku" />
     <result column="sku" jdbcType="VARCHAR" property="sku" />
-    <result column="shop_id" jdbcType="INTEGER" property="shopId" />
     <result column="shop_sku_id" jdbcType="INTEGER" property="shopSkuId" />
-    <result column="product-name" jdbcType="VARCHAR" property="productName" />
+    <result column="shop_id" jdbcType="INTEGER" property="shopId" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
     <result column="quantity" jdbcType="INTEGER" property="quantity" />
     <result column="fulfillment_center_id" jdbcType="VARCHAR" property="fulfillmentCenterId" />
     <result column="detailed_disposition" jdbcType="VARCHAR" property="detailedDisposition" />
@@ -78,7 +78,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, snapshot_day, snapshot_date, fnsku, sku, shop_id, shop_sku_id, product-name, 
+    id, snapshot_day, snapshot_date, fnsku, sku, shop_sku_id, shop_id, product_name, 
     quantity, fulfillment_center_id, detailed_disposition, country, create_time, create_by, 
     update_by, update_time
   </sql>
@@ -117,13 +117,13 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into fba_inventory_distribution (snapshot_day, snapshot_date, fnsku, 
-      sku, shop_id, shop_sku_id, 
-      product-name, quantity, fulfillment_center_id, 
+      sku, shop_sku_id, shop_id, 
+      product_name, quantity, fulfillment_center_id, 
       detailed_disposition, country, create_time, 
       create_by, update_by, update_time
       )
     values (#{snapshotDay,jdbcType=TIMESTAMP}, #{snapshotDate,jdbcType=VARCHAR}, #{fnsku,jdbcType=VARCHAR}, 
-      #{sku,jdbcType=VARCHAR}, #{shopId,jdbcType=INTEGER}, #{shopSkuId,jdbcType=INTEGER}, 
+      #{sku,jdbcType=VARCHAR}, #{shopSkuId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, 
       #{productName,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{fulfillmentCenterId,jdbcType=VARCHAR}, 
       #{detailedDisposition,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
       #{createBy,jdbcType=INTEGER}, #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
@@ -147,14 +147,14 @@
       <if test="sku != null">
         sku,
       </if>
-      <if test="shopId != null">
-        shop_id,
-      </if>
       <if test="shopSkuId != null">
         shop_sku_id,
       </if>
+      <if test="shopId != null">
+        shop_id,
+      </if>
       <if test="productName != null">
-        product-name,
+        product_name,
       </if>
       <if test="quantity != null">
         quantity,
@@ -194,11 +194,11 @@
       <if test="sku != null">
         #{sku,jdbcType=VARCHAR},
       </if>
-      <if test="shopId != null">
-        #{shopId,jdbcType=INTEGER},
-      </if>
       <if test="shopSkuId != null">
         #{shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="shopId != null">
+        #{shopId,jdbcType=INTEGER},
       </if>
       <if test="productName != null">
         #{productName,jdbcType=VARCHAR},
@@ -253,14 +253,14 @@
       <if test="record.sku != null">
         sku = #{record.sku,jdbcType=VARCHAR},
       </if>
-      <if test="record.shopId != null">
-        shop_id = #{record.shopId,jdbcType=INTEGER},
-      </if>
       <if test="record.shopSkuId != null">
         shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
       </if>
+      <if test="record.shopId != null">
+        shop_id = #{record.shopId,jdbcType=INTEGER},
+      </if>
       <if test="record.productName != null">
-        product-name = #{record.productName,jdbcType=VARCHAR},
+        product_name = #{record.productName,jdbcType=VARCHAR},
       </if>
       <if test="record.quantity != null">
         quantity = #{record.quantity,jdbcType=INTEGER},
@@ -298,9 +298,9 @@
       snapshot_date = #{record.snapshotDate,jdbcType=VARCHAR},
       fnsku = #{record.fnsku,jdbcType=VARCHAR},
       sku = #{record.sku,jdbcType=VARCHAR},
-      shop_id = #{record.shopId,jdbcType=INTEGER},
       shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
-      product-name = #{record.productName,jdbcType=VARCHAR},
+      shop_id = #{record.shopId,jdbcType=INTEGER},
+      product_name = #{record.productName,jdbcType=VARCHAR},
       quantity = #{record.quantity,jdbcType=INTEGER},
       fulfillment_center_id = #{record.fulfillmentCenterId,jdbcType=VARCHAR},
       detailed_disposition = #{record.detailedDisposition,jdbcType=VARCHAR},
@@ -328,14 +328,14 @@
       <if test="sku != null">
         sku = #{sku,jdbcType=VARCHAR},
       </if>
-      <if test="shopId != null">
-        shop_id = #{shopId,jdbcType=INTEGER},
-      </if>
       <if test="shopSkuId != null">
         shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
       </if>
+      <if test="shopId != null">
+        shop_id = #{shopId,jdbcType=INTEGER},
+      </if>
       <if test="productName != null">
-        product-name = #{productName,jdbcType=VARCHAR},
+        product_name = #{productName,jdbcType=VARCHAR},
       </if>
       <if test="quantity != null">
         quantity = #{quantity,jdbcType=INTEGER},
@@ -370,9 +370,9 @@
       snapshot_date = #{snapshotDate,jdbcType=VARCHAR},
       fnsku = #{fnsku,jdbcType=VARCHAR},
       sku = #{sku,jdbcType=VARCHAR},
-      shop_id = #{shopId,jdbcType=INTEGER},
       shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
-      product-name = #{productName,jdbcType=VARCHAR},
+      shop_id = #{shopId,jdbcType=INTEGER},
+      product_name = #{productName,jdbcType=VARCHAR},
       quantity = #{quantity,jdbcType=INTEGER},
       fulfillment_center_id = #{fulfillmentCenterId,jdbcType=VARCHAR},
       detailed_disposition = #{detailedDisposition,jdbcType=VARCHAR},

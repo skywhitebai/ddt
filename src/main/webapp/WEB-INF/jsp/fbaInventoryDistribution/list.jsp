@@ -92,12 +92,18 @@
         </div>
     </form>
 </div>
+<div id="cover">
+    <div id="coverMsg">
+        <img src="${pageContext.request.contextPath }/static/img/loading.gif" width="100px">
+    </div>
+</div>
 </body>
 <script type="text/javascript">
     $(function () {
         bindShop();
         bindData();
     });
+
     function bindShop() {
         $('#s_shopId').combobox({
             valueField: 'shopId',
@@ -105,10 +111,12 @@
             url: "${pageContext.request.contextPath }/shop/comboboxlist",//获取数据
         });
     }
+
     function getQueryParams() {
         queryParams = {
             snapshotDay: $("#s_snapshotDay").val(),
             fnsku: $("#s_fnsku").val(),
+            shopId: $("#s_shopId").combobox('getValue'),
             sku: $("#s_sku").val(),
             productName: $("#s_productName").val(),
             fulfillmentCenterId: $("#s_fulfillmentCenterId").val(),
@@ -146,44 +154,24 @@
             columns: [[
                 {field: 'ck', checkbox: true},   //选择
                 {
-                    title: '日期', field: 'snapshotDay', width: 70,
+                    title: '日期', field: 'snapshotDay', width: 100,
                     formatter: function (value, rowData, rowIndex) {
                         return value.slice(0, 10);
                     }
                 },
-                {title: 'snapshotDate', field: 'snapshotDate', width: 180},
-                {title: 'fnsku', field: 'fnsku', width: 100},
-                {title: 'sku', field: 'sku', width: 100},
+                {title: '店铺名', field: 'shopName', width: 100},
+                {title: 'snapshotDate', field: 'snapshotDate', width: 200},
+                {title: 'fnsku', field: 'fnsku', width: 120},
+                {title: 'sku', field: 'sku', width: 160},
                 {title: 'productName', field: 'productName', width: 180},
                 {title: '数量', field: 'quantity', width: 40},
                 {title: '仓库', field: 'fulfillmentCenterId', width: 60},
                 {title: 'detailedDisposition', field: 'detailedDisposition', width: 100},
                 {title: '国家', field: 'country', width: 60},
-                {title: '创建时间', field: 'createTime', width: 120},
-                {title: '修改时间', field: 'updateTime', width: 120}
+                {title: '创建时间', field: 'createTime', width: 150},
+                {title: '修改时间', field: 'updateTime', width: 150}
             ]],
             toolbar: [{
-                id: 'btnAdd',
-                text: '添加',
-                iconCls: 'icon-add',
-                handler: function () {
-                    showAddDialog();//实现添加记录的页面
-                }
-            }, '-', {
-                id: 'btnEdit',
-                text: '修改',
-                iconCls: 'icon-edit',
-                handler: function () {
-                    showEditDialog();//实现修改记录的方法
-                }
-            }, '-', {
-                id: 'btnView',
-                text: '查看',
-                iconCls: 'icon-search',
-                handler: function () {
-                    showViewDialog();//实现查看记录详细信息的方法
-                }
-            }, '-', {
                 id: 'btnReload',
                 text: '刷新',
                 iconCls: 'icon-reload',
@@ -260,17 +248,17 @@
     }
 
     function downFbaInventoryDistribution() {
-        var shopId = $("#s_shopId").val();
-        if(isEmpty(shopId)){
+        var shopId = $("#s_shopId").combobox('getValue');
+        if (isEmpty(shopId)) {
             $.messager.alert("提示", "请选择店铺");
             return;
         }
         var snapshotDay = $("#s_snapshotDay").val();
-        if(isEmpty(snapshotDay)){
+        if (isEmpty(snapshotDay)) {
             $.messager.alert("提示", "请选择日期");
             return;
         }
-        window.open('${pageContext.request.contextPath }/fbaInventoryDistribution/downFbaInventoryDistribution?snapshotDay=' + snapshotDay+"&shopId="+shopId);
+        window.open('${pageContext.request.contextPath }/fbaInventoryDistribution/downFbaInventoryDistribution?snapshotDay=' + snapshotDay + "&shopId=" + shopId);
 
     }
 </script>

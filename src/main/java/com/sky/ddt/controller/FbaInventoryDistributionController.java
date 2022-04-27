@@ -61,7 +61,7 @@ public class FbaInventoryDistributionController extends SuperController {
     }
     @RequestMapping("/downFbaInventoryDistribution")
     @ResponseBody
-    @RightAnnotation("fbaInventoryDistribution/index")
+    @MenuAnnotation("fbaInventoryDistribution/index")
     public BaseResponse downFbaInventoryDistribution(@Validated DownFbaInventoryDistributionReq params) {
         return fbaInventoryDistributionService.downFbaInventoryDistribution(params,response);
     }

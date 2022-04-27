@@ -5,10 +5,9 @@
     <select id="listFbaInventoryDistributionExist"
             resultType="com.sky.ddt.dto.fbaInventoryDistribution.resp.FbaInventoryDistributionExistInfo">
         select
-        id,sku
+        id,sku,fulfillment_center_id fulfillmentCenterId,detailed_disposition detailedDisposition
         from fba_inventory_distribution
         <where>
-
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 and sku in
                 <foreach close=")" collection="shopSkuList" item="shopSku" open="(" separator=",">
@@ -28,7 +27,7 @@
             resultMap="listFbaInventoryDistributionMap">
         select
         <include refid="com.sky.ddt.dao.generate.FbaInventoryDistributionMapper.Base_Column_List"/>
-        ,(select shop_name from shop s where fid.shop_id=s.shop_id) shop_name,
+        ,(select shop_name from shop s where fid.shop_id=s.shop_id) shop_name
         from fba_inventory_distribution fid
         <if test="_parameter != null">
             <include refid="fbaInventoryDistribution_Query_Where_Clause"/>
@@ -39,7 +38,7 @@
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 <if test="shopId != null">and fid.shop_id=#{shopId}</if>
-                <if test="snapshotDay != null">and fid.snapshotDay=#{snapshotDay}</if>
+                <if test="snapshotDay != null">and fid.snapshot_day=#{snapshotDay}</if>
                 <if test="fnsku != null and fnsku != ''">and fid.fnsku like concat('%',#{fnsku},'%')</if>
                 <if test="sku != null and sku != ''">and fid.sku like concat('%',#{sku},'%')</if>
                 <if test="productName != null and productName != ''">and fid.product-name like

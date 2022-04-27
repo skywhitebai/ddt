@@ -13,9 +13,9 @@ public class FbaInventoryDistribution {
 
     private String sku;
 
-    private Integer shopId;
-
     private Integer shopSkuId;
+
+    private Integer shopId;
 
     private String productName;
 
@@ -75,20 +75,20 @@ public class FbaInventoryDistribution {
         this.sku = sku == null ? null : sku.trim();
     }
 
-    public Integer getShopId() {
-        return shopId;
-    }
-
-    public void setShopId(Integer shopId) {
-        this.shopId = shopId;
-    }
-
     public Integer getShopSkuId() {
         return shopSkuId;
     }
 
     public void setShopSkuId(Integer shopSkuId) {
         this.shopSkuId = shopSkuId;
+    }
+
+    public Integer getShopId() {
+        return shopId;
+    }
+
+    public void setShopId(Integer shopId) {
+        this.shopId = shopId;
     }
 
     public String getProductName() {

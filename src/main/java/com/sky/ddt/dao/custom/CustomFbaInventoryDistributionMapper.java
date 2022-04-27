@@ -16,7 +16,7 @@ import java.util.Map;
  * @date 2022/4/21 23:26
  */
 public interface CustomFbaInventoryDistributionMapper extends FbaInventoryDistributionMapper {
-    List<FbaInventoryDistributionExistInfo> listFbaInventoryDistributionExist(@Param("snapshotDay")Date snapshotDay,@Param("shopSkuList") List<Map<String, String>> list);
+    List<FbaInventoryDistributionExistInfo> listFbaInventoryDistributionExist(@Param("snapshotDay")Date snapshotDay,@Param("shopSkuList") List<String> list);
 
     List<ListFbaInventoryDistributionResp> listFbaInventoryDistribution(ListFbaInventoryDistributionReq params);
 }

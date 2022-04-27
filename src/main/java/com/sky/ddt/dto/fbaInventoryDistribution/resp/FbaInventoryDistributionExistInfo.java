@@ -11,4 +11,6 @@ import lombok.Data;
 public class FbaInventoryDistributionExistInfo {
     Integer id;
     String sku;
+    String fulfillmentCenterId;
+    String detailedDisposition;
 }

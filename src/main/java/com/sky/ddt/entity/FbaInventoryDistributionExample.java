@@ -435,66 +435,6 @@ public class FbaInventoryDistributionExample {
             return (Criteria) this;
         }
 
-        public Criteria andShopIdIsNull() {
-            addCriterion("shop_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopIdIsNotNull() {
-            addCriterion("shop_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopIdEqualTo(Integer value) {
-            addCriterion("shop_id =", value, "shopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopIdNotEqualTo(Integer value) {
-            addCriterion("shop_id <>", value, "shopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopIdGreaterThan(Integer value) {
-            addCriterion("shop_id >", value, "shopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopIdGreaterThanOrEqualTo(Integer value) {
-            addCriterion("shop_id >=", value, "shopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopIdLessThan(Integer value) {
-            addCriterion("shop_id <", value, "shopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopIdLessThanOrEqualTo(Integer value) {
-            addCriterion("shop_id <=", value, "shopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopIdIn(List<Integer> values) {
-            addCriterion("shop_id in", values, "shopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopIdNotIn(List<Integer> values) {
-            addCriterion("shop_id not in", values, "shopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopIdBetween(Integer value1, Integer value2) {
-            addCriterion("shop_id between", value1, value2, "shopId");
-            return (Criteria) this;
-        }
-
-        public Criteria andShopIdNotBetween(Integer value1, Integer value2) {
-            addCriterion("shop_id not between", value1, value2, "shopId");
-            return (Criteria) this;
-        }
-
         public Criteria andShopSkuIdIsNull() {
             addCriterion("shop_sku_id is null");
             return (Criteria) this;
@@ -555,73 +495,133 @@ public class FbaInventoryDistributionExample {
             return (Criteria) this;
         }
 
+        public Criteria andShopIdIsNull() {
+            addCriterion("shop_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopIdIsNotNull() {
+            addCriterion("shop_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopIdEqualTo(Integer value) {
+            addCriterion("shop_id =", value, "shopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopIdNotEqualTo(Integer value) {
+            addCriterion("shop_id <>", value, "shopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopIdGreaterThan(Integer value) {
+            addCriterion("shop_id >", value, "shopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("shop_id >=", value, "shopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopIdLessThan(Integer value) {
+            addCriterion("shop_id <", value, "shopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopIdLessThanOrEqualTo(Integer value) {
+            addCriterion("shop_id <=", value, "shopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopIdIn(List<Integer> values) {
+            addCriterion("shop_id in", values, "shopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopIdNotIn(List<Integer> values) {
+            addCriterion("shop_id not in", values, "shopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopIdBetween(Integer value1, Integer value2) {
+            addCriterion("shop_id between", value1, value2, "shopId");
+            return (Criteria) this;
+        }
+
+        public Criteria andShopIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("shop_id not between", value1, value2, "shopId");
+            return (Criteria) this;
+        }
+
         public Criteria andProductNameIsNull() {
-            addCriterion("product-name is null");
+            addCriterion("product_name is null");
             return (Criteria) this;
         }
 
         public Criteria andProductNameIsNotNull() {
-            addCriterion("product-name is not null");
+            addCriterion("product_name is not null");
             return (Criteria) this;
         }
 
         public Criteria andProductNameEqualTo(String value) {
-            addCriterion("product-name =", value, "productName");
+            addCriterion("product_name =", value, "productName");
             return (Criteria) this;
         }
 
         public Criteria andProductNameNotEqualTo(String value) {
-            addCriterion("product-name <>", value, "productName");
+            addCriterion("product_name <>", value, "productName");
             return (Criteria) this;
         }
 
         public Criteria andProductNameGreaterThan(String value) {
-            addCriterion("product-name >", value, "productName");
+            addCriterion("product_name >", value, "productName");
             return (Criteria) this;
         }
 
         public Criteria andProductNameGreaterThanOrEqualTo(String value) {
-            addCriterion("product-name >=", value, "productName");
+            addCriterion("product_name >=", value, "productName");
             return (Criteria) this;
         }
 
         public Criteria andProductNameLessThan(String value) {
-            addCriterion("product-name <", value, "productName");
+            addCriterion("product_name <", value, "productName");
             return (Criteria) this;
         }
 
         public Criteria andProductNameLessThanOrEqualTo(String value) {
-            addCriterion("product-name <=", value, "productName");
+            addCriterion("product_name <=", value, "productName");
             return (Criteria) this;
         }
 
         public Criteria andProductNameLike(String value) {
-            addCriterion("product-name like", value, "productName");
+            addCriterion("product_name like", value, "productName");
             return (Criteria) this;
         }
 
         public Criteria andProductNameNotLike(String value) {
-            addCriterion("product-name not like", value, "productName");
+            addCriterion("product_name not like", value, "productName");
             return (Criteria) this;
         }
 
         public Criteria andProductNameIn(List<String> values) {
-            addCriterion("product-name in", values, "productName");
+            addCriterion("product_name in", values, "productName");
             return (Criteria) this;
         }
 
         public Criteria andProductNameNotIn(List<String> values) {
-            addCriterion("product-name not in", values, "productName");
+            addCriterion("product_name not in", values, "productName");
             return (Criteria) this;
         }
 
         public Criteria andProductNameBetween(String value1, String value2) {
-            addCriterion("product-name between", value1, value2, "productName");
+            addCriterion("product_name between", value1, value2, "productName");
             return (Criteria) this;
         }
 
         public Criteria andProductNameNotBetween(String value1, String value2) {
-            addCriterion("product-name not between", value1, value2, "productName");
+            addCriterion("product_name not between", value1, value2, "productName");
             return (Criteria) this;
         }
 
