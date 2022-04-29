@@ -5,16 +5,17 @@
     <select id="listFbaInventoryDistributionExist"
             resultType="com.sky.ddt.dto.fbaInventoryDistribution.resp.FbaInventoryDistributionExistInfo">
         select
-        id,sku,fulfillment_center_id fulfillmentCenterId,detailed_disposition detailedDisposition
+        id,sku,snapshot_day snapshotDay,fulfillment_center_id fulfillmentCenterId,detailed_disposition detailedDisposition
         from fba_inventory_distribution
         <where>
-            <trim prefix="(" suffix=")" prefixOverrides="and">
-                and sku in
-                <foreach close=")" collection="shopSkuList" item="shopSku" open="(" separator=",">
-                    #{shopSku}
-                </foreach>
-            </trim>
-            and snapshot_day=#{snapshotDay}
+            and sku in
+            <foreach close=")" collection="shopSkuList" item="shopSku" open="(" separator=",">
+                #{shopSku}
+            </foreach>
+            and snapshot_day in
+            <foreach close=")" collection="snapshotDaySet" item="snapshotDay" open="(" separator=",">
+                #{snapshotDay}
+            </foreach>
         </where>
     </select>
 

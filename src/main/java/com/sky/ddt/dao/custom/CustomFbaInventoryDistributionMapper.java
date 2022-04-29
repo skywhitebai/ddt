@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author sky
@@ -16,7 +17,7 @@ import java.util.Map;
  * @date 2022/4/21 23:26
  */
 public interface CustomFbaInventoryDistributionMapper extends FbaInventoryDistributionMapper {
-    List<FbaInventoryDistributionExistInfo> listFbaInventoryDistributionExist(@Param("snapshotDay")Date snapshotDay,@Param("shopSkuList") List<String> list);
+    List<FbaInventoryDistributionExistInfo> listFbaInventoryDistributionExist(@Param("snapshotDaySet") Set<Date> snapshotDaySet, @Param("shopSkuList") List<String> list);
 
     List<ListFbaInventoryDistributionResp> listFbaInventoryDistribution(ListFbaInventoryDistributionReq params);
 }

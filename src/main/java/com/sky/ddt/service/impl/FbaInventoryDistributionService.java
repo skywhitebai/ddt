@@ -65,14 +65,13 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
         StringBuilder sbErro = new StringBuilder();
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
-            if (!StringUtils.isEmpty(map.get("sku"))&&map.get("sku").contains("&amp;")){
-                map.put("sku",map.get("sku").replace("&amp;","&"));
+            if (!StringUtils.isEmpty(map.get("sku")) && map.get("sku").contains("&amp;")) {
+                map.put("sku", map.get("sku").replace("&amp;", "&"));
             }
         }
         Map<String, ShopSkuInfo> shopSkuMap = getShopSkuMap(list);
-        String snapshotDate = "";
-        Date snapshotDay = null;
-        Map<String,Integer> skuInfoMap=new HashMap<>();
+        Set<Date> snapshotDaySet = new HashSet<>();
+        Map<String, Integer> skuInfoMap = new HashMap<>();
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
             //忽略空行
@@ -90,15 +89,14 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
             if (StringUtils.isEmpty(map.get("snapshot-date"))) {
                 sbErroItem.append(",").append("snapshot-date不能为空");
             } else {
-                if (StringUtils.isEmpty(snapshotDate)) {
-                    if (map.get("snapshot-date").length() < 10) {
+                if (map.get("snapshot-date").length() < 10) {
+                    sbErroItem.append(",").append("snapshot-date格式错误，必须为日期");
+                } else {
+                    Date snapshotDay = DateUtil.strToDate(map.get("snapshot-date").substring(0, 10));
+                    if (snapshotDay == null) {
                         sbErroItem.append(",").append("snapshot-date格式错误，必须为日期");
                     } else {
-                        snapshotDate = map.get("snapshot-date");
-                        snapshotDay = DateUtil.strToDate(map.get("snapshot-date").substring(0, 10));
-                        if (snapshotDay == null) {
-                            sbErroItem.append(",").append("snapshot-date格式错误，必须为日期");
-                        }
+                        snapshotDaySet.add(snapshotDay);
                     }
                 }
             }
@@ -123,13 +121,15 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
             if (StringUtils.isEmpty(map.get("fulfillment-center-id"))) {
                 sbErroItem.append(",").append("fulfillment-center-id不能为空");
             }
-            if (!StringUtils.isEmpty(map.get("sku"))&&!StringUtils.isEmpty(map.get("fulfillment-center-id"))) {
-                String skuFullInfo=map.get("sku")+map.get("fulfillment-center-id")+map.get("detailed-disposition");
-                if(skuInfoMap.containsKey(skuFullInfo)){
-                    sbErroItem.append(",").append(String.format("sku[%s]、fulfillment-center-id[%s]、detailed-disposition【%s】和第[%d]行重复",map.get("sku"),map.get("fulfillment-center-id"),map.get("detailed-disposition"),skuInfoMap.get(skuFullInfo)));
-                }else{
-                    skuInfoMap.put(skuFullInfo,i+1);
-                    map.put("skuFullInfo",skuFullInfo);
+            if (!StringUtils.isEmpty(map.get("sku"))
+                    && !StringUtils.isEmpty(map.get("fulfillment-center-id"))
+                    && !StringUtils.isEmpty(map.get("snapshot-date"))
+                    && map.get("snapshot-date").length() >= 10) {
+                String skuFullInfo = map.get("sku") + map.get("fulfillment-center-id") + map.get("detailed-disposition") + map.get("snapshot-date").substring(0, 10);
+                if (skuInfoMap.containsKey(skuFullInfo)) {
+                    sbErroItem.append(",").append(String.format("sku[%s]、fulfillment-center-id[%s]、detailed-disposition【%s】和第[%d]行重复", map.get("sku"), map.get("fulfillment-center-id"), map.get("detailed-disposition"), skuInfoMap.get(skuFullInfo)));
+                } else {
+                    skuInfoMap.put(skuFullInfo, i + 1);
                 }
             }
 
@@ -141,7 +141,7 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
             return BaseResponse.failMessage(sbErro.substring(1));
         }
         //获取历史数据
-        Map<String, Integer> fbaInventoryDistributionMap = getfbaInventoryDistributionMap(snapshotDay, list);
+        List<FbaInventoryDistributionExistInfo> fbaInventoryDistributionExistInfoList = getFbaInventoryDistributionExistInfoList(snapshotDaySet, list);
         for (Map<String, String> map : list) {
             //忽略空行
             Boolean isEmpty = true;
@@ -156,7 +156,7 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
             }
 
             FbaInventoryDistribution fbaInventoryDistribution = new FbaInventoryDistribution();
-            fbaInventoryDistribution.setSnapshotDay(snapshotDay);
+            fbaInventoryDistribution.setSnapshotDay(DateUtil.strToDate(map.get("snapshot-date").substring(0, 10)));
             fbaInventoryDistribution.setSnapshotDate(map.get("snapshot-date"));
             fbaInventoryDistribution.setFnsku(map.get("fnsku"));
             fbaInventoryDistribution.setSku(map.get("sku"));
@@ -167,7 +167,7 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
             fbaInventoryDistribution.setFulfillmentCenterId(map.get("fulfillment-center-id"));
             fbaInventoryDistribution.setDetailedDisposition(map.get("detailed-disposition"));
             fbaInventoryDistribution.setCountry(map.get("country"));
-            fbaInventoryDistribution.setId(fbaInventoryDistributionMap.get(map.get("skuFullInfo")));
+            fbaInventoryDistribution.setId(getFbaInventoryDistributionId(fbaInventoryDistribution, fbaInventoryDistributionExistInfoList));
             if (fbaInventoryDistribution.getId() != null) {
                 fbaInventoryDistribution.setUpdateBy(dealUserId);
                 fbaInventoryDistribution.setUpdateTime(new Date());
@@ -180,6 +180,22 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
         }
         return BaseResponse.success();
     }
+
+    private Integer getFbaInventoryDistributionId(FbaInventoryDistribution fbaInventoryDistribution, List<FbaInventoryDistributionExistInfo> fbaInventoryDistributionExistInfoList) {
+        if (CollectionUtils.isEmpty(fbaInventoryDistributionExistInfoList)) {
+            return null;
+        }
+        Optional<FbaInventoryDistributionExistInfo> first = fbaInventoryDistributionExistInfoList.stream().filter(
+                item -> item.getSku().equals(fbaInventoryDistribution.getSku())
+                        && item.getDetailedDisposition().equals(fbaInventoryDistribution.getDetailedDisposition())
+                        && item.getFulfillmentCenterId().equals(fbaInventoryDistribution.getFulfillmentCenterId())
+                        && item.getSnapshotDay().equals(fbaInventoryDistribution.getSnapshotDay())).findFirst();
+        if(first.isPresent()){
+            return first.get().getId();
+        }
+        return null;
+    }
+
 
     @Override
     public BaseResponse downFbaInventoryDistribution(DownFbaInventoryDistributionReq params, HttpServletResponse response) {
@@ -291,10 +307,10 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
             //设置总数
             skuFulfillmentCenterIdQuantity.setQuantity(MathUtil.addInteger(skuFulfillmentCenterIdQuantity.getQuantity(), fbaInventoryDistribution.getQuantity()));
             skuFulfillmentCenterIdQuantity.setSku(fbaInventoryDistribution.getSku());
-            FulfillmentCenterIdQuantity fulfillmentCenterIdQuantity=getFulfillmentCenterIdQuantity(skuFulfillmentCenterIdQuantity.getFulfillmentCenterIdQuantityList(),fbaInventoryDistribution.getFulfillmentCenterId());
-            if(fulfillmentCenterIdQuantity!=null){
-                fulfillmentCenterIdQuantity.setQuantity(MathUtil.addInteger(fulfillmentCenterIdQuantity.getQuantity(),fbaInventoryDistribution.getQuantity()));
-            }else{
+            FulfillmentCenterIdQuantity fulfillmentCenterIdQuantity = getFulfillmentCenterIdQuantity(skuFulfillmentCenterIdQuantity.getFulfillmentCenterIdQuantityList(), fbaInventoryDistribution.getFulfillmentCenterId());
+            if (fulfillmentCenterIdQuantity != null) {
+                fulfillmentCenterIdQuantity.setQuantity(MathUtil.addInteger(fulfillmentCenterIdQuantity.getQuantity(), fbaInventoryDistribution.getQuantity()));
+            } else {
                 skuFulfillmentCenterIdQuantity.getFulfillmentCenterIdQuantityList().add(getFulfillmentCenterIdQuantity(fbaInventoryDistribution));
             }
             map.put(fbaInventoryDistribution.getSku(), skuFulfillmentCenterIdQuantity);
@@ -306,8 +322,8 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
     }
 
     private FulfillmentCenterIdQuantity getFulfillmentCenterIdQuantity(List<FulfillmentCenterIdQuantity> fulfillmentCenterIdQuantityList, String fulfillmentCenterId) {
-        Optional<FulfillmentCenterIdQuantity> first=fulfillmentCenterIdQuantityList.stream().filter(item->item.getFulfillmentCenterId().equals(fulfillmentCenterId)).findFirst();
-        if(first.isPresent()){
+        Optional<FulfillmentCenterIdQuantity> first = fulfillmentCenterIdQuantityList.stream().filter(item -> item.getFulfillmentCenterId().equals(fulfillmentCenterId)).findFirst();
+        if (first.isPresent()) {
             return first.get();
         }
         return null;
@@ -335,17 +351,9 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
         return fulfillmentCenterIdQuantityList;
     }
 
-    private Map<String, Integer> getfbaInventoryDistributionMap(Date snapshotDay, List<Map<String, String>> list) {
+    private List<FbaInventoryDistributionExistInfo> getFbaInventoryDistributionExistInfoList(Set<Date> snapshotDaySet, List<Map<String, String>> list) {
         List<String> shopSkuList = list.stream().map(item -> item.get("sku")).collect(Collectors.toList());
-        List<FbaInventoryDistributionExistInfo> fbaInventoryDistributionExistInfoList = customFbaInventoryDistributionMapper.listFbaInventoryDistributionExist(snapshotDay, shopSkuList);
-        if (CollectionUtils.isEmpty(fbaInventoryDistributionExistInfoList)) {
-            return new HashMap<>();
-        }
-        Map<String, Integer> fbaInventoryDistributionMap = new HashMap<>();
-        for (FbaInventoryDistributionExistInfo fbaInventoryDistributionExistInfo : fbaInventoryDistributionExistInfoList) {
-            fbaInventoryDistributionMap.put(fbaInventoryDistributionExistInfo.getSku()+fbaInventoryDistributionExistInfo.getFulfillmentCenterId()+fbaInventoryDistributionExistInfo.getDetailedDisposition(), fbaInventoryDistributionExistInfo.getId());
-        }
-        return fbaInventoryDistributionMap;
+        return customFbaInventoryDistributionMapper.listFbaInventoryDistributionExist(snapshotDaySet, shopSkuList);
     }
 
     private Map<String, ShopSkuInfo> getShopSkuMap(List<Map<String, String>> list) {
@@ -356,27 +364,5 @@ public class FbaInventoryDistributionService implements IFbaInventoryDistributio
         }
         shopSkuMap = shopSkuService.getShopSkuInfoMap(shopSkuList);
         return shopSkuMap;
-    }
-
-    private FbaInventoryDistributionExample buildFbaInventoryDistributionExample(ListFbaInventoryDistributionReq params) {
-        FbaInventoryDistributionExample fbaInventoryDistributionExample = new FbaInventoryDistributionExample();
-        FbaInventoryDistributionExample.Criteria criteria = fbaInventoryDistributionExample.createCriteria();
-        if (params.getSnapshotDay() != null) {
-            criteria.andSnapshotDayEqualTo(params.getSnapshotDay());
-        }
-        if (params.getFnsku() != null) {
-            criteria.andFnskuLike(params.getFnsku());
-        }
-        if (params.getProductName() != null) {
-            criteria.andProductNameLike(params.getProductName());
-        }
-        if (params.getFulfillmentCenterId() != null) {
-            criteria.andFulfillmentCenterIdLike(params.getFulfillmentCenterId());
-        }
-        if (params.getDetailedDisposition() != null) {
-            criteria.andDetailedDispositionLike(params.getDetailedDisposition());
-        }
-        fbaInventoryDistributionExample.setOrderByClause("snapshot_day desc,sku asc");
-        return fbaInventoryDistributionExample;
     }
 }

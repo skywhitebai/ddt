@@ -2,6 +2,8 @@ package com.sky.ddt.dto.fbaInventoryDistribution.resp;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author sky
  * @Description
@@ -11,6 +13,7 @@ import lombok.Data;
 public class FbaInventoryDistributionExistInfo {
     Integer id;
     String sku;
+    Date snapshotDay;
     String fulfillmentCenterId;
     String detailedDisposition;
 }
