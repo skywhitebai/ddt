@@ -74,7 +74,7 @@ public class WorkOrderService implements IWorkOrderService {
             }
             if (WorkOrderConstant.StatusEnum.COMPLETED.getStatus().equals(params.getStatus())) {
                 Date now = new Date();
-                if (workOrderExist.getPlanEndTime()==null||now.before(workOrderExist.getPlanEndTime())) {
+                if (workOrderExist.getPlanEndTime() == null || now.before(workOrderExist.getPlanEndTime())) {
                     workOrder.setDealStatus(WorkOrderConstant.DealStatusEnum.HANDLER.getDealStatus());
                 } else {
                     workOrder.setDealStatus(WorkOrderConstant.DealStatusEnum.TIMEOUT_HANDLER.getDealStatus());
@@ -91,7 +91,7 @@ public class WorkOrderService implements IWorkOrderService {
 
     private String getWorderOrderNo() {
         String worderOrderNoFirst = "WO" + DateUtil.getFormatStryyyyMMdd(new Date());
-        WorkOrderExample example=new WorkOrderExample();
+        WorkOrderExample example = new WorkOrderExample();
         example.createCriteria().andCreateTimeGreaterThanOrEqualTo(DateUtil.getToday());
         Long count = customWorkOrderMapper.countByExample(example);
         String worderOrderNo = "";
@@ -108,22 +108,22 @@ public class WorkOrderService implements IWorkOrderService {
     }
 
     private boolean existWorderOrderNo(String worderOrderNo) {
-        WorkOrderExample example=new WorkOrderExample();
+        WorkOrderExample example = new WorkOrderExample();
         example.createCriteria().andWorkOrderNoEqualTo(worderOrderNo);
         Long count = customWorkOrderMapper.countByExample(example);
-        return count>0;
+        return count > 0;
     }
 
     @Override
     public BaseResponse cancelWorkOrder(Integer id, Integer dealUserId) {
-        if(id==null){
+        if (id == null) {
             return BaseResponse.failMessage("id不能为空");
         }
-        WorkOrder workOrder=customWorkOrderMapper.selectByPrimaryKey(id);
-        if(workOrder==null){
+        WorkOrder workOrder = customWorkOrderMapper.selectByPrimaryKey(id);
+        if (workOrder == null) {
             return BaseResponse.failMessage("id不存在");
         }
-        WorkOrder workOrderUpdate=new WorkOrder();
+        WorkOrder workOrderUpdate = new WorkOrder();
         workOrderUpdate.setId(id);
         workOrderUpdate.setUpdateBy(dealUserId);
         workOrderUpdate.setUpdateTime(new Date());

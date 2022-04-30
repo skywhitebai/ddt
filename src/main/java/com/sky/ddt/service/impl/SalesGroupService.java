@@ -73,6 +73,13 @@ public class SalesGroupService implements ISalesGroupService {
         return BaseResponse.success();
     }
 
+    @Override
+    public List<SalesGroup> comboboxlist() {
+        SalesGroupExample salesGroupExample = new SalesGroupExample();
+        salesGroupExample.setOrderByClause("group_name asc");
+        return customSalesGroupMapper.selectByExample(salesGroupExample);
+    }
+
     private boolean existGroupName(SaveSalesGroupReq req) {
         SalesGroupExample salesGroupExample = new SalesGroupExample();
         SalesGroupExample.Criteria criteria = salesGroupExample.createCriteria();

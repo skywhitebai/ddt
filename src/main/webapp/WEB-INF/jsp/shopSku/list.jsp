@@ -514,14 +514,15 @@
                             return '<a href="javascript:;" title="暂停生产" onclick="setProduceStatus(' + row.shopSkuId + ",'" + row.shopSku + "'" + ',1)" >暂停生产</a>';
                         }
                     }
-                },
+                }
+                /*,
                 {
                     title: '操作', field: 'shopSkuId', width: 150,
                     formatter: function (value, row, index) {
                         return '<a href="javascript:;" onclick="showPrintLabel(\'' + row.shopSku + '\')" title="打印标签">打印标签</a>'
                             + '&nbsp;&nbsp;&nbsp;<a href="javascript:;" onclick="showPrintLabel7040(\'' + row.shopSku + '\')" title="打印7040标签">打印7040标签</a>';
                     }
-                }
+                }*/
             ]],
             toolbar: [{
                 id: 'btnView',

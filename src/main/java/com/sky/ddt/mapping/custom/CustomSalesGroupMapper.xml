@@ -16,7 +16,7 @@
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 <if test="userId != null">and exists(select 1 from sales_group_user sgu where sgu.sales_group_id=sg.id and sgu.user_id=#{userId})</if>
-                <if test="groupName != null and groupName!=''">and group_name like like concat('%',#{groupName},'%')</if>
+                <if test="groupName != null and groupName!=''">and group_name like concat('%',#{groupName},'%')</if>
                 <if test="status != null ">and status = #{status}</if>
             </trim>
         </where>

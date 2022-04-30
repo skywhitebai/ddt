@@ -5,6 +5,9 @@ import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.salesGroup.req.ListSalesGroupReq;
 import com.sky.ddt.dto.salesGroup.req.SaveSalesGroupReq;
 import com.sky.ddt.dto.salesGroup.resp.ListSalesGroupResp;
+import com.sky.ddt.entity.SalesGroup;
+
+import java.util.List;
 
 /**
  * @author sky
@@ -17,4 +20,6 @@ public interface ISalesGroupService {
     BaseResponse saveSalesGroup(SaveSalesGroupReq req, Integer currentUserId);
 
     BaseResponse deleteSalesGroup(Integer id, Integer currentUserId);
+
+    List<SalesGroup> comboboxlist();
 }

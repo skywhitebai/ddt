@@ -7,6 +7,7 @@ import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.salesGroup.req.ListSalesGroupReq;
 import com.sky.ddt.dto.salesGroup.req.SaveSalesGroupReq;
 import com.sky.ddt.dto.salesGroup.resp.ListSalesGroupResp;
+import com.sky.ddt.entity.SalesGroup;
 import com.sky.ddt.service.ISalesGroupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * @author sky
@@ -48,5 +50,10 @@ public class SalesGroupController extends SuperController {
     @ResponseBody
     public BaseResponse deleteSalesGroup(@NotNull(message = "id不能为空") Integer id){
         return salesGroupService.deleteSalesGroup(id,getCurrentUserId());
+    }
+    @RequestMapping("/comboboxlist")
+    @ResponseBody
+    public List<SalesGroup> comboboxlist(){
+        return salesGroupService.comboboxlist();
     }
 }
