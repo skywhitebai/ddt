@@ -110,12 +110,12 @@ public class LongStorageFeeService implements ILongStorageFeeService {
             CheckUtil.checkAndSetStr(longStorageFeeImportRequest, sbErroItem, map, "asin", null, true);
             CheckUtil.checkAndSetStr(longStorageFeeImportRequest, sbErroItem, map, "product-name", null, true);
             CheckUtil.checkAndSetStr(longStorageFeeImportRequest, sbErroItem, map, "condition","conditionType", true);
-            CheckUtil.checkAndSetBigDecimal(longStorageFeeImportRequest, sbErroItem, map, "qty-charged-12-mo-long-term-storage-fee", null, true);
+            CheckUtil.checkAndSetBigDecimal(longStorageFeeImportRequest, sbErroItem, map, "qty-charged-long-time-range-long-term-storage-fee", "qtyCharged12MoLongTermStorageFee", true);
             CheckUtil.checkAndSetBigDecimal(longStorageFeeImportRequest, sbErroItem, map, "per-unit-volume", null, true);
             CheckUtil.checkAndSetStr(longStorageFeeImportRequest, sbErroItem, map, "currency", null, true);
-            CheckUtil.checkAndSetBigDecimal(longStorageFeeImportRequest, sbErroItem, map, "12-mo-long-terms-storage-fee","mo12LongTermsStorageFee", true);
-            CheckUtil.checkAndSetBigDecimal(longStorageFeeImportRequest, sbErroItem, map, "qty-charged-6-mo-long-term-storage-fee", null, true);
-            CheckUtil.checkAndSetBigDecimal(longStorageFeeImportRequest, sbErroItem, map, "6-mo-long-terms-storage-fee","mo6LongTermsStorageFee", true);
+            CheckUtil.checkAndSetBigDecimal(longStorageFeeImportRequest, sbErroItem, map, "long-time-range-long-term-storage-fee","mo12LongTermsStorageFee", true);
+            CheckUtil.checkAndSetBigDecimal(longStorageFeeImportRequest, sbErroItem, map, "qty-charged-short-time-range-long-term-storage-fee", "qtyCharged6MoLongTermStorageFee", true);
+            CheckUtil.checkAndSetBigDecimal(longStorageFeeImportRequest, sbErroItem, map, "short-time-range-long-term-storage-fee","mo6LongTermsStorageFee", true);
             CheckUtil.checkAndSetStr(longStorageFeeImportRequest, sbErroItem, map, "volume-unit", null, true);
             CheckUtil.checkAndSetStr(longStorageFeeImportRequest, sbErroItem, map, "country", null, true);
             CheckUtil.checkAndSetStr(longStorageFeeImportRequest, sbErroItem, map, "enrolled-in-small-and-light", null, true);

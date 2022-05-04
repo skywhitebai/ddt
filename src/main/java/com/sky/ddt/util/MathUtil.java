@@ -89,6 +89,7 @@ public class MathUtil {
         }
         return preferentialAmount.add(couponPreferentialAmount);
     }
+
     public static BigDecimal subtractBigDecimal(BigDecimal b1, BigDecimal b2) {
         if (b1 == null) {
             b1 = BigDecimal.ZERO;
@@ -145,27 +146,29 @@ public class MathUtil {
         if (a == null || b == null) {
             return null;
         }
-        if(BigDecimal.ZERO.compareTo(b)==0){
+        if (BigDecimal.ZERO.compareTo(b) == 0) {
             return null;
         }
         if (digits == null || digits < 0) {
             return a.divide(b);
         }
-        return a.divide(b,digits, BigDecimal.ROUND_HALF_UP);
+        return a.divide(b, digits, BigDecimal.ROUND_HALF_UP);
     }
+
     public static BigDecimal divide(BigDecimal a, Integer b, Integer digits) {
         if (a == null || b == null) {
             return null;
         }
-        if(b==0){
+        if (b == 0) {
             return null;
         }
-        BigDecimal bb=new BigDecimal(b);
+        BigDecimal bb = new BigDecimal(b);
         if (digits == null || digits < 0) {
             return a.divide(bb);
         }
-        return a.divide(bb,digits, BigDecimal.ROUND_HALF_UP);
+        return a.divide(bb, digits, BigDecimal.ROUND_HALF_UP);
     }
+
     public static BigDecimal divideBigDecimalInteger(BigDecimal a, Integer b, Integer digits) {
         if (a == null || b == null) {
             return null;
@@ -226,14 +229,13 @@ public class MathUtil {
     }
 
     public static boolean equalBigDecimal(BigDecimal num1, BigDecimal num2) {
-        if (num1 == null) {
-            if (num2 == null) {
+        if (num1 == null || num2 == null) {
+            if (num1 == null && num2 == null) {
                 return true;
-            } else {
-                return false;
             }
+            return false;
         }
-        return num1.compareTo(num2)==0;
+        return num1.compareTo(num2) == 0;
     }
 
     public static Integer subtractInteger(Integer a, Integer b) {
@@ -247,6 +249,7 @@ public class MathUtil {
         }
         return result;
     }
+
     /**
      * description 校验数值范围
      *
@@ -328,16 +331,16 @@ public class MathUtil {
         }
     }
 
-    public static BigDecimal multiply(BigDecimal cost, Integer quantity,int digits) {
-        if(cost==null||quantity==null){
+    public static BigDecimal multiply(BigDecimal cost, Integer quantity, int digits) {
+        if (cost == null || quantity == null) {
             return null;
         }
-        return cost.multiply(new BigDecimal(quantity)).setScale(digits,BigDecimal.ROUND_HALF_UP);
+        return cost.multiply(new BigDecimal(quantity)).setScale(digits, BigDecimal.ROUND_HALF_UP);
 
     }
 
     public static boolean isNotInteger(String numStr) {
-        if(strToInteger(numStr)==null){
+        if (strToInteger(numStr) == null) {
             return true;
         }
         return false;
