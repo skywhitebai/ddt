@@ -48,4 +48,10 @@ public class TestController extends SuperController {
         Integer a = null;
         return BaseResponse.successData(0/a);
     }
+    @RequestMapping("/testLong")
+    @Login(action = Action.Skip)
+    @ResponseBody
+    public Long testLong() {
+        return 1234567891234567891L;
+    }
 }

@@ -4,7 +4,7 @@
 
     <select id="listShopSkuInventoryDetails"
             resultType="com.sky.ddt.dto.shopHeadTripCost.response.ShopSkuInventoryDetails">
-            select shop_sku_id shopSkuId,afn_total_quantity-afn_inbound_working_quantity quantity
+            select shop_sku_id shopSkuId,afn_total_quantity quantity
             from inventory_details
             where finance_id=#{financeId}
             order by shop_sku_id
