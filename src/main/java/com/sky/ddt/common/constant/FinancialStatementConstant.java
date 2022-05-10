@@ -110,17 +110,20 @@ public class FinancialStatementConstant {
     }
 
     public static void initFinancialStatementExport(FinancialStatementExport financialStatementExport) {
-        if (financialStatementExport.getProductMonth() <= 14) {
-            financialStatementExport.setNewProductSellingFees(MathUtil.multiply(MathUtil.divide(financialStatementExport.getSellingFees(), platformRate, 4),financialStatementExport.getExchangeRate(),2));
-            financialStatementExport.setOldProductSellingFees(BigDecimal.ZERO);
-            financialStatementExport.setNewProductProductSales(financialStatementExport.getProductSales());
-            financialStatementExport.setOldProductProductSales(BigDecimal.ZERO);
-        } else {
-            financialStatementExport.setNewProductSellingFees(BigDecimal.ZERO);
-            financialStatementExport.setOldProductSellingFees(MathUtil.multiply(MathUtil.divide(financialStatementExport.getSellingFees(), platformRate, 4),financialStatementExport.getExchangeRate(),2));
-            financialStatementExport.setNewProductProductSales(BigDecimal.ZERO);
-            financialStatementExport.setOldProductProductSales(financialStatementExport.getProductSales());
+        if(financialStatementExport.getProductMonth()!=null){
+            if (financialStatementExport.getProductMonth() <= 14) {
+                financialStatementExport.setNewProductSellingFees(MathUtil.multiply(MathUtil.divide(financialStatementExport.getSellingFees(), platformRate, 4),financialStatementExport.getExchangeRate(),2));
+                financialStatementExport.setOldProductSellingFees(BigDecimal.ZERO);
+                financialStatementExport.setNewProductProductSales(financialStatementExport.getProductSales());
+                financialStatementExport.setOldProductProductSales(BigDecimal.ZERO);
+            } else {
+                financialStatementExport.setNewProductSellingFees(BigDecimal.ZERO);
+                financialStatementExport.setOldProductSellingFees(MathUtil.multiply(MathUtil.divide(financialStatementExport.getSellingFees(), platformRate, 4),financialStatementExport.getExchangeRate(),2));
+                financialStatementExport.setNewProductProductSales(BigDecimal.ZERO);
+                financialStatementExport.setOldProductProductSales(financialStatementExport.getProductSales());
+            }
         }
+
         financialStatementExport.setAverageInventoryCost(MathUtil.divide(MathUtil.addBigDecimal(financialStatementExport.getInitialInventoryCost(), financialStatementExport.getFinalInventoryCost()), 2, 2));
         financialStatementExport.setMonthlySalesValue(MathUtil.addBigDecimal(financialStatementExport.getProcurementCost(), financialStatementExport.getFbaHeadTripCost()));
         financialStatementExport.setAroi(MathUtil.divide(financialStatementExport.getMainBusinessProfit(),financialStatementExport.getAverageInventoryCost(),2));

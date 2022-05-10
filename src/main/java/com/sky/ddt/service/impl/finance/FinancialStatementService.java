@@ -1167,8 +1167,6 @@ public class FinancialStatementService implements IFinancialStatementService {
             financialStatementShopParentSku.setLiquidationsAdjustments(MathUtil.addBigDecimal(financialStatementShopParentSku.getLiquidationsAdjustments(), financialStatement.getLiquidationsAdjustments()));
             financialStatementShopParentSku.setTbybOrderPayment(MathUtil.addBigDecimal(financialStatementShopParentSku.getTbybOrderPayment(), financialStatement.getTbybOrderPayment()));
             financialStatementShopParentSku.setTbybTrialShipment(MathUtil.addBigDecimal(financialStatementShopParentSku.getTbybTrialShipment(), financialStatement.getTbybTrialShipment()));
-            financialStatementShopParentSku.setAverageInventoryCost(MathUtil.addBigDecimal(financialStatementShopParentSku.getAverageInventoryCost(), financialStatement.getAverageInventoryCost()));
-            financialStatementShopParentSku.setMonthlySalesValue(MathUtil.addBigDecimal(financialStatementShopParentSku.getMonthlySalesValue(), financialStatement.getMonthlySalesValue()));
         }
         List<FinancialStatementExport> financialStatementShopParentSkuList = new ArrayList<>();
         for (Map.Entry<String, FinancialStatementExport> map : financialStatementMap.entrySet()) {
@@ -1178,6 +1176,7 @@ public class FinancialStatementService implements IFinancialStatementService {
             setRoiAndInventoryTurnover(financialStatement);
             setRefundRate(financialStatement);
             setAdvertisingSalesPercentage(financialStatement);
+            FinancialStatementConstant.initFinancialStatementExport(financialStatement);
             financialStatementShopParentSkuList.add(financialStatement);
         }
         Collections.sort(financialStatementShopParentSkuList, new Comparator<FinancialStatement>() {
