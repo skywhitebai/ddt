@@ -8,17 +8,17 @@
         <result column="chargeUserRealName" property="chargeUserRealName"/>
         <result column="salesGroupName" property="salesGroupName"/>
         <result column="salesGroupUserRealNames" property="salesGroupUserRealNames"/>
+        <result column="salesGroupId" property="salesGroupId"/>
     </resultMap>
     <select id="listWorkTask"
             resultMap="listWorkTaskMap">
         SELECT
-        <include refid="com.sky.ddt.dao.generate.WorkTaskMapper.Base_Column_List"/>,
-        <include refid="com.sky.ddt.dao.generate.WorkTaskMapper.Blob_Column_List" />,
+        wt.*,
         (select real_name  from user u where u.user_id =wt.deal_user_id) dealUserRealName,
         (select real_name  from user u where u.user_id =wt.charge_user_id) chargeUserRealName,
-        (select group_name  from sales_group sg where sg.id =wt.sales_group_id) salesGroupName,
-        (select GROUP_CONCAT(real_name SEPARATOR ',')   from user u,sales_group_user sgu where u.user_id=sgu.user_id and sgu.sales_group_id =wt.sales_group_id) salesGroupUserRealNames
-        from work_task wt
+        (select group_name  from sales_group sg where sg.id =sgu2.sales_group_id) salesGroupName,
+        (select GROUP_CONCAT(real_name SEPARATOR ',')   from user u,sales_group_user sgu where u.user_id=sgu.user_id and sgu.sales_group_id =sgu2.sales_group_id) salesGroupUserRealNames
+        from work_task wt left join sales_group_user sgu2 on wt.charge_user_id=sgu2.user_id
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 <if test="title != null and title!=''">and title like concat('%',#{title},'%')</if>
@@ -26,7 +26,7 @@
                 <if test="status != null ">and status = #{status}</if>
                 <if test="chargeUserId != null ">and charge_user_id = #{chargeUserId}</if>
                 <if test="dealUserId != null ">and deal_user_id = #{dealUserId}</if>
-                <if test="salesGroupId != null ">and sales_group_id = #{salesGroupId}</if>
+                <if test="salesGroupId != null ">and sgu2.sales_group_id= #{salesGroupId}</if>
             </trim>
         </where>
         order by wt.create_time asc

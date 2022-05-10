@@ -88,7 +88,7 @@
        data-options="iconCls:'icon-search'"
        style="">导入店铺sku库位</a>
     <a href="javascript:void(0)" id="a_importShopSkuHeadTripCost" onclick="showDialogImport('headTripCost')"
-       class="easyui-linkbutton"
+       class="easyui-linkbutton  a_hide"
        data-options="iconCls:'icon-search'"
        style="">导入店铺sku头程费</a>
     <a href="javascript:void(0)" onclick="showTransformShopSku()" class="easyui-linkbutton"
@@ -396,6 +396,9 @@
         if (!hasRight("shopSku/deleteShopSku")) {
             $("#btnDelete").hide()
         }
+        if (!hasRight("shopSku/importShopSkuHeadTripCost")) {
+            $("#a_importShopSkuHeadTripCost").show()
+
     }
 
     function bindShop() {

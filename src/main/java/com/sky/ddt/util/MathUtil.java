@@ -338,7 +338,13 @@ public class MathUtil {
         return cost.multiply(new BigDecimal(quantity)).setScale(digits, BigDecimal.ROUND_HALF_UP);
 
     }
+    public static BigDecimal multiply(BigDecimal a, BigDecimal b, int digits) {
+        if (a == null || b == null) {
+            return null;
+        }
+        return a.multiply(b).setScale(digits, BigDecimal.ROUND_HALF_UP);
 
+    }
     public static boolean isNotInteger(String numStr) {
         if (strToInteger(numStr) == null) {
             return true;

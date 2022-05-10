@@ -1053,4 +1053,5 @@ public class FinancialStatement {
     public void setTbybTrialShipment(BigDecimal tbybTrialShipment) {
         this.tbybTrialShipment = tbybTrialShipment;
     }
+
 }

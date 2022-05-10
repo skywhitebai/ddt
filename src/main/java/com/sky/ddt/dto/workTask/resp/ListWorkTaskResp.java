@@ -14,4 +14,5 @@ public class ListWorkTaskResp extends WorkTask {
     String chargeUserRealName;
     String salesGroupName;
     String salesGroupUserRealNames;
+    Integer salesGroupId;
 }

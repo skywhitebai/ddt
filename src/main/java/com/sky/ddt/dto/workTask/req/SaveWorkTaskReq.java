@@ -37,6 +37,4 @@ public class SaveWorkTaskReq {
     private String content;
     @NotNull(message = "负责人不能为空")
     private Integer chargeUserId;
-    @NotNull(message = "负责小组不能为空")
-    private Integer salesGroupId;
 }
