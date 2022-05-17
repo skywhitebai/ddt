@@ -1,7 +1,6 @@
 package com.sky.ddt.dto.finance.response;
 
 import com.sky.ddt.entity.FinancialStatement;
-import com.sky.ddt.util.MathUtil;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -15,10 +14,9 @@ import java.math.BigDecimal;
 public class FinancialStatementExport extends FinancialStatement {
     BigDecimal newProductSellingFees;
     BigDecimal oldProductSellingFees;
-    BigDecimal newProductProductSales;
-    BigDecimal oldProductProductSales;
+    BigDecimal newProductMainBusinessProfit;
+    BigDecimal oldProductMainBusinessProfit;
     BigDecimal averageInventoryCost;
-    BigDecimal monthlySalesValue;
     BigDecimal aroi;
     BigDecimal inventoryTurnoverTimes;
     BigDecimal roiAssessmentCoefficient;

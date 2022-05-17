@@ -20,6 +20,7 @@ public class FinancialStatementConstant {
     public static final String FINANCIAL_STATEMENT_NOT_EXIST = "财务报表不存在";
     public static final BigDecimal bigDecimal360 = new BigDecimal(360);
     public static final BigDecimal platformRate = new BigDecimal(-0.17);
+    public static final BigDecimal platformRateMinusByOne = new BigDecimal(0.83);
     public static Map<Integer, String> titleMap = new HashMap<>();
 
     static {
@@ -110,30 +111,33 @@ public class FinancialStatementConstant {
     }
 
     public static void initFinancialStatementExport(FinancialStatementExport financialStatementExport) {
-        if(financialStatementExport.getProductMonth()!=null){
-            if (financialStatementExport.getProductMonth() <= 14) {
-                financialStatementExport.setNewProductSellingFees(MathUtil.multiply(MathUtil.divide(financialStatementExport.getSellingFees(), platformRate, 4),financialStatementExport.getExchangeRate(),2));
+        if (financialStatementExport.getProductMonth() != null) {
+            if (financialStatementExport.getNewProduct() == 1) {
+                financialStatementExport.setNewProductSellingFees(getSellingFees(financialStatementExport));
                 financialStatementExport.setOldProductSellingFees(BigDecimal.ZERO);
-                financialStatementExport.setNewProductProductSales(financialStatementExport.getProductSales());
-                financialStatementExport.setOldProductProductSales(BigDecimal.ZERO);
+                financialStatementExport.setNewProductMainBusinessProfit(financialStatementExport.getMainBusinessProfit());
+                financialStatementExport.setOldProductMainBusinessProfit(BigDecimal.ZERO);
             } else {
                 financialStatementExport.setNewProductSellingFees(BigDecimal.ZERO);
-                financialStatementExport.setOldProductSellingFees(MathUtil.multiply(MathUtil.divide(financialStatementExport.getSellingFees(), platformRate, 4),financialStatementExport.getExchangeRate(),2));
-                financialStatementExport.setNewProductProductSales(BigDecimal.ZERO);
-                financialStatementExport.setOldProductProductSales(financialStatementExport.getProductSales());
+                financialStatementExport.setOldProductSellingFees(getSellingFees(financialStatementExport));
+                financialStatementExport.setNewProductMainBusinessProfit(BigDecimal.ZERO);
+                financialStatementExport.setOldProductMainBusinessProfit(financialStatementExport.getMainBusinessProfit());
             }
         }
 
         financialStatementExport.setAverageInventoryCost(MathUtil.divide(MathUtil.addBigDecimal(financialStatementExport.getInitialInventoryCost(), financialStatementExport.getFinalInventoryCost()), 2, 2));
-        financialStatementExport.setMonthlySalesValue(MathUtil.addBigDecimal(financialStatementExport.getProcurementCost(), financialStatementExport.getFbaHeadTripCost()));
-        financialStatementExport.setAroi(MathUtil.divide(financialStatementExport.getMainBusinessProfit(),financialStatementExport.getAverageInventoryCost(),2));
-        financialStatementExport.setInventoryTurnoverTimes(MathUtil.divide(bigDecimal360,financialStatementExport.getInventoryTurnover(),2));
-        financialStatementExport.setRoiAssessmentCoefficient(MathUtil.multiply(financialStatementExport.getAroi(),financialStatementExport.getInventoryTurnoverTimes(),2));
+        financialStatementExport.setAroi(MathUtil.divide(financialStatementExport.getMainBusinessProfit(), financialStatementExport.getAverageInventoryCost(), 2));
+        financialStatementExport.setInventoryTurnoverTimes(MathUtil.divide(bigDecimal360, financialStatementExport.getInventoryTurnover(), 2));
+        financialStatementExport.setRoiAssessmentCoefficient(MathUtil.multiply(financialStatementExport.getAroi(), financialStatementExport.getInventoryTurnoverTimes(), 2));
+    }
+
+    private static BigDecimal getSellingFees(FinancialStatementExport financialStatementExport) {
+        return MathUtil.multiply(MathUtil.addBigDecimal(MathUtil.divide(financialStatementExport.getSellingFees(), platformRate, 4), MathUtil.divide(financialStatementExport.getTbybOrderPayment(), platformRateMinusByOne, 4)), financialStatementExport.getExchangeRate(), 2);
     }
 
     public static void setFinancialStatementCount(FinancialStatementExport financialStatementExport) {
-        financialStatementExport.setAroi(MathUtil.divide(financialStatementExport.getMainBusinessProfit(),financialStatementExport.getAverageInventoryCost(),2));
-        financialStatementExport.setInventoryTurnoverTimes(MathUtil.divide(bigDecimal360,financialStatementExport.getInventoryTurnover(),2));
-        financialStatementExport.setRoiAssessmentCoefficient(MathUtil.multiply(financialStatementExport.getAroi(),financialStatementExport.getInventoryTurnoverTimes(),2));
+        financialStatementExport.setAroi(MathUtil.divide(financialStatementExport.getMainBusinessProfit(), financialStatementExport.getAverageInventoryCost(), 2));
+        financialStatementExport.setInventoryTurnoverTimes(MathUtil.divide(bigDecimal360, financialStatementExport.getInventoryTurnover(), 2));
+        financialStatementExport.setRoiAssessmentCoefficient(MathUtil.multiply(financialStatementExport.getAroi(), financialStatementExport.getInventoryTurnoverTimes(), 2));
     }
 }

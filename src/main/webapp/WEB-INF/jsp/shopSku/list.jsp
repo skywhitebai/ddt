@@ -396,8 +396,9 @@
         if (!hasRight("shopSku/deleteShopSku")) {
             $("#btnDelete").hide()
         }
-        if (!hasRight("shopSku/importShopSkuHeadTripCost")) {
+        if (hasRight("shopSku/importShopSkuHeadTripCost")) {
             $("#a_importShopSkuHeadTripCost").show()
+        }
 
     }
 

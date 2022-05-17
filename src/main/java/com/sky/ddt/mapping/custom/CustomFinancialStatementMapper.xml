@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.sky.ddt.dao.custom.CustomFinancialStatementMapper">
 
-    <select id="getFinancialStatementResponse"  resultType="com.sky.ddt.dto.finance.response.FinancialStatementResponse">
+    <select id="getFinancialStatementResponse" resultType="com.sky.ddt.dto.finance.response.FinancialStatementResponse">
         SELECT f.id financeId,f.month,ss.shop_id shopId,s.`shop_name` shopName,p.`developer_user_id` developerUserId,
         ud.`real_name` developerUserName,ss.`salesman_user_id` salesmanUserId,us.`real_name` salesmanUserName,
         ss.`shop_parent_sku` shopParentSku,sku.`sku`,ss.head_trip_cost headTripCost,sku.cost_price costPrice,ss.shop_sku_id shopSkuId,ss.`shop_sku` shopSku,p.`product_code` productCode,
@@ -89,7 +89,10 @@
         IFNULL(ma.manualAdjustment,0) manualAdjustment,IFNULL(da.displayAdvertising,0) displayAdvertising,IFNULL(da.displayAdvertisingIncome,0) displayAdvertisingIncome,
         IFNULL(ba.brandAdvertising,0) brandAdvertising,IFNULL(ba.brandAdvertisingIncome,0) brandAdvertisingIncome,
         case when ss.create_time is null then 0 when DATE_ADD(ss.create_time,INTERVAL 14 month)<![CDATA[  > ]]>f.month then 1 else 0 end newProduct,
-        TIMESTAMPDIFF(MONTH,ss.create_time,f.month) productMonth
+        TIMESTAMPDIFF(MONTH,ss.create_time,f.month) productMonth,
+        IFNULL(sshtch.fba_send_quantity*(sshtch.head_trip_cost_after+sku.cost_price),0) sendCost,
+        IFNULL(sshtch.fba_send_quantity*sku.cost_price,0) sendCostPrice,
+        IFNULL(sshtch.fba_send_quantity*sshtch.head_trip_cost_after,0) sendHeadTripCost
         FROM `finance` f
         INNER JOIN shop s ON f.`shop_id`=s.`shop_id`
         INNER JOIN  shop_sku ss ON f.`shop_id`=ss.`shop_id`
@@ -99,6 +102,8 @@
         LEFT JOIN USER us ON ss.`salesman_user_id`=us.`user_id`
         left join sales_group_user sgu on sgu.user_id=ss.`salesman_user_id`
         left join sales_group sg on sg.id=sgu.sales_group_id
+        left join shop_head_trip_cost shtc on f.month=shtc.month and f.shop_id=shtc.shop_id
+        left join shop_sku_head_trip_cost_his sshtch on shtc.id=sshtch.shop_head_trip_cost_id and sshtch.shop_sku_id=ss.shop_sku_id
         LEFT JOIN
         (SELECT shop_sku_id,SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`quantity`,0) ELSE 0 END)  saleQuantity,
         SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`product_sales`,0) ELSE 0 END)  productSales,

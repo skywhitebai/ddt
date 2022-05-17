@@ -107,6 +107,10 @@
     <result column="liquidations_adjustments" jdbcType="DECIMAL" property="liquidationsAdjustments" />
     <result column="tbyb_order_payment" jdbcType="DECIMAL" property="tbybOrderPayment" />
     <result column="tbyb_trial_shipment" jdbcType="DECIMAL" property="tbybTrialShipment" />
+    <result column="send_cost" jdbcType="DECIMAL" property="sendCost" />
+    <result column="send_cost_price" jdbcType="DECIMAL" property="sendCostPrice" />
+    <result column="send_head_trip_cost" jdbcType="DECIMAL" property="sendHeadTripCost" />
+    <result column="sale_cost" jdbcType="DECIMAL" property="saleCost" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -191,7 +195,8 @@
     create_time, create_by, advertising_sales_percentage, product_month, exchange_rate, 
     cost_price, head_trip_cost, development_level, display_advertising, display_advertising_income, 
     brand_advertising, brand_advertising_income, currency_name, currency_code, liquidations, 
-    liquidations_adjustments, tbyb_order_payment, tbyb_trial_shipment
+    liquidations_adjustments, tbyb_order_payment, tbyb_trial_shipment, send_cost, send_cost_price, 
+    send_head_trip_cost, sale_cost
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FinancialStatementExample" resultMap="BaseResultMap">
     select
@@ -268,7 +273,9 @@
       display_advertising_income, brand_advertising, 
       brand_advertising_income, currency_name, currency_code, 
       liquidations, liquidations_adjustments, 
-      tbyb_order_payment, tbyb_trial_shipment)
+      tbyb_order_payment, tbyb_trial_shipment, send_cost, 
+      send_cost_price, send_head_trip_cost, sale_cost
+      )
     values (#{financeId,jdbcType=INTEGER}, #{month,jdbcType=TIMESTAMP}, #{shopId,jdbcType=INTEGER}, 
       #{shopName,jdbcType=VARCHAR}, #{developerUserId,jdbcType=INTEGER}, #{developerUserName,jdbcType=VARCHAR}, 
       #{salesmanUserId,jdbcType=INTEGER}, #{salesmanUserName,jdbcType=VARCHAR}, #{salesGroupId,jdbcType=INTEGER}, 
@@ -310,7 +317,9 @@
       #{displayAdvertisingIncome,jdbcType=DECIMAL}, #{brandAdvertising,jdbcType=DECIMAL}, 
       #{brandAdvertisingIncome,jdbcType=DECIMAL}, #{currencyName,jdbcType=VARCHAR}, #{currencyCode,jdbcType=VARCHAR}, 
       #{liquidations,jdbcType=DECIMAL}, #{liquidationsAdjustments,jdbcType=DECIMAL}, 
-      #{tbybOrderPayment,jdbcType=DECIMAL}, #{tbybTrialShipment,jdbcType=DECIMAL})
+      #{tbybOrderPayment,jdbcType=DECIMAL}, #{tbybTrialShipment,jdbcType=DECIMAL}, #{sendCost,jdbcType=DECIMAL}, 
+      #{sendCostPrice,jdbcType=DECIMAL}, #{sendHeadTripCost,jdbcType=DECIMAL}, #{saleCost,jdbcType=DECIMAL}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.FinancialStatement">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -630,6 +639,18 @@
       <if test="tbybTrialShipment != null">
         tbyb_trial_shipment,
       </if>
+      <if test="sendCost != null">
+        send_cost,
+      </if>
+      <if test="sendCostPrice != null">
+        send_cost_price,
+      </if>
+      <if test="sendHeadTripCost != null">
+        send_head_trip_cost,
+      </if>
+      <if test="saleCost != null">
+        sale_cost,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="financeId != null">
@@ -943,6 +964,18 @@
       </if>
       <if test="tbybTrialShipment != null">
         #{tbybTrialShipment,jdbcType=DECIMAL},
+      </if>
+      <if test="sendCost != null">
+        #{sendCost,jdbcType=DECIMAL},
+      </if>
+      <if test="sendCostPrice != null">
+        #{sendCostPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="sendHeadTripCost != null">
+        #{sendHeadTripCost,jdbcType=DECIMAL},
+      </if>
+      <if test="saleCost != null">
+        #{saleCost,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -1270,6 +1303,18 @@
       <if test="record.tbybTrialShipment != null">
         tbyb_trial_shipment = #{record.tbybTrialShipment,jdbcType=DECIMAL},
       </if>
+      <if test="record.sendCost != null">
+        send_cost = #{record.sendCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sendCostPrice != null">
+        send_cost_price = #{record.sendCostPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sendHeadTripCost != null">
+        send_head_trip_cost = #{record.sendHeadTripCost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.saleCost != null">
+        sale_cost = #{record.saleCost,jdbcType=DECIMAL},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -1381,7 +1426,11 @@
       liquidations = #{record.liquidations,jdbcType=DECIMAL},
       liquidations_adjustments = #{record.liquidationsAdjustments,jdbcType=DECIMAL},
       tbyb_order_payment = #{record.tbybOrderPayment,jdbcType=DECIMAL},
-      tbyb_trial_shipment = #{record.tbybTrialShipment,jdbcType=DECIMAL}
+      tbyb_trial_shipment = #{record.tbybTrialShipment,jdbcType=DECIMAL},
+      send_cost = #{record.sendCost,jdbcType=DECIMAL},
+      send_cost_price = #{record.sendCostPrice,jdbcType=DECIMAL},
+      send_head_trip_cost = #{record.sendHeadTripCost,jdbcType=DECIMAL},
+      sale_cost = #{record.saleCost,jdbcType=DECIMAL}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -1701,6 +1750,18 @@
       <if test="tbybTrialShipment != null">
         tbyb_trial_shipment = #{tbybTrialShipment,jdbcType=DECIMAL},
       </if>
+      <if test="sendCost != null">
+        send_cost = #{sendCost,jdbcType=DECIMAL},
+      </if>
+      <if test="sendCostPrice != null">
+        send_cost_price = #{sendCostPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="sendHeadTripCost != null">
+        send_head_trip_cost = #{sendHeadTripCost,jdbcType=DECIMAL},
+      </if>
+      <if test="saleCost != null">
+        sale_cost = #{saleCost,jdbcType=DECIMAL},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -1809,7 +1870,11 @@
       liquidations = #{liquidations,jdbcType=DECIMAL},
       liquidations_adjustments = #{liquidationsAdjustments,jdbcType=DECIMAL},
       tbyb_order_payment = #{tbybOrderPayment,jdbcType=DECIMAL},
-      tbyb_trial_shipment = #{tbybTrialShipment,jdbcType=DECIMAL}
+      tbyb_trial_shipment = #{tbybTrialShipment,jdbcType=DECIMAL},
+      send_cost = #{sendCost,jdbcType=DECIMAL},
+      send_cost_price = #{sendCostPrice,jdbcType=DECIMAL},
+      send_head_trip_cost = #{sendHeadTripCost,jdbcType=DECIMAL},
+      sale_cost = #{saleCost,jdbcType=DECIMAL}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

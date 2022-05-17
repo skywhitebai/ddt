@@ -181,6 +181,7 @@ public class FinancialStatementService implements IFinancialStatementService {
                     financialStatementResponse.setRefundRate(BigDecimal.ZERO);
                 }
             }
+            financialStatementResponse.setSaleCost(MathUtil.addBigDecimal(financialStatementResponse.getProcurementCost(), financialStatementResponse.getFbaHeadTripCost()));
             setAdvertisingSalesPercentage(financialStatementResponse);
         }
 
@@ -598,8 +599,6 @@ public class FinancialStatementService implements IFinancialStatementService {
             }
         }
         financialStatementCount.setExchangeRate(rateOfDollarExchangeRmb);
-        BigDecimal newMainBusinessProfit = BigDecimal.ZERO;
-        BigDecimal oldMainBusinessProfit = BigDecimal.ZERO;
         for (FinancialStatementExport financialStatement :
                 financialStatementList) {
             financialStatementCount.setSaleQuantity(MathUtil.add(financialStatementCount.getSaleQuantity(), financialStatement.getSaleQuantity()));
@@ -661,11 +660,6 @@ public class FinancialStatementService implements IFinancialStatementService {
             financialStatementCount.setFbaHeadTripCost(MathUtil.addBigDecimal(financialStatementCount.getFbaHeadTripCost(), financialStatement.getFbaHeadTripCost()));
             financialStatementCount.setHeadDeductionFee(MathUtil.addBigDecimal(financialStatementCount.getHeadDeductionFee(), financialStatement.getHeadDeductionFee()));
             financialStatementCount.setMainBusinessProfit(MathUtil.addBigDecimal(financialStatementCount.getMainBusinessProfit(), financialStatement.getMainBusinessProfit()));
-            if (financialStatement.getNewProduct() == 1) {
-                newMainBusinessProfit = MathUtil.addBigDecimal(newMainBusinessProfit, financialStatement.getMainBusinessProfit());
-            } else {
-                oldMainBusinessProfit = MathUtil.addBigDecimal(oldMainBusinessProfit, financialStatement.getMainBusinessProfit());
-            }
             financialStatementCount.setInitialQuantity(MathUtil.add(financialStatementCount.getInitialQuantity(), financialStatement.getInitialQuantity()));
             financialStatementCount.setInitialInventoryCost(MathUtil.addBigDecimal(financialStatementCount.getInitialInventoryCost(), financialStatement.getInitialInventoryCost()));
             financialStatementCount.setFinalQuantity(MathUtil.add(financialStatementCount.getFinalQuantity(), financialStatement.getFinalQuantity()));
@@ -682,10 +676,13 @@ public class FinancialStatementService implements IFinancialStatementService {
             financialStatementCount.setBrandAdvertisingIncome(MathUtil.addBigDecimal(financialStatementCount.getBrandAdvertisingIncome(), financialStatement.getBrandAdvertisingIncome()));
             financialStatementCount.setNewProductSellingFees(MathUtil.addBigDecimal(financialStatementCount.getNewProductSellingFees(), financialStatement.getNewProductSellingFees()));
             financialStatementCount.setOldProductSellingFees(MathUtil.addBigDecimal(financialStatementCount.getOldProductSellingFees(), financialStatement.getOldProductSellingFees()));
-            financialStatementCount.setNewProductProductSales(MathUtil.addBigDecimal(financialStatementCount.getNewProductProductSales(), financialStatement.getNewProductProductSales()));
-            financialStatementCount.setOldProductProductSales(MathUtil.addBigDecimal(financialStatementCount.getOldProductProductSales(), financialStatement.getOldProductProductSales()));
+            financialStatementCount.setNewProductMainBusinessProfit(MathUtil.addBigDecimal(financialStatementCount.getNewProductMainBusinessProfit(), financialStatement.getNewProductMainBusinessProfit()));
+            financialStatementCount.setOldProductMainBusinessProfit(MathUtil.addBigDecimal(financialStatementCount.getOldProductMainBusinessProfit(), financialStatement.getOldProductMainBusinessProfit()));
             financialStatementCount.setAverageInventoryCost(MathUtil.addBigDecimal(financialStatementCount.getAverageInventoryCost(), financialStatement.getAverageInventoryCost()));
-            financialStatementCount.setMonthlySalesValue(MathUtil.addBigDecimal(financialStatementCount.getMonthlySalesValue(), financialStatement.getMonthlySalesValue()));
+            financialStatementCount.setSaleCost(MathUtil.addBigDecimal(financialStatementCount.getSaleCost(), financialStatement.getSaleCost()));
+            financialStatementCount.setSendCost(MathUtil.addBigDecimal(financialStatementCount.getSendCost(), financialStatement.getSendCost()));
+            financialStatementCount.setSendCostPrice(MathUtil.addBigDecimal(financialStatementCount.getSendCostPrice(), financialStatement.getSendCostPrice()));
+            financialStatementCount.setSendHeadTripCost(MathUtil.addBigDecimal(financialStatementCount.getSendHeadTripCost(), financialStatement.getSendHeadTripCost()));
         }
         setMoneyBackRate(financialStatementCount);
         setGrossMarginOnSales(financialStatementCount);
@@ -695,6 +692,7 @@ public class FinancialStatementService implements IFinancialStatementService {
         FinancialStatementConstant.setFinancialStatementCount(financialStatementCount);
         int rowIndex = sheet.getLastRowNum() + 2;
         Row row = sheet.createRow(rowIndex);
+        row.createCell(6).setCellValue(excelTitle);
         row.createCell(7).setCellValue("汇总");
         row.createCell(9).setCellValue(financialStatementCount.getSaleQuantity().doubleValue());
         row.createCell(10).setCellValue(financialStatementCount.getProductSales().doubleValue());
@@ -780,10 +778,10 @@ public class FinancialStatementService implements IFinancialStatementService {
 
         row.createCell(122).setCellValue(financialStatementCount.getNewProductSellingFees().doubleValue());
         row.createCell(123).setCellValue(financialStatementCount.getOldProductSellingFees().doubleValue());
-        row.createCell(124).setCellValue(financialStatementCount.getNewProductProductSales().doubleValue());
-        row.createCell(125).setCellValue(financialStatementCount.getOldProductProductSales().doubleValue());
+        row.createCell(124).setCellValue(financialStatementCount.getNewProductMainBusinessProfit().doubleValue());
+        row.createCell(125).setCellValue(financialStatementCount.getOldProductMainBusinessProfit().doubleValue());
         row.createCell(126).setCellValue(financialStatementCount.getAverageInventoryCost().doubleValue());
-        row.createCell(127).setCellValue(financialStatementCount.getMonthlySalesValue().doubleValue());
+        row.createCell(127).setCellValue(financialStatementCount.getSaleCost().doubleValue());
         if (financialStatementCount.getAroi() != null) {
             row.createCell(128).setCellValue(financialStatementCount.getAroi().doubleValue());
         }
@@ -793,7 +791,21 @@ public class FinancialStatementService implements IFinancialStatementService {
         if (financialStatementCount.getRoiAssessmentCoefficient() != null) {
             row.createCell(130).setCellValue(financialStatementCount.getRoiAssessmentCoefficient().doubleValue());
         }
-        Row row2 = sheet.createRow(rowIndex + 1);
+        if (financialStatementCount.getRoiAssessmentCoefficient() != null) {
+            row.createCell(130).setCellValue(financialStatementCount.getRoiAssessmentCoefficient().doubleValue());
+        }
+
+        if (financialStatementCount.getSendCost() != null) {
+            row.createCell(131).setCellValue(financialStatementCount.getSendCost().doubleValue());
+        }
+        if (financialStatementCount.getSendCostPrice() != null) {
+            row.createCell(132).setCellValue(financialStatementCount.getSendCostPrice().doubleValue());
+        }
+
+        if (financialStatementCount.getSendHeadTripCost() != null) {
+            row.createCell(133).setCellValue(financialStatementCount.getSendHeadTripCost().doubleValue());
+        }
+        /*Row row2 = sheet.createRow(rowIndex + 1);
         Row row3 = sheet.createRow(rowIndex + 2);
         row2.createCell(7).setCellValue("负责人");
         row3.createCell(7).setCellValue(excelTitle);
@@ -832,7 +844,7 @@ public class FinancialStatementService implements IFinancialStatementService {
         row2.createCell(24).setCellValue("月度业绩计入");
         row3.createCell(24).setCellValue(financialStatementCount.getMainBusinessProfit().doubleValue());
         row2.createCell(25).setCellValue("毛利率");
-        row3.createCell(25).setCellValue(financialStatementCount.getGrossMarginOnSales().doubleValue());
+        row3.createCell(25).setCellValue(financialStatementCount.getGrossMarginOnSales().doubleValue());*/
     }
 
     private void setRefundRate(FinancialStatement financialStatement) {
@@ -1070,7 +1082,7 @@ public class FinancialStatementService implements IFinancialStatementService {
             row.createCell(112).setCellValue(financialStatement.getTbybOrderPayment().doubleValue());
             row.createCell(113).setCellValue(financialStatement.getTbybTrialShipment().doubleValue());
             row.createCell(114).setCellValue(financialStatement.getAverageInventoryCost().doubleValue());
-            row.createCell(115).setCellValue(financialStatement.getMonthlySalesValue().doubleValue());
+            row.createCell(115).setCellValue(financialStatement.getSaleCost().doubleValue());
             if (financialStatement.getAroi() != null) {
                 row.createCell(116).setCellValue(financialStatement.getAroi().doubleValue());
             }
@@ -1079,6 +1091,16 @@ public class FinancialStatementService implements IFinancialStatementService {
             }
             if (financialStatement.getRoiAssessmentCoefficient() != null) {
                 row.createCell(118).setCellValue(financialStatement.getRoiAssessmentCoefficient().doubleValue());
+            }
+            if (financialStatement.getSendCost() != null) {
+                row.createCell(119).setCellValue(financialStatement.getSendCost().doubleValue());
+            }
+            if (financialStatement.getSendCostPrice() != null) {
+                row.createCell(120).setCellValue(financialStatement.getSendCostPrice().doubleValue());
+            }
+
+            if (financialStatement.getSendHeadTripCost() != null) {
+                row.createCell(121).setCellValue(financialStatement.getSendHeadTripCost().doubleValue());
             }
             rowIndex++;
         }
@@ -1301,10 +1323,10 @@ public class FinancialStatementService implements IFinancialStatementService {
             FinancialStatementConstant.initFinancialStatementExport(financialStatement);
             row.createCell(122).setCellValue(financialStatement.getNewProductSellingFees().doubleValue());
             row.createCell(123).setCellValue(financialStatement.getOldProductSellingFees().doubleValue());
-            row.createCell(124).setCellValue(financialStatement.getNewProductProductSales().doubleValue());
-            row.createCell(125).setCellValue(financialStatement.getOldProductProductSales().doubleValue());
+            row.createCell(124).setCellValue(financialStatement.getNewProductMainBusinessProfit().doubleValue());
+            row.createCell(125).setCellValue(financialStatement.getOldProductMainBusinessProfit().doubleValue());
             row.createCell(126).setCellValue(financialStatement.getAverageInventoryCost().doubleValue());
-            row.createCell(127).setCellValue(financialStatement.getMonthlySalesValue().doubleValue());
+            row.createCell(127).setCellValue(financialStatement.getSaleCost().doubleValue());
             if (financialStatement.getAroi() != null) {
                 row.createCell(128).setCellValue(financialStatement.getAroi().doubleValue());
             }
@@ -1313,6 +1335,16 @@ public class FinancialStatementService implements IFinancialStatementService {
             }
             if (financialStatement.getRoiAssessmentCoefficient() != null) {
                 row.createCell(130).setCellValue(financialStatement.getRoiAssessmentCoefficient().doubleValue());
+            }
+            if (financialStatement.getSendCost() != null) {
+                row.createCell(131).setCellValue(financialStatement.getSendCost().doubleValue());
+            }
+            if (financialStatement.getSendCostPrice() != null) {
+                row.createCell(132).setCellValue(financialStatement.getSendCostPrice().doubleValue());
+            }
+
+            if (financialStatement.getSendHeadTripCost() != null) {
+                row.createCell(133).setCellValue(financialStatement.getSendHeadTripCost().doubleValue());
             }
             rowIndex++;
         }

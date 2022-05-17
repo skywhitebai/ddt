@@ -6505,6 +6505,246 @@ public class FinancialStatementExample {
             addCriterion("tbyb_trial_shipment not between", value1, value2, "tbybTrialShipment");
             return (Criteria) this;
         }
+
+        public Criteria andSendCostIsNull() {
+            addCriterion("send_cost is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostIsNotNull() {
+            addCriterion("send_cost is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostEqualTo(BigDecimal value) {
+            addCriterion("send_cost =", value, "sendCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostNotEqualTo(BigDecimal value) {
+            addCriterion("send_cost <>", value, "sendCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostGreaterThan(BigDecimal value) {
+            addCriterion("send_cost >", value, "sendCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("send_cost >=", value, "sendCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostLessThan(BigDecimal value) {
+            addCriterion("send_cost <", value, "sendCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("send_cost <=", value, "sendCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostIn(List<BigDecimal> values) {
+            addCriterion("send_cost in", values, "sendCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostNotIn(List<BigDecimal> values) {
+            addCriterion("send_cost not in", values, "sendCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("send_cost between", value1, value2, "sendCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("send_cost not between", value1, value2, "sendCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceIsNull() {
+            addCriterion("send_cost_price is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceIsNotNull() {
+            addCriterion("send_cost_price is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceEqualTo(BigDecimal value) {
+            addCriterion("send_cost_price =", value, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceNotEqualTo(BigDecimal value) {
+            addCriterion("send_cost_price <>", value, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceGreaterThan(BigDecimal value) {
+            addCriterion("send_cost_price >", value, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("send_cost_price >=", value, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceLessThan(BigDecimal value) {
+            addCriterion("send_cost_price <", value, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("send_cost_price <=", value, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceIn(List<BigDecimal> values) {
+            addCriterion("send_cost_price in", values, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceNotIn(List<BigDecimal> values) {
+            addCriterion("send_cost_price not in", values, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("send_cost_price between", value1, value2, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendCostPriceNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("send_cost_price not between", value1, value2, "sendCostPrice");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostIsNull() {
+            addCriterion("send_head_trip_cost is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostIsNotNull() {
+            addCriterion("send_head_trip_cost is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostEqualTo(BigDecimal value) {
+            addCriterion("send_head_trip_cost =", value, "sendHeadTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostNotEqualTo(BigDecimal value) {
+            addCriterion("send_head_trip_cost <>", value, "sendHeadTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostGreaterThan(BigDecimal value) {
+            addCriterion("send_head_trip_cost >", value, "sendHeadTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("send_head_trip_cost >=", value, "sendHeadTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostLessThan(BigDecimal value) {
+            addCriterion("send_head_trip_cost <", value, "sendHeadTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("send_head_trip_cost <=", value, "sendHeadTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostIn(List<BigDecimal> values) {
+            addCriterion("send_head_trip_cost in", values, "sendHeadTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostNotIn(List<BigDecimal> values) {
+            addCriterion("send_head_trip_cost not in", values, "sendHeadTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("send_head_trip_cost between", value1, value2, "sendHeadTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSendHeadTripCostNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("send_head_trip_cost not between", value1, value2, "sendHeadTripCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleCostIsNull() {
+            addCriterion("sale_cost is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleCostIsNotNull() {
+            addCriterion("sale_cost is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleCostEqualTo(BigDecimal value) {
+            addCriterion("sale_cost =", value, "saleCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleCostNotEqualTo(BigDecimal value) {
+            addCriterion("sale_cost <>", value, "saleCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleCostGreaterThan(BigDecimal value) {
+            addCriterion("sale_cost >", value, "saleCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleCostGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("sale_cost >=", value, "saleCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleCostLessThan(BigDecimal value) {
+            addCriterion("sale_cost <", value, "saleCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleCostLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("sale_cost <=", value, "saleCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleCostIn(List<BigDecimal> values) {
+            addCriterion("sale_cost in", values, "saleCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleCostNotIn(List<BigDecimal> values) {
+            addCriterion("sale_cost not in", values, "saleCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleCostBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("sale_cost between", value1, value2, "saleCost");
+            return (Criteria) this;
+        }
+
+        public Criteria andSaleCostNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("sale_cost not between", value1, value2, "saleCost");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

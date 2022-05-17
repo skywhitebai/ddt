@@ -214,6 +214,14 @@ public class FinancialStatement {
 
     private BigDecimal tbybTrialShipment;
 
+    private BigDecimal sendCost;
+
+    private BigDecimal sendCostPrice;
+
+    private BigDecimal sendHeadTripCost;
+
+    private BigDecimal saleCost;
+
     public Integer getId() {
         return id;
     }
@@ -1054,4 +1062,35 @@ public class FinancialStatement {
         this.tbybTrialShipment = tbybTrialShipment;
     }
 
+    public BigDecimal getSendCost() {
+        return sendCost;
+    }
+
+    public void setSendCost(BigDecimal sendCost) {
+        this.sendCost = sendCost;
+    }
+
+    public BigDecimal getSendCostPrice() {
+        return sendCostPrice;
+    }
+
+    public void setSendCostPrice(BigDecimal sendCostPrice) {
+        this.sendCostPrice = sendCostPrice;
+    }
+
+    public BigDecimal getSendHeadTripCost() {
+        return sendHeadTripCost;
+    }
+
+    public void setSendHeadTripCost(BigDecimal sendHeadTripCost) {
+        this.sendHeadTripCost = sendHeadTripCost;
+    }
+
+    public BigDecimal getSaleCost() {
+        return saleCost;
+    }
+
+    public void setSaleCost(BigDecimal saleCost) {
+        this.saleCost = saleCost;
+    }
 }
