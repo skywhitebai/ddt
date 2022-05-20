@@ -954,57 +954,7 @@ public class FinancialStatementService implements IFinancialStatementService {
         }
     }
 
-    private void setRefundRate(FinancialStatement financialStatement) {
-        if (new Integer(0).equals(financialStatement.getSaleQuantity())) {
-            if (new Integer(0).equals(financialStatement.getRefundSaleQuantity())) {
-                financialStatement.setRefundRate(BigDecimal.ZERO);
-            } else {
-                financialStatement.setRefundRate(new BigDecimal(10000));
-            }
-        } else {
-            Double refundRate = MathUtil.divide(financialStatement.getRefundSaleQuantity(), financialStatement.getSaleQuantity().doubleValue(), 4);
-            if (refundRate != null) {
-                financialStatement.setRefundRate(new BigDecimal(refundRate));
-            } else {
-                financialStatement.setRefundRate(BigDecimal.ZERO);
-            }
-        }
-    }
 
-    private void setRoiAndInventoryTurnover(FinancialStatement financialStatement) {
-        BigDecimal cost = MathUtil.subtractBigDecimal(MathUtil.addBigDecimal(financialStatement.getProcurementCost(), financialStatement.getFbaHeadTripCost()), financialStatement.getHeadDeductionFee());
-        if (cost.compareTo(BigDecimal.ZERO) != 0) {
-            BigDecimal roi = MathUtil.divide(financialStatement.getMainBusinessProfit(), cost, 2);
-            financialStatement.setRoi(roi);
-            BigDecimal inventoryCost = MathUtil.addBigDecimal(financialStatement.getInitialInventoryCost(), financialStatement.getFinalInventoryCost());
-            inventoryCost = MathUtil.divide(inventoryCost, new BigDecimal(2), 2);
-            BigDecimal inventoryTurnover = MathUtil.divide(inventoryCost.multiply(new BigDecimal(30)), cost, 2);
-            financialStatement.setInventoryTurnover(inventoryTurnover);
-        } else {
-            financialStatement.setRoi(BigDecimal.ZERO);
-            financialStatement.setInventoryTurnover(BigDecimal.ZERO);
-        }
-    }
-
-    private void setGrossMarginOnSales(FinancialStatement financialStatement) {
-        if (financialStatement.getProductSales() != null
-                && financialStatement.getProductSales().compareTo(BigDecimal.ZERO) != 0) {
-            BigDecimal grossMarginOnSales = financialStatement.getMainBusinessProfit().divide(financialStatement.getProductSales().multiply(financialStatement.getExchangeRate()), 4, BigDecimal.ROUND_HALF_UP);
-            financialStatement.setGrossMarginOnSales(grossMarginOnSales);
-        } else {
-            financialStatement.setGrossMarginOnSales(BigDecimal.ZERO);
-        }
-    }
-
-    private void setMoneyBackRate(FinancialStatement financialStatement) {
-        if (financialStatement.getProductSales() != null
-                && financialStatement.getProductSales().compareTo(BigDecimal.ZERO) != 0) {
-            BigDecimal moneyBackRate = financialStatement.getMoneyBack().divide(financialStatement.getProductSales(), 4, BigDecimal.ROUND_HALF_UP);
-            financialStatement.setMoneyBackRate(moneyBackRate);
-        } else {
-            financialStatement.setMoneyBackRate(BigDecimal.ZERO);
-        }
-    }
 
     private void setExcelTitle(Sheet sheet, String excelTitle) {
         Row row = sheet.getRow(0);
@@ -1214,95 +1164,8 @@ public class FinancialStatementService implements IFinancialStatementService {
     }
 
     private List<FinancialStatementExport> getFinancialStatementShopParentSkuList(List<FinancialStatementExport> financialStatementList) {
-        Map<String, FinancialStatementExport> financialStatementMap = new HashMap<>();
-        Iterator<FinancialStatementExport> iterator = financialStatementList.iterator();
-        while (iterator.hasNext()) {
-            FinancialStatementExport financialStatement = iterator.next();
-            FinancialStatementExport financialStatementShopParentSku = financialStatementMap.get(financialStatement.getShopParentSku());
-            if (financialStatementShopParentSku == null) {
-                financialStatementMap.put(financialStatement.getShopParentSku(), financialStatement);
-                iterator.remove();
-                continue;
-            }
-            financialStatementShopParentSku.setSaleQuantity(MathUtil.addInteger(financialStatementShopParentSku.getSaleQuantity(), financialStatement.getSaleQuantity()));
-            financialStatementShopParentSku.setProductSales(MathUtil.addBigDecimal(financialStatementShopParentSku.getProductSales(), financialStatement.getProductSales()));
-            financialStatementShopParentSku.setProductSalesTax(MathUtil.addBigDecimal(financialStatementShopParentSku.getProductSalesTax(), financialStatement.getProductSalesTax()));
-            financialStatementShopParentSku.setShippingCredits(MathUtil.addBigDecimal(financialStatementShopParentSku.getShippingCredits(), financialStatement.getShippingCredits()));
-            financialStatementShopParentSku.setShippingCreditsTax(MathUtil.addBigDecimal(financialStatementShopParentSku.getShippingCreditsTax(), financialStatement.getShippingCreditsTax()));
-            financialStatementShopParentSku.setGiftWrapCredits(MathUtil.addBigDecimal(financialStatementShopParentSku.getGiftWrapCredits(), financialStatement.getGiftWrapCredits()));
-            financialStatementShopParentSku.setGiftWrapCreditsTax(MathUtil.addBigDecimal(financialStatementShopParentSku.getGiftWrapCreditsTax(), financialStatement.getGiftWrapCreditsTax()));
-            financialStatementShopParentSku.setPromotionalRebates(MathUtil.addBigDecimal(financialStatementShopParentSku.getPromotionalRebates(), financialStatement.getPromotionalRebates()));
-            financialStatementShopParentSku.setPromotionalRebatesTax(MathUtil.addBigDecimal(financialStatementShopParentSku.getPromotionalRebatesTax(), financialStatement.getPromotionalRebatesTax()));
-            financialStatementShopParentSku.setMarketplaceWithheldTax(MathUtil.addBigDecimal(financialStatementShopParentSku.getMarketplaceWithheldTax(), financialStatement.getMarketplaceWithheldTax()));
-            financialStatementShopParentSku.setSellingFees(MathUtil.addBigDecimal(financialStatementShopParentSku.getSellingFees(), financialStatement.getSellingFees()));
-            financialStatementShopParentSku.setFbaFees(MathUtil.addBigDecimal(financialStatementShopParentSku.getFbaFees(), financialStatement.getFbaFees()));
-            financialStatementShopParentSku.setOtherTransactionFees(MathUtil.addBigDecimal(financialStatementShopParentSku.getOtherTransactionFees(), financialStatement.getOtherTransactionFees()));
-            financialStatementShopParentSku.setOther(MathUtil.addBigDecimal(financialStatementShopParentSku.getOther(), financialStatement.getOther()));
-            financialStatementShopParentSku.setTotal(MathUtil.addBigDecimal(financialStatementShopParentSku.getTotal(), financialStatement.getTotal()));
-            financialStatementShopParentSku.setRefundSaleQuantity(MathUtil.addInteger(financialStatementShopParentSku.getRefundSaleQuantity(), financialStatement.getRefundSaleQuantity()));
-            financialStatementShopParentSku.setRefundProductSales(MathUtil.addBigDecimal(financialStatementShopParentSku.getRefundProductSales(), financialStatement.getRefundProductSales()));
-            financialStatementShopParentSku.setRefundProductSalesTax(MathUtil.addBigDecimal(financialStatementShopParentSku.getRefundProductSalesTax(), financialStatement.getRefundProductSalesTax()));
-            financialStatementShopParentSku.setRefundShippingCredits(MathUtil.addBigDecimal(financialStatementShopParentSku.getRefundShippingCredits(), financialStatement.getRefundShippingCredits()));
-            financialStatementShopParentSku.setRefundShippingCreditsTax(MathUtil.addBigDecimal(financialStatementShopParentSku.getRefundShippingCreditsTax(), financialStatement.getRefundShippingCreditsTax()));
-            financialStatementShopParentSku.setRefundGiftWrapCredits(MathUtil.addBigDecimal(financialStatementShopParentSku.getRefundGiftWrapCredits(), financialStatement.getRefundGiftWrapCredits()));
-            financialStatementShopParentSku.setRefundGiftWrapCreditsTax(MathUtil.addBigDecimal(financialStatementShopParentSku.getRefundGiftWrapCreditsTax(), financialStatement.getRefundGiftWrapCreditsTax()));
-            financialStatementShopParentSku.setRefundPromotionalRebates(MathUtil.addBigDecimal(financialStatementShopParentSku.getRefundPromotionalRebates(), financialStatement.getRefundPromotionalRebates()));
-            financialStatementShopParentSku.setRefundPromotionalRebatesTax(MathUtil.addBigDecimal(financialStatementShopParentSku.getRefundPromotionalRebatesTax(), financialStatement.getRefundPromotionalRebatesTax()));
-            financialStatementShopParentSku.setRefundMarketplaceWithheldTax(MathUtil.addBigDecimal(financialStatementShopParentSku.getRefundMarketplaceWithheldTax(), financialStatement.getRefundMarketplaceWithheldTax()));
-            financialStatementShopParentSku.setRefundSellingFees(MathUtil.addBigDecimal(financialStatementShopParentSku.getRefundSellingFees(), financialStatement.getRefundSellingFees()));
-            financialStatementShopParentSku.setRefundFbaFees(MathUtil.addBigDecimal(financialStatementShopParentSku.getRefundFbaFees(), financialStatement.getRefundFbaFees()));
-            financialStatementShopParentSku.setRefundOtherTransactionFees(MathUtil.addBigDecimal(financialStatementShopParentSku.getRefundOtherTransactionFees(), financialStatement.getRefundOtherTransactionFees()));
-            financialStatementShopParentSku.setRefundOther(MathUtil.addBigDecimal(financialStatementShopParentSku.getRefundOther(), financialStatement.getRefundOther()));
-            financialStatementShopParentSku.setRefundTotal(MathUtil.addBigDecimal(financialStatementShopParentSku.getRefundTotal(), financialStatement.getRefundTotal()));
-            financialStatementShopParentSku.setSellerpaymentsReportFeeSubscription(MathUtil.addBigDecimal(financialStatementShopParentSku.getSellerpaymentsReportFeeSubscription(), financialStatement.getSellerpaymentsReportFeeSubscription()));
-            financialStatementShopParentSku.setLightningDealFee(MathUtil.addBigDecimal(financialStatementShopParentSku.getLightningDealFee(), financialStatement.getLightningDealFee()));
-            financialStatementShopParentSku.setCostOfAdvertising(MathUtil.addBigDecimal(financialStatementShopParentSku.getCostOfAdvertising(), financialStatement.getCostOfAdvertising()));
-            financialStatementShopParentSku.setFbaInventoryReimbursementCustomerReturn(MathUtil.addBigDecimal(financialStatementShopParentSku.getFbaInventoryReimbursementCustomerReturn(), financialStatement.getFbaInventoryReimbursementCustomerReturn()));
-            financialStatementShopParentSku.setFbaInventoryReimbursementDamagedWarehouse(MathUtil.addBigDecimal(financialStatementShopParentSku.getFbaInventoryReimbursementDamagedWarehouse(), financialStatement.getFbaInventoryReimbursementDamagedWarehouse()));
-            financialStatementShopParentSku.setFbaInventoryReimbursementCustomerServiceIssue(MathUtil.addBigDecimal(financialStatementShopParentSku.getFbaInventoryReimbursementCustomerServiceIssue(), financialStatement.getFbaInventoryReimbursementCustomerServiceIssue()));
-            financialStatementShopParentSku.setFbaInventoryReimbursementFeeCorrection(MathUtil.addBigDecimal(financialStatementShopParentSku.getFbaInventoryReimbursementFeeCorrection(), financialStatement.getFbaInventoryReimbursementFeeCorrection()));
-            financialStatementShopParentSku.setFbaInventoryReimbursementGeneralAdjustment(MathUtil.addBigDecimal(financialStatementShopParentSku.getFbaInventoryReimbursementGeneralAdjustment(), financialStatement.getFbaInventoryReimbursementGeneralAdjustment()));
-            financialStatementShopParentSku.setFbaInventoryReimbursementLostInbound(MathUtil.addBigDecimal(financialStatementShopParentSku.getFbaInventoryReimbursementLostInbound(), financialStatement.getFbaInventoryReimbursementLostInbound()));
-            financialStatementShopParentSku.setFbaInventoryReimbursementLostWarehouse(MathUtil.addBigDecimal(financialStatementShopParentSku.getFbaInventoryReimbursementLostWarehouse(), financialStatement.getFbaInventoryReimbursementLostWarehouse()));
-            financialStatementShopParentSku.setNonSubscriptionFeeAdjustment(MathUtil.addBigDecimal(financialStatementShopParentSku.getNonSubscriptionFeeAdjustment(), financialStatement.getNonSubscriptionFeeAdjustment()));
-            financialStatementShopParentSku.setFbaInventoryPlacementServiceFee(MathUtil.addBigDecimal(financialStatementShopParentSku.getFbaInventoryPlacementServiceFee(), financialStatement.getFbaInventoryPlacementServiceFee()));
-            financialStatementShopParentSku.setFbaCustomerReturnPerUnitFee(MathUtil.addBigDecimal(financialStatementShopParentSku.getFbaCustomerReturnPerUnitFee(), financialStatement.getFbaCustomerReturnPerUnitFee()));
-            financialStatementShopParentSku.setFbaInventoryStorageFee(MathUtil.addBigDecimal(financialStatementShopParentSku.getFbaInventoryStorageFee(), financialStatement.getFbaInventoryStorageFee()));
-            financialStatementShopParentSku.setFbaLongTermStorageFee(MathUtil.addBigDecimal(financialStatementShopParentSku.getFbaLongTermStorageFee(), financialStatement.getFbaLongTermStorageFee()));
-            financialStatementShopParentSku.setFbaRemovalOrderDisposalFee(MathUtil.addBigDecimal(financialStatementShopParentSku.getFbaRemovalOrderDisposalFee(), financialStatement.getFbaRemovalOrderDisposalFee()));
-            financialStatementShopParentSku.setCouponRedemptionFee(MathUtil.addBigDecimal(financialStatementShopParentSku.getCouponRedemptionFee(), financialStatement.getCouponRedemptionFee()));
-            financialStatementShopParentSku.setEarlyReviewerProgramFee(MathUtil.addBigDecimal(financialStatementShopParentSku.getEarlyReviewerProgramFee(), financialStatement.getEarlyReviewerProgramFee()));
-            financialStatementShopParentSku.setMoneyBack(MathUtil.addBigDecimal(financialStatementShopParentSku.getMoneyBack(), financialStatement.getMoneyBack()));
-
-            financialStatementShopParentSku.setMainBusinessIncome(MathUtil.addBigDecimal(financialStatementShopParentSku.getMainBusinessIncome(), financialStatement.getMainBusinessIncome()));
-            financialStatementShopParentSku.setTotalEffectiveReceipts(MathUtil.addBigDecimal(financialStatementShopParentSku.getTotalEffectiveReceipts(), financialStatement.getTotalEffectiveReceipts()));
-            financialStatementShopParentSku.setSellableRequestedQuantity(MathUtil.addInteger(financialStatementShopParentSku.getSellableRequestedQuantity(), financialStatement.getSellableRequestedQuantity()));
-            financialStatementShopParentSku.setSellableCost(MathUtil.addBigDecimal(financialStatementShopParentSku.getSellableCost(), financialStatement.getSellableCost()));
-            financialStatementShopParentSku.setUnsellableRequestedQuantity(MathUtil.addInteger(financialStatementShopParentSku.getUnsellableRequestedQuantity(), financialStatement.getUnsellableRequestedQuantity()));
-            financialStatementShopParentSku.setUnsellableCost(MathUtil.addBigDecimal(financialStatementShopParentSku.getUnsellableCost(), financialStatement.getUnsellableCost()));
-            financialStatementShopParentSku.setProcurementCost(MathUtil.addBigDecimal(financialStatementShopParentSku.getProcurementCost(), financialStatement.getProcurementCost()));
-            financialStatementShopParentSku.setFbaHeadTripCost(MathUtil.addBigDecimal(financialStatementShopParentSku.getFbaHeadTripCost(), financialStatement.getFbaHeadTripCost()));
-            financialStatementShopParentSku.setHeadDeductionFee(MathUtil.addBigDecimal(financialStatementShopParentSku.getHeadDeductionFee(), financialStatement.getHeadDeductionFee()));
-            financialStatementShopParentSku.setMainBusinessProfit(MathUtil.addBigDecimal(financialStatementShopParentSku.getMainBusinessProfit(), financialStatement.getMainBusinessProfit()));
-
-            financialStatementShopParentSku.setInitialQuantity(MathUtil.addInteger(financialStatementShopParentSku.getInitialQuantity(), financialStatement.getInitialQuantity()));
-            financialStatementShopParentSku.setInitialInventoryCost(MathUtil.addBigDecimal(financialStatementShopParentSku.getInitialInventoryCost(), financialStatement.getInitialInventoryCost()));
-            financialStatementShopParentSku.setFinalQuantity(MathUtil.addInteger(financialStatementShopParentSku.getFinalQuantity(), financialStatement.getFinalQuantity()));
-            financialStatementShopParentSku.setFinalInventoryCost(MathUtil.addBigDecimal(financialStatementShopParentSku.getFinalInventoryCost(), financialStatement.getFinalInventoryCost()));
-            financialStatementShopParentSku.setManualAdjustment(MathUtil.addBigDecimal(financialStatementShopParentSku.getManualAdjustment(), financialStatement.getManualAdjustment()));
-            financialStatementShopParentSku.setDisplayAdvertising(MathUtil.addBigDecimal(financialStatementShopParentSku.getDisplayAdvertising(), financialStatement.getDisplayAdvertising()));
-            financialStatementShopParentSku.setBrandAdvertising(MathUtil.addBigDecimal(financialStatementShopParentSku.getBrandAdvertising(), financialStatement.getBrandAdvertising()));
-            financialStatementShopParentSku.setLiquidations(MathUtil.addBigDecimal(financialStatementShopParentSku.getLiquidations(), financialStatement.getLiquidations()));
-            financialStatementShopParentSku.setLiquidationsAdjustments(MathUtil.addBigDecimal(financialStatementShopParentSku.getLiquidationsAdjustments(), financialStatement.getLiquidationsAdjustments()));
-            financialStatementShopParentSku.setTbybOrderPayment(MathUtil.addBigDecimal(financialStatementShopParentSku.getTbybOrderPayment(), financialStatement.getTbybOrderPayment()));
-            financialStatementShopParentSku.setTbybTrialShipment(MathUtil.addBigDecimal(financialStatementShopParentSku.getTbybTrialShipment(), financialStatement.getTbybTrialShipment()));
-        }
-        List<FinancialStatementExport> financialStatementShopParentSkuList = new ArrayList<>();
-        for (Map.Entry<String, FinancialStatementExport> map : financialStatementMap.entrySet()) {
-            FinancialStatementExport financialStatement = map.getValue();
-            FinancialStatementConstant.setFinancialStatementCount(financialStatement);
-            financialStatementShopParentSkuList.add(financialStatement);
-        }
+        Map<String, List<FinancialStatementExport>> financialStatementExportListMap=financialStatementList.stream().collect(Collectors.groupingBy(item -> StringUtils.isEmpty(item.getShopParentSku()) ? "" : item.getShopParentSku()));
+        List<FinancialStatementExport> financialStatementShopParentSkuList = getFinancialStatementCountList(financialStatementExportListMap);
         Collections.sort(financialStatementShopParentSkuList, new Comparator<FinancialStatement>() {
             @Override
             public int compare(FinancialStatement o1, FinancialStatement o2) {

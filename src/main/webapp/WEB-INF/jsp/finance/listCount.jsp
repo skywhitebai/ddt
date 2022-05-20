@@ -79,8 +79,8 @@
             collapsible: true,
             pagination: false,
             //singleSelect: true,
-            pageSize: 15,
-            pageList: [10, 15, 20, 30, 50],
+            //pageSize: 15,
+            //pageList: [10, 15, 20, 30, 50],
             rownumbers: true,
             //sortName: 'ID',    //根据某个字段给easyUI排序
             //sortOrder: 'asc',

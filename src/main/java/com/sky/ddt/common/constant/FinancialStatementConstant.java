@@ -174,14 +174,14 @@ public class FinancialStatementConstant {
     }
 
     public static void setFinancialStatementCount(FinancialStatementExport financialStatementExport) {
-        financialStatementExport.setAroi(MathUtil.divide(financialStatementExport.getMainBusinessProfit(), financialStatementExport.getAverageInventoryCost(), 2));
-        financialStatementExport.setInventoryTurnoverTimes(MathUtil.divide(bigDecimal360, financialStatementExport.getInventoryTurnover(), 2));
-        financialStatementExport.setRoiAssessmentCoefficient(MathUtil.multiply(financialStatementExport.getAroi(), financialStatementExport.getInventoryTurnoverTimes(), 2));
         setMoneyBackRate(financialStatementExport);
         setGrossMarginOnSales(financialStatementExport);
         setRoiAndInventoryTurnover(financialStatementExport);
         setRefundRate(financialStatementExport);
         setAdvertisingSalesPercentage(financialStatementExport);
+        financialStatementExport.setAroi(MathUtil.divide(financialStatementExport.getMainBusinessProfit(), financialStatementExport.getAverageInventoryCost(), 2));
+        financialStatementExport.setInventoryTurnoverTimes(MathUtil.divide(bigDecimal360, financialStatementExport.getInventoryTurnover(), 2));
+        financialStatementExport.setRoiAssessmentCoefficient(MathUtil.multiply(financialStatementExport.getAroi(), financialStatementExport.getInventoryTurnoverTimes(), 2));
     }
 
     private static void setMoneyBackRate(FinancialStatementExport financialStatement) {
