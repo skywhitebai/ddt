@@ -3,7 +3,9 @@ package com.sky.ddt.common.constant;
 import com.sky.ddt.dto.finance.response.FinancialStatementExport;
 import com.sky.ddt.entity.FinancialStatement;
 import com.sky.ddt.util.MathUtil;
+import lombok.Getter;
 import org.springframework.beans.BeanUtils;
+import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -100,11 +102,47 @@ public class FinancialStatementConstant {
         titleMap.put(103, "inventoryTurnover");
     }
 
+    /**
+     * 初始化count
+     * @param financialStatementCount
+     * @param financialStatementExport
+     */
+    public static FinancialStatementExport initFinancialStatementCount(FinancialStatementExport financialStatementExport) {
+        FinancialStatementExport financialStatementCount=new FinancialStatementExport();
+        financialStatementCount.setExchangeRate(financialStatementExport.getExchangeRate());
+        financialStatementCount.setShopName(financialStatementExport.getShopName());
+        financialStatementCount.setMonth(financialStatementExport.getMonth());
+        financialStatementCount.setDeveloperUserName(financialStatementExport.getDeveloperUserName());
+        financialStatementCount.setSalesmanUserName(financialStatementExport.getSalesmanUserName());
+        financialStatementCount.setSalesGroupName(financialStatementExport.getSalesGroupName());
+        financialStatementCount.setShopParentSku(financialStatementExport.getShopParentSku());
+        financialStatementCount.setSku(financialStatementExport.getSku());
+        financialStatementCount.setShopSku(financialStatementExport.getShopSku());
+        financialStatementCount.setProductCode(financialStatementExport.getProductCode());
+        return financialStatementCount;
+    }
+
+
+    @Getter
+    public enum FinancialStatementCountTypeEnum {
+        SALESMANUSER("salesmanUser"),
+        SHOP("shop"),
+        SALESGROUP("salesGroup"),
+        ;
+
+        FinancialStatementCountTypeEnum(String type) {
+            this.type = type;
+        }
+
+        String type;
+    }
+
     public static List<FinancialStatementExport> convertToFinancialStatementExportList(List<FinancialStatement> financialStatementList) {
         List<FinancialStatementExport> financialStatementExportList = new ArrayList<>();
         for (FinancialStatement financialStatement : financialStatementList) {
             FinancialStatementExport financialStatementExport = new FinancialStatementExport();
             BeanUtils.copyProperties(financialStatement, financialStatementExport);
+            initFinancialStatementExport(financialStatementExport);
             financialStatementExportList.add(financialStatementExport);
         }
         return financialStatementExportList;
@@ -139,5 +177,82 @@ public class FinancialStatementConstant {
         financialStatementExport.setAroi(MathUtil.divide(financialStatementExport.getMainBusinessProfit(), financialStatementExport.getAverageInventoryCost(), 2));
         financialStatementExport.setInventoryTurnoverTimes(MathUtil.divide(bigDecimal360, financialStatementExport.getInventoryTurnover(), 2));
         financialStatementExport.setRoiAssessmentCoefficient(MathUtil.multiply(financialStatementExport.getAroi(), financialStatementExport.getInventoryTurnoverTimes(), 2));
+        setMoneyBackRate(financialStatementExport);
+        setGrossMarginOnSales(financialStatementExport);
+        setRoiAndInventoryTurnover(financialStatementExport);
+        setRefundRate(financialStatementExport);
+        setAdvertisingSalesPercentage(financialStatementExport);
+    }
+
+    private static void setMoneyBackRate(FinancialStatementExport financialStatement) {
+        if (financialStatement.getProductSales() != null
+                && financialStatement.getProductSales().compareTo(BigDecimal.ZERO) != 0) {
+            BigDecimal moneyBackRate = financialStatement.getMoneyBack().divide(financialStatement.getProductSales(), 4, BigDecimal.ROUND_HALF_UP);
+            financialStatement.setMoneyBackRate(moneyBackRate);
+        } else {
+            financialStatement.setMoneyBackRate(BigDecimal.ZERO);
+        }
+    }
+
+    private static void setGrossMarginOnSales(FinancialStatementExport financialStatement) {
+        if (financialStatement.getProductSales() != null
+                && financialStatement.getProductSales().compareTo(BigDecimal.ZERO) != 0) {
+            BigDecimal grossMarginOnSales = financialStatement.getMainBusinessProfit().divide(financialStatement.getProductSales().multiply(financialStatement.getExchangeRate()), 4, BigDecimal.ROUND_HALF_UP);
+            financialStatement.setGrossMarginOnSales(grossMarginOnSales);
+        } else {
+            financialStatement.setGrossMarginOnSales(BigDecimal.ZERO);
+        }
+    }
+
+    private static void setRoiAndInventoryTurnover(FinancialStatementExport financialStatement) {
+        BigDecimal cost = MathUtil.subtractBigDecimal(MathUtil.addBigDecimal(financialStatement.getProcurementCost(), financialStatement.getFbaHeadTripCost()), financialStatement.getHeadDeductionFee());
+        if (cost.compareTo(BigDecimal.ZERO) != 0) {
+            BigDecimal roi = MathUtil.divide(financialStatement.getMainBusinessProfit(), cost, 2);
+            financialStatement.setRoi(roi);
+            BigDecimal inventoryCost = MathUtil.addBigDecimal(financialStatement.getInitialInventoryCost(), financialStatement.getFinalInventoryCost());
+            inventoryCost = MathUtil.divide(inventoryCost, new BigDecimal(2), 2);
+            BigDecimal inventoryTurnover = MathUtil.divide(inventoryCost.multiply(new BigDecimal(30)), cost, 2);
+            financialStatement.setInventoryTurnover(inventoryTurnover);
+        } else {
+            financialStatement.setRoi(BigDecimal.ZERO);
+            financialStatement.setInventoryTurnover(BigDecimal.ZERO);
+        }
+    }
+
+    private static void setRefundRate(FinancialStatementExport financialStatement) {
+        if (new Integer(0).equals(financialStatement.getSaleQuantity())) {
+            if (new Integer(0).equals(financialStatement.getRefundSaleQuantity())) {
+                financialStatement.setRefundRate(BigDecimal.ZERO);
+            } else {
+                financialStatement.setRefundRate(new BigDecimal(10000));
+            }
+        } else {
+            Double refundRate = MathUtil.divide(financialStatement.getRefundSaleQuantity(), financialStatement.getSaleQuantity().doubleValue(), 4);
+            if (refundRate != null) {
+                financialStatement.setRefundRate(new BigDecimal(refundRate));
+            } else {
+                financialStatement.setRefundRate(BigDecimal.ZERO);
+            }
+        }
+    }
+
+    private static void setAdvertisingSalesPercentage(FinancialStatementExport financialStatementResponse) {
+        if (financialStatementResponse.getCostOfAdvertising().compareTo(BigDecimal.ZERO) == 0
+                && financialStatementResponse.getDisplayAdvertising().compareTo(BigDecimal.ZERO) == 0
+                && financialStatementResponse.getBrandAdvertising().compareTo(BigDecimal.ZERO) == 0) {
+            financialStatementResponse.setAdvertisingSalesPercentage(BigDecimal.ZERO);
+        } else {
+            if (BigDecimal.ZERO.compareTo(financialStatementResponse.getProductSales()) == 0) {
+                financialStatementResponse.setAdvertisingSalesPercentage(new BigDecimal(10000));
+            } else {
+                BigDecimal adCount = financialStatementResponse.getCostOfAdvertising().add(financialStatementResponse.getBrandAdvertising()).add(financialStatementResponse.getDisplayAdvertising());
+                BigDecimal advertisingSalesPercentage = MathUtil.divide(adCount.multiply(new BigDecimal(-1)), financialStatementResponse.getProductSales(), 4);
+                if (advertisingSalesPercentage != null) {
+                    financialStatementResponse.setAdvertisingSalesPercentage(advertisingSalesPercentage);
+                } else {
+                    financialStatementResponse.setAdvertisingSalesPercentage(BigDecimal.ZERO);
+                }
+            }
+        }
     }
 }

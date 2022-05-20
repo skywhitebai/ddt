@@ -3,10 +3,13 @@ package com.sky.ddt.controller.finance;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.common.constant.FinanceConstant;
 import com.sky.ddt.controller.SuperController;
+import com.sky.ddt.dto.easyui.response.DataGridResponse;
+import com.sky.ddt.dto.finance.request.ListFinancialStatementCountReq;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.service.finance.IFinancialStatementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -16,7 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @date 2019/12/24 11:22
  */
 @Controller
-@RequestMapping("financialStatement")
+@RequestMapping("/financialStatement")
 public class FinancialStatementController extends SuperController {
 
     @Autowired
@@ -29,49 +32,65 @@ public class FinancialStatementController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return financialStatementService.createFinancialStatement(financeId, dealUserId);
     }
+
     @RequestMapping("/exportFinancialStatement")
     @ResponseBody
     @MenuAnnotation("finance/index")
     public BaseResponse exportFinancialStatement(Integer financeId) {
-        return financialStatementService.exportFinancialStatement(response,financeId);
+        return financialStatementService.exportFinancialStatement(response, financeId);
     }
+
     @RequestMapping("/exportDeveloperFinancialStatement")
     @ResponseBody
     @MenuAnnotation("finance/index")
     public BaseResponse exportDeveloperFinancialStatement(String month) {
-        return financialStatementService.exportFinancialStatement(response,month, FinanceConstant.FinanceExprotType.DEVELOPER.getType());
+        return financialStatementService.exportFinancialStatement(response, month, FinanceConstant.FinanceExprotType.DEVELOPER.getType());
     }
+
     @RequestMapping("/exportSalesmanFinancialStatement")
     @ResponseBody
     @MenuAnnotation("finance/index")
     public BaseResponse exportSalesmanFinancialStatement(String month) {
-        return financialStatementService.exportFinancialStatement(response,month,FinanceConstant.FinanceExprotType.SALESMAN.getType());
+        return financialStatementService.exportFinancialStatement(response, month, FinanceConstant.FinanceExprotType.SALESMAN.getType());
     }
+
     @RequestMapping("/exportCurrentUserDeveloperFinancialStatement")
     @ResponseBody
     public BaseResponse exportCurrentUserDeveloperFinancialStatement(String month) {
-        return financialStatementService.exportCurrentUserFinancialStatement(response,month,FinanceConstant.FinanceExprotType.DEVELOPER.getType(),getCurrentUserInfo());
+        return financialStatementService.exportCurrentUserFinancialStatement(response, month, FinanceConstant.FinanceExprotType.DEVELOPER.getType(), getCurrentUserInfo());
     }
+
     @RequestMapping("/exportCurrentUserSalesmanFinancialStatement")
     @ResponseBody
     public BaseResponse exportCurrentUserSalesmanFinancialStatement(String month) {
-        return financialStatementService.exportCurrentUserFinancialStatement(response,month,FinanceConstant.FinanceExprotType.SALESMAN.getType(),getCurrentUserInfo());
+        return financialStatementService.exportCurrentUserFinancialStatement(response, month, FinanceConstant.FinanceExprotType.SALESMAN.getType(), getCurrentUserInfo());
     }
+
     @RequestMapping("/exportCurrentUserSalesGroupFinancialStatement")
     @ResponseBody
     public BaseResponse exportCurrentUserSalesGroupFinancialStatement(String month) {
-        return financialStatementService.exportCurrentUserFinancialStatement(response,month,FinanceConstant.FinanceExprotType.SALESGROUP.getType(),getCurrentUserInfo());
+        return financialStatementService.exportCurrentUserFinancialStatement(response, month, FinanceConstant.FinanceExprotType.SALESGROUP.getType(), getCurrentUserInfo());
     }
+
     @RequestMapping("/exportFinancialStatementAll")
     @ResponseBody
     @MenuAnnotation("finance/index")
     public BaseResponse exportFinancialStatementAll(String month) {
-        return financialStatementService.exportFinancialStatementAll(response,month);
+        return financialStatementService.exportFinancialStatementAll(response, month);
     }
+
     @RequestMapping("/exportSalesGroupFinancialStatement")
     @ResponseBody
     @MenuAnnotation("finance/index")
     public BaseResponse exportSalesGroupFinancialStatement(String month) {
-        return financialStatementService.exportFinancialStatement(response,month,FinanceConstant.FinanceExprotType.SALESGROUP.getType());
+        return financialStatementService.exportFinancialStatement(response, month, FinanceConstant.FinanceExprotType.SALESGROUP.getType());
     }
+
+    @RequestMapping("/listFinancialStatementCount")
+    @ResponseBody
+    @MenuAnnotation("finance/index")
+    public DataGridResponse listFinancialStatementCount(@Validated ListFinancialStatementCountReq listFinancialStatementCountReq) {
+        return financialStatementService.listFinancialStatementCount(listFinancialStatementCountReq);
+    }
+
 }

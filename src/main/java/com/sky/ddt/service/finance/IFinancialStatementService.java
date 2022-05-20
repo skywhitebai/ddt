@@ -1,6 +1,8 @@
 package com.sky.ddt.service.finance;
 
 import com.sky.ddt.common.login.CurrentUserInfo;
+import com.sky.ddt.dto.easyui.response.DataGridResponse;
+import com.sky.ddt.dto.finance.request.ListFinancialStatementCountReq;
 import com.sky.ddt.dto.response.BaseResponse;
 
 import javax.servlet.http.HttpServletResponse;
@@ -49,4 +51,6 @@ public interface IFinancialStatementService {
      * @date 2020/12/15 14:42
      */
     BaseResponse exportCurrentUserFinancialStatement(HttpServletResponse response, String month, String developer, CurrentUserInfo currentUserInfo);
+
+    DataGridResponse listFinancialStatementCount(ListFinancialStatementCountReq listFinancialStatementCountReq);
 }

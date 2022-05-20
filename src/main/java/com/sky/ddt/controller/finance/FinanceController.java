@@ -33,13 +33,13 @@ public class FinanceController extends SuperController {
     /**
      * @param
      * @return
-     * @description 财务统计导入页面
+     * @description 财务统计统计信息
      * @author baixueping
      * @date 2019/11/19 15:51
      */
-    @RequestMapping("/importIndex")
+    @RequestMapping("/countIndex")
     public String importIndex() {
-        return "finance/importIndex";
+        return "finance/listCount";
     }
 
     /**
