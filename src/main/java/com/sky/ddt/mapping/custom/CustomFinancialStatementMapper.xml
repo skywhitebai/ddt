@@ -198,4 +198,28 @@
         WHERE f.`id`=#{financeId}
         ORDER BY ss.`shop_parent_sku`,sku.`sku`
     </select>
+
+
+    <resultMap id="listFinancialStatementExportMap" type="com.sky.ddt.dto.finance.response.FinancialStatementExport"
+               extends="com.sky.ddt.dao.generate.FinancialStatementMapper.BaseResultMap">
+    </resultMap>
+    <select id="listFinancialStatementExport"  resultMap="listFinancialStatementExportMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.FinancialStatementMapper.Base_Column_List"/>
+        from financial_statement f
+        <if test="_parameter != null">
+            <include refid="listFinancialStatementExport_Query_Where_Clause" />
+        </if>
+    </select>
+    <sql id="listFinancialStatementExport_Query_Where_Clause">
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="month != null ">and f.month=#{month}</if>
+                <if test="developerUserId != null">and f.developer_user_id=#{developerUserId}</if>
+                <if test="salesmanUserId != null">and f.salesman_user_id=#{salesmanUserId}</if>
+                <if test="salesGroupUserId != null ">and f.sales_group_id = (select max(sales_group_id) from financial_statement fs2  where fs2.salesman_user_id=#{salesGroupUserId})</if>
+                <if test="financeId != null">and f.finance_id=#{financeId}</if>
+            </trim>
+        </where>
+    </sql>
 </mapper>

@@ -53,4 +53,6 @@ public interface IFinancialStatementService {
     BaseResponse exportCurrentUserFinancialStatement(HttpServletResponse response, String month, String developer, CurrentUserInfo currentUserInfo);
 
     DataGridResponse listFinancialStatementCount(ListFinancialStatementCountReq listFinancialStatementCountReq);
+
+    BaseResponse exportFinancialStatementCount(HttpServletResponse response, ListFinancialStatementCountReq listFinancialStatementCountReq);
 }

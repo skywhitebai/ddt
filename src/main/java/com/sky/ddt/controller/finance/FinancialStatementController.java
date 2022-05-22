@@ -44,26 +44,26 @@ public class FinancialStatementController extends SuperController {
     @ResponseBody
     @MenuAnnotation("finance/index")
     public BaseResponse exportDeveloperFinancialStatement(String month) {
-        return financialStatementService.exportFinancialStatement(response, month, FinanceConstant.FinanceExprotType.DEVELOPER.getType());
+        return financialStatementService.exportFinancialStatement(response, month, FinanceConstant.FinanceExprotType.DEVELOPERUSER.getType());
     }
 
     @RequestMapping("/exportSalesmanFinancialStatement")
     @ResponseBody
     @MenuAnnotation("finance/index")
     public BaseResponse exportSalesmanFinancialStatement(String month) {
-        return financialStatementService.exportFinancialStatement(response, month, FinanceConstant.FinanceExprotType.SALESMAN.getType());
+        return financialStatementService.exportFinancialStatement(response, month, FinanceConstant.FinanceExprotType.SALESMANUSER.getType());
     }
 
     @RequestMapping("/exportCurrentUserDeveloperFinancialStatement")
     @ResponseBody
     public BaseResponse exportCurrentUserDeveloperFinancialStatement(String month) {
-        return financialStatementService.exportCurrentUserFinancialStatement(response, month, FinanceConstant.FinanceExprotType.DEVELOPER.getType(), getCurrentUserInfo());
+        return financialStatementService.exportCurrentUserFinancialStatement(response, month, FinanceConstant.FinanceExprotType.DEVELOPERUSER.getType(), getCurrentUserInfo());
     }
 
     @RequestMapping("/exportCurrentUserSalesmanFinancialStatement")
     @ResponseBody
     public BaseResponse exportCurrentUserSalesmanFinancialStatement(String month) {
-        return financialStatementService.exportCurrentUserFinancialStatement(response, month, FinanceConstant.FinanceExprotType.SALESMAN.getType(), getCurrentUserInfo());
+        return financialStatementService.exportCurrentUserFinancialStatement(response, month, FinanceConstant.FinanceExprotType.SALESMANUSER.getType(), getCurrentUserInfo());
     }
 
     @RequestMapping("/exportCurrentUserSalesGroupFinancialStatement")
@@ -85,7 +85,12 @@ public class FinancialStatementController extends SuperController {
     public BaseResponse exportSalesGroupFinancialStatement(String month) {
         return financialStatementService.exportFinancialStatement(response, month, FinanceConstant.FinanceExprotType.SALESGROUP.getType());
     }
-
+    @RequestMapping("/exportFinancialStatementCount")
+    @ResponseBody
+    @MenuAnnotation("finance/index")
+    public BaseResponse exportFinancialStatementCount(@Validated ListFinancialStatementCountReq listFinancialStatementCountReq) {
+        return financialStatementService.exportFinancialStatementCount(response, listFinancialStatementCountReq);
+    }
     @RequestMapping("/listFinancialStatementCount")
     @ResponseBody
     @MenuAnnotation("finance/index")

@@ -6,6 +6,7 @@ import com.sky.ddt.common.login.CurrentUserInfo;
 import com.sky.ddt.dao.custom.*;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.finance.request.ListFinancialStatementCountReq;
+import com.sky.ddt.dto.finance.request.ListFinancialStatementReq;
 import com.sky.ddt.dto.finance.response.FbaCustomerReturnFeeResponse;
 import com.sky.ddt.dto.finance.response.FbaCustomerReturnSkuResponse;
 import com.sky.ddt.dto.finance.response.FinancialStatementExport;
@@ -241,69 +242,6 @@ public class FinancialStatementService implements IFinancialStatementService {
         }
     }
 
-    private void setfbaCustomerReturnPerUnitFee(List<FinancialStatementResponse> financialStatementResponseList) {
-        if (CollectionUtils.isEmpty(financialStatementResponseList)) {
-            return;
-        }
-        Integer shopId = financialStatementResponseList.get(0).getShopId();
-        Integer financeId = financialStatementResponseList.get(0).getFinanceId();
-        if (shopId == null || financeId == null) {
-            return;
-        }
-        //获取退款服务费列表
-        List<FbaCustomerReturnFeeResponse> fbaCustomerReturnFeeResponseList = customMonthlySalesMapper.listFbaCustomerReturnFee(financeId);
-        if (CollectionUtils.isEmpty(fbaCustomerReturnFeeResponseList)) {
-            return;
-        }
-        //获取退款服务费对应的sku
-        List<FbaCustomerReturnSkuResponse> fbaCustomerReturnSkuResponseList = customMonthlySalesMapper.listFbaCustomerReturnFeeSku(financeId, shopId);
-        if (CollectionUtils.isEmpty(fbaCustomerReturnSkuResponseList)) {
-            return;
-        }
-        for (FbaCustomerReturnFeeResponse fbaCustomerReturnFeeResponse : fbaCustomerReturnFeeResponseList) {
-            fbaCustomerReturnFeeResponse.setShopSkuId(getShopSkuId(fbaCustomerReturnFeeResponse.getOrderId(), fbaCustomerReturnSkuResponseList));
-        }
-        for (FinancialStatementResponse financialStatementResponse :
-                financialStatementResponseList) {
-            financialStatementResponse.setFbaCustomerReturnPerUnitFee(getFbaCustomerReturnPerUnitFee(financialStatementResponse.getShopSkuId(), fbaCustomerReturnFeeResponseList));
-        }
-    }
-
-    private BigDecimal getFbaCustomerReturnPerUnitFee(Integer shopSkuId, List<FbaCustomerReturnFeeResponse> fbaCustomerReturnFeeResponseList) {
-        BigDecimal fbaCustomerReturnPerUnitFee = BigDecimal.ZERO;
-        Iterator<FbaCustomerReturnFeeResponse> it = fbaCustomerReturnFeeResponseList.iterator();
-        while (it.hasNext()) {
-            FbaCustomerReturnFeeResponse fbaCustomerReturnFeeResponse = it.next();
-            if (shopSkuId.equals(fbaCustomerReturnFeeResponse.getShopSkuId())) {
-                fbaCustomerReturnPerUnitFee = fbaCustomerReturnPerUnitFee.add(fbaCustomerReturnFeeResponse.getTotal());
-                it.remove();
-            }
-        }
-        return fbaCustomerReturnPerUnitFee;
-    }
-
-    private Integer getShopSkuId(String orderId, List<FbaCustomerReturnSkuResponse> fbaCustomerReturnSkuResponseList) {
-        FbaCustomerReturnSkuResponse fbaCustomerReturnSkuResponseFirst = null;
-        for (FbaCustomerReturnSkuResponse fbaCustomerReturnSkuResponse : fbaCustomerReturnSkuResponseList) {
-            if (fbaCustomerReturnSkuResponse.getOrderId().equals(orderId)) {
-                if (!Boolean.TRUE.equals(fbaCustomerReturnSkuResponse.getUsed())) {
-                    fbaCustomerReturnSkuResponse.setUsed(Boolean.TRUE);
-                    return fbaCustomerReturnSkuResponse.getShopSkuId();
-                }
-                if (fbaCustomerReturnSkuResponseFirst == null) {
-                    fbaCustomerReturnSkuResponseFirst = fbaCustomerReturnSkuResponse;
-                }
-
-            }
-        }
-        if (fbaCustomerReturnSkuResponseFirst != null) {
-            return fbaCustomerReturnSkuResponseFirst.getShopSkuId();
-        } else {
-            logger.info("fbaCustomerReturnFee orderId:" + orderId + ",找不到sku");
-        }
-        return null;
-    }
-
 
     @Override
     public BaseResponse exportFinancialStatementAll(HttpServletResponse response, String month) {
@@ -314,14 +252,12 @@ public class FinancialStatementService implements IFinancialStatementService {
         if (monthDate == null) {
             return BaseResponse.failMessage("月份格式错误");
         }
-        FinancialStatementExample example = new FinancialStatementExample();
-        example.createCriteria().andMonthEqualTo(monthDate);
-        example.setOrderByClause("shop_name,shop_parent_sku,sku");
-        List<FinancialStatement> financialStatementList = customFinancialStatementMapper.selectByExample(example);
+        ListFinancialStatementReq listFinancialStatementReq = new ListFinancialStatementReq();
+        listFinancialStatementReq.setMonth(monthDate);
+        List<FinancialStatementExport> financialStatementList = customFinancialStatementMapper.listFinancialStatementExport(listFinancialStatementReq);
         if (CollectionUtils.isEmpty(financialStatementList)) {
             return BaseResponse.failMessage(FinancialStatementConstant.FINANCIAL_STATEMENT_NOT_EXIST);
         }
-        FinancialStatement financialStatement = financialStatementList.get(0);
         //读取模板
         String excelTitle = month + "-各SKU利润表";
         Workbook workbook = getWorkbook(financialStatementList, excelTitle);
@@ -341,10 +277,9 @@ public class FinancialStatementService implements IFinancialStatementService {
         if (financeId == null) {
             return BaseResponse.failMessage(FinanceConstant.ID_EMPTY);
         }
-        FinancialStatementExample example = new FinancialStatementExample();
-        example.createCriteria().andFinanceIdEqualTo(financeId);
-        example.setOrderByClause("shop_parent_sku,sku");
-        List<FinancialStatement> financialStatementList = customFinancialStatementMapper.selectByExample(example);
+        ListFinancialStatementReq listFinancialStatementReq = new ListFinancialStatementReq();
+        listFinancialStatementReq.setFinanceId(financeId);
+        List<FinancialStatementExport> financialStatementList = customFinancialStatementMapper.listFinancialStatementExport(listFinancialStatementReq);
         if (CollectionUtils.isEmpty(financialStatementList)) {
             return BaseResponse.failMessage(FinancialStatementConstant.FINANCIAL_STATEMENT_NOT_EXIST);
         }
@@ -382,25 +317,15 @@ public class FinancialStatementService implements IFinancialStatementService {
         if (monthDate == null) {
             return BaseResponse.failMessage("月份格式错误");
         }
-        BaseResponse<List<Integer>> checkFinancialStatusResponse = checkFinancialStatus(monthDate);
-        if (checkFinancialStatusResponse.isFail()) {
-            return checkFinancialStatusResponse;
-        }
-        //获取所有店铺sku销售数据
-        FinancialStatementExample example = new FinancialStatementExample();
-        example.createCriteria().andFinanceIdIn(checkFinancialStatusResponse.getData());
-        example.setOrderByClause("shop_parent_sku,sku");
-        List<FinancialStatement> financialStatementList = customFinancialStatementMapper.selectByExample(example);
-        if (CollectionUtils.isEmpty(financialStatementList)) {
+        ListFinancialStatementReq listFinancialStatementReq = new ListFinancialStatementReq();
+        listFinancialStatementReq.setMonth(monthDate);
+        Map<String, List<FinancialStatementExport>> financialStatementExportListMap = getFinancialStatementExportListGroup(listFinancialStatementReq, type);
+        if (CollectionUtils.isEmpty(financialStatementExportListMap)) {
             return BaseResponse.failMessage(FinancialStatementConstant.FINANCIAL_STATEMENT_NOT_EXIST);
         }
-        String monthChinese = DateUtil.getMonthChinese(financialStatementList.get(0).getMonth());
-        if (month == null) {
-            month = "";
-        }
+        String monthChinese = DateUtil.getMonthChinese(monthDate);
         //根据用户信息，生成多个excel
-        Map<String, Workbook> workbookMap = getWorkbookMap(financialStatementList, type, monthChinese);
-        //Map<String, ByteArrayOutputStream> byteArrayOutputStreamMap = workBook2Stream(workbookMap);
+        Map<String, Workbook> workbookMap = getWorkbookMap(financialStatementExportListMap, type, monthChinese);
         String fileName = getZipName(monthChinese, type, "");
         Map<String, byte[]> byteMap = workBook2Byte(workbookMap, fileName);
         ZipUtil.downloadBatchByFile(response, byteMap, fileName);
@@ -426,58 +351,25 @@ public class FinancialStatementService implements IFinancialStatementService {
         if (monthDate == null) {
             return BaseResponse.failMessage("月份格式错误");
         }
-        BaseResponse<List<Integer>> checkFinancialStatusResponse = checkFinancialStatus(monthDate);
-        if (checkFinancialStatusResponse.isFail()) {
-            return checkFinancialStatusResponse;
+        ListFinancialStatementReq listFinancialStatementReq = new ListFinancialStatementReq();
+        listFinancialStatementReq.setMonth(monthDate);
+        if (FinanceConstant.FinanceExprotType.DEVELOPERUSER.getType().equals(type)) {
+            listFinancialStatementReq.setDeveloperUserId(currentUserInfo.getUserId());
+        } else if (FinanceConstant.FinanceExprotType.SALESMANUSER.getType().equals(type)) {
+            listFinancialStatementReq.setSalesmanUserId(currentUserInfo.getUserId());
+        } else if (FinanceConstant.FinanceExprotType.SALESGROUP.getType().equals(type)) {
+            listFinancialStatementReq.setSalesGroupUserId(currentUserInfo.getUserId());
         }
-        //获取所有店铺sku销售数据
-        FinancialStatementExample example = new FinancialStatementExample();
-        FinancialStatementExample.Criteria criteria = example.createCriteria().andFinanceIdIn(checkFinancialStatusResponse.getData());
-        example.setOrderByClause("shop_parent_sku,sku");
-        if (type.equals("developer")) {
-            criteria.andDeveloperUserIdEqualTo(currentUserInfo.getUserId());
-        } else if (type.equals("salesman")) {
-            criteria.andSalesmanUserIdEqualTo(currentUserInfo.getUserId());
-        } else if (type.equals(FinanceConstant.FinanceExprotType.SALESGROUP.getType())) {
-            List<Integer> userIdList = customSalesGroupUserMapper.selectSelesGroupUserIdbyUserId(currentUserInfo.getUserId());
-            if (CollectionUtils.isEmpty(userIdList)) {
-                return BaseResponse.failMessage("用户没有分组");
-            }
-            criteria.andSalesmanUserIdIn(userIdList);
-        }
-        List<FinancialStatement> financialStatementList = customFinancialStatementMapper.selectByExample(example);
-        if (CollectionUtils.isEmpty(financialStatementList)) {
+        Map<String, List<FinancialStatementExport>> financialStatementExportListMap = getFinancialStatementExportListGroup(listFinancialStatementReq, type);
+        if (CollectionUtils.isEmpty(financialStatementExportListMap)) {
             return BaseResponse.failMessage(FinancialStatementConstant.FINANCIAL_STATEMENT_NOT_EXIST);
         }
-        String monthChinese = DateUtil.getMonthChinese(financialStatementList.get(0).getMonth());
-        if (month == null) {
-            month = "";
-        }
+        String monthChinese = DateUtil.getMonthChinese(monthDate);
         //根据用户信息，生成多个excel
-        Map<String, Workbook> workbookMap = getWorkbookMap(financialStatementList, type, monthChinese);
-        Workbook workbook = null;
-        for (String key : workbookMap.keySet()) {
-            workbook = workbookMap.get(key);
-
-        }
-        String fileName = getZipName(monthChinese, type, currentUserInfo.getRealName());
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            workbook.write(outputStream);
-            ByteArrayInputStream tempIn = new ByteArrayInputStream(outputStream.toByteArray());
-            response.setHeader("Content-Length", String.valueOf(tempIn.available()));
-            response.setHeader("Content-disposition", "attachment;filename=" + URLEncoder.encode(fileName, "UTF-8") + DateUtil.getFormatStryyyyMMddHHmmss(new Date()) + ".xlsx");//默认Excel名称
-            OutputStream out = response.getOutputStream();
-            byte[] buffer = new byte[1024];
-            int a;
-            while ((a = tempIn.read(buffer)) != -1) {
-                out.write(buffer, 0, a);
-            }
-            out.flush();
-            out.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Map<String, Workbook> workbookMap = getWorkbookMap(financialStatementExportListMap, type, monthChinese);
+        String fileName = getZipName(monthChinese, type, "");
+        Map<String, byte[]> byteMap = workBook2Byte(workbookMap, fileName);
+        ZipUtil.downloadBatchByFile(response, byteMap, fileName);
         return BaseResponse.success();
     }
 
@@ -487,17 +379,47 @@ public class FinancialStatementService implements IFinancialStatementService {
         return DataGridResponse.create(financialStatementCountList);
     }
 
+    @Override
+    public BaseResponse exportFinancialStatementCount(HttpServletResponse response, ListFinancialStatementCountReq listFinancialStatementCountReq) {
+        Date monthDate = DateUtil.strMonthToDate(listFinancialStatementCountReq.getMonth());
+        if (monthDate == null) {
+            return BaseResponse.failMessage("月份格式错误");
+        }
+        List<FinancialStatementExport> financialStatementCountList = getFinancialStatementCountList(listFinancialStatementCountReq);
+        if (CollectionUtils.isEmpty(financialStatementCountList)) {
+            return BaseResponse.failMessage(FinancialStatementConstant.FINANCIAL_STATEMENT_NOT_EXIST);
+        }
+        //读取模板
+        String excelTitle = listFinancialStatementCountReq.getMonth() + "-" + listFinancialStatementCountReq.getType() + "财务汇总";
+        Workbook workbook = getCountWorkbook(financialStatementCountList, excelTitle);
+        String fileName = listFinancialStatementCountReq.getType() + "-" + listFinancialStatementCountReq.getMonth() + "财务汇总";
+        return ExcelUtil.exportExcel(response, workbook, fileName);
+    }
+
+    private Workbook getCountWorkbook(List<FinancialStatementExport> financialStatementCountList, String excelTitle) {
+        //读取模板
+        String path = FinancialStatementService.class.getClassLoader().getResource("template/finance/financialStatementTemplate.xlsx").getPath();
+        Workbook wb = ExcelUtil.readExcel(path);
+        Sheet sheet = wb.getSheetAt(0);
+        setExcelTitle(sheet, excelTitle);
+        setCurrency(sheet, financialStatementCountList);
+        setFinancialStatement(sheet, financialStatementCountList);
+        setFinancialCountInfo(sheet, financialStatementCountList, excelTitle);
+        return wb;
+    }
+
     private List<FinancialStatementExport> getFinancialStatementCountList(ListFinancialStatementCountReq listFinancialStatementCountReq) {
         Date monthDate = DateUtil.strMonthToDate(listFinancialStatementCountReq.getMonth());
         if (monthDate == null) {
             return new ArrayList<>();
         }
-        List<FinancialStatementExport> financialStatementExportList = listFinancialStatementExport(monthDate);
-        if (CollectionUtils.isEmpty(financialStatementExportList)) {
+        ListFinancialStatementReq listFinancialStatementReq = new ListFinancialStatementReq();
+        listFinancialStatementReq.setMonth(monthDate);
+        //分组
+        Map<String, List<FinancialStatementExport>> financialStatementExportListMap = getFinancialStatementExportListGroup(listFinancialStatementReq, listFinancialStatementCountReq.getType());
+        if (CollectionUtils.isEmpty(financialStatementExportListMap)) {
             return new ArrayList<>();
         }
-        //分组
-        Map<String, List<FinancialStatementExport>> financialStatementExportListMap = getFinancialStatementExportListGroup(financialStatementExportList, listFinancialStatementCountReq.getType());
         //计算汇总
         List<FinancialStatementExport> financialStatementCountList = getFinancialStatementCountList(financialStatementExportListMap);
         //返回
@@ -509,6 +431,8 @@ public class FinancialStatementService implements IFinancialStatementService {
         for (List<FinancialStatementExport> financialStatementExportList : financialStatementExportListMap.values()) {
             FinancialStatementExport financialStatementExport = getFinancialStatementCount(financialStatementExportList);
             financialStatementCountList.add(financialStatementExport);
+            //主动回收
+            financialStatementExportList=null;
         }
         return financialStatementCountList;
     }
@@ -517,6 +441,7 @@ public class FinancialStatementService implements IFinancialStatementService {
         FinancialStatementExport financialStatementCount = FinancialStatementConstant.initFinancialStatementCount(financialStatementList.get(0));
         for (FinancialStatementExport financialStatement :
                 financialStatementList) {
+            FinancialStatementConstant.initFinancialStatementLessInfo(financialStatement);
             financialStatementCount.setSaleQuantity(MathUtil.add(financialStatementCount.getSaleQuantity(), financialStatement.getSaleQuantity()));
             financialStatementCount.setProductSales(MathUtil.addBigDecimal(financialStatementCount.getProductSales(), financialStatement.getProductSales()));
             financialStatementCount.setProductSalesTax(MathUtil.addBigDecimal(financialStatementCount.getProductSalesTax(), financialStatement.getProductSalesTax()));
@@ -603,34 +528,44 @@ public class FinancialStatementService implements IFinancialStatementService {
         FinancialStatementConstant.setFinancialStatementCount(financialStatementCount);
         return financialStatementCount;
     }
-
-    private Map<String, List<FinancialStatementExport>> getFinancialStatementExportListGroup(List<FinancialStatementExport> financialStatementExportList, String type) {
+    private Map<String, List<FinancialStatementExport>> getFinancialStatementExportListGroup(ListFinancialStatementReq listFinancialStatementReq, String type) {
+        List<FinancialStatementExport> financialStatementExportList = customFinancialStatementMapper.listFinancialStatementExport(listFinancialStatementReq);
+        if (CollectionUtils.isEmpty(financialStatementExportList)) {
+            return new HashMap<>();
+        }
+        return getFinancialStatementExportListGroup(financialStatementExportList,type);
+    }
+    private Map<String, List<FinancialStatementExport>> getFinancialStatementExportListGroup(List<FinancialStatementExport> financialStatementExportList , String type) {
         Map<String, List<FinancialStatementExport>> financialStatementExportListMap = new HashMap<>();
-
-        if (FinancialStatementConstant.FinancialStatementCountTypeEnum.SALESMANUSER.getType().equals(type)) {
-            financialStatementExportListMap = financialStatementExportList.stream().collect(Collectors.groupingBy(item -> StringUtils.isEmpty(item.getSalesmanUserName()) ? "" : item.getSalesmanUserName()));
-        } else if (FinancialStatementConstant.FinancialStatementCountTypeEnum.SHOP.getType().equals(type)) {
-            financialStatementExportListMap = financialStatementExportList.stream().collect(Collectors.groupingBy(item -> StringUtils.isEmpty(item.getShopName()) ? "" : item.getShopName()));
-        } else if (FinancialStatementConstant.FinancialStatementCountTypeEnum.SALESGROUP.getType().equals(type)) {
-            financialStatementExportListMap = financialStatementExportList.stream().collect(Collectors.groupingBy(item -> StringUtils.isEmpty(item.getSalesGroupName()) ? "" : item.getSalesGroupName()));
+        for(FinancialStatementExport item:financialStatementExportList){
+            String name = "";
+            if (FinanceConstant.FinanceExprotType.SALESMANUSER.getType().equals(type)) {
+                if (!StringUtils.isEmpty(item.getSalesmanUserName())) {
+                    name = item.getSalesmanUserName();
+                }
+            } else if (FinanceConstant.FinanceExprotType.SHOP.getType().equals(type)) {
+                if (!StringUtils.isEmpty(item.getShopName())) {
+                    name = item.getShopName();
+                }
+            } else if (FinanceConstant.FinanceExprotType.SALESGROUP.getType().equals(type)) {
+                if (!StringUtils.isEmpty(item.getSalesGroupName())) {
+                    name = item.getSalesGroupName();
+                }
+            } else if (FinanceConstant.FinanceExprotType.DEVELOPERUSER.getType().equals(type)) {
+                if (!StringUtils.isEmpty(item.getDeveloperUserName())) {
+                    name = item.getDeveloperUserName();
+                }
+            } else if (FinanceConstant.FinanceExprotType.SHOPPARENTSKU.getType().equals(type)) {
+                if (!StringUtils.isEmpty(item.getShopParentSku())) {
+                    name = item.getShopParentSku();
+                }
+            }
+            List<FinancialStatementExport> financialStatementExportListItem = financialStatementExportListMap.getOrDefault(name, new ArrayList<>());
+            financialStatementExportListItem.add(item);
+            financialStatementExportListMap.put(name, financialStatementExportListItem);
         }
         return financialStatementExportListMap;
     }
-
-    private List<FinancialStatementExport> listFinancialStatementExport(Date monthDate) {
-        List<FinancialStatement> list = listFinancialStatement(monthDate);
-        List<FinancialStatementExport> financialStatementExportList = FinancialStatementConstant.convertToFinancialStatementExportList(list);
-        return financialStatementExportList;
-    }
-
-    private List<FinancialStatement> listFinancialStatement(Date monthDate) {
-        FinancialStatementExample financialStatementExample = new FinancialStatementExample();
-        financialStatementExample.createCriteria().andMonthEqualTo(monthDate);
-        financialStatementExample.setOrderByClause("shop_name,shop_parent_sku,sku");
-        List<FinancialStatement> financialStatementList = customFinancialStatementMapper.selectByExample(financialStatementExample);
-        return financialStatementList;
-    }
-
     private Map<String, byte[]> workBook2Byte(Map<String, Workbook> workbookMap, String fileName) {
         Map<String, byte[]> map = new HashMap<>();
         String excelNameLast = "-" + DateUtil.getFormatStryyyyMMddHHmmss(new Date()) + ".xlsx";
@@ -651,9 +586,9 @@ public class FinancialStatementService implements IFinancialStatementService {
 
     private String getZipName(String monthChinese, String type, String realName) {
         String name = "";
-        if ("developer".equals(type)) {
+        if (FinanceConstant.FinanceExprotType.DEVELOPERUSER.getType().equals(type)) {
             name = "开发人员";
-        } else if ("salesman".equals(type)) {
+        } else if (FinanceConstant.FinanceExprotType.SALESMANUSER.getType().equals(type)) {
             name = "销售人员";
         } else if (FinanceConstant.FinanceExprotType.SALESGROUP.getType().equals(type)) {
             name = "销售分组";
@@ -682,33 +617,30 @@ public class FinancialStatementService implements IFinancialStatementService {
         return map;
     }
 
-    private Map<String, Workbook> getWorkbookMap(List<FinancialStatement> financialStatementList, String type, String monthChinese) {
-        List<String> userNameList = getUserNameList(financialStatementList, type);
+    private Map<String, Workbook> getWorkbookMap(Map<String, List<FinancialStatementExport>> financialStatementExportListMap, String type, String monthChinese) {
         Map<String, Workbook> workbookMap = new HashMap<>();
-        userNameList.stream().forEach(userName -> {
-            Workbook workbook = getWorkbook(userName, financialStatementList, type, monthChinese);
-            workbookMap.put(userName, workbook);
-        });
+        for (String name :
+                financialStatementExportListMap.keySet()) {
+            Workbook workbook = getWorkbook(name, financialStatementExportListMap.get(name), type, monthChinese);
+            workbookMap.put(name, workbook);
+            //主动回收
+            financialStatementExportListMap.put(name,null);
+        }
         return workbookMap;
     }
 
-    private Workbook getWorkbook(String userName, List<FinancialStatement> financialStatementList, String type, String monthChinese) {
-        //获取财务信息
-        List<FinancialStatement> financialStatementListUserName = getFinancialStatementListUserName(userName, financialStatementList, type);
+    private Workbook getWorkbook(String userName, List<FinancialStatementExport> financialStatementList, String type, String monthChinese) {
         //获取workbook
         String excelTitle = userName + "-" + monthChinese + "-各SKU利润表";
-        Workbook workbook = getWorkbook(financialStatementListUserName, excelTitle);
+        Workbook workbook = getWorkbook(financialStatementList, excelTitle);
         return workbook;
     }
 
-    private Workbook getWorkbook(List<FinancialStatement> financialStatementList, String excelTitle) {
+    private Workbook getWorkbook(List<FinancialStatementExport> financialStatementExportList, String excelTitle) {
         //读取模板
         String path = FinancialStatementService.class.getClassLoader().getResource("template/finance/financialStatementTemplate.xlsx").getPath();
         Workbook wb = ExcelUtil.readExcel(path);
         Sheet sheet = wb.getSheetAt(0);
-        List<FinancialStatementExport> financialStatementExportList = FinancialStatementConstant.convertToFinancialStatementExportList(financialStatementList);
-        //回收掉，避免浪费内存
-        financialStatementList = null;
         setExcelTitle(sheet, excelTitle);
         setCurrency(sheet, financialStatementExportList);
         setFinancialStatement(sheet, financialStatementExportList);
@@ -955,89 +887,9 @@ public class FinancialStatementService implements IFinancialStatementService {
     }
 
 
-
     private void setExcelTitle(Sheet sheet, String excelTitle) {
         Row row = sheet.getRow(0);
         row.getCell(0).setCellValue(excelTitle);
-    }
-
-    private List<FinancialStatement> getFinancialStatementListUserName(String userName, List<FinancialStatement> financialStatementList, String type) {
-        List<FinancialStatement> financialStatements = new ArrayList<>();
-        if (FinanceConstant.FinanceExprotType.DEVELOPER.getType().equals(type)) {
-            financialStatements = financialStatementList.stream().filter(item -> {
-                if (StringUtils.isEmpty(item.getDeveloperUserName())) {
-                    if (StringUtils.isEmpty(userName)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-                if (item.getDeveloperUserName().equals(userName)) {
-                    return true;
-                }
-                return false;
-            }).collect(Collectors.toList());
-        } else if (FinanceConstant.FinanceExprotType.SALESMAN.getType().equals(type)) {
-            financialStatements = financialStatementList.stream().filter(item -> {
-                if (StringUtils.isEmpty(item.getSalesmanUserName())) {
-                    if (StringUtils.isEmpty(userName)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-                if (item.getSalesmanUserName().equals(userName)) {
-                    return true;
-                }
-                return false;
-            }).collect(Collectors.toList());
-        } else if (FinanceConstant.FinanceExprotType.SALESGROUP.getType().equals(type)) {
-            financialStatements = financialStatementList.stream().filter(item -> {
-                if (StringUtils.isEmpty(item.getSalesGroupName())) {
-                    if (StringUtils.isEmpty(userName)) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                }
-                if (item.getSalesGroupName().equals(userName)) {
-                    return true;
-                }
-                return false;
-            }).collect(Collectors.toList());
-        }
-
-        return financialStatements;
-    }
-
-
-    private List<String> getUserNameList(List<FinancialStatement> financialStatementList, String type) {
-        List<String> userNameList = new ArrayList<>();
-        if ("developer".equals(type)) {
-            userNameList = financialStatementList.stream().map(FinancialStatement::getDeveloperUserName).distinct().collect(Collectors.toList());
-        } else if ("salesman".equals(type)) {
-            userNameList = financialStatementList.stream().map(FinancialStatement::getSalesmanUserName).distinct().collect(Collectors.toList());
-        } else if ("salesGroup".equals(type)) {
-            userNameList = financialStatementList.stream().map(FinancialStatement::getSalesGroupName).distinct().collect(Collectors.toList());
-        }
-        return userNameList;
-    }
-
-    private BaseResponse<List<Integer>> checkFinancialStatus(Date month) {
-        FinanceExample financeExample = new FinanceExample();
-        financeExample.createCriteria().andMonthEqualTo(month);
-        List<Finance> financeList = customFinanceMapper.selectByExample(financeExample);
-        if (CollectionUtils.isEmpty(financeList)) {
-            return BaseResponse.failMessage("没有财务信息");
-        }
-        List<Integer> financeIdList = financeList.stream().filter(item -> {
-            return FinanceConstant.FinanceStatusEnum.GENERATED.getStatus().equals(item.getStatus()) ||
-                    FinanceConstant.FinanceStatusEnum.LOCKED.getStatus().equals(item.getStatus());
-        }).map(Finance::getId).distinct().collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(financeIdList)) {
-            return BaseResponse.failMessage("没有已生成或已锁定的财务信息");
-        }
-        return BaseResponse.successData(financeIdList);
     }
 
     private void setFinancialStatementShopParentSku(Sheet sheet, List<FinancialStatementExport> financialStatementList) {
@@ -1164,7 +1016,7 @@ public class FinancialStatementService implements IFinancialStatementService {
     }
 
     private List<FinancialStatementExport> getFinancialStatementShopParentSkuList(List<FinancialStatementExport> financialStatementList) {
-        Map<String, List<FinancialStatementExport>> financialStatementExportListMap=financialStatementList.stream().collect(Collectors.groupingBy(item -> StringUtils.isEmpty(item.getShopParentSku()) ? "" : item.getShopParentSku()));
+        Map<String, List<FinancialStatementExport>> financialStatementExportListMap =getFinancialStatementExportListGroup(financialStatementList,FinanceConstant.FinanceExprotType.SHOPPARENTSKU.getType());
         List<FinancialStatementExport> financialStatementShopParentSkuList = getFinancialStatementCountList(financialStatementExportListMap);
         Collections.sort(financialStatementShopParentSkuList, new Comparator<FinancialStatement>() {
             @Override
@@ -1187,6 +1039,9 @@ public class FinancialStatementService implements IFinancialStatementService {
         int rowIndex = 6;
         for (int i = 0; i < financialStatementList.size(); i++) {
             FinancialStatementExport financialStatement = financialStatementList.get(i);
+            if (financialStatement.isNotInit()) {
+                FinancialStatementConstant.initFinancialStatementExport(financialStatement);
+            }
             Row row = sheet.createRow(rowIndex);
             row.createCell(7).setCellValue(i + 1);
             row.createCell(0).setCellValue(financialStatement.getShopName());
@@ -1265,7 +1120,9 @@ public class FinancialStatementService implements IFinancialStatementService {
             row.createCell(103).setCellValue(financialStatement.getFinalInventoryCost().doubleValue());
             row.createCell(104).setCellValue(financialStatement.getInventoryTurnover().doubleValue());
             row.createCell(105).setCellValue(financialStatement.getRefundRate().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
-            row.createCell(106).setCellValue(financialStatement.getNewProduct() == 1 ? "是" : "否");
+            if (financialStatement.getNewProduct() != null) {
+                row.createCell(106).setCellValue(financialStatement.getNewProduct() == 1 ? "是" : "否");
+            }
             row.createCell(107).setCellValue(financialStatement.getAdvertisingSalesPercentage().multiply(new BigDecimal(100)).setScale(2, BigDecimal.ROUND_HALF_UP) + "%");
             if (!StringUtils.isEmpty(financialStatement.getProductMonth())) {
                 row.createCell(108).setCellValue(financialStatement.getProductMonth());
@@ -1273,8 +1130,12 @@ public class FinancialStatementService implements IFinancialStatementService {
             if (financialStatement.getDevelopmentLevel() != null) {
                 row.createCell(109).setCellValue(financialStatement.getDevelopmentLevel());
             }
-            row.createCell(110).setCellValue(financialStatement.getCostPrice().doubleValue());
-            row.createCell(111).setCellValue(financialStatement.getHeadTripCost().doubleValue());
+            if (financialStatement.getCostPrice() != null) {
+                row.createCell(110).setCellValue(financialStatement.getCostPrice().doubleValue());
+            }
+            if (financialStatement.getHeadTripCost() != null) {
+                row.createCell(111).setCellValue(financialStatement.getHeadTripCost().doubleValue());
+            }
             row.createCell(112).setCellValue(financialStatement.getDisplayAdvertising().doubleValue());
             row.createCell(113).setCellValue(financialStatement.getBrandAdvertising().doubleValue());
             row.createCell(114).setCellValue(financialStatement.getLiquidations().doubleValue());
@@ -1323,18 +1184,6 @@ public class FinancialStatementService implements IFinancialStatementService {
         }
         sheet.getRow(2).getCell(5).setCellValue(financialStatementList.get(0).getExchangeRate().toString());
 
-    }
-
-    private List<Sku> getSkuList(List<FinancialStatement> financialStatementList) {
-        List<String> skuStrList = financialStatementList.stream().map(FinancialStatement::getSku).collect(Collectors.toList()).stream().distinct().collect(Collectors.toList());
-        SkuExample skuExample = new SkuExample();
-        skuExample.createCriteria().andSkuIn(skuStrList);
-        return customSkuMapper.selectByExample(skuExample);
-    }
-
-    private void setExcelTitle(Sheet sheet, String month, String shopName) {
-        Row row = sheet.getRow(0);
-        row.getCell(0).setCellValue(month + "-" + shopName + "各SKU利润表");
     }
 
     private void setSellerpaymentsReportFeeSubscription(List<FinancialStatementResponse> financialStatementResponseList) {

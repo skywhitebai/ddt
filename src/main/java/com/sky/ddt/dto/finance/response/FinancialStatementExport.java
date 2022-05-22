@@ -20,4 +20,5 @@ public class FinancialStatementExport extends FinancialStatement {
     BigDecimal aroi;
     BigDecimal inventoryTurnoverTimes;
     BigDecimal roiAssessmentCoefficient;
+    boolean notInit=true;
 }

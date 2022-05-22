@@ -104,11 +104,12 @@ public class FinancialStatementConstant {
 
     /**
      * 初始化count
+     *
      * @param financialStatementCount
      * @param financialStatementExport
      */
     public static FinancialStatementExport initFinancialStatementCount(FinancialStatementExport financialStatementExport) {
-        FinancialStatementExport financialStatementCount=new FinancialStatementExport();
+        FinancialStatementExport financialStatementCount = new FinancialStatementExport();
         financialStatementCount.setExchangeRate(financialStatementExport.getExchangeRate());
         financialStatementCount.setShopName(financialStatementExport.getShopName());
         financialStatementCount.setMonth(financialStatementExport.getMonth());
@@ -122,33 +123,24 @@ public class FinancialStatementConstant {
         return financialStatementCount;
     }
 
-
-    @Getter
-    public enum FinancialStatementCountTypeEnum {
-        SALESMANUSER("salesmanUser"),
-        SHOP("shop"),
-        SALESGROUP("salesGroup"),
-        ;
-
-        FinancialStatementCountTypeEnum(String type) {
-            this.type = type;
-        }
-
-        String type;
-    }
-
-    public static List<FinancialStatementExport> convertToFinancialStatementExportList(List<FinancialStatement> financialStatementList) {
-        List<FinancialStatementExport> financialStatementExportList = new ArrayList<>();
-        for (FinancialStatement financialStatement : financialStatementList) {
-            FinancialStatementExport financialStatementExport = new FinancialStatementExport();
-            BeanUtils.copyProperties(financialStatement, financialStatementExport);
-            initFinancialStatementExport(financialStatementExport);
-            financialStatementExportList.add(financialStatementExport);
-        }
-        return financialStatementExportList;
-    }
-
+    /**
+     * 更新全部信息，用于下载
+     * @param financialStatementExport
+     */
     public static void initFinancialStatementExport(FinancialStatementExport financialStatementExport) {
+        initFinancialStatementLessInfo(financialStatementExport);
+        financialStatementExport.setAroi(MathUtil.divide(financialStatementExport.getMainBusinessProfit(), financialStatementExport.getAverageInventoryCost(), 2));
+        financialStatementExport.setInventoryTurnoverTimes(MathUtil.divide(bigDecimal360, financialStatementExport.getInventoryTurnover(), 2));
+        financialStatementExport.setRoiAssessmentCoefficient(MathUtil.multiply(financialStatementExport.getAroi(), financialStatementExport.getInventoryTurnoverTimes(), 2));
+        financialStatementExport.setNotInit(false);
+    }
+
+    /**
+     * 更新少量信息，供计算汇总信息
+     *
+     * @param financialStatementExport
+     */
+    public static void initFinancialStatementLessInfo(FinancialStatementExport financialStatementExport) {
         if (financialStatementExport.getProductMonth() != null) {
             if (financialStatementExport.getNewProduct() == 1) {
                 financialStatementExport.setNewProductSellingFees(getSellingFees(financialStatementExport));
@@ -162,11 +154,7 @@ public class FinancialStatementConstant {
                 financialStatementExport.setOldProductMainBusinessProfit(financialStatementExport.getMainBusinessProfit());
             }
         }
-
         financialStatementExport.setAverageInventoryCost(MathUtil.divide(MathUtil.addBigDecimal(financialStatementExport.getInitialInventoryCost(), financialStatementExport.getFinalInventoryCost()), 2, 2));
-        financialStatementExport.setAroi(MathUtil.divide(financialStatementExport.getMainBusinessProfit(), financialStatementExport.getAverageInventoryCost(), 2));
-        financialStatementExport.setInventoryTurnoverTimes(MathUtil.divide(bigDecimal360, financialStatementExport.getInventoryTurnover(), 2));
-        financialStatementExport.setRoiAssessmentCoefficient(MathUtil.multiply(financialStatementExport.getAroi(), financialStatementExport.getInventoryTurnoverTimes(), 2));
     }
 
     private static BigDecimal getSellingFees(FinancialStatementExport financialStatementExport) {

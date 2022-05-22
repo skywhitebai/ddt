@@ -34,11 +34,13 @@
         <option value="salesmanUser">销售员</option>
         <option value="shop">店铺</option>
         <option value="salesGroup">小组</option>
+        <option value="developerUser">开发人员</option>
     </select>
     年月
     <input class="easyui-validatebox textbox" id="s_month">
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
+    <a href="javascript:void(0)" onclick="exportFinancialStatementCount()" class="easyui-linkbutton">导出汇总报表</a>
 </div>
 
 <!--入库单列表-->
@@ -52,13 +54,13 @@
     });
 
     function bindData() {
-        var type=$("#s_type").combobox('getValue');
-        if(isEmpty(type)){
+        var type = $("#s_type").combobox('getValue');
+        if (isEmpty(type)) {
             $.messager.alert("提示", "请选择类型");
             return;
         }
-        var month=$("#s_month").val();
-        if(isEmpty(month)){
+        var month = $("#s_month").val();
+        if (isEmpty(month)) {
             $.messager.alert("提示", "请选择月份");
             return;
         }
@@ -67,7 +69,7 @@
         title = "财务列表";
         queryParams = {
             type: type,
-            month:month
+            month: month
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -138,13 +140,41 @@
                 {title: 'LD', field: 'lightningDealFee', width: 100},
                 {title: 'CPC-推广费用', field: 'costOfAdvertising', width: 100},
                 {title: '广告收入', field: 'advertisingIncome', width: 100},
-                {title: 'FBA Inventory Reimbursement - Customer Return', field: 'fbaInventoryReimbursementCustomerReturn', width: 100},
-                {title: 'FBA Inventory Reimbursement - Damaged:Warehouse', field: 'fbaInventoryReimbursementDamagedWarehouse', width: 100},
-                {title: 'FBA Inventory Reimbursement - Customer Service Issue', field: 'fbaInventoryReimbursementCustomerServiceIssue', width: 100},
-                {title: 'FBA Inventory Reimbursement - Fee Correction', field: 'fbaInventoryReimbursementFeeCorrection', width: 100},
-                {title: 'FBA Inventory Reimbursement - General Adjustment', field: 'fbaInventoryReimbursementGeneralAdjustment', width: 100},
-                {title: 'FBA Inventory Reimbursement - Lost:Inbound', field: 'fbaInventoryReimbursementLostInbound', width: 100},
-                {title: 'FBA Inventory Reimbursement - Lost:Warehouse', field: 'fbaInventoryReimbursementLostWarehouse', width: 100},
+                {
+                    title: 'FBA Inventory Reimbursement - Customer Return',
+                    field: 'fbaInventoryReimbursementCustomerReturn',
+                    width: 100
+                },
+                {
+                    title: 'FBA Inventory Reimbursement - Damaged:Warehouse',
+                    field: 'fbaInventoryReimbursementDamagedWarehouse',
+                    width: 100
+                },
+                {
+                    title: 'FBA Inventory Reimbursement - Customer Service Issue',
+                    field: 'fbaInventoryReimbursementCustomerServiceIssue',
+                    width: 100
+                },
+                {
+                    title: 'FBA Inventory Reimbursement - Fee Correction',
+                    field: 'fbaInventoryReimbursementFeeCorrection',
+                    width: 100
+                },
+                {
+                    title: 'FBA Inventory Reimbursement - General Adjustment',
+                    field: 'fbaInventoryReimbursementGeneralAdjustment',
+                    width: 100
+                },
+                {
+                    title: 'FBA Inventory Reimbursement - Lost:Inbound',
+                    field: 'fbaInventoryReimbursementLostInbound',
+                    width: 100
+                },
+                {
+                    title: 'FBA Inventory Reimbursement - Lost:Warehouse',
+                    field: 'fbaInventoryReimbursementLostWarehouse',
+                    width: 100
+                },
                 {title: 'Non-subscription Fee Adjustment', field: 'nonSubscriptionFeeAdjustment', width: 100},
                 {title: 'FBA Inventory Placement Service Fee', field: 'fbaInventoryPlacementServiceFee', width: 100},
                 {title: 'FBA Customer Return Per Unit Fee', field: 'fbaCustomerReturnPerUnitFee', width: 100},
@@ -216,5 +246,19 @@
         $(dg).datagrid('clearSelections');
     }
 
+    function exportFinancialStatementCount() {
+        var type = $("#s_type").combobox('getValue');
+        if (isEmpty(type)) {
+            $.messager.alert("提示", "请选择类型");
+            return;
+        }
+        var month = $("#s_month").val();
+        if (isEmpty(month)) {
+            $.messager.alert("提示", "请选择月份");
+            return;
+        }
+        window.open('${pageContext.request.contextPath }/financialStatement/exportFinancialStatementCount?month=' + month+'&type='+type);
+
+    }
 </script>
 </html>

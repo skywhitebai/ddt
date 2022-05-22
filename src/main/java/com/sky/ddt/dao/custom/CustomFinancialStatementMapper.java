@@ -1,6 +1,8 @@
 package com.sky.ddt.dao.custom;
 
 import com.sky.ddt.dao.generate.FinancialStatementMapper;
+import com.sky.ddt.dto.finance.request.ListFinancialStatementReq;
+import com.sky.ddt.dto.finance.response.FinancialStatementExport;
 import com.sky.ddt.dto.finance.response.FinancialStatementResponse;
 
 import java.util.List;
@@ -19,4 +21,6 @@ public interface CustomFinancialStatementMapper extends FinancialStatementMapper
      * @date 2019/12/24 12:33
      */
     List<FinancialStatementResponse> getFinancialStatementResponse(Integer financeId);
+
+    List<FinancialStatementExport> listFinancialStatementExport(ListFinancialStatementReq listFinancialStatementReq);
 }

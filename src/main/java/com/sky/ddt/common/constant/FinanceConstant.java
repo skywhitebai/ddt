@@ -86,9 +86,12 @@ public class FinanceConstant {
 
     @Getter
     public enum FinanceExprotType {
-        DEVELOPER("developer"),
-        SALESMAN("salesman"),
-        SALESGROUP("salesGroup"),;
+        DEVELOPERUSER("developerUser"),
+        SALESMANUSER("salesmanUser"),
+        SALESGROUP("salesGroup"),
+        SHOPPARENTSKU("shopParentSku"),
+        SHOP("shop")
+        ;
 
         FinanceExprotType(String type) {
             this.type = type;
