@@ -69,7 +69,7 @@
             parameterType="com.sky.ddt.dto.shopSku.request.SalesCountRequest"
             resultType="com.sky.ddt.dto.shopSku.response.SalesCountDayResponse">
         select
-        ss.shop_parent_sku shopParentSku,sum(quantity) quantity,date_format(purchase_date, '%Y-%m-%d') purchaseDate
+        ifnull(ss.shop_parent_sku,'') shopParentSku,sum(quantity) quantity,date_format(purchase_date, '%Y-%m-%d') purchaseDate
         from order_import oi,shop_sku ss
         where oi.shop_sku_id=ss.shop_sku_id
         <if test="shopId != null">and ss.shop_id=#{shopId}</if>

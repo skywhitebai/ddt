@@ -58,6 +58,8 @@
 >最近90天</a>
 <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
 >查 询</a>
+<a href="javascript:void(0)" onclick="exportSalesInfo()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
+>下 载</a>
 <a href="javascript:void(0)" onclick="showChart()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
 >查询统计图</a>
 <table id="dg" style="width: 100%; height: auto">
@@ -76,6 +78,32 @@
             url: "${pageContext.request.contextPath }/shop/userShopComboboxlist",//获取数据
         });
     }
+    function getQueryParams() {
+        queryParams = {
+            shopId: $('#s_shopId').combobox('getValue'),
+            productCode: $("#s_productCode").val(),
+            shopSku: $("#s_shopSku").val(),
+            sku: $("#s_sku").val(),
+            productName: $("#s_productName").val(),
+            shopParentSku: $("#s_shopParentSku").val(),
+            purchaseDateStart: $("#s_purchaseDateStart").val(),
+            purchaseDateEnd: $("#s_purchaseDateEnd").val(),
+            searchType:$("input[name='searchType']:checked").val()
+        };
+        return queryParams;
+    }
+
+    function exportSalesInfo() {
+        var purchaseDateStart = $("#s_purchaseDateStart").val();
+        var purchaseDateEnd = $("#s_purchaseDateEnd").val();
+        if (isEmpty(purchaseDateStart) || isEmpty(purchaseDateEnd)) {
+            $.messager.alert("提示", "请选择创建订单时间.");
+            return;
+        }
+        queryParams = getQueryParams();
+        url = "${pageContext.request.contextPath }/shopSku/exportSalesInfo" + getUrlParams(queryParams);
+        window.open(url);
+    }
 
     function bindData() {
         dg = '#dg';
@@ -92,17 +120,7 @@
         if (!res) {
             return;
         }
-        queryParams = {
-            shopId: $('#s_shopId').combobox('getValue'),
-            productCode: $("#s_productCode").val(),
-            shopSku: $("#s_shopSku").val(),
-            sku: $("#s_sku").val(),
-            productName: $("#s_productName").val(),
-            shopParentSku: $("#s_shopParentSku").val(),
-            purchaseDateStart: purchaseDateStart,
-            purchaseDateEnd: purchaseDateEnd,
-            searchType:$("input[name='searchType']:checked").val()
-        };
+        queryParams = getQueryParams();
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
             title: title,
@@ -113,8 +131,8 @@
             collapsible: true,
             pagination: true,
             //singleSelect: true,
-            pageSize: 15,
-            pageList: [10, 15, 20, 30, 50],
+            pageSize: 500,
+            pageList: [10, 15, 20, 30, 50,100,200,500],
             rownumbers: true,
             //sortName: 'ID',    //根据某个字段给easyUI排序
             //sortOrder: 'asc',

@@ -32,5 +32,5 @@ public class MonthlySalesConstant {
     public static final String OTHER_ERROR = "other必须为数字";
     public static final String TOTAL_EMPTY = "total不能为空";
     public static final String TOTAL_ERROR = "total必须为数字";
-    public static final String SKU_NOT_EXIST = "sku不存在";
+    public static final String SKU_NOT_EXIST = "sku[%s]不存在";
 }

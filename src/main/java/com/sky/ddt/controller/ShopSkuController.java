@@ -163,7 +163,13 @@ public class ShopSkuController extends SuperController {
         params.setUserId(getCurrentUserId());
         return shopSkuService.salesCount(params);
     }
-
+    @RequestMapping("/exportSalesInfo")
+    @ResponseBody
+    @MenuAnnotation("shopSku/index")
+    public BaseResponse exportSalesInfo(SalesCountRequest params) {
+        params.setUserId(getCurrentUserId());
+        return shopSkuService.exportSalesInfo(response,params);
+    }
     /**
      * @param
      * @return

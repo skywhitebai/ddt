@@ -15,6 +15,7 @@ import com.sky.ddt.dto.shopHeadTripCost.response.ShopSkuHeadTripCostInfo;
 import com.sky.ddt.dto.shopSku.request.*;
 import com.sky.ddt.dto.shopSku.response.*;
 import com.sky.ddt.entity.*;
+import com.sky.ddt.helper.excel.ExportSalesInfoHelper;
 import com.sky.ddt.service.*;
 import com.sky.ddt.util.DateUtil;
 import com.sky.ddt.util.ExcelUtil;
@@ -1330,15 +1331,15 @@ public class ShopSkuService implements IShopSkuService {
 
     @Override
     public Map<String, Integer> getShopSkuIdMap(List<String> shopSkuList) {
-        if(CollectionUtils.isEmpty(shopSkuList)){
+        if (CollectionUtils.isEmpty(shopSkuList)) {
             return new HashMap<>();
         }
-        List<ShopSkuInfo> list=customShopSkuMapper.listShopSkuInfo(shopSkuList);
-        if(CollectionUtils.isEmpty(list)){
+        List<ShopSkuInfo> list = customShopSkuMapper.listShopSkuInfo(shopSkuList);
+        if (CollectionUtils.isEmpty(list)) {
             return new HashMap<>();
         }
-        Map<String,Integer> shopSkuIdMap=new HashMap<>(list.size());
-        for(ShopSkuInfo shopSkuInfo :list){
+        Map<String, Integer> shopSkuIdMap = new HashMap<>(list.size());
+        for (ShopSkuInfo shopSkuInfo : list) {
             shopSkuIdMap.put(shopSkuInfo.getShopSku(), shopSkuInfo.getShopSkuId());
         }
         return shopSkuIdMap;
@@ -1346,18 +1347,47 @@ public class ShopSkuService implements IShopSkuService {
 
     @Override
     public Map<String, ShopSkuInfo> getShopSkuInfoMap(List<String> shopSkuList) {
-        if(CollectionUtils.isEmpty(shopSkuList)){
+        if (CollectionUtils.isEmpty(shopSkuList)) {
             return new HashMap<>();
         }
-        List<ShopSkuInfo> list=customShopSkuMapper.listShopSkuInfo(shopSkuList);
-        if(CollectionUtils.isEmpty(list)){
+        List<ShopSkuInfo> list = customShopSkuMapper.listShopSkuInfo(shopSkuList);
+        if (CollectionUtils.isEmpty(list)) {
             return new HashMap<>();
         }
-        Map<String,ShopSkuInfo> shopSkuIdMap=new HashMap<>(list.size());
-        for(ShopSkuInfo shopSkuInfo :list){
+        Map<String, ShopSkuInfo> shopSkuIdMap = new HashMap<>(list.size());
+        for (ShopSkuInfo shopSkuInfo : list) {
             shopSkuIdMap.put(shopSkuInfo.getShopSku(), shopSkuInfo);
         }
         return shopSkuIdMap;
+    }
+
+    @Override
+    public BaseResponse exportSalesInfo(HttpServletResponse response, SalesCountRequest params) {
+        List<SalesCountResponse> list = customShopSkuMapper.listSelectSalesCountShopSku(params);
+        //获取每日销售数量
+        List<SalesCountDayResponse> salesCountDayResponseList = getSalesCountDay(list, params);
+        if(CollectionUtils.isEmpty(list)||CollectionUtils.isEmpty(salesCountDayResponseList)){
+            return BaseResponse.failMessage("销售数据为空");
+        }
+        try{
+            BaseResponse baseResponse=ExportSalesInfoHelper.exportSalesInfo(response,list,salesCountDayResponseList,params);
+            return baseResponse;
+        }catch (Exception ex){
+            ex.printStackTrace();
+            return BaseResponse.failMessage(ex.getMessage());
+        }
+    }
+
+    private List<SalesCountDayResponse> getSalesCountDay(List<SalesCountResponse> list, SalesCountRequest params) {
+        if ("shopParentSku".equals(params.getSearchType())) {
+            List<String> shopParentSkuList = list.stream().map(SalesCountResponse::getShopParentSku).collect(Collectors.toList());
+            params.setShopParentSkuList(shopParentSkuList);
+            return customOrderImportMapper.listSalesCountDayShopParentSkuResponse(params);
+        } else {
+            List<Integer> shopSkuIdList = list.stream().map(SalesCountResponse::getShopSkuId).collect(Collectors.toList());
+            params.setShopSkuIdList(shopSkuIdList);
+            return customOrderImportMapper.listSalesCountDayResponse(params);
+        }
     }
 
     /**
@@ -1756,7 +1786,6 @@ public class ShopSkuService implements IShopSkuService {
         List<String> shopParentSkuList = list.stream().map(SalesCountResponse::getShopParentSku).collect(Collectors.toList());
         params.setShopParentSkuList(shopParentSkuList);
         List<SalesCountDayResponse> salesCountDayResponseList = customOrderImportMapper.listSalesCountDayShopParentSkuResponse(params);
-        List<String> dateList = getDateList(params);
         for (SalesCountResponse salesCountResponse : list) {
             sbItems.append(",{");
             sbItems.append("\"shopName\":\"" + salesCountResponse.getShopName() + "\",");
@@ -1782,7 +1811,6 @@ public class ShopSkuService implements IShopSkuService {
         List<Integer> shopSkuIdList = list.stream().map(SalesCountResponse::getShopSkuId).collect(Collectors.toList());
         params.setShopSkuIdList(shopSkuIdList);
         List<SalesCountDayResponse> salesCountDayResponseList = customOrderImportMapper.listSalesCountDayResponse(params);
-        List<String> dateList = getDateList(params);
         for (SalesCountResponse salesCountResponse : list) {
             sbItems.append(",{");
             sbItems.append("\"shopName\":\"" + salesCountResponse.getShopName() + "\",");
@@ -1803,9 +1831,6 @@ public class ShopSkuService implements IShopSkuService {
         return sbItems.substring(1);
     }
 
-    private List<String> getDateList(SalesCountRequest params) {
-        return null;
-    }
 
     public PageInfo<SalesCountResponse> listSelectSalesCountShopSku(SalesCountRequest params) {
         PageHelper.startPage(params.getPage(), params.getRows(), true);

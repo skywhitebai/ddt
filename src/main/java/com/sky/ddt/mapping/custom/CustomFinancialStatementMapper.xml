@@ -159,10 +159,10 @@
         (SELECT SUM(IFNULL(maf.`cost`,0))*-1  costOfAdvertising,SUM(IFNULL(maf.`total_sales_in_7_days`,0))  advertisingIncome,shop_sku_id FROM `monthly_advertising_fee` maf WHERE finance_id=#{financeId}  GROUP BY `shop_sku_id`) maf
         ON maf.shop_sku_id=ss.`shop_sku_id`
         LEFT JOIN
-        (SELECT SUM(IFNULL(msf.`estimated_monthly_storage_fee`,0)*-1) fbaInventoryStorageFee,shop_sku_id FROM monthly_storage_fee msf WHERE finance_id=#{financeId}  GROUP BY `shop_sku_id`) msf
+        (SELECT SUM(IFNULL(msf.`estimated_monthly_storage_fee`,0))*-1 fbaInventoryStorageFee,shop_sku_id FROM monthly_storage_fee msf WHERE finance_id=#{financeId}  GROUP BY `shop_sku_id`) msf
         ON msf.shop_sku_id=ss.shop_sku_id
         LEFT JOIN
-        (SELECT SUM(IFNULL(lsf.`mo_12_long_terms_storage_fee`,0)*-1) fbaLongTermStorageFee,shop_sku_id FROM `long_storage_fee` lsf WHERE `finance_id`=#{financeId}  GROUP BY `shop_sku_id`) lsf
+        (SELECT SUM(IFNULL(lsf.`mo_12_long_terms_storage_fee`,0)+IFNULL(lsf.`mo_6_long_terms_storage_fee`,0))*-1 fbaLongTermStorageFee,shop_sku_id FROM `long_storage_fee` lsf WHERE `finance_id`=#{financeId}  GROUP BY `shop_sku_id`) lsf
         ON lsf.shop_sku_id=ss.shop_sku_id
         LEFT JOIN
         (SELECT SUM(IFNULL(df.`removal_fee`,0)*-1) fbaRemovalOrderDisposalFee,shop_sku_id FROM `destruction_fee` df WHERE `finance_id`=#{financeId}  GROUP BY `shop_sku_id`) df

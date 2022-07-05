@@ -104,7 +104,11 @@
     <select id="listSelectSalesCountShopSku" parameterType="com.sky.ddt.dto.shopSku.request.SalesCountRequest"
             resultType="com.sky.ddt.dto.shopSku.response.SalesCountResponse">
         select
-        ss.shop_sku_id shopSkuId,ss.shop_sku shopSku,ss.shop_parent_sku shopParentSku,p.product_name
+        <if test="searchType == null or searchType != 'shopParentSku' ">
+        ss.shop_sku_id shopSkuId,
+        ss.shop_sku shopSku,
+        </if>
+        ss.shop_parent_sku shopParentSku,p.product_name
         productName,p.product_code productCode,
         s.shop_name shopName
         from shop_sku ss

@@ -52,7 +52,7 @@ public class DefaultExceptionHandler extends DefaultHandlerExceptionResolver {
         if(sbErro.length()>0){
             attributes.put("message", sbErro.substring(1));
         }else{
-            attributes.put("message", "系统异常，请稍后重试或联系客服");
+            attributes.put("message", "系统异常，请稍后重试或联系客服"+ex.getMessage());
         }
         attributes.put("detailMessage", null);
         attributes.put("data", null);

@@ -269,4 +269,6 @@ public interface IShopSkuService {
     Map<String, Integer> getShopSkuIdMap(List<String> shopSkuList);
 
     Map<String, ShopSkuInfo> getShopSkuInfoMap(List<String> shopSkuList);
+
+    BaseResponse exportSalesInfo(HttpServletResponse response, SalesCountRequest params);
 }

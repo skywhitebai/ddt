@@ -105,7 +105,7 @@ public class MonthlySalesService implements IMonthlySalesService {
                     shopSku = ShopSkuUtil.getShopSkuByShopSku(sku, shopSkuList);
                 }
                 if (shopSku == null) {
-                    sbErroItem.append(",").append(MonthlySalesConstant.SKU_NOT_EXIST);
+                    sbErroItem.append(",").append(String.format(MonthlySalesConstant.SKU_NOT_EXIST,sku));
                 } else {
                     if (shopId == null) {
                         shopId = shopSku.getShopId();
@@ -116,7 +116,7 @@ public class MonthlySalesService implements IMonthlySalesService {
                     }
                     monthlySalesImportRequest.setShopSkuId(shopSku.getShopSkuId());
                 }
-                monthlySalesImportRequest.setSku(shopSku.getShopSku());
+                monthlySalesImportRequest.setSku(sku);
             }
             monthlySalesImportRequest.setDescription(map.get("description"));
             monthlySalesImportRequest.setQuantity(MathUtil.strToInteger(map.get("quantity")));
