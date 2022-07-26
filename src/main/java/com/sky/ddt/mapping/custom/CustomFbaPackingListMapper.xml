@@ -15,7 +15,7 @@
         ,(select shop_name from shop s where fpl.shop_id=s.shop_id) shop_name,
         CASE WHEN EXISTS(SELECT 1 FROM `outbound_order` oo WHERE oo.fba_packing_list_id=fpl.id and oo.status!=0) THEN 1 ELSE 0 END outbound_order_status,
         (select sum(quantity) from fba_packing_list_shop_sku fplss where fplss.fba_packing_list_id=fpl.id)  actualDeliveryQuantity,
-        (SELECT GROUP_CONCAT( DISTINCT CONCAT( ion.order_number,'-',tt.transport_type_name,'-',ion.remark) SEPARATOR <![CDATA['<br/>']]>)FROM
+        (SELECT GROUP_CONCAT( DISTINCT CONCAT( ion.order_number,'->',tt.transport_type_name,'->',ion.remark) SEPARATOR <![CDATA['<br/>']]>)FROM
         `fba_packing_list_shop_sku` fplss,`internal_order_number_transport` iont,`internal_order_number` ion,`transport_type` tt
         WHERE fplss.`fba_shipment_id`=iont.`fba_shipment_id_short` AND fplss.`fba_packing_list_id`=fpl.id
         AND ion.`id`=iont.`internal_order_number_id` AND tt.id=ion.transport_type_id) orderNumberInfo

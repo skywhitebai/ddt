@@ -8,6 +8,7 @@
         <result column="order_number" property="orderNumber"/>
         <result column="existFbaShipmentIdShort" property="existFbaShipmentIdShort"/>
         <result column="internalOrderNumberRemark" property="internalOrderNumberRemark"/>
+        <result column="fplInfo" property="fplInfo"/>
     </resultMap>
     <select id="listInternalOrderNumberTransport"
             parameterType="com.sky.ddt.dto.internalOrderNumberTransport.request.ListInternalOrderNumberTransportRequest"
@@ -16,7 +17,10 @@
         iont.*,
         (select transport_type_name from transport_type tt where tt.id=iont.transport_type_id) transport_type_name,
         ion.order_number,ion.remark internalOrderNumberRemark,
-        case when exists(select 1 from fba_packing_list_shop_sku fplss where fplss.fba_shipment_id=iont.fba_shipment_id_short) then 1 else 0 end existFbaShipmentIdShort
+        case when exists(select 1 from fba_packing_list_shop_sku fplss where fplss.fba_shipment_id=iont.fba_shipment_id_short) then 1 else 0 end existFbaShipmentIdShort,
+        (SELECT GROUP_CONCAT( DISTINCT CONCAT(s.shop_name,' -> ',fpl.ship_to) SEPARATOR <![CDATA['<br/>']]>)  FROM  fba_packing_list fpl LEFT JOIN shop s ON fpl.shop_id=s.shop_id
+        left join fba_packing_list_shop_sku fplss ON fpl.id=fplss.fba_packing_list_id
+        where fplss.`fba_shipment_id`=iont.`fba_shipment_id_short`)fplInfo
         from internal_order_number_transport iont
         left JOIN internal_order_number ion on ion.id=iont.internal_order_number_id
         <where>

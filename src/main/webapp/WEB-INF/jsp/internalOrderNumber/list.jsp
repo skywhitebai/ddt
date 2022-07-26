@@ -198,14 +198,15 @@
                     formatter: function (value, row, rowIndex) {
                         let text;
                         if (isEmpty(value)) {
-                            text= '<input class="textbox" onchange="saveFinancialRemark(this,' + row.id + ')">';
+                            text = '<input class="textbox" onchange="saveFinancialRemark(this,' + row.id + ')">';
                         } else {
-                            text= '<input class="textbox" value="' + value + '" onchange="saveFinancialRemark(this,' + row.id + ')">';
+                            text = '<input class="textbox" value="' + value + '" onchange="saveFinancialRemark(this,' + row.id + ')">';
                         }
-                        text=text+'<a href="#" onclick="showFinancialRemarkHis(' + row.id + ')" title="查看">查看</a>';
+                        text = text + '<a href="#" onclick="showFinancialRemarkHis(' + row.id + ')" title="查看">查看</a>';
                         return text;
                     }
-                }
+                },
+                {title: 'fba发货信息', field: 'fplInfo', width: 700}
             ]],
             toolbar: [{
                 id: 'btnAdd',
@@ -245,11 +246,13 @@
         })
         $(dg).datagrid('clearSelections');
     }
+
     function showFinancialRemarkHis(internalOrderNumberId) {
         $('#dlgFinancialRemarkHis').dialog('open').dialog('setTitle', '财务备注历史');
         $('#dlgFinancialRemarkHis_internalOrderNumberId').val(internalOrderNumberId);
         bindInternalOrderNumberFinancialRemarkHis();
     }
+
     function bindInternalOrderNumberFinancialRemarkHis() {
         dg = '#dgInternalOrderNumberFinancialRemarkHis';
         url = "${pageContext.request.contextPath }/internalOrderNumberFinancialRemarkHis/listInternalOrderNumberFinancialRemarkHis";
@@ -293,6 +296,7 @@
         })
         $(dg).datagrid('clearSelections');
     }
+
     function showViewDialog() {
         var rows = $('#dg').datagrid('getSelections');
         if (rows && rows.length == 1) {
@@ -348,8 +352,7 @@
                 if (res.code == '200') {
                     closeDialog();
                     bindData();
-                }
-                else {
+                } else {
                     $.messager.alert("提示", res.message);
                 }
             }
@@ -363,17 +366,18 @@
     function downPDF(id) {
         window.open('${pageContext.request.contextPath }/internalOrderNumber/downPDF?id=' + id)
     }
-    function saveFinancialRemark(input, id){
-            var financialRemark = $(input).val();
-            $.post('${pageContext.request.contextPath }/internalOrderNumber/saveFinancialRemark', {
-                financialRemark: financialRemark,
-                id: id
-            }, function (data) {
-                if (data.code == '200') {
-                } else {
-                    $.messager.alert("提示", data.message);
-                }
-            });
+
+    function saveFinancialRemark(input, id) {
+        var financialRemark = $(input).val();
+        $.post('${pageContext.request.contextPath }/internalOrderNumber/saveFinancialRemark', {
+            financialRemark: financialRemark,
+            id: id
+        }, function (data) {
+            if (data.code == '200') {
+            } else {
+                $.messager.alert("提示", data.message);
+            }
+        });
     }
 </script>
 </html>

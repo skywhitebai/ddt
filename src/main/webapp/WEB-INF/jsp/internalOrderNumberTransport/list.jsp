@@ -261,7 +261,8 @@
                 },
                 {title: '创建时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
-                {title: '备注', field: 'internalOrderNumberRemark', width: 120}
+                {title: '备注', field: 'internalOrderNumberRemark', width: 120},
+                {title: 'fba发货信息', field: 'fplInfo', width: 700}
             ]],
             toolbar: [{
                 id: 'btnView',
