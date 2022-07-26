@@ -6,6 +6,7 @@
         <result column="shop_name" property="shopName"/>
         <result column="outbound_order_status" property="outboundOrderStatus"/>
         <result column="actualDeliveryQuantity" property="actualDeliveryQuantity"/>
+        <result column="orderNumberInfo" property="orderNumberInfo"/>
     </resultMap>
     <select id="listFbaPackingList" parameterType="com.sky.ddt.dto.fbaPackingList.request.ListFbaPackingListRequest"
             resultMap="listFbaPackingListMap">
@@ -13,7 +14,11 @@
         <include refid="com.sky.ddt.dao.generate.FbaPackingListMapper.Base_Column_List"/>
         ,(select shop_name from shop s where fpl.shop_id=s.shop_id) shop_name,
         CASE WHEN EXISTS(SELECT 1 FROM `outbound_order` oo WHERE oo.fba_packing_list_id=fpl.id and oo.status!=0) THEN 1 ELSE 0 END outbound_order_status,
-        (select sum(quantity) from fba_packing_list_shop_sku fplss where fplss.fba_packing_list_id=fpl.id)  actualDeliveryQuantity
+        (select sum(quantity) from fba_packing_list_shop_sku fplss where fplss.fba_packing_list_id=fpl.id)  actualDeliveryQuantity,
+        (SELECT GROUP_CONCAT( DISTINCT CONCAT( ion.order_number,'-',tt.transport_type_name,'-',ion.remark) SEPARATOR <![CDATA['<br/>']]>)FROM
+        `fba_packing_list_shop_sku` fplss,`internal_order_number_transport` iont,`internal_order_number` ion,`transport_type` tt
+        WHERE fplss.`fba_shipment_id`=iont.`fba_shipment_id_short` AND fplss.`fba_packing_list_id`=fpl.id
+        AND ion.`id`=iont.`internal_order_number_id` AND tt.id=ion.transport_type_id) orderNumberInfo
         from fba_packing_list fpl
         <if test="_parameter != null">
             <include refid="fbaPackingList_Query_Where_Clause"/>

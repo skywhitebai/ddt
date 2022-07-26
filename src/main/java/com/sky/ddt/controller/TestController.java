@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("test")
@@ -54,4 +55,15 @@ public class TestController extends SuperController {
     public Long testLong() {
         return 1234567891234567891L;
     }
+
+
+
+    @RequestMapping("/testUuid")
+    @Login(action = Action.Skip)
+    @ResponseBody
+    public String testUuid() {
+        String uuid=UUID.randomUUID().toString();
+        return uuid;
+    }
+
 }

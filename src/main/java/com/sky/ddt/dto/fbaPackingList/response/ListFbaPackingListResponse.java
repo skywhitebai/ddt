@@ -13,4 +13,5 @@ public class ListFbaPackingListResponse extends FbaPackingList{
     String shopName;
     Integer outboundOrderStatus;
     Integer actualDeliveryQuantity;
+    String orderNumberInfo;
 }
