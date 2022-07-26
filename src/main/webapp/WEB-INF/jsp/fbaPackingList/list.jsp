@@ -433,7 +433,7 @@
                 {title: '创建时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
                 {title: '备注', field: 'remark', width: 120},
-                {title: '内部单号信息', field: 'orderNumberInfo', width: 200}
+                {title: '内部单号信息', field: 'orderNumberInfo', width: 700}
             ]],
             toolbar: [{
                 id: 'btnView',
