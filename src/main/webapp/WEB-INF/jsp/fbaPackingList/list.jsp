@@ -51,12 +51,9 @@
     <input class="easyui-validatebox textbox" id="s_shipmentId">
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
-    <a href="javascript:void(0)" onclick="showDialogImportFbaPackingList()" class="easyui-linkbutton"
-       data-options="iconCls:'icon-search'"
-       style="">导入fba装箱单信息</a>
     <a href="javascript:void(0)" onclick="showDialogImportFbaPackingList2()" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
-       style="">新的导入fba装箱单信息</a>
+       style="">导入fba装箱单信息</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 </table>
@@ -163,6 +160,7 @@
         FBAshipment id：<input class="easyui-textbox" name="fbaShipmentId"
                               id="dlg_importFbaPackingList2_fbaShipmentId"><br>
         Ship to（地址）：<input class="easyui-textbox" name="shipTo" id="dlg_importFbaPackingList2_shipTo"><br>
+        ReferenceId*：<input class="easyui-textbox" name="shipTo" id="dlg_importFbaPackingList2_referenceId"><br>
         <input type="file" id="importFbaPackingListFile2" name="file" accept=".xls,.xlsx"/>
         <div style="text-align:center;">
             <label style="color: red">请将excel里面的公式转换为普通数值再导入</label>
@@ -281,7 +279,8 @@
     function showDialogImportFbaPackingList2() {
         $('#dlg_importFbaPackingList2').dialog('open').dialog('setTitle', '新的fba装箱单导入');
         $("#dlg_importFbaPackingList2_fbaShipmentId").val("");
-        $("#dlg_importFbaPackingList2_shopTo").val("");
+        $("#dlg_importFbaPackingList2_shipTo").val("");
+        $("#dlg_importFbaPackingList2_referenceId").val("");
     }
 
     function closeDialogImportFbaPackingList() {
@@ -344,6 +343,11 @@
         var shipTo = $("#dlg_importFbaPackingList2_shipTo").val();
         if (shipTo == '') {
             $.messager.alert("提示", "请填写shipTo");
+            return;
+        }
+        var referenceId = $("#dlg_importFbaPackingList2_referenceId").val();
+        if (referenceId == '') {
+            $.messager.alert("提示", "请填写ReferenceId");
             return;
         }
         var dom = document.getElementById("importFbaPackingListFile2");

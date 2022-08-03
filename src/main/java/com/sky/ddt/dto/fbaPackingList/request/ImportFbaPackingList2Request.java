@@ -15,5 +15,7 @@ public class ImportFbaPackingList2Request {
     String fbaShipmentId;
     @NotEmpty(message = "shipTo不能为空")
     String shipTo;
+    @NotEmpty(message = "referenceId不能为空")
+    String referenceId;
     MultipartFile file;
 }

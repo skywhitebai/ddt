@@ -15,6 +15,8 @@ public class FbaPackingList {
 
     private String shipTo;
 
+    private String referenceid;
+
     private Integer totalSkus;
 
     private Integer totalUnits;
@@ -81,6 +83,14 @@ public class FbaPackingList {
 
     public void setShipTo(String shipTo) {
         this.shipTo = shipTo == null ? null : shipTo.trim();
+    }
+
+    public String getReferenceid() {
+        return referenceid;
+    }
+
+    public void setReferenceid(String referenceid) {
+        this.referenceid = referenceid == null ? null : referenceid.trim();
     }
 
     public Integer getTotalSkus() {

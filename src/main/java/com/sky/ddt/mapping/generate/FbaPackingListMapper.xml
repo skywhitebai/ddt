@@ -8,6 +8,7 @@
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="plan_id" jdbcType="VARCHAR" property="planId" />
     <result column="ship_to" jdbcType="VARCHAR" property="shipTo" />
+    <result column="ReferenceId" jdbcType="VARCHAR" property="referenceid" />
     <result column="total_skus" jdbcType="INTEGER" property="totalSkus" />
     <result column="total_units" jdbcType="INTEGER" property="totalUnits" />
     <result column="pack_list" jdbcType="TIMESTAMP" property="packList" />
@@ -78,8 +79,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, shop_id, shipment_id, name, plan_id, ship_to, total_skus, total_units, pack_list, 
-    remark, create_by, create_time, update_by, update_time, status, check_status
+    id, shop_id, shipment_id, name, plan_id, ship_to, ReferenceId, total_skus, total_units, 
+    pack_list, remark, create_by, create_time, update_by, update_time, status, check_status
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FbaPackingListExample" resultMap="BaseResultMap">
     select
@@ -116,17 +117,17 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into fba_packing_list (shop_id, shipment_id, name, 
-      plan_id, ship_to, total_skus, 
-      total_units, pack_list, remark, 
-      create_by, create_time, update_by, 
-      update_time, status, check_status
-      )
+      plan_id, ship_to, ReferenceId, 
+      total_skus, total_units, pack_list, 
+      remark, create_by, create_time, 
+      update_by, update_time, status, 
+      check_status)
     values (#{shopId,jdbcType=INTEGER}, #{shipmentId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
-      #{planId,jdbcType=VARCHAR}, #{shipTo,jdbcType=VARCHAR}, #{totalSkus,jdbcType=INTEGER}, 
-      #{totalUnits,jdbcType=INTEGER}, #{packList,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
-      #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{checkStatus,jdbcType=INTEGER}
-      )
+      #{planId,jdbcType=VARCHAR}, #{shipTo,jdbcType=VARCHAR}, #{referenceid,jdbcType=VARCHAR}, 
+      #{totalSkus,jdbcType=INTEGER}, #{totalUnits,jdbcType=INTEGER}, #{packList,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
+      #{checkStatus,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.FbaPackingList">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -148,6 +149,9 @@
       </if>
       <if test="shipTo != null">
         ship_to,
+      </if>
+      <if test="referenceid != null">
+        ReferenceId,
       </if>
       <if test="totalSkus != null">
         total_skus,
@@ -195,6 +199,9 @@
       </if>
       <if test="shipTo != null">
         #{shipTo,jdbcType=VARCHAR},
+      </if>
+      <if test="referenceid != null">
+        #{referenceid,jdbcType=VARCHAR},
       </if>
       <if test="totalSkus != null">
         #{totalSkus,jdbcType=INTEGER},
@@ -255,6 +262,9 @@
       <if test="record.shipTo != null">
         ship_to = #{record.shipTo,jdbcType=VARCHAR},
       </if>
+      <if test="record.referenceid != null">
+        ReferenceId = #{record.referenceid,jdbcType=VARCHAR},
+      </if>
       <if test="record.totalSkus != null">
         total_skus = #{record.totalSkus,jdbcType=INTEGER},
       </if>
@@ -298,6 +308,7 @@
       name = #{record.name,jdbcType=VARCHAR},
       plan_id = #{record.planId,jdbcType=VARCHAR},
       ship_to = #{record.shipTo,jdbcType=VARCHAR},
+      ReferenceId = #{record.referenceid,jdbcType=VARCHAR},
       total_skus = #{record.totalSkus,jdbcType=INTEGER},
       total_units = #{record.totalUnits,jdbcType=INTEGER},
       pack_list = #{record.packList,jdbcType=TIMESTAMP},
@@ -329,6 +340,9 @@
       </if>
       <if test="shipTo != null">
         ship_to = #{shipTo,jdbcType=VARCHAR},
+      </if>
+      <if test="referenceid != null">
+        ReferenceId = #{referenceid,jdbcType=VARCHAR},
       </if>
       <if test="totalSkus != null">
         total_skus = #{totalSkus,jdbcType=INTEGER},
@@ -370,6 +384,7 @@
       name = #{name,jdbcType=VARCHAR},
       plan_id = #{planId,jdbcType=VARCHAR},
       ship_to = #{shipTo,jdbcType=VARCHAR},
+      ReferenceId = #{referenceid,jdbcType=VARCHAR},
       total_skus = #{totalSkus,jdbcType=INTEGER},
       total_units = #{totalUnits,jdbcType=INTEGER},
       pack_list = #{packList,jdbcType=TIMESTAMP},

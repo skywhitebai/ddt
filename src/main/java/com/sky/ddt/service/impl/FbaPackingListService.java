@@ -376,9 +376,6 @@ public class FbaPackingListService implements IFbaPackingListService {
         if (params.getFile() == null) {
             return BaseResponse.failMessage("请选择要上传的文件");
         }
-        if (StringUtils.isEmpty(params.getFbaShipmentId())) {
-            return BaseResponse.failMessage("fbaShipmentId不能为空");
-        }
         Workbook wb = ExcelUtil.readExcel(params.getFile());
         if (wb == null || wb.getNumberOfSheets() == 0) {
             return BaseResponse.failMessage("excel读取失败");
@@ -527,6 +524,7 @@ public class FbaPackingListService implements IFbaPackingListService {
 
         //插入
         fbaPackingList.setShipTo(params.getShipTo());
+        fbaPackingList.setReferenceid(params.getReferenceId());
         fbaPackingList.setShopId(shopId);
         fbaPackingList.setCreateBy(dealUserId);
         fbaPackingList.setCreateTime(new Date());
