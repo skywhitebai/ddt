@@ -9,10 +9,7 @@ import com.sky.ddt.dao.custom.CustomFbaPackingListShopSkuMapper;
 import com.sky.ddt.dao.custom.CustomOutboundOrderMapper;
 import com.sky.ddt.dto.deliverGoods.request.InvoiceInfo;
 import com.sky.ddt.dto.deliverGoods.request.InvoiceSkuInfo;
-import com.sky.ddt.dto.fbaPackingList.request.GenerateOutboundOrderRequest;
-import com.sky.ddt.dto.fbaPackingList.request.ImportFbaPackingList2Request;
-import com.sky.ddt.dto.fbaPackingList.request.ListFbaPackingListRequest;
-import com.sky.ddt.dto.fbaPackingList.request.ListInvoiceInfoRequest;
+import com.sky.ddt.dto.fbaPackingList.request.*;
 import com.sky.ddt.dto.fbaPackingList.response.ListFbaPackingListResponse;
 import com.sky.ddt.dto.fbaPackingList.response.ListInvoiceInfoResponse;
 import com.sky.ddt.dto.response.BaseResponse;
@@ -542,6 +539,29 @@ public class FbaPackingListService implements IFbaPackingListService {
             fbaPackingListShopSku.setCreateTime(new Date());
             customFbaPackingListShopSkuMapper.insertSelective(fbaPackingListShopSku);
         }
+        return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse saveFbaPackingListRemark(SaveFbaPackingListRemarkReq params, Integer dealUserId) {
+        FbaPackingList fbaPackingList=new FbaPackingList();
+        fbaPackingList.setId(params.getId());
+        fbaPackingList.setRemark(params.getRemark());
+        customFbaPackingListMapper.updateByPrimaryKeySelective(fbaPackingList);
+        return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse saveFbaPackingListCheckStatus(SaveFbaPackingListCheckStatusReq params, Integer dealUserId) {
+        if(params.getCheckStatus()!=null&&!FbaPackingListConstant.FbaPackingListCheckStatusEnum.contains(params.getCheckStatus())){
+            return BaseResponse.failMessage("检查状态不存在");
+        }
+        FbaPackingList fbaPackingListOld=customFbaPackingListMapper.selectByPrimaryKey(params.getId());
+        if(fbaPackingListOld==null){
+            return BaseResponse.failMessage("裝箱單不存在");
+        }
+        fbaPackingListOld.setCheckStatus(params.getCheckStatus());
+        customFbaPackingListMapper.updateByPrimaryKey(fbaPackingListOld);
         return BaseResponse.success();
     }
 

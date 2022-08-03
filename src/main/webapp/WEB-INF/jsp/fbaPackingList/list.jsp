@@ -37,7 +37,15 @@
     <select class="easyui-combobox" id="s_status" style="width:100px;">
         <option value="">全部</option>
         <option value="1">有效</option>
-        <option value="2">取消</option>
+        <option value="0">取消</option>
+    </select>
+    检查状态：
+    <select class="easyui-combobox" id="s_checkStatus" style="width:100px;">
+        <option value="">全部</option>
+        <option value="1">无差错</option>
+        <option value="2">有差异无需调查</option>
+        <option value="3">有差异需要调查</option>
+        <option value="4">其他</option>
     </select>
     shipmentId：
     <input class="easyui-validatebox textbox" id="s_shipmentId">
@@ -375,7 +383,8 @@
             shopSku: $("#s_shopSku").val(),
             sku: $("#s_sku").val(),
             shipmentId: $("#s_shipmentId").val(),
-            status: $("#s_status").val()
+            status: $("#s_status").val(),
+            checkStatus:$("#s_checkStatus").val()
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -395,6 +404,8 @@
             remoteSort: false,
             idField: 'id',
             queryParams: queryParams,  //异步查询的参数
+            onClickCell: onClickCell,
+            onAfterEdit:onAfterEdit,
             columns: [[
                 {field: 'ck', checkbox: true},   //选择
                 {title: '店铺名', field: 'shopName', width: 120},
@@ -430,9 +441,74 @@
                         }
                     }
                 },
+                {
+                    title: '状态', field: 'status', width: 100,
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return '正常';
+                        } else if (value == 0) {
+                            return '取消';
+                        } else {
+                            return '';
+                        }
+                    }
+                },
+                {
+                    title: '检查状态', field: 'checkStatus', width: 120,sortable:false,formatter: function(value, row, index) {
+                        if (value == 1) {
+                            return '无差错';
+                        } else if (value == 2) {
+                            return '有差异无需调查';
+                        } else if (value == 3) {
+                            return '有差异需要调查';
+                        } else if (value == 4) {
+                            return '其他';
+                        } else {
+                            return '';
+                        }
+                    },
+                    editor: {
+                        type: 'combobox',
+                        options: {
+                            panelHeight: 'auto',
+                            valueField:'id',
+                            textField:'text',
+                            editable:true,
+                            data:[
+                                {id:1, text:'无差错' },
+                                {id:2, text:'有差异无需调查' },
+                                {id:3, text:'有差异需要调查' },
+                                {id:4, text:'其他' }
+                            ]
+                            /*,
+                            onSelect: function (rec) {
+                                var value = $(this).combobox("getValue");
+                                $.post('${pageContext.request.contextPath }/fbaPackingList/saveFbaPackingListCheckStatus', {
+                                    id: rec.id,
+                                    checkStatus: value
+                                }, function (data) {
+                                    if (data.code == '200') {
+                                        bindData();
+                                    } else {
+                                        $.messager.alert("提示", data.message);
+                                    }
+                                });
+                            }*/
+                        }
+                    }
+                },
                 {title: '创建时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
-                {title: '备注', field: 'remark', width: 120},
+                {
+                    title: '备注', field: 'remark', width: 200,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-textbox " style="width:100%"  onchange="saveFbaPackingListRemark(this,' + row.id + ')">';
+                        } else {
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveFbaPackingListRemark(this,' + row.id + ')">';
+                        }
+                    }
+                },
                 {title: '内部单号信息', field: 'orderNumberInfo', width: 700}
             ]],
             toolbar: [{
@@ -466,7 +542,44 @@
         })
         $(dg).datagrid('clearSelections');
     }
+    var editIndex = undefined;
+    function endEditing(){
+        if (editIndex == undefined){return true}
+        if ($('#dg').datagrid('validateRow', editIndex)){
+            $('#dg').datagrid('endEdit', editIndex);
+            editIndex = undefined;
+            return true;
+        } else {
+            return false;
+        }
+    }
+    function onClickCell(index){
+        if (endEditing()){
+            $('#dg').datagrid('selectRow', index)
+                .datagrid('beginEdit', index);
+            editIndex = index;
+        } else {
+            $('#dg').datagrid('selectRow', editIndex);
+        }
+    }
+    function onAfterEdit(index, row, changes) {
+        var change = false;
+        for(x in changes){
+            change = true;
+            break;
+        }
+        $.post('${pageContext.request.contextPath }/fbaPackingList/saveFbaPackingListCheckStatus', {
+            id: row.id,
+            checkStatus: row.checkStatus
+        }, function (data) {
+            if (data.code == '200') {
+                //bindData();
+            } else {
+                $.messager.alert("提示", data.message);
+            }
+        });
 
+    }
     function cancelFbaPackingList() {
         var rows = $('#dg').datagrid('getSelections');
         if (rows && rows.length == 1) {
@@ -657,6 +770,20 @@
     function downInvoice(fbaPackingListId, orderNumber, type) {
         var url = '${pageContext.request.contextPath }/fbaPackingList/downInvoice?fbaPackingListId=' + fbaPackingListId + "&orderNumber=" + orderNumber + "&type=" + type;
         window.open(url);
+    }
+
+    function saveFbaPackingListRemark(input, id) {
+        var remark = $(input).val();
+        $.post('${pageContext.request.contextPath }/fbaPackingList/saveFbaPackingListRemark', {
+            id: id,
+            remark: remark
+        }, function (data) {
+            if (data.code == '200') {
+                bindData();
+            } else {
+                $.messager.alert("提示", data.message);
+            }
+        });
     }
 </script>
 </html>

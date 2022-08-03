@@ -43,4 +43,30 @@ public class FbaPackingListConstant {
             return false;
         }
     }
+    @Getter
+    public enum FbaPackingListCheckStatusEnum {
+        ERROR_FREE(1,"无差错"),
+        DIFF_NO_NEED_CHECK(2,"有差异无需调查"),
+        DIFF_NEED_CHECK(3,"有差异需要调查"),
+        OTHER(4,"其他");
+        Integer code;
+        String desc;
+
+        FbaPackingListCheckStatusEnum(Integer code, String desc) {
+            this.code = code;
+            this.desc = desc;
+        }
+        public static boolean contains(Integer code){
+            if(code ==null){
+                return false;
+            }
+            for (FbaPackingListCheckStatusEnum item :
+                    FbaPackingListCheckStatusEnum.values() ) {
+                if(item.getCode().equals(code)){
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
 }

@@ -105,21 +105,21 @@
         left join shop_head_trip_cost shtc on f.month=shtc.month and f.shop_id=shtc.shop_id
         left join shop_sku_head_trip_cost_his sshtch on shtc.id=sshtch.shop_head_trip_cost_id and sshtch.shop_sku_id=ss.shop_sku_id
         LEFT JOIN
-        (SELECT shop_sku_id,SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`quantity`,0) ELSE 0 END)  saleQuantity,
-        SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`product_sales`,0) ELSE 0 END)  productSales,
-        SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`product_sales_tax`,0) ELSE 0 END)  productSalesTax,
-        SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`shipping_credits`,0) ELSE 0 END)  shippingCredits,
-        SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`shipping_credits_tax`,0) ELSE 0 END)  shippingCreditsTax,
-        SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`gift_wrap_credits`,0) ELSE 0 END)  giftWrapCredits,
-        SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`giftwrap_credits_tax`,0) ELSE 0 END)  giftWrapCreditsTax,
-        SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`promotional_rebates`,0) ELSE 0 END)  promotionalRebates,
-        SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`promotional_rebates_tax`,0) ELSE 0 END)  promotionalRebatesTax,
-        SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`marketplace_withheld_tax`,0) ELSE 0 END)  marketplaceWithheldTax,
-        SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`selling_fees`,0) ELSE 0 END)  sellingFees,
-        SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`fba_fees`,0) ELSE 0 END)  fbaFees,
-        SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`other_transaction_fees`,0) ELSE 0 END)  otherTransactionFees,
-        SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`other`,0) ELSE 0 END)  other,
-        SUM(CASE WHEN  ms.`type`='Order' THEN IFNULL(ms.`total`,0) ELSE 0 END)  total,
+        (SELECT shop_sku_id,SUM(CASE WHEN  ms.`type` in('order','TBYB Order Payment') THEN IFNULL(ms.`quantity`,0) ELSE 0 END)  saleQuantity,
+        SUM(CASE WHEN  ms.`type` in('order','TBYB Order Payment') THEN IFNULL(ms.`product_sales`,0) ELSE 0 END)  productSales,
+        SUM(CASE WHEN  ms.`type` in('order','TBYB Order Payment') THEN IFNULL(ms.`product_sales_tax`,0) ELSE 0 END)  productSalesTax,
+        SUM(CASE WHEN  ms.`type` in('order','TBYB Order Payment') THEN IFNULL(ms.`shipping_credits`,0) ELSE 0 END)  shippingCredits,
+        SUM(CASE WHEN  ms.`type` in('order','TBYB Order Payment') THEN IFNULL(ms.`shipping_credits_tax`,0) ELSE 0 END)  shippingCreditsTax,
+        SUM(CASE WHEN  ms.`type` in('order','TBYB Order Payment') THEN IFNULL(ms.`gift_wrap_credits`,0) ELSE 0 END)  giftWrapCredits,
+        SUM(CASE WHEN  ms.`type` in('order','TBYB Order Payment') THEN IFNULL(ms.`giftwrap_credits_tax`,0) ELSE 0 END)  giftWrapCreditsTax,
+        SUM(CASE WHEN  ms.`type` in('order','TBYB Order Payment') THEN IFNULL(ms.`promotional_rebates`,0) ELSE 0 END)  promotionalRebates,
+        SUM(CASE WHEN  ms.`type` in('order','TBYB Order Payment') THEN IFNULL(ms.`promotional_rebates_tax`,0) ELSE 0 END)  promotionalRebatesTax,
+        SUM(CASE WHEN  ms.`type` in('order','TBYB Order Payment') THEN IFNULL(ms.`marketplace_withheld_tax`,0) ELSE 0 END)  marketplaceWithheldTax,
+        SUM(CASE WHEN  ms.`type` in('order','TBYB Order Payment') THEN IFNULL(ms.`selling_fees`,0) ELSE 0 END)  sellingFees,
+        SUM(CASE WHEN  ms.`type` in('order','TBYB Order Payment') THEN IFNULL(ms.`fba_fees`,0) ELSE 0 END)  fbaFees,
+        SUM(CASE WHEN  ms.`type` in('order','TBYB Order Payment') THEN IFNULL(ms.`other_transaction_fees`,0) ELSE 0 END)  otherTransactionFees,
+        SUM(CASE WHEN  ms.`type` in('order','TBYB Order Payment') THEN IFNULL(ms.`other`,0) ELSE 0 END)  other,
+        SUM(CASE WHEN  ms.`type` in('order','TBYB Order Payment') THEN IFNULL(ms.`total`,0) ELSE 0 END)  total,
 
         SUM(CASE WHEN  ms.`type`='Refund' THEN IFNULL(ms.`quantity`,0) ELSE 0 END)  refundSaleQuantity,
         SUM(CASE WHEN  ms.`type`='Refund' THEN IFNULL(ms.`product_sales`,0) ELSE 0 END)  refundProductSales,
@@ -148,7 +148,7 @@
         SUM(CASE WHEN  ms.`type`='Adjustment' AND ms.`description`='FBA Inventory Placement Service Fee' THEN IFNULL(ms.`total`,0) ELSE 0 END)  fbaInventoryPlacementServiceFee,
         SUM(CASE WHEN  ms.`type`='Liquidations' THEN IFNULL(ms.`total`,0) ELSE 0 END)  liquidations,
         SUM(CASE WHEN  ms.`type`='Liquidations Adjustments' THEN IFNULL(ms.`total`,0) ELSE 0 END)  liquidationsAdjustments,
-        SUM(CASE WHEN  ms.`type`='TBYB Order Payment' THEN IFNULL(ms.`total`,0) ELSE 0 END)  tbybOrderPayment,
+        0 tbybOrderPayment,
         SUM(CASE WHEN  ms.`type`='TBYB Trial Shipment' THEN IFNULL(ms.`total`,0) ELSE 0 END)  tbybTrialShipment
         FROM `monthly_sales` ms WHERE `finance_id`=#{financeId} GROUP BY `shop_sku_id`) ms
         ON ms.`shop_sku_id`=ss.`shop_sku_id`

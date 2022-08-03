@@ -21,8 +21,6 @@ public class FbaPackingList {
 
     private Date packList;
 
-    private Integer status;
-
     private String remark;
 
     private Integer createBy;
@@ -32,6 +30,10 @@ public class FbaPackingList {
     private Integer updateBy;
 
     private Date updateTime;
+
+    private Integer status;
+
+    private Integer checkStatus;
 
     public Integer getId() {
         return id;
@@ -105,14 +107,6 @@ public class FbaPackingList {
         this.packList = packList;
     }
 
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
     public String getRemark() {
         return remark;
     }
@@ -151,5 +145,21 @@ public class FbaPackingList {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getCheckStatus() {
+        return checkStatus;
+    }
+
+    public void setCheckStatus(Integer checkStatus) {
+        this.checkStatus = checkStatus;
     }
 }

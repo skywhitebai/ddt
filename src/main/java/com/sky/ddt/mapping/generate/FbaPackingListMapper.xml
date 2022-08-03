@@ -11,12 +11,13 @@
     <result column="total_skus" jdbcType="INTEGER" property="totalSkus" />
     <result column="total_units" jdbcType="INTEGER" property="totalUnits" />
     <result column="pack_list" jdbcType="TIMESTAMP" property="packList" />
-    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_by" jdbcType="INTEGER" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -78,7 +79,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, shop_id, shipment_id, name, plan_id, ship_to, total_skus, total_units, pack_list, 
-    status, remark, create_by, create_time, update_by, update_time
+    remark, create_by, create_time, update_by, update_time, status, check_status
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FbaPackingListExample" resultMap="BaseResultMap">
     select
@@ -116,14 +117,16 @@
     </selectKey>
     insert into fba_packing_list (shop_id, shipment_id, name, 
       plan_id, ship_to, total_skus, 
-      total_units, pack_list, status, 
-      remark, create_by, create_time, 
-      update_by, update_time)
+      total_units, pack_list, remark, 
+      create_by, create_time, update_by, 
+      update_time, status, check_status
+      )
     values (#{shopId,jdbcType=INTEGER}, #{shipmentId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{planId,jdbcType=VARCHAR}, #{shipTo,jdbcType=VARCHAR}, #{totalSkus,jdbcType=INTEGER}, 
-      #{totalUnits,jdbcType=INTEGER}, #{packList,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
+      #{totalUnits,jdbcType=INTEGER}, #{packList,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}, 
+      #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, #{checkStatus,jdbcType=INTEGER}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.FbaPackingList">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -155,9 +158,6 @@
       <if test="packList != null">
         pack_list,
       </if>
-      <if test="status != null">
-        status,
-      </if>
       <if test="remark != null">
         remark,
       </if>
@@ -172,6 +172,12 @@
       </if>
       <if test="updateTime != null">
         update_time,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="checkStatus != null">
+        check_status,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -199,9 +205,6 @@
       <if test="packList != null">
         #{packList,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null">
-        #{status,jdbcType=INTEGER},
-      </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
@@ -216,6 +219,12 @@
       </if>
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="checkStatus != null">
+        #{checkStatus,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -255,9 +264,6 @@
       <if test="record.packList != null">
         pack_list = #{record.packList,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=INTEGER},
-      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -272,6 +278,12 @@
       </if>
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=INTEGER},
+      </if>
+      <if test="record.checkStatus != null">
+        check_status = #{record.checkStatus,jdbcType=INTEGER},
       </if>
     </set>
     <if test="_parameter != null">
@@ -289,12 +301,13 @@
       total_skus = #{record.totalSkus,jdbcType=INTEGER},
       total_units = #{record.totalUnits,jdbcType=INTEGER},
       pack_list = #{record.packList,jdbcType=TIMESTAMP},
-      status = #{record.status,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_by = #{record.createBy,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_by = #{record.updateBy,jdbcType=INTEGER},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      status = #{record.status,jdbcType=INTEGER},
+      check_status = #{record.checkStatus,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -326,9 +339,6 @@
       <if test="packList != null">
         pack_list = #{packList,jdbcType=TIMESTAMP},
       </if>
-      <if test="status != null">
-        status = #{status,jdbcType=INTEGER},
-      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -344,6 +354,12 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="checkStatus != null">
+        check_status = #{checkStatus,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -357,12 +373,13 @@
       total_skus = #{totalSkus,jdbcType=INTEGER},
       total_units = #{totalUnits,jdbcType=INTEGER},
       pack_list = #{packList,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_by = #{createBy,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=INTEGER},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      check_status = #{checkStatus,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

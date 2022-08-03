@@ -16,4 +16,5 @@ public class ListFbaPackingListRequest extends DataGridRequest {
     String shipmentId;
     Integer userId;
     Integer status;
+    Integer checkStatus;
 }

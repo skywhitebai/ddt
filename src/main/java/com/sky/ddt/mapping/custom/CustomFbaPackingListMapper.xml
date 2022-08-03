@@ -41,6 +41,7 @@
                 </if>
                 <if test="userId != null ">and fpl.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
                 <if test="status != null ">and fpl.status=#{status}</if>
+                <if test="checkStatus != null ">and fpl.check_status=#{checkStatus}</if>
             </trim>
         </where>
     </sql>

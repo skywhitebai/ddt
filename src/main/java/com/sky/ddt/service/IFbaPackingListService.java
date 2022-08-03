@@ -1,10 +1,7 @@
 package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
-import com.sky.ddt.dto.fbaPackingList.request.GenerateOutboundOrderRequest;
-import com.sky.ddt.dto.fbaPackingList.request.ImportFbaPackingList2Request;
-import com.sky.ddt.dto.fbaPackingList.request.ListFbaPackingListRequest;
-import com.sky.ddt.dto.fbaPackingList.request.ListInvoiceInfoRequest;
+import com.sky.ddt.dto.fbaPackingList.request.*;
 import com.sky.ddt.dto.fbaPackingList.response.ListFbaPackingListResponse;
 import com.sky.ddt.dto.fbaPackingList.response.ListInvoiceInfoResponse;
 import com.sky.ddt.dto.response.BaseResponse;
@@ -72,4 +69,8 @@ public interface IFbaPackingListService {
     BaseResponse cancelFbaPackingList(Integer id, Integer dealUserId);
 
     BaseResponse importFbaPackingList2(ImportFbaPackingList2Request params, Integer dealUserId);
+
+    BaseResponse saveFbaPackingListRemark(SaveFbaPackingListRemarkReq params, Integer dealUserId);
+
+    BaseResponse saveFbaPackingListCheckStatus(SaveFbaPackingListCheckStatusReq params, Integer dealUserId);
 }

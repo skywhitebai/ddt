@@ -3,13 +3,11 @@ package com.sky.ddt.controller;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
-import com.sky.ddt.dto.fbaPackingList.request.GenerateOutboundOrderRequest;
-import com.sky.ddt.dto.fbaPackingList.request.ImportFbaPackingList2Request;
-import com.sky.ddt.dto.fbaPackingList.request.ListFbaPackingListRequest;
-import com.sky.ddt.dto.fbaPackingList.request.ListInvoiceInfoRequest;
+import com.sky.ddt.dto.fbaPackingList.request.*;
 import com.sky.ddt.dto.fbaPackingList.response.ListFbaPackingListResponse;
 import com.sky.ddt.dto.fbaPackingList.response.ListInvoiceInfoResponse;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.dto.stockRecord.request.SaveStockRecordRemarkRequest;
 import com.sky.ddt.service.IFbaPackingListService;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,5 +85,21 @@ public class FbaPackingListController extends SuperController {
     public BaseResponse cancelFbaPackingList(Integer id) {
         Integer dealUserId=getCurrentUserId();
         return fbaPackingListService.cancelFbaPackingList(id,dealUserId);
+    }
+
+    @RequestMapping("/saveFbaPackingListRemark")
+    @ResponseBody
+    @MenuAnnotation("fbaPackingList/index")
+    public BaseResponse saveFbaPackingListRemark(SaveFbaPackingListRemarkReq params) {
+        Integer dealUserId = getCurrentUserId();
+        return fbaPackingListService.saveFbaPackingListRemark(params, dealUserId);
+    }
+
+    @RequestMapping("/saveFbaPackingListCheckStatus")
+    @ResponseBody
+    @MenuAnnotation("fbaPackingList/index")
+    public BaseResponse saveFbaPackingListCheckStatus(SaveFbaPackingListCheckStatusReq params) {
+        Integer dealUserId = getCurrentUserId();
+        return fbaPackingListService.saveFbaPackingListCheckStatus(params, dealUserId);
     }
 }
