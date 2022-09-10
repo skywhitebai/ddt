@@ -14,6 +14,7 @@ import java.util.List;
 public class InvoiceInfo {
     Integer fbaPackingListId;
     String shipmentId;
+    String referenceId;
     String fbaNo;
     String shipTo;
     Date date;

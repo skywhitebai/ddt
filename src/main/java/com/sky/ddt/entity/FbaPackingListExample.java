@@ -505,73 +505,73 @@ public class FbaPackingListExample {
             return (Criteria) this;
         }
 
-        public Criteria andReferenceidIsNull() {
-            addCriterion("ReferenceId is null");
+        public Criteria andReferenceIdIsNull() {
+            addCriterion("reference_id is null");
             return (Criteria) this;
         }
 
-        public Criteria andReferenceidIsNotNull() {
-            addCriterion("ReferenceId is not null");
+        public Criteria andReferenceIdIsNotNull() {
+            addCriterion("reference_id is not null");
             return (Criteria) this;
         }
 
-        public Criteria andReferenceidEqualTo(String value) {
-            addCriterion("ReferenceId =", value, "referenceid");
+        public Criteria andReferenceIdEqualTo(String value) {
+            addCriterion("reference_id =", value, "referenceId");
             return (Criteria) this;
         }
 
-        public Criteria andReferenceidNotEqualTo(String value) {
-            addCriterion("ReferenceId <>", value, "referenceid");
+        public Criteria andReferenceIdNotEqualTo(String value) {
+            addCriterion("reference_id <>", value, "referenceId");
             return (Criteria) this;
         }
 
-        public Criteria andReferenceidGreaterThan(String value) {
-            addCriterion("ReferenceId >", value, "referenceid");
+        public Criteria andReferenceIdGreaterThan(String value) {
+            addCriterion("reference_id >", value, "referenceId");
             return (Criteria) this;
         }
 
-        public Criteria andReferenceidGreaterThanOrEqualTo(String value) {
-            addCriterion("ReferenceId >=", value, "referenceid");
+        public Criteria andReferenceIdGreaterThanOrEqualTo(String value) {
+            addCriterion("reference_id >=", value, "referenceId");
             return (Criteria) this;
         }
 
-        public Criteria andReferenceidLessThan(String value) {
-            addCriterion("ReferenceId <", value, "referenceid");
+        public Criteria andReferenceIdLessThan(String value) {
+            addCriterion("reference_id <", value, "referenceId");
             return (Criteria) this;
         }
 
-        public Criteria andReferenceidLessThanOrEqualTo(String value) {
-            addCriterion("ReferenceId <=", value, "referenceid");
+        public Criteria andReferenceIdLessThanOrEqualTo(String value) {
+            addCriterion("reference_id <=", value, "referenceId");
             return (Criteria) this;
         }
 
-        public Criteria andReferenceidLike(String value) {
-            addCriterion("ReferenceId like", value, "referenceid");
+        public Criteria andReferenceIdLike(String value) {
+            addCriterion("reference_id like", value, "referenceId");
             return (Criteria) this;
         }
 
-        public Criteria andReferenceidNotLike(String value) {
-            addCriterion("ReferenceId not like", value, "referenceid");
+        public Criteria andReferenceIdNotLike(String value) {
+            addCriterion("reference_id not like", value, "referenceId");
             return (Criteria) this;
         }
 
-        public Criteria andReferenceidIn(List<String> values) {
-            addCriterion("ReferenceId in", values, "referenceid");
+        public Criteria andReferenceIdIn(List<String> values) {
+            addCriterion("reference_id in", values, "referenceId");
             return (Criteria) this;
         }
 
-        public Criteria andReferenceidNotIn(List<String> values) {
-            addCriterion("ReferenceId not in", values, "referenceid");
+        public Criteria andReferenceIdNotIn(List<String> values) {
+            addCriterion("reference_id not in", values, "referenceId");
             return (Criteria) this;
         }
 
-        public Criteria andReferenceidBetween(String value1, String value2) {
-            addCriterion("ReferenceId between", value1, value2, "referenceid");
+        public Criteria andReferenceIdBetween(String value1, String value2) {
+            addCriterion("reference_id between", value1, value2, "referenceId");
             return (Criteria) this;
         }
 
-        public Criteria andReferenceidNotBetween(String value1, String value2) {
-            addCriterion("ReferenceId not between", value1, value2, "referenceid");
+        public Criteria andReferenceIdNotBetween(String value1, String value2) {
+            addCriterion("reference_id not between", value1, value2, "referenceId");
             return (Criteria) this;
         }
 

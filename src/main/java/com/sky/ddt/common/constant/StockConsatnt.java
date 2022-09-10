@@ -21,7 +21,8 @@ public class StockConsatnt {
         HY("hy"),
         HY2("hy2"),
         DL("dl"),
-        DLX("dlx"),;
+        DLX("dlx"),
+        AMHY("amhy"),;
         String type;
 
         public String getType() {

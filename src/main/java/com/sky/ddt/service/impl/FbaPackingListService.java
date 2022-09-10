@@ -336,6 +336,7 @@ public class FbaPackingListService implements IFbaPackingListService {
         }
         invoiceInfo.setFbaPackingListId(fbaPackingListId);
         invoiceInfo.setShipmentId(fbaPackingList.getShipmentId());
+        invoiceInfo.setReferenceId(fbaPackingList.getReferenceId());
         invoiceInfo.setShipTo(fbaPackingList.getShipTo());
         invoiceInfo.setFbaNo(orderNumber);
         //根据orderNumber 查询fba装箱单店铺sku数据
@@ -524,7 +525,7 @@ public class FbaPackingListService implements IFbaPackingListService {
 
         //插入
         fbaPackingList.setShipTo(params.getShipTo());
-        fbaPackingList.setReferenceid(params.getReferenceId());
+        fbaPackingList.setReferenceId(params.getReferenceId());
         fbaPackingList.setShopId(shopId);
         fbaPackingList.setCreateBy(dealUserId);
         fbaPackingList.setCreateTime(new Date());

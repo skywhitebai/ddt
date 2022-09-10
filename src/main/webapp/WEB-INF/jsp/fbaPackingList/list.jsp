@@ -160,7 +160,7 @@
         FBAshipment id：<input class="easyui-textbox" name="fbaShipmentId"
                               id="dlg_importFbaPackingList2_fbaShipmentId"><br>
         Ship to（地址）：<input class="easyui-textbox" name="shipTo" id="dlg_importFbaPackingList2_shipTo"><br>
-        ReferenceId*：<input class="easyui-textbox" name="shipTo" id="dlg_importFbaPackingList2_referenceId"><br>
+        ReferenceId*：<input class="easyui-textbox" name="referenceId" id="dlg_importFbaPackingList2_referenceId"><br>
         <input type="file" id="importFbaPackingListFile2" name="file" accept=".xls,.xlsx"/>
         <div style="text-align:center;">
             <label style="color: red">请将excel里面的公式转换为普通数值再导入</label>
@@ -205,7 +205,7 @@
     </table>
 </div>
 
-<div id="dlgGenerateOutboundOrder" class="easyui-dialog" style="width: 700px; height: 500px; padding: 10px 20px"
+<div id="dlgGenerateOutboundOrder" class="easyui-dialog" style="width: 880px; height: 500px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
     <div class="ftitle">
         <b>生成出库单</b>
@@ -416,6 +416,7 @@
                 {title: 'Shipment ID', field: 'shipmentId', width: 140},
                 {title: 'Name', field: 'name', width: 160},
                 {title: 'Plan ID', field: 'planId', width: 160},
+                {title: 'referenceId', field: 'referenceId', width: 100},
                 {title: 'Total SKUs', field: 'totalSkus', width: 80},
                 {title: 'Total Units', field: 'totalUnits', width: 140},
                 {title: '实发数量', field: 'actualDeliveryQuantity', width: 120},
@@ -747,12 +748,13 @@
                 {title: 'sku数量', field: 'shopSkuCount', width: 50},
                 {title: '商品数量', field: 'shopSkuQuantity', width: 50},
                 {
-                    title: '操作', field: 'deal', width: 650,
+                    title: '操作', field: 'deal', width: 800,
                     formatter: function (value, row, index) {
                         return '<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'ky\')" title="生成空运发票">生成空运发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'kp\')" title="生成空派发票">生成空派发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'hy\')" title="生成海运发票">生成海运发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'hy2\')" title="生成新的海运发票">生成新的海运发票</a>'
+                            + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'amhy\')" title="生成阿玛海运发票">生成阿玛海运发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'dl\')" title="生成DL海运发票">生成DL海运发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'dlx\')" title="生成德立讯发票">生成德立讯发票</a>';
                     }
