@@ -13,7 +13,7 @@ public class ListWorkTaskReq extends DataGridRequest {
     private String title;
     private String workTaskNo;
     private Integer status;
+    private Integer auditStatus;
     private Integer dealUserId;
     private Integer chargeUserId;
-    private Integer salesGroupId;
 }

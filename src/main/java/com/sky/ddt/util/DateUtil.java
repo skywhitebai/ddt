@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
+    public static final Date baseDate = strToDate("2000-01-01");
 
     public static String getFormatSSS(Date date) {
         if (date == null) {
@@ -82,6 +83,7 @@ public class DateUtil {
         String formatStr = formatter.format(date);
         return formatStr;
     }
+
     /**
      * @param date
      * @return
@@ -94,6 +96,7 @@ public class DateUtil {
         String formatStr = formatter.format(date);
         return formatStr;
     }
+
     /**
      * 指定日期加上小时后的日期
      *
@@ -121,12 +124,14 @@ public class DateUtil {
         ca.add(Calendar.DATE, num);// num为增加的天数，可以改变的
         return ca.getTime();
     }
-    public static Date plusYear(int num,Date date) {
+
+    public static Date plusYear(int num, Date date) {
         Calendar ca = Calendar.getInstance();
         ca.setTime(date);
         ca.add(Calendar.YEAR, num);// num为增加的小时，可以改变的
         return ca.getTime();
     }
+
     /**
      * 指定日期加上多少分钟后的日期
      *
@@ -204,8 +209,8 @@ public class DateUtil {
         if (StringUtils.isEmpty(str)) {
             return null;
         }
-        if(str.length()>19){
-            str=str.substring(0,19);
+        if (str.length() > 19) {
+            str = str.substring(0, 19);
         }
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         try {
@@ -295,8 +300,9 @@ public class DateUtil {
     public static Date asDate(LocalDateTime localDateTime) {
         return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
+
     public static Date getDateNowUtc() {
-        LocalDateTime localDateTime=LocalDateTime.now(ZoneOffset.UTC);
+        LocalDateTime localDateTime = LocalDateTime.now(ZoneOffset.UTC);
         return asDate(localDateTime);
     }
 
@@ -332,7 +338,7 @@ public class DateUtil {
     }
 
     public static Date dateTimeToDate(Date dateTime) {
-        if(dateTime==null){
+        if (dateTime == null) {
             return null;
         }
         SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-dd");
@@ -361,5 +367,22 @@ public class DateUtil {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static Date getWeekMonday(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        // 获得当前日期是一个星期的第几天
+        int dayWeek = cal.get(Calendar.DAY_OF_WEEK);
+        if (1 == dayWeek) {
+            cal.add(Calendar.DAY_OF_MONTH, -1);
+        }
+        // 设置一个星期的第一天，按中国的习惯一个星期的第一天是星期一
+        cal.setFirstDayOfWeek(Calendar.MONDAY);
+        // 获得当前日期是一个星期的第几天
+        int day = cal.get(Calendar.DAY_OF_WEEK);
+        // 根据日历的规则，给当前日期减去星期几与一个星期第一天的差值
+        cal.add(Calendar.DATE, cal.getFirstDayOfWeek() - day);
+        return cal.getTime();
     }
 }

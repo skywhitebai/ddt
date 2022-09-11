@@ -1,13 +1,16 @@
 package com.sky.ddt.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.sky.ddt.common.annotation.Log;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.common.annotation.RightAnnotation;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
+import com.sky.ddt.dto.easyui.response.TreeResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.user.request.UserComboboxRequest;
 import com.sky.ddt.dto.user.request.UserListRequest;
 import com.sky.ddt.dto.user.request.UserSaveRequest;
+import com.sky.ddt.dto.user.request.UserTreeReq;
 import com.sky.ddt.dto.user.response.UserComboboxResponse;
 import com.sky.ddt.dto.user.response.UserListResponse;
 import com.sky.ddt.entity.User;
@@ -61,5 +64,11 @@ public class UserController extends SuperController{
     public List<UserComboboxResponse> comboboxlist(UserComboboxRequest params) {
         List<UserComboboxResponse> list=userService.comboboxlist(params);
         return list;
+    }
+    @RequestMapping("/tree")
+    @ResponseBody
+    @Log("用户树 供选择用户")
+    public  List<TreeResponse> tree(UserTreeReq params) {
+        return userService.tree(params);
     }
 }

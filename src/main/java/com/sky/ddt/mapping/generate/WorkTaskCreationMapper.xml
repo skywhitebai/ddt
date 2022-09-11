@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.sky.ddt.dao.generate.WorkTaskMapper">
-  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.WorkTask">
+<mapper namespace="com.sky.ddt.dao.generate.WorkTaskCreationMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.WorkTaskCreation">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="work_task_no" jdbcType="VARCHAR" property="workTaskNo" />
     <result column="level" jdbcType="INTEGER" property="level" />
-    <result column="audit_status" jdbcType="INTEGER" property="auditStatus" />
-    <result column="status" jdbcType="INTEGER" property="status" />
-    <result column="begin_time" jdbcType="TIMESTAMP" property="beginTime" />
-    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
-    <result column="actual_end_time" jdbcType="TIMESTAMP" property="actualEndTime" />
-    <result column="charge_user_id" jdbcType="INTEGER" property="chargeUserId" />
-    <result column="deal_user_id" jdbcType="INTEGER" property="dealUserId" />
-    <result column="deal_status" jdbcType="INTEGER" property="dealStatus" />
+    <result column="begin_time" jdbcType="DATE" property="beginTime" />
+    <result column="end_time" jdbcType="DATE" property="endTime" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="need_audit" jdbcType="INTEGER" property="needAudit" />
+    <result column="deal_time" jdbcType="TIMESTAMP" property="dealTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_by" jdbcType="INTEGER" property="updateBy" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sky.ddt.entity.WorkTaskWithBLOBs">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.sky.ddt.entity.WorkTaskCreation">
     <result column="content" jdbcType="LONGVARCHAR" property="content" />
-    <result column="solution" jdbcType="LONGVARCHAR" property="solution" />
-    <result column="audit_content" jdbcType="LONGVARCHAR" property="auditContent" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -84,14 +79,13 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, title, work_task_no, level, audit_status, status, begin_time, end_time, actual_end_time, 
-    charge_user_id, deal_user_id, deal_status, remark, create_time, create_by, update_time, 
-    update_by
+    id, title, level, begin_time, end_time, remark, status, type, need_audit, deal_time, 
+    create_time, create_by, update_time, update_by
   </sql>
   <sql id="Blob_Column_List">
-    content, solution, audit_content
+    content
   </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.sky.ddt.entity.WorkTaskExample" resultMap="ResultMapWithBLOBs">
+  <select id="selectByExampleWithBLOBs" parameterType="com.sky.ddt.entity.WorkTaskCreationExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
@@ -99,7 +93,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from work_task
+    from work_task_creation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -107,13 +101,13 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" parameterType="com.sky.ddt.entity.WorkTaskExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.WorkTaskCreationExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from work_task
+    from work_task_creation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -126,58 +120,45 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from work_task
+    from work_task_creation
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from work_task
+    delete from work_task_creation
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.WorkTaskExample">
-    delete from work_task
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.WorkTaskCreationExample">
+    delete from work_task_creation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.sky.ddt.entity.WorkTaskWithBLOBs">
+  <insert id="insert" parameterType="com.sky.ddt.entity.WorkTaskCreation">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into work_task (title, work_task_no, level, 
-      audit_status, status, begin_time, 
-      end_time, actual_end_time, charge_user_id, 
-      deal_user_id, deal_status, remark, 
+    insert into work_task_creation (title, level, begin_time, 
+      end_time, remark, status, 
+      type, need_audit, deal_time, 
       create_time, create_by, update_time, 
-      update_by, content, solution, 
-      audit_content)
-    values (#{title,jdbcType=VARCHAR}, #{workTaskNo,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, 
-      #{auditStatus,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{beginTime,jdbcType=TIMESTAMP}, 
-      #{endTime,jdbcType=TIMESTAMP}, #{actualEndTime,jdbcType=TIMESTAMP}, #{chargeUserId,jdbcType=INTEGER}, 
-      #{dealUserId,jdbcType=INTEGER}, #{dealStatus,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      update_by, content)
+    values (#{title,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, #{beginTime,jdbcType=DATE}, 
+      #{endTime,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{type,jdbcType=INTEGER}, #{needAudit,jdbcType=INTEGER}, #{dealTime,jdbcType=TIMESTAMP}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}, #{solution,jdbcType=LONGVARCHAR}, 
-      #{auditContent,jdbcType=LONGVARCHAR})
+      #{updateBy,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.sky.ddt.entity.WorkTaskWithBLOBs">
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.WorkTaskCreation">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into work_task
+    insert into work_task_creation
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="title != null">
         title,
       </if>
-      <if test="workTaskNo != null">
-        work_task_no,
-      </if>
       <if test="level != null">
         level,
-      </if>
-      <if test="auditStatus != null">
-        audit_status,
-      </if>
-      <if test="status != null">
-        status,
       </if>
       <if test="beginTime != null">
         begin_time,
@@ -185,20 +166,20 @@
       <if test="endTime != null">
         end_time,
       </if>
-      <if test="actualEndTime != null">
-        actual_end_time,
-      </if>
-      <if test="chargeUserId != null">
-        charge_user_id,
-      </if>
-      <if test="dealUserId != null">
-        deal_user_id,
-      </if>
-      <if test="dealStatus != null">
-        deal_status,
-      </if>
       <if test="remark != null">
         remark,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="needAudit != null">
+        need_audit,
+      </if>
+      <if test="dealTime != null">
+        deal_time,
       </if>
       <if test="createTime != null">
         create_time,
@@ -215,49 +196,34 @@
       <if test="content != null">
         content,
       </if>
-      <if test="solution != null">
-        solution,
-      </if>
-      <if test="auditContent != null">
-        audit_content,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
       </if>
-      <if test="workTaskNo != null">
-        #{workTaskNo,jdbcType=VARCHAR},
-      </if>
       <if test="level != null">
         #{level,jdbcType=INTEGER},
       </if>
-      <if test="auditStatus != null">
-        #{auditStatus,jdbcType=INTEGER},
+      <if test="beginTime != null">
+        #{beginTime,jdbcType=DATE},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=DATE},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         #{status,jdbcType=INTEGER},
       </if>
-      <if test="beginTime != null">
-        #{beginTime,jdbcType=TIMESTAMP},
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
       </if>
-      <if test="endTime != null">
-        #{endTime,jdbcType=TIMESTAMP},
+      <if test="needAudit != null">
+        #{needAudit,jdbcType=INTEGER},
       </if>
-      <if test="actualEndTime != null">
-        #{actualEndTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="chargeUserId != null">
-        #{chargeUserId,jdbcType=INTEGER},
-      </if>
-      <if test="dealUserId != null">
-        #{dealUserId,jdbcType=INTEGER},
-      </if>
-      <if test="dealStatus != null">
-        #{dealStatus,jdbcType=INTEGER},
-      </if>
-      <if test="remark != null">
-        #{remark,jdbcType=VARCHAR},
+      <if test="dealTime != null">
+        #{dealTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -274,22 +240,16 @@
       <if test="content != null">
         #{content,jdbcType=LONGVARCHAR},
       </if>
-      <if test="solution != null">
-        #{solution,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="auditContent != null">
-        #{auditContent,jdbcType=LONGVARCHAR},
-      </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.sky.ddt.entity.WorkTaskExample" resultType="java.lang.Long">
-    select count(*) from work_task
+  <select id="countByExample" parameterType="com.sky.ddt.entity.WorkTaskCreationExample" resultType="java.lang.Long">
+    select count(*) from work_task_creation
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update work_task
+    update work_task_creation
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=INTEGER},
@@ -297,38 +257,29 @@
       <if test="record.title != null">
         title = #{record.title,jdbcType=VARCHAR},
       </if>
-      <if test="record.workTaskNo != null">
-        work_task_no = #{record.workTaskNo,jdbcType=VARCHAR},
-      </if>
       <if test="record.level != null">
         level = #{record.level,jdbcType=INTEGER},
       </if>
-      <if test="record.auditStatus != null">
-        audit_status = #{record.auditStatus,jdbcType=INTEGER},
+      <if test="record.beginTime != null">
+        begin_time = #{record.beginTime,jdbcType=DATE},
+      </if>
+      <if test="record.endTime != null">
+        end_time = #{record.endTime,jdbcType=DATE},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
       </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=INTEGER},
       </if>
-      <if test="record.beginTime != null">
-        begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
+      <if test="record.type != null">
+        type = #{record.type,jdbcType=INTEGER},
       </if>
-      <if test="record.endTime != null">
-        end_time = #{record.endTime,jdbcType=TIMESTAMP},
+      <if test="record.needAudit != null">
+        need_audit = #{record.needAudit,jdbcType=INTEGER},
       </if>
-      <if test="record.actualEndTime != null">
-        actual_end_time = #{record.actualEndTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.chargeUserId != null">
-        charge_user_id = #{record.chargeUserId,jdbcType=INTEGER},
-      </if>
-      <if test="record.dealUserId != null">
-        deal_user_id = #{record.dealUserId,jdbcType=INTEGER},
-      </if>
-      <if test="record.dealStatus != null">
-        deal_status = #{record.dealStatus,jdbcType=INTEGER},
-      </if>
-      <if test="record.remark != null">
-        remark = #{record.remark,jdbcType=VARCHAR},
+      <if test="record.dealTime != null">
+        deal_time = #{record.dealTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -345,58 +296,44 @@
       <if test="record.content != null">
         content = #{record.content,jdbcType=LONGVARCHAR},
       </if>
-      <if test="record.solution != null">
-        solution = #{record.solution,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="record.auditContent != null">
-        audit_content = #{record.auditContent,jdbcType=LONGVARCHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
-    update work_task
+    update work_task_creation
     set id = #{record.id,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
-      work_task_no = #{record.workTaskNo,jdbcType=VARCHAR},
       level = #{record.level,jdbcType=INTEGER},
-      audit_status = #{record.auditStatus,jdbcType=INTEGER},
-      status = #{record.status,jdbcType=INTEGER},
-      begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
-      end_time = #{record.endTime,jdbcType=TIMESTAMP},
-      actual_end_time = #{record.actualEndTime,jdbcType=TIMESTAMP},
-      charge_user_id = #{record.chargeUserId,jdbcType=INTEGER},
-      deal_user_id = #{record.dealUserId,jdbcType=INTEGER},
-      deal_status = #{record.dealStatus,jdbcType=INTEGER},
+      begin_time = #{record.beginTime,jdbcType=DATE},
+      end_time = #{record.endTime,jdbcType=DATE},
       remark = #{record.remark,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=INTEGER},
+      need_audit = #{record.needAudit,jdbcType=INTEGER},
+      deal_time = #{record.dealTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       update_by = #{record.updateBy,jdbcType=INTEGER},
-      content = #{record.content,jdbcType=LONGVARCHAR},
-      solution = #{record.solution,jdbcType=LONGVARCHAR},
-      audit_content = #{record.auditContent,jdbcType=LONGVARCHAR}
+      content = #{record.content,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update work_task
+    update work_task_creation
     set id = #{record.id,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
-      work_task_no = #{record.workTaskNo,jdbcType=VARCHAR},
       level = #{record.level,jdbcType=INTEGER},
-      audit_status = #{record.auditStatus,jdbcType=INTEGER},
-      status = #{record.status,jdbcType=INTEGER},
-      begin_time = #{record.beginTime,jdbcType=TIMESTAMP},
-      end_time = #{record.endTime,jdbcType=TIMESTAMP},
-      actual_end_time = #{record.actualEndTime,jdbcType=TIMESTAMP},
-      charge_user_id = #{record.chargeUserId,jdbcType=INTEGER},
-      deal_user_id = #{record.dealUserId,jdbcType=INTEGER},
-      deal_status = #{record.dealStatus,jdbcType=INTEGER},
+      begin_time = #{record.beginTime,jdbcType=DATE},
+      end_time = #{record.endTime,jdbcType=DATE},
       remark = #{record.remark,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=INTEGER},
+      type = #{record.type,jdbcType=INTEGER},
+      need_audit = #{record.needAudit,jdbcType=INTEGER},
+      deal_time = #{record.dealTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
@@ -405,44 +342,35 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.WorkTaskWithBLOBs">
-    update work_task
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.WorkTaskCreation">
+    update work_task_creation
     <set>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
       </if>
-      <if test="workTaskNo != null">
-        work_task_no = #{workTaskNo,jdbcType=VARCHAR},
-      </if>
       <if test="level != null">
         level = #{level,jdbcType=INTEGER},
       </if>
-      <if test="auditStatus != null">
-        audit_status = #{auditStatus,jdbcType=INTEGER},
+      <if test="beginTime != null">
+        begin_time = #{beginTime,jdbcType=DATE},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=DATE},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=INTEGER},
       </if>
-      <if test="beginTime != null">
-        begin_time = #{beginTime,jdbcType=TIMESTAMP},
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
       </if>
-      <if test="endTime != null">
-        end_time = #{endTime,jdbcType=TIMESTAMP},
+      <if test="needAudit != null">
+        need_audit = #{needAudit,jdbcType=INTEGER},
       </if>
-      <if test="actualEndTime != null">
-        actual_end_time = #{actualEndTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="chargeUserId != null">
-        charge_user_id = #{chargeUserId,jdbcType=INTEGER},
-      </if>
-      <if test="dealUserId != null">
-        deal_user_id = #{dealUserId,jdbcType=INTEGER},
-      </if>
-      <if test="dealStatus != null">
-        deal_status = #{dealStatus,jdbcType=INTEGER},
-      </if>
-      <if test="remark != null">
-        remark = #{remark,jdbcType=VARCHAR},
+      <if test="dealTime != null">
+        deal_time = #{dealTime,jdbcType=TIMESTAMP},
       </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -459,52 +387,38 @@
       <if test="content != null">
         content = #{content,jdbcType=LONGVARCHAR},
       </if>
-      <if test="solution != null">
-        solution = #{solution,jdbcType=LONGVARCHAR},
-      </if>
-      <if test="auditContent != null">
-        audit_content = #{auditContent,jdbcType=LONGVARCHAR},
-      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sky.ddt.entity.WorkTaskWithBLOBs">
-    update work_task
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.sky.ddt.entity.WorkTaskCreation">
+    update work_task_creation
     set title = #{title,jdbcType=VARCHAR},
-      work_task_no = #{workTaskNo,jdbcType=VARCHAR},
       level = #{level,jdbcType=INTEGER},
-      audit_status = #{auditStatus,jdbcType=INTEGER},
-      status = #{status,jdbcType=INTEGER},
-      begin_time = #{beginTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
-      actual_end_time = #{actualEndTime,jdbcType=TIMESTAMP},
-      charge_user_id = #{chargeUserId,jdbcType=INTEGER},
-      deal_user_id = #{dealUserId,jdbcType=INTEGER},
-      deal_status = #{dealStatus,jdbcType=INTEGER},
+      begin_time = #{beginTime,jdbcType=DATE},
+      end_time = #{endTime,jdbcType=DATE},
       remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      need_audit = #{needAudit,jdbcType=INTEGER},
+      deal_time = #{dealTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=INTEGER},
-      content = #{content,jdbcType=LONGVARCHAR},
-      solution = #{solution,jdbcType=LONGVARCHAR},
-      audit_content = #{auditContent,jdbcType=LONGVARCHAR}
+      content = #{content,jdbcType=LONGVARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.WorkTask">
-    update work_task
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.WorkTaskCreation">
+    update work_task_creation
     set title = #{title,jdbcType=VARCHAR},
-      work_task_no = #{workTaskNo,jdbcType=VARCHAR},
       level = #{level,jdbcType=INTEGER},
-      audit_status = #{auditStatus,jdbcType=INTEGER},
-      status = #{status,jdbcType=INTEGER},
-      begin_time = #{beginTime,jdbcType=TIMESTAMP},
-      end_time = #{endTime,jdbcType=TIMESTAMP},
-      actual_end_time = #{actualEndTime,jdbcType=TIMESTAMP},
-      charge_user_id = #{chargeUserId,jdbcType=INTEGER},
-      deal_user_id = #{dealUserId,jdbcType=INTEGER},
-      deal_status = #{dealStatus,jdbcType=INTEGER},
+      begin_time = #{beginTime,jdbcType=DATE},
+      end_time = #{endTime,jdbcType=DATE},
       remark = #{remark,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      need_audit = #{needAudit,jdbcType=INTEGER},
+      deal_time = #{dealTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},

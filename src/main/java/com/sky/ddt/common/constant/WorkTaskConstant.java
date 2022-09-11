@@ -10,10 +10,10 @@ import lombok.Getter;
 public class WorkTaskConstant {
     @Getter
     public enum StatusEnum {
-        WAIT_DEAL(0, "待处理"),
+        CANCEL(0, "取消"),
         HAVE_IN_HAND(1, "进行中"),
         COMPLETED(2, "已完成"),
-        CANCEL(3, "取消"),;
+        WAIT_AUDIT(3, "待审核"),;
         Integer status;
         String statusName;
 
@@ -97,6 +97,37 @@ public class WorkTaskConstant {
             for (WorkTaskConstant.LevelEnum statusEnum : WorkTaskConstant.LevelEnum.values()) {
                 if (statusEnum.level.equals(level)) {
                     return statusEnum.levelName;
+                }
+            }
+            return null;
+        }
+    }
+    @Getter
+    public enum AuditStatusEnum {
+        NO_NEED(0, "不需要审核"),
+        WAIT_AUDIT(1, "待审核"),
+        AUDIT(2, "审核通过"),;
+        Integer auditStatus;
+        String statusName;
+
+        AuditStatusEnum(Integer dealStatus, String statusName) {
+            this.auditStatus = dealStatus;
+            this.statusName = statusName;
+        }
+
+        public static boolean contains(Integer dealStatus) {
+            for (WorkTaskConstant.AuditStatusEnum statusEnum : WorkTaskConstant.AuditStatusEnum.values()) {
+                if (statusEnum.auditStatus.equals(dealStatus)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static String getAuditStatusName(Integer dealStatus) {
+            for (WorkTaskConstant.AuditStatusEnum statusEnum : WorkTaskConstant.AuditStatusEnum.values()) {
+                if (statusEnum.auditStatus.equals(dealStatus)) {
+                    return statusEnum.statusName;
                 }
             }
             return null;

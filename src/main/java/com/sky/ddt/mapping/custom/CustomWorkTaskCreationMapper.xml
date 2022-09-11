@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomWorkTaskCreationMapper">
+
+    <resultMap id="listWorkTaskCreationMap"
+               type="com.sky.ddt.dto.workTaskCreation.resp.ListWorkTaskCreationResp"
+               extends="com.sky.ddt.dao.generate.WorkTaskCreationMapper.ResultMapWithBLOBs">
+        <result column="chargeUserRealNames" property="chargeUserRealNames"/>
+    </resultMap>
+    <select id="listWorkTaskCreation"
+            resultMap="listWorkTaskCreationMap">
+        SELECT
+        wtc.*,
+        (select GROUP_CONCAT(real_name SEPARATOR ',')   from user u,work_task_creation_user wtcu where u.user_id=wtcu.user_id and wtcu.work_task_creation_id =wtc.id) chargeUserRealNames
+        from work_task_creation wtc
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="title != null and title!=''">and title like concat('%',#{title},'%')</if>
+                <if test="status != null ">and status = #{status}</if>
+            </trim>
+        </where>
+        order by wtc.create_time asc
+    </select>
+</mapper>

@@ -4,12 +4,15 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.UserConstant;
 import com.sky.ddt.dao.custom.CustomUserMapper;
+import com.sky.ddt.dto.easyui.response.TreeResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.user.request.UserComboboxRequest;
 import com.sky.ddt.dto.user.request.UserListRequest;
 import com.sky.ddt.dto.user.request.UserSaveRequest;
+import com.sky.ddt.dto.user.request.UserTreeReq;
 import com.sky.ddt.dto.user.response.UserComboboxResponse;
 import com.sky.ddt.dto.user.response.UserListResponse;
+import com.sky.ddt.entity.Menu;
 import com.sky.ddt.entity.User;
 import com.sky.ddt.entity.UserExample;
 import com.sky.ddt.service.IUserService;
@@ -20,6 +23,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -178,5 +182,37 @@ public class UserService implements IUserService {
             return null;
         }
         return list.get(0);
+    }
+
+    @Override
+    public List<TreeResponse> tree(UserTreeReq params) {
+        TreeResponse treeResponse = new TreeResponse();
+        treeResponse.setId(0);
+        treeResponse.setText("用户");
+        List<User> userList = geetUserList(params);
+        getTreeChildren(treeResponse, userList);
+        List<TreeResponse> list = new ArrayList<TreeResponse>();
+        list.add(treeResponse);
+        return list;
+    }
+
+    private void getTreeChildren(TreeResponse treeResponse, List<User> userList) {
+        treeResponse.setChildren(new ArrayList<TreeResponse>());
+        for (User user :
+                userList) {
+                TreeResponse userTree = new TreeResponse();
+                userTree.setId(user.getUserId());
+                userTree.setText(user.getRealName());
+                treeResponse.getChildren().add(userTree);
+        }
+    }
+
+    private List<User> geetUserList(UserTreeReq params) {
+        UserExample example=new UserExample();
+        if(params.getStatus()!=null){
+            example.createCriteria().andStatusEqualTo(params.getStatus());
+        }
+        example.setOrderByClause(" real_name asc ");
+        return customUserMapper.selectByExample(example);
     }
 }

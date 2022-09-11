@@ -13,6 +13,7 @@ import com.sky.ddt.dto.workTask.resp.ListWorkTaskResp;
 import com.sky.ddt.entity.WorkOrder;
 import com.sky.ddt.entity.WorkTask;
 import com.sky.ddt.entity.WorkTaskExample;
+import com.sky.ddt.entity.WorkTaskWithBLOBs;
 import com.sky.ddt.service.IWorkTaskService;
 import com.sky.ddt.util.DateUtil;
 import org.springframework.beans.BeanUtils;
@@ -54,7 +55,7 @@ public class WorkTaskService implements IWorkTaskService {
         if (customUserMapper.selectByPrimaryKey(params.getChargeUserId()) == null) {
             return BaseResponse.failMessage("负责人id不存在");
         }
-        WorkTask workTask = new WorkTask();
+        WorkTaskWithBLOBs workTask = new WorkTaskWithBLOBs();
         if (!WorkTaskConstant.LevelEnum.contains(params.getLevel())) {
             return BaseResponse.failMessage("处理级别不存在");
         }
@@ -96,7 +97,7 @@ public class WorkTaskService implements IWorkTaskService {
         if (workTask == null) {
             return BaseResponse.failMessage("id不存在");
         }
-        WorkTask workTaskUpdate = new WorkTask();
+        WorkTaskWithBLOBs workTaskUpdate = new WorkTaskWithBLOBs();
         workTaskUpdate.setId(id);
         workTaskUpdate.setUpdateBy(dealUserId);
         workTaskUpdate.setUpdateTime(new Date());
@@ -104,8 +105,8 @@ public class WorkTaskService implements IWorkTaskService {
         customWorkTaskMapper.updateByPrimaryKeySelective(workTaskUpdate);
         return BaseResponse.success();
     }
-
-    private String getWorderTaskNo() {
+    @Override
+    public String getWorderTaskNo() {
         String worderTaskNoFirst = "WO" + DateUtil.getFormatStryyyyMMdd(new Date());
         WorkTaskExample example = new WorkTaskExample();
         example.createCriteria().andCreateTimeGreaterThanOrEqualTo(DateUtil.getToday());

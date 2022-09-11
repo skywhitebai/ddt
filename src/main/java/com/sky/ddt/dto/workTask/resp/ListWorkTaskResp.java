@@ -1,6 +1,7 @@
 package com.sky.ddt.dto.workTask.resp;
 
 import com.sky.ddt.entity.WorkTask;
+import com.sky.ddt.entity.WorkTaskWithBLOBs;
 import lombok.Data;
 
 /**
@@ -9,10 +10,7 @@ import lombok.Data;
  * @date 2022/4/29 23:07
  */
 @Data
-public class ListWorkTaskResp extends WorkTask {
+public class ListWorkTaskResp extends WorkTaskWithBLOBs {
     String dealUserRealName;
-    String chargeUserRealName;
-    String salesGroupName;
-    String salesGroupUserRealNames;
-    Integer salesGroupId;
+    String chargeUserRealNames;
 }

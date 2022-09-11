@@ -17,4 +17,6 @@ public interface IWorkTaskService {
     BaseResponse saveWorkTask(SaveWorkTaskReq params, Integer dealUserId);
 
     BaseResponse cancelWorkTask(Integer id, Integer dealUserId);
+
+    String getWorderTaskNo();
 }

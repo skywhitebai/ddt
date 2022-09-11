@@ -2,32 +2,26 @@ package com.sky.ddt.entity;
 
 import java.util.Date;
 
-public class WorkTask {
+public class WorkTaskCreation {
     private Integer id;
 
     private String title;
 
-    private String workTaskNo;
-
     private Integer level;
-
-    private Integer auditStatus;
-
-    private Integer status;
 
     private Date beginTime;
 
     private Date endTime;
 
-    private Date actualEndTime;
-
-    private Integer chargeUserId;
-
-    private Integer dealUserId;
-
-    private Integer dealStatus;
-
     private String remark;
+
+    private Integer status;
+
+    private Integer type;
+
+    private Integer needAudit;
+
+    private Date dealTime;
 
     private Date createTime;
 
@@ -36,6 +30,8 @@ public class WorkTask {
     private Date updateTime;
 
     private Integer updateBy;
+
+    private String content;
 
     public Integer getId() {
         return id;
@@ -53,36 +49,12 @@ public class WorkTask {
         this.title = title == null ? null : title.trim();
     }
 
-    public String getWorkTaskNo() {
-        return workTaskNo;
-    }
-
-    public void setWorkTaskNo(String workTaskNo) {
-        this.workTaskNo = workTaskNo == null ? null : workTaskNo.trim();
-    }
-
     public Integer getLevel() {
         return level;
     }
 
     public void setLevel(Integer level) {
         this.level = level;
-    }
-
-    public Integer getAuditStatus() {
-        return auditStatus;
-    }
-
-    public void setAuditStatus(Integer auditStatus) {
-        this.auditStatus = auditStatus;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
     }
 
     public Date getBeginTime() {
@@ -101,44 +73,44 @@ public class WorkTask {
         this.endTime = endTime;
     }
 
-    public Date getActualEndTime() {
-        return actualEndTime;
-    }
-
-    public void setActualEndTime(Date actualEndTime) {
-        this.actualEndTime = actualEndTime;
-    }
-
-    public Integer getChargeUserId() {
-        return chargeUserId;
-    }
-
-    public void setChargeUserId(Integer chargeUserId) {
-        this.chargeUserId = chargeUserId;
-    }
-
-    public Integer getDealUserId() {
-        return dealUserId;
-    }
-
-    public void setDealUserId(Integer dealUserId) {
-        this.dealUserId = dealUserId;
-    }
-
-    public Integer getDealStatus() {
-        return dealStatus;
-    }
-
-    public void setDealStatus(Integer dealStatus) {
-        this.dealStatus = dealStatus;
-    }
-
     public String getRemark() {
         return remark;
     }
 
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
+
+    public Integer getNeedAudit() {
+        return needAudit;
+    }
+
+    public void setNeedAudit(Integer needAudit) {
+        this.needAudit = needAudit;
+    }
+
+    public Date getDealTime() {
+        return dealTime;
+    }
+
+    public void setDealTime(Date dealTime) {
+        this.dealTime = dealTime;
     }
 
     public Date getCreateTime() {
@@ -171,5 +143,13 @@ public class WorkTask {
 
     public void setUpdateBy(Integer updateBy) {
         this.updateBy = updateBy;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content == null ? null : content.trim();
     }
 }

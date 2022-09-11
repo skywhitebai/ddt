@@ -1,10 +1,12 @@
 package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
+import com.sky.ddt.dto.easyui.response.TreeResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.user.request.UserComboboxRequest;
 import com.sky.ddt.dto.user.request.UserListRequest;
 import com.sky.ddt.dto.user.request.UserSaveRequest;
+import com.sky.ddt.dto.user.request.UserTreeReq;
 import com.sky.ddt.dto.user.response.UserComboboxResponse;
 import com.sky.ddt.dto.user.response.UserListResponse;
 import com.sky.ddt.entity.User;
@@ -58,4 +60,6 @@ public interface IUserService {
      * @date 2020/1/3 10:21
      */
     User getUserByUserName(String userName);
+
+    List<TreeResponse> tree(UserTreeReq params);
 }
