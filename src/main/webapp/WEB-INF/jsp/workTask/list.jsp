@@ -27,6 +27,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath }/static/css/main.css?t=20200928" type="text/css">
     <script type="text/javascript"
             src="${pageContext.request.contextPath }/static/js/common/common.js?t=20201028"></script>
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath }/static/js/common/cookieUtil.js?t=20200928"></script>
     <title>任务管理</title>
 </head>
 <body>
@@ -95,10 +97,17 @@
                            style="width: 90%;height:200px">
                 </td>
             </tr>
+            <tr class="view_status">
+                <td>解决方案：</td>
+                <td colspan="3">
+                    <input class="easyui-textbox" name="solution"
+                           style="width: 90%;height:200px">
+                </td>
+            </tr>
             <tr>
                 <td>处理级别：</td>
                 <td>
-                    <select class="easyui-combobox" name="level" style="width:100px;">
+                    <select class="easyui-combobox" name="level" data-options="required:true" style="width:100px;">
                         <option value="1">紧急</option>
                         <option value="2">普通</option>
                         <option value="3">不急</option>
@@ -117,8 +126,20 @@
             </tr>
             <tr>
                 <td>负责人：</td>
+                <td colspan="3">
+                    <input class="easyui-textbox" type="text" name="chargeUserRealnames"
+                           data-options="multiline:true,required:true"
+                           style="width: 90%;height:50px">
+                    <a href="#" onclick="showDlgChargeUser()">选择负责人</a>
+                    <input type="hidden" name="chargeUserIds" id="chargeUserIds">
+                </td>
+            </tr>
+            <tr class="view_status">
+                <td>是否需要审核：</td>
                 <td>
-                    <select class="easyui-combobox" id="chargeUserId" name="chargeUserId" style="width:100px;">
+                    <select class="easyui-combobox" name="status" style="width:100px;">
+                        <option value="0">不需要</option>
+                        <option value="1">需要</option>
                     </select>
                 </td>
             </tr>
@@ -126,9 +147,10 @@
                 <td>状态：</td>
                 <td>
                     <select class="easyui-combobox" name="status" style="width:100px;">
+                        <option value="0">取消</option>
                         <option value="1">进行中</option>
                         <option value="2">已完成</option>
-                        <option value="3">取消</option>
+                        <option value="3">待审核</option>
                     </select>
                 </td>
                 <td>处理人：</td>
@@ -174,6 +196,57 @@
                data-options="iconCls:'icon-cancel'" onclick="closeDialog()">关闭</a>
         </div>
     </form>
+</div>
+
+<div id="dlgAuditStatus" class="easyui-dialog" style="width: 700px; height: 600px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
+    <div class="ftitle">
+        <b>工单</b>
+        <hr/>
+    </div>
+    <form id="frmAuditStatus" method="post" novalidate="novalidate">
+        <table>
+            <tr style="display: none">
+                <td>id：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="workTaskId" id="workTaskId">
+                </td>
+            </tr>
+            <tr>
+                <td>审核结果：</td>
+                <td>
+                    <select class="easyui-combobox" name="level" data-options="required:true" style="width:100px;">
+                        <option value="2">审核通过</option>
+                        <option value="3">审核不通过</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>审核意见：</td>
+                <td colspan="3">
+                    <input class="easyui-textbox" data-options="multiline:true,required:true" name="content"
+                           style="width: 90%;height:200px">
+                </td>
+            </tr>
+        </table>
+        <div style="text-align:center;">
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-ok'" id="btn_save_audit_status" onclick="saveAuditStatus()">确定</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-cancel'" onclick="closeDlgAuditStatus()">关闭</a>
+        </div>
+    </form>
+</div>
+<div id="dlgChargeUser" class="easyui-dialog" style="width: 500px; height: 700px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons',top:55,align:'center'">
+    <input type="hidden" id="workTaskCreationId">
+    <ul id="userTree"></ul>
+    <div style="text-align:center;">
+        <a href="javascript:void(0)" class="easyui-linkbutton"
+           data-options="iconCls:'icon-ok'" id="btn_save_charge_user" onclick="saveChargeUser()">确定</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton"
+           data-options="iconCls:'icon-cancel'" onclick="closeDlgChargeUser()">关闭</a>
+    </div>
 </div>
 </body>
 <script type="text/javascript">
@@ -285,6 +358,16 @@
                     {title: '实际结束时间', field: 'actualEndTime', width: 150},
                     {title: '创建时间', field: 'createTime', width: 180},
                     {title: '修改时间', field: 'updateTime', width: 180},
+                    {
+                        title: '操作', field: 'auditStatus', width: 80, formatter: function (value, row, index) {
+                            if (hasRight("auditWorkTask")) {
+                                if ((row.auditStatus == 1 || row.auditStatus == 3) && (row.status == 2 || row.status == 3)) {
+                                    var content = '<a href="javascript:void(0)" onclick="showDlgAuditStatus(' + row.id + ')" class="easyui-linkbutton" >审核</a>';
+                                    return content;
+                                }
+                            }
+                        }
+                    },
                     {title: '备注', field: 'remark', width: 180}
                 ]],
                 toolbar: [{
@@ -431,6 +514,80 @@
         } else {
             $.messager.alert("提示", "请选择一条记录.");
         }
+    }
+
+    function showDlgAuditStatus(id) {
+        $('#workTaskId').val(id);
+        $('#dlgAuditStatus').dialog('open').dialog('setTitle', '审核管理');
+    }
+
+    function closeDlgAuditStatus() {
+        $('#dlgAuditStatus').dialog('close');
+    }
+
+    function saveAuditStatus() {
+        $('#frmAuditStatus').form('submit', {
+            url: '${pageContext.request.contextPath }/workTask/auditWorkTask',
+            onSubmit: function () {
+                var validate = $(this).form('validate');
+                return validate;
+            },
+            success: function (data) {
+                res = eval('(' + data + ')');
+                if (res.code == '200') {
+                    closeDlgAuditStatus();
+                    bindData();
+                } else {
+                    $.messager.alert("提示", res.message);
+                }
+            }
+        });
+    }
+
+    function showDlgChargeUser() {
+        $('#dlgChargeUser').dialog('open').dialog('setTitle', '负责人管理');
+        bindUserTree();
+    }
+
+    function closeDlgChargeUser() {
+        $('#dlgChargeUser').dialog('close');
+    }
+
+    function bindUserTree() {
+        $("#userTree").tree({
+            checkbox: true,
+            cascadeCheck: false,
+            url: "${pageContext.request.contextPath }/user/tree?status=1",
+            onLoadSuccess: function (data) {
+                checkUserTree();
+            }
+        });
+    }
+
+    function checkUserTree() {
+        var userIdStrs = $('#chargeUserIds').val();
+        if (!isEmpty(userIdStrs)) {
+            var userIds = userIdStrs.split(',');
+            for (var i = 0; i < userIds.length; i++) {
+                var node = $('#userTree').tree('find', userIds[i]);
+                if (node) {
+                    $("#userTree").tree("check", node.target);
+                }
+            }
+        }
+    }
+
+    function saveChargeUser() {
+        var nodes = $('#userTree').tree('getChecked');
+        var userIds = "";
+        for (var i = 0; i < nodes.length; i++) {
+            if (i == 0) {
+                userIds = nodes[i].id;
+            } else {
+                userIds = userIds + ',' + nodes[i].id;
+            }
+        }
+        $('#chargeUserIds').val(userIds);
     }
 </script>
 </html>

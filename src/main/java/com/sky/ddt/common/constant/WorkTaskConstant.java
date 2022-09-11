@@ -106,7 +106,8 @@ public class WorkTaskConstant {
     public enum AuditStatusEnum {
         NO_NEED(0, "不需要审核"),
         WAIT_AUDIT(1, "待审核"),
-        AUDIT(2, "审核通过"),;
+        AUDIT(2, "审核通过"),
+        NOT_AUDIT(3, "审核不通过"),;
         Integer auditStatus;
         String statusName;
 

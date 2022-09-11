@@ -35,8 +35,9 @@ public class SaveWorkTaskReq {
     private Date endTime;
     @NotEmpty(message = "内容不能为空")
     private String content;
-    @NotNull(message = "负责人不能为空")
-    private Integer chargeUserId;
+    private String solution;
+    @NotEmpty(message = "负责人不能为空")
+    private String chargeUserIds;
     @NotNull(message = "是否需要审核不能为空")
     private Integer neetAudit;
 }

@@ -5,19 +5,23 @@
                type="com.sky.ddt.dto.workTask.resp.ListWorkTaskResp"
                extends="com.sky.ddt.dao.generate.WorkTaskMapper.ResultMapWithBLOBs">
         <result column="dealUserRealName" property="dealUserRealName"/>
-        <result column="chargeUserRealNameRealNames" property="chargeUserRealNameRealNames"/>
+        <result column="chargeUserRealNames" property="chargeUserRealNames"/>
+        <result column="chargeUserIds" property="chargeUserIds"/>
     </resultMap>
     <select id="listWorkTask"
             resultMap="listWorkTaskMap">
         SELECT
         wt.*,
-        (select real_name  from user u where u.user_id =wt.deal_user_id) dealUserRealName,
-        (select GROUP_CONCAT(real_name SEPARATOR ',')   from user u,work_task_user wtu where u.user_id=wtu.user_id and wtu.work_task_id =wt.id) chargeUserRealNameRealNames
+        (select real_name from user u where u.user_id =wt.deal_user_id) dealUserRealName,
+        (select GROUP_CONCAT(real_name SEPARATOR ',') from user u,work_task_user wtu where u.user_id=wtu.user_id and
+        wtu.work_task_id =wt.id) chargeUserRealNames,
+        (select GROUP_CONCAT(user_id SEPARATOR ',') from work_task_user wtu where wtu.work_task_id =wt.id) chargeUserIds
         from work_task wt
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 <if test="title != null and title!=''">and title like concat('%',#{title},'%')</if>
-                <if test="workTaskNo != null and workTaskNo!=''">and work_task_no like concat('%',#{workTaskNo},'%')</if>
+                <if test="workTaskNo != null and workTaskNo!=''">and work_task_no like concat('%',#{workTaskNo},'%')
+                </if>
                 <if test="auditStatus != null ">and audit_status = #{auditStatus}</if>
                 <if test="status != null ">and status = #{status}</if>
                 <if test="chargeUserId != null ">and charge_user_id = #{chargeUserId}</if>

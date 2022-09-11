@@ -10,9 +10,10 @@ import lombok.Getter;
 public class WorkOrderConstant {
     @Getter
     public enum StatusEnum {
+        CANCEL(0, "取消"),
         HAVE_IN_HAND(1, "进行中"),
         COMPLETED(2, "已完成"),
-        CANCEL(3, "取消"),;
+        WAIT_AUDIT(3, "待审核"),;
         Integer status;
         String statusName;
 

@@ -416,7 +416,7 @@
     }
 
     function showDlgChargeUser(id) {
-        $('#workTaskCreationId').val(id);
+        $('#workTaskCreationId').val(frm);
         $('#dlgChargeUser').dialog('open').dialog('setTitle', '负责人管理');
         bindUserTree();
     }

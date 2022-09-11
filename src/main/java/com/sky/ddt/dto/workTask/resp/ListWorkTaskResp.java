@@ -13,4 +13,5 @@ import lombok.Data;
 public class ListWorkTaskResp extends WorkTaskWithBLOBs {
     String dealUserRealName;
     String chargeUserRealNames;
+    String chargeUserIds;
 }

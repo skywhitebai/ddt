@@ -2,10 +2,12 @@ package com.sky.ddt.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.annotation.MenuAnnotation;
+import com.sky.ddt.common.annotation.RightAnnotation;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.workOrder.request.ListWorkOrderRequest;
 import com.sky.ddt.dto.workOrder.request.SaveWorkOrderRequest;
+import com.sky.ddt.dto.workTask.req.AuditWorkTaskReq;
 import com.sky.ddt.dto.workTask.req.ListWorkTaskReq;
 import com.sky.ddt.dto.workTask.req.SaveWorkTaskReq;
 import com.sky.ddt.dto.workTask.resp.ListWorkTaskResp;
@@ -56,5 +58,13 @@ public class WorkTaskController extends SuperController{
     public BaseResponse cancelWorkTask(Integer id) {
         Integer dealUserId = getCurrentUserId();
         return workTaskService.cancelWorkTask(id, dealUserId);
+    }
+
+    @RequestMapping("auditWorkTask")
+    @ResponseBody
+    @RightAnnotation("auditWorkTask")
+    public BaseResponse auditWorkTask(@Validated AuditWorkTaskReq params) {
+        Integer dealUserId = getCurrentUserId();
+        return workTaskService.auditWorkTask(params, dealUserId);
     }
 }

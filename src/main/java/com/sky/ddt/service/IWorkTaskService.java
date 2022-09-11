@@ -2,6 +2,7 @@ package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.dto.workTask.req.AuditWorkTaskReq;
 import com.sky.ddt.dto.workTask.req.ListWorkTaskReq;
 import com.sky.ddt.dto.workTask.req.SaveWorkTaskReq;
 import com.sky.ddt.dto.workTask.resp.ListWorkTaskResp;
@@ -19,4 +20,6 @@ public interface IWorkTaskService {
     BaseResponse cancelWorkTask(Integer id, Integer dealUserId);
 
     String getWorderTaskNo();
+
+    BaseResponse auditWorkTask(AuditWorkTaskReq params, Integer dealUserId);
 }
