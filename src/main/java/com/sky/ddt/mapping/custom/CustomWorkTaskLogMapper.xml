@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomWorkTaskLogMapper">
+    <resultMap id="listWorkTaskLogMap"
+               type="com.sky.ddt.dto.workTask.resp.ListWorkTaskLogResp"
+               extends="com.sky.ddt.dao.generate.WorkTaskLogMapper.BaseResultMap">
+        <result column="dealUserRealName" property="dealUserRealName"/>
+    </resultMap>
+    <select id="listWorkTaskLog"
+            resultMap="listWorkTaskLogMap">
+        SELECT
+        wtl.*,
+        (select real_name from user u where u.user_id =wtl.create_by) dealUserRealName
+        from work_task_log wtl
+        where work_task_id= #{workTaskId}
+        order by wtl.create_time desc
+    </select>
+</mapper>

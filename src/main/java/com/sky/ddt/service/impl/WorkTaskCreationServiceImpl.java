@@ -15,7 +15,6 @@ import com.sky.ddt.dto.workTaskCreation.resp.ListWorkTaskCreationResp;
 import com.sky.ddt.entity.*;
 import com.sky.ddt.service.WorkTaskCreationService;
 import com.sky.ddt.util.DateUtil;
-import com.sky.ddt.util.HolidayUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -119,69 +118,74 @@ public class WorkTaskCreationServiceImpl implements WorkTaskCreationService {
             return;
         }*/
         //判断是否已生成
-        if (WorkTaskCreationConstant.TypeEnum.DAY.equals(workTaskCreation.getType())) {
+        if (WorkTaskCreationConstant.TypeEnum.DAY.getType().equals(workTaskCreation.getType())) {
             if (workTaskCreation.getDealTime().after(dayNow)) {
                 //已经执行了，则返回
                 return;
             }
-        } else if (WorkTaskCreationConstant.TypeEnum.WEEK.equals(workTaskCreation.getType())) {
+        } else if (WorkTaskCreationConstant.TypeEnum.WEEK.getType().equals(workTaskCreation.getType())) {
             //获取星期一的时间
             Date monday = DateUtil.getWeekMonday(dayNow);
             if (workTaskCreation.getDealTime().after(monday)) {
                 //已经执行了，则返回
                 return;
             }
-        } else if (WorkTaskCreationConstant.TypeEnum.MONTH.equals(workTaskCreation.getType())) {
+        } else if (WorkTaskCreationConstant.TypeEnum.MONTH.getType().equals(workTaskCreation.getType())) {
             //获取本月一号的时间
             Date monthFirstDay = DateUtil.getMonthFirstDay(dayNow);
             if (workTaskCreation.getDealTime().after(monthFirstDay)) {
                 //已经执行了，则返回
                 return;
             }
+        }else{
+            //类型错误
+            return;
         }
         //获取负责人信息
 
         List<WorkTaskCreationUser> workTaskCreationUserList = listWorkTaskCreationUser(workTaskCreation.getId());
-        if (CollectionUtils.isEmpty(workTaskCreationUserList)) {
-            return;
-        }
-        for (WorkTaskCreationUser workTaskCreationUser :
-                workTaskCreationUserList) {
-            WorkTaskWithBLOBs workTask = new WorkTaskWithBLOBs();
-            workTask.setTitle(workTaskCreation.getTitle());
-            workTask.setWorkTaskNo(workTaskService.getWorderTaskNo());
-            workTask.setContent(workTaskCreation.getContent());
-            workTask.setLevel(workTaskCreation.getLevel());
-            workTask.setStatus(WorkTaskConstant.StatusEnum.HAVE_IN_HAND.getStatus());
-            workTask.setBeginTime(new Date());
-            workTask.setEndTime(getEndTime(workTaskCreation.getType(), dayNow));
-            workTask.setDealStatus(WorkTaskConstant.DealStatusEnum.UN_DEAL.getDealStatus());
-            if(WorkTaskCreationConstant.NeedAuditEnum.NEED.getStatus().equals(workTaskCreation.getNeedAudit())){
-                workTask.setAuditStatus(WorkTaskConstant.AuditStatusEnum.WAIT_AUDIT.getAuditStatus());
-            }else{
-                workTask.setAuditStatus(WorkTaskConstant.AuditStatusEnum.NO_NEED.getAuditStatus());
+        if (!CollectionUtils.isEmpty(workTaskCreationUserList)) {
+            for (WorkTaskCreationUser workTaskCreationUser :
+                    workTaskCreationUserList) {
+                WorkTaskWithBLOBs workTask = new WorkTaskWithBLOBs();
+                workTask.setTitle(workTaskCreation.getTitle());
+                workTask.setWorkTaskNo(workTaskService.getWorderTaskNo());
+                workTask.setContent(workTaskCreation.getContent());
+                workTask.setLevel(workTaskCreation.getLevel());
+                workTask.setStatus(WorkTaskConstant.StatusEnum.HAVE_IN_HAND.getStatus());
+                workTask.setBeginTime(new Date());
+                workTask.setEndTime(getEndTime(workTaskCreation.getType(), dayNow));
+                workTask.setDealStatus(WorkTaskConstant.DealStatusEnum.UN_DEAL.getDealStatus());
+                if(WorkTaskCreationConstant.NeedAuditEnum.NEED.getStatus().equals(workTaskCreation.getNeedAudit())){
+                    workTask.setAuditStatus(WorkTaskConstant.AuditStatusEnum.WAIT_AUDIT.getAuditStatus());
+                }else{
+                    workTask.setAuditStatus(WorkTaskConstant.AuditStatusEnum.NO_NEED.getAuditStatus());
+                }
+                workTask.setCreateTime(new Date());
+                workTask.setCreateBy(0);
+                customWorkTaskMapper.insertSelective(workTask);
+                WorkTaskUser workTaskUser=new WorkTaskUser();
+                workTaskUser.setCreateTime(new Date());
+                workTaskUser.setUserId(workTaskCreationUser.getUserId().intValue());
+                workTaskUser.setWorkTaskId(workTask.getId());
+                workTaskUser.setCreateBy(0);
+                customWorkTaskUserMapper.insertSelective(workTaskUser);
             }
-            workTask.setCreateTime(new Date());
-            workTask.setCreateBy(0);
-            customWorkTaskMapper.insertSelective(workTask);
-            WorkTaskUser workTaskUser=new WorkTaskUser();
-            workTaskUser.setCreateTime(new Date());
-            workTaskUser.setUserId(workTaskCreationUser.getUserId().intValue());
-            workTaskUser.setWorkTaskId(workTask.getId());
-            workTaskUser.setCreateBy(0);
-            customWorkTaskUserMapper.insertSelective(workTaskUser);
         }
+
+        workTaskCreation.setDealTime(new Date());
+        customWorkTaskCreationMapper.updateByPrimaryKey(workTaskCreation);
     }
 
     private Date getEndTime(Integer type, Date dayNow) {
         Date endTime = null;
-        if (WorkTaskCreationConstant.TypeEnum.DAY.equals(type)) {
+        if (WorkTaskCreationConstant.TypeEnum.DAY.getType().equals(type)) {
             endTime = DateUtil.plusHour(19, dayNow);//晚上7点结束
 
-        } else if (WorkTaskCreationConstant.TypeEnum.WEEK.equals(type)) {
+        } else if (WorkTaskCreationConstant.TypeEnum.WEEK.getType().equals(type)) {
             Date monday = DateUtil.getWeekMonday(dayNow);
             endTime = DateUtil.plusHour(19, DateUtil.plusDay(6, monday));//周六晚上7点结束
-        } else if (WorkTaskCreationConstant.TypeEnum.MONTH.equals(type)) {
+        } else if (WorkTaskCreationConstant.TypeEnum.MONTH.getType().equals(type)) {
             //获取本月一号的时间
             Date monthFirstDay = DateUtil.getMonthFirstDay(dayNow);
             endTime = DateUtil.plusHour(19, DateUtil.plusDay(-1, DateUtil.plusMonth(1, monthFirstDay)));//周六晚上7点结束

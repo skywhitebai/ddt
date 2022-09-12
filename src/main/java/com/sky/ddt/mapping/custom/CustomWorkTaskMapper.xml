@@ -24,7 +24,9 @@
                 </if>
                 <if test="auditStatus != null ">and audit_status = #{auditStatus}</if>
                 <if test="status != null ">and status = #{status}</if>
-                <if test="chargeUserId != null ">and charge_user_id = #{chargeUserId}</if>
+                <if test="chargeUserId != null ">and exists (select 1 from work_task_user wtu where wtu.work_task_id
+                    =wt.id and wtu.user_id=#{chargeUserId})
+                </if>
                 <if test="dealUserId != null ">and deal_user_id = #{dealUserId}</if>
             </trim>
         </where>

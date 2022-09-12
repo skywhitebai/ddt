@@ -115,7 +115,11 @@ public class WorkTaskService implements IWorkTaskService {
     private void updateWorkTaskUser(String chargeUserIds, Integer workTaskId, Integer dealUserId) {
         List<WorkTaskUser> workTaskUserList = listWorkTaskUser(workTaskId);
         String[] userIdStrs = chargeUserIds.split(",");
-        List<String> userIds = Arrays.asList(userIdStrs);
+        List<String> userIds = new ArrayList<>();
+        for (String userId:
+                userIdStrs) {
+            userIds.add(userId);
+        }
         if (!CollectionUtils.isEmpty(workTaskUserList)) {
             List<Integer> existUser = new ArrayList<>();
             Iterator<String> iterator = userIds.iterator();

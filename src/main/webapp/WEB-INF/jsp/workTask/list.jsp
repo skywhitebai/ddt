@@ -42,8 +42,6 @@
     负责人：
     <select class="easyui-combobox" id="s_chargeUserId" style="width:100px;">
     </select>
-    负责小组：
-    <select class="easyui-combobox" id="s_salesGroupId" style="width:100px;">
     </select>
     处理人：
     <select class="easyui-combobox" id="s_dealUserId" style="width:100px;">
@@ -64,7 +62,7 @@
 
 </table>
 <!--入库单编辑页面-->
-<div id="dlg" class="easyui-dialog" style="width: 700px; height: 600px; padding: 10px 20px"
+<div id="dlg" class="easyui-dialog" style="width: 800px; height: 700px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
     <div class="ftitle">
         <b>工单</b>
@@ -94,14 +92,21 @@
                 <td>内容：</td>
                 <td colspan="3">
                     <input class="easyui-textbox" data-options="multiline:true" name="content"
-                           style="width: 90%;height:200px">
+                           style="width: 90%;height:150px">
                 </td>
             </tr>
             <tr class="view_status">
                 <td>解决方案：</td>
                 <td colspan="3">
-                    <input class="easyui-textbox" name="solution"
-                           style="width: 90%;height:200px">
+                    <input class="easyui-textbox" data-options="multiline:true" name="solution"
+                           style="width: 90%;height:150px">
+                </td>
+            </tr>
+            <tr class="view_show">
+                <td>审核意见：</td>
+                <td colspan="3">
+                    <input class="easyui-textbox" data-options="multiline:true" name="auditContent"
+                           style="width: 90%;height:50px">
                 </td>
             </tr>
             <tr>
@@ -127,17 +132,17 @@
             <tr>
                 <td>负责人：</td>
                 <td colspan="3">
-                    <input class="easyui-textbox" type="text" name="chargeUserRealnames"
+                    <input class="easyui-textbox" type="text" name="chargeUserRealNames" id="chargeUserRealNames"
                            data-options="multiline:true,required:true"
-                           style="width: 90%;height:50px">
+                           style="width: 70%;height:25px">
                     <a href="#" onclick="showDlgChargeUser()">选择负责人</a>
                     <input type="hidden" name="chargeUserIds" id="chargeUserIds">
                 </td>
             </tr>
-            <tr class="view_status">
+            <tr class="view_hide">
                 <td>是否需要审核：</td>
                 <td>
-                    <select class="easyui-combobox" name="status" style="width:100px;">
+                    <select class="easyui-combobox" name="auditStatus" style="width:100px;">
                         <option value="0">不需要</option>
                         <option value="1">需要</option>
                     </select>
@@ -179,7 +184,7 @@
                     <input class="easyui-textbox" type="text" name="remark" style="width: 90%">
                 </td>
             </tr>
-            <tr class="view_hide">
+            <tr class="view_show">
                 <td>创建时间：</td>
                 <td>
                     <input class="easyui-validatebox textbox" name="createTime"></td>
@@ -214,8 +219,9 @@
             </tr>
             <tr>
                 <td>审核结果：</td>
-                <td>
-                    <select class="easyui-combobox" name="level" data-options="required:true" style="width:100px;">
+                <td colspan="3">
+                    <select class="easyui-combobox" name="auditStatus" data-options="required:true"
+                            style="width:100px;">
                         <option value="2">审核通过</option>
                         <option value="3">审核不通过</option>
                     </select>
@@ -224,8 +230,8 @@
             <tr>
                 <td>审核意见：</td>
                 <td colspan="3">
-                    <input class="easyui-textbox" data-options="multiline:true,required:true" name="content"
-                           style="width: 90%;height:200px">
+                    <input class="easyui-textbox" data-options="multiline:true,required:true" name="auditContent"
+                           style="width: 500px;height:200px">
                 </td>
             </tr>
         </table>
@@ -248,11 +254,16 @@
            data-options="iconCls:'icon-cancel'" onclick="closeDlgChargeUser()">关闭</a>
     </div>
 </div>
+<div id="dlgWorkTaskLog" class="easyui-dialog" style="width: 800px; height: 700px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons',top:55,align:'center'">
+    <table id="dgWorkTaskLog" style="width: 100%; height: auto">
+
+    </table>
+</div>
 </body>
 <script type="text/javascript">
     $(document).ready(function () {
         bindUserId();
-        bindSalesGroupId();
         bindData();
     });
 
@@ -349,9 +360,7 @@
 
                         }
                     },
-                    {title: '负责人', field: 'chargeUserRealName', width: 100},
-                    {title: '负责小组', field: 'salesGroupName', width: 100},
-                    {title: '负责小组人员名称', field: 'salesGroupUserRealNames', width: 100},
+                    {title: '负责人', field: 'chargeUserRealNames', width: 100},
                     {title: '处理人', field: 'dealUserRealName', width: 100},
                     {title: '计划开始时间', field: 'beginTime', width: 150},
                     {title: '计划结束时间', field: 'endTime', width: 150},
@@ -359,13 +368,18 @@
                     {title: '创建时间', field: 'createTime', width: 180},
                     {title: '修改时间', field: 'updateTime', width: 180},
                     {
-                        title: '操作', field: 'auditStatus', width: 80, formatter: function (value, row, index) {
+                        title: '操作', field: 'auditStatus', width: 150, formatter: function (value, row, index) {
+                            var content = "";
                             if (hasRight("auditWorkTask")) {
                                 if ((row.auditStatus == 1 || row.auditStatus == 3) && (row.status == 2 || row.status == 3)) {
-                                    var content = '<a href="javascript:void(0)" onclick="showDlgAuditStatus(' + row.id + ')" class="easyui-linkbutton" >审核</a>';
-                                    return content;
+                                    content = content + '<a href="javascript:void(0)" onclick="showDlgAuditStatus(' + row.id + ')" class="easyui-linkbutton" >审核</a>';
                                 }
                             }
+                            if (!isEmpty(content)) {
+                                content = content + "&nbsp;&nbsp;&nbsp;";
+                            }
+                            content = content + '<a href="javascript:void(0)" onclick="showDlgWorkTaskLog(' + row.id + ')" class="easyui-linkbutton" >操作记录</a>';
+                            return content;
                         }
                     },
                     {title: '备注', field: 'remark', width: 180}
@@ -423,7 +437,6 @@
             title: $("#s_title").val(),
             workTaskNo: $("#s_workTaskNo").val(),
             chargeUserId: $("#s_chargeUserId").val(),
-            salesGroupId: $("#s_salesGroupId").val(),
             dealUserId: $("#s_dealUserId").val(),
             status: $("#s_status").val()
         };
@@ -437,7 +450,8 @@
             $('#frm').form('load', rows[0]);
             $("#btn_save").hide();
             $(".view_status").show();
-            $(".view_hide").show();
+            $(".view_hide").hide();
+            $(".view_show").show();
         } else {
             $.messager.alert("提示", "请选择一条记录.");
         }
@@ -448,7 +462,8 @@
         $('#frm').form('clear');
         $(".view_status").hide();
         $("#btn_save").show();
-        $(".view_hide").hide();
+        $(".view_hide").show();
+        $(".view_show").hide();
     }
 
     function showEditDialog() {
@@ -458,7 +473,8 @@
             $('#frm').form('load', rows[0]);
             $(".view_status").show();
             $("#btn_save").show();
-            $(".view_hide").hide();
+            $(".view_hide").show();
+            $(".view_show").hide();
         } else {
             $.messager.alert("提示", "请选择一条记录.");
         }
@@ -580,14 +596,74 @@
     function saveChargeUser() {
         var nodes = $('#userTree').tree('getChecked');
         var userIds = "";
+        var userNames = "";
         for (var i = 0; i < nodes.length; i++) {
             if (i == 0) {
                 userIds = nodes[i].id;
+                userNames = nodes[i].text;
             } else {
                 userIds = userIds + ',' + nodes[i].id;
+                userNames = userNames + ',' + nodes[i].text;
             }
         }
         $('#chargeUserIds').val(userIds);
+        $('#chargeUserRealNames').textbox('setValue', userNames);
+        closeDlgChargeUser();
+    }
+
+    function showDlgWorkTaskLog(id) {
+        $('#workTaskId').val(id);
+        bindWorkTaskLog();
+        $('#dlgWorkTaskLog').dialog('open').dialog('setTitle', '操作记录');
+    }
+
+    function closeDlgWorkTaskLog(id) {
+        $('#dlgWorkTaskLog').dialog('close');
+    }
+
+    function bindWorkTaskLog() {
+        dg = '#dgWorkTaskLog';
+        url = "${pageContext.request.contextPath }/workTaskLog/listWorkTaskLog";
+        title = "操作记录";
+        queryParams = {
+            workTaskId: $("#workTaskId").val()
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+                url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+                title: title,
+                iconCls: 'icon-view',
+                nowrap: true,
+                autoRowHeight: true,
+                striped: true,
+                collapsible: true,
+                pagination: true,
+                singleSelect: true,
+                pageSize: 15,
+                pageList: [10, 15, 20, 30, 50],
+                rownumbers: true,
+                //sortName: 'ID',    //根据某个字段给easyUI排序
+                //sortOrder: 'asc',
+                remoteSort: false,
+                idField: 'id',
+                queryParams: queryParams,  //异步查询的参数
+                columns: [[
+                    {field: 'ck', checkbox: true},   //选择
+                    {title: '操作用户', field: 'dealUserRealName', width: 60},
+                    {title: '操作内容', field: 'content', width: 150},
+                    {title: '创建时间', field: 'createTime', width: 180}
+                ]],
+                toolbar: [{
+                    id: 'btnReload',
+                    text: '刷新',
+                    iconCls: 'icon-reload',
+                    handler: function () {
+                        //实现刷新栏目中的数据
+                        $(dg).datagrid("reload");
+                    }
+                }]
+            }
+        )
+        $(dg).datagrid('clearSelections');
     }
 </script>
 </html>

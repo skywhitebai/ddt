@@ -44,27 +44,27 @@ public class WorkTaskCreationConstant {
         DAY(1, "每天"),
         WEEK(2, "每周"),
         MONTH(3, "每月"),;
-        Integer level;
-        String levelName;
+        Integer type;
+        String typeName;
 
         TypeEnum(Integer status, String statusName) {
-            this.level = status;
-            this.levelName = statusName;
+            this.type = status;
+            this.typeName = statusName;
         }
 
         public static boolean contains(Integer level) {
             for (TypeEnum statusEnum : TypeEnum.values()) {
-                if (statusEnum.level.equals(level)) {
+                if (statusEnum.type.equals(level)) {
                     return true;
                 }
             }
             return false;
         }
 
-        public static String getLevelName(Integer level) {
+        public static String getTypeName(Integer level) {
             for (TypeEnum statusEnum : TypeEnum.values()) {
-                if (statusEnum.level.equals(level)) {
-                    return statusEnum.levelName;
+                if (statusEnum.type.equals(level)) {
+                    return statusEnum.typeName;
                 }
             }
             return null;
