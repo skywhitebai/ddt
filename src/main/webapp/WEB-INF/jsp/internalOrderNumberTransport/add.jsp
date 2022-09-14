@@ -30,7 +30,7 @@
     <title>添加内部单号发货记录</title>
 </head>
 <style>
-    .div_main{
+    .div_main {
         width: 508px;
     }
 </style>
@@ -39,7 +39,7 @@
 
     <div style="text-align:center;">
         <a href="javascript:void(0)" class="easyui-linkbutton"
-           data-options="iconCls:'icon-ok'" onclick="save()">保存</a>
+           data-options="iconCls:'icon-ok'" onclick="save()" id="btnSave">保存</a>
     </div>
     <table>
         <tr>
@@ -223,7 +223,14 @@
         });
     }
 
+    //防止重复点击
+    var saveEnable = true;
+
     function save() {
+        if (!saveEnable) {
+            $.messager.alert("提示", "已在执行，请稍等");
+            return;
+        }
         var list = []
         var subOrderNumberInputs = $("input[name='subOrderNumber']");
         for (var i = 0; i < subOrderNumberInputs.length; i++) {
@@ -269,10 +276,11 @@
             transportInfo.transferOrderNo = transferOrderNo;
             list.push(transportInfo);
         }
-        if(list.length==0){
+        if (list.length == 0) {
             $.messager.alert("提示", "请填写数据");
             return;
         }
+        saveEnable = false;
         $.ajax({
             type: 'post',
             url: "${pageContext.request.contextPath }/internalOrderNumberTransport/batchAddInternalOrderNumberTransport",
@@ -282,16 +290,16 @@
             success: function (data) {
                 if (data.code == '200') {
                     $.messager.alert("提示", data.message);
-                }
-                else {
+                } else {
                     $.messager.alert("提示", data.message);
                 }
+                saveEnable = true;
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 $.messager.alert("error");
+                saveEnable = true;
             }
         });
-
     }
 </script>
 </html>
