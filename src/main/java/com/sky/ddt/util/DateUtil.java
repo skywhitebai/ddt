@@ -146,6 +146,16 @@ public class DateUtil {
         return ca.getTime();
     }
 
+
+    public static Date plusSecond(Integer num, Date date) {
+        if(num==null){
+            return date;
+        }
+        Calendar ca = Calendar.getInstance();
+        ca.setTime(date);
+        ca.add(Calendar.SECOND, num);
+        return ca.getTime();
+    }
     public static Date plusMonth(int num, Date date) {
         Calendar ca = Calendar.getInstance();
         ca.setTime(date);

@@ -426,6 +426,66 @@ public class OrderImportExample {
             return (Criteria) this;
         }
 
+        public Criteria andPurchaseDateRealIsNull() {
+            addCriterion("purchase_date_real is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseDateRealIsNotNull() {
+            addCriterion("purchase_date_real is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseDateRealEqualTo(Date value) {
+            addCriterion("purchase_date_real =", value, "purchaseDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseDateRealNotEqualTo(Date value) {
+            addCriterion("purchase_date_real <>", value, "purchaseDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseDateRealGreaterThan(Date value) {
+            addCriterion("purchase_date_real >", value, "purchaseDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseDateRealGreaterThanOrEqualTo(Date value) {
+            addCriterion("purchase_date_real >=", value, "purchaseDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseDateRealLessThan(Date value) {
+            addCriterion("purchase_date_real <", value, "purchaseDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseDateRealLessThanOrEqualTo(Date value) {
+            addCriterion("purchase_date_real <=", value, "purchaseDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseDateRealIn(List<Date> values) {
+            addCriterion("purchase_date_real in", values, "purchaseDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseDateRealNotIn(List<Date> values) {
+            addCriterion("purchase_date_real not in", values, "purchaseDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseDateRealBetween(Date value1, Date value2) {
+            addCriterion("purchase_date_real between", value1, value2, "purchaseDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andPurchaseDateRealNotBetween(Date value1, Date value2) {
+            addCriterion("purchase_date_real not between", value1, value2, "purchaseDateReal");
+            return (Criteria) this;
+        }
+
         public Criteria andLastUpdatedDateIsNull() {
             addCriterion("last_updated_date is null");
             return (Criteria) this;
@@ -483,6 +543,66 @@ public class OrderImportExample {
 
         public Criteria andLastUpdatedDateNotBetween(Date value1, Date value2) {
             addCriterion("last_updated_date not between", value1, value2, "lastUpdatedDate");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdatedDateRealIsNull() {
+            addCriterion("last_updated_date_real is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdatedDateRealIsNotNull() {
+            addCriterion("last_updated_date_real is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdatedDateRealEqualTo(Date value) {
+            addCriterion("last_updated_date_real =", value, "lastUpdatedDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdatedDateRealNotEqualTo(Date value) {
+            addCriterion("last_updated_date_real <>", value, "lastUpdatedDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdatedDateRealGreaterThan(Date value) {
+            addCriterion("last_updated_date_real >", value, "lastUpdatedDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdatedDateRealGreaterThanOrEqualTo(Date value) {
+            addCriterion("last_updated_date_real >=", value, "lastUpdatedDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdatedDateRealLessThan(Date value) {
+            addCriterion("last_updated_date_real <", value, "lastUpdatedDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdatedDateRealLessThanOrEqualTo(Date value) {
+            addCriterion("last_updated_date_real <=", value, "lastUpdatedDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdatedDateRealIn(List<Date> values) {
+            addCriterion("last_updated_date_real in", values, "lastUpdatedDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdatedDateRealNotIn(List<Date> values) {
+            addCriterion("last_updated_date_real not in", values, "lastUpdatedDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdatedDateRealBetween(Date value1, Date value2) {
+            addCriterion("last_updated_date_real between", value1, value2, "lastUpdatedDateReal");
+            return (Criteria) this;
+        }
+
+        public Criteria andLastUpdatedDateRealNotBetween(Date value1, Date value2) {
+            addCriterion("last_updated_date_real not between", value1, value2, "lastUpdatedDateReal");
             return (Criteria) this;
         }
 

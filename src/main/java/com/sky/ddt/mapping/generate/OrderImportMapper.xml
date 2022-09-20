@@ -7,7 +7,9 @@
     <result column="amazon_order_id" jdbcType="VARCHAR" property="amazonOrderId" />
     <result column="merchant_order_id" jdbcType="VARCHAR" property="merchantOrderId" />
     <result column="purchase_date" jdbcType="TIMESTAMP" property="purchaseDate" />
+    <result column="purchase_date_real" jdbcType="TIMESTAMP" property="purchaseDateReal" />
     <result column="last_updated_date" jdbcType="TIMESTAMP" property="lastUpdatedDate" />
+    <result column="last_updated_date_real" jdbcType="TIMESTAMP" property="lastUpdatedDateReal" />
     <result column="order_status" jdbcType="VARCHAR" property="orderStatus" />
     <result column="fulfillment_channel" jdbcType="VARCHAR" property="fulfillmentChannel" />
     <result column="sales_channel" jdbcType="VARCHAR" property="salesChannel" />
@@ -102,13 +104,13 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, shop_id, amazon_order_id, merchant_order_id, purchase_date, last_updated_date, 
-    order_status, fulfillment_channel, sales_channel, order_channel, url, ship_service_level, 
-    product_name, sku, shop_sku_id, asin, item_status, quantity, currency, item_price, 
-    item_tax, shipping_price, shipping_tax, gift_wrap_price, gift_wrap_tax, item_promotion_discount, 
-    ship_promotion_discount, ship_city, ship_state, ship_postal_code, ship_country, promotion_ids, 
-    is_business_order, purchase_order_number, price_designation, remark, create_time, 
-    create_by, update_time, update_by
+    id, shop_id, amazon_order_id, merchant_order_id, purchase_date, purchase_date_real, 
+    last_updated_date, last_updated_date_real, order_status, fulfillment_channel, sales_channel, 
+    order_channel, url, ship_service_level, product_name, sku, shop_sku_id, asin, item_status, 
+    quantity, currency, item_price, item_tax, shipping_price, shipping_tax, gift_wrap_price, 
+    gift_wrap_tax, item_promotion_discount, ship_promotion_discount, ship_city, ship_state, 
+    ship_postal_code, ship_country, promotion_ids, is_business_order, purchase_order_number, 
+    price_designation, remark, create_time, create_by, update_time, update_by
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.OrderImportExample" resultMap="BaseResultMap">
     select
@@ -145,31 +147,31 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
     insert into order_import (shop_id, amazon_order_id, merchant_order_id, 
-      purchase_date, last_updated_date, order_status, 
-      fulfillment_channel, sales_channel, order_channel, 
-      url, ship_service_level, product_name, 
-      sku, shop_sku_id, asin, 
-      item_status, quantity, currency, 
-      item_price, item_tax, shipping_price, 
-      shipping_tax, gift_wrap_price, gift_wrap_tax, 
-      item_promotion_discount, ship_promotion_discount, 
-      ship_city, ship_state, ship_postal_code, 
-      ship_country, promotion_ids, is_business_order, 
-      purchase_order_number, price_designation, 
+      purchase_date, purchase_date_real, last_updated_date, 
+      last_updated_date_real, order_status, fulfillment_channel, 
+      sales_channel, order_channel, url, 
+      ship_service_level, product_name, sku, 
+      shop_sku_id, asin, item_status, 
+      quantity, currency, item_price, 
+      item_tax, shipping_price, shipping_tax, 
+      gift_wrap_price, gift_wrap_tax, item_promotion_discount, 
+      ship_promotion_discount, ship_city, ship_state, 
+      ship_postal_code, ship_country, promotion_ids, 
+      is_business_order, purchase_order_number, price_designation, 
       remark, create_time, create_by, 
       update_time, update_by)
     values (#{shopId,jdbcType=INTEGER}, #{amazonOrderId,jdbcType=VARCHAR}, #{merchantOrderId,jdbcType=VARCHAR}, 
-      #{purchaseDate,jdbcType=TIMESTAMP}, #{lastUpdatedDate,jdbcType=TIMESTAMP}, #{orderStatus,jdbcType=VARCHAR}, 
-      #{fulfillmentChannel,jdbcType=VARCHAR}, #{salesChannel,jdbcType=VARCHAR}, #{orderChannel,jdbcType=VARCHAR}, 
-      #{url,jdbcType=VARCHAR}, #{shipServiceLevel,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
-      #{sku,jdbcType=VARCHAR}, #{shopSkuId,jdbcType=INTEGER}, #{asin,jdbcType=VARCHAR}, 
-      #{itemStatus,jdbcType=VARCHAR}, #{quantity,jdbcType=INTEGER}, #{currency,jdbcType=VARCHAR}, 
-      #{itemPrice,jdbcType=DECIMAL}, #{itemTax,jdbcType=DECIMAL}, #{shippingPrice,jdbcType=DECIMAL}, 
-      #{shippingTax,jdbcType=DECIMAL}, #{giftWrapPrice,jdbcType=DECIMAL}, #{giftWrapTax,jdbcType=DECIMAL}, 
-      #{itemPromotionDiscount,jdbcType=DECIMAL}, #{shipPromotionDiscount,jdbcType=DECIMAL}, 
-      #{shipCity,jdbcType=VARCHAR}, #{shipState,jdbcType=VARCHAR}, #{shipPostalCode,jdbcType=VARCHAR}, 
-      #{shipCountry,jdbcType=VARCHAR}, #{promotionIds,jdbcType=VARCHAR}, #{isBusinessOrder,jdbcType=VARCHAR}, 
-      #{purchaseOrderNumber,jdbcType=INTEGER}, #{priceDesignation,jdbcType=VARCHAR}, 
+      #{purchaseDate,jdbcType=TIMESTAMP}, #{purchaseDateReal,jdbcType=TIMESTAMP}, #{lastUpdatedDate,jdbcType=TIMESTAMP}, 
+      #{lastUpdatedDateReal,jdbcType=TIMESTAMP}, #{orderStatus,jdbcType=VARCHAR}, #{fulfillmentChannel,jdbcType=VARCHAR}, 
+      #{salesChannel,jdbcType=VARCHAR}, #{orderChannel,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{shipServiceLevel,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, 
+      #{shopSkuId,jdbcType=INTEGER}, #{asin,jdbcType=VARCHAR}, #{itemStatus,jdbcType=VARCHAR}, 
+      #{quantity,jdbcType=INTEGER}, #{currency,jdbcType=VARCHAR}, #{itemPrice,jdbcType=DECIMAL}, 
+      #{itemTax,jdbcType=DECIMAL}, #{shippingPrice,jdbcType=DECIMAL}, #{shippingTax,jdbcType=DECIMAL}, 
+      #{giftWrapPrice,jdbcType=DECIMAL}, #{giftWrapTax,jdbcType=DECIMAL}, #{itemPromotionDiscount,jdbcType=DECIMAL}, 
+      #{shipPromotionDiscount,jdbcType=DECIMAL}, #{shipCity,jdbcType=VARCHAR}, #{shipState,jdbcType=VARCHAR}, 
+      #{shipPostalCode,jdbcType=VARCHAR}, #{shipCountry,jdbcType=VARCHAR}, #{promotionIds,jdbcType=VARCHAR}, 
+      #{isBusinessOrder,jdbcType=VARCHAR}, #{purchaseOrderNumber,jdbcType=INTEGER}, #{priceDesignation,jdbcType=VARCHAR}, 
       #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER})
   </insert>
@@ -191,8 +193,14 @@
       <if test="purchaseDate != null">
         purchase_date,
       </if>
+      <if test="purchaseDateReal != null">
+        purchase_date_real,
+      </if>
       <if test="lastUpdatedDate != null">
         last_updated_date,
+      </if>
+      <if test="lastUpdatedDateReal != null">
+        last_updated_date_real,
       </if>
       <if test="orderStatus != null">
         order_status,
@@ -310,8 +318,14 @@
       <if test="purchaseDate != null">
         #{purchaseDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="purchaseDateReal != null">
+        #{purchaseDateReal,jdbcType=TIMESTAMP},
+      </if>
       <if test="lastUpdatedDate != null">
         #{lastUpdatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdatedDateReal != null">
+        #{lastUpdatedDateReal,jdbcType=TIMESTAMP},
       </if>
       <if test="orderStatus != null">
         #{orderStatus,jdbcType=VARCHAR},
@@ -441,8 +455,14 @@
       <if test="record.purchaseDate != null">
         purchase_date = #{record.purchaseDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.purchaseDateReal != null">
+        purchase_date_real = #{record.purchaseDateReal,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.lastUpdatedDate != null">
         last_updated_date = #{record.lastUpdatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdatedDateReal != null">
+        last_updated_date_real = #{record.lastUpdatedDateReal,jdbcType=TIMESTAMP},
       </if>
       <if test="record.orderStatus != null">
         order_status = #{record.orderStatus,jdbcType=VARCHAR},
@@ -558,7 +578,9 @@
       amazon_order_id = #{record.amazonOrderId,jdbcType=VARCHAR},
       merchant_order_id = #{record.merchantOrderId,jdbcType=VARCHAR},
       purchase_date = #{record.purchaseDate,jdbcType=TIMESTAMP},
+      purchase_date_real = #{record.purchaseDateReal,jdbcType=TIMESTAMP},
       last_updated_date = #{record.lastUpdatedDate,jdbcType=TIMESTAMP},
+      last_updated_date_real = #{record.lastUpdatedDateReal,jdbcType=TIMESTAMP},
       order_status = #{record.orderStatus,jdbcType=VARCHAR},
       fulfillment_channel = #{record.fulfillmentChannel,jdbcType=VARCHAR},
       sales_channel = #{record.salesChannel,jdbcType=VARCHAR},
@@ -612,8 +634,14 @@
       <if test="purchaseDate != null">
         purchase_date = #{purchaseDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="purchaseDateReal != null">
+        purchase_date_real = #{purchaseDateReal,jdbcType=TIMESTAMP},
+      </if>
       <if test="lastUpdatedDate != null">
         last_updated_date = #{lastUpdatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdatedDateReal != null">
+        last_updated_date_real = #{lastUpdatedDateReal,jdbcType=TIMESTAMP},
       </if>
       <if test="orderStatus != null">
         order_status = #{orderStatus,jdbcType=VARCHAR},
@@ -726,7 +754,9 @@
       amazon_order_id = #{amazonOrderId,jdbcType=VARCHAR},
       merchant_order_id = #{merchantOrderId,jdbcType=VARCHAR},
       purchase_date = #{purchaseDate,jdbcType=TIMESTAMP},
+      purchase_date_real = #{purchaseDateReal,jdbcType=TIMESTAMP},
       last_updated_date = #{lastUpdatedDate,jdbcType=TIMESTAMP},
+      last_updated_date_real = #{lastUpdatedDateReal,jdbcType=TIMESTAMP},
       order_status = #{orderStatus,jdbcType=VARCHAR},
       fulfillment_channel = #{fulfillmentChannel,jdbcType=VARCHAR},
       sales_channel = #{salesChannel,jdbcType=VARCHAR},

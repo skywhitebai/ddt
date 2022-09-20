@@ -1,36 +1,34 @@
 package com.sky.ddt.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.OrderImportConstant;
 import com.sky.ddt.dao.custom.CustomOrderImportMapper;
+import com.sky.ddt.dto.config.OrderPurchaseDateConfig;
 import com.sky.ddt.dto.orderImport.request.ListOrderImportRequest;
 import com.sky.ddt.dto.orderImport.response.ListOrderImportResponse;
 import com.sky.ddt.dto.orderImport.response.OrderShopSkuResponse;
 import com.sky.ddt.dto.response.BaseResponse;
-import com.sky.ddt.entity.OrderImport;
-import com.sky.ddt.entity.OrderImportExample;
-import com.sky.ddt.entity.Shop;
-import com.sky.ddt.entity.ShopSku;
+import com.sky.ddt.entity.*;
 import com.sky.ddt.service.IOrderImportService;
 import com.sky.ddt.service.IShopSkuService;
 import com.sky.ddt.service.IShopUserService;
+import com.sky.ddt.service.ISysConfigService;
+import com.sky.ddt.util.BaseResponseUtils;
 import com.sky.ddt.util.DateUtil;
 import com.sky.ddt.util.ExcelUtil;
 import com.sky.ddt.util.MathUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.*;
 
 /**
  * @author baixueping
@@ -39,12 +37,15 @@ import java.util.stream.Collectors;
  */
 @Service
 public class OrderImportService implements IOrderImportService {
+    Logger logger = LoggerFactory.getLogger(OrderImportService.class);
     @Autowired
     IShopUserService shopUserService;
     @Autowired
     IShopSkuService shopSkuService;
     @Autowired
     CustomOrderImportMapper customOrderImportMapper;
+    @Autowired
+    ISysConfigService sysConfigService;
 
     /**
      * @param file
@@ -63,7 +64,7 @@ public class OrderImportService implements IOrderImportService {
         if (CollectionUtils.isEmpty(shopList)) {
             return BaseResponse.failMessage("用户只能上传自己管理的店铺sku");
         }
-        List<Integer> shopIdList = shopList.stream().map(Shop::getShopId).collect(Collectors.toList());
+        Map<Integer, Shop> shopMap = getShopMap(shopList);
         //读取excel 转换为list
         List<Map<String, String>> list = ExcelUtil.getListByExcel(file);
         if (list == null || list.size() == 0) {
@@ -71,7 +72,6 @@ public class OrderImportService implements IOrderImportService {
         }
         //遍历list导入信息
         StringBuilder sbErro = new StringBuilder();
-        List<String> shopNameList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
             Map<String, String> map = list.get(i);
             //忽略空行
@@ -95,7 +95,7 @@ public class OrderImportService implements IOrderImportService {
                 if (shopSku == null) {
                     sbErroItem.append(",").append(OrderImportConstant.SKU_NOT_EXIST);
                 } else {
-                    if (!shopIdList.contains(shopSku.getShopId())) {
+                    if (!shopMap.containsKey(shopSku.getShopId())) {
                         sbErroItem.append(",").append(OrderImportConstant.SKU_NOT_USER_SHOP);
                     } else {
                         map.put("shopSkuId", shopSku.getShopSkuId().toString());
@@ -196,6 +196,7 @@ public class OrderImportService implements IOrderImportService {
         if (sbErro.length() > 0) {
             return BaseResponse.failMessage(sbErro.substring(1));
         }
+        Map<Integer, Integer> orderPurchaseDateConfigMap = getOrderPurchaseDateConfigMap();
         for (Map<String, String> map : list) {
             //忽略空行
             Boolean isEmpty = true;
@@ -210,19 +211,54 @@ public class OrderImportService implements IOrderImportService {
             }
             OrderImport orderImport = getOrderImport(map.get("amazon-order-id"), map.get("sku"));
             if (orderImport != null) {
-                setOrderImportByMap(orderImport, map);
+                setOrderImportByMap(orderImport, map,orderPurchaseDateConfigMap,shopMap);
                 orderImport.setUpdateBy(userId);
                 orderImport.setUpdateTime(new Date());
                 customOrderImportMapper.updateByPrimaryKeySelective(orderImport);
             } else {
                 orderImport = new OrderImport();
-                setOrderImportByMap(orderImport, map);
+                setOrderImportByMap(orderImport, map,orderPurchaseDateConfigMap,shopMap);
                 orderImport.setCreateBy(userId);
                 orderImport.setCreateTime(new Date());
                 customOrderImportMapper.insertSelective(orderImport);
             }
         }
         return BaseResponse.success();
+    }
+
+    private Map<Integer, Integer> getOrderPurchaseDateConfigMap() {
+        Map<Integer, Integer> map = new HashMap<>();
+        //获取配置信息
+        BaseResponse<SysConfig> baseResponse = sysConfigService.getConfigByKey("orderPurchaseDate");
+        if (BaseResponseUtils.isFailOrEmpty(baseResponse)) {
+            return map;
+        }
+        String jsonStr = baseResponse.getData().getKeyValue();
+        List<OrderPurchaseDateConfig> orderPurchaseDateConfigList = new ArrayList<>();
+        try {
+            orderPurchaseDateConfigList = JSON.parseArray(jsonStr, OrderPurchaseDateConfig.class);
+        } catch (Exception ex) {
+            logger.error("getOrderPurchaseDateConfigMap fail,exception：" + ex.getMessage());
+            ex.printStackTrace();
+            return map;
+        }
+        for (OrderPurchaseDateConfig orderPurchaseDateConfig :
+                orderPurchaseDateConfigList) {
+            if (Boolean.TRUE.equals(orderPurchaseDateConfig.getEnable())) {
+                //重复自己判断 程序简单化处理
+                map.put(orderPurchaseDateConfig.getCountryId(), orderPurchaseDateConfig.getDateAddSecond());
+            }
+        }
+        return map;
+    }
+
+    private Map<Integer, Shop> getShopMap(List<Shop> shopList) {
+        Map<Integer, Shop> map = new HashMap<>();
+        for (Shop shop :
+                shopList) {
+            map.put(shop.getShopId(), shop);
+        }
+        return map;
     }
 
     /**
@@ -247,7 +283,7 @@ public class OrderImportService implements IOrderImportService {
      * @date 2019/9/19 15:58
      */
     @Override
-    public BaseResponse<List<OrderShopSkuResponse>>  listGetShopSku(MultipartFile file) {
+    public BaseResponse<List<OrderShopSkuResponse>> listGetShopSku(MultipartFile file) {
         if (file == null) {
             return BaseResponse.failMessage("请选择文件");
         }
@@ -261,16 +297,16 @@ public class OrderImportService implements IOrderImportService {
                 }
             }
         }
-        if(CollectionUtils.isEmpty(amazonOrderIdList)){
+        if (CollectionUtils.isEmpty(amazonOrderIdList)) {
             return BaseResponse.failMessage("请填写亚马逊订单号");
         }
-        OrderImportExample example=new OrderImportExample();
+        OrderImportExample example = new OrderImportExample();
         example.createCriteria().andAmazonOrderIdIn(amazonOrderIdList);
         example.setOrderByClause("amazon_order_id asc,sku asc");
-        List<OrderImport> orderImportList=customOrderImportMapper.selectByExample(example);
-        List<OrderShopSkuResponse> orderShopSkuResponseList=new ArrayList<>();
-        for(OrderImport orderImport:orderImportList){
-            OrderShopSkuResponse orderShopSkuResponse=new OrderShopSkuResponse();
+        List<OrderImport> orderImportList = customOrderImportMapper.selectByExample(example);
+        List<OrderShopSkuResponse> orderShopSkuResponseList = new ArrayList<>();
+        for (OrderImport orderImport : orderImportList) {
+            OrderShopSkuResponse orderShopSkuResponse = new OrderShopSkuResponse();
             orderShopSkuResponse.setAmazonOrderId(orderImport.getAmazonOrderId());
             orderShopSkuResponse.setSku(orderImport.getSku());
             orderShopSkuResponseList.add(orderShopSkuResponse);
@@ -278,15 +314,26 @@ public class OrderImportService implements IOrderImportService {
         return BaseResponse.successData(orderShopSkuResponseList);
     }
 
-    private void setOrderImportByMap(OrderImport orderImport, Map<String, String> map) {
+    private void setOrderImportByMap(OrderImport orderImport, Map<String, String> map, Map<Integer, Integer> orderPurchaseDateConfigMap, Map<Integer, Shop> shopMap) {
         if (orderImport == null || map == null) {
             return;
         }
         orderImport.setShopId(MathUtil.strToInteger(map.get("shopId")));
         orderImport.setAmazonOrderId(map.get("amazon-order-id"));
         orderImport.setMerchantOrderId(map.get("merchant-order-id"));
-        orderImport.setPurchaseDate(DateUtil.UtcStrToDateTime(map.get("purchase-date")));
-        orderImport.setLastUpdatedDate(DateUtil.UtcStrToDateTime(map.get("last-updated-date")));
+        orderImport.setPurchaseDateReal(DateUtil.UtcStrToDateTime(map.get("purchase-date")));
+        Integer countryId=shopMap.get(orderImport.getShopId()).getCountryId();
+        if(countryId!=null&&orderPurchaseDateConfigMap.containsKey(countryId)){
+            orderImport.setPurchaseDate(DateUtil.plusSecond(orderPurchaseDateConfigMap.get(countryId),orderImport.getPurchaseDateReal()));
+        }else{
+            orderImport.setPurchaseDate(orderImport.getPurchaseDateReal());
+        }
+        orderImport.setLastUpdatedDateReal(DateUtil.UtcStrToDateTime(map.get("last-updated-date")));
+        if(countryId!=null&&orderPurchaseDateConfigMap.containsKey(countryId)){
+            orderImport.setLastUpdatedDate(DateUtil.plusSecond(orderPurchaseDateConfigMap.get(countryId),orderImport.getLastUpdatedDateReal()));
+        }else{
+            orderImport.setLastUpdatedDate(orderImport.getLastUpdatedDateReal());
+        }
         orderImport.setOrderStatus(map.get("order-status"));
         orderImport.setFulfillmentChannel(map.get("fulfillment-channel"));
         orderImport.setSalesChannel(map.get("sales-channel"));

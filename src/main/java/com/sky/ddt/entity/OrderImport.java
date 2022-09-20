@@ -14,7 +14,11 @@ public class OrderImport {
 
     private Date purchaseDate;
 
+    private Date purchaseDateReal;
+
     private Date lastUpdatedDate;
+
+    private Date lastUpdatedDateReal;
 
     private String orderStatus;
 
@@ -124,12 +128,28 @@ public class OrderImport {
         this.purchaseDate = purchaseDate;
     }
 
+    public Date getPurchaseDateReal() {
+        return purchaseDateReal;
+    }
+
+    public void setPurchaseDateReal(Date purchaseDateReal) {
+        this.purchaseDateReal = purchaseDateReal;
+    }
+
     public Date getLastUpdatedDate() {
         return lastUpdatedDate;
     }
 
     public void setLastUpdatedDate(Date lastUpdatedDate) {
         this.lastUpdatedDate = lastUpdatedDate;
+    }
+
+    public Date getLastUpdatedDateReal() {
+        return lastUpdatedDateReal;
+    }
+
+    public void setLastUpdatedDateReal(Date lastUpdatedDateReal) {
+        this.lastUpdatedDateReal = lastUpdatedDateReal;
     }
 
     public String getOrderStatus() {
