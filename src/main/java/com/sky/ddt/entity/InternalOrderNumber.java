@@ -16,6 +16,8 @@ public class InternalOrderNumber {
 
     private Integer theoreticalAmountStatus;
 
+    private Date estimatedArrivalTime;
+
     private String remark;
 
     private Date createTime;
@@ -76,6 +78,14 @@ public class InternalOrderNumber {
 
     public void setTheoreticalAmountStatus(Integer theoreticalAmountStatus) {
         this.theoreticalAmountStatus = theoreticalAmountStatus;
+    }
+
+    public Date getEstimatedArrivalTime() {
+        return estimatedArrivalTime;
+    }
+
+    public void setEstimatedArrivalTime(Date estimatedArrivalTime) {
+        this.estimatedArrivalTime = estimatedArrivalTime;
     }
 
     public String getRemark() {

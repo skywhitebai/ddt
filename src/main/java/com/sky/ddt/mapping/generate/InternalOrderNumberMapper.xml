@@ -8,6 +8,7 @@
     <result column="pay_amount" jdbcType="DECIMAL" property="payAmount" />
     <result column="theoretical_amount" jdbcType="DECIMAL" property="theoreticalAmount" />
     <result column="theoretical_amount_status" jdbcType="INTEGER" property="theoreticalAmountStatus" />
+    <result column="estimated_arrival_time" jdbcType="DATE" property="estimatedArrivalTime" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
@@ -76,7 +77,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, order_number, number, pay_amount, theoretical_amount, theoretical_amount_status, 
-    remark, create_time, create_by, update_time, update_by, transport_type_id, financial_remark
+    estimated_arrival_time, remark, create_time, create_by, update_time, update_by, transport_type_id, 
+    financial_remark
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.InternalOrderNumberExample" resultMap="BaseResultMap">
     select
@@ -114,14 +116,14 @@
     </selectKey>
     insert into internal_order_number (order_number, number, pay_amount, 
       theoretical_amount, theoretical_amount_status, 
-      remark, create_time, create_by, 
-      update_time, update_by, transport_type_id, 
-      financial_remark)
+      estimated_arrival_time, remark, create_time, 
+      create_by, update_time, update_by, 
+      transport_type_id, financial_remark)
     values (#{orderNumber,jdbcType=VARCHAR}, #{number,jdbcType=INTEGER}, #{payAmount,jdbcType=DECIMAL}, 
       #{theoreticalAmount,jdbcType=DECIMAL}, #{theoreticalAmountStatus,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{transportTypeId,jdbcType=INTEGER}, 
-      #{financialRemark,jdbcType=VARCHAR})
+      #{estimatedArrivalTime,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
+      #{transportTypeId,jdbcType=INTEGER}, #{financialRemark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.InternalOrderNumber">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -143,6 +145,9 @@
       </if>
       <if test="theoreticalAmountStatus != null">
         theoretical_amount_status,
+      </if>
+      <if test="estimatedArrivalTime != null">
+        estimated_arrival_time,
       </if>
       <if test="remark != null">
         remark,
@@ -181,6 +186,9 @@
       </if>
       <if test="theoreticalAmountStatus != null">
         #{theoreticalAmountStatus,jdbcType=INTEGER},
+      </if>
+      <if test="estimatedArrivalTime != null">
+        #{estimatedArrivalTime,jdbcType=DATE},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -232,6 +240,9 @@
       <if test="record.theoreticalAmountStatus != null">
         theoretical_amount_status = #{record.theoreticalAmountStatus,jdbcType=INTEGER},
       </if>
+      <if test="record.estimatedArrivalTime != null">
+        estimated_arrival_time = #{record.estimatedArrivalTime,jdbcType=DATE},
+      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=VARCHAR},
       </if>
@@ -266,6 +277,7 @@
       pay_amount = #{record.payAmount,jdbcType=DECIMAL},
       theoretical_amount = #{record.theoreticalAmount,jdbcType=DECIMAL},
       theoretical_amount_status = #{record.theoreticalAmountStatus,jdbcType=INTEGER},
+      estimated_arrival_time = #{record.estimatedArrivalTime,jdbcType=DATE},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER},
@@ -294,6 +306,9 @@
       </if>
       <if test="theoreticalAmountStatus != null">
         theoretical_amount_status = #{theoreticalAmountStatus,jdbcType=INTEGER},
+      </if>
+      <if test="estimatedArrivalTime != null">
+        estimated_arrival_time = #{estimatedArrivalTime,jdbcType=DATE},
       </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
@@ -326,6 +341,7 @@
       pay_amount = #{payAmount,jdbcType=DECIMAL},
       theoretical_amount = #{theoreticalAmount,jdbcType=DECIMAL},
       theoretical_amount_status = #{theoreticalAmountStatus,jdbcType=INTEGER},
+      estimated_arrival_time = #{estimatedArrivalTime,jdbcType=DATE},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER},

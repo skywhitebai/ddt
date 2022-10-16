@@ -36,7 +36,12 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
         <!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名 -->
-        <table tableName="order_import">
+        <table tableName="internal_order_number">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <!--<generatedKey column="sku_id" sqlStatement="MySql" identity="true"/>-->
+        </table>
+        <!-- 要生成的表 tableName是数据库中的表名或视图名 domainObjectName是实体类名 -->
+        <table tableName="transport_type">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
             <!--<generatedKey column="sku_id" sqlStatement="MySql" identity="true"/>-->
         </table>

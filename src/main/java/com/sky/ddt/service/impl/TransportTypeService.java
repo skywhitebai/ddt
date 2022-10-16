@@ -67,6 +67,7 @@ public class TransportTypeService implements ITransportTypeService {
             }
             transportType.setTransportTypeName(params.getTransportTypeName());
             transportType.setSort(params.getSort());
+            transportType.setTimeliness(params.getTimeliness());
             transportType.setRemark(params.getRemark());
             if (existTransportTypeName(transportType)) {
                 return BaseResponse.failMessage(TransportTypeConstant.TRANSPORT_TYPE_NAME_EXIST);
@@ -112,6 +113,11 @@ public class TransportTypeService implements ITransportTypeService {
         TransportTypeExample.Criteria criteria = example.createCriteria();
         criteria.andIdEqualTo(transportTypeId);
         return customTransportTypeMapper.countByExample(example) == 0;
+    }
+
+    @Override
+    public TransportType getTransportType(Integer transportTypeId) {
+        return customTransportTypeMapper.selectByPrimaryKey(transportTypeId);
     }
 
     private boolean existTransportTypeName(TransportType transportType) {

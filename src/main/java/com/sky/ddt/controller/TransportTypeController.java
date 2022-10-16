@@ -52,7 +52,7 @@ public class TransportTypeController extends SuperController {
         return transportTypeService.saveTransportType(params, dealUserId);
     }
 
-    @RequestMapping("comboboxlist")
+    @RequestMapping("/comboboxlist")
     @ResponseBody
     public List<TransportType> comboboxlist() {
         List<TransportType> list = transportTypeService.comboboxlist();

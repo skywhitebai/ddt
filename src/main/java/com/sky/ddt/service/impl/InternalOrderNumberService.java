@@ -64,7 +64,8 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
      */
     @Override
     public BaseResponse saveInternalOrderNumber(SaveInternalOrderNumberRequest params, Integer dealUserId) {
-        if (transportTypeService.notExistTransportTypeId(params.getTransportTypeId())) {
+        TransportType transportType = transportTypeService.getTransportType(params.getTransportTypeId());
+        if (transportType == null) {
             return BaseResponse.failMessage(InternalOrderNumberConstant.TRANSPORT_TYPE_ID_NOT_EXIST);
         }
         //修改
@@ -75,11 +76,18 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
             }
             InternalOrderNumber internalOrderNumberUpdate = new InternalOrderNumber();
             BeanUtils.copyProperties(params, internalOrderNumberUpdate);
+            if (!params.getTransportTypeId().equals(internalOrderNumber.getTransportTypeId())) {
+                if (transportType.getTimeliness() != null) {
+                    internalOrderNumberUpdate.setEstimatedArrivalTime(DateUtil.plusDay(transportType.getTimeliness(), internalOrderNumberUpdate.getCreateTime()));
+                } else {
+                    internalOrderNumberUpdate.setEstimatedArrivalTime(null);
+                }
+            }
             internalOrderNumberUpdate.setUpdateTime(new Date());
             internalOrderNumberUpdate.setUpdateBy(dealUserId);
             customInternalOrderNumberMapper.updateByPrimaryKeySelective(internalOrderNumberUpdate);
-            if(!internalOrderNumber.getFinancialRemark().equals(params.getFinancialRemark())){
-                internalOrderNumberFinancialRemarkHisService.addInternalOrderNumberFinancialRemarkHis(params.getFinancialRemark(),params.getId(),dealUserId);
+            if (!internalOrderNumber.getFinancialRemark().equals(params.getFinancialRemark())) {
+                internalOrderNumberFinancialRemarkHisService.addInternalOrderNumberFinancialRemarkHis(params.getFinancialRemark(), params.getId(), dealUserId);
             }
             return BaseResponse.success();
         }
@@ -89,9 +97,14 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
         internalOrderNumber.setOrderNumber(getOrderNumber());
         internalOrderNumber.setCreateBy(dealUserId);
         internalOrderNumber.setCreateTime(new Date());
+        if (transportType.getTimeliness() != null) {
+            internalOrderNumber.setEstimatedArrivalTime(DateUtil.plusDay(transportType.getTimeliness(), DateUtil.getToday()));
+        } else {
+            internalOrderNumber.setEstimatedArrivalTime(null);
+        }
         customInternalOrderNumberMapper.insertSelective(internalOrderNumber);
-        if(StringUtils.isEmpty(params.getFinancialRemark())){
-            internalOrderNumberFinancialRemarkHisService.addInternalOrderNumberFinancialRemarkHis(params.getFinancialRemark(),internalOrderNumber.getId(),dealUserId);
+        if (StringUtils.isEmpty(params.getFinancialRemark())) {
+            internalOrderNumberFinancialRemarkHisService.addInternalOrderNumberFinancialRemarkHis(params.getFinancialRemark(), internalOrderNumber.getId(), dealUserId);
         }
         return BaseResponse.success();
     }
@@ -147,7 +160,7 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
         if (internalOrderNumber == null) {
             return BaseResponse.failMessage(InternalOrderNumberConstant.ID_NOT_EXIST);
         }
-        if(internalOrderNumber.getFinancialRemark().equals(params.getFinancialRemark())){
+        if (internalOrderNumber.getFinancialRemark().equals(params.getFinancialRemark())) {
             return BaseResponse.success();
         }
         InternalOrderNumber internalOrderNumberUpdate = new InternalOrderNumber();
@@ -156,8 +169,8 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
         internalOrderNumberUpdate.setUpdateTime(new Date());
         internalOrderNumberUpdate.setUpdateBy(dealUserId);
         customInternalOrderNumberMapper.updateByPrimaryKeySelective(internalOrderNumberUpdate);
-        if(!internalOrderNumber.getFinancialRemark().equals(params.getFinancialRemark())){
-            internalOrderNumberFinancialRemarkHisService.addInternalOrderNumberFinancialRemarkHis(params.getFinancialRemark(),params.getId(),dealUserId);
+        if (!internalOrderNumber.getFinancialRemark().equals(params.getFinancialRemark())) {
+            internalOrderNumberFinancialRemarkHisService.addInternalOrderNumberFinancialRemarkHis(params.getFinancialRemark(), params.getId(), dealUserId);
         }
         return BaseResponse.success();
     }
@@ -182,22 +195,22 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
         //判断是否有没有头程费率或者没有重量的
         List<InternalOrderNumberTransport> internalOrderNumberTransportsNoHeadTripCostRates = customInternalOrderNumberTransportMapper.queryInternalOrderNumberTransportsNoHeadTripCostRate(params);
         if (!CollectionUtils.isEmpty(internalOrderNumberTransportsNoHeadTripCostRates)) {
-            String subOrderNumbers = internalOrderNumberTransportsNoHeadTripCostRates.stream().map(item ->item.getSubOrderNumber()).collect(Collectors.joining(","));
-            if(subOrderNumbers.length()>500){
-                subOrderNumbers= subOrderNumbers.substring(0,500);
+            String subOrderNumbers = internalOrderNumberTransportsNoHeadTripCostRates.stream().map(item -> item.getSubOrderNumber()).collect(Collectors.joining(","));
+            if (subOrderNumbers.length() > 500) {
+                subOrderNumbers = subOrderNumbers.substring(0, 500);
             }
-            return BaseResponse.failMessage("以下内部单号子单号的头程费率为空或者小于等于0："+subOrderNumbers);
+            return BaseResponse.failMessage("以下内部单号子单号的头程费率为空或者小于等于0：" + subOrderNumbers);
         }
-        List<String> skuNoWeights= customInternalOrderNumberMapper.querySkuNoWeight(params);
+        List<String> skuNoWeights = customInternalOrderNumberMapper.querySkuNoWeight(params);
         if (!CollectionUtils.isEmpty(skuNoWeights)) {
             String skus = skuNoWeights.stream().collect(Collectors.joining(","));
-            if(skus.length()>500){
-                skus= skus.substring(0,500);
+            if (skus.length() > 500) {
+                skus = skus.substring(0, 500);
             }
-            return BaseResponse.failMessage("以下sku重量为空或者小于等于0："+skus);
+            return BaseResponse.failMessage("以下sku重量为空或者小于等于0：" + skus);
         }
-        int count=customInternalOrderNumberMapper.generateTheoreticalAmount(params);
-        if(count>0){
+        int count = customInternalOrderNumberMapper.generateTheoreticalAmount(params);
+        if (count > 0) {
             return BaseResponse.success();
         }
         return BaseResponse.failMessage("没有需要更新的数据");

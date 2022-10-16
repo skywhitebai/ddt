@@ -22,6 +22,9 @@ public class SaveTransportTypeRequest {
     @NotNull(message = TransportTypeConstant.SORT_EMPTY)
     @Min(value = 1, message = TransportTypeConstant.SORT_ERRO)
     Integer sort;
+    @NotNull(message = "时效不能为空")
+    @Min(value = 1, message = "时效必须为数字")
+    Integer timeliness;
     @Length(max = 200, message = TransportTypeConstant.REMARK_TOO_LONG)
     String remark;
 }

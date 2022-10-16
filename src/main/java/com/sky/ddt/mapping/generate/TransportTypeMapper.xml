@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.sky.ddt.entity.TransportType">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="transport_type_name" jdbcType="VARCHAR" property="transportTypeName" />
+    <result column="timeliness" jdbcType="INTEGER" property="timeliness" />
     <result column="sort" jdbcType="INTEGER" property="sort" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -70,7 +71,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, transport_type_name, sort, remark, create_time, create_by, update_time, update_by
+    id, transport_type_name, timeliness, sort, remark, create_time, create_by, update_time, 
+    update_by
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.TransportTypeExample" resultMap="BaseResultMap">
     select
@@ -106,12 +108,12 @@
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
       SELECT LAST_INSERT_ID()
     </selectKey>
-    insert into transport_type (transport_type_name, sort, remark, 
-      create_time, create_by, update_time, 
-      update_by)
-    values (#{transportTypeName,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=INTEGER})
+    insert into transport_type (transport_type_name, timeliness, sort, 
+      remark, create_time, create_by, 
+      update_time, update_by)
+    values (#{transportTypeName,jdbcType=VARCHAR}, #{timeliness,jdbcType=INTEGER}, #{sort,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.TransportType">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -121,6 +123,9 @@
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="transportTypeName != null">
         transport_type_name,
+      </if>
+      <if test="timeliness != null">
+        timeliness,
       </if>
       <if test="sort != null">
         sort,
@@ -144,6 +149,9 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="transportTypeName != null">
         #{transportTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="timeliness != null">
+        #{timeliness,jdbcType=INTEGER},
       </if>
       <if test="sort != null">
         #{sort,jdbcType=INTEGER},
@@ -180,6 +188,9 @@
       <if test="record.transportTypeName != null">
         transport_type_name = #{record.transportTypeName,jdbcType=VARCHAR},
       </if>
+      <if test="record.timeliness != null">
+        timeliness = #{record.timeliness,jdbcType=INTEGER},
+      </if>
       <if test="record.sort != null">
         sort = #{record.sort,jdbcType=INTEGER},
       </if>
@@ -207,6 +218,7 @@
     update transport_type
     set id = #{record.id,jdbcType=INTEGER},
       transport_type_name = #{record.transportTypeName,jdbcType=VARCHAR},
+      timeliness = #{record.timeliness,jdbcType=INTEGER},
       sort = #{record.sort,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -222,6 +234,9 @@
     <set>
       <if test="transportTypeName != null">
         transport_type_name = #{transportTypeName,jdbcType=VARCHAR},
+      </if>
+      <if test="timeliness != null">
+        timeliness = #{timeliness,jdbcType=INTEGER},
       </if>
       <if test="sort != null">
         sort = #{sort,jdbcType=INTEGER},
@@ -247,6 +262,7 @@
   <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.TransportType">
     update transport_type
     set transport_type_name = #{transportTypeName,jdbcType=VARCHAR},
+      timeliness = #{timeliness,jdbcType=INTEGER},
       sort = #{sort,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       create_time = #{createTime,jdbcType=TIMESTAMP},

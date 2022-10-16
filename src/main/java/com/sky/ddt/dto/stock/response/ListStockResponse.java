@@ -85,6 +85,10 @@ public class ListStockResponse {
      * 在途数量
      */
     Integer onTheWayQuantity;
+    /**
+     * 发送中数量
+     */
+    Integer sendQuantity;
     Integer afnReservedQuantity;
     private Integer afnInboundWorkingQuantity;
 

@@ -7,6 +7,8 @@ public class TransportType {
 
     private String transportTypeName;
 
+    private Integer timeliness;
+
     private Integer sort;
 
     private String remark;
@@ -33,6 +35,14 @@ public class TransportType {
 
     public void setTransportTypeName(String transportTypeName) {
         this.transportTypeName = transportTypeName == null ? null : transportTypeName.trim();
+    }
+
+    public Integer getTimeliness() {
+        return timeliness;
+    }
+
+    public void setTimeliness(Integer timeliness) {
+        this.timeliness = timeliness;
     }
 
     public Integer getSort() {

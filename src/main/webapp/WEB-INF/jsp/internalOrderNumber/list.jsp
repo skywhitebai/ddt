@@ -55,7 +55,7 @@
 </table>
 <!--编辑页面-->
 <div id="dlg" class="easyui-dialog" style="width: 700px; height: 300px; padding: 10px 20px"
-     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', align:'center'">
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons',top:50, align:'center'">
     <div class="ftitle">
         <b>内部单号管理</b>
         <hr/>
@@ -85,8 +85,14 @@
                 <td colspan="3">
                     <select class="easyui-combobox" id="transportTypeId" style="width:160px;" name="transportTypeId"
                             data-options="required:true">
-
                     </select>
+                </td>
+            </tr>
+            <tr>
+                <td>预计到货时间：</td>
+                <td colspan="3">
+                    <input class="easyui-textbox" readonly="readonly" name="estimatedArrivalTime"
+                           id="estimatedArrivalTime">
                 </td>
             </tr>
             </tr>
@@ -188,6 +194,16 @@
                     title: '操作', field: 'id', width: 150,
                     formatter: function (value, row, index) {
                         return '<a href="javascript:;" onclick="downPDF(\'' + row.id + '\')" title="下载PDF">下载PDF</a>';
+                    }
+                },
+                {
+                    title: '预计到货时间', field: 'estimatedArrivalTime', width: 90,
+                    formatter: function (value, rowData, rowIndex) {
+                        if (isEmpty(value)) {
+                            return value;
+                        } else {
+                            return value.slice(0, 10);
+                        }
                     }
                 },
                 {title: '创建时间', field: 'createTime', width: 180},

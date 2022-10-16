@@ -3,6 +3,7 @@ package com.sky.ddt.entity;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 public class InternalOrderNumberExample {
@@ -104,6 +105,32 @@ public class InternalOrderNumberExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
+        }
+
+        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
+            if (value == null) {
+                throw new RuntimeException("Value for " + property + " cannot be null");
+            }
+            addCriterion(condition, new java.sql.Date(value.getTime()), property);
+        }
+
+        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
+            if (values == null || values.size() == 0) {
+                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
+            }
+            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
+            Iterator<Date> iter = values.iterator();
+            while (iter.hasNext()) {
+                dateList.add(new java.sql.Date(iter.next().getTime()));
+            }
+            addCriterion(condition, dateList, property);
+        }
+
+        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
+            if (value1 == null || value2 == null) {
+                throw new RuntimeException("Between values for " + property + " cannot be null");
+            }
+            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andIdIsNull() {
@@ -473,6 +500,66 @@ public class InternalOrderNumberExample {
 
         public Criteria andTheoreticalAmountStatusNotBetween(Integer value1, Integer value2) {
             addCriterion("theoretical_amount_status not between", value1, value2, "theoreticalAmountStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimatedArrivalTimeIsNull() {
+            addCriterion("estimated_arrival_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimatedArrivalTimeIsNotNull() {
+            addCriterion("estimated_arrival_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimatedArrivalTimeEqualTo(Date value) {
+            addCriterionForJDBCDate("estimated_arrival_time =", value, "estimatedArrivalTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimatedArrivalTimeNotEqualTo(Date value) {
+            addCriterionForJDBCDate("estimated_arrival_time <>", value, "estimatedArrivalTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimatedArrivalTimeGreaterThan(Date value) {
+            addCriterionForJDBCDate("estimated_arrival_time >", value, "estimatedArrivalTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimatedArrivalTimeGreaterThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("estimated_arrival_time >=", value, "estimatedArrivalTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimatedArrivalTimeLessThan(Date value) {
+            addCriterionForJDBCDate("estimated_arrival_time <", value, "estimatedArrivalTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimatedArrivalTimeLessThanOrEqualTo(Date value) {
+            addCriterionForJDBCDate("estimated_arrival_time <=", value, "estimatedArrivalTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimatedArrivalTimeIn(List<Date> values) {
+            addCriterionForJDBCDate("estimated_arrival_time in", values, "estimatedArrivalTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimatedArrivalTimeNotIn(List<Date> values) {
+            addCriterionForJDBCDate("estimated_arrival_time not in", values, "estimatedArrivalTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimatedArrivalTimeBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("estimated_arrival_time between", value1, value2, "estimatedArrivalTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andEstimatedArrivalTimeNotBetween(Date value1, Date value2) {
+            addCriterionForJDBCDate("estimated_arrival_time not between", value1, value2, "estimatedArrivalTime");
             return (Criteria) this;
         }
 

@@ -12,6 +12,7 @@ import com.sky.ddt.dto.stock.request.ListStockRequest;
 import com.sky.ddt.dto.stock.request.SaveProductionQuantityRequest;
 import com.sky.ddt.dto.stock.request.SaveStockQuantityRequest;
 import com.sky.ddt.dto.stock.response.ListStockResponse;
+import com.sky.ddt.dto.stock.response.SendQuantityDto;
 import com.sky.ddt.entity.InternalOrderNumber;
 import com.sky.ddt.entity.ShopSku;
 import com.sky.ddt.entity.StockCart;
@@ -60,6 +61,7 @@ public class StockCartService implements IStockCartService {
         PageHelper.startPage(params.getPage(), params.getRows(), true);
         List<ListStockResponse> list = customStockCartMapper.listStock(params);
         setListStock(list);
+        setSendQuantity(list);
         for (ListStockResponse listStockResponse :
                 list) {
             String imgUrl = imgService.getImgUrlBySkuId(listStockResponse.getSkuId());
@@ -71,6 +73,28 @@ public class StockCartService implements IStockCartService {
         }
         PageInfo<ListStockResponse> page = new PageInfo<ListStockResponse>(list);
         return page;
+    }
+
+    /**
+     * 设置发送中数量
+     *
+     * @param list
+     */
+    private void setSendQuantity(List<ListStockResponse> list) {
+        if(CollectionUtils.isEmpty(list)){
+            return;
+        }
+        List<Integer> shopSkuIdList=list.stream().map(item->MathUtil.strToInteger(item.getShopSkuId())).collect(Collectors.toList());
+        List<SendQuantityDto> sendQuantityDtoList=customStockCartMapper.listSendQuantity(shopSkuIdList,list.get(0).getShopId());
+        for (ListStockResponse listStockResponse:
+                list) {
+            Optional<SendQuantityDto> sendQuantityDtoOptional=sendQuantityDtoList.stream().filter(item->item.getShopSkuId().equals(listStockResponse.getShopSkuId())).findFirst();
+            if(sendQuantityDtoOptional.isPresent()){
+                listStockResponse.setSendQuantity(sendQuantityDtoOptional.get().getSendQuantity());
+            }else{
+                listStockResponse.setSendQuantity(0);
+            }
+        }
     }
 
     @Override
@@ -116,7 +140,7 @@ public class StockCartService implements IStockCartService {
                 listStockResponse.setSalesForTheLast35Days(info.getSalesForTheLast35Days());
                 listStockResponse.setSalesForTheLastYear90Days(info.getSalesForTheLastYear90Days());
                 listStockResponse.setItemPrice30(info.getItemPrice30());
-            }else{
+            } else {
                 listStockResponse.setAfnFulfillableQuantity(0);
                 listStockResponse.setOnTheWayQuantity(0);
                 listStockResponse.setAfnReservedQuantity(0);

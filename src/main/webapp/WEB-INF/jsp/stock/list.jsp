@@ -108,13 +108,19 @@
                 <td>
                     <input class="easyui-validatebox textbox" name="onTheWayQuantity" readonly="readonly">
                 </td>
-                <td>reserver数量：</td>
+                <td>发送中数量：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="sendQuantity" readonly="readonly">
+                </td>
+            </tr>
+            <tr>
+                <td>afnreserver数量：</td>
                 <td>
                     <input class="easyui-validatebox textbox" name="afnReservedQuantity" readonly="readonly">
                 </td>
             </tr>
             <tr>
-                <td>receive数量：</td>
+                <td>afnInboundReceiving数量：</td>
                 <td>
                     <input class="easyui-validatebox textbox" name="afnInboundReceivingQuantity" readonly="readonly">
                 </td>
@@ -343,6 +349,7 @@
                     }
                 },
                 {title: '在途', field: 'onTheWayQuantity', width: 90},
+                {title: '发送中数量', field: 'sendQuantity', width: 100},
                 {title: 'fba总可售库存', field: 'fbaTotalCanSaleQuantity', width: 90},
                 {
                     title: '预计总可售天数', field: 'estimateCanSaleDay', width: 95,

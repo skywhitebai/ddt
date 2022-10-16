@@ -69,6 +69,13 @@
                 </td>
             </tr>
             <tr>
+                <td>时效（天）：</td>
+                <td>
+                    <input class="easyui-numberbox textbox-wide" name="timeliness" id="timeliness" min="0"
+                           precision="0" data-options="required:true">
+                </td>
+            </tr>
+            <tr>
                 <td>排序（倒序）：</td>
                 <td>
                     <input class="easyui-numberbox textbox-wide" name="sort"
@@ -127,6 +134,7 @@
             columns: [[
                 {field: 'ck', checkbox: true},   //选择
                 {title: '运输方式', field: 'transportTypeName', width: 120},
+                {title: '时效（天）', field: 'timeliness', width: 100},
                 {title: '排序', field: 'sort', width: 60},
                 {title: '备注', field: 'remark', width: 200}
             ]],

@@ -55,8 +55,11 @@
         where po.id=poss.produce_order_id and po.shop_id!=ss.shop_id and po.shop_id=s.shop_id and s.type=2 and
         poss.shop_sku_id=ss2.shop_sku_id and ss2.sku_id=ss.sku_id and po.status in(1,2)
         ),0) produceOrderShopSkuProductionQuantityWarehouse,
-        (select AVG(oi2.item_price) from order_import oi2 where oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 31 DAY) and oi2.shop_sku_id=ss.shop_sku_id  and oi2.order_status!='Cancelled')itemPrice30,
-        (SELECT SUM(oi2.quantity) FROM order_import oi2 WHERE oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR) AND oi2.`purchase_date`<![CDATA[<]]>DATE_ADD(DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR),INTERVAL 90 DAY) AND oi2.shop_sku_id=ss.shop_sku_id and oi2.order_status!='Cancelled') salesForTheLastYear90Days
+        (select AVG(oi2.item_price) from order_import oi2 where oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 31
+        DAY) and oi2.shop_sku_id=ss.shop_sku_id and oi2.order_status!='Cancelled')itemPrice30,
+        (SELECT SUM(oi2.quantity) FROM order_import oi2 WHERE oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR)
+        AND oi2.`purchase_date`<![CDATA[<]]>DATE_ADD(DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR),INTERVAL 90 DAY) AND
+        oi2.shop_sku_id=ss.shop_sku_id and oi2.order_status!='Cancelled') salesForTheLastYear90Days
         FROM
         shop_sku ss
         LEFT JOIN `order_import` oi ON ss.`shop_sku_id`=oi.`shop_sku_id` and
@@ -181,7 +184,8 @@
                     ss2.shop_id=s2.shop_id and s2.type=1 and ss2.sku_id=ss.sku_id)
                 </if>
 
-                <if test="saleShopId != null and saleShopId!=0 and saleShopId!=-1 ">and exists (select 1 from shop_sku ss2 where
+                <if test="saleShopId != null and saleShopId!=0 and saleShopId!=-1 ">and exists (select 1 from shop_sku
+                    ss2 where
                     ss2.shop_id=#{saleShopId} and ss2.sku_id=ss.sku_id)
                 </if>
             </trim>
@@ -243,8 +247,9 @@
         on a.skuId=c.skuId
         left join
         (select sum(oi2.quantity) salesForTheLastYear90Days,ss.sku_id skuId from order_import oi2,shop_sku ss
-         where oi2.shop_sku_id=ss.shop_sku_id and oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 year) and oi2.`purchase_date`<![CDATA[<]]>DATE_add(DATE_SUB(DATE(NOW()),INTERVAL 1 year),INTERVAL 90 day)
-         and oi2.order_status!='Cancelled' and ss.sku_id in
+        where oi2.shop_sku_id=ss.shop_sku_id and oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 year) and
+        oi2.`purchase_date`<![CDATA[<]]>DATE_add(DATE_SUB(DATE(NOW()),INTERVAL 1 year),INTERVAL 90 day)
+        and oi2.order_status!='Cancelled' and ss.sku_id in
         <foreach close=")" collection="list" item="listItem" open="(" separator=",">
             #{listItem}
         </foreach>
@@ -252,12 +257,28 @@
         on a.skuId=d.skuId
         left join
         (select AVG(oi2.item_price) itemPrice30,ss.sku_id skuId from order_import oi2,shop_sku ss
-        where  oi2.shop_sku_id=ss.shop_sku_id and oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 31 DAY) and oi2.order_status!='Cancelled'
+        where oi2.shop_sku_id=ss.shop_sku_id and oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 31 DAY) and
+        oi2.order_status!='Cancelled'
         and ss.sku_id in
         <foreach close=")" collection="list" item="listItem" open="(" separator=",">
             #{listItem}
         </foreach>
         group by ss.sku_id) e
         on a.skuId=e.skuId
+    </select>
+
+    <select id="listSendQuantity"
+            resultType="com.sky.ddt.dto.stock.response.SendQuantityDto">
+        select fplss.shop_sku_id shopSkuId,sum(quantity) sendQuantity
+        from fba_packing_list fpl,fba_packing_list_shop_sku fplss,internal_order_number
+        ion,internal_order_number_transport iont
+        where fpl.shop_id=#{shopId} and fpl.id=fplss.fba_packing_list_id
+        and fplss.shop_sku_id in
+        <foreach close=")" collection="shopSkuIdList" item="shopSkuId" open="(" separator=",">
+            #{shopSkuId}
+        </foreach>
+        and ion.id=iont.internal_order_number_id and estimated_arrival_time <![CDATA[ >= ]]>DATE(NOW())
+        and iont.fba_shipment_id_short=fplss.fba_shipment_id
+        group by fplss.shop_sku_id
     </select>
 </mapper>

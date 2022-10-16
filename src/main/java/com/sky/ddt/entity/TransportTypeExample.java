@@ -235,6 +235,66 @@ public class TransportTypeExample {
             return (Criteria) this;
         }
 
+        public Criteria andTimelinessIsNull() {
+            addCriterion("timeliness is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimelinessIsNotNull() {
+            addCriterion("timeliness is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimelinessEqualTo(Integer value) {
+            addCriterion("timeliness =", value, "timeliness");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimelinessNotEqualTo(Integer value) {
+            addCriterion("timeliness <>", value, "timeliness");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimelinessGreaterThan(Integer value) {
+            addCriterion("timeliness >", value, "timeliness");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimelinessGreaterThanOrEqualTo(Integer value) {
+            addCriterion("timeliness >=", value, "timeliness");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimelinessLessThan(Integer value) {
+            addCriterion("timeliness <", value, "timeliness");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimelinessLessThanOrEqualTo(Integer value) {
+            addCriterion("timeliness <=", value, "timeliness");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimelinessIn(List<Integer> values) {
+            addCriterion("timeliness in", values, "timeliness");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimelinessNotIn(List<Integer> values) {
+            addCriterion("timeliness not in", values, "timeliness");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimelinessBetween(Integer value1, Integer value2) {
+            addCriterion("timeliness between", value1, value2, "timeliness");
+            return (Criteria) this;
+        }
+
+        public Criteria andTimelinessNotBetween(Integer value1, Integer value2) {
+            addCriterion("timeliness not between", value1, value2, "timeliness");
+            return (Criteria) this;
+        }
+
         public Criteria andSortIsNull() {
             addCriterion("sort is null");
             return (Criteria) this;

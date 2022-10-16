@@ -51,4 +51,6 @@ public interface ITransportTypeService {
      * @date 2020/7/7 9:41
      */
     boolean notExistTransportTypeId(Integer transportTypeId);
+
+    TransportType getTransportType(Integer transportTypeId);
 }

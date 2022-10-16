@@ -18,7 +18,7 @@ public class SaveInternalOrderNumberRequest {
     @NotNull(message = InternalOrderNumberConstant.NUMBER_EMPTY)
     @Min(value = 1, message = InternalOrderNumberConstant.NUMBER_ERRO)
     Integer number;
-    //@NotNull(message = InternalOrderNumberConstant.TRANSPORT_TYPE_ID_EMPTY)
+    @NotNull(message = InternalOrderNumberConstant.TRANSPORT_TYPE_ID_EMPTY)
     Integer transportTypeId;
     @Length(max = 200, message = InternalOrderNumberConstant.REMARK_TOO_LONG)
     String remark;
