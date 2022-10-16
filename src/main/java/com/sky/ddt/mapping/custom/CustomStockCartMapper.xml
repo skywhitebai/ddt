@@ -281,4 +281,19 @@
         and iont.fba_shipment_id_short=fplss.fba_shipment_id
         group by fplss.shop_sku_id
     </select>
+
+    <select id="listPageSendQuantity"
+            resultType="com.sky.ddt.dto.stock.response.ListSendQuantityResp">
+        select fplss.shop_sku_id shopSkuId,fpl.shop_id shopId,ss.shop_sku shopSku,fpl.shipment_id shipmentId,fplss.quantity
+        ,transport_type_name transportTypeName,fpl.create_time createTime,ion.estimated_arrival_time estimatedArrivalTime
+        from fba_packing_list fpl,fba_packing_list_shop_sku fplss,internal_order_number
+        ion,internal_order_number_transport iont,shop_sku ss,transport_type tt
+        where fpl.shop_id=#{shopId} and fpl.id=fplss.fba_packing_list_id
+        and fplss.shop_sku_id=#{shopSkuId}
+        and ss.shop_sku_id=#{shopSkuId}
+        and ion.transport_type_id=tt.id
+        and ion.id=iont.internal_order_number_id and estimated_arrival_time <![CDATA[ >= ]]>DATE(NOW())
+        and iont.fba_shipment_id_short=fplss.fba_shipment_id
+        order by ion.estimated_arrival_time desc
+    </select>
 </mapper>

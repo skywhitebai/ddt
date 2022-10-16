@@ -4,9 +4,11 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.dto.stock.request.ListSendQuntityReq;
 import com.sky.ddt.dto.stock.request.ListStockRequest;
 import com.sky.ddt.dto.stock.request.SaveProductionQuantityRequest;
 import com.sky.ddt.dto.stock.request.SaveStockQuantityRequest;
+import com.sky.ddt.dto.stock.response.ListSendQuantityResp;
 import com.sky.ddt.dto.stock.response.ListStockResponse;
 import com.sky.ddt.service.IStockCartService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -84,5 +86,15 @@ public class StockController extends SuperController {
     @MenuAnnotation("stock/index")
     public BaseResponse saveProductionQuantity(@Validated SaveProductionQuantityRequest params) {
         return stockCartService.saveProductionQuantity(params,getCurrentUserId());
+    }
+    @RequestMapping("/listSendQuantity")
+    @ResponseBody
+    @MenuAnnotation("stock/index")
+    public DataGridResponse listSendQuantity(@Validated ListSendQuntityReq params) {
+        PageInfo<ListSendQuantityResp> page = stockCartService.listSendQuantity(params);
+        DataGridResponse dataGridResponse = new DataGridResponse();
+        dataGridResponse.setTotal(page.getTotal());
+        dataGridResponse.setRows(page.getList());
+        return dataGridResponse;
     }
 }

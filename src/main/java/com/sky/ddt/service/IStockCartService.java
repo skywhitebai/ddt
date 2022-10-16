@@ -2,9 +2,11 @@ package com.sky.ddt.service;
 
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dto.response.BaseResponse;
+import com.sky.ddt.dto.stock.request.ListSendQuntityReq;
 import com.sky.ddt.dto.stock.request.ListStockRequest;
 import com.sky.ddt.dto.stock.request.SaveProductionQuantityRequest;
 import com.sky.ddt.dto.stock.request.SaveStockQuantityRequest;
+import com.sky.ddt.dto.stock.response.ListSendQuantityResp;
 import com.sky.ddt.dto.stock.response.ListStockResponse;
 
 /**
@@ -41,4 +43,6 @@ public interface IStockCartService {
     BaseResponse saveProductionQuantity(SaveProductionQuantityRequest params, Integer currentUserId);
 
     PageInfo<ListStockResponse> listWarehouseStock(ListStockRequest params);
+
+    PageInfo<ListSendQuantityResp> listSendQuantity(ListSendQuntityReq params);
 }

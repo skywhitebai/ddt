@@ -196,6 +196,26 @@
     <table id="dgImg" style="width: 100%; height: auto">
     </table>
 </div>
+<div id="dlgSendQuantity" class="easyui-dialog" style="width: 900px; height: 600px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
+    <form id="frmSendQuantity" method="post" enctype="multipart/form-data">
+        <table>
+            <tr style="display: none">
+                <td>shopId：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="shopId">
+                </td>
+                <td>shopSkuId：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="shopSkuId">
+
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table id="dgSendQuantity" style="width: 100%; height: auto">
+    </table>
+</div>
 <div id="dlgInventoryQuantity" class="easyui-dialog" style="width: 600px; height: 600px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
     <form id="frmInventoryQuantity" method="post" enctype="multipart/form-data">
@@ -348,8 +368,13 @@
                         }
                     }
                 },
-                {title: '在途', field: 'onTheWayQuantity', width: 90},
-                {title: '发送中数量', field: 'sendQuantity', width: 100},
+                {title: '在途', field: 'onTheWayQuantity', width: 50},
+                {
+                    title: '发送中数量', field: 'sendQuantity', width: 80,
+                    formatter: function (value, rowData, rowIndex) {
+                        return '<a href="javascript:;" onclick="showSendQuantityDialog(' + rowData.shopId + ',' + rowData.shopSkuId + ')" >'+value+'</a>';
+                    }
+                },
                 {title: 'fba总可售库存', field: 'fbaTotalCanSaleQuantity', width: 90},
                 {
                     title: '预计总可售天数', field: 'estimateCanSaleDay', width: 95,
@@ -739,6 +764,70 @@
                     }
                 },
                 {title: '创建时间', field: 'createTime', width: 180}
+            ]],
+            toolbar: [{
+                id: 'btnImgReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        $(dg).datagrid('clearSelections');
+    }
+
+    function showSendQuantityDialog(shopId,shopSkuId){
+        $('#dlgSendQuantity').dialog('open').dialog('setTitle', '发送中数量');
+        $('#frmSendQuantity').form('clear');
+        $("div#dlgSendQuantity input[name='shopId']").val(shopId);
+        $("div#dlgSendQuantity input[name='shopSkuId']").val(shopSkuId);
+        bindSendQuantity();
+    }
+    function bindSendQuantity() {
+        dg = '#dgSendQuantity';
+        url = "${pageContext.request.contextPath }/stock/listSendQuantity";
+        title = "发送中数量";
+        queryParams = {
+            shopId: $("div#dlgSendQuantity input[name='shopId']").val(),
+            shopSkuId: $("div#dlgSendQuantity input[name='shopSkuId']").val()
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: true,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 5,
+            pageList: [5, 10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'imgId',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '店铺sku', field: 'shopSku', width: 150},
+                {title: 'Shipment ID', field: 'shipmentId', width: 130},
+                {title: '数量', field: 'quantity', width: 50},
+                {title: '物流渠道', field: 'transportTypeName', width: 80},
+                {title: '创建时间', field: 'createTime', width: 180},
+                {
+                    title: '预计到货时间', field: 'estimatedArrivalTime', width: 90,
+                    formatter: function (value, rowData, rowIndex) {
+                        if (isEmpty(value)) {
+                            return value;
+                        } else {
+                            return value.slice(0, 10);
+                        }
+                    }
+                }
             ]],
             toolbar: [{
                 id: 'btnImgReload',

@@ -1,7 +1,9 @@
 package com.sky.ddt.dao.custom;
 
 import com.sky.ddt.dao.generate.StockCartMapper;
+import com.sky.ddt.dto.stock.request.ListSendQuntityReq;
 import com.sky.ddt.dto.stock.request.ListStockRequest;
+import com.sky.ddt.dto.stock.response.ListSendQuantityResp;
 import com.sky.ddt.dto.stock.response.ListStockResponse;
 import com.sky.ddt.dto.stock.response.SendQuantityDto;
 import com.sky.ddt.entity.StockCart;
@@ -29,4 +31,6 @@ public interface CustomStockCartMapper extends StockCartMapper {
     List<ListStockResponse> listWarehouseStockOtherInfo(List<Integer> list);
 
     List<SendQuantityDto> listSendQuantity(@Param("shopSkuIdList") List<Integer> shopSkuIdList, @Param("shopId") Integer shopId);
+
+    List<ListSendQuantityResp> listPageSendQuantity(ListSendQuntityReq params);
 }

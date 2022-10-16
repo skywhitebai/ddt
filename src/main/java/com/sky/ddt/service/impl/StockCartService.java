@@ -7,13 +7,13 @@ import com.sky.ddt.common.constant.StockRecordConstant;
 import com.sky.ddt.dao.custom.CustomShopSkuMapper;
 import com.sky.ddt.dao.custom.CustomStockCartMapper;
 import com.sky.ddt.dto.response.BaseResponse;
-import com.sky.ddt.dto.sku.response.SkuListResponse;
+import com.sky.ddt.dto.stock.request.ListSendQuntityReq;
 import com.sky.ddt.dto.stock.request.ListStockRequest;
 import com.sky.ddt.dto.stock.request.SaveProductionQuantityRequest;
 import com.sky.ddt.dto.stock.request.SaveStockQuantityRequest;
+import com.sky.ddt.dto.stock.response.ListSendQuantityResp;
 import com.sky.ddt.dto.stock.response.ListStockResponse;
 import com.sky.ddt.dto.stock.response.SendQuantityDto;
-import com.sky.ddt.entity.InternalOrderNumber;
 import com.sky.ddt.entity.ShopSku;
 import com.sky.ddt.entity.StockCart;
 import com.sky.ddt.entity.StockCartExample;
@@ -21,7 +21,6 @@ import com.sky.ddt.service.IImgService;
 import com.sky.ddt.service.IShopUserService;
 import com.sky.ddt.service.IStockCartService;
 import com.sky.ddt.util.MathUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -81,17 +80,17 @@ public class StockCartService implements IStockCartService {
      * @param list
      */
     private void setSendQuantity(List<ListStockResponse> list) {
-        if(CollectionUtils.isEmpty(list)){
+        if (CollectionUtils.isEmpty(list)) {
             return;
         }
-        List<Integer> shopSkuIdList=list.stream().map(item->MathUtil.strToInteger(item.getShopSkuId())).collect(Collectors.toList());
-        List<SendQuantityDto> sendQuantityDtoList=customStockCartMapper.listSendQuantity(shopSkuIdList,list.get(0).getShopId());
-        for (ListStockResponse listStockResponse:
+        List<Integer> shopSkuIdList = list.stream().map(item -> MathUtil.strToInteger(item.getShopSkuId())).collect(Collectors.toList());
+        List<SendQuantityDto> sendQuantityDtoList = customStockCartMapper.listSendQuantity(shopSkuIdList, list.get(0).getShopId());
+        for (ListStockResponse listStockResponse :
                 list) {
-            Optional<SendQuantityDto> sendQuantityDtoOptional=sendQuantityDtoList.stream().filter(item->item.getShopSkuId().equals(listStockResponse.getShopSkuId())).findFirst();
-            if(sendQuantityDtoOptional.isPresent()){
+            Optional<SendQuantityDto> sendQuantityDtoOptional = sendQuantityDtoList.stream().filter(item -> item.getShopSkuId().equals(listStockResponse.getShopSkuId())).findFirst();
+            if (sendQuantityDtoOptional.isPresent()) {
                 listStockResponse.setSendQuantity(sendQuantityDtoOptional.get().getSendQuantity());
-            }else{
+            } else {
                 listStockResponse.setSendQuantity(0);
             }
         }
@@ -116,6 +115,14 @@ public class StockCartService implements IStockCartService {
         }
 
         PageInfo<ListStockResponse> page = new PageInfo<ListStockResponse>(list);
+        return page;
+    }
+
+    @Override
+    public PageInfo<ListSendQuantityResp> listSendQuantity(ListSendQuntityReq params) {
+        PageHelper.startPage(params.getPage(), params.getRows(), true);
+        List<ListSendQuantityResp> list = customStockCartMapper.listPageSendQuantity(params);
+        PageInfo<ListSendQuantityResp> page = new PageInfo<ListSendQuantityResp>(list);
         return page;
     }
 
