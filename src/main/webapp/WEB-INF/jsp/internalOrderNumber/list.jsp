@@ -54,7 +54,7 @@
 
 </table>
 <!--编辑页面-->
-<div id="dlg" class="easyui-dialog" style="width: 700px; height: 300px; padding: 10px 20px"
+<div id="dlg" class="easyui-dialog" style="width: 700px; height: 400px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons',top:50, align:'center'">
     <div class="ftitle">
         <b>内部单号管理</b>
@@ -91,8 +91,7 @@
             <tr>
                 <td>预计到货时间：</td>
                 <td colspan="3">
-                    <input class="easyui-textbox" readonly="readonly" name="estimatedArrivalTime"
-                           id="estimatedArrivalTime">
+                    <input class="easyui-datebox" id="estimatedArrivalTime" name="estimatedArrivalTime">
                 </td>
             </tr>
             </tr>

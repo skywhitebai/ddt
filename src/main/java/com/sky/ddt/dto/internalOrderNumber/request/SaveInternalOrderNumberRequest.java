@@ -3,9 +3,11 @@ package com.sky.ddt.dto.internalOrderNumber.request;
 import com.sky.ddt.common.constant.InternalOrderNumberConstant;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 /**
  * @author baixueping
@@ -24,4 +26,6 @@ public class SaveInternalOrderNumberRequest {
     String remark;
     @Length(max = 200, message = InternalOrderNumberConstant.FINANCIAL_REMARK_TOO_LONG)
     String financialRemark;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    Date estimatedArrivalTime;
 }

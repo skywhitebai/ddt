@@ -97,10 +97,12 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
         internalOrderNumber.setOrderNumber(getOrderNumber());
         internalOrderNumber.setCreateBy(dealUserId);
         internalOrderNumber.setCreateTime(new Date());
-        if (transportType.getTimeliness() != null) {
-            internalOrderNumber.setEstimatedArrivalTime(DateUtil.plusDay(transportType.getTimeliness(), DateUtil.getToday()));
-        } else {
-            internalOrderNumber.setEstimatedArrivalTime(null);
+        if(params.getEstimatedArrivalTime()==null){
+            if (transportType.getTimeliness() != null) {
+                internalOrderNumber.setEstimatedArrivalTime(DateUtil.plusDay(transportType.getTimeliness(), DateUtil.getToday()));
+            } else {
+                internalOrderNumber.setEstimatedArrivalTime(null);
+            }
         }
         customInternalOrderNumberMapper.insertSelective(internalOrderNumber);
         if (StringUtils.isEmpty(params.getFinancialRemark())) {
