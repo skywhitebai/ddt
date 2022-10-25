@@ -2,6 +2,8 @@ package com.sky.ddt.dto.produceOrderShopSku.response;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author baixueping
  * @description 列表查询其他生产单生产中数量
@@ -15,4 +17,6 @@ public class ListProduceOrderShopSkuProductionQuantityResponse {
     String shopSku;
     Integer productionQuantity;
     Integer warehousingQuantity;
+    Date productionTime;
+    String batchNumber;
 }

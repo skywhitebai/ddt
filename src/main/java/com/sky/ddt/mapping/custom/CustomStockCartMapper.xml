@@ -294,6 +294,6 @@
         and ion.transport_type_id=tt.id
         and ion.id=iont.internal_order_number_id and estimated_arrival_time <![CDATA[ >= ]]>DATE(NOW())
         and iont.fba_shipment_id_short=fplss.fba_shipment_id
-        order by ion.estimated_arrival_time desc
+        order by ion.estimated_arrival_time,fpl.shipment_id desc
     </select>
 </mapper>

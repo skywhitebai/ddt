@@ -74,18 +74,18 @@ public class InternalOrderNumberService implements IInternalOrderNumberService {
             if (internalOrderNumber == null) {
                 return BaseResponse.failMessage(InternalOrderNumberConstant.ID_NOT_EXIST);
             }
-            InternalOrderNumber internalOrderNumberUpdate = new InternalOrderNumber();
-            BeanUtils.copyProperties(params, internalOrderNumberUpdate);
-            if (!params.getTransportTypeId().equals(internalOrderNumber.getTransportTypeId())) {
+            Integer oldTransportTypeId=internalOrderNumber.getTransportTypeId();
+            BeanUtils.copyProperties(params, internalOrderNumber);
+            if (!params.getTransportTypeId().equals(oldTransportTypeId)) {
                 if (transportType.getTimeliness() != null) {
-                    internalOrderNumberUpdate.setEstimatedArrivalTime(DateUtil.plusDay(transportType.getTimeliness(), internalOrderNumberUpdate.getCreateTime()));
+                    internalOrderNumber.setEstimatedArrivalTime(DateUtil.plusDay(transportType.getTimeliness(), internalOrderNumber.getCreateTime()));
                 } else {
-                    internalOrderNumberUpdate.setEstimatedArrivalTime(null);
+                    internalOrderNumber.setEstimatedArrivalTime(null);
                 }
             }
-            internalOrderNumberUpdate.setUpdateTime(new Date());
-            internalOrderNumberUpdate.setUpdateBy(dealUserId);
-            customInternalOrderNumberMapper.updateByPrimaryKeySelective(internalOrderNumberUpdate);
+            internalOrderNumber.setUpdateTime(new Date());
+            internalOrderNumber.setUpdateBy(dealUserId);
+            customInternalOrderNumberMapper.updateByPrimaryKey(internalOrderNumber);
             if (!internalOrderNumber.getFinancialRemark().equals(params.getFinancialRemark())) {
                 internalOrderNumberFinancialRemarkHisService.addInternalOrderNumberFinancialRemarkHis(params.getFinancialRemark(), params.getId(), dealUserId);
             }

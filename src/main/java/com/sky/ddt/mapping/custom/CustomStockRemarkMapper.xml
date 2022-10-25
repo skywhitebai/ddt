@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomStockRemarkMapper">
+    <resultMap id="listStockRemarkMap" type="com.sky.ddt.dto.stockRemark.resp.ListStockRemarkResp"
+               extends="com.sky.ddt.dao.generate.StockRemarkMapper.BaseResultMap">
+        <result column="real_name" property="createRealName"/>
+        <result column="shop_sku" property="shopSku"/>
+    </resultMap>
+    <select id="listStockRemark"
+            resultMap="listStockRemarkMap">
+        SELECT
+        u.real_name,ss.shop_sku,sr.remark,sr.create_time
+        from stock_remark sr
+        left join shop_sku ss on ss.shop_sku_id=sr.shop_sku_id
+        left JOIN user u on sr.create_by=u.user_id
+        where sr.shop_sku_id=#{shopSkuId}
+        ORDER BY create_time desc
+    </select>
+</mapper>

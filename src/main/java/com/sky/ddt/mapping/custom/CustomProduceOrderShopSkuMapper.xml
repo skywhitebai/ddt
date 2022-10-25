@@ -40,7 +40,7 @@
         warehousingQuantity,shopId,shopName,shopSku FROM (SELECT poss.production_quantity productionQuantity,(SELECT
         SUM(woss.warehousing_quantity) warehousingQuantity FROM warehousing_order wo,warehousing_order_shop_sku woss
         WHERE wo.produce_order_id=po.id AND wo.STATUS IN(1,2) AND wo.id=woss.`warehousing_order_id` AND
-        woss.shop_sku_id=ss.shop_sku_id) warehousingQuantity,s.shop_id shopId,s.shop_name shopName,ss.shop_sku shopSku
+        woss.shop_sku_id=ss.shop_sku_id) warehousingQuantity,s.shop_id shopId,s.shop_name shopName,ss.shop_sku shopSku,po.production_time productionTime,po.batch_number batchNumber
         FROM
         shop_sku ss
         INNER JOIN shop s ON ss.`shop_id`=s.`shop_id` and ss.sku_id=#{skuId}
@@ -48,7 +48,7 @@
         <if test="type != null and type!=0">AND s.shop_id!=#{shopId} and s.type=#{type}</if>
         INNER JOIN produce_order po ON po.shop_id=s.shop_id AND po.status IN(1,2)
         INNER JOIN produce_order_shop_sku poss ON po.id=poss.produce_order_id AND ss.`shop_sku_id`=poss.`shop_sku_id`) t
-        GROUP BY shopSku
+        GROUP BY shopSku,po.batch_number
     </select>
     <select id="existProduceOrderShopSkuNotSameSku"
             resultType="java.lang.Boolean">

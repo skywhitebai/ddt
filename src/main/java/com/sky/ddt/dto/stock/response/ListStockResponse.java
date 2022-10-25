@@ -128,4 +128,5 @@ public class ListStockResponse {
      */
     private Integer produceOrderShopSkuProductionQuantityWarehouse;
     private BigDecimal itemPrice30;
+    private String stockRemark;
 }

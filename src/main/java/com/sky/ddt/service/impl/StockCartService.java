@@ -6,6 +6,7 @@ import com.sky.ddt.common.constant.StockConsatnt;
 import com.sky.ddt.common.constant.StockRecordConstant;
 import com.sky.ddt.dao.custom.CustomShopSkuMapper;
 import com.sky.ddt.dao.custom.CustomStockCartMapper;
+import com.sky.ddt.dao.custom.CustomStockRemarkMapper;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.stock.request.ListSendQuntityReq;
 import com.sky.ddt.dto.stock.request.ListStockRequest;
@@ -14,9 +15,7 @@ import com.sky.ddt.dto.stock.request.SaveStockQuantityRequest;
 import com.sky.ddt.dto.stock.response.ListSendQuantityResp;
 import com.sky.ddt.dto.stock.response.ListStockResponse;
 import com.sky.ddt.dto.stock.response.SendQuantityDto;
-import com.sky.ddt.entity.ShopSku;
-import com.sky.ddt.entity.StockCart;
-import com.sky.ddt.entity.StockCartExample;
+import com.sky.ddt.entity.*;
 import com.sky.ddt.service.IImgService;
 import com.sky.ddt.service.IShopUserService;
 import com.sky.ddt.service.IStockCartService;
@@ -47,6 +46,8 @@ public class StockCartService implements IStockCartService {
     IShopUserService shopUserService;
     @Autowired
     IImgService imgService;
+    @Autowired
+    CustomStockRemarkMapper customStockRemarkMapper;
 
     /**
      * @param params
@@ -61,6 +62,7 @@ public class StockCartService implements IStockCartService {
         List<ListStockResponse> list = customStockCartMapper.listStock(params);
         setListStock(list);
         setSendQuantity(list);
+        setStockRemark(list);
         for (ListStockResponse listStockResponse :
                 list) {
             String imgUrl = imgService.getImgUrlBySkuId(listStockResponse.getSkuId());
@@ -72,6 +74,25 @@ public class StockCartService implements IStockCartService {
         }
         PageInfo<ListStockResponse> page = new PageInfo<ListStockResponse>(list);
         return page;
+    }
+
+    private void setStockRemark(List<ListStockResponse> list) {
+        if (CollectionUtils.isEmpty(list)) {
+            return;
+        }
+        List<Integer> shopSkuIdList = list.stream().map(item -> MathUtil.strToInteger(item.getShopSkuId())).collect(Collectors.toList());
+        StockRemarkExample example = new StockRemarkExample();
+        example.createCriteria().andShopSkuIdIn(shopSkuIdList).andStatusEqualTo(1);
+        List<StockRemark> stockRemarkList = customStockRemarkMapper.selectByExample(example);
+        for (ListStockResponse listStockResponse :
+                list) {
+            Optional<StockRemark> stockRemarkOptional = stockRemarkList.stream().filter(item -> item.getShopSkuId().equals(Integer.valueOf(listStockResponse.getShopSkuId()))).findFirst();
+            if (stockRemarkOptional.isPresent()) {
+                listStockResponse.setStockRemark(stockRemarkOptional.get().getRemark());
+            }else{
+                listStockResponse.setStockRemark("");
+            }
+        }
     }
 
     /**

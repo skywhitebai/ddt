@@ -261,6 +261,22 @@
     <table id="dgProduceOrderShopSkuProductionQuantity" style="width: 100%; height: auto">
     </table>
 </div>
+
+<div id="dlgStockRemark" class="easyui-dialog" style="width: 900px; height: 600px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
+    <form id="frmStockRemark" method="post" enctype="multipart/form-data">
+        <table>
+            <tr style="display: none">
+                <td>shopSkuId：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="shopSkuId">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table id="dgStockRemark" style="width: 100%; height: auto">
+    </table>
+</div>
 </body>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -372,7 +388,7 @@
                 {
                     title: '发送中数量', field: 'sendQuantity', width: 80,
                     formatter: function (value, rowData, rowIndex) {
-                        return '<a href="javascript:;" onclick="showSendQuantityDialog(' + rowData.shopId + ',' + rowData.shopSkuId + ')" >'+value+'</a>';
+                        return '<a href="javascript:;" onclick="showSendQuantityDialog(' + rowData.shopId + ',' + rowData.shopSkuId + ')" >' + value + '</a>';
                     }
                 },
                 {title: 'fba总可售库存', field: 'fbaTotalCanSaleQuantity', width: 90},
@@ -443,6 +459,12 @@
                 {
                     title: '预计生产数量', field: 'estimateProductionQuantity', width: 100, styler: cellStyler,
                     formatter: cellFormatter
+                },
+                {
+                    title: '备注', field: 'stockRemark', width: 220,
+                    formatter: function (value, row, rowIndex) {
+                        return '<input class="easyui-textbox" value="' + value + '"  onchange="saveStockRemark(this,' + row.shopSkuId + ')">&nbsp;&nbsp;<a href="javascript:;" title="查看" onclick="showStockRemark(' + row.shopSkuId + ')" >查看</a>';
+                    }
                 },
                 {
                     title: '实际生产数量', field: 'productionQuantity', width: 100,
@@ -629,6 +651,72 @@
         });
     }
 
+    function saveStockRemark(input, shopSkuId) {
+        var remark = $(input).val();
+        $.post('${pageContext.request.contextPath }/stockRemark/saveStockRemark', {
+            remark: remark,
+            shopSkuId: shopSkuId
+        }, function (data) {
+            if (data.code == '200') {
+                //保存成功
+            } else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+
+    function showStockRemark(shopSkuId) {
+        $('#dlgStockRemark').dialog('open').dialog('setTitle', '备注管理');
+        $('#frmStockRemark').form('clear');
+        $("div#dlgStockRemark input[name='shopSkuId']").val(shopSkuId);
+        bindStockRemark();
+    }
+
+    function bindStockRemark() {
+        dg = '#dgStockRemark';
+        url = "${pageContext.request.contextPath }/stockRemark/listStockRemark";
+        title = "备注";
+        queryParams = {
+            shopSkuId: $("div#dlgStockRemark input[name='shopSkuId']").val()
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: true,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 5,
+            pageList: [5, 10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'imgId',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '店铺sku', field: 'shopSku', width: 150},
+                {title: '备注', field: 'remark', width: 200},
+                {title: '创建人', field: 'createRealName', width: 80},
+                {title: '创建时间', field: 'createTime', width: 180}
+            ]],
+            toolbar: [{
+                id: 'btnImgReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        $(dg).datagrid('clearSelections');
+    }
+
     function refreshStockQuantity(stockQuantity, shopSkuId, type) {
         var rowIndex = $('#dg').datagrid('getRowIndex', shopSkuId);//id是关键字值
         var row = $('#dg').datagrid('getData').rows[rowIndex];
@@ -778,13 +866,14 @@
         $(dg).datagrid('clearSelections');
     }
 
-    function showSendQuantityDialog(shopId,shopSkuId){
+    function showSendQuantityDialog(shopId, shopSkuId) {
         $('#dlgSendQuantity').dialog('open').dialog('setTitle', '发送中数量');
         $('#frmSendQuantity').form('clear');
         $("div#dlgSendQuantity input[name='shopId']").val(shopId);
         $("div#dlgSendQuantity input[name='shopSkuId']").val(shopSkuId);
         bindSendQuantity();
     }
+
     function bindSendQuantity() {
         dg = '#dgSendQuantity';
         url = "${pageContext.request.contextPath }/stock/listSendQuantity";
@@ -947,7 +1036,9 @@
                 {title: '店铺名称', field: 'shopName', width: 100},
                 {title: '店铺sku', field: 'shopSku', width: 180},
                 {title: '生产中数量', field: 'productionQuantity', width: 80},
-                {title: '入库数量', field: 'warehousingQuantity', width: 80}
+                {title: '入库数量', field: 'warehousingQuantity', width: 80},
+                {title: '生产批号', field: 'batchNumber', width: 100},
+                {title: '生产时间', field: 'productionTime', width: 150}
             ]],
             toolbar: [{
                 id: 'btnImgReload',
