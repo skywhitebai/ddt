@@ -23,6 +23,18 @@ public class MathUtil {
         return result;
     }
 
+
+    public static Double add(Double a, Double b) {
+        Double result = 0.0;
+        if (a != null) {
+            result = result + a;
+        }
+        if (b != null) {
+            result = result + b;
+        }
+        return result;
+    }
+
     public static Boolean compareBig(Integer a, Integer b) {
         if (a == null || b == null) {
             return false;
@@ -142,6 +154,15 @@ public class MathUtil {
         return new BigDecimal(a / b).setScale(digits, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
+    public static Double divide(Double a, Double b, Integer digits) {
+        if (a == null || b == null) {
+            return null;
+        }
+        if (digits == null || digits < 0) {
+            return new Double(a / b);
+        }
+        return new BigDecimal(a / b).setScale(digits, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
     public static BigDecimal divide(BigDecimal a, BigDecimal b, Integer digits) {
         if (a == null || b == null) {
             return null;
@@ -194,6 +215,28 @@ public class MathUtil {
             return null;
         }
         return new Double(Math.round(a * b)).intValue();
+    }
+
+    /**
+     * @param
+     * @return
+     * @description 四舍五入取整数
+     * @author baixueping
+     * @date 2019/4/24 10:25
+     */
+    public static Double multiply2(Double a, Double b) {
+        if (a == null || b == null) {
+            return null;
+        }
+        return a * b;
+    }
+
+    public static Double multiply2(Double a, Double b, int digits) {
+        Double result = multiply2(a, b);
+        if (result == null) {
+            return result;
+        }
+        return setScale(result, digits);
     }
 
     /**
@@ -338,6 +381,7 @@ public class MathUtil {
         return cost.multiply(new BigDecimal(quantity)).setScale(digits, BigDecimal.ROUND_HALF_UP);
 
     }
+
     public static BigDecimal multiply(BigDecimal a, BigDecimal b, int digits) {
         if (a == null || b == null) {
             return null;
@@ -345,10 +389,13 @@ public class MathUtil {
         return a.multiply(b).setScale(digits, BigDecimal.ROUND_HALF_UP);
 
     }
+
     public static boolean isNotInteger(String numStr) {
         if (strToInteger(numStr) == null) {
             return true;
         }
         return false;
     }
+
+
 }

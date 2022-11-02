@@ -103,6 +103,8 @@
             <a href="javascript:void(0)" class="easyui-linkbutton"
                data-options="iconCls:'icon-ok'" onclick="generateInvoice('amhy')">生成阿玛海运发票</a>
             <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-ok'" onclick="generateInvoice('amty')">生成阿玛统一发票</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton"
                data-options="iconCls:'icon-ok'" onclick="generateInvoice('dl')">生成DL海运发票</a>
             <a href="javascript:void(0)" class="easyui-linkbutton"
                data-options="iconCls:'icon-ok'" onclick="generateInvoice('dlx')">生成德立讯发票</a>

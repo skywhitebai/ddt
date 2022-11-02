@@ -307,7 +307,7 @@ public class FbaPackingListService implements IFbaPackingListService {
         if (sbErroEntity.isFail()) {
             return sbErroEntity.getResponse();
         }
-        return outboundOrderService.generateOutboundOrder(fbaPackingList,params.getOutboundShopId(), dealUserId);
+        return outboundOrderService.generateOutboundOrder(fbaPackingList, params.getOutboundShopId(), dealUserId);
     }
 
     /**
@@ -543,7 +543,7 @@ public class FbaPackingListService implements IFbaPackingListService {
 
     @Override
     public BaseResponse saveFbaPackingListRemark(SaveFbaPackingListRemarkReq params, Integer dealUserId) {
-        FbaPackingList fbaPackingList=new FbaPackingList();
+        FbaPackingList fbaPackingList = new FbaPackingList();
         fbaPackingList.setId(params.getId());
         fbaPackingList.setRemark(params.getRemark());
         customFbaPackingListMapper.updateByPrimaryKeySelective(fbaPackingList);
@@ -552,11 +552,11 @@ public class FbaPackingListService implements IFbaPackingListService {
 
     @Override
     public BaseResponse saveFbaPackingListCheckStatus(SaveFbaPackingListCheckStatusReq params, Integer dealUserId) {
-        if(params.getCheckStatus()!=null&&!FbaPackingListConstant.FbaPackingListCheckStatusEnum.contains(params.getCheckStatus())){
+        if (params.getCheckStatus() != null && !FbaPackingListConstant.FbaPackingListCheckStatusEnum.contains(params.getCheckStatus())) {
             return BaseResponse.failMessage("检查状态不存在");
         }
-        FbaPackingList fbaPackingListOld=customFbaPackingListMapper.selectByPrimaryKey(params.getId());
-        if(fbaPackingListOld==null){
+        FbaPackingList fbaPackingListOld = customFbaPackingListMapper.selectByPrimaryKey(params.getId());
+        if (fbaPackingListOld == null) {
             return BaseResponse.failMessage("裝箱單不存在");
         }
         fbaPackingListOld.setCheckStatus(params.getCheckStatus());
@@ -593,11 +593,15 @@ public class FbaPackingListService implements IFbaPackingListService {
                     invoiceSkuInfo.setEnglishProductName(shopSkuFullProductName.getEnglishProductName());
                     invoiceSkuInfo.setHsCode(shopSkuFullProductName.getHsCode());
                     invoiceSkuInfo.setWeight(shopSkuFullProductName.getWeight());
+                    //获取美元 大概的
+                    invoiceSkuInfo.setCostPrice(MathUtil.divide(invoiceSkuInfo.getCostPrice(),6.5,2));
                 }
             }
             if (StringUtils.isEmpty(invoiceSkuInfo.getChineseProductName()) || StringUtils.isEmpty(invoiceSkuInfo.getEnglishProductName())) {
                 return BaseResponse.failMessage(invoiceSkuInfo.getShopSku() + "的店铺sku信息不存在，或者对应产品的中英文报关名为空");
             }
+            invoiceSkuInfo.setTotalWeight(MathUtil.multiply2(invoiceSkuInfo.getWeight(), invoiceSkuInfo.getQuantity().doubleValue(), 2));
+            invoiceSkuInfo.setTotalCostPrice(MathUtil.multiply2(invoiceSkuInfo.getCostPrice(), invoiceSkuInfo.getQuantity().doubleValue(), 2));
         }
         return BaseResponse.success();
     }

@@ -48,7 +48,7 @@
         <if test="type != null and type!=0">AND s.shop_id!=#{shopId} and s.type=#{type}</if>
         INNER JOIN produce_order po ON po.shop_id=s.shop_id AND po.status IN(1,2)
         INNER JOIN produce_order_shop_sku poss ON po.id=poss.produce_order_id AND ss.`shop_sku_id`=poss.`shop_sku_id`) t
-        GROUP BY shopSku,po.batch_number
+        GROUP BY shopSku,batchNumber
     </select>
     <select id="existProduceOrderShopSkuNotSameSku"
             resultType="java.lang.Boolean">

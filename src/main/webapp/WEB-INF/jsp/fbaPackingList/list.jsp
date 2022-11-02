@@ -388,7 +388,7 @@
             sku: $("#s_sku").val(),
             shipmentId: $("#s_shipmentId").val(),
             status: $("#s_status").val(),
-            checkStatus:$("#s_checkStatus").val()
+            checkStatus: $("#s_checkStatus").val()
         };
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
@@ -409,7 +409,7 @@
             idField: 'id',
             queryParams: queryParams,  //异步查询的参数
             onClickCell: onClickCell,
-            onAfterEdit:onAfterEdit,
+            onAfterEdit: onAfterEdit,
             columns: [[
                 {field: 'ck', checkbox: true},   //选择
                 {title: '店铺名', field: 'shopName', width: 120},
@@ -459,7 +459,11 @@
                     }
                 },
                 {
-                    title: '检查状态', field: 'checkStatus', width: 120,sortable:false,formatter: function(value, row, index) {
+                    title: '检查状态',
+                    field: 'checkStatus',
+                    width: 120,
+                    sortable: false,
+                    formatter: function (value, row, index) {
                         if (value == 1) {
                             return '无差错';
                         } else if (value == 2) {
@@ -476,14 +480,14 @@
                         type: 'combobox',
                         options: {
                             panelHeight: 'auto',
-                            valueField:'id',
-                            textField:'text',
-                            editable:true,
-                            data:[
-                                {id:1, text:'无差错' },
-                                {id:2, text:'有差异无需调查' },
-                                {id:3, text:'有差异需要调查' },
-                                {id:4, text:'其他' }
+                            valueField: 'id',
+                            textField: 'text',
+                            editable: true,
+                            data: [
+                                {id: 1, text: '无差错'},
+                                {id: 2, text: '有差异无需调查'},
+                                {id: 3, text: '有差异需要调查'},
+                                {id: 4, text: '其他'}
                             ]
                             /*,
                             onSelect: function (rec) {
@@ -547,10 +551,14 @@
         })
         $(dg).datagrid('clearSelections');
     }
+
     var editIndex = undefined;
-    function endEditing(){
-        if (editIndex == undefined){return true}
-        if ($('#dg').datagrid('validateRow', editIndex)){
+
+    function endEditing() {
+        if (editIndex == undefined) {
+            return true
+        }
+        if ($('#dg').datagrid('validateRow', editIndex)) {
             $('#dg').datagrid('endEdit', editIndex);
             editIndex = undefined;
             return true;
@@ -558,8 +566,9 @@
             return false;
         }
     }
-    function onClickCell(index){
-        if (endEditing()){
+
+    function onClickCell(index) {
+        if (endEditing()) {
             $('#dg').datagrid('selectRow', index)
                 .datagrid('beginEdit', index);
             editIndex = index;
@@ -567,9 +576,10 @@
             $('#dg').datagrid('selectRow', editIndex);
         }
     }
+
     function onAfterEdit(index, row, changes) {
         var change = false;
-        for(x in changes){
+        for (x in changes) {
             change = true;
             break;
         }
@@ -585,6 +595,7 @@
         });
 
     }
+
     function cancelFbaPackingList() {
         var rows = $('#dg').datagrid('getSelections');
         if (rows && rows.length == 1) {
@@ -748,13 +759,14 @@
                 {title: 'sku数量', field: 'shopSkuCount', width: 50},
                 {title: '商品数量', field: 'shopSkuQuantity', width: 50},
                 {
-                    title: '操作', field: 'deal', width: 800,
+                    title: '操作', field: 'deal', width: 1000,
                     formatter: function (value, row, index) {
                         return '<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'ky\')" title="生成空运发票">生成空运发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'kp\')" title="生成空派发票">生成空派发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'hy\')" title="生成海运发票">生成海运发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'hy2\')" title="生成新的海运发票">生成新的海运发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'amhy\')" title="生成阿玛海运发票">生成阿玛海运发票</a>'
+                            + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'amty\')" title="生成阿玛海运发票">生成阿玛统一发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'dl\')" title="生成DL海运发票">生成DL海运发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'dlx\')" title="生成德立讯发票">生成德立讯发票</a>';
                     }

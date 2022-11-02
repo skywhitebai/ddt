@@ -18,6 +18,9 @@ public class InvoiceInfo {
     String fbaNo;
     String shipTo;
     Date date;
+    /**
+     * 箱数
+     */
     Integer numberOfBoxes;
     Double totalPrice;
     Double unitPrice;

@@ -16,6 +16,9 @@ public class InvoiceSkuInfo {
     String containerNo;
     Integer quantity;
     Double weight;
+    Double totalWeight;
+    Double costPrice;
+    Double totalCostPrice;
     String chineseProductName;
     String englishProductName;
     String hsCode;

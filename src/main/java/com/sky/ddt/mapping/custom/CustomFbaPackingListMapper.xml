@@ -13,10 +13,14 @@
         select
         <include refid="com.sky.ddt.dao.generate.FbaPackingListMapper.Base_Column_List"/>
         ,(select shop_name from shop s where fpl.shop_id=s.shop_id) shop_name,
-        CASE WHEN EXISTS(SELECT 1 FROM `outbound_order` oo WHERE oo.fba_packing_list_id=fpl.id and oo.status!=0) THEN 1 ELSE 0 END outbound_order_status,
-        (select sum(quantity) from fba_packing_list_shop_sku fplss where fplss.fba_packing_list_id=fpl.id)  actualDeliveryQuantity,
-        (SELECT GROUP_CONCAT( DISTINCT CONCAT( ion.order_number,' -> ',tt.transport_type_name,' -> ',ion.remark) SEPARATOR <![CDATA['<br/>']]>)FROM
-        `fba_packing_list_shop_sku` fplss,`internal_order_number_transport` iont,`internal_order_number` ion,`transport_type` tt
+        CASE WHEN EXISTS(SELECT 1 FROM `outbound_order` oo WHERE oo.fba_packing_list_id=fpl.id and oo.status!=0) THEN 1
+        ELSE 0 END outbound_order_status,
+        (select sum(quantity) from fba_packing_list_shop_sku fplss where fplss.fba_packing_list_id=fpl.id)
+        actualDeliveryQuantity,
+        (SELECT GROUP_CONCAT( DISTINCT CONCAT( ion.order_number,' -> ',tt.transport_type_name,' -> ',ion.remark)
+        SEPARATOR <![CDATA['<br/>']]>)FROM
+        `fba_packing_list_shop_sku` fplss,`internal_order_number_transport` iont,`internal_order_number`
+        ion,`transport_type` tt
         WHERE fplss.`fba_shipment_id`=iont.`fba_shipment_id_short` AND fplss.`fba_packing_list_id`=fpl.id
         AND ion.`id`=iont.`internal_order_number_id` AND tt.id=ion.transport_type_id) orderNumberInfo
         from fba_packing_list fpl
@@ -33,13 +37,16 @@
                 <if test="shipmentId != null">and fpl.shipment_Id like concat('%',#{shipmentId},'%')</if>
                 <if test="shopSku != null and shopSku != '' ">
                     and EXISTS (select 1 from fba_packing_list_shop_sku fplss,shop_sku ss
-                    where fplss.fba_packing_list_id=fpl.id and fplss.shop_sku_id=ss.shop_sku_id and ss.shop_sku like concat('%',#{shopSku},'%'))
+                    where fplss.fba_packing_list_id=fpl.id and fplss.shop_sku_id=ss.shop_sku_id and ss.shop_sku like
+                    concat('%',#{shopSku},'%'))
                 </if>
                 <if test="sku != null and sku != '' ">
                     and EXISTS (select 1 from fba_packing_list_shop_sku fplss,shop_sku ss,sku
-                    where fplss.fba_packing_list_id=fpl.id and fplss.shop_sku_id=ss.shop_sku_id and sku.sku_id=ss.sku_id and sku.sku like concat('%',#{sku},'%'))
+                    where fplss.fba_packing_list_id=fpl.id and fplss.shop_sku_id=ss.shop_sku_id and sku.sku_id=ss.sku_id
+                    and sku.sku like concat('%',#{sku},'%'))
                 </if>
-                <if test="userId != null ">and fpl.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
+                <if test="userId != null ">and fpl.shop_id in(select shop_id from shop_user where user_id=#{userId})
+                </if>
                 <if test="status != null ">and fpl.status=#{status}</if>
                 <if test="checkStatus != null ">and fpl.check_status=#{checkStatus}</if>
             </trim>
@@ -48,7 +55,8 @@
 
     <select id="listInvoiceInfo" parameterType="com.sky.ddt.dto.fbaPackingList.request.ListInvoiceInfoRequest"
             resultType="com.sky.ddt.dto.fbaPackingList.response.ListInvoiceInfoResponse">
-        select #{fbaPackingListId} fbaPackingListId,iont.internal_order_number_id internalOrderNumberId,ion.`order_number` orderNumber,
+        select #{fbaPackingListId} fbaPackingListId,iont.internal_order_number_id
+        internalOrderNumberId,ion.`order_number` orderNumber,
         (select transport_type_name from `transport_type` tt where tt.id=ion.transport_type_id) transportTypeName,
         count(distinct(iont.`fba_shipment_id_short`)) fbaShipmentIdCount,
         count(distinct(fplss.`shop_sku_id`)) shopSkuCount,
@@ -63,7 +71,7 @@
     </select>
     <select id="listInvoiceSkuInfo"
             resultType="com.sky.ddt.dto.deliverGoods.request.InvoiceSkuInfo">
-        SELECT fplss.shop_sku_id shopSkuId,fplss.`fba_shipment_id` containerNo,fplss.`quantity`,round(sku.weight/1000,2) weight FROM
+        SELECT fplss.shop_sku_id shopSkuId,fplss.`fba_shipment_id` containerNo,fplss.`quantity`,round(sku.weight/1000,2) weight,sku.cost_price costPrice FROM
         `fba_packing_list_shop_sku` fplss,`internal_order_number_transport` iont,`internal_order_number` ion,sku,shop_sku ss
         WHERE fplss.`fba_shipment_id`=iont.`fba_shipment_id_short` AND fplss.`fba_packing_list_id`=#{fbaPackingListId}
         and fplss.shop_sku_id=ss.shop_sku_id and sku.sku_id=ss.sku_id
