@@ -2,6 +2,7 @@ package com.sky.ddt.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.common.collect.Lists;
 import com.sky.ddt.common.constant.StockConsatnt;
 import com.sky.ddt.common.constant.StockRecordConstant;
 import com.sky.ddt.dao.custom.CustomShopSkuMapper;
@@ -26,6 +27,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -59,10 +61,7 @@ public class StockCartService implements IStockCartService {
     @Override
     public PageInfo<ListStockResponse> listStock(ListStockRequest params) {
         PageHelper.startPage(params.getPage(), params.getRows(), true);
-        List<ListStockResponse> list = customStockCartMapper.listStock(params);
-        setListStock(list);
-        setSendQuantity(list);
-        setStockRemark(list);
+        List<ListStockResponse> list = getListStock(params);
         for (ListStockResponse listStockResponse :
                 list) {
             String imgUrl = imgService.getImgUrlBySkuId(listStockResponse.getSkuId());
@@ -81,15 +80,20 @@ public class StockCartService implements IStockCartService {
             return;
         }
         List<Integer> shopSkuIdList = list.stream().map(item -> MathUtil.strToInteger(item.getShopSkuId())).collect(Collectors.toList());
-        StockRemarkExample example = new StockRemarkExample();
-        example.createCriteria().andShopSkuIdIn(shopSkuIdList).andStatusEqualTo(1);
-        List<StockRemark> stockRemarkList = customStockRemarkMapper.selectByExample(example);
+        List<List<Integer>> shopSkuIdListPartition = Lists.partition(shopSkuIdList, 1000);
+        List<StockRemark> stockRemarkList = new ArrayList<>();
+        for (List<Integer> shopSkuIdListItem : shopSkuIdListPartition) {
+            StockRemarkExample example = new StockRemarkExample();
+            example.createCriteria().andShopSkuIdIn(shopSkuIdListItem).andStatusEqualTo(1);
+            List<StockRemark> stockRemarkListItem = customStockRemarkMapper.selectByExample(example);
+            stockRemarkList.addAll(stockRemarkListItem);
+        }
         for (ListStockResponse listStockResponse :
                 list) {
             Optional<StockRemark> stockRemarkOptional = stockRemarkList.stream().filter(item -> item.getShopSkuId().equals(Integer.valueOf(listStockResponse.getShopSkuId()))).findFirst();
             if (stockRemarkOptional.isPresent()) {
                 listStockResponse.setStockRemark(stockRemarkOptional.get().getRemark());
-            }else{
+            } else {
                 listStockResponse.setStockRemark("");
             }
         }
@@ -105,7 +109,12 @@ public class StockCartService implements IStockCartService {
             return;
         }
         List<Integer> shopSkuIdList = list.stream().map(item -> MathUtil.strToInteger(item.getShopSkuId())).collect(Collectors.toList());
-        List<SendQuantityDto> sendQuantityDtoList = customStockCartMapper.listSendQuantity(shopSkuIdList, list.get(0).getShopId());
+        List<List<Integer>> shopSkuIdListPartition = Lists.partition(shopSkuIdList, 1000);
+        List<SendQuantityDto> sendQuantityDtoList = new ArrayList<>();
+        for (List<Integer> shopSkuIdListItem : shopSkuIdListPartition) {
+            List<SendQuantityDto> sendQuantityDtoListItem = customStockCartMapper.listSendQuantity(shopSkuIdListItem, list.get(0).getShopId());
+            sendQuantityDtoList.addAll(sendQuantityDtoListItem);
+        }
         for (ListStockResponse listStockResponse :
                 list) {
             Optional<SendQuantityDto> sendQuantityDtoOptional = sendQuantityDtoList.stream().filter(item -> item.getShopSkuId().equals(listStockResponse.getShopSkuId())).findFirst();
@@ -145,6 +154,19 @@ public class StockCartService implements IStockCartService {
         List<ListSendQuantityResp> list = customStockCartMapper.listPageSendQuantity(params);
         PageInfo<ListSendQuantityResp> page = new PageInfo<ListSendQuantityResp>(list);
         return page;
+    }
+
+    @Override
+    public List<ListStockResponse> listExportStock(ListStockRequest params) {
+        return getListStock(params);
+    }
+
+    List<ListStockResponse> getListStock(ListStockRequest params) {
+        List<ListStockResponse> list = customStockCartMapper.listStock(params);
+        setListStock(list);
+        setSendQuantity(list);
+        setStockRemark(list);
+        return list;
     }
 
     private void setOtherInfo(List<ListStockResponse> list, List<ListStockResponse> listInfo) {

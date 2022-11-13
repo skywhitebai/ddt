@@ -768,7 +768,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         CellStyle priceStyle = getPriceStyle(wb);
         updateSheetInoviceAmty(sheetInovice, invoiceInfo, priceStyle);
         //导出
-        String fileName = invoiceInfo.getShopName() + "-" + invoiceInfo.getFbaNo() + "-" + invoiceInfo.getNumberOfBoxes() + "箱阿玛海运发票";
+        String fileName = "百布川洋+美国-(美森限时达)+" + invoiceInfo.getFbaNo() + "-" + invoiceInfo.getShipmentId() + "-" + invoiceInfo.getNumberOfBoxes() + "箱";
         return exportExcel(response, wb, fileName);
     }
 
@@ -783,7 +783,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         row3.getCell(1).setCellValue(invoiceInfo.getFbaNo() + "-" + invoiceInfo.getShipmentId() + "-" + invoiceInfo.getNumberOfBoxes());
         //设置FBANO
         Row rowFbaNo = sheetInovice.getRow(3);
-        rowFbaNo.getCell(1).setCellValue(invoiceInfo.getFbaNo());
+        rowFbaNo.getCell(1).setCellValue(invoiceInfo.getShipmentId());
         //设置Shipment ID
         Row rowShipmentID = sheetInovice.getRow(4);
         rowShipmentID.getCell(1).setCellValue(invoiceInfo.getShipmentId());

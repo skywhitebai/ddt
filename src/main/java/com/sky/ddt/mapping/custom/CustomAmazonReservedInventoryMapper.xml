@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sky.ddt.dao.custom.CustomAmazonReservedInventoryMapper">
+    <resultMap id="listAmazonReservedInventoryMap"
+               type="com.sky.ddt.dto.amazonReservedInventory.resp.ListAmazonReservedInventoryResp"
+               extends="com.sky.ddt.dao.generate.AmazonReservedInventoryMapper.BaseResultMap">
+        <result column="shop_name" property="shopName"/>
+    </resultMap>
+    <select id="listAmazonReservedInventory"
+            parameterType="com.sky.ddt.dto.amazonReservedInventory.req.ListAmazonReservedInventoryReq"
+            resultMap="listAmazonReservedInventoryMap">
+        select
+        <include refid="com.sky.ddt.dao.generate.AmazonReservedInventoryMapper.Base_Column_List"/>
+        ,(select shop_name from shop s where ari.shop_id=s.shop_id) shop_name
+        from amazon_reserved_inventory ari
+        <if test="_parameter != null">
+            <include refid="Query_Where_Clause"/>
+        </if>
+        order by ari.sku
+    </select>
+
+    <sql id="Query_Where_Clause">
+        <where>
+            <trim prefix="(" suffix=")" prefixOverrides="and">
+                <if test="shopId != null">and ari.shop_id=#{shopId}</if>
+                <if test="sku != null and sku != '' ">and ari.sku like concat('%',#{sku},'%')</if>
+                <if test="fnsku != null and fnsku != '' ">and ari.fnsku like concat('%',#{fnsku},'%')</if>
+                <if test="asin != null and asin != '' ">and ari.asin like concat('%',#{asin},'%')</if>
+                <if test="shopSkuId != null ">and ari.shop_sku_id =#{shopSkuId}</if>
+            </trim>
+        </where>
+    </sql>
+
+</mapper>

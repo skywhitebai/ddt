@@ -60,6 +60,7 @@
        data-options="iconCls:'icon-search'"
        style="">生成工厂生产单</a>
     <a href="javascript:void(0)" onclick="openThisView()" class="easyui-linkbutton">全屏显示</a>
+    <a href="javascript:void(0)" onclick="exportStock()" class="easyui-linkbutton">下载</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 </table>
@@ -216,6 +217,23 @@
     <table id="dgSendQuantity" style="width: 100%; height: auto">
     </table>
 </div>
+
+<div id="dlgOnTheWayQuantity" class="easyui-dialog" style="width: 1100px; height: 600px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
+    <form id="frmOnTheWayQuantity" method="post" enctype="multipart/form-data">
+        <table>
+            <tr style="display: none">
+                <td>shopSkuId：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="shopSkuId">
+
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table id="dgOnTheWayQuantity" style="width: 100%; height: auto">
+    </table>
+</div>
 <div id="dlgInventoryQuantity" class="easyui-dialog" style="width: 600px; height: 600px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
     <form id="frmInventoryQuantity" method="post" enctype="multipart/form-data">
@@ -304,8 +322,25 @@
         });
     }
 
-    var pageSizeEnable = false;
 
+    function exportStock() {
+        queryParams = getQueryParams();
+        url = "${pageContext.request.contextPath }/stock/exportStock" + getUrlParams(queryParams);
+        window.open(url);
+    }
+    function getQueryParams() {
+        queryParams = {
+            shopId: shopId,
+            shopSku: $("#s_shopSku").val(),
+            shopParentSku: $("#s_shopParentSku").val(),
+            showType: $("#s_showType").val(),
+            salesmanUserId: $("#s_salesmanUserId").val(),
+            sku: $("#s_sku").val(),
+            produceStatus: $("#s_produceStatus").val()
+        };
+        return queryParams;
+    }
+    var pageSizeEnable = false;
     function bindData() {
         var shopId = $("#s_shopId").combobox('getValue');
         if (isEmpty(shopId)) {
@@ -321,15 +356,7 @@
         dg = '#dg';
         url = "${pageContext.request.contextPath }/stock/listStock";
         title = "备货管理";
-        queryParams = {
-            shopId: shopId,
-            shopSku: $("#s_shopSku").val(),
-            shopParentSku: $("#s_shopParentSku").val(),
-            showType: $("#s_showType").val(),
-            salesmanUserId: $("#s_salesmanUserId").val(),
-            sku: $("#s_sku").val(),
-            produceStatus: $("#s_produceStatus").val()
-        };
+        queryParams = getQueryParams();
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
             title: title,
@@ -384,7 +411,12 @@
                         }
                     }
                 },
-                {title: '在途', field: 'onTheWayQuantity', width: 50},
+                {
+                    title: '在途', field: 'onTheWayQuantity', width: 50,
+                    formatter: function (value, rowData, rowIndex) {
+                        return '<a href="javascript:;" onclick="showOnTheWayQuantityDialog(' + rowData.shopSkuId + ')" >' + value + '</a>';
+                    }
+                },
                 {
                     title: '发送中数量', field: 'sendQuantity', width: 80,
                     formatter: function (value, rowData, rowIndex) {
@@ -873,7 +905,63 @@
         $("div#dlgSendQuantity input[name='shopSkuId']").val(shopSkuId);
         bindSendQuantity();
     }
-
+    function showOnTheWayQuantityDialog(shopSkuId) {
+        $('#dlgOnTheWayQuantity').dialog('open').dialog('setTitle', '发送中数量');
+        $('#frmOnTheWayQuantity').form('clear');
+        $("div#dlgOnTheWayQuantity input[name='shopSkuId']").val(shopSkuId);
+        bindOnTheWayQuantity();
+    }
+    function bindOnTheWayQuantity() {
+        dg = '#dgOnTheWayQuantity';
+        url = "${pageContext.request.contextPath }/amazonReservedInventory/listAmazonReservedInventory";
+        title = "亚马逊预留库存";
+        queryParams = {
+            shopSkuId: $("div#dlgOnTheWayQuantity input[name='shopSkuId']").val()
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: false,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 15,
+            pageList: [10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'id',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '店铺名', field: 'shopName', width: 120},
+                {title: 'sku', field: 'sku', width: 120},
+                {title: 'fnsku', field: 'fnsku', width: 120},
+                {title: 'asin', field: 'asin', width: 120},
+                {title: '产品名', field: 'productName', width: 120},
+                {title: 'reservedQty', field: 'reservedQty', width: 120},
+                {title: 'reservedCustomerorders', field: 'reservedCustomerorders', width: 120},
+                {title: 'reservedFcTransfers', field: 'reservedFcTransfers', width: 120},
+                {title: 'reservedFcProcessing', field: 'reservedFcProcessing', width: 120},
+                {title: '创建时间', field: 'createTime', width: 180},
+                {title: '修改时间', field: 'updateTime', width: 180}
+            ]],
+            toolbar: [{
+                id: 'btnReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        $(dg).datagrid('clearSelections');
+    }
     function bindSendQuantity() {
         dg = '#dgSendQuantity';
         url = "${pageContext.request.contextPath }/stock/listSendQuantity";

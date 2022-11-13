@@ -9,6 +9,8 @@ import com.sky.ddt.dto.stock.request.SaveStockQuantityRequest;
 import com.sky.ddt.dto.stock.response.ListSendQuantityResp;
 import com.sky.ddt.dto.stock.response.ListStockResponse;
 
+import java.util.List;
+
 /**
  * @author baixueping
  * @description 备货购物车服务
@@ -45,4 +47,6 @@ public interface IStockCartService {
     PageInfo<ListStockResponse> listWarehouseStock(ListStockRequest params);
 
     PageInfo<ListSendQuantityResp> listSendQuantity(ListSendQuntityReq params);
+
+    List<ListStockResponse> listExportStock(ListStockRequest params);
 }
