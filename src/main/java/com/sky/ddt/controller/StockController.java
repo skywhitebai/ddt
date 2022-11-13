@@ -104,7 +104,7 @@ public class StockController extends SuperController {
     }
     @RequestMapping("/exportStock")
     @ResponseBody
-    @RightAnnotation("stock/index")
+    @MenuAnnotation("stock/index")
     public BaseResponse exportStock(ListStockRequest params) {
         params.setUserId(getCurrentUserId());
         List<ListStockResponse> list = stockCartService.listExportStock(params);

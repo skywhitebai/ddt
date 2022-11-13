@@ -324,13 +324,18 @@
 
 
     function exportStock() {
+        var shopId = $("#s_shopId").combobox('getValue');
+        if (isEmpty(shopId)) {
+            $.messager.alert("提示", "请选择店铺.");
+            return;
+        }
         queryParams = getQueryParams();
         url = "${pageContext.request.contextPath }/stock/exportStock" + getUrlParams(queryParams);
         window.open(url);
     }
     function getQueryParams() {
         queryParams = {
-            shopId: shopId,
+            shopId:  $("#s_shopId").combobox('getValue'),
             shopSku: $("#s_shopSku").val(),
             shopParentSku: $("#s_shopParentSku").val(),
             showType: $("#s_showType").val(),
