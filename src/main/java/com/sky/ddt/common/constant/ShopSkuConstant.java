@@ -40,7 +40,7 @@ public class ShopSkuConstant {
     public static final String FNSKU_EXIST = "FNSKU已存在，不允许重复添加";
     public static final String SALESMAN_USERNAME_EMPTY = "销售人员用户名不能为空";
     public static final String SALESMAN_USERNAME_NOT_EXIST = "销售人员用户名不存在";
-    public static final String FNSKU_ERRO ="FNSKU必须以X开头" ;
+    public static final String FNSKU_ERRO ="FNSKU必须以X或0（零）开头" ;
     public static final String STORAGE_LOCATION_TOO_LONG ="库位长度不能超过200" ;
     public static final String PRODUCE_STATUS_EMPTY ="生产状态不能为空";
     public static final String PRODUCE_STATUS_ERROE ="生产状态错误，必须为正常生产或暂停生产";

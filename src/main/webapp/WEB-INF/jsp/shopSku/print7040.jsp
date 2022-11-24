@@ -288,8 +288,8 @@
             alert('sku信息错误，fnsku不能为空');
             return;
         }
-        if(globalFnsku.indexOf("X0") != 0&&globalFnsku.indexOf("B0") != 0) {
-            alert('sku信息错误，fnsku必须以X0或B0开头');
+        if(globalFnsku.indexOf("X") != 0&&globalFnsku.indexOf("0") != 0) {
+            alert('sku信息错误，fnsku必须以X或0开头');
             return;
         }
         $("#search").hide();

@@ -23,6 +23,7 @@ public class FinancialStatementConstant {
     public static final BigDecimal bigDecimal360 = new BigDecimal(360);
     public static final BigDecimal platformRate = new BigDecimal(-0.17);
     public static final BigDecimal platformRateMinusByOne = new BigDecimal(0.83);
+    public static final BigDecimal refundRate = new BigDecimal(0.8);
     public static Map<Integer, String> titleMap = new HashMap<>();
 
     static {
@@ -125,6 +126,7 @@ public class FinancialStatementConstant {
 
     /**
      * 更新全部信息，用于下载
+     *
      * @param financialStatementExport
      */
     public static void initFinancialStatementExport(FinancialStatementExport financialStatementExport) {
@@ -158,7 +160,7 @@ public class FinancialStatementConstant {
     }
 
     private static BigDecimal getSellingFees(FinancialStatementExport financialStatementExport) {
-        return MathUtil.multiply(MathUtil.addBigDecimal(MathUtil.divide(financialStatementExport.getSellingFees(), platformRate, 4), MathUtil.divide(financialStatementExport.getTbybOrderPayment(), platformRateMinusByOne, 4)), financialStatementExport.getExchangeRate(), 2);
+        return MathUtil.multiply(MathUtil.addBigDecimal(MathUtil.divide(MathUtil.subtractBigDecimal(financialStatementExport.getSellingFees(), MathUtil.multiply(financialStatementExport.getRefundSellingFees(), refundRate, 4)), platformRate, 4), MathUtil.divide(financialStatementExport.getTbybOrderPayment(), platformRateMinusByOne, 4)), financialStatementExport.getExchangeRate(), 2);
     }
 
     public static void setFinancialStatementCount(FinancialStatementExport financialStatementExport) {

@@ -153,7 +153,7 @@ public class ShopSkuService implements IShopSkuService {
                 sbErroItem.append(",").append(ShopSkuConstant.FNSKU_EMPTY);
             } else if (existOtherFnskuByShopSku(map.get("店铺sku"), map.get("FNSKU"))) {
                 sbErroItem.append(",").append(ShopSkuConstant.FNSKU_EXIST);
-            } else if (!map.get("FNSKU").substring(0, 1).equals("X")) {
+            } else if (!map.get("FNSKU").substring(0, 1).equals("X")&&!map.get("FNSKU").substring(0, 1).equals("0")) {
                 sbErroItem.append(",").append(ShopSkuConstant.FNSKU_ERRO);
             }
             if (StringUtils.isEmpty(map.get("ASIN"))) {

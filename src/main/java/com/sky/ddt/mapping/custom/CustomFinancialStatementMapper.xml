@@ -74,8 +74,8 @@
         IFNULL(dd.unsellableRequestedQuantity,0) unsellableRequestedQuantity,
         IFNULL(dd.unsellableRequestedQuantity,0)*(IFNULL(sku.`cost_price`,0)+IFNULL(ss.`head_trip_cost`,0)) unsellableCost,
 
-        IFNULL(ms.saleQuantity,0)*IFNULL(sku.`cost_price`,0) procurementCost,
-        IFNULL(ms.saleQuantity,0)*IFNULL(ss.`head_trip_cost`,0) fbaHeadTripCost,
+        GREATEST((IFNULL(ms.saleQuantity,0)-IFNULL(ms.refundSaleQuantity,0)*0.8)*IFNULL(sku.`cost_price`,0),0) procurementCost,
+        GREATEST((IFNULL(ms.saleQuantity,0)-IFNULL(ms.refundSaleQuantity,0)*0.8)*IFNULL(ss.`head_trip_cost`,0),0) fbaHeadTripCost,
         0 headDeductionFee,
         IFNULL(idi.initialQuantity,0) initialQuantity,
         IFNULL(idi.initialQuantity,0)*(IFNULL(sku.`cost_price`,0)+IFNULL(ss.`head_trip_cost`,0)) initialInventoryCost,
