@@ -160,7 +160,7 @@ public class FinancialStatementConstant {
     }
 
     private static BigDecimal getSellingFees(FinancialStatementExport financialStatementExport) {
-        return MathUtil.multiply(MathUtil.addBigDecimal(MathUtil.divide(MathUtil.subtractBigDecimal(financialStatementExport.getSellingFees(), MathUtil.multiply(financialStatementExport.getRefundSellingFees(), refundRate, 4)), platformRate, 4), MathUtil.divide(financialStatementExport.getTbybOrderPayment(), platformRateMinusByOne, 4)), financialStatementExport.getExchangeRate(), 2);
+        return MathUtil.multiply(MathUtil.addBigDecimal(MathUtil.divide(MathUtil.subtractBigDecimal(financialStatementExport.getSellingFees(), MathUtil.divide(financialStatementExport.getRefundSellingFees(), refundRate, 4)), platformRate, 4), MathUtil.divide(financialStatementExport.getTbybOrderPayment(), platformRateMinusByOne, 4)), financialStatementExport.getExchangeRate(), 2);
     }
 
     public static void setFinancialStatementCount(FinancialStatementExport financialStatementExport) {
