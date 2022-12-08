@@ -160,7 +160,9 @@ public class FinancialStatementConstant {
     }
 
     private static BigDecimal getSellingFees(FinancialStatementExport financialStatementExport) {
-        return MathUtil.multiply(MathUtil.addBigDecimal(MathUtil.divide(MathUtil.subtractBigDecimal(financialStatementExport.getSellingFees(), MathUtil.divide(financialStatementExport.getRefundSellingFees(), refundRate, 4)), platformRate, 4), MathUtil.divide(financialStatementExport.getTbybOrderPayment(), platformRateMinusByOne, 4)), financialStatementExport.getExchangeRate(), 2);
+        //order下（selling fees/-0.17+TbybOrderPayment/0.83   减去refund下selling fees/0.8/0.17）*汇率
+        //=order下（（selling fees+refund下selling fees/0.8）/-0.17+TbybOrderPayment/0.83）*汇率
+        return MathUtil.multiply(MathUtil.addBigDecimal(MathUtil.divide(MathUtil.addBigDecimal(financialStatementExport.getSellingFees(), MathUtil.divide(financialStatementExport.getRefundSellingFees(), refundRate, 4)), platformRate, 4), MathUtil.divide(financialStatementExport.getTbybOrderPayment(), platformRateMinusByOne, 4)), financialStatementExport.getExchangeRate(), 2);
     }
 
     public static void setFinancialStatementCount(FinancialStatementExport financialStatementExport) {

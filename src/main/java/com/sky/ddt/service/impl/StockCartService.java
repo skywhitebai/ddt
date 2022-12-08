@@ -188,7 +188,12 @@ public class StockCartService implements IStockCartService {
                 listStockResponse.setSalesForTheLast21Days(info.getSalesForTheLast21Days());
                 listStockResponse.setSalesForTheLast28Days(info.getSalesForTheLast28Days());
                 listStockResponse.setSalesForTheLast35Days(info.getSalesForTheLast35Days());
-                listStockResponse.setSalesForTheLastYear90Days(info.getSalesForTheLastYear90Days());
+                listStockResponse.setSalesForTheLastYear30Days(info.getSalesForTheLastYear30Days());
+                listStockResponse.setSalesForTheLastYear60Days(info.getSalesForTheLastYear60Days());
+                listStockResponse.setSalesForTheLastYear120Days(info.getSalesForTheLastYear120Days());
+                listStockResponse.setSalesForTheLastYear180Days(info.getSalesForTheLastYear180Days());
+                listStockResponse.setSalesForTheLastYear365Days(info.getSalesForTheLastYear365Days());
+
                 listStockResponse.setItemPrice30(info.getItemPrice30());
             } else {
                 listStockResponse.setAfnFulfillableQuantity(0);
@@ -204,7 +209,11 @@ public class StockCartService implements IStockCartService {
                 listStockResponse.setSalesForTheLast21Days(0);
                 listStockResponse.setSalesForTheLast28Days(0);
                 listStockResponse.setSalesForTheLast35Days(0);
-                listStockResponse.setSalesForTheLastYear90Days(0);
+                listStockResponse.setSalesForTheLastYear30Days(0);
+                listStockResponse.setSalesForTheLastYear60Days(0);
+                listStockResponse.setSalesForTheLastYear120Days(0);
+                listStockResponse.setSalesForTheLastYear180Days(0);
+                listStockResponse.setSalesForTheLastYear365Days(0);
                 listStockResponse.setItemPrice30(BigDecimal.ZERO);
             }
         }
@@ -352,6 +361,9 @@ public class StockCartService implements IStockCartService {
             Integer replenishQuantity42Days = estimateSales42Days - listStockResponse.getFbaTotalCanSaleQuantity();
             Integer replenishQuantity56Days = estimateSales56Days - listStockResponse.getFbaTotalCanSaleQuantity();
             Integer replenishQuantity90Days = estimateSales90Days - listStockResponse.getFbaTotalCanSaleQuantity();
+            //建议生产数量=去年60天销量-本地仓库-fba总可售库存
+            Integer recommendedProductionQuantity60Days =MathUtil.subtractInteger(MathUtil.subtractInteger(MathUtil.subtractInteger(listStockResponse.getSalesForTheLastYear60Days(),listStockResponse.getInventoryQuantity()),listStockResponse.getInventoryQuantityWarehouse()),listStockResponse.getFbaTotalCanSaleQuantity());
+            listStockResponse.setRecommendedProductionQuantity60Days(recommendedProductionQuantity60Days);
             listStockResponse.setReplenishQuantity28Days(replenishQuantity28Days);
             listStockResponse.setReplenishQuantity42Days(replenishQuantity42Days);
             listStockResponse.setReplenishQuantity56Days(replenishQuantity56Days);

@@ -99,7 +99,7 @@
             <tr>
                 <td>是否需要审核：</td>
                 <td>
-                    <select class="easyui-combobox" name="level" style="width:100px;" data-options="required:true">
+                    <select class="easyui-combobox" name="needAudit" style="width:100px;" data-options="required:true">
                         <option value="1">需要</option>
                         <option value="0">不需要</option>
                     </select>
@@ -118,8 +118,8 @@
             <tr class="view_status">
                 <td>负责人：</td>
                 <td colspan="3">
-                    <input class="easyui-textbox" type="text" name="chargeUserRealnames"
-                           data-options="multiline:true,required:true"
+                    <input class="easyui-textbox" type="text" name="chargeUserRealNames"
+                           data-options="multiline:true"
                            style="width: 90%;height:50px">
                 </td>
             </tr>
@@ -135,7 +135,7 @@
             <tr>
                 <td>备注：</td>
                 <td colspan="3">
-                    <input class="easyui-textbox" type="text" name="remark" data-options="multiline:true,required:true"
+                    <input class="easyui-textbox" type="text" name="remark" data-options="multiline:true"
                            style="width: 90%;height:50px">
                 </td>
             </tr>

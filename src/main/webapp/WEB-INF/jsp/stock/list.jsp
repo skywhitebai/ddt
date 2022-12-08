@@ -494,10 +494,6 @@
                     }
                 },
                 {
-                    title: '预计生产数量', field: 'estimateProductionQuantity', width: 100, styler: cellStyler,
-                    formatter: cellFormatter
-                },
-                {
                     title: '备注', field: 'stockRemark', width: 220,
                     formatter: function (value, row, rowIndex) {
                         return '<input class="easyui-textbox" value="' + value + '"  onchange="saveStockRemark(this,' + row.shopSkuId + ')">&nbsp;&nbsp;<a href="javascript:;" title="查看" onclick="showStockRemark(' + row.shopSkuId + ')" >查看</a>';
@@ -512,6 +508,14 @@
                             return '<input class="easyui-numberbox" min="0" precision="0" value="' + value + '" onchange="saveProductionQuantity(this,' + row.shopSkuId + ')">';
                         }
                     }
+                },
+                {
+                    title: '建议生产数量（60天）', field: 'recommendedProductionQuantity60Days', width: 100, styler: cellStyler,
+                    formatter: cellFormatter
+                },
+                {
+                    title: '预计生产数量', field: 'estimateProductionQuantity', width: 100, styler: cellStyler,
+                    formatter: cellFormatter
                 },
                 /*{title: '店铺库存', field: 'inventoryQuantity', width: 90},
                 {
@@ -548,9 +552,6 @@
                     }
                 },
                 {title: '补货数量', field: 'stockQuantity', width: 90},
-                {title: '店铺名', field: 'shopName', width: 140},
-                {title: '销售负责人', field: 'salesmanRealName', width: 120},
-                {title: '店铺父sku', field: 'shopParentSku', width: 168},
                 {
                     title: '图片', field: 'imgUrl', width: 120,
                     formatter: function (value, rowData, rowIndex) {
@@ -564,6 +565,9 @@
                         return res;
                     }
                 },
+                {title: '店铺名', field: 'shopName', width: 140},
+                {title: '销售负责人', field: 'salesmanRealName', width: 120},
+                {title: '店铺父sku', field: 'shopParentSku', width: 168},
                 {title: '设置时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
                 {

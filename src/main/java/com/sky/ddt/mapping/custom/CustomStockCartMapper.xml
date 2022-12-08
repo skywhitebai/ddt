@@ -58,8 +58,23 @@
         (select AVG(oi2.item_price) from order_import oi2 where oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 31
         DAY) and oi2.shop_sku_id=ss.shop_sku_id and oi2.order_status!='Cancelled')itemPrice30,
         (SELECT SUM(oi2.quantity) FROM order_import oi2 WHERE oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR)
+        AND oi2.`purchase_date`<![CDATA[<]]>DATE_ADD(DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR),INTERVAL 30 DAY) AND
+        oi2.shop_sku_id=ss.shop_sku_id and oi2.order_status!='Cancelled') salesForTheLastYear30Days,
+        (SELECT SUM(oi2.quantity) FROM order_import oi2 WHERE oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR)
+        AND oi2.`purchase_date`<![CDATA[<]]>DATE_ADD(DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR),INTERVAL 60 DAY) AND
+        oi2.shop_sku_id=ss.shop_sku_id and oi2.order_status!='Cancelled') salesForTheLastYear60Days,
+        (SELECT SUM(oi2.quantity) FROM order_import oi2 WHERE oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR)
         AND oi2.`purchase_date`<![CDATA[<]]>DATE_ADD(DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR),INTERVAL 90 DAY) AND
-        oi2.shop_sku_id=ss.shop_sku_id and oi2.order_status!='Cancelled') salesForTheLastYear90Days
+        oi2.shop_sku_id=ss.shop_sku_id and oi2.order_status!='Cancelled') salesForTheLastYear90Days,
+        (SELECT SUM(oi2.quantity) FROM order_import oi2 WHERE oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR)
+        AND oi2.`purchase_date`<![CDATA[<]]>DATE_ADD(DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR),INTERVAL 120 DAY) AND
+        oi2.shop_sku_id=ss.shop_sku_id and oi2.order_status!='Cancelled') salesForTheLastYear120Days,
+        (SELECT SUM(oi2.quantity) FROM order_import oi2 WHERE oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR)
+        AND oi2.`purchase_date`<![CDATA[<]]>DATE_ADD(DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR),INTERVAL 180 DAY) AND
+        oi2.shop_sku_id=ss.shop_sku_id and oi2.order_status!='Cancelled') salesForTheLastYear180Days,
+        (SELECT SUM(oi2.quantity) FROM order_import oi2 WHERE oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR)
+        AND oi2.`purchase_date`<![CDATA[<]]>DATE_ADD(DATE_SUB(DATE(NOW()),INTERVAL 1 YEAR),INTERVAL 365 DAY) AND
+        oi2.shop_sku_id=ss.shop_sku_id and oi2.order_status!='Cancelled') salesForTheLastYear365Days
         FROM
         shop_sku ss
         LEFT JOIN `order_import` oi ON ss.`shop_sku_id`=oi.`shop_sku_id` and
@@ -194,7 +209,7 @@
     </select>
     <select id="listWarehouseStockOtherInfo" parameterType="java.util.List"
             resultType="com.sky.ddt.dto.stock.response.ListStockResponse">
-        select a.*,b.*,c.*,d.*,e.* from (select ss.sku_id skuId,IFNULL(sum(fi.afn_fulfillable_quantity),0)
+        select a.*,b.*,c.*,d30.*,d60.*,d90.*,d120.*,d180.*,d365.*,e.* from (select ss.sku_id skuId,IFNULL(sum(fi.afn_fulfillable_quantity),0)
         afnFulfillableQuantity,
         IFNULL(sum(fi.`afn_reserved_quantity`),0)+ IFNULL(sum(fi.`afn_inbound_working_quantity`),0)+
         IFNULL(sum(fi.`afn_inbound_shipped_quantity`),0)+ IFNULL(sum(fi.`afn_inbound_receiving_quantity`),0)
@@ -246,6 +261,26 @@
         group by ss.sku_id) c
         on a.skuId=c.skuId
         left join
+        (select sum(oi2.quantity) salesForTheLastYear30Days,ss.sku_id skuId from order_import oi2,shop_sku ss
+        where oi2.shop_sku_id=ss.shop_sku_id and oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 year) and
+        oi2.`purchase_date`<![CDATA[<]]>DATE_add(DATE_SUB(DATE(NOW()),INTERVAL 1 year),INTERVAL 30 day)
+        and oi2.order_status!='Cancelled' and ss.sku_id in
+        <foreach close=")" collection="list" item="listItem" open="(" separator=",">
+            #{listItem}
+        </foreach>
+        group by ss.sku_id) d30
+        on a.skuId=d30.skuId
+        left join
+        (select sum(oi2.quantity) salesForTheLastYear60Days,ss.sku_id skuId from order_import oi2,shop_sku ss
+        where oi2.shop_sku_id=ss.shop_sku_id and oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 year) and
+        oi2.`purchase_date`<![CDATA[<]]>DATE_add(DATE_SUB(DATE(NOW()),INTERVAL 1 year),INTERVAL 60 day)
+        and oi2.order_status!='Cancelled' and ss.sku_id in
+        <foreach close=")" collection="list" item="listItem" open="(" separator=",">
+            #{listItem}
+        </foreach>
+        group by ss.sku_id) d60
+        on a.skuId=d60.skuId
+        left join
         (select sum(oi2.quantity) salesForTheLastYear90Days,ss.sku_id skuId from order_import oi2,shop_sku ss
         where oi2.shop_sku_id=ss.shop_sku_id and oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 year) and
         oi2.`purchase_date`<![CDATA[<]]>DATE_add(DATE_SUB(DATE(NOW()),INTERVAL 1 year),INTERVAL 90 day)
@@ -253,8 +288,38 @@
         <foreach close=")" collection="list" item="listItem" open="(" separator=",">
             #{listItem}
         </foreach>
-        group by ss.sku_id) d
-        on a.skuId=d.skuId
+        group by ss.sku_id) d90
+        on a.skuId=d90.skuId
+        left join
+        (select sum(oi2.quantity) salesForTheLastYear120Days,ss.sku_id skuId from order_import oi2,shop_sku ss
+        where oi2.shop_sku_id=ss.shop_sku_id and oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 year) and
+        oi2.`purchase_date`<![CDATA[<]]>DATE_add(DATE_SUB(DATE(NOW()),INTERVAL 1 year),INTERVAL 120 day)
+        and oi2.order_status!='Cancelled' and ss.sku_id in
+        <foreach close=")" collection="list" item="listItem" open="(" separator=",">
+            #{listItem}
+        </foreach>
+        group by ss.sku_id) d120
+        on a.skuId=d120.skuId
+        left join
+        (select sum(oi2.quantity) salesForTheLastYear180Days,ss.sku_id skuId from order_import oi2,shop_sku ss
+        where oi2.shop_sku_id=ss.shop_sku_id and oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 year) and
+        oi2.`purchase_date`<![CDATA[<]]>DATE_add(DATE_SUB(DATE(NOW()),INTERVAL 1 year),INTERVAL 180 day)
+        and oi2.order_status!='Cancelled' and ss.sku_id in
+        <foreach close=")" collection="list" item="listItem" open="(" separator=",">
+            #{listItem}
+        </foreach>
+        group by ss.sku_id) d180
+        on a.skuId=d180.skuId
+        left join
+        (select sum(oi2.quantity) salesForTheLastYear365Days,ss.sku_id skuId from order_import oi2,shop_sku ss
+        where oi2.shop_sku_id=ss.shop_sku_id and oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 1 year) and
+        oi2.`purchase_date`<![CDATA[<]]>DATE_add(DATE_SUB(DATE(NOW()),INTERVAL 1 year),INTERVAL 365 day)
+        and oi2.order_status!='Cancelled' and ss.sku_id in
+        <foreach close=")" collection="list" item="listItem" open="(" separator=",">
+            #{listItem}
+        </foreach>
+        group by ss.sku_id) d365
+        on a.skuId=d365.skuId
         left join
         (select AVG(oi2.item_price) itemPrice30,ss.sku_id skuId from order_import oi2,shop_sku ss
         where oi2.shop_sku_id=ss.shop_sku_id and oi2.`purchase_date`>=DATE_SUB(DATE(NOW()),INTERVAL 31 DAY) and

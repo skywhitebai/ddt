@@ -376,6 +376,10 @@
                         }
                     }
                 },
+                {
+                    title: '建议生产数量（60天）', field: 'recommendedProductionQuantity60Days', width: 100, styler: cellStyler,
+                    formatter: cellFormatter
+                },
                 {title: 'fba可售库存', field: 'afnFulfillableQuantity', width: 90},
                 /*{title: '总库存', field: 'inventoryQuantityTotal', width: 90},*/
                 {
@@ -415,10 +419,6 @@
                         return '<a href="javascript:;" title="查看其他店铺库存" onclick="showProduceOrderShopSkuProductionQuantityDialog(' + row.skuId + ',' + row.shopId + ',2)" >' + value + '</a>';
                     }
                 },*/
-                {title: '店铺名', field: 'shopName', width: 140},
-                {title: '销售渠道', field: 'saleShopNames', width: 200},
-                {title: '销售负责人', field: 'salesmanRealName', width: 120},
-                {title: '店铺父sku', field: 'shopParentSku', width: 168},
                 {
                     title: '图片', field: 'imgUrl', width: 120,
                     formatter: function (value, rowData, rowIndex) {
@@ -432,6 +432,10 @@
                         return res;
                     }
                 },
+                {title: '店铺名', field: 'shopName', width: 140},
+                {title: '销售渠道', field: 'saleShopNames', width: 200},
+                {title: '销售负责人', field: 'salesmanRealName', width: 120},
+                {title: '店铺父sku', field: 'shopParentSku', width: 168},
                 {title: '产品sku创建时间', field: 'skuCreateTime', width: 180},
                 {title: '设置时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
