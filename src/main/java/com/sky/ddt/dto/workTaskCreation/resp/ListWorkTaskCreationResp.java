@@ -11,4 +11,5 @@ import lombok.Data;
 @Data
 public class ListWorkTaskCreationResp extends WorkTaskCreation {
     String chargeUserRealNames;
+    String chargeRoleNames;
 }

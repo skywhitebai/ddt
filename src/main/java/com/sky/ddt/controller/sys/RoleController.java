@@ -1,11 +1,14 @@
 package com.sky.ddt.controller.sys;
 
 import com.github.pagehelper.PageInfo;
+import com.sky.ddt.common.annotation.Log;
 import com.sky.ddt.controller.SuperController;
 import com.sky.ddt.dto.easyui.request.DataGridRequest;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
+import com.sky.ddt.dto.easyui.response.TreeResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.sys.role.request.RoleSaveRequest;
+import com.sky.ddt.dto.user.request.UserTreeReq;
 import com.sky.ddt.entity.Role;
 import com.sky.ddt.service.sys.IRoleService;
 import lombok.Data;
@@ -57,5 +60,11 @@ public class RoleController extends SuperController {
     @ResponseBody
     public BaseResponse delete(Integer id) {
         return roleService.delete(id);
+    }
+
+    @RequestMapping("/tree")
+    @ResponseBody
+    public  List<TreeResponse> tree() {
+        return roleService.tree();
     }
 }

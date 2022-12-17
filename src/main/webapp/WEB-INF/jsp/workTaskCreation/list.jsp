@@ -176,6 +176,19 @@
     </div>
 </div>
 
+<!--任务管理角色管理-->
+<div id="dlgChargeRole" class="easyui-dialog" style="width: 500px; height: 700px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons',top:55,align:'center'">
+    <ul id="roleTree"></ul>
+    <div style="text-align:center;">
+        <a href="javascript:void(0)" class="easyui-linkbutton"
+           data-options="iconCls:'icon-ok'" id="btn_save_charge_role" onclick="saveChargeRole()">确定</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton"
+           data-options="iconCls:'icon-cancel'" onclick="closeDlgChargeRole()">关闭</a>
+    </div>
+</div>
+
+
 </body>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -262,6 +275,17 @@
                                 return content;
                             } else {
                                 var content = '<a href="javascript:void(0)" onclick="showDlgChargeUser(' + row.id + ')" class="easyui-linkbutton" >' + value + '</a>';
+                                return content;
+                            }
+                        }
+                    },
+                    {
+                        title: '负责角色', field: 'chargeRoleNames', width: 200, formatter: function (value, row, index) {
+                            if (isEmpty(value)) {
+                                var content = '<a href="javascript:void(0)" onclick="showDlgChargeRole(' + row.id + ')" class="easyui-linkbutton" >暂无负责角色</a>';
+                                return content;
+                            } else {
+                                var content = '<a href="javascript:void(0)" onclick="showDlgChargeRole(' + row.id + ')" class="easyui-linkbutton" >' + value + '</a>';
                                 return content;
                             }
                         }
@@ -465,6 +489,63 @@
         }, function (data) {
             if (data.code == '200') {
                 closeDlgChargeUser();
+                bindData();
+            } else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+
+    function showDlgChargeRole(id) {
+        $('#workTaskCreationId').val(id);
+        $('#dlgChargeRole').dialog('open').dialog('setTitle', '负责角色管理');
+        bindRoleTree();
+    }
+
+    function closeDlgChargeRole() {
+        $('#dlgChargeRole').dialog('close');
+    }
+
+    function bindRoleTree() {
+        $("#roleTree").tree({
+            checkbox: true,
+            cascadeCheck: false,
+            url: "${pageContext.request.contextPath }/role/tree?status=1",
+            onLoadSuccess: function (data) {
+                checkRoleTree();
+            }
+        });
+    }
+
+    function checkRoleTree() {
+        var workTaskCreationId = $('#workTaskCreationId').val();
+        $.post('${pageContext.request.contextPath }/workTaskCreationRole/listWorkTaskCreationRole', {workTaskCreationId: workTaskCreationId}, function (data) {
+            if (data.code == '200') {
+                for (var i = 0; i < data.data.length; i++) {
+                    var node = $('#RoleTree').tree('find', data.data[i].RoleId);
+                    if (node) {
+                        $("#RoleTree").tree("check", node.target);
+                    }
+                }
+            } else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+
+    function saveChargeRole() {
+        var workTaskCreationId = $('#workTaskCreationId').val();
+        var nodes = $('#roleTree').tree('getChecked');
+        var roleIds = new Array();
+        for (var i = 0; i < nodes.length; i++) {
+            roleIds.push(nodes[i].id);
+        }
+        $.post('${pageContext.request.contextPath }/workTaskCreationRole/saveWorkTaskCreationRole', {
+            workTaskCreationId: workTaskCreationId,
+            roleIds: roleIds
+        }, function (data) {
+            if (data.code == '200') {
+                closeDlgChargeRole();
                 bindData();
             } else {
                 $.messager.alert("提示", data.message);

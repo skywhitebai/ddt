@@ -5,10 +5,12 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.RoleConstant;
 import com.sky.ddt.dao.custom.CustomRoleMapper;
 import com.sky.ddt.dto.easyui.request.DataGridRequest;
+import com.sky.ddt.dto.easyui.response.TreeResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.sys.role.request.RoleSaveRequest;
 import com.sky.ddt.entity.Role;
 import com.sky.ddt.entity.RoleExample;
+import com.sky.ddt.entity.User;
 import com.sky.ddt.service.sys.IRoleMenuService;
 import com.sky.ddt.service.sys.IRoleService;
 import com.sky.ddt.service.sys.IUserRoleService;
@@ -16,6 +18,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -98,6 +101,34 @@ public class RoleService implements IRoleService {
         roleMenuService.deleteByRoleId(id);
         customRoleMapper.deleteByPrimaryKey(id);
         return BaseResponse.success();
+    }
+
+    @Override
+    public List<TreeResponse> tree() {
+        TreeResponse treeResponse = new TreeResponse();
+        treeResponse.setId(0);
+        treeResponse.setText("角色");
+        List<Role> roleList = getRoleList();
+        getTreeChildren(treeResponse, roleList);
+        List<TreeResponse> list = new ArrayList<TreeResponse>();
+        list.add(treeResponse);
+        return list;
+    }
+
+    private void getTreeChildren(TreeResponse treeResponse, List<Role> roleList) {
+        treeResponse.setChildren(new ArrayList<TreeResponse>());
+        for (Role role :
+                roleList) {
+            TreeResponse userTree = new TreeResponse();
+            userTree.setId(role.getId());
+            userTree.setText(role.getRoleName());
+            treeResponse.getChildren().add(userTree);
+        }
+    }
+
+    private List<Role> getRoleList() {
+        RoleExample roleExample=new RoleExample();
+        return customRoleMapper.selectByExample(roleExample);
     }
 
     private boolean existRepeatRoleName(Integer id, String roleName) {

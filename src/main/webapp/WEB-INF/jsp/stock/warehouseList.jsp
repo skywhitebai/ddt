@@ -324,7 +324,12 @@
                 {title: '28天实销', field: 'salesForTheLast28Days', width: 70},*/
                 {title: '35天实销', field: 'salesForTheLast35Days', width: 70},
                 {title: '30天售价', field: 'itemPrice30', width: 90},
+                {title: '去年30天销量', field: 'salesForTheLastYear30Days', width: 90},
+                {title: '去年60天销量', field: 'salesForTheLastYear60Days', width: 90},
                 {title: '去年90天销量', field: 'salesForTheLastYear90Days', width: 90},
+                {title: '去年120天销量', field: 'salesForTheLastYear120Days', width: 90},
+                {title: '去年180天销量', field: 'salesForTheLastYear180Days', width: 90},
+                {title: '去年365天销量', field: 'salesForTheLastYear365Days', width: 90},
                 {title: '预计日均销量', field: 'estimateAverageDailySales', width: 90},
                 /*{title: '预计14天销量', field: 'estimateSales14Days', width: 90},
                 {title: '预计28天销量', field: 'estimateSales28Days', width: 90},

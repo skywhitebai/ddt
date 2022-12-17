@@ -2,6 +2,7 @@ package com.sky.ddt.service.sys;
 
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dto.easyui.request.DataGridRequest;
+import com.sky.ddt.dto.easyui.response.TreeResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.sys.role.request.RoleSaveRequest;
 import com.sky.ddt.entity.Role;
@@ -51,4 +52,5 @@ public interface IRoleService {
      */
     BaseResponse delete(Integer id);
 
+    List<TreeResponse> tree();
 }
