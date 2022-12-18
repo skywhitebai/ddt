@@ -16,6 +16,7 @@ import com.sky.ddt.entity.UserExample;
 import com.sky.ddt.service.IAccountService;
 import com.sky.ddt.service.sys.IMenuService;
 import com.sky.ddt.service.sys.IRightService;
+import com.sky.ddt.service.sys.IRoleService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,8 @@ public class AccountService implements IAccountService {
     IMenuService menuService;
     @Autowired
     IRightService rightService;
+    @Autowired
+    IRoleService roleService;
     @Override
     public BaseResponse login(LoginRequest params) {
         return getLoginResponse(params,"login");
@@ -85,7 +88,16 @@ public class AccountService implements IAccountService {
         BeanUtils.copyProperties(user,currentUserInfo);
         currentUserInfo.setMenuUrlList(getMenuUrlList(currentUserInfo.getUserId()));
         currentUserInfo.setRightStrList(getRightStrList(currentUserInfo.getUserId()));
+        currentUserInfo.setRoleNameList(getRoleNameList(currentUserInfo.getUserId()));
         return BaseResponse.successData(currentUserInfo);
+    }
+
+    private List<String> getRoleNameList(Integer userId) {
+        BaseResponse baseResponse=roleService.userRoleList(userId);
+        if(baseResponse.isSuccess()){
+            return (List<String>) baseResponse.getData();
+        }
+        return new ArrayList<>();
     }
 
     private List<String> getMenuUrlList(Integer userId) {

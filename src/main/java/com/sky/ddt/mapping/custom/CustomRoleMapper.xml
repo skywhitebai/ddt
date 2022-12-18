@@ -7,5 +7,10 @@
         from sys_role
         order by create_time
     </select>
+    <select id="userRoleList" resultType="java.lang.String">
+        select role_name
+        from sys_role sr,sys_user_role sur
+       where sr.id=sur.role_id and sur.user_id=#{userId}
+    </select>
 
 </mapper>

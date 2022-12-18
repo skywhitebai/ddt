@@ -115,6 +115,12 @@ public class RoleService implements IRoleService {
         return list;
     }
 
+    @Override
+    public BaseResponse userRoleList(Integer userId) {
+        List<String> list=customRoleMapper.userRoleList(userId);
+        return BaseResponse.successData(list);
+    }
+
     private void getTreeChildren(TreeResponse treeResponse, List<Role> roleList) {
         treeResponse.setChildren(new ArrayList<TreeResponse>());
         for (Role role :

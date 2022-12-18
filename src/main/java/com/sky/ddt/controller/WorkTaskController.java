@@ -27,24 +27,31 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/workTask")
-public class WorkTaskController extends SuperController{
+public class WorkTaskController extends SuperController {
     @Autowired
     IWorkTaskService workTaskService;
+
     @RequestMapping("/index")
     @MenuAnnotation("workTask/index")
     public String index() {
         return "workTask/list";
     }
+
     @RequestMapping("/listWorkTask")
     @MenuAnnotation("workTask/index")
     @ResponseBody
     public DataGridResponse listWorkTask(ListWorkTaskReq params) {
-        PageInfo<ListWorkTaskResp> page=workTaskService.listWorkTask(params);
+        if (getCurrentUserInfo().getRoleNameList().contains("超级管理员")) {
+            params.setAdmin(1);
+        }
+        params.setCurrentUserId(getCurrentUserId());
+        PageInfo<ListWorkTaskResp> page = workTaskService.listWorkTask(params);
         DataGridResponse dataGridResponse = new DataGridResponse();
         dataGridResponse.setTotal(page.getTotal());
         dataGridResponse.setRows(page.getList());
         return dataGridResponse;
     }
+
     @RequestMapping("saveWorkTask")
     @ResponseBody
     @MenuAnnotation("workTask/index")
@@ -52,6 +59,7 @@ public class WorkTaskController extends SuperController{
         Integer dealUserId = getCurrentUserId();
         return workTaskService.saveWorkTask(params, dealUserId);
     }
+
     @RequestMapping("cancelWorkTask")
     @ResponseBody
     @MenuAnnotation("workTask/index")

@@ -35,6 +35,8 @@ public class SaveWorkTaskCreationReq {
     private Integer status;
     @NotNull(message = "类型不能为空")
     private Integer type;
+    @NotEmpty(message = "时间不能为空")
+    private String dayNums;
     @NotNull(message = "是否需要审核不能为空")
     private Integer needAudit;
 }

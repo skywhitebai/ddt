@@ -41,9 +41,8 @@ public class WorkTaskCreationConstant {
 
     @Getter
     public enum TypeEnum {
-        DAY(1, "每天"),
-        WEEK(2, "每周"),
-        MONTH(3, "每月"),;
+        WEEK(1, "每周"),
+        MONTH(2, "每月"),;
         Integer type;
         String typeName;
 

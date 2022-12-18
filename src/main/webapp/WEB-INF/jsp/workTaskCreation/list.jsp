@@ -89,11 +89,58 @@
                 </td>
                 <td>类型：</td>
                 <td>
-                    <select class="easyui-combobox" name="type" style="width:100px;" data-options="required:true">
-                        <option value="1">每日</option>
-                        <option value="2">每周</option>
-                        <option value="3">每月</option>
+                    <select class="easyui-combobox" name="type" id="sType" style="width:100px;"
+                            data-options="required:true">
+                        <option value="1">每周</option>
+                        <option value="2">每月</option>
                     </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <input type="hidden" name="dayNums">
+                    <div id="div_day_nums_week" style="display: none">
+                        <input type="checkbox" name="week" value="1"/>周一
+                        <input type="checkbox" name="week" value="2"/>周二
+                        <input type="checkbox" name="week" value="3"/>周三
+                        <input type="checkbox" name="week" value="4"/>周四
+                        <input type="checkbox" name="week" value="5"/>周五
+                        <input type="checkbox" name="week" value="6"/>周六
+                        <input type="checkbox" name="week" value="0"/>周日
+                    </div>
+                    <div id="div_day_nums_month" style="display: none">
+                        <input type='checkbox' name='month' value='1'/>1
+                        <input type='checkbox' name='month' value='2'/>2
+                        <input type='checkbox' name='month' value='3'/>3
+                        <input type='checkbox' name='month' value='4'/>4
+                        <input type='checkbox' name='month' value='5'/>5
+                        <input type='checkbox' name='month' value='6'/>6
+                        <input type='checkbox' name='month' value='7'/>7
+                        <input type='checkbox' name='month' value='8'/>8
+                        <input type='checkbox' name='month' value='9'/>9
+                        <input type='checkbox' name='month' value='10'/>10
+                        <input type='checkbox' name='month' value='11'/>11
+                        <input type='checkbox' name='month' value='12'/>12
+                        <input type='checkbox' name='month' value='13'/>13
+                        <input type='checkbox' name='month' value='14'/>14
+                        <input type='checkbox' name='month' value='15'/>15
+                        <input type='checkbox' name='month' value='16'/>16
+                        <input type='checkbox' name='month' value='17'/>17
+                        <input type='checkbox' name='month' value='18'/>18
+                        <input type='checkbox' name='month' value='19'/>19
+                        <input type='checkbox' name='month' value='20'/>20
+                        <input type='checkbox' name='month' value='21'/>21
+                        <input type='checkbox' name='month' value='22'/>22
+                        <input type='checkbox' name='month' value='23'/>23
+                        <input type='checkbox' name='month' value='24'/>24
+                        <input type='checkbox' name='month' value='25'/>25
+                        <input type='checkbox' name='month' value='26'/>26
+                        <input type='checkbox' name='month' value='27'/>27
+                        <input type='checkbox' name='month' value='28'/>28
+                        <input type='checkbox' name='month' value='29'/>29
+                        <input type='checkbox' name='month' value='30'/>30
+                        <input type='checkbox' name='month' value='31'/>31
+                    </div>
                 </td>
             </tr>
             <tr>
@@ -193,6 +240,11 @@
 <script type="text/javascript">
     $(document).ready(function () {
         bindData();
+        $('#sType').combobox({
+            onChange: function (newValue, oldValue) {
+                changeType(newValue);
+            }
+        });
     });
 
     function bindUserId() {
@@ -260,14 +312,13 @@
                     {
                         title: '类型', field: 'type', width: 50, formatter: function (value, row, index) {
                             if (value == 1) {
-                                return "每天";
-                            } else if (value == 2) {
                                 return "每周";
-                            } else if (value == 3) {
+                            } else if (value == 2) {
                                 return "每月";
                             }
                         }
                     },
+                    {title: '时间', field: 'dayNums', width: 100},
                     {
                         title: '负责人', field: 'chargeUserRealNames', width: 200, formatter: function (value, row, index) {
                             if (isEmpty(value)) {
@@ -358,6 +409,7 @@
         if (rows && rows.length == 1) {
             $('#dlg').dialog('open').dialog('setTitle', '查看');
             $('#frm').form('load', rows[0]);
+            initDayNums(rows[0]);
             $("#btn_save").hide();
             $(".view_status").show();
             $(".view_hide").show();
@@ -379,6 +431,7 @@
         if (rows && rows.length == 1) {
             $('#dlg').dialog('open').dialog('setTitle', '修改');
             $('#frm').form('load', rows[0]);
+            initDayNums(rows[0]);
             $(".view_status").show();
             $("#btn_save").show();
             $(".view_hide").hide();
@@ -402,6 +455,12 @@
             $.messager.alert("提示", '请填写内容');
             return;
         }
+        var dayNums = getDayNums();
+        if (isEmpty(dayNums)) {
+            $.messager.alert("提示", '请选择时间');
+            return;
+        }
+        $("div#dlg input[name='dayNums']").val(dayNums);
         $('#frm').form('submit', {
             url: '${pageContext.request.contextPath }/workTaskCreation/saveWorkTaskCreation',
             onSubmit: function () {
@@ -551,6 +610,55 @@
                 $.messager.alert("提示", data.message);
             }
         });
+    }
+
+    function changeType(type) {
+        if (type == 1) {
+            $("#div_day_nums_week").show();
+            $("#div_day_nums_month").hide();
+        } else if (type == 2) {
+            $("#div_day_nums_week").hide();
+            $("#div_day_nums_month").show();
+        }
+    }
+
+    function initDayNums(row) {
+        changeType(row.type);
+        var dayNums = row.dayNums.split(",");
+        var name;
+        if (row.type == 1) {
+            name = ("week");
+        } else if (row.type == 2) {
+            name = ("month");
+        }
+        checkboxs = document.getElementsByName(name);
+        for (k in checkboxs) {
+            if (dayNums.includes(checkboxs[k].value)) {
+                checkboxs[k].checked = true;
+            }
+        }
+    }
+
+    function getDayNums() {
+        var type = $("#sType").combobox('getValue');
+        var name;
+        if (type == 1) {
+            name = ("week");
+        } else if (type == 2) {
+            name = ("month");
+        }
+        checkboxs = document.getElementsByName(name);
+        var dayNums = '';
+        for (k in checkboxs) {
+            if (checkboxs[k].checked) {
+                if (dayNums == '') {
+                    dayNums = checkboxs[k].value;
+                } else {
+                    dayNums = dayNums + "," + checkboxs[k].value;
+                }
+            }
+        }
+        return dayNums;
     }
 </script>
 </html>

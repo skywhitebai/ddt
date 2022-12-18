@@ -19,6 +19,8 @@ public class WorkTaskCreation {
 
     private Integer type;
 
+    private String dayNums;
+
     private Integer needAudit;
 
     private Date dealTime;
@@ -95,6 +97,14 @@ public class WorkTaskCreation {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getDayNums() {
+        return dayNums;
+    }
+
+    public void setDayNums(String dayNums) {
+        this.dayNums = dayNums == null ? null : dayNums.trim();
     }
 
     public Integer getNeedAudit() {

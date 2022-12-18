@@ -12,8 +12,10 @@
             resultMap="listWorkTaskCreationMap">
         SELECT
         wtc.*,
-        (select GROUP_CONCAT(real_name SEPARATOR ',')   from user u,work_task_creation_user wtcu where u.user_id=wtcu.user_id and wtcu.work_task_creation_id =wtc.id) chargeUserRealNames
-        , (select GROUP_CONCAT(role_name SEPARATOR ',')   from sys_role r,work_task_creation_role wtcr where r.id=wtcr.role_id and wtcr.work_task_creation_id =wtc.id) chargeRoleNames
+        (select GROUP_CONCAT(real_name SEPARATOR ',') from user u,work_task_creation_user wtcu where
+        u.user_id=wtcu.user_id and wtcu.work_task_creation_id =wtc.id) chargeUserRealNames
+        , (select GROUP_CONCAT(role_name SEPARATOR ',') from sys_role r,work_task_creation_role wtcr where
+        r.id=wtcr.role_id and wtcr.work_task_creation_id =wtc.id) chargeRoleNames
 
         from work_task_creation wtc
         <where>
@@ -23,5 +25,13 @@
             </trim>
         </where>
         order by wtc.create_time asc
+    </select>
+
+    <select id="listWorkTaskCreationUser" resultType="java.lang.Integer">
+        SELECT user_id FROM `work_task_creation_user`
+WHERE work_task_creation_id=#{workTaskCreationId}
+UNION
+SELECT sur.user_id FROM `work_task_creation_role` wtcr,`sys_user_role` sur
+WHERE wtcr.work_task_creation_id=#{workTaskCreationId} AND wtcr.role_id=sur.role_id
     </select>
 </mapper>

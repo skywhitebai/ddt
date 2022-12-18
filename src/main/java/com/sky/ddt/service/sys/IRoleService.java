@@ -53,4 +53,6 @@ public interface IRoleService {
     BaseResponse delete(Integer id);
 
     List<TreeResponse> tree();
+
+    BaseResponse userRoleList(Integer userId);
 }

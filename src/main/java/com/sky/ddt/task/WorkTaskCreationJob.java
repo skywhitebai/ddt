@@ -21,8 +21,8 @@ public class WorkTaskCreationJob {
     WorkTaskCreationService workTaskCreationService;
 
     //每天凌晨12.30执行生成当天需要执行的任务信息
-    @Scheduled(cron ="0 30 0 * * ?")
-    //@Scheduled(cron = "0 0/1 * * * ? ")
+    //@Scheduled(cron ="0 30 0 * * ?")
+    @Scheduled(cron = "0 0/1 * * * ? ")
     public void scheduled() {
         log.info("{}，生成任务信息", DateUtil.getFormatDateStr(new Date()));
         workTaskCreationService.workTaskCreation();

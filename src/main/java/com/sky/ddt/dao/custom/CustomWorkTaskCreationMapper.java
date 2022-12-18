@@ -13,4 +13,6 @@ import java.util.List;
  */
 public interface CustomWorkTaskCreationMapper extends WorkTaskCreationMapper {
     List<ListWorkTaskCreationResp> listWorkTaskCreation(ListWorkTaskCreationReq params);
+
+    List<Integer> listWorkTaskCreationUser(Integer workTaskCreationId);
 }

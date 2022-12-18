@@ -16,4 +16,6 @@ public class ListWorkTaskReq extends DataGridRequest {
     private Integer auditStatus;
     private Integer dealUserId;
     private Integer chargeUserId;
+    private Integer admin;
+    private Integer currentUserId;
 }

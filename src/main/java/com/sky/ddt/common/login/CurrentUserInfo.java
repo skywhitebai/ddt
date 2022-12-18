@@ -21,6 +21,7 @@ public class CurrentUserInfo {
     private String email;
     private String loginToken;
     private List<String> menuUrlList;
+    private List<String> roleNameList;
     private List<String> rightStrList;
 
     public boolean hasMenuUrl(String menuUrl){

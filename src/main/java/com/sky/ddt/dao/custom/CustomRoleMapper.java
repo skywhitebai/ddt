@@ -12,4 +12,6 @@ import java.util.List;
  */
 public interface CustomRoleMapper extends RoleMapper {
     List<Role> comboboxlist();
+
+    List<String> userRoleList(Integer userId);
 }

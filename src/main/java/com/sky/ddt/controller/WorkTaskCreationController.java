@@ -43,7 +43,7 @@ public class WorkTaskCreationController extends SuperController{
         dataGridResponse.setRows(page.getList());
         return dataGridResponse;
     }
-    @RequestMapping("saveWorkTaskCreation")
+    @RequestMapping("/saveWorkTaskCreation")
     @ResponseBody
     @MenuAnnotation("workTaskCreation/index")
     public BaseResponse saveWorkTaskCreation(@Validated SaveWorkTaskCreationReq params) {

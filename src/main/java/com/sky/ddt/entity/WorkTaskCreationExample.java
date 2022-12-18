@@ -632,6 +632,76 @@ public class WorkTaskCreationExample {
             return (Criteria) this;
         }
 
+        public Criteria andDayNumsIsNull() {
+            addCriterion("day_nums is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNumsIsNotNull() {
+            addCriterion("day_nums is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNumsEqualTo(String value) {
+            addCriterion("day_nums =", value, "dayNums");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNumsNotEqualTo(String value) {
+            addCriterion("day_nums <>", value, "dayNums");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNumsGreaterThan(String value) {
+            addCriterion("day_nums >", value, "dayNums");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNumsGreaterThanOrEqualTo(String value) {
+            addCriterion("day_nums >=", value, "dayNums");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNumsLessThan(String value) {
+            addCriterion("day_nums <", value, "dayNums");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNumsLessThanOrEqualTo(String value) {
+            addCriterion("day_nums <=", value, "dayNums");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNumsLike(String value) {
+            addCriterion("day_nums like", value, "dayNums");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNumsNotLike(String value) {
+            addCriterion("day_nums not like", value, "dayNums");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNumsIn(List<String> values) {
+            addCriterion("day_nums in", values, "dayNums");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNumsNotIn(List<String> values) {
+            addCriterion("day_nums not in", values, "dayNums");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNumsBetween(String value1, String value2) {
+            addCriterion("day_nums between", value1, value2, "dayNums");
+            return (Criteria) this;
+        }
+
+        public Criteria andDayNumsNotBetween(String value1, String value2) {
+            addCriterion("day_nums not between", value1, value2, "dayNums");
+            return (Criteria) this;
+        }
+
         public Criteria andNeedAuditIsNull() {
             addCriterion("need_audit is null");
             return (Criteria) this;
