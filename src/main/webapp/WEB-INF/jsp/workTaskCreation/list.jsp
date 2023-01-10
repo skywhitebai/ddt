@@ -151,6 +151,10 @@
                         <option value="0">不需要</option>
                     </select>
                 </td>
+                <td>任务处理天数：</td>
+                <td><input class="easyui-numberbox" name="workDays" data-options="required:true" precision="0"
+                           min="1">
+                </td>
             </tr>
             <tr>
                 <td>计划开始时间：</td>
@@ -319,6 +323,7 @@
                         }
                     },
                     {title: '时间', field: 'dayNums', width: 100},
+                    {title: '任务处理天数', field: 'workDays', width: 80},
                     {
                         title: '负责人', field: 'chargeUserRealNames', width: 200, formatter: function (value, row, index) {
                             if (isEmpty(value)) {
@@ -581,9 +586,9 @@
         $.post('${pageContext.request.contextPath }/workTaskCreationRole/listWorkTaskCreationRole', {workTaskCreationId: workTaskCreationId}, function (data) {
             if (data.code == '200') {
                 for (var i = 0; i < data.data.length; i++) {
-                    var node = $('#RoleTree').tree('find', data.data[i].RoleId);
+                    var node = $('#roleTree').tree('find', data.data[i].roleId);
                     if (node) {
-                        $("#RoleTree").tree("check", node.target);
+                        $("#roleTree").tree("check", node.target);
                     }
                 }
             } else {

@@ -11,6 +11,7 @@
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="day_nums" jdbcType="VARCHAR" property="dayNums" />
+    <result column="work_days" jdbcType="INTEGER" property="workDays" />
     <result column="need_audit" jdbcType="INTEGER" property="needAudit" />
     <result column="deal_time" jdbcType="TIMESTAMP" property="dealTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -80,8 +81,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, title, level, begin_time, end_time, remark, status, type, day_nums, need_audit, 
-    deal_time, create_time, create_by, update_time, update_by
+    id, title, level, begin_time, end_time, remark, status, type, day_nums, work_days, 
+    need_audit, deal_time, create_time, create_by, update_time, update_by
   </sql>
   <sql id="Blob_Column_List">
     content
@@ -140,16 +141,16 @@
     </selectKey>
     insert into work_task_creation (title, level, begin_time, 
       end_time, remark, status, 
-      type, day_nums, need_audit, 
-      deal_time, create_time, create_by, 
-      update_time, update_by, content
-      )
+      type, day_nums, work_days, 
+      need_audit, deal_time, create_time, 
+      create_by, update_time, update_by, 
+      content)
     values (#{title,jdbcType=VARCHAR}, #{level,jdbcType=INTEGER}, #{beginTime,jdbcType=DATE}, 
       #{endTime,jdbcType=DATE}, #{remark,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
-      #{type,jdbcType=INTEGER}, #{dayNums,jdbcType=VARCHAR}, #{needAudit,jdbcType=INTEGER}, 
-      #{dealTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{content,jdbcType=LONGVARCHAR}
-      )
+      #{type,jdbcType=INTEGER}, #{dayNums,jdbcType=VARCHAR}, #{workDays,jdbcType=INTEGER}, 
+      #{needAudit,jdbcType=INTEGER}, #{dealTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, 
+      #{content,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.WorkTaskCreation">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -180,6 +181,9 @@
       </if>
       <if test="dayNums != null">
         day_nums,
+      </if>
+      <if test="workDays != null">
+        work_days,
       </if>
       <if test="needAudit != null">
         need_audit,
@@ -227,6 +231,9 @@
       </if>
       <if test="dayNums != null">
         #{dayNums,jdbcType=VARCHAR},
+      </if>
+      <if test="workDays != null">
+        #{workDays,jdbcType=INTEGER},
       </if>
       <if test="needAudit != null">
         #{needAudit,jdbcType=INTEGER},
@@ -287,6 +294,9 @@
       <if test="record.dayNums != null">
         day_nums = #{record.dayNums,jdbcType=VARCHAR},
       </if>
+      <if test="record.workDays != null">
+        work_days = #{record.workDays,jdbcType=INTEGER},
+      </if>
       <if test="record.needAudit != null">
         need_audit = #{record.needAudit,jdbcType=INTEGER},
       </if>
@@ -324,6 +334,7 @@
       status = #{record.status,jdbcType=INTEGER},
       type = #{record.type,jdbcType=INTEGER},
       day_nums = #{record.dayNums,jdbcType=VARCHAR},
+      work_days = #{record.workDays,jdbcType=INTEGER},
       need_audit = #{record.needAudit,jdbcType=INTEGER},
       deal_time = #{record.dealTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -346,6 +357,7 @@
       status = #{record.status,jdbcType=INTEGER},
       type = #{record.type,jdbcType=INTEGER},
       day_nums = #{record.dayNums,jdbcType=VARCHAR},
+      work_days = #{record.workDays,jdbcType=INTEGER},
       need_audit = #{record.needAudit,jdbcType=INTEGER},
       deal_time = #{record.dealTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -383,6 +395,9 @@
       <if test="dayNums != null">
         day_nums = #{dayNums,jdbcType=VARCHAR},
       </if>
+      <if test="workDays != null">
+        work_days = #{workDays,jdbcType=INTEGER},
+      </if>
       <if test="needAudit != null">
         need_audit = #{needAudit,jdbcType=INTEGER},
       </if>
@@ -417,6 +432,7 @@
       status = #{status,jdbcType=INTEGER},
       type = #{type,jdbcType=INTEGER},
       day_nums = #{dayNums,jdbcType=VARCHAR},
+      work_days = #{workDays,jdbcType=INTEGER},
       need_audit = #{needAudit,jdbcType=INTEGER},
       deal_time = #{dealTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
@@ -436,6 +452,7 @@
       status = #{status,jdbcType=INTEGER},
       type = #{type,jdbcType=INTEGER},
       day_nums = #{dayNums,jdbcType=VARCHAR},
+      work_days = #{workDays,jdbcType=INTEGER},
       need_audit = #{needAudit,jdbcType=INTEGER},
       deal_time = #{dealTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},

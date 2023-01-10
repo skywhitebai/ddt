@@ -67,7 +67,13 @@ public class WorkTaskController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return workTaskService.cancelWorkTask(id, dealUserId);
     }
-
+    @RequestMapping("completeWorkTask")
+    @ResponseBody
+    @MenuAnnotation("workTask/index")
+    public BaseResponse completeWorkTask(Integer id) {
+        Integer dealUserId = getCurrentUserId();
+        return workTaskService.completeWorkTask(id, dealUserId);
+    }
     @RequestMapping("auditWorkTask")
     @ResponseBody
     @RightAnnotation("auditWorkTask")

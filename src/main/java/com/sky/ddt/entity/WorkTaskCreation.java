@@ -21,6 +21,8 @@ public class WorkTaskCreation {
 
     private String dayNums;
 
+    private Integer workDays;
+
     private Integer needAudit;
 
     private Date dealTime;
@@ -105,6 +107,14 @@ public class WorkTaskCreation {
 
     public void setDayNums(String dayNums) {
         this.dayNums = dayNums == null ? null : dayNums.trim();
+    }
+
+    public Integer getWorkDays() {
+        return workDays;
+    }
+
+    public void setWorkDays(Integer workDays) {
+        this.workDays = workDays;
     }
 
     public Integer getNeedAudit() {

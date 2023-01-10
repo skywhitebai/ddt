@@ -116,7 +116,7 @@ public class WorkTaskService implements IWorkTaskService {
         List<WorkTaskUser> workTaskUserList = listWorkTaskUser(workTaskId);
         String[] userIdStrs = chargeUserIds.split(",");
         List<String> userIds = new ArrayList<>();
-        for (String userId:
+        for (String userId :
                 userIdStrs) {
             userIds.add(userId);
         }
@@ -220,6 +220,34 @@ public class WorkTaskService implements IWorkTaskService {
         customWorkTaskMapper.updateByPrimaryKeySelective(workTask);
         workTaskLogService.addWorkTaskLog(params.getWorkTaskId(), content, dealUserId);
         return BaseResponse.success();
+    }
+
+    @Override
+    public BaseResponse completeWorkTask(Integer id, Integer dealUserId) {
+        WorkTaskWithBLOBs workTask = customWorkTaskMapper.selectByPrimaryKey(id);
+        if (workTask == null) {
+            return BaseResponse.failMessage("任务id不存在");
+        }
+        if (StringUtils.isEmpty(workTask.getSolution())) {
+            return BaseResponse.failMessage("解决方案不能为空");
+        }
+        if (WorkOrderConstant.StatusEnum.COMPLETED.getStatus().equals(workTask.getStatus())) {
+            return BaseResponse.failMessage("任务已完成");
+        }
+        workTask.setStatus(WorkOrderConstant.StatusEnum.COMPLETED.getStatus());
+        Date now = new Date();
+        if (workTask.getEndTime() == null || now.before(workTask.getEndTime())) {
+            workTask.setDealStatus(WorkOrderConstant.DealStatusEnum.HANDLER.getDealStatus());
+        } else {
+            workTask.setDealStatus(WorkOrderConstant.DealStatusEnum.TIMEOUT_HANDLER.getDealStatus());
+        }
+        workTask.setActualEndTime(now);
+        workTask.setDealUserId(dealUserId);
+        workTask.setUpdateBy(dealUserId);
+        workTask.setUpdateTime(new Date());
+        customWorkTaskMapper.updateByPrimaryKeySelective(workTask);
+        workTaskLogService.addWorkTaskLog(workTask.getId(), "设置任务为已完成", dealUserId);
+        return null;
     }
 
     private boolean existWorkTaskNo(String worderTaskNo) {

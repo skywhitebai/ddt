@@ -702,6 +702,66 @@ public class WorkTaskCreationExample {
             return (Criteria) this;
         }
 
+        public Criteria andWorkDaysIsNull() {
+            addCriterion("work_days is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkDaysIsNotNull() {
+            addCriterion("work_days is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkDaysEqualTo(Integer value) {
+            addCriterion("work_days =", value, "workDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkDaysNotEqualTo(Integer value) {
+            addCriterion("work_days <>", value, "workDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkDaysGreaterThan(Integer value) {
+            addCriterion("work_days >", value, "workDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkDaysGreaterThanOrEqualTo(Integer value) {
+            addCriterion("work_days >=", value, "workDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkDaysLessThan(Integer value) {
+            addCriterion("work_days <", value, "workDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkDaysLessThanOrEqualTo(Integer value) {
+            addCriterion("work_days <=", value, "workDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkDaysIn(List<Integer> values) {
+            addCriterion("work_days in", values, "workDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkDaysNotIn(List<Integer> values) {
+            addCriterion("work_days not in", values, "workDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkDaysBetween(Integer value1, Integer value2) {
+            addCriterion("work_days between", value1, value2, "workDays");
+            return (Criteria) this;
+        }
+
+        public Criteria andWorkDaysNotBetween(Integer value1, Integer value2) {
+            addCriterion("work_days not between", value1, value2, "workDays");
+            return (Criteria) this;
+        }
+
         public Criteria andNeedAuditIsNull() {
             addCriterion("need_audit is null");
             return (Criteria) this;

@@ -21,7 +21,8 @@ public class FileConstant {
     @Getter
     public enum FileTypeEnum {
         PRODUCT_DEVELOP_FILE("product_develop.file"),
-        FINANCIAL_DOCUMENT_FILE("financial_document.file");
+        FINANCIAL_DOCUMENT_FILE("financial_document.file"),
+        WORK_TASK_FILE("work_task.file");
         String fileType;
 
         FileTypeEnum(String fileType) {

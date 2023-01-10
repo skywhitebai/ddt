@@ -28,10 +28,11 @@
     </select>
 
     <select id="listWorkTaskCreationUser" resultType="java.lang.Integer">
-        SELECT user_id FROM `work_task_creation_user`
+       select a.user_id from  (SELECT user_id FROM `work_task_creation_user`
 WHERE work_task_creation_id=#{workTaskCreationId}
 UNION
 SELECT sur.user_id FROM `work_task_creation_role` wtcr,`sys_user_role` sur
-WHERE wtcr.work_task_creation_id=#{workTaskCreationId} AND wtcr.role_id=sur.role_id
+WHERE wtcr.work_task_creation_id=#{workTaskCreationId} AND wtcr.role_id=sur.role_id)a
+where exists(select 1 from user u where u.user_id=a.user_id and u.status=1)
     </select>
 </mapper>

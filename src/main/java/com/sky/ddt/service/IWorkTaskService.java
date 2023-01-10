@@ -22,4 +22,6 @@ public interface IWorkTaskService {
     String getWorderTaskNo();
 
     BaseResponse auditWorkTask(AuditWorkTaskReq params, Integer dealUserId);
+
+    BaseResponse completeWorkTask(Integer id, Integer dealUserId);
 }

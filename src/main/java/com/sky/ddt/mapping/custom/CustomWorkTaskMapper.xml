@@ -28,7 +28,8 @@
                     =wt.id and wtu.user_id=#{chargeUserId})
                 </if>
                 <if test="dealUserId != null ">and deal_user_id = #{dealUserId}</if>
-                <if test="admin == null ">and deal_user_id = #{currentUserId}</if>
+                <if test="admin == null ">and exists (select 1 from work_task_user wtu where wtu.work_task_id
+                    =wt.id and wtu.user_id=#{currentUserId}) </if>
             </trim>
         </where>
         order by wt.create_time desc

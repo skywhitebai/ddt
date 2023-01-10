@@ -162,6 +162,10 @@ public class WorkTaskCreationServiceImpl implements WorkTaskCreationService {
         //获取负责人信息
         List<Integer> userIdList = customWorkTaskCreationMapper.listWorkTaskCreationUser(workTaskCreation.getId());
         if (!CollectionUtils.isEmpty(userIdList)) {
+            Integer workDays=workTaskCreation.getWorkDays();
+            if(workDays==null){
+                workDays=1;
+            }
             for (Integer userId :
                     userIdList) {
                 WorkTaskWithBLOBs workTask = new WorkTaskWithBLOBs();
@@ -171,7 +175,7 @@ public class WorkTaskCreationServiceImpl implements WorkTaskCreationService {
                 workTask.setLevel(workTaskCreation.getLevel());
                 workTask.setStatus(WorkTaskConstant.StatusEnum.HAVE_IN_HAND.getStatus());
                 workTask.setBeginTime(new Date());
-                workTask.setEndTime(getEndTime(workTaskCreation.getType(), dayNow));
+                workTask.setEndTime( DateUtil.plusDay(workDays,dayNow));
                 workTask.setDealStatus(WorkTaskConstant.DealStatusEnum.UN_DEAL.getDealStatus());
                 if (WorkTaskCreationConstant.NeedAuditEnum.NEED.getStatus().equals(workTaskCreation.getNeedAudit())) {
                     workTask.setAuditStatus(WorkTaskConstant.AuditStatusEnum.WAIT_AUDIT.getAuditStatus());
