@@ -5,6 +5,7 @@ import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.stockRemark.req.ListStockRemarkReq;
 import com.sky.ddt.dto.stockRemark.req.SaveStockRemarkReq;
 import com.sky.ddt.dto.stockRemark.resp.ListStockRemarkResp;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author sky
@@ -15,4 +16,6 @@ public interface IStockRemarkService {
     BaseResponse saveStockRemark(SaveStockRemarkReq req, Integer currentUserId);
 
     PageInfo<ListStockRemarkResp> listStockRemark(ListStockRemarkReq req);
+
+    BaseResponse importStockRemark(MultipartFile file, Integer dealUserId);
 }

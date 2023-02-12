@@ -793,9 +793,14 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         //设置地址
         Row rowAddress = sheetInovice.getRow(12);
         rowAddress.getCell(1).setCellValue(invoiceInfo.getShipTo());
+        //设置收件电话
+        String postalCode=getPostalCode(invoiceInfo.getShipTo());
+        Row rowPhone = sheetInovice.getRow(13);
+        rowPhone.getCell(1).setCellValue(postalCode+postalCode);
+
         //设置邮编
         Row rowPostalCode = sheetInovice.getRow(14);
-        rowPostalCode.getCell(1).setCellValue(getPostalCode(invoiceInfo.getShipTo()));
+        rowPostalCode.getCell(1).setCellValue(postalCode);
         Double totalWeight = 0.0;
         //设置每箱信息
         for (int i = 0; i < invoiceInfo.getInvoicePackingInfoList().size(); i++) {

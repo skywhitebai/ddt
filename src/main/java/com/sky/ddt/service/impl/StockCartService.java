@@ -135,6 +135,7 @@ public class StockCartService implements IStockCartService {
             List<ListStockResponse> listInfo = customStockCartMapper.listWarehouseStockOtherInfo(ids);
             setOtherInfo(list, listInfo);
             setListStock(list);
+            setStockRemark(list);
             for (ListStockResponse listStockResponse :
                     list) {
                 String imgUrl = imgService.getImgUrlBySkuId(listStockResponse.getSkuId());
@@ -159,6 +160,24 @@ public class StockCartService implements IStockCartService {
     @Override
     public List<ListStockResponse> listExportStock(ListStockRequest params) {
         return getListStock(params);
+    }
+
+    @Override
+    public List<ListStockResponse> listExportWarehouseStock(ListStockRequest params) {
+        return getListExportWarehouseStock(params);
+    }
+
+
+    private List<ListStockResponse> getListExportWarehouseStock(ListStockRequest params) {
+        List<ListStockResponse> list = customStockCartMapper.listWarehouseStock(params);
+        if (!CollectionUtils.isEmpty(list)) {
+            List<Integer> ids = list.stream().map(ListStockResponse::getSkuId).collect(Collectors.toList());
+            List<ListStockResponse> listInfo = customStockCartMapper.listWarehouseStockOtherInfo(ids);
+            setOtherInfo(list, listInfo);
+            setListStock(list);
+            setStockRemark(list);
+        }
+        return list;
     }
 
     List<ListStockResponse> getListStock(ListStockRequest params) {

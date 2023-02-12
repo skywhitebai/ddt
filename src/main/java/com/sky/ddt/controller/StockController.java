@@ -1,10 +1,13 @@
 package com.sky.ddt.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.sky.ddt.common.annotation.Action;
+import com.sky.ddt.common.annotation.LogRequest;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.common.annotation.RightAnnotation;
 import com.sky.ddt.common.constant.StockConsatnt;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
+import com.sky.ddt.dto.finance.request.ImportFinanceRequest;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.stock.request.ListSendQuntityReq;
 import com.sky.ddt.dto.stock.request.ListStockRequest;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -109,6 +113,15 @@ public class StockController extends SuperController {
         params.setUserId(getCurrentUserId());
         List<ListStockResponse> list = stockCartService.listExportStock(params);
         BaseResponse exportResponse = new ExcelExportByExcelFieldUtil().export(response, list, StockConsatnt.exportStockFieldList, "补货信息");
+        return exportResponse;
+    }
+    @RequestMapping("/exportWarehouseStock")
+    @ResponseBody
+    @MenuAnnotation("stock/warehouseIndex")
+    public BaseResponse exportWarehouseStock(ListStockRequest params) {
+        params.setUserId(getCurrentUserId());
+        List<ListStockResponse> list = stockCartService.listExportWarehouseStock(params);
+        BaseResponse exportResponse = new ExcelExportByExcelFieldUtil().export(response, list, StockConsatnt.exportStockWarehouseFieldList, "产品sku补货信息");
         return exportResponse;
     }
 }

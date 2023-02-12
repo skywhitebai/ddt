@@ -61,6 +61,7 @@
        style="">生成工厂生产单</a>
     <a href="javascript:void(0)" onclick="openThisView()" class="easyui-linkbutton">全屏显示</a>
     <a href="javascript:void(0)" onclick="exportStock()" class="easyui-linkbutton">下载</a>
+    <a href="javascript:void(0)" onclick="showDlgImport('remark')" class="easyui-linkbutton">导入备注</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 </table>
@@ -295,6 +296,33 @@
     <table id="dgStockRemark" style="width: 100%; height: auto">
     </table>
 </div>
+
+<!--导入页面-->
+<div id="dlgImport" class="easyui-dialog" style="width: 600px; height: 300px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', align:'center'">
+    <div class="ftitle">
+        <b id="importTitle"></b>
+        <hr/>
+        模板下载：
+        <a href="" id="importTemplate"
+           target="_blank">模板下载</a>
+    </div>
+    <form id="frmImport" method="post" novalidate="novalidate" enctype="multipart/form-data">
+        <input type="file" id="importFile" name="file" accept=".xls,.xlsx"/>
+        <input type="hidden" id="importType" name="type">
+        <div style="text-align:center;">
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-ok'" onclick="importData()">导入</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-cancel'" onclick="closeDlgImport()">关闭</a>
+        </div>
+    </form>
+</div>
+<div id="cover">
+    <div id="coverMsg">
+        <img src="${pageContext.request.contextPath }/static/img/loading.gif" width="100px">
+    </div>
+</div>
 </body>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -332,6 +360,61 @@
         queryParams = getQueryParams();
         url = "${pageContext.request.contextPath }/stock/exportStock" + getUrlParams(queryParams);
         window.open(url);
+    }
+
+    function showDlgImport(importType) {
+        var importTitle;
+        switch (importType) {
+            case 'remark':
+                importTitle = "导入备注";
+                break;
+        }
+        if (isEmpty(importTitle)) {
+            $.messager.alert("提示", "请选择正确的导入类型.");
+            return;
+        }
+        $("#importTitle").text(importTitle);
+        $("#importType").val(importType);
+        $("#importFile").val('');
+        importTemplateUrl = "${pageContext.request.contextPath }/static/template/stock/stockRemarkTemplate.xlsx";
+        $("#importTemplate").attr("href", importTemplateUrl);
+        $('#dlgImport').dialog('open').dialog('setTitle', importTitle);
+    }
+    function closeDlgImport() {
+        $('#dlgImport').dialog('close');
+    }
+    function importData() {
+        var importFile = $("#importFile").val();
+        if (importFile == '') {
+            $.messager.alert("提示", "请选择导入的文件");
+            return;
+        }
+        var dom = document.getElementById("importFile");
+        var fileSize = dom.files[0].size;
+        if (fileSize > 30000000) {
+            $.messager.alert("提示", "上传文件过大,请上传小于30M的文件");
+            return false;
+        }
+        $('#frmImport').form('submit', {
+            url: '${pageContext.request.contextPath }/stockRemark/importStockRemark',
+            onSubmit: function () {
+                var isValid = $(this).form('validate');
+                if (isValid) {
+                    showCover();
+                }
+                return isValid;
+            },
+            success: function (data) {
+                hideCover();
+                res = eval("(" + data + ")")
+                if (res.code == '200') {
+                    $.messager.alert("提示", "上传成功");
+                    bindData();
+                } else {
+                    $.messager.alert("提示", res.message);
+                }
+            }
+        });
     }
     function getQueryParams() {
         queryParams = {

@@ -60,6 +60,8 @@
        data-options="iconCls:'icon-search'"
        style="">生成工厂生产单</a>
     <a href="javascript:void(0)" onclick="openThisView()" class="easyui-linkbutton">全屏显示</a>
+    <a href="javascript:void(0)" onclick="exportWarehouseStock()" class="easyui-linkbutton">下载</a>
+    <a href="javascript:void(0)" onclick="showDlgImport('remark')" class="easyui-linkbutton">导入备注</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 </table>
@@ -235,6 +237,33 @@
     <table id="dgProduceOrderShopSkuProductionQuantity" style="width: 100%; height: auto">
     </table>
 </div>
+
+<!--导入页面-->
+<div id="dlgImport" class="easyui-dialog" style="width: 600px; height: 300px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', align:'center'">
+    <div class="ftitle">
+        <b id="importTitle"></b>
+        <hr/>
+        模板下载：
+        <a href="" id="importTemplate"
+           target="_blank">模板下载</a>
+    </div>
+    <form id="frmImport" method="post" novalidate="novalidate" enctype="multipart/form-data">
+        <input type="file" id="importFile" name="file" accept=".xls,.xlsx"/>
+        <input type="hidden" id="importType" name="type">
+        <div style="text-align:center;">
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-ok'" onclick="importData()">导入</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton"
+               data-options="iconCls:'icon-cancel'" onclick="closeDlgImport()">关闭</a>
+        </div>
+    </form>
+</div>
+<div id="cover">
+    <div id="coverMsg">
+        <img src="${pageContext.request.contextPath }/static/img/loading.gif" width="100px">
+    </div>
+</div>
 </body>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -369,6 +398,12 @@
                 {
                     title: '90天建议补货', field: 'replenishQuantity90Days', width: 90, styler: cellStyler,
                     formatter: cellFormatter
+                },
+                {
+                    title: '备注', field: 'stockRemark', width: 220,
+                    formatter: function (value, row, rowIndex) {
+                        return '<input class="easyui-textbox" value="' + value + '"  onchange="saveStockRemark(this,' + row.shopSkuId + ')">&nbsp;&nbsp;<a href="javascript:;" title="查看" onclick="showStockRemark(' + row.shopSkuId + ')" >查看</a>';
+                    }
                 },
                 {title: '店铺sku', field: 'shopSku', width: 168},
                 {
@@ -578,7 +613,16 @@
     function openThisView() {
         window.open("${pageContext.request.contextPath }/stock/warehouseIndex");
     }
-
+    function exportWarehouseStock() {
+        var shopId = $("#s_shopId").combobox('getValue');
+        if (isEmpty(shopId)) {
+            $.messager.alert("提示", "请选择店铺.");
+            return;
+        }
+        queryParams = getQueryParams();
+        url = "${pageContext.request.contextPath }/stock/exportWarehouseStock" + getUrlParams(queryParams);
+        window.open(url);
+    }
     function showImgDialog(skuId) {
         $('#dlgImg').dialog('open').dialog('setTitle', 'sku图片');
         $('#frmImg').form('clear');
@@ -799,6 +843,126 @@
                 });
             }
         });
+    }
+
+    function showDlgImport(importType) {
+        var importTitle;
+        switch (importType) {
+            case 'remark':
+                importTitle = "导入备注";
+                break;
+        }
+        if (isEmpty(importTitle)) {
+            $.messager.alert("提示", "请选择正确的导入类型.");
+            return;
+        }
+        $("#importTitle").text(importTitle);
+        $("#importType").val(importType);
+        $("#importFile").val('');
+        importTemplateUrl = "${pageContext.request.contextPath }/static/template/stock/stockRemarkTemplate.xlsx";
+        $("#importTemplate").attr("href", importTemplateUrl);
+        $('#dlgImport').dialog('open').dialog('setTitle', importTitle);
+    }
+    function closeDlgImport() {
+        $('#dlgImport').dialog('close');
+    }
+    function importData() {
+        var importFile = $("#importFile").val();
+        if (importFile == '') {
+            $.messager.alert("提示", "请选择导入的文件");
+            return;
+        }
+        var dom = document.getElementById("importFile");
+        var fileSize = dom.files[0].size;
+        if (fileSize > 30000000) {
+            $.messager.alert("提示", "上传文件过大,请上传小于30M的文件");
+            return false;
+        }
+        $('#frmImport').form('submit', {
+            url: '${pageContext.request.contextPath }/stockRemark/importStockRemark',
+            onSubmit: function () {
+                var isValid = $(this).form('validate');
+                if (isValid) {
+                    showCover();
+                }
+                return isValid;
+            },
+            success: function (data) {
+                hideCover();
+                res = eval("(" + data + ")")
+                if (res.code == '200') {
+                    $.messager.alert("提示", "上传成功");
+                    bindData();
+                } else {
+                    $.messager.alert("提示", res.message);
+                }
+            }
+        });
+    }
+    function saveStockRemark(input, shopSkuId) {
+        var remark = $(input).val();
+        $.post('${pageContext.request.contextPath }/stockRemark/saveStockRemark', {
+            remark: remark,
+            shopSkuId: shopSkuId
+        }, function (data) {
+            if (data.code == '200') {
+                //保存成功
+            } else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+
+    function showStockRemark(shopSkuId) {
+        $('#dlgStockRemark').dialog('open').dialog('setTitle', '备注管理');
+        $('#frmStockRemark').form('clear');
+        $("div#dlgStockRemark input[name='shopSkuId']").val(shopSkuId);
+        bindStockRemark();
+    }
+
+    function bindStockRemark() {
+        dg = '#dgStockRemark';
+        url = "${pageContext.request.contextPath }/stockRemark/listStockRemark";
+        title = "备注";
+        queryParams = {
+            shopSkuId: $("div#dlgStockRemark input[name='shopSkuId']").val()
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: true,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 5,
+            pageList: [5, 10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'imgId',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '店铺sku', field: 'shopSku', width: 150},
+                {title: '备注', field: 'remark', width: 200},
+                {title: '创建人', field: 'createRealName', width: 80},
+                {title: '创建时间', field: 'createTime', width: 180}
+            ]],
+            toolbar: [{
+                id: 'btnImgReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        $(dg).datagrid('clearSelections');
     }
 </script>
 </html>

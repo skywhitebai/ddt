@@ -8,6 +8,7 @@ import com.sky.ddt.dto.stock.request.SaveProductionQuantityRequest;
 import com.sky.ddt.dto.stock.request.SaveStockQuantityRequest;
 import com.sky.ddt.dto.stock.response.ListSendQuantityResp;
 import com.sky.ddt.dto.stock.response.ListStockResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -49,4 +50,6 @@ public interface IStockCartService {
     PageInfo<ListSendQuantityResp> listSendQuantity(ListSendQuntityReq params);
 
     List<ListStockResponse> listExportStock(ListStockRequest params);
+
+    List<ListStockResponse> listExportWarehouseStock(ListStockRequest params);
 }

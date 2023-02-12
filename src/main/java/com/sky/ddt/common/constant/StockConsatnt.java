@@ -65,6 +65,8 @@ public class StockConsatnt {
 
     public static List<ExcelField> exportStockFieldList = new ArrayList<>();
 
+    public static List<ExcelField> exportStockWarehouseFieldList = new ArrayList<>();
+
     static {
         exportStockFieldList.add(new ExcelField("shopName", "店铺名", ExcelField.FieldTypeEnum.STRING));
         exportStockFieldList.add(new ExcelField("sku", "产品sku", ExcelField.FieldTypeEnum.STRING));
@@ -104,5 +106,41 @@ public class StockConsatnt {
         exportStockFieldList.add(new ExcelField("salesmanRealName", "销售负责人", ExcelField.FieldTypeEnum.STRING));
         exportStockFieldList.add(new ExcelField("createTime", "设置时间", ExcelField.FieldTypeEnum.DATE_TIME));
         exportStockFieldList.add(new ExcelField("updateTime", "修改时间", ExcelField.FieldTypeEnum.DATE_TIME));
+
+        exportStockWarehouseFieldList.add(new ExcelField("shopName", "店铺名", ExcelField.FieldTypeEnum.STRING));
+        exportStockWarehouseFieldList.add(new ExcelField("sku", "产品sku", ExcelField.FieldTypeEnum.STRING));
+        exportStockWarehouseFieldList.add(new ExcelField("shopSku", "店铺sku", ExcelField.FieldTypeEnum.STRING));
+        exportStockWarehouseFieldList.add(new ExcelField("shopParentSku", "店铺父sku", ExcelField.FieldTypeEnum.STRING));
+        exportStockWarehouseFieldList.add(new ExcelField("salesForTheLast7Days", "7天实销", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("salesForTheLast14Days", "14天实销", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("salesForTheLast35Days", "35天实销", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("itemPrice30", "30天售价", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("salesForTheLastYear30Days", "去年30天销量", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("salesForTheLastYear60Days", "去年60天销量", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("salesForTheLastYear90Days", "去年90天销量", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("salesForTheLastYear120Days", "去年120天销量", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("salesForTheLastYear180Days", "去年180天销量", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("salesForTheLastYear365Days", "去年365天销量", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("estimateAverageDailySales", "预计日均销量", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("afnFulfillableQuantity", "fba可售库存", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("ableCanSaleDay", "当前库存周转", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("onTheWayQuantity", "在途", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("sendQuantity", "发送中数量", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("fbaTotalCanSaleQuantity", "fba总可售库存", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("estimateCanSaleDay", "预计总可售天数", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("replenishQuantity28Days", "28天建议补货", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("replenishQuantity42Days", "42天建议补货", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("replenishQuantity56Days", "56天建议补货", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("replenishQuantity90Days", "90天建议补货", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("stockRemark", "备注", ExcelField.FieldTypeEnum.STRING));
+        exportStockWarehouseFieldList.add(new ExcelField("productionQuantity", "实际生产数量", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("recommendedProductionQuantity60Days", "建议生产数量（60天）", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("estimateProductionQuantity", "预计生产数量", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("inventoryQuantityWarehouse", "其他仓库库存", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("produceOrderShopSkuProductionQuantityWarehouse", "其他仓库生产中数量", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("stockQuantity", "补货数量", ExcelField.FieldTypeEnum.NUMBER));
+        exportStockWarehouseFieldList.add(new ExcelField("salesmanRealName", "销售负责人", ExcelField.FieldTypeEnum.STRING));
+        exportStockWarehouseFieldList.add(new ExcelField("createTime", "设置时间", ExcelField.FieldTypeEnum.DATE_TIME));
+        exportStockWarehouseFieldList.add(new ExcelField("updateTime", "修改时间", ExcelField.FieldTypeEnum.DATE_TIME));
     }
 }

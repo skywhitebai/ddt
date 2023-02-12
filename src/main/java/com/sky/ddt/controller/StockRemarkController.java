@@ -1,6 +1,8 @@
 package com.sky.ddt.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.sky.ddt.common.annotation.Action;
+import com.sky.ddt.common.annotation.LogRequest;
 import com.sky.ddt.common.annotation.MenuAnnotation;
 import com.sky.ddt.dto.easyui.response.DataGridResponse;
 import com.sky.ddt.dto.response.BaseResponse;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author sky
@@ -43,5 +46,13 @@ public class StockRemarkController extends SuperController{
         dataGridResponse.setTotal(page.getTotal());
         dataGridResponse.setRows(page.getList());
         return dataGridResponse;
+    }
+    //importFinance
+    @RequestMapping("/importStockRemark")
+    @ResponseBody
+    @LogRequest(action = Action.Skip)
+    public BaseResponse importStockRemark(MultipartFile file) {
+        Integer dealUserId = getCurrentUserId();
+        return stockRemarkService.importStockRemark(file, dealUserId);
     }
 }
