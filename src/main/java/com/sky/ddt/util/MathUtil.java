@@ -398,4 +398,11 @@ public class MathUtil {
     }
 
 
+    public static boolean checkIntGreaterOrEqual(String str, int min) {
+        Integer res=strToInteger(str);
+        if(res==null){
+            return false;
+        }
+        return res>=min;
+    }
 }

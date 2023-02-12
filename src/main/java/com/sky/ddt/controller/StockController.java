@@ -124,4 +124,11 @@ public class StockController extends SuperController {
         BaseResponse exportResponse = new ExcelExportByExcelFieldUtil().export(response, list, StockConsatnt.exportStockWarehouseFieldList, "产品sku补货信息");
         return exportResponse;
     }
+    @RequestMapping("/importStockQuantity")
+    @ResponseBody
+    @LogRequest(action = Action.Skip)
+    public BaseResponse importStockQuantity(MultipartFile file) {
+        Integer dealUserId = getCurrentUserId();
+        return stockCartService.importStockQuantity(file, dealUserId);
+    }
 }

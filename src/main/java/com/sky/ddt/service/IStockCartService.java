@@ -52,4 +52,6 @@ public interface IStockCartService {
     List<ListStockResponse> listExportStock(ListStockRequest params);
 
     List<ListStockResponse> listExportWarehouseStock(ListStockRequest params);
+
+    BaseResponse importStockQuantity(MultipartFile file, Integer dealUserId);
 }

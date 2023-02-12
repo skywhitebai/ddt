@@ -22,6 +22,7 @@
             src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.5.5.4/jquery.easyui.min.js"></script>
     <script type="text/javascript"
             src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.5.5.4/locale/easyui-lang-zh_CN.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath }/static/css/main.css?t=20200928" type="text/css">
     <script type="text/javascript"
             src="${pageContext.request.contextPath }/static/js/common/common.js?t=20201028"></script>
     <title>仓库补货信息</title>
@@ -237,7 +238,21 @@
     <table id="dgProduceOrderShopSkuProductionQuantity" style="width: 100%; height: auto">
     </table>
 </div>
-
+<div id="dlgStockRemark" class="easyui-dialog" style="width: 900px; height: 600px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
+    <form id="frmStockRemark" method="post" enctype="multipart/form-data">
+        <table>
+            <tr style="display: none">
+                <td>shopSkuId：</td>
+                <td>
+                    <input class="easyui-validatebox textbox" name="shopSkuId">
+                </td>
+            </tr>
+        </table>
+    </form>
+    <table id="dgStockRemark" style="width: 100%; height: auto">
+    </table>
+</div>
 <!--导入页面-->
 <div id="dlgImport" class="easyui-dialog" style="width: 600px; height: 300px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', align:'center'">

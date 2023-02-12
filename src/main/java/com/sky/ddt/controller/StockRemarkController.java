@@ -47,7 +47,6 @@ public class StockRemarkController extends SuperController{
         dataGridResponse.setRows(page.getList());
         return dataGridResponse;
     }
-    //importFinance
     @RequestMapping("/importStockRemark")
     @ResponseBody
     @LogRequest(action = Action.Skip)

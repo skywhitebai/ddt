@@ -3,34 +3,32 @@ package com.sky.ddt.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
+import com.sky.ddt.common.constant.ShopSkuConstant;
 import com.sky.ddt.common.constant.StockConsatnt;
 import com.sky.ddt.common.constant.StockRecordConstant;
 import com.sky.ddt.dao.custom.CustomShopSkuMapper;
 import com.sky.ddt.dao.custom.CustomStockCartMapper;
 import com.sky.ddt.dao.custom.CustomStockRemarkMapper;
 import com.sky.ddt.dto.response.BaseResponse;
-import com.sky.ddt.dto.stock.request.ListSendQuntityReq;
-import com.sky.ddt.dto.stock.request.ListStockRequest;
-import com.sky.ddt.dto.stock.request.SaveProductionQuantityRequest;
-import com.sky.ddt.dto.stock.request.SaveStockQuantityRequest;
+import com.sky.ddt.dto.stock.request.*;
 import com.sky.ddt.dto.stock.response.ListSendQuantityResp;
 import com.sky.ddt.dto.stock.response.ListStockResponse;
 import com.sky.ddt.dto.stock.response.SendQuantityDto;
 import com.sky.ddt.entity.*;
 import com.sky.ddt.service.IImgService;
+import com.sky.ddt.service.IShopSkuService;
 import com.sky.ddt.service.IShopUserService;
 import com.sky.ddt.service.IStockCartService;
+import com.sky.ddt.util.ExcelUtil;
 import com.sky.ddt.util.MathUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -50,6 +48,8 @@ public class StockCartService implements IStockCartService {
     IImgService imgService;
     @Autowired
     CustomStockRemarkMapper customStockRemarkMapper;
+    @Autowired
+    IShopSkuService shopSkuService;
 
     /**
      * @param params
@@ -167,6 +167,196 @@ public class StockCartService implements IStockCartService {
         return getListExportWarehouseStock(params);
     }
 
+    @Override
+    public BaseResponse importStockQuantity(MultipartFile file, Integer dealUserId) {
+        //读取excel 转换为list
+        List<Map<String, String>> list = ExcelUtil.getListByExcel(file);
+        if (list == null || list.size() == 0) {
+            return BaseResponse.failMessage("导入的数据内容为空");
+        }
+        //遍历list导入信息
+        StringBuilder sbErro = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            Map<String, String> map = list.get(i);
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            StringBuilder sbErroItem = new StringBuilder();
+            if (StringUtils.isEmpty(map.get("店铺sku"))) {
+                sbErroItem.append(",").append(ShopSkuConstant.SHOP_SKU_EMPTY);
+            } else {
+                ShopSku shopSku = shopSkuService.getShopSkuByShopSku(map.get("店铺sku"));
+                if (shopSku == null) {
+                    sbErroItem.append(",").append(ShopSkuConstant.SHOP_SKU_NOT_EXIST);
+                } else {
+                    map.put("shopSkuId", shopSku.getShopSkuId().toString());
+                    if (!shopUserService.exisShopUser(shopSku.getShopId(), dealUserId)) {
+                        sbErroItem.append(",").append(StockRecordConstant.USER_NO_SHOP_RIGHT);
+                    }
+                }
+            }
+
+            if (!StringUtils.isEmpty(map.get("空运补货"))) {
+                if (MathUtil.checkIntGreaterOrEqual(map.get("空运补货"), 0)) {
+                    sbErroItem.append(",").append(StockRecordConstant.STOCK_QUANTITY_KY_ERROR);
+                }
+            }
+            if (!StringUtils.isEmpty(map.get("空派补货"))) {
+                if (MathUtil.checkIntGreaterOrEqual(map.get("空派补货"), 0)) {
+                    sbErroItem.append(",").append(StockRecordConstant.STOCK_QUANTITY_KP_ERROR);
+                }
+            }
+            if (!StringUtils.isEmpty(map.get("海运补货"))) {
+                if (MathUtil.checkIntGreaterOrEqual(map.get("海运补货"), 0)) {
+                    sbErroItem.append(",").append(StockRecordConstant.STOCK_QUANTITY_HY_ERROR);
+                }
+            }
+            if (!StringUtils.isEmpty(map.get("实际生产数量"))) {
+                if (MathUtil.checkIntGreaterOrEqual(map.get("实际生产数量"), 0)) {
+                    sbErroItem.append(",").append(StockRecordConstant.PRODUCTION_QUANTITY_ERROR);
+                }
+            }
+            if (sbErroItem.length() > 0) {
+                sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
+            }
+        }
+        if (sbErro.length() > 0) {
+            return BaseResponse.failMessage(sbErro.substring(1));
+        }
+        for (Map<String, String> map : list) {
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            SaveStockQuantityDto saveStockQuantityDto = new SaveStockQuantityDto();
+            saveStockQuantityDto.setShopSkuId(MathUtil.strToInteger(map.get("shopSkuId")));
+            saveStockQuantityDto.setStockQuantityKy(MathUtil.strToInteger(map.get("空运补货")));
+            saveStockQuantityDto.setStockQuantityKp(MathUtil.strToInteger(map.get("空派补货")));
+            saveStockQuantityDto.setStockQuantityHy(MathUtil.strToInteger(map.get("海运补货")));
+            saveStockQuantityDeal(saveStockQuantityDto, dealUserId, false);
+            SaveProductionQuantityRequest saveProductionQuantityRequest = new SaveProductionQuantityRequest();
+            saveProductionQuantityRequest.setProductionQuantity(MathUtil.strToInteger(map.get("实际生产数量")));
+            saveProductionQuantityRequest.setShopSkuId(MathUtil.strToInteger(map.get("shopSkuId")));
+            saveProductionQuantityDeal(saveProductionQuantityRequest, dealUserId, false);
+        }
+        return BaseResponse.success();
+    }
+
+    private BaseResponse saveProductionQuantityDeal(SaveProductionQuantityRequest params, Integer currentUserId, boolean checkUserRight) {
+        ShopSku shopSku = customShopSkuMapper.selectByPrimaryKey(params.getShopSkuId());
+        if (shopSku == null) {
+            return BaseResponse.failMessage(StockConsatnt.SHOP_SKU_ID_NOT_EXIST);
+        }
+        if (checkUserRight && !shopUserService.exisShopUser(shopSku.getShopId(), currentUserId)) {
+            return BaseResponse.failMessage(StockRecordConstant.USER_NO_SHOP_RIGHT);
+        }
+        StockCart stockCart = getStockCartByShopSkuId(params.getShopSkuId(), StockConsatnt.TypeEnum.FACTORY_PRODUCTION.getType());
+        if (stockCart == null) {
+            if (params.getProductionQuantity() == 0) {
+                return BaseResponse.success();
+            }
+            stockCart = new StockCart();
+            stockCart.setCreateBy(currentUserId);
+            stockCart.setCreateTime(new Date());
+            stockCart.setType(StockConsatnt.TypeEnum.FACTORY_PRODUCTION.getType());
+            stockCart.setShopId(shopSku.getShopId());
+            stockCart.setShopSkuId(params.getShopSkuId());
+            stockCart.setProductionQuantity(params.getProductionQuantity());
+            customStockCartMapper.insertSelective(stockCart);
+        } else {
+            stockCart.setUpdateBy(currentUserId);
+            stockCart.setUpdateTime(new Date());
+            stockCart.setProductionQuantity(params.getProductionQuantity());
+            if (stockCart.getProductionQuantity() == 0) {
+                customStockCartMapper.deleteByPrimaryKey(stockCart.getId());
+            } else {
+                customStockCartMapper.updateByPrimaryKeySelective(stockCart);
+            }
+        }
+        return BaseResponse.success();
+    }
+
+    private BaseResponse saveStockQuantityDeal(SaveStockQuantityDto saveStockQuantityDto, Integer currentUserId, boolean checkUserRight) {
+        Boolean checkStatus = false;
+        if (saveStockQuantityDto.getStockQuantityKy() != null) {
+            checkStatus = true;
+        }
+        if (saveStockQuantityDto.getStockQuantityKp() != null) {
+            checkStatus = true;
+        }
+        if (saveStockQuantityDto.getStockQuantityHy() != null) {
+            checkStatus = true;
+        }
+        if (!checkStatus) {
+            return BaseResponse.success();
+        }
+        ShopSku shopSku = customShopSkuMapper.selectByPrimaryKey(saveStockQuantityDto.getShopSkuId());
+        if (shopSku == null) {
+            return BaseResponse.failMessage(StockConsatnt.SHOP_SKU_ID_NOT_EXIST);
+        }
+        if (checkUserRight && !shopUserService.exisShopUser(shopSku.getShopId(), currentUserId)) {
+            return BaseResponse.failMessage(StockRecordConstant.USER_NO_SHOP_RIGHT);
+        }
+        StockCart stockCart = getStockCartByShopSkuId(saveStockQuantityDto.getShopSkuId(), StockConsatnt.TypeEnum.REPLENISHMENT.getType());
+        if (stockCart == null) {
+            stockCart = new StockCart();
+            Integer stockQuantity = 0;
+            if (saveStockQuantityDto.getStockQuantityKy() != null) {
+                stockCart.setStockQuantityKy(saveStockQuantityDto.getStockQuantityKy());
+                stockQuantity += saveStockQuantityDto.getStockQuantityKy();
+            }
+            if (saveStockQuantityDto.getStockQuantityKp() != null) {
+                stockQuantity += saveStockQuantityDto.getStockQuantityKp();
+                stockCart.setStockQuantityKp(saveStockQuantityDto.getStockQuantityKp());
+            }
+            if (saveStockQuantityDto.getStockQuantityHy() != null) {
+                stockQuantity += saveStockQuantityDto.getStockQuantityHy();
+                stockCart.setStockQuantityHy(saveStockQuantityDto.getStockQuantityHy());
+            }
+            stockCart.setCreateBy(currentUserId);
+            stockCart.setType(StockConsatnt.TypeEnum.REPLENISHMENT.getType());
+            stockCart.setCreateTime(new Date());
+            stockCart.setShopId(shopSku.getShopId());
+            stockCart.setShopSkuId(saveStockQuantityDto.getShopSkuId());
+            stockCart.setStockQuantity(stockQuantity);
+            customStockCartMapper.insertSelective(stockCart);
+        } else {
+            stockCart.setUpdateBy(currentUserId);
+            stockCart.setUpdateTime(new Date());
+            if (saveStockQuantityDto.getStockQuantityKy() != null) {
+                stockCart.setStockQuantityKy(saveStockQuantityDto.getStockQuantityKy());
+            }
+            if (saveStockQuantityDto.getStockQuantityKp() != null) {
+                stockCart.setStockQuantityKp(saveStockQuantityDto.getStockQuantityKp());
+            }
+            if (saveStockQuantityDto.getStockQuantityHy() != null) {
+                stockCart.setStockQuantityHy(saveStockQuantityDto.getStockQuantityHy());
+            }
+            stockCart.setStockQuantity(stockCart.getStockQuantityKy() + stockCart.getStockQuantityKp() + stockCart.getStockQuantityHy());
+            if (stockCart.getStockQuantity() == 0) {
+                customStockCartMapper.deleteByPrimaryKey(stockCart.getId());
+            } else {
+                customStockCartMapper.updateByPrimaryKeySelective(stockCart);
+            }
+        }
+        return BaseResponse.success();
+    }
+
 
     private List<ListStockResponse> getListExportWarehouseStock(ListStockRequest params) {
         List<ListStockResponse> list = customStockCartMapper.listWarehouseStock(params);
@@ -209,6 +399,7 @@ public class StockCartService implements IStockCartService {
                 listStockResponse.setSalesForTheLast35Days(info.getSalesForTheLast35Days());
                 listStockResponse.setSalesForTheLastYear30Days(info.getSalesForTheLastYear30Days());
                 listStockResponse.setSalesForTheLastYear60Days(info.getSalesForTheLastYear60Days());
+                listStockResponse.setSalesForTheLastYear90Days(info.getSalesForTheLastYear90Days());
                 listStockResponse.setSalesForTheLastYear120Days(info.getSalesForTheLastYear120Days());
                 listStockResponse.setSalesForTheLastYear180Days(info.getSalesForTheLastYear180Days());
                 listStockResponse.setSalesForTheLastYear365Days(info.getSalesForTheLastYear365Days());
@@ -230,6 +421,7 @@ public class StockCartService implements IStockCartService {
                 listStockResponse.setSalesForTheLast35Days(0);
                 listStockResponse.setSalesForTheLastYear30Days(0);
                 listStockResponse.setSalesForTheLastYear60Days(0);
+                listStockResponse.setSalesForTheLastYear90Days(0);
                 listStockResponse.setSalesForTheLastYear120Days(0);
                 listStockResponse.setSalesForTheLastYear180Days(0);
                 listStockResponse.setSalesForTheLastYear365Days(0);
@@ -253,51 +445,16 @@ public class StockCartService implements IStockCartService {
                 && !StockConsatnt.StockQuantityTypeEnum.HY.getType().equals(params.getType())) {
             return BaseResponse.failMessage(StockConsatnt.TYPE_EERO);
         }
-        ShopSku shopSku = customShopSkuMapper.selectByPrimaryKey(params.getShopSkuId());
-        if (shopSku == null) {
-            return BaseResponse.failMessage(StockConsatnt.SHOP_SKU_ID_NOT_EXIST);
+        SaveStockQuantityDto saveStockQuantityDto = new SaveStockQuantityDto();
+        saveStockQuantityDto.setShopSkuId(params.getShopSkuId());
+        if (StockConsatnt.StockQuantityTypeEnum.KY.getType().equals(params.getType())) {
+            saveStockQuantityDto.setStockQuantityKy(params.getStockQuantity());
+        } else if (StockConsatnt.StockQuantityTypeEnum.KP.getType().equals(params.getType())) {
+            saveStockQuantityDto.setStockQuantityKp(params.getStockQuantity());
+        } else if (StockConsatnt.StockQuantityTypeEnum.HY.getType().equals(params.getType())) {
+            saveStockQuantityDto.setStockQuantityHy(params.getStockQuantity());
         }
-        if (!shopUserService.exisShopUser(shopSku.getShopId(), currentUserId)) {
-            return BaseResponse.failMessage(StockRecordConstant.USER_NO_SHOP_RIGHT);
-        }
-        StockCart stockCart = getStockCartByShopSkuId(params.getShopSkuId(), StockConsatnt.TypeEnum.REPLENISHMENT.getType());
-        if (stockCart == null) {
-            if (params.getStockQuantity() == 0) {
-                return BaseResponse.success();
-            }
-            stockCart = new StockCart();
-            stockCart.setCreateBy(currentUserId);
-            stockCart.setType(StockConsatnt.TypeEnum.REPLENISHMENT.getType());
-            stockCart.setCreateTime(new Date());
-            stockCart.setShopId(shopSku.getShopId());
-            stockCart.setShopSkuId(params.getShopSkuId());
-            stockCart.setStockQuantity(params.getStockQuantity());
-            if (StockConsatnt.StockQuantityTypeEnum.KY.getType().equals(params.getType())) {
-                stockCart.setStockQuantityKy(params.getStockQuantity());
-            } else if (StockConsatnt.StockQuantityTypeEnum.KP.getType().equals(params.getType())) {
-                stockCart.setStockQuantityKp(params.getStockQuantity());
-            } else if (StockConsatnt.StockQuantityTypeEnum.HY.getType().equals(params.getType())) {
-                stockCart.setStockQuantityHy(params.getStockQuantity());
-            }
-            customStockCartMapper.insertSelective(stockCart);
-        } else {
-            stockCart.setUpdateBy(currentUserId);
-            stockCart.setUpdateTime(new Date());
-            if (StockConsatnt.StockQuantityTypeEnum.KY.getType().equals(params.getType())) {
-                stockCart.setStockQuantityKy(params.getStockQuantity());
-            } else if (StockConsatnt.StockQuantityTypeEnum.KP.getType().equals(params.getType())) {
-                stockCart.setStockQuantityKp(params.getStockQuantity());
-            } else if (StockConsatnt.StockQuantityTypeEnum.HY.getType().equals(params.getType())) {
-                stockCart.setStockQuantityHy(params.getStockQuantity());
-            }
-            stockCart.setStockQuantity(stockCart.getStockQuantityKy() + stockCart.getStockQuantityKp() + stockCart.getStockQuantityHy());
-            if (stockCart.getStockQuantity() == 0) {
-                customStockCartMapper.deleteByPrimaryKey(stockCart.getId());
-            } else {
-                customStockCartMapper.updateByPrimaryKeySelective(stockCart);
-            }
-        }
-        return BaseResponse.success();
+        return saveStockQuantityDeal(saveStockQuantityDto, currentUserId, true);
     }
 
     /**
@@ -310,37 +467,7 @@ public class StockCartService implements IStockCartService {
      */
     @Override
     public BaseResponse saveProductionQuantity(SaveProductionQuantityRequest params, Integer currentUserId) {
-        ShopSku shopSku = customShopSkuMapper.selectByPrimaryKey(params.getShopSkuId());
-        if (shopSku == null) {
-            return BaseResponse.failMessage(StockConsatnt.SHOP_SKU_ID_NOT_EXIST);
-        }
-        if (!shopUserService.exisShopUser(shopSku.getShopId(), currentUserId)) {
-            return BaseResponse.failMessage(StockRecordConstant.USER_NO_SHOP_RIGHT);
-        }
-        StockCart stockCart = getStockCartByShopSkuId(params.getShopSkuId(), StockConsatnt.TypeEnum.FACTORY_PRODUCTION.getType());
-        if (stockCart == null) {
-            if (params.getProductionQuantity() == 0) {
-                return BaseResponse.success();
-            }
-            stockCart = new StockCart();
-            stockCart.setCreateBy(currentUserId);
-            stockCart.setCreateTime(new Date());
-            stockCart.setType(StockConsatnt.TypeEnum.FACTORY_PRODUCTION.getType());
-            stockCart.setShopId(shopSku.getShopId());
-            stockCart.setShopSkuId(params.getShopSkuId());
-            stockCart.setProductionQuantity(params.getProductionQuantity());
-            customStockCartMapper.insertSelective(stockCart);
-        } else {
-            stockCart.setUpdateBy(currentUserId);
-            stockCart.setUpdateTime(new Date());
-            stockCart.setProductionQuantity(params.getProductionQuantity());
-            if (stockCart.getProductionQuantity() == 0) {
-                customStockCartMapper.deleteByPrimaryKey(stockCart.getId());
-            } else {
-                customStockCartMapper.updateByPrimaryKeySelective(stockCart);
-            }
-        }
-        return BaseResponse.success();
+        return saveProductionQuantityDeal(params, currentUserId, true);
     }
 
 
@@ -381,7 +508,7 @@ public class StockCartService implements IStockCartService {
             Integer replenishQuantity56Days = estimateSales56Days - listStockResponse.getFbaTotalCanSaleQuantity();
             Integer replenishQuantity90Days = estimateSales90Days - listStockResponse.getFbaTotalCanSaleQuantity();
             //建议生产数量=去年60天销量-本地仓库-fba总可售库存
-            Integer recommendedProductionQuantity60Days =MathUtil.subtractInteger(MathUtil.subtractInteger(MathUtil.subtractInteger(listStockResponse.getSalesForTheLastYear60Days(),listStockResponse.getInventoryQuantity()),listStockResponse.getInventoryQuantityWarehouse()),listStockResponse.getFbaTotalCanSaleQuantity());
+            Integer recommendedProductionQuantity60Days = MathUtil.subtractInteger(MathUtil.subtractInteger(MathUtil.subtractInteger(listStockResponse.getSalesForTheLastYear60Days(), listStockResponse.getInventoryQuantity()), listStockResponse.getInventoryQuantityWarehouse()), listStockResponse.getFbaTotalCanSaleQuantity());
             listStockResponse.setRecommendedProductionQuantity60Days(recommendedProductionQuantity60Days);
             listStockResponse.setReplenishQuantity28Days(replenishQuantity28Days);
             listStockResponse.setReplenishQuantity42Days(replenishQuantity42Days);

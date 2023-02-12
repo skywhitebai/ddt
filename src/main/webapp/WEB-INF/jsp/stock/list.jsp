@@ -22,6 +22,7 @@
             src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.5.5.4/jquery.easyui.min.js"></script>
     <script type="text/javascript"
             src="${pageContext.request.contextPath }/static/js/jquery-easyui-1.5.5.4/locale/easyui-lang-zh_CN.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath }/static/css/main.css?t=20200928" type="text/css">
     <script type="text/javascript"
             src="${pageContext.request.contextPath }/static/js/common/common.js?t=20201028"></script>
     <title>补货信息</title>
@@ -62,6 +63,7 @@
     <a href="javascript:void(0)" onclick="openThisView()" class="easyui-linkbutton">全屏显示</a>
     <a href="javascript:void(0)" onclick="exportStock()" class="easyui-linkbutton">下载</a>
     <a href="javascript:void(0)" onclick="showDlgImport('remark')" class="easyui-linkbutton">导入备注</a>
+    <a href="javascript:void(0)" onclick="showDlgImport('quantity')" class="easyui-linkbutton">导入补货生产数量</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 </table>
@@ -362,11 +364,20 @@
         window.open(url);
     }
 
+    var importUrl;
+
     function showDlgImport(importType) {
         var importTitle;
         switch (importType) {
             case 'remark':
                 importTitle = "导入备注";
+                importUrl = '${pageContext.request.contextPath }/stockRemark/importStockRemark';
+                importTemplateUrl = "${pageContext.request.contextPath }/static/template/stock/stockRemarkTemplate.xlsx";
+                break;
+            case 'quantity':
+                importTitle = "导入数量";
+                importUrl = '${pageContext.request.contextPath }/stock/importStockQuantity';
+                importTemplateUrl = "${pageContext.request.contextPath }/static/template/stock/stockQuantityTemplate.xlsx";
                 break;
         }
         if (isEmpty(importTitle)) {
@@ -376,13 +387,14 @@
         $("#importTitle").text(importTitle);
         $("#importType").val(importType);
         $("#importFile").val('');
-        importTemplateUrl = "${pageContext.request.contextPath }/static/template/stock/stockRemarkTemplate.xlsx";
         $("#importTemplate").attr("href", importTemplateUrl);
         $('#dlgImport').dialog('open').dialog('setTitle', importTitle);
     }
+
     function closeDlgImport() {
         $('#dlgImport').dialog('close');
     }
+
     function importData() {
         var importFile = $("#importFile").val();
         if (importFile == '') {
@@ -396,7 +408,7 @@
             return false;
         }
         $('#frmImport').form('submit', {
-            url: '${pageContext.request.contextPath }/stockRemark/importStockRemark',
+            url: importUrl,
             onSubmit: function () {
                 var isValid = $(this).form('validate');
                 if (isValid) {
@@ -416,9 +428,10 @@
             }
         });
     }
+
     function getQueryParams() {
         queryParams = {
-            shopId:  $("#s_shopId").combobox('getValue'),
+            shopId: $("#s_shopId").combobox('getValue'),
             shopSku: $("#s_shopSku").val(),
             shopParentSku: $("#s_shopParentSku").val(),
             showType: $("#s_showType").val(),
@@ -428,7 +441,9 @@
         };
         return queryParams;
     }
+
     var pageSizeEnable = false;
+
     function bindData() {
         var shopId = $("#s_shopId").combobox('getValue');
         if (isEmpty(shopId)) {
@@ -1002,12 +1017,14 @@
         $("div#dlgSendQuantity input[name='shopSkuId']").val(shopSkuId);
         bindSendQuantity();
     }
+
     function showOnTheWayQuantityDialog(shopSkuId) {
         $('#dlgOnTheWayQuantity').dialog('open').dialog('setTitle', '发送中数量');
         $('#frmOnTheWayQuantity').form('clear');
         $("div#dlgOnTheWayQuantity input[name='shopSkuId']").val(shopSkuId);
         bindOnTheWayQuantity();
     }
+
     function bindOnTheWayQuantity() {
         dg = '#dgOnTheWayQuantity';
         url = "${pageContext.request.contextPath }/amazonReservedInventory/listAmazonReservedInventory";
@@ -1059,6 +1076,7 @@
         })
         $(dg).datagrid('clearSelections');
     }
+
     function bindSendQuantity() {
         dg = '#dgSendQuantity';
         url = "${pageContext.request.contextPath }/stock/listSendQuantity";
