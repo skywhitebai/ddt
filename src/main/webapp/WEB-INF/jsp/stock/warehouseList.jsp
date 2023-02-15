@@ -328,16 +328,7 @@
         dg = '#dg';
         url = "${pageContext.request.contextPath }/stock/listWarehouseStock";
         title = "产品sku备货管理";
-        queryParams = {
-            shopId: shopId,
-            shopSku: $("#s_shopSku").val(),
-            shopParentSku: $("#s_shopParentSku").val(),
-            showType: $("#s_showType").val(),
-            salesmanUserId: $("#s_salesmanUserId").val(),
-            sku: $("#s_sku").val(),
-            produceStatus: $("#s_produceStatus").val(),
-            saleShopId: $("#s_saleShopId").combobox('getValue')
-        };
+        queryParams = getQueryParams();
         $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
             url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
             title: title,
@@ -627,6 +618,19 @@
 
     function openThisView() {
         window.open("${pageContext.request.contextPath }/stock/warehouseIndex");
+    }
+    function getQueryParams() {
+        queryParams = {
+            shopId: $("#s_shopId").combobox('getValue'),
+            shopSku: $("#s_shopSku").val(),
+            shopParentSku: $("#s_shopParentSku").val(),
+            showType: $("#s_showType").val(),
+            salesmanUserId: $("#s_salesmanUserId").val(),
+            sku: $("#s_sku").val(),
+            produceStatus: $("#s_produceStatus").val(),
+            saleShopId: $("#s_saleShopId").combobox('getValue')
+        };
+        return queryParams;
     }
     function exportWarehouseStock() {
         var shopId = $("#s_shopId").combobox('getValue');

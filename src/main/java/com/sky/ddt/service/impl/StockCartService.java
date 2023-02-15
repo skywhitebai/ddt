@@ -205,22 +205,22 @@ public class StockCartService implements IStockCartService {
             }
 
             if (!StringUtils.isEmpty(map.get("空运补货"))) {
-                if (MathUtil.checkIntGreaterOrEqual(map.get("空运补货"), 0)) {
+                if (!MathUtil.checkIntGreaterOrEqual(map.get("空运补货"), 0)) {
                     sbErroItem.append(",").append(StockRecordConstant.STOCK_QUANTITY_KY_ERROR);
                 }
             }
             if (!StringUtils.isEmpty(map.get("空派补货"))) {
-                if (MathUtil.checkIntGreaterOrEqual(map.get("空派补货"), 0)) {
+                if (!MathUtil.checkIntGreaterOrEqual(map.get("空派补货"), 0)) {
                     sbErroItem.append(",").append(StockRecordConstant.STOCK_QUANTITY_KP_ERROR);
                 }
             }
             if (!StringUtils.isEmpty(map.get("海运补货"))) {
-                if (MathUtil.checkIntGreaterOrEqual(map.get("海运补货"), 0)) {
+                if (!MathUtil.checkIntGreaterOrEqual(map.get("海运补货"), 0)) {
                     sbErroItem.append(",").append(StockRecordConstant.STOCK_QUANTITY_HY_ERROR);
                 }
             }
             if (!StringUtils.isEmpty(map.get("实际生产数量"))) {
-                if (MathUtil.checkIntGreaterOrEqual(map.get("实际生产数量"), 0)) {
+                if (!MathUtil.checkIntGreaterOrEqual(map.get("实际生产数量"), 0)) {
                     sbErroItem.append(",").append(StockRecordConstant.PRODUCTION_QUANTITY_ERROR);
                 }
             }

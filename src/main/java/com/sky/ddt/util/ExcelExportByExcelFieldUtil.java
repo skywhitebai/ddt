@@ -84,9 +84,6 @@ public class ExcelExportByExcelFieldUtil<T> {
                         String imgUrl = value.toString();
                         try {
                             String imgUrlReal = imgUrl;
-                            if (imgUrlReal.contains("allmiin.cn")) {
-                                imgUrlReal = imgUrlReal.replace("allmiin.cn", "ddt-file.oss-cn-beijing.aliyuncs.com");
-                            }
                             url = new URL(imgUrlReal);
                         } catch (Exception ex) {
                             cell.setCellValue(imgUrl);

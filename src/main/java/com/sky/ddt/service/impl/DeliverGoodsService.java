@@ -768,7 +768,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         CellStyle priceStyle = getPriceStyle(wb);
         updateSheetInoviceAmty(sheetInovice, invoiceInfo, priceStyle);
         //导出
-        String fileName = "百布川洋+美国-(美森限时达)+" + invoiceInfo.getFbaNo() + "-" + invoiceInfo.getShipmentId() + "-" + invoiceInfo.getNumberOfBoxes() + "箱";
+        String fileName = "2254+美国-(美森限时达)+" + invoiceInfo.getFbaNo() + "-" + invoiceInfo.getShipmentId() + "-" + invoiceInfo.getNumberOfBoxes() + "箱";
         return exportExcel(response, wb, fileName);
     }
 
