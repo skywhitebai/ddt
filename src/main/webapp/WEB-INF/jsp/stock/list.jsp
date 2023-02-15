@@ -421,6 +421,10 @@
                 res = eval("(" + data + ")")
                 if (res.code == '200') {
                     $.messager.alert("提示", "上传成功");
+                    shopId=$("#s_shopId").combobox('getValue')
+                    if (isEmpty(shopId)) {
+                        return;
+                    }
                     bindData();
                 } else {
                     $.messager.alert("提示", res.message);
