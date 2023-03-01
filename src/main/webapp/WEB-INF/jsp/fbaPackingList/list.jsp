@@ -51,9 +51,12 @@
     <input class="easyui-validatebox textbox" id="s_shipmentId">
     <a href="javascript:void(0)" onclick="bindData()" class="easyui-linkbutton" data-options="iconCls:'icon-search'"
        style="width: 80px">查 询</a>
-    <a href="javascript:void(0)" onclick="showDialogImportFbaPackingList2()" class="easyui-linkbutton"
+    <a href="javascript:void(0)" onclick="showDialogImportFbaPackingList2(2)" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">导入fba装箱单信息</a>
+    <a href="javascript:void(0)" onclick="showDialogImportFbaPackingList2(3)" class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'"
+       style="">新的导入fba装箱单信息</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 </table>
@@ -161,6 +164,7 @@
                               id="dlg_importFbaPackingList2_fbaShipmentId"><br>
         Ship to（地址）：<input class="easyui-textbox" name="shipTo" id="dlg_importFbaPackingList2_shipTo"><br>
         ReferenceId*：<input class="easyui-textbox" name="referenceId" id="dlg_importFbaPackingList2_referenceId"><br>
+        <input type="hidden" id="dlg_importFbaPackingList2_type" name="type">
         <input type="file" id="importFbaPackingListFile2" name="file" accept=".xls,.xlsx"/>
         <div style="text-align:center;">
             <label style="color: red">请将excel里面的公式转换为普通数值再导入</label>
@@ -172,7 +176,7 @@
     </form>
 </div>
 <!--编辑页面-->
-<div id="dlgShopSku" class="easyui-dialog" style="width: 850px; height: 500px; padding: 10px 20px"
+<div id="dlgShopSku" class="easyui-dialog" style="width: 900px; height: 500px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', align:'center'">
     <input type="hidden" id="dlgShopSku_fbaPackingListId">
     <!--查询条件-->
@@ -276,11 +280,12 @@
         $('#dlg_importFbaPackingList').dialog('open').dialog('setTitle', 'fba装箱单导入');
     }
 
-    function showDialogImportFbaPackingList2() {
-        $('#dlg_importFbaPackingList2').dialog('open').dialog('setTitle', '新的fba装箱单导入');
+    function showDialogImportFbaPackingList2(type) {
+        $('#dlg_importFbaPackingList2').dialog('open').dialog('setTitle', 'fba装箱单导入');
         $("#dlg_importFbaPackingList2_fbaShipmentId").val("");
         $("#dlg_importFbaPackingList2_shipTo").val("");
         $("#dlg_importFbaPackingList2_referenceId").val("");
+        $("#dlg_importFbaPackingList2_type").val(type);
     }
 
     function closeDialogImportFbaPackingList() {
@@ -518,6 +523,9 @@
                         }
                     }
                 },
+                {title: '箱子数量', field: 'boxNumber', width: 60},
+                {title: '地址简称', field: 'addressAbbr', width: 120},
+                {title: '箱子名称', field: 'boxName', width: 300},
                 {title: '内部单号信息', field: 'orderNumberInfo', width: 700}
             ]],
             toolbar: [{
@@ -664,8 +672,9 @@
                 {field: 'ck', checkbox: true},   //选择
                 {title: '店铺sku', field: 'shopSku', width: 160},
                 {title: '产品sku', field: 'sku', width: 160},
-                {title: 'FBA Shipment ID', field: 'fbaShipmentId', width: 180},
-                {title: '数量', field: 'quantity', width: 80},
+                {title: 'FBA Shipment ID', field: 'fbaShipmentId', width: 160},
+                {title: '数量', field: 'quantity', width: 40},
+                {title: '箱子名称', field: 'boxName', width: 80},
                 {title: '创建时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180}
             ]],

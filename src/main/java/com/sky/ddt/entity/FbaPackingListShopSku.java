@@ -23,6 +23,8 @@ public class FbaPackingListShopSku {
 
     private Date updateTime;
 
+    private String boxName;
+
     public Integer getId() {
         return id;
     }
@@ -101,5 +103,13 @@ public class FbaPackingListShopSku {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getBoxName() {
+        return boxName;
+    }
+
+    public void setBoxName(String boxName) {
+        this.boxName = boxName == null ? null : boxName.trim();
     }
 }

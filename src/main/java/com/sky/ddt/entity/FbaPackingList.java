@@ -37,6 +37,12 @@ public class FbaPackingList {
 
     private Integer checkStatus;
 
+    private Integer boxNumber;
+
+    private String boxName;
+
+    private String addressAbbr;
+
     public Integer getId() {
         return id;
     }
@@ -171,5 +177,29 @@ public class FbaPackingList {
 
     public void setCheckStatus(Integer checkStatus) {
         this.checkStatus = checkStatus;
+    }
+
+    public Integer getBoxNumber() {
+        return boxNumber;
+    }
+
+    public void setBoxNumber(Integer boxNumber) {
+        this.boxNumber = boxNumber;
+    }
+
+    public String getBoxName() {
+        return boxName;
+    }
+
+    public void setBoxName(String boxName) {
+        this.boxName = boxName == null ? null : boxName.trim();
+    }
+
+    public String getAddressAbbr() {
+        return addressAbbr;
+    }
+
+    public void setAddressAbbr(String addressAbbr) {
+        this.addressAbbr = addressAbbr == null ? null : addressAbbr.trim();
     }
 }

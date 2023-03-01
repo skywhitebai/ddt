@@ -19,6 +19,9 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="check_status" jdbcType="INTEGER" property="checkStatus" />
+    <result column="box_number" jdbcType="INTEGER" property="boxNumber" />
+    <result column="box_name" jdbcType="VARCHAR" property="boxName" />
+    <result column="address_abbr" jdbcType="VARCHAR" property="addressAbbr" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -80,7 +83,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, shop_id, shipment_id, name, plan_id, ship_to, reference_id, total_skus, total_units, 
-    pack_list, remark, create_by, create_time, update_by, update_time, status, check_status
+    pack_list, remark, create_by, create_time, update_by, update_time, status, check_status, 
+    box_number, box_name, address_abbr
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FbaPackingListExample" resultMap="BaseResultMap">
     select
@@ -121,13 +125,15 @@
       total_skus, total_units, pack_list, 
       remark, create_by, create_time, 
       update_by, update_time, status, 
-      check_status)
+      check_status, box_number, box_name, 
+      address_abbr)
     values (#{shopId,jdbcType=INTEGER}, #{shipmentId,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, 
       #{planId,jdbcType=VARCHAR}, #{shipTo,jdbcType=VARCHAR}, #{referenceId,jdbcType=VARCHAR}, 
       #{totalSkus,jdbcType=INTEGER}, #{totalUnits,jdbcType=INTEGER}, #{packList,jdbcType=TIMESTAMP}, 
       #{remark,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER}, 
-      #{checkStatus,jdbcType=INTEGER})
+      #{checkStatus,jdbcType=INTEGER}, #{boxNumber,jdbcType=INTEGER}, #{boxName,jdbcType=VARCHAR}, 
+      #{addressAbbr,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.FbaPackingList">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -183,6 +189,15 @@
       <if test="checkStatus != null">
         check_status,
       </if>
+      <if test="boxNumber != null">
+        box_number,
+      </if>
+      <if test="boxName != null">
+        box_name,
+      </if>
+      <if test="addressAbbr != null">
+        address_abbr,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="shopId != null">
@@ -232,6 +247,15 @@
       </if>
       <if test="checkStatus != null">
         #{checkStatus,jdbcType=INTEGER},
+      </if>
+      <if test="boxNumber != null">
+        #{boxNumber,jdbcType=INTEGER},
+      </if>
+      <if test="boxName != null">
+        #{boxName,jdbcType=VARCHAR},
+      </if>
+      <if test="addressAbbr != null">
+        #{addressAbbr,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -295,6 +319,15 @@
       <if test="record.checkStatus != null">
         check_status = #{record.checkStatus,jdbcType=INTEGER},
       </if>
+      <if test="record.boxNumber != null">
+        box_number = #{record.boxNumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.boxName != null">
+        box_name = #{record.boxName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.addressAbbr != null">
+        address_abbr = #{record.addressAbbr,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -318,7 +351,10 @@
       update_by = #{record.updateBy,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       status = #{record.status,jdbcType=INTEGER},
-      check_status = #{record.checkStatus,jdbcType=INTEGER}
+      check_status = #{record.checkStatus,jdbcType=INTEGER},
+      box_number = #{record.boxNumber,jdbcType=INTEGER},
+      box_name = #{record.boxName,jdbcType=VARCHAR},
+      address_abbr = #{record.addressAbbr,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -374,6 +410,15 @@
       <if test="checkStatus != null">
         check_status = #{checkStatus,jdbcType=INTEGER},
       </if>
+      <if test="boxNumber != null">
+        box_number = #{boxNumber,jdbcType=INTEGER},
+      </if>
+      <if test="boxName != null">
+        box_name = #{boxName,jdbcType=VARCHAR},
+      </if>
+      <if test="addressAbbr != null">
+        address_abbr = #{addressAbbr,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -394,7 +439,10 @@
       update_by = #{updateBy,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=INTEGER},
-      check_status = #{checkStatus,jdbcType=INTEGER}
+      check_status = #{checkStatus,jdbcType=INTEGER},
+      box_number = #{boxNumber,jdbcType=INTEGER},
+      box_name = #{boxName,jdbcType=VARCHAR},
+      address_abbr = #{addressAbbr,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

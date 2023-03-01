@@ -10,7 +10,7 @@
 
     <sql id="Custom_Base_Column_List">
         fplss.id, fplss.fba_packing_list_id, fplss.shop_sku_id, fplss.fba_shipment_id, fplss.quantity, fplss.remark, fplss.create_by,
-        fplss.create_time, fplss.update_by, fplss.update_time
+        fplss.create_time, fplss.update_by, fplss.update_time, fplss.box_name
     </sql>
     <select id="listFbaPackingListShopSku"
             parameterType="com.sky.ddt.dto.fbaPackingListShopSku.request.ListFbaPackingListShopSkuRequest"

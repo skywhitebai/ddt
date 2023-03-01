@@ -724,6 +724,76 @@ public class FbaPackingListShopSkuExample {
             addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
+
+        public Criteria andBoxNameIsNull() {
+            addCriterion("box_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameIsNotNull() {
+            addCriterion("box_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameEqualTo(String value) {
+            addCriterion("box_name =", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameNotEqualTo(String value) {
+            addCriterion("box_name <>", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameGreaterThan(String value) {
+            addCriterion("box_name >", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameGreaterThanOrEqualTo(String value) {
+            addCriterion("box_name >=", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameLessThan(String value) {
+            addCriterion("box_name <", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameLessThanOrEqualTo(String value) {
+            addCriterion("box_name <=", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameLike(String value) {
+            addCriterion("box_name like", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameNotLike(String value) {
+            addCriterion("box_name not like", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameIn(List<String> values) {
+            addCriterion("box_name in", values, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameNotIn(List<String> values) {
+            addCriterion("box_name not in", values, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameBetween(String value1, String value2) {
+            addCriterion("box_name between", value1, value2, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameNotBetween(String value1, String value2) {
+            addCriterion("box_name not between", value1, value2, "boxName");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

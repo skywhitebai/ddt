@@ -4,6 +4,8 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * @author sky
  * @Description ImportFbaPackingList2Request
@@ -18,4 +20,6 @@ public class ImportFbaPackingList2Request {
     @NotEmpty(message = "referenceId不能为空")
     String referenceId;
     MultipartFile file;
+    @NotNull(message = "type不能为空")
+    Integer type;
 }

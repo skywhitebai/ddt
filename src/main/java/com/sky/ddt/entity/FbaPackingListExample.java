@@ -1184,6 +1184,206 @@ public class FbaPackingListExample {
             addCriterion("check_status not between", value1, value2, "checkStatus");
             return (Criteria) this;
         }
+
+        public Criteria andBoxNumberIsNull() {
+            addCriterion("box_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNumberIsNotNull() {
+            addCriterion("box_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNumberEqualTo(Integer value) {
+            addCriterion("box_number =", value, "boxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNumberNotEqualTo(Integer value) {
+            addCriterion("box_number <>", value, "boxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNumberGreaterThan(Integer value) {
+            addCriterion("box_number >", value, "boxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNumberGreaterThanOrEqualTo(Integer value) {
+            addCriterion("box_number >=", value, "boxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNumberLessThan(Integer value) {
+            addCriterion("box_number <", value, "boxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNumberLessThanOrEqualTo(Integer value) {
+            addCriterion("box_number <=", value, "boxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNumberIn(List<Integer> values) {
+            addCriterion("box_number in", values, "boxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNumberNotIn(List<Integer> values) {
+            addCriterion("box_number not in", values, "boxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNumberBetween(Integer value1, Integer value2) {
+            addCriterion("box_number between", value1, value2, "boxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNumberNotBetween(Integer value1, Integer value2) {
+            addCriterion("box_number not between", value1, value2, "boxNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameIsNull() {
+            addCriterion("box_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameIsNotNull() {
+            addCriterion("box_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameEqualTo(String value) {
+            addCriterion("box_name =", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameNotEqualTo(String value) {
+            addCriterion("box_name <>", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameGreaterThan(String value) {
+            addCriterion("box_name >", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameGreaterThanOrEqualTo(String value) {
+            addCriterion("box_name >=", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameLessThan(String value) {
+            addCriterion("box_name <", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameLessThanOrEqualTo(String value) {
+            addCriterion("box_name <=", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameLike(String value) {
+            addCriterion("box_name like", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameNotLike(String value) {
+            addCriterion("box_name not like", value, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameIn(List<String> values) {
+            addCriterion("box_name in", values, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameNotIn(List<String> values) {
+            addCriterion("box_name not in", values, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameBetween(String value1, String value2) {
+            addCriterion("box_name between", value1, value2, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBoxNameNotBetween(String value1, String value2) {
+            addCriterion("box_name not between", value1, value2, "boxName");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressAbbrIsNull() {
+            addCriterion("address_abbr is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressAbbrIsNotNull() {
+            addCriterion("address_abbr is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressAbbrEqualTo(String value) {
+            addCriterion("address_abbr =", value, "addressAbbr");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressAbbrNotEqualTo(String value) {
+            addCriterion("address_abbr <>", value, "addressAbbr");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressAbbrGreaterThan(String value) {
+            addCriterion("address_abbr >", value, "addressAbbr");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressAbbrGreaterThanOrEqualTo(String value) {
+            addCriterion("address_abbr >=", value, "addressAbbr");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressAbbrLessThan(String value) {
+            addCriterion("address_abbr <", value, "addressAbbr");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressAbbrLessThanOrEqualTo(String value) {
+            addCriterion("address_abbr <=", value, "addressAbbr");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressAbbrLike(String value) {
+            addCriterion("address_abbr like", value, "addressAbbr");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressAbbrNotLike(String value) {
+            addCriterion("address_abbr not like", value, "addressAbbr");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressAbbrIn(List<String> values) {
+            addCriterion("address_abbr in", values, "addressAbbr");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressAbbrNotIn(List<String> values) {
+            addCriterion("address_abbr not in", values, "addressAbbr");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressAbbrBetween(String value1, String value2) {
+            addCriterion("address_abbr between", value1, value2, "addressAbbr");
+            return (Criteria) this;
+        }
+
+        public Criteria andAddressAbbrNotBetween(String value1, String value2) {
+            addCriterion("address_abbr not between", value1, value2, "addressAbbr");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -12,6 +12,7 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_by" jdbcType="INTEGER" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="box_name" jdbcType="VARCHAR" property="boxName" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,7 +74,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, fba_packing_list_id, shop_sku_id, fba_shipment_id, quantity, remark, create_by, 
-    create_time, update_by, update_time
+    create_time, update_by, update_time, box_name
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.FbaPackingListShopSkuExample" resultMap="BaseResultMap">
     select
@@ -111,12 +112,12 @@
     </selectKey>
     insert into fba_packing_list_shop_sku (fba_packing_list_id, shop_sku_id, fba_shipment_id, 
       quantity, remark, create_by, 
-      create_time, update_by, update_time
-      )
+      create_time, update_by, update_time, 
+      box_name)
     values (#{fbaPackingListId,jdbcType=INTEGER}, #{shopSkuId,jdbcType=INTEGER}, #{fbaShipmentId,jdbcType=VARCHAR}, 
       #{quantity,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{createTime,jdbcType=TIMESTAMP}, #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{boxName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.FbaPackingListShopSku">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -151,6 +152,9 @@
       <if test="updateTime != null">
         update_time,
       </if>
+      <if test="boxName != null">
+        box_name,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="fbaPackingListId != null">
@@ -179,6 +183,9 @@
       </if>
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="boxName != null">
+        #{boxName,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -221,6 +228,9 @@
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.boxName != null">
+        box_name = #{record.boxName,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -237,7 +247,8 @@
       create_by = #{record.createBy,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_by = #{record.updateBy,jdbcType=INTEGER},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      box_name = #{record.boxName,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,6 +283,9 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="boxName != null">
+        box_name = #{boxName,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -285,7 +299,8 @@
       create_by = #{createBy,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=INTEGER},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      box_name = #{boxName,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
