@@ -571,12 +571,33 @@ public class FbaPackingListService implements IFbaPackingListService {
         }else{
             return BaseResponse.failMessage("货件名称不能为空");
         }
-        //箱子数量
+        //配送地址
         Row row4 = sheet.getRow(3);
         if (row4 != null) {
-            String boxNumberStr = ExcelUtil.getCellFormatValueString(row4.getCell(1));
+            String address = ExcelUtil.getCellFormatValueString(row4.getCell(1));
+            fbaPackingList.setAddressAbbr(address);
+        }
+        //箱子数量
+        Row row5 = sheet.getRow(4);
+        if (row5 != null) {
+            String boxNumberStr = ExcelUtil.getCellFormatValueString(row5.getCell(1));
             Integer boxNumber=MathUtil.strToInteger(boxNumberStr);
             fbaPackingList.setBoxNumber(boxNumber);
+        }
+
+        //sku数量
+        Row row6 = sheet.getRow(5);
+        if (row6 != null) {
+            String totalSkusStr = ExcelUtil.getCellFormatValueString(row6.getCell(1));
+            Integer totalSkus=MathUtil.strToInteger(totalSkusStr);
+            fbaPackingList.setTotalSkus(totalSkus);
+        }
+        //商品数量
+        Row row7 = sheet.getRow(6);
+        if (row7 != null) {
+            String totalUnitsStr = ExcelUtil.getCellFormatValueString(row7.getCell(1));
+            Integer totalUnits=MathUtil.strToInteger(totalUnitsStr);
+            fbaPackingList.setTotalUnits(totalUnits);
         }
 
         fbaPackingList.setShipmentId(params.getFbaShipmentId());
