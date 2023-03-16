@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.sky.ddt.common.constant.*;
 import com.sky.ddt.common.enums.YesOrNoEnum;
 import com.sky.ddt.dao.custom.CustomFbaPackingListMapper;
+import com.sky.ddt.dao.custom.CustomFbaPackingListRemarkHisMapper;
 import com.sky.ddt.dao.custom.CustomFbaPackingListShopSkuMapper;
 import com.sky.ddt.dao.custom.CustomOutboundOrderMapper;
 import com.sky.ddt.dto.deliverGoods.request.InvoiceInfo;
@@ -54,6 +55,8 @@ public class FbaPackingListService implements IFbaPackingListService {
     CustomOutboundOrderMapper customOutboundOrderMapper;
     @Autowired
     IShopService shopService;
+    @Autowired
+    CustomFbaPackingListRemarkHisMapper customFbaPackingListRemarkHisMapper;
 
 
     /**
@@ -387,8 +390,8 @@ public class FbaPackingListService implements IFbaPackingListService {
         if (rownum == 0) {
             return BaseResponse.failMessage("excel内容为空");
         }
-        if(params.getType()==3){
-            return importFbaPackingList3(params,dealUserId,sheet);
+        if (params.getType() == 3) {
+            return importFbaPackingList3(params, dealUserId, sheet);
         }
         if (rownum < 5) {
             return BaseResponse.failMessage("装箱单数据为空");
@@ -556,10 +559,10 @@ public class FbaPackingListService implements IFbaPackingListService {
         if (row2 != null) {
             //SKU 总数：7（140 件商品）
             String fbaShipmentId = ExcelUtil.getCellFormatValueString(row2.getCell(1));
-            if(!fbaShipmentId.equals(params.getFbaShipmentId())){
+            if (!fbaShipmentId.equals(params.getFbaShipmentId())) {
                 return BaseResponse.failMessage("货件编号与填写的FbaShipmentId不一致");
             }
-        }else{
+        } else {
             return BaseResponse.failMessage("货件名称不能为空");
         }
         //货件名称
@@ -568,7 +571,7 @@ public class FbaPackingListService implements IFbaPackingListService {
             //SKU 总数：7（140 件商品）
             String name = ExcelUtil.getCellFormatValueString(row3.getCell(1));
             fbaPackingList.setName(name);
-        }else{
+        } else {
             return BaseResponse.failMessage("货件名称不能为空");
         }
         //配送地址
@@ -581,7 +584,7 @@ public class FbaPackingListService implements IFbaPackingListService {
         Row row5 = sheet.getRow(4);
         if (row5 != null) {
             String boxNumberStr = ExcelUtil.getCellFormatValueString(row5.getCell(1));
-            Integer boxNumber=MathUtil.strToInteger(boxNumberStr);
+            Integer boxNumber = MathUtil.strToInteger(boxNumberStr);
             fbaPackingList.setBoxNumber(boxNumber);
         }
 
@@ -589,14 +592,14 @@ public class FbaPackingListService implements IFbaPackingListService {
         Row row6 = sheet.getRow(5);
         if (row6 != null) {
             String totalSkusStr = ExcelUtil.getCellFormatValueString(row6.getCell(1));
-            Integer totalSkus=MathUtil.strToInteger(totalSkusStr);
+            Integer totalSkus = MathUtil.strToInteger(totalSkusStr);
             fbaPackingList.setTotalSkus(totalSkus);
         }
         //商品数量
         Row row7 = sheet.getRow(6);
         if (row7 != null) {
             String totalUnitsStr = ExcelUtil.getCellFormatValueString(row7.getCell(1));
-            Integer totalUnits=MathUtil.strToInteger(totalUnitsStr);
+            Integer totalUnits = MathUtil.strToInteger(totalUnitsStr);
             fbaPackingList.setTotalUnits(totalUnits);
         }
 
@@ -615,7 +618,7 @@ public class FbaPackingListService implements IFbaPackingListService {
             columns.add(cellData);
         }
         //获取内容
-        Map<Integer,Map<String, String>>rowMap=new HashMap<>();
+        Map<Integer, Map<String, String>> rowMap = new HashMap<>();
         for (int i = rownumTitle + 1; i <= rownum; i++) {
             Map<String, String> map = new LinkedHashMap<String, String>();
             Row row = sheet.getRow(i);
@@ -625,44 +628,44 @@ public class FbaPackingListService implements IFbaPackingListService {
                     map.put(columns.get(j), cellData);
                 }
             }
-            rowMap.put(i,map);
+            rowMap.put(i, map);
         }
         List<FbaPackingListShopSku> fbaPackingListShopSkuList = new ArrayList<>();
         SbErroEntity sbErroEntity = new SbErroEntity(";");
         Integer shopId = null;
 
         //读取箱号和箱子名称
-        Map<String,String> boxFbaShipmentId=new HashMap<>();
-        Map<String,String> boxNameMap=new HashMap<>();
+        Map<String, String> boxFbaShipmentId = new HashMap<>();
+        Map<String, String> boxNameMap = new HashMap<>();
         //读取sku数据
-        for (int i= rownumTitle + 1; i <= rownum; i++) {
-            Map<String, String> dataMap=rowMap.get(i);
-            if(dataMap==null){
+        for (int i = rownumTitle + 1; i <= rownum; i++) {
+            Map<String, String> dataMap = rowMap.get(i);
+            if (dataMap == null) {
                 continue;
             }
-            String str=dataMap.get("商品总数");
-            if("箱号".equals(str)){
-                for(int j=9;j<columns.size();j++){
-                    if(columns.get(j).startsWith("箱子")){
-                        boxFbaShipmentId.put(columns.get(j),dataMap.get(columns.get(j)).replace("U000","U"));
+            String str = dataMap.get("商品总数");
+            if ("箱号".equals(str)) {
+                for (int j = 9; j < columns.size(); j++) {
+                    if (columns.get(j).startsWith("箱子")) {
+                        boxFbaShipmentId.put(columns.get(j), dataMap.get(columns.get(j)).replace("U000", "U"));
                     }
                 }
-            }else if("箱子名称".equals(str)){
-                for(int j=9;j<columns.size();j++){
-                    if(columns.get(j).startsWith("箱子")){
-                        boxNameMap.put(columns.get(j),dataMap.get(columns.get(j)));
+            } else if ("箱子名称".equals(str)) {
+                for (int j = 9; j < columns.size(); j++) {
+                    if (columns.get(j).startsWith("箱子")) {
+                        boxNameMap.put(columns.get(j), dataMap.get(columns.get(j)));
                     }
                 }
                 break;
             }
         }
-        HashSet<String> skuSet=new HashSet<>();
-        Integer shopSkuId=0;
+        HashSet<String> skuSet = new HashSet<>();
+        Integer shopSkuId = 0;
         //读取sku数据
-        for (int i= rownumTitle + 1; i <= rownum; i++) {
+        for (int i = rownumTitle + 1; i <= rownum; i++) {
             SbErroEntity sbErroEntityItem = new SbErroEntity();
-            Map<String, String> dataMap=rowMap.get(i);
-            if(dataMap==null){
+            Map<String, String> dataMap = rowMap.get(i);
+            if (dataMap == null) {
                 continue;
             }
             String shopSku = dataMap.get("SKU");
@@ -684,11 +687,11 @@ public class FbaPackingListService implements IFbaPackingListService {
             //判断sku是否重复
             if (skuSet.contains(shopSku)) {
                 sbErroEntityItem.append(String.format(FbaPackingListConstant.SHOP_SKU_REPEAT, shopSku));
-            }else{
+            } else {
                 skuSet.add(shopSku);
             }
             List<Integer> fbaShipmentIdNumList = new ArrayList<>();
-            for(String key:boxFbaShipmentId.keySet()){
+            for (String key : boxFbaShipmentId.keySet()) {
                 String quantityStr = dataMap.get(key);
                 if (StringUtils.isEmpty(quantityStr)) {
                     continue;
@@ -744,7 +747,16 @@ public class FbaPackingListService implements IFbaPackingListService {
         fbaPackingList.setId(params.getId());
         fbaPackingList.setRemark(params.getRemark());
         customFbaPackingListMapper.updateByPrimaryKeySelective(fbaPackingList);
+        saveFbaPackingListRemarkHis(params, dealUserId);
         return BaseResponse.success();
+    }
+
+    private void saveFbaPackingListRemarkHis(SaveFbaPackingListRemarkReq params, Integer dealUserId) {
+        FbaPackingListRemarkHis fbaPackingListRemarkHis=new FbaPackingListRemarkHis();
+        fbaPackingListRemarkHis.setRemark(params.getRemark());
+        fbaPackingListRemarkHis.setFbaPackingListId(params.getId());
+        fbaPackingListRemarkHis.setCreateBy(dealUserId);
+        customFbaPackingListRemarkHisMapper.insertSelective(fbaPackingListRemarkHis);
     }
 
     @Override
@@ -791,7 +803,7 @@ public class FbaPackingListService implements IFbaPackingListService {
                     invoiceSkuInfo.setHsCode(shopSkuFullProductName.getHsCode());
                     invoiceSkuInfo.setWeight(shopSkuFullProductName.getWeight());
                     //获取美元 大概的
-                    invoiceSkuInfo.setCostPrice(MathUtil.divide(invoiceSkuInfo.getCostPrice(),6.5,2));
+                    invoiceSkuInfo.setCostPrice(MathUtil.divide(invoiceSkuInfo.getCostPrice(), 6.5, 2));
                 }
             }
             if (StringUtils.isEmpty(invoiceSkuInfo.getChineseProductName()) || StringUtils.isEmpty(invoiceSkuInfo.getEnglishProductName())) {

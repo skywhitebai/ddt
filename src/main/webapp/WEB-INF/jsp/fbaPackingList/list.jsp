@@ -245,6 +245,18 @@
         <img src="${pageContext.request.contextPath }/static/img/loading.gif" width="100px">
     </div>
 </div>
+<div id="dlgFbaPackingListRemarkHis" class="easyui-dialog" style="width: 850px; height: 500px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true, buttons:'#dlg-buttons', top:50,align:'center'">
+    <input type="hidden" id="dlgFbaPackingListRemarkHis_fbaPackingListId">
+    <!--查询条件-->
+    <div class="easyui-panel">
+        <a href="javascript:void(0)" onclick="bindFbaPackingListRemarkHis()" class="easyui-linkbutton"
+           data-options="iconCls:'icon-search'"
+           style="width: 80px">查 询</a>
+    </div>
+    <table id="dgFbaPackingListRemarkHis" style="width: 100%; height: auto">
+    </table>
+</div>
 </body>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -514,13 +526,16 @@
                 {title: '创建时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
                 {
-                    title: '备注', field: 'remark', width: 200,
+                    title: '备注', field: 'remark', width: 222,
                     formatter: function (value, row, rowIndex) {
+                        let text;
                         if (isEmpty(value)) {
-                            return '<input class="easyui-textbox " style="width:100%"  onchange="saveFbaPackingListRemark(this,' + row.id + ')">';
+                            text = '<input class="textbox " onchange="saveFbaPackingListRemark(this,' + row.id + ')">';
                         } else {
-                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveFbaPackingListRemark(this,' + row.id + ')">';
+                            text = '<input class="textbox" value="' + value + '" onchange="saveFbaPackingListRemark(this,' + row.id + ')">';
                         }
+                        text = text + '<a href="#" onclick="showFbaPackingListRemarkHis(' + row.id + ')" title="查看">查看</a>';
+                        return text;
                     }
                 },
                 {title: '箱子数量', field: 'boxNumber', width: 60},
@@ -559,7 +574,54 @@
         })
         $(dg).datagrid('clearSelections');
     }
-
+    function showFbaPackingListRemarkHis(fbaPackingListId) {
+        $('#dlgFbaPackingListRemarkHis').dialog('open').dialog('setTitle', '备注历史');
+        $('#dlgFbaPackingListRemarkHis_fbaPackingListId').val(fbaPackingListId);
+        bindFbaPackingListRemarkHis();
+    }
+    function bindFbaPackingListRemarkHis() {
+        dg = '#dgFbaPackingListRemarkHis';
+        url = "${pageContext.request.contextPath }/fbaPackingListRemarkHis/listFbaPackingListRemarkHis";
+        title = "店铺sku头程费信息";
+        queryParams = {
+            fbaPackingListId: $('#dlgFbaPackingListRemarkHis_fbaPackingListId').val()
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: false,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 15,
+            pageList: [10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'id',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '备注', field: 'remark', width: 160},
+                {title: '修改人', field: 'createUserRealName', width: 80},
+                {title: '创建时间', field: 'createTime', width: 180}
+            ]],
+            toolbar: [{
+                id: 'btnReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        $(dg).datagrid('clearSelections');
+    }
     var editIndex = undefined;
 
     function endEditing() {
