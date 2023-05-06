@@ -112,4 +112,12 @@ public class InternalOrderNumberTransportController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return internalOrderNumberTransportService.saveInternalOrderNumberTransportWight(params, dealUserId);
     }
+
+    @RequestMapping("/importInternalOrderNumberTransport")
+    @ResponseBody
+    @MenuAnnotation("internalOrderNumberTransport/index")
+    public BaseResponse importInternalOrderNumberTransport(MultipartFile file) {
+        Integer dealUserId = getCurrentUserId();
+        return internalOrderNumberTransportService.importInternalOrderNumberTransport(file, dealUserId);
+    }
 }

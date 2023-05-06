@@ -40,6 +40,10 @@ public class LongStorageFee {
 
     private String enrolledInSmallAndLight;
 
+    private String surchargeAgeTier;
+
+    private BigDecimal rateSurcharge;
+
     private Date createTime;
 
     private Integer createBy;
@@ -186,6 +190,22 @@ public class LongStorageFee {
 
     public void setEnrolledInSmallAndLight(String enrolledInSmallAndLight) {
         this.enrolledInSmallAndLight = enrolledInSmallAndLight == null ? null : enrolledInSmallAndLight.trim();
+    }
+
+    public String getSurchargeAgeTier() {
+        return surchargeAgeTier;
+    }
+
+    public void setSurchargeAgeTier(String surchargeAgeTier) {
+        this.surchargeAgeTier = surchargeAgeTier == null ? null : surchargeAgeTier.trim();
+    }
+
+    public BigDecimal getRateSurcharge() {
+        return rateSurcharge;
+    }
+
+    public void setRateSurcharge(BigDecimal rateSurcharge) {
+        this.rateSurcharge = rateSurcharge;
     }
 
     public Date getCreateTime() {

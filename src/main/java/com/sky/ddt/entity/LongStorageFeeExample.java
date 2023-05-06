@@ -1276,6 +1276,136 @@ public class LongStorageFeeExample {
             return (Criteria) this;
         }
 
+        public Criteria andSurchargeAgeTierIsNull() {
+            addCriterion("surcharge_age_tier is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSurchargeAgeTierIsNotNull() {
+            addCriterion("surcharge_age_tier is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSurchargeAgeTierEqualTo(String value) {
+            addCriterion("surcharge_age_tier =", value, "surchargeAgeTier");
+            return (Criteria) this;
+        }
+
+        public Criteria andSurchargeAgeTierNotEqualTo(String value) {
+            addCriterion("surcharge_age_tier <>", value, "surchargeAgeTier");
+            return (Criteria) this;
+        }
+
+        public Criteria andSurchargeAgeTierGreaterThan(String value) {
+            addCriterion("surcharge_age_tier >", value, "surchargeAgeTier");
+            return (Criteria) this;
+        }
+
+        public Criteria andSurchargeAgeTierGreaterThanOrEqualTo(String value) {
+            addCriterion("surcharge_age_tier >=", value, "surchargeAgeTier");
+            return (Criteria) this;
+        }
+
+        public Criteria andSurchargeAgeTierLessThan(String value) {
+            addCriterion("surcharge_age_tier <", value, "surchargeAgeTier");
+            return (Criteria) this;
+        }
+
+        public Criteria andSurchargeAgeTierLessThanOrEqualTo(String value) {
+            addCriterion("surcharge_age_tier <=", value, "surchargeAgeTier");
+            return (Criteria) this;
+        }
+
+        public Criteria andSurchargeAgeTierLike(String value) {
+            addCriterion("surcharge_age_tier like", value, "surchargeAgeTier");
+            return (Criteria) this;
+        }
+
+        public Criteria andSurchargeAgeTierNotLike(String value) {
+            addCriterion("surcharge_age_tier not like", value, "surchargeAgeTier");
+            return (Criteria) this;
+        }
+
+        public Criteria andSurchargeAgeTierIn(List<String> values) {
+            addCriterion("surcharge_age_tier in", values, "surchargeAgeTier");
+            return (Criteria) this;
+        }
+
+        public Criteria andSurchargeAgeTierNotIn(List<String> values) {
+            addCriterion("surcharge_age_tier not in", values, "surchargeAgeTier");
+            return (Criteria) this;
+        }
+
+        public Criteria andSurchargeAgeTierBetween(String value1, String value2) {
+            addCriterion("surcharge_age_tier between", value1, value2, "surchargeAgeTier");
+            return (Criteria) this;
+        }
+
+        public Criteria andSurchargeAgeTierNotBetween(String value1, String value2) {
+            addCriterion("surcharge_age_tier not between", value1, value2, "surchargeAgeTier");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateSurchargeIsNull() {
+            addCriterion("rate_surcharge is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateSurchargeIsNotNull() {
+            addCriterion("rate_surcharge is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateSurchargeEqualTo(BigDecimal value) {
+            addCriterion("rate_surcharge =", value, "rateSurcharge");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateSurchargeNotEqualTo(BigDecimal value) {
+            addCriterion("rate_surcharge <>", value, "rateSurcharge");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateSurchargeGreaterThan(BigDecimal value) {
+            addCriterion("rate_surcharge >", value, "rateSurcharge");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateSurchargeGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("rate_surcharge >=", value, "rateSurcharge");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateSurchargeLessThan(BigDecimal value) {
+            addCriterion("rate_surcharge <", value, "rateSurcharge");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateSurchargeLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("rate_surcharge <=", value, "rateSurcharge");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateSurchargeIn(List<BigDecimal> values) {
+            addCriterion("rate_surcharge in", values, "rateSurcharge");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateSurchargeNotIn(List<BigDecimal> values) {
+            addCriterion("rate_surcharge not in", values, "rateSurcharge");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateSurchargeBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("rate_surcharge between", value1, value2, "rateSurcharge");
+            return (Criteria) this;
+        }
+
+        public Criteria andRateSurchargeNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("rate_surcharge not between", value1, value2, "rateSurcharge");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

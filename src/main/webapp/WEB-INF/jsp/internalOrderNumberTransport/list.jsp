@@ -68,6 +68,8 @@
        data-options="iconCls:'icon-search'">导入头程费率</a>
     <a href="javascript:void(0)" onclick="exportInternalOrderNumberTransport()" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'">导出内部单号发货记录</a>
+    <a href="javascript:void(0)" onclick="showDialogImport('internalOrderNumberTransport')" class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'">导入内部单号发货记录</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 
@@ -439,6 +441,11 @@
                 importTitle = "导入头程费率（不会更新已锁定数据）";
                 importTemplateUrl = "${pageContext.request.contextPath }/static/template/internalOrderNumberTransport/headTripCostRateImportTemplate.xlsx";
                 importUrl = '${pageContext.request.contextPath }/internalOrderNumberTransport/importHeadTripCostRate';
+                break;
+            case 'internalOrderNumberTransport':
+                importTitle = "导入内部单号发货记录";
+                importTemplateUrl = "${pageContext.request.contextPath }/static/template/internalOrderNumberTransport/internalOrderNumberTransportTemplate.xlsx";
+                importUrl = '${pageContext.request.contextPath }/internalOrderNumberTransport/importInternalOrderNumberTransport';
                 break;
         }
         if (isEmpty(importTitle)) {

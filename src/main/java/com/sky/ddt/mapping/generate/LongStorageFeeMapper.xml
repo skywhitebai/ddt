@@ -20,6 +20,8 @@
     <result column="volume_unit" jdbcType="VARCHAR" property="volumeUnit" />
     <result column="country" jdbcType="VARCHAR" property="country" />
     <result column="enrolled_in_small_and_light" jdbcType="VARCHAR" property="enrolledInSmallAndLight" />
+    <result column="surcharge_age_tier" jdbcType="VARCHAR" property="surchargeAgeTier" />
+    <result column="rate_surcharge" jdbcType="DECIMAL" property="rateSurcharge" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="create_by" jdbcType="INTEGER" property="createBy" />
   </resultMap>
@@ -85,7 +87,8 @@
     id, finance_id, snapshot_date, sku, shop_sku_id, fnsku, asin, product_name, condition_type, 
     qty_charged_12_mo_long_term_storage_fee, per_unit_volume, currency, mo_12_long_terms_storage_fee, 
     qty_charged_6_mo_long_term_storage_fee, mo_6_long_terms_storage_fee, volume_unit, 
-    country, enrolled_in_small_and_light, create_time, create_by
+    country, enrolled_in_small_and_light, surcharge_age_tier, rate_surcharge, create_time, 
+    create_by
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.LongStorageFeeExample" resultMap="BaseResultMap">
     select
@@ -127,14 +130,16 @@
       per_unit_volume, currency, mo_12_long_terms_storage_fee, 
       qty_charged_6_mo_long_term_storage_fee, mo_6_long_terms_storage_fee, 
       volume_unit, country, enrolled_in_small_and_light, 
-      create_time, create_by)
+      surcharge_age_tier, rate_surcharge, create_time, 
+      create_by)
     values (#{financeId,jdbcType=INTEGER}, #{snapshotDate,jdbcType=TIMESTAMP}, #{sku,jdbcType=VARCHAR}, 
       #{shopSkuId,jdbcType=INTEGER}, #{fnsku,jdbcType=VARCHAR}, #{asin,jdbcType=VARCHAR}, 
       #{productName,jdbcType=VARCHAR}, #{conditionType,jdbcType=VARCHAR}, #{qtyCharged12MoLongTermStorageFee,jdbcType=DECIMAL}, 
       #{perUnitVolume,jdbcType=DECIMAL}, #{currency,jdbcType=VARCHAR}, #{mo12LongTermsStorageFee,jdbcType=DECIMAL}, 
       #{qtyCharged6MoLongTermStorageFee,jdbcType=DECIMAL}, #{mo6LongTermsStorageFee,jdbcType=DECIMAL}, 
       #{volumeUnit,jdbcType=VARCHAR}, #{country,jdbcType=VARCHAR}, #{enrolledInSmallAndLight,jdbcType=VARCHAR}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER})
+      #{surchargeAgeTier,jdbcType=VARCHAR}, #{rateSurcharge,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createBy,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.LongStorageFee">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -192,6 +197,12 @@
       </if>
       <if test="enrolledInSmallAndLight != null">
         enrolled_in_small_and_light,
+      </if>
+      <if test="surchargeAgeTier != null">
+        surcharge_age_tier,
+      </if>
+      <if test="rateSurcharge != null">
+        rate_surcharge,
       </if>
       <if test="createTime != null">
         create_time,
@@ -251,6 +262,12 @@
       </if>
       <if test="enrolledInSmallAndLight != null">
         #{enrolledInSmallAndLight,jdbcType=VARCHAR},
+      </if>
+      <if test="surchargeAgeTier != null">
+        #{surchargeAgeTier,jdbcType=VARCHAR},
+      </if>
+      <if test="rateSurcharge != null">
+        #{rateSurcharge,jdbcType=DECIMAL},
       </if>
       <if test="createTime != null">
         #{createTime,jdbcType=TIMESTAMP},
@@ -323,6 +340,12 @@
       <if test="record.enrolledInSmallAndLight != null">
         enrolled_in_small_and_light = #{record.enrolledInSmallAndLight,jdbcType=VARCHAR},
       </if>
+      <if test="record.surchargeAgeTier != null">
+        surcharge_age_tier = #{record.surchargeAgeTier,jdbcType=VARCHAR},
+      </if>
+      <if test="record.rateSurcharge != null">
+        rate_surcharge = #{record.rateSurcharge,jdbcType=DECIMAL},
+      </if>
       <if test="record.createTime != null">
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -354,6 +377,8 @@
       volume_unit = #{record.volumeUnit,jdbcType=VARCHAR},
       country = #{record.country,jdbcType=VARCHAR},
       enrolled_in_small_and_light = #{record.enrolledInSmallAndLight,jdbcType=VARCHAR},
+      surcharge_age_tier = #{record.surchargeAgeTier,jdbcType=VARCHAR},
+      rate_surcharge = #{record.rateSurcharge,jdbcType=DECIMAL},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       create_by = #{record.createBy,jdbcType=INTEGER}
     <if test="_parameter != null">
@@ -414,6 +439,12 @@
       <if test="enrolledInSmallAndLight != null">
         enrolled_in_small_and_light = #{enrolledInSmallAndLight,jdbcType=VARCHAR},
       </if>
+      <if test="surchargeAgeTier != null">
+        surcharge_age_tier = #{surchargeAgeTier,jdbcType=VARCHAR},
+      </if>
+      <if test="rateSurcharge != null">
+        rate_surcharge = #{rateSurcharge,jdbcType=DECIMAL},
+      </if>
       <if test="createTime != null">
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -442,6 +473,8 @@
       volume_unit = #{volumeUnit,jdbcType=VARCHAR},
       country = #{country,jdbcType=VARCHAR},
       enrolled_in_small_and_light = #{enrolledInSmallAndLight,jdbcType=VARCHAR},
+      surcharge_age_tier = #{surchargeAgeTier,jdbcType=VARCHAR},
+      rate_surcharge = #{rateSurcharge,jdbcType=DECIMAL},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_by = #{createBy,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}

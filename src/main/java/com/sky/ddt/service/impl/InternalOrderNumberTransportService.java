@@ -26,10 +26,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author baixueping
@@ -365,7 +362,55 @@ public class InternalOrderNumberTransportService implements IInternalOrderNumber
         }
         return BaseResponse.success();
     }
-
+    @Override
+    public BaseResponse importInternalOrderNumberTransport(MultipartFile file, Integer dealUserId) {
+        if (file == null) {
+            return BaseResponse.failMessage("请选择要上传的文件");
+        }
+        //读取excel 转换为list
+        List<Map<String, String>> list = ExcelUtil.getListByExcel(file);
+        if (list == null || list.size() == 0) {
+            return BaseResponse.failMessage("导入的数据内容为空");
+        }
+        SbErroEntity sbErro = new SbErroEntity(";");
+        Integer emptyCount = 0;
+        List<AddInternalOrderNumberTransportRequest> addInternalOrderNumberTransportRequestList=new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            Map<String, String> map = list.get(i);
+            if (map.containsKey("isEmpty")) {
+                emptyCount++;
+                continue;
+            }
+            SbErroEntity sbErroItem = new SbErroEntity();
+            String subOrderNumber = map.get("内部子单号");
+            String fbaShipmentId = map.get("FBAshipmentID");
+            String transferOrderNo = map.get("转单号");
+            if (StringUtils.isEmpty(subOrderNumber)) {
+                sbErroItem.append(InternalOrderNumberTransportConstant.SUB_ORDER_NUMBER_EMPTY);
+            }
+            if (StringUtils.isEmpty(fbaShipmentId)) {
+                sbErroItem.append(InternalOrderNumberTransportConstant.FBA_SHIPMENT_ID_EMPTY);
+            }
+            if (StringUtils.isEmpty(transferOrderNo)) {
+                sbErroItem.append(InternalOrderNumberTransportConstant.TRANSFER_ORDER_NO_EMPTY);
+            }
+            AddInternalOrderNumberTransportRequest addInternalOrderNumberTransportRequest=new AddInternalOrderNumberTransportRequest();
+            addInternalOrderNumberTransportRequest.setSubOrderNumber(subOrderNumber);
+            addInternalOrderNumberTransportRequest.setFbaShipmentId(fbaShipmentId);
+            addInternalOrderNumberTransportRequest.setTransferOrderNo(transferOrderNo);
+            addInternalOrderNumberTransportRequestList.add(addInternalOrderNumberTransportRequest);
+            if (sbErroItem.isFail()) {
+                sbErro.append("第" + (i + 2) + "行：" + sbErroItem.getMessage());
+            }
+        }
+        if (sbErro.isFail()) {
+            return sbErro.getResponse();
+        }
+        if (list.size() == emptyCount) {
+            return BaseResponse.failMessage("导入的数据内容为空");
+        }
+        return batchAddInternalOrderNumberTransport(addInternalOrderNumberTransportRequestList,dealUserId);
+    }
     private InternalOrderNumberTransport getInternalOrderNumberTransportBySubOrderNumber(String subOrderNumber) {
         if (StringUtils.isEmpty(subOrderNumber)) {
             return null;
@@ -410,6 +455,8 @@ public class InternalOrderNumberTransportService implements IInternalOrderNumber
         customInternalOrderNumberTransportMapper.updateByPrimaryKey(internalOrderNumberTransport);
         return BaseResponse.success();
     }
+
+
 
     private boolean repeatOrderNumber(String orderNumber, List<Map<String, String>> list) {
         int count = 0;

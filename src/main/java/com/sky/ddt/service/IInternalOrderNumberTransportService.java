@@ -85,4 +85,6 @@ public interface IInternalOrderNumberTransportService {
     void lockHeadTripCostRate(Integer shopId, Date monthDate);
 
     BaseResponse saveInternalOrderNumberTransportWight(SaveInternalOrderNumberTransportWightRequest params, Integer dealUserId);
+
+    BaseResponse importInternalOrderNumberTransport(MultipartFile file, Integer dealUserId);
 }
