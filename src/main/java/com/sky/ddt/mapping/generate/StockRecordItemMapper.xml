@@ -14,6 +14,8 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_by" jdbcType="INTEGER" property="updateBy" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="print_quantity" jdbcType="INTEGER" property="printQuantity" />
+    <result column="print_remark" jdbcType="VARCHAR" property="printRemark" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -75,7 +77,8 @@
   </sql>
   <sql id="Base_Column_List">
     id, stock_record_id, shop_sku_id, stock_quantity, stock_quantity_ky, stock_quantity_kp, 
-    stock_quantity_hy, production_quantity, create_by, create_time, update_by, update_time
+    stock_quantity_hy, production_quantity, create_by, create_time, update_by, update_time, 
+    print_quantity, print_remark
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.StockRecordItemExample" resultMap="BaseResultMap">
     select
@@ -114,11 +117,13 @@
     insert into stock_record_item (stock_record_id, shop_sku_id, stock_quantity, 
       stock_quantity_ky, stock_quantity_kp, stock_quantity_hy, 
       production_quantity, create_by, create_time, 
-      update_by, update_time)
+      update_by, update_time, print_quantity, 
+      print_remark)
     values (#{stockRecordId,jdbcType=INTEGER}, #{shopSkuId,jdbcType=INTEGER}, #{stockQuantity,jdbcType=INTEGER}, 
       #{stockQuantityKy,jdbcType=INTEGER}, #{stockQuantityKp,jdbcType=INTEGER}, #{stockQuantityHy,jdbcType=INTEGER}, 
       #{productionQuantity,jdbcType=INTEGER}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP})
+      #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{printQuantity,jdbcType=INTEGER}, 
+      #{printRemark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.StockRecordItem">
     <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
@@ -159,6 +164,12 @@
       <if test="updateTime != null">
         update_time,
       </if>
+      <if test="printQuantity != null">
+        print_quantity,
+      </if>
+      <if test="printRemark != null">
+        print_remark,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="stockRecordId != null">
@@ -193,6 +204,12 @@
       </if>
       <if test="updateTime != null">
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="printQuantity != null">
+        #{printQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="printRemark != null">
+        #{printRemark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -241,6 +258,12 @@
       <if test="record.updateTime != null">
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.printQuantity != null">
+        print_quantity = #{record.printQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="record.printRemark != null">
+        print_remark = #{record.printRemark,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -259,7 +282,9 @@
       create_by = #{record.createBy,jdbcType=INTEGER},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_by = #{record.updateBy,jdbcType=INTEGER},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      print_quantity = #{record.printQuantity,jdbcType=INTEGER},
+      print_remark = #{record.printRemark,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -300,6 +325,12 @@
       <if test="updateTime != null">
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="printQuantity != null">
+        print_quantity = #{printQuantity,jdbcType=INTEGER},
+      </if>
+      <if test="printRemark != null">
+        print_remark = #{printRemark,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -315,7 +346,9 @@
       create_by = #{createBy,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_by = #{updateBy,jdbcType=INTEGER},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      print_quantity = #{printQuantity,jdbcType=INTEGER},
+      print_remark = #{printRemark,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>

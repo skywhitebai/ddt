@@ -48,7 +48,7 @@
 </table>
 
 <!--发货单详情-->
-<div id="dlgStockRecordItem" class="easyui-dialog" style="width: 1200px; height: 660px; padding: 10px 20px"
+<div id="dlgStockRecordItem" class="easyui-dialog" style="width: 1500px; height: 660px; padding: 10px 20px"
      data-options="closed:true, resizable:true, modal:true, align:'center'">
     <div>
         <input type="hidden" id="s_stockRecordId">
@@ -67,7 +67,11 @@
            data-options="iconCls:'icon-cancel'" onclick="closeDlgStockRecordItem()">关闭</a>
     </div>
 </div>
-
+<div id="dlgStockRecordItemPrintRecord" class="easyui-dialog" style="width: 780px; height: 400px; padding: 10px 20px"
+     data-options="closed:true, resizable:true, modal:true,top:50, align:'center'">
+    <table id="dgStockRecordItemPrintRecord" style="width: 100%; height: auto">
+    </table>
+</div>
 
 </body>
 <script type="text/javascript">
@@ -225,7 +229,29 @@
                 {
                     title: '操作', field: 'shopSkuId', width: 60,
                     formatter: function (value, row, rowIndex) {
-                        return "<a href='${pageContext.request.contextPath }/shopSku/print?shopSku=" + row.shopSku + "&quantity=" + row.stockQuantity + "'  title='打印标签'  target='_blank'>打印标签</a>";
+                        return "<a href='${pageContext.request.contextPath }/shopSku/print?shopSku=" + row.shopSku + "&quantity=" + row.stockQuantity + "&stockRecordItemId=" + row.id + "'  title='打印标签'  target='_blank'>打印标签</a>";
+                    }
+                },
+                {
+                    title: '打印数量', field: 'printQuantity', width: 65,
+                    formatter: function (value, rowData, rowIndex) {
+                        var res = "";
+                        if (value != null && value != '') {
+                            res += '<a href="javascript:;" onclick="showStockRecordItemPrintRecordDialog(' + rowData.id + ')" title="查看打印数量">' + value + '</a>';
+                        } else {
+                            res += '<a href="javascript:;" onclick="showStockRecordItemPrintRecordDialog(' + rowData.id + ')" title="查看打印数量">暂未打印</a>';
+                        }
+                        return res;
+                    }
+                },
+                {
+                    title: '打印备注', field: 'printRemark', width: 300,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-textbox " style="width:100%"  onchange="savePrintRemark(this,' + row.id + ')">';
+                        } else {
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="savePrintRemark(this,' + row.id + ')">';
+                        }
                     }
                 }
             ]],
@@ -242,6 +268,67 @@
         //$(dg).datagrid('clearSelections');
     }
 
+    var stockRecordItemId;
+
+    function bindStockRecordItemPrintRecordData() {
+        dg = '#dgStockRecordItemPrintRecord';
+        url = "${pageContext.request.contextPath }/stockRecordItemPrintRecord/listStockRecordItemPrintRecord";
+        title = "打印历史记录";
+        queryParams = {
+            stockRecordItemId: stockRecordItemId
+        };
+        $(dg).datagrid({   //定位到Table标签，Table标签的ID是grid
+            url: url,   //指向后台的Action来获取当前菜单的信息的Json格式的数据
+            title: title,
+            iconCls: 'icon-view',
+            nowrap: true,
+            autoRowHeight: true,
+            striped: true,
+            collapsible: true,
+            pagination: true,
+            //singleSelect: true,
+            pageSize: 5,
+            pageList: [5, 10, 15, 20, 30, 50],
+            rownumbers: true,
+            //sortName: 'ID',    //根据某个字段给easyUI排序
+            //sortOrder: 'asc',
+            remoteSort: false,
+            idField: 'id',
+            queryParams: queryParams,  //异步查询的参数
+            columns: [[
+                {field: 'ck', checkbox: true},   //选择
+                {title: '打印数量', field: 'printQuantity', width: 80},
+                {title: '打印时间', field: 'createTime', width: 160},
+                {title: '打印人', field: 'createRealName', width: 90},
+                {
+                    title: '备注', field: 'remark', width: 300,
+                    formatter: function (value, row, rowIndex) {
+                        if (isEmpty(value)) {
+                            return '<input class="easyui-textbox " style="width:100%"  onchange="saveStockRecordItemPrintRecordRemark(this,' + row.id + ')">';
+                        } else {
+                            return '<input class="easyui-textbox" style="width:100%" value="' + value + '" onchange="saveStockRecordItemPrintRecordRemark(this,' + row.id + ')">';
+                        }
+                    }
+                }
+            ]],
+            toolbar: [{
+                id: 'btnSkuCostPriceReload',
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    //实现刷新栏目中的数据
+                    $(dg).datagrid("reload");
+                }
+            }]
+        })
+        $(dg).datagrid('clearSelections');
+    }
+
+    function showStockRecordItemPrintRecordDialog(id) {
+        $('#dlgStockRecordItemPrintRecord').dialog('open').dialog('setTitle', '打印记录');
+        stockRecordItemId = id;
+        bindStockRecordItemPrintRecordData();
+    }
 
     function exportStockRecord(stockRecordId, type) {
         url = "${pageContext.request.contextPath }/stockRecord/exportStockRecord?stockRecordId=" + stockRecordId + "&type=" + type;
@@ -275,5 +362,34 @@
             }
         });
     }
+
+    function savePrintRemark(input, stockRecordItemId) {
+        var printRemark = $(input).val();
+        $.post('${pageContext.request.contextPath }/stockRecordItem/savePrintRemark', {
+            stockRecordItemId: stockRecordItemId,
+            printRemark: printRemark
+        }, function (data) {
+            if (data.code == '200') {
+                bindData();
+            } else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+
+    function saveStockRecordItemPrintRecordRemark(input, id) {
+        var remark = $(input).val();
+        $.post('${pageContext.request.contextPath }/stockRecordItemPrintRecord/saveStockRecordItemPrintRecordRemark', {
+            id: id,
+            remark: remark
+        }, function (data) {
+            if (data.code == '200') {
+                bindData();
+            } else {
+                $.messager.alert("提示", data.message);
+            }
+        });
+    }
+
 </script>
 </html>

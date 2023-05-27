@@ -27,6 +27,10 @@ public class StockRecordItem {
 
     private Date updateTime;
 
+    private Integer printQuantity;
+
+    private String printRemark;
+
     public Integer getId() {
         return id;
     }
@@ -121,5 +125,21 @@ public class StockRecordItem {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getPrintQuantity() {
+        return printQuantity;
+    }
+
+    public void setPrintQuantity(Integer printQuantity) {
+        this.printQuantity = printQuantity;
+    }
+
+    public String getPrintRemark() {
+        return printRemark;
+    }
+
+    public void setPrintRemark(String printRemark) {
+        this.printRemark = printRemark == null ? null : printRemark.trim();
     }
 }

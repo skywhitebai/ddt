@@ -11,8 +11,7 @@
         <result column="locationNos" property="locationNos"/>
     </resultMap>
     <sql id="Custom_Column_List">
-        sri.id, sri.stock_record_id, sri.shop_sku_id, sri.stock_quantity, sri.stock_quantity_ky, sri.stock_quantity_kp,
-        stock_quantity_hy, sri.production_quantity, sri.create_by, sri.create_time, sri.update_by, sri.update_time,
+        sri.*,
          (SELECT GROUP_CONCAT(distinct sl.location_no SEPARATOR ',') FROM shop_sku_storage_location sssl,storage_location sl,shop_sku ss2 WHERE sssl.shop_sku_id=ss2.shop_sku_id AND sssl.storage_location_id=sl.id AND ss2.sku_id=ss.sku_id GROUP BY ss.shop_sku_id) locationNos
         </sql>
     <select id="listStockRecordItem"

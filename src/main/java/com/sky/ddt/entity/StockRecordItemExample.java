@@ -824,6 +824,136 @@ public class StockRecordItemExample {
             addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
+
+        public Criteria andPrintQuantityIsNull() {
+            addCriterion("print_quantity is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintQuantityIsNotNull() {
+            addCriterion("print_quantity is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintQuantityEqualTo(Integer value) {
+            addCriterion("print_quantity =", value, "printQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintQuantityNotEqualTo(Integer value) {
+            addCriterion("print_quantity <>", value, "printQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintQuantityGreaterThan(Integer value) {
+            addCriterion("print_quantity >", value, "printQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintQuantityGreaterThanOrEqualTo(Integer value) {
+            addCriterion("print_quantity >=", value, "printQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintQuantityLessThan(Integer value) {
+            addCriterion("print_quantity <", value, "printQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintQuantityLessThanOrEqualTo(Integer value) {
+            addCriterion("print_quantity <=", value, "printQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintQuantityIn(List<Integer> values) {
+            addCriterion("print_quantity in", values, "printQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintQuantityNotIn(List<Integer> values) {
+            addCriterion("print_quantity not in", values, "printQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintQuantityBetween(Integer value1, Integer value2) {
+            addCriterion("print_quantity between", value1, value2, "printQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintQuantityNotBetween(Integer value1, Integer value2) {
+            addCriterion("print_quantity not between", value1, value2, "printQuantity");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintRemarkIsNull() {
+            addCriterion("print_remark is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintRemarkIsNotNull() {
+            addCriterion("print_remark is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintRemarkEqualTo(String value) {
+            addCriterion("print_remark =", value, "printRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintRemarkNotEqualTo(String value) {
+            addCriterion("print_remark <>", value, "printRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintRemarkGreaterThan(String value) {
+            addCriterion("print_remark >", value, "printRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintRemarkGreaterThanOrEqualTo(String value) {
+            addCriterion("print_remark >=", value, "printRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintRemarkLessThan(String value) {
+            addCriterion("print_remark <", value, "printRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintRemarkLessThanOrEqualTo(String value) {
+            addCriterion("print_remark <=", value, "printRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintRemarkLike(String value) {
+            addCriterion("print_remark like", value, "printRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintRemarkNotLike(String value) {
+            addCriterion("print_remark not like", value, "printRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintRemarkIn(List<String> values) {
+            addCriterion("print_remark in", values, "printRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintRemarkNotIn(List<String> values) {
+            addCriterion("print_remark not in", values, "printRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintRemarkBetween(String value1, String value2) {
+            addCriterion("print_remark between", value1, value2, "printRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrintRemarkNotBetween(String value1, String value2) {
+            addCriterion("print_remark not between", value1, value2, "printRemark");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

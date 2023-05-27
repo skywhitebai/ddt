@@ -68,10 +68,12 @@
             font-size: 12px;
             font-weight: bold;
         }
+
         .colourNumber {
             font-size: 10px;
             font-weight: bold;
         }
+
         .made {
             font-size: 12px;
             font-weight: bold;
@@ -165,6 +167,7 @@
         hidePrint();
     });
     var globalFnsku;
+
     function showPrint(status) {
         if (status == 0) {
             $("#print").hide();
@@ -190,7 +193,7 @@
             $("#s_shopSku").val(decodeURI(shopSku));
             bindData();
         }
-        var quantity=getQueryVariable('quantity');
+        var quantity = getQueryVariable('quantity');
         if (!isEmpty(quantity)) {
             $("#quantity").val(decodeURI(quantity));
         }
@@ -226,17 +229,16 @@
                 $(".title").text(getTitle(data.data.title));
                 $(".sku").text(data.data.sku);
                 $(".shopParentSku").text(data.data.shopParentSku);
-                globalFnsku=data.data.fnsku;
+                globalFnsku = data.data.fnsku;
                 $(".new").text("New");
-                if(!isEmpty(data.data.colourNumber)){
+                if (!isEmpty(data.data.colourNumber)) {
                     $(".colourNumber").text(data.data.colourNumber);
                 }
                 $(".made").text("MADE IN CHINA");
                 showImg(data.data.imgUrl);
                 $("#sku_img").attr("src", data.data.imgUrl);
                 showPrint(data.data.status);
-            }
-            else {
+            } else {
                 showImg("");
                 alert(data.message);
             }
@@ -253,7 +255,7 @@
             $("#div_img").show();
             $("#div_img_show").show();
             $("#div_img_info").hide();
-            $("#sku_img").attr("src", imgUrl+"?x-oss-process=image/resize,m_fill,h_300,w_300");
+            $("#sku_img").attr("src", imgUrl + "?x-oss-process=image/resize,m_fill,h_300,w_300");
         }
     }
 
@@ -273,6 +275,7 @@
     function preview3(id) {
         $('#' + id).printArea();
     }
+
     function preview2(id) {
 
         var sprnhtml = $('#' + id).html();   //获取区域内容
@@ -283,14 +286,16 @@
     }
 
     function preview(id) {
-        if(isEmpty(globalFnsku)){
+        if (isEmpty(globalFnsku)) {
             alert('sku信息错误，fnsku不能为空');
             return;
         }
-        if(globalFnsku.indexOf("X") != 0&&globalFnsku.indexOf("0") != 0) {
+        if (globalFnsku.indexOf("X") != 0 && globalFnsku.indexOf("0") != 0) {
             alert('sku信息错误，fnsku必须以X或0开头');
             return;
         }
+        //保存打印记录
+        saveStockRecordItemPrintRecord();
         $("#search").hide();
         $("#div_img").hide();
         $("#print").hide();
@@ -298,6 +303,22 @@
         $("#search").show();
         $("#div_img").show();
         $("#print").show();
+    }
+
+
+    function saveStockRecordItemPrintRecord() {
+        var stockRecordItemId = getQueryVariable('stockRecordItemId');
+        if (!isEmpty(stockRecordItemId)) {
+            $.post('${pageContext.request.contextPath }/stockRecordItemPrintRecord/saveStockRecordItemPrintRecord', {
+                stockRecordItemId: stockRecordItemId
+            }, function (data) {
+                if (data.code == '200') {
+
+                } else {
+                    
+                }
+            });
+        }
     }
 
 </script>

@@ -3,8 +3,12 @@ package com.sky.ddt.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sky.ddt.dao.custom.CustomStockRecordItemMapper;
+import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.stockRecordItem.request.ListStockRecordItemRequest;
+import com.sky.ddt.dto.stockRecordItem.request.SavePrintRemarkRequest;
 import com.sky.ddt.dto.stockRecordItem.response.ListStockRecordItemResponse;
+import com.sky.ddt.entity.StockRecord;
+import com.sky.ddt.entity.StockRecordItem;
 import com.sky.ddt.service.IImgService;
 import com.sky.ddt.service.IStockRecordItemService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,5 +47,14 @@ public class StockRecordItemService implements IStockRecordItemService{
         }
         PageInfo<ListStockRecordItemResponse> page = new PageInfo<ListStockRecordItemResponse>(list);
         return page;
+    }
+
+    @Override
+    public BaseResponse savePrintRemark(SavePrintRemarkRequest params) {
+        StockRecordItem stockRecordItem = new StockRecordItem();
+        stockRecordItem.setId(params.getStockRecordItemId());
+        stockRecordItem.setPrintRemark(params.getPrintRemark());
+        customStockRecordItemMapper.updateByPrimaryKeySelective(stockRecordItem);
+        return BaseResponse.success();
     }
 }
