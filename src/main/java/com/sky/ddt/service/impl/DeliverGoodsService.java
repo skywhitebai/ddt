@@ -19,7 +19,10 @@ import com.sky.ddt.util.MathUtil;
 import com.sky.ddt.util.RegexUtil;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -27,10 +30,14 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.*;
 import java.util.stream.Collectors;
+
 
 /**
  * @author baixueping
@@ -765,14 +772,27 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         String path = DeliverGoodsService.class.getClassLoader().getResource("template/invoice/invoiceTemplateAmty.xlsx").getPath();
         Workbook wb = ExcelUtil.readExcel(path);
         Sheet sheetInovice = wb.getSheetAt(0);
-        CellStyle priceStyle = getPriceStyle(wb);
-        updateSheetInoviceAmty(sheetInovice, invoiceInfo, priceStyle);
+        CellStyle cellStyle = getCellStyle(wb);
+        updateSheetInoviceAmty(sheetInovice, invoiceInfo, cellStyle);
         //导出
         String fileName = "2254+美国-(美森限时达)+" + invoiceInfo.getFbaNo() + "-" + invoiceInfo.getShipmentId() + "-" + invoiceInfo.getNumberOfBoxes() + "箱";
         return exportExcel(response, wb, fileName);
     }
 
-    private void updateSheetInoviceAmty(Sheet sheetInovice, InvoiceInfo invoiceInfo, CellStyle priceStyle) {
+    private CellStyle getCellStyle(Workbook wb) {
+        CellStyle cellStyle = wb.createCellStyle();
+        cellStyle.setBorderBottom(CellStyle.BORDER_THIN); //下边框
+        cellStyle.setBorderLeft(CellStyle.BORDER_THIN);//左边框
+        cellStyle.setBorderTop(CellStyle.BORDER_THIN);//上边框
+        cellStyle.setBorderRight(CellStyle.BORDER_THIN);//右边框
+        Font font = wb.createFont();
+        font.setFontName("宋体");
+        font.setFontHeightInPoints((short) 12);
+        cellStyle.setFont(font);
+        return cellStyle;
+    }
+
+    private void updateSheetInoviceAmty(Sheet sheetInovice, InvoiceInfo invoiceInfo, CellStyle cellStyle) {
         //设置总箱数
         Row row11 = sheetInovice.getRow(10);
         row11.getCell(5).setCellValue(invoiceInfo.getNumberOfBoxes());
@@ -794,9 +814,9 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         Row rowAddress = sheetInovice.getRow(12);
         rowAddress.getCell(1).setCellValue(invoiceInfo.getShipTo());
         //设置收件电话
-        String postalCode=getPostalCode(invoiceInfo.getShipTo());
+        String postalCode = getPostalCode(invoiceInfo.getShipTo());
         Row rowPhone = sheetInovice.getRow(13);
-        rowPhone.getCell(1).setCellValue(postalCode+postalCode);
+        rowPhone.getCell(1).setCellValue(postalCode + postalCode);
 
         //设置邮编
         Row rowPostalCode = sheetInovice.getRow(14);
@@ -806,32 +826,35 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         for (int i = 0; i < invoiceInfo.getInvoicePackingInfoList().size(); i++) {
             Row rowGoodsInfo = sheetInovice.createRow(18 + i);
             InvoicePackingInfo invoicePackingInfo = invoiceInfo.getInvoicePackingInfoList().get(i);
-            rowGoodsInfo.createCell(0).setCellValue(invoicePackingInfo.getContainerNo());
-            rowGoodsInfo.createCell(1).setCellValue(invoicePackingInfo.getChineseProductName());
-            rowGoodsInfo.createCell(2).setCellValue(invoicePackingInfo.getEnglishProductName());
-            rowGoodsInfo.createCell(3).setCellValue(invoicePackingInfo.getChineseMaterial());//中文材质
-            rowGoodsInfo.createCell(4).setCellValue(invoicePackingInfo.getEnglishMaterial());//英文材质
-            rowGoodsInfo.createCell(5).setCellValue("穿");//中文用途
-            rowGoodsInfo.createCell(6).setCellValue("Wear");//英文用途
-            rowGoodsInfo.createCell(7).setCellValue(invoicePackingInfo.getHsCode());// 海关编码
-            rowGoodsInfo.createCell(8).setCellValue(invoicePackingInfo.getQuantity());
-            rowGoodsInfo.createCell(9).setCellValue(invoicePackingInfo.getCostPrice());
-            rowGoodsInfo.createCell(10).setCellValue(invoicePackingInfo.getTotalCostPrice());
-            rowGoodsInfo.createCell(11).setCellValue(1);//箱数
-            rowGoodsInfo.createCell(12).setCellValue("不带电不带磁");//是否带电或带磁
-            rowGoodsInfo.createCell(13).setCellValue(invoicePackingInfo.getBrand());
-            //rowGoodsInfo.createCell(14).setCellValue();//Model（型号
-            rowGoodsInfo.createCell(15).setCellValue(invoicePackingInfo.getTotalWeight());
+            ExcelUtil.createCell(rowGoodsInfo, 0, invoicePackingInfo.getContainerNo(), cellStyle);
+            ExcelUtil.createCell(rowGoodsInfo, 1, invoicePackingInfo.getChineseProductName(), cellStyle);
+            ExcelUtil.createCell(rowGoodsInfo, 2, invoicePackingInfo.getEnglishProductName(), cellStyle);
+            ExcelUtil.createCell(rowGoodsInfo, 3, invoicePackingInfo.getChineseMaterial(), cellStyle);//中文材质
+            ExcelUtil.createCell(rowGoodsInfo, 4, invoicePackingInfo.getEnglishMaterial(), cellStyle);//英文材质
+            ExcelUtil.createCell(rowGoodsInfo, 5, "穿", cellStyle);//中文用途
+            ExcelUtil.createCell(rowGoodsInfo, 6, "Wear", cellStyle);//英文用途
+            ExcelUtil.createCell(rowGoodsInfo, 7, invoicePackingInfo.getHsCode(), cellStyle);//海关编码
+            ExcelUtil.createCell(rowGoodsInfo, 8, invoicePackingInfo.getQuantity(), cellStyle);
+            ExcelUtil.createCell(rowGoodsInfo, 9, invoicePackingInfo.getCostPrice(), cellStyle);
+            ExcelUtil.createCell(rowGoodsInfo, 10, invoicePackingInfo.getTotalCostPrice(), cellStyle);
+            ExcelUtil.createCell(rowGoodsInfo, 11, 1, cellStyle);//箱数
+            ExcelUtil.createCell(rowGoodsInfo, 12, "不带电不带磁", cellStyle);///是否带电或带磁
+            ExcelUtil.createCell(rowGoodsInfo, 13, invoicePackingInfo.getBrand(), cellStyle);
+            ExcelUtil.createCell(rowGoodsInfo, 14, "无", cellStyle);
+            ExcelUtil.createCell(rowGoodsInfo, 15, invoicePackingInfo.getTotalWeight(), cellStyle);
             if (invoicePackingInfo.getTotalWeight() != null) {
                 totalWeight += invoicePackingInfo.getTotalWeight();
             }
-            rowGoodsInfo.createCell(16).setCellValue(invoicePackingInfo.getWeight());
-            rowGoodsInfo.createCell(17).setCellValue(invoicePackingInfo.getLength());
-            rowGoodsInfo.createCell(18).setCellValue(invoicePackingInfo.getWidth());
-            rowGoodsInfo.createCell(19).setCellValue(invoicePackingInfo.getHeight());
+            ExcelUtil.createCell(rowGoodsInfo, 16, invoicePackingInfo.getWeight(), cellStyle);
+            ExcelUtil.createCell(rowGoodsInfo, 17, invoicePackingInfo.getLength(), cellStyle);
+            ExcelUtil.createCell(rowGoodsInfo, 18, invoicePackingInfo.getWidth(), cellStyle);
+            ExcelUtil.createCell(rowGoodsInfo, 19, invoicePackingInfo.getHeight(), cellStyle);
 
-            rowGoodsInfo.createCell(22).setCellValue("无");
-            rowGoodsInfo.createCell(23).setCellValue("不享受");
+
+            ExcelUtil.createCell(rowGoodsInfo, 21, "1", cellStyle);
+            ExcelUtil.createCell(rowGoodsInfo, 22, "无", cellStyle);
+            ExcelUtil.createCell(rowGoodsInfo, 23, "不享受", cellStyle);
+            rowGoodsInfo.setRowStyle(cellStyle);
         }
         rowWeight.getCell(5).setCellValue(totalWeight);
     }

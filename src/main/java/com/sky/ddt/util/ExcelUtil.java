@@ -310,4 +310,29 @@ public class ExcelUtil {
             return BaseResponse.fail();
         }
     }
+
+    public static Cell createCell(Row row, int column, String value, CellStyle style) {
+        Cell cell = row.createCell(column);
+        cell.setCellValue(cell.getRow().getSheet().getWorkbook().getCreationHelper().createRichTextString(value));
+        if (style != null) {
+            cell.setCellStyle(style);
+        }
+        return cell;
+    }
+    public static Cell createCell(Row row, int column, Integer value, CellStyle style) {
+        Cell cell = row.createCell(column);
+        cell.setCellValue(value);
+        if (style != null) {
+            cell.setCellStyle(style);
+        }
+        return cell;
+    }
+    public static Cell createCell(Row row, int column, Double value, CellStyle style) {
+        Cell cell = row.createCell(column);
+        cell.setCellValue(value);
+        if (style != null) {
+            cell.setCellStyle(style);
+        }
+        return cell;
+    }
 }
