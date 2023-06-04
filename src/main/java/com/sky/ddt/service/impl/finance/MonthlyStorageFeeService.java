@@ -210,7 +210,7 @@ public class MonthlyStorageFeeService implements IMonthlyStorageFeeService {
                     monthlyStorageFeeImportRequest.setMonthOfCharge(DateUtil.getFormatYearMonth(date));
                 }
             }
-            CheckUtil.checkAndSetBigDecimal(monthlyStorageFeeImportRequest, sbErroItem, map, "storage_rate", null, true);
+            CheckUtil.checkAndSetBigDecimal(monthlyStorageFeeImportRequest, sbErroItem, map, "base_rate", "storage_rate", false);
             CheckUtil.checkAndSetStr(monthlyStorageFeeImportRequest, sbErroItem, map, "currency", null, true);
             CheckUtil.checkAndSetBigDecimal(monthlyStorageFeeImportRequest, sbErroItem, map, "estimated_monthly_storage_fee", null, true);
             CheckUtil.checkAndSetStr(monthlyStorageFeeImportRequest, sbErroItem, map, "dangerous_goods_storage_type", null, true);
