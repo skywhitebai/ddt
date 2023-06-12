@@ -22,6 +22,14 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="shop_parent_sku" jdbcType="VARCHAR" property="shopParentSku" />
     <result column="parent_asin" jdbcType="VARCHAR" property="parentAsin" />
+    <result column="t_product_name" jdbcType="VARCHAR" property="tProductName" />
+    <result column="barcode" jdbcType="VARCHAR" property="barcode" />
+    <result column="t_skc" jdbcType="VARCHAR" property="tSkc" />
+    <result column="t_sku" jdbcType="VARCHAR" property="tSku" />
+    <result column="t_skc_item_number" jdbcType="VARCHAR" property="tSkcItemNumber" />
+    <result column="t_sku_item_number" jdbcType="VARCHAR" property="tSkuItemNumber" />
+    <result column="sales_attributes_1" jdbcType="VARCHAR" property="salesAttributes1" />
+    <result column="sales_attributes_2" jdbcType="VARCHAR" property="salesAttributes2" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -84,7 +92,8 @@
   <sql id="Base_Column_List">
     shop_sku_id, shop_sku, sku_id, shop_id, salesman_user_id, fnsku, asin, title, inventory_quantity, 
     storage_location, head_trip_cost, status, produce_status, remark, create_by, create_time, 
-    update_by, update_time, shop_parent_sku, parent_asin
+    update_by, update_time, shop_parent_sku, parent_asin, t_product_name, barcode, t_skc, 
+    t_sku, t_skc_item_number, t_sku_item_number, sales_attributes_1, sales_attributes_2
   </sql>
   <select id="selectByExample" parameterType="com.sky.ddt.entity.ShopSkuExample" resultMap="BaseResultMap">
     select
@@ -126,14 +135,20 @@
       head_trip_cost, status, produce_status, 
       remark, create_by, create_time, 
       update_by, update_time, shop_parent_sku, 
-      parent_asin)
+      parent_asin, t_product_name, barcode, 
+      t_skc, t_sku, t_skc_item_number, 
+      t_sku_item_number, sales_attributes_1, sales_attributes_2
+      )
     values (#{shopSku,jdbcType=VARCHAR}, #{skuId,jdbcType=INTEGER}, #{shopId,jdbcType=INTEGER}, 
       #{salesmanUserId,jdbcType=INTEGER}, #{fnsku,jdbcType=VARCHAR}, #{asin,jdbcType=VARCHAR}, 
       #{title,jdbcType=VARCHAR}, #{inventoryQuantity,jdbcType=INTEGER}, #{storageLocation,jdbcType=VARCHAR}, 
       #{headTripCost,jdbcType=DECIMAL}, #{status,jdbcType=INTEGER}, #{produceStatus,jdbcType=INTEGER}, 
       #{remark,jdbcType=VARCHAR}, #{createBy,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, 
       #{updateBy,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}, #{shopParentSku,jdbcType=VARCHAR}, 
-      #{parentAsin,jdbcType=VARCHAR})
+      #{parentAsin,jdbcType=VARCHAR}, #{tProductName,jdbcType=VARCHAR}, #{barcode,jdbcType=VARCHAR}, 
+      #{tSkc,jdbcType=VARCHAR}, #{tSku,jdbcType=VARCHAR}, #{tSkcItemNumber,jdbcType=VARCHAR}, 
+      #{tSkuItemNumber,jdbcType=VARCHAR}, #{salesAttributes1,jdbcType=VARCHAR}, #{salesAttributes2,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.sky.ddt.entity.ShopSku">
     <selectKey keyProperty="shopSkuId" order="AFTER" resultType="java.lang.Integer">
@@ -198,6 +213,30 @@
       <if test="parentAsin != null">
         parent_asin,
       </if>
+      <if test="tProductName != null">
+        t_product_name,
+      </if>
+      <if test="barcode != null">
+        barcode,
+      </if>
+      <if test="tSkc != null">
+        t_skc,
+      </if>
+      <if test="tSku != null">
+        t_sku,
+      </if>
+      <if test="tSkcItemNumber != null">
+        t_skc_item_number,
+      </if>
+      <if test="tSkuItemNumber != null">
+        t_sku_item_number,
+      </if>
+      <if test="salesAttributes1 != null">
+        sales_attributes_1,
+      </if>
+      <if test="salesAttributes2 != null">
+        sales_attributes_2,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="shopSku != null">
@@ -256,6 +295,30 @@
       </if>
       <if test="parentAsin != null">
         #{parentAsin,jdbcType=VARCHAR},
+      </if>
+      <if test="tProductName != null">
+        #{tProductName,jdbcType=VARCHAR},
+      </if>
+      <if test="barcode != null">
+        #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="tSkc != null">
+        #{tSkc,jdbcType=VARCHAR},
+      </if>
+      <if test="tSku != null">
+        #{tSku,jdbcType=VARCHAR},
+      </if>
+      <if test="tSkcItemNumber != null">
+        #{tSkcItemNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="tSkuItemNumber != null">
+        #{tSkuItemNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="salesAttributes1 != null">
+        #{salesAttributes1,jdbcType=VARCHAR},
+      </if>
+      <if test="salesAttributes2 != null">
+        #{salesAttributes2,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -328,6 +391,30 @@
       <if test="record.parentAsin != null">
         parent_asin = #{record.parentAsin,jdbcType=VARCHAR},
       </if>
+      <if test="record.tProductName != null">
+        t_product_name = #{record.tProductName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.barcode != null">
+        barcode = #{record.barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tSkc != null">
+        t_skc = #{record.tSkc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tSku != null">
+        t_sku = #{record.tSku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tSkcItemNumber != null">
+        t_skc_item_number = #{record.tSkcItemNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tSkuItemNumber != null">
+        t_sku_item_number = #{record.tSkuItemNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.salesAttributes1 != null">
+        sales_attributes_1 = #{record.salesAttributes1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.salesAttributes2 != null">
+        sales_attributes_2 = #{record.salesAttributes2,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -354,7 +441,15 @@
       update_by = #{record.updateBy,jdbcType=INTEGER},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       shop_parent_sku = #{record.shopParentSku,jdbcType=VARCHAR},
-      parent_asin = #{record.parentAsin,jdbcType=VARCHAR}
+      parent_asin = #{record.parentAsin,jdbcType=VARCHAR},
+      t_product_name = #{record.tProductName,jdbcType=VARCHAR},
+      barcode = #{record.barcode,jdbcType=VARCHAR},
+      t_skc = #{record.tSkc,jdbcType=VARCHAR},
+      t_sku = #{record.tSku,jdbcType=VARCHAR},
+      t_skc_item_number = #{record.tSkcItemNumber,jdbcType=VARCHAR},
+      t_sku_item_number = #{record.tSkuItemNumber,jdbcType=VARCHAR},
+      sales_attributes_1 = #{record.salesAttributes1,jdbcType=VARCHAR},
+      sales_attributes_2 = #{record.salesAttributes2,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -419,6 +514,30 @@
       <if test="parentAsin != null">
         parent_asin = #{parentAsin,jdbcType=VARCHAR},
       </if>
+      <if test="tProductName != null">
+        t_product_name = #{tProductName,jdbcType=VARCHAR},
+      </if>
+      <if test="barcode != null">
+        barcode = #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="tSkc != null">
+        t_skc = #{tSkc,jdbcType=VARCHAR},
+      </if>
+      <if test="tSku != null">
+        t_sku = #{tSku,jdbcType=VARCHAR},
+      </if>
+      <if test="tSkcItemNumber != null">
+        t_skc_item_number = #{tSkcItemNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="tSkuItemNumber != null">
+        t_sku_item_number = #{tSkuItemNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="salesAttributes1 != null">
+        sales_attributes_1 = #{salesAttributes1,jdbcType=VARCHAR},
+      </if>
+      <if test="salesAttributes2 != null">
+        sales_attributes_2 = #{salesAttributes2,jdbcType=VARCHAR},
+      </if>
     </set>
     where shop_sku_id = #{shopSkuId,jdbcType=INTEGER}
   </update>
@@ -442,7 +561,15 @@
       update_by = #{updateBy,jdbcType=INTEGER},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       shop_parent_sku = #{shopParentSku,jdbcType=VARCHAR},
-      parent_asin = #{parentAsin,jdbcType=VARCHAR}
+      parent_asin = #{parentAsin,jdbcType=VARCHAR},
+      t_product_name = #{tProductName,jdbcType=VARCHAR},
+      barcode = #{barcode,jdbcType=VARCHAR},
+      t_skc = #{tSkc,jdbcType=VARCHAR},
+      t_sku = #{tSku,jdbcType=VARCHAR},
+      t_skc_item_number = #{tSkcItemNumber,jdbcType=VARCHAR},
+      t_sku_item_number = #{tSkuItemNumber,jdbcType=VARCHAR},
+      sales_attributes_1 = #{salesAttributes1,jdbcType=VARCHAR},
+      sales_attributes_2 = #{salesAttributes2,jdbcType=VARCHAR}
     where shop_sku_id = #{shopSkuId,jdbcType=INTEGER}
   </update>
 </mapper>

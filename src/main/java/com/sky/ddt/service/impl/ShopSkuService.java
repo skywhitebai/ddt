@@ -153,7 +153,7 @@ public class ShopSkuService implements IShopSkuService {
                 sbErroItem.append(",").append(ShopSkuConstant.FNSKU_EMPTY);
             } else if (existOtherFnskuByShopSku(map.get("店铺sku"), map.get("FNSKU"))) {
                 sbErroItem.append(",").append(ShopSkuConstant.FNSKU_EXIST);
-            } else if (!map.get("FNSKU").substring(0, 1).equals("X")&&!map.get("FNSKU").substring(0, 1).equals("0")) {
+            } else if (!map.get("FNSKU").substring(0, 1).equals("X") && !map.get("FNSKU").substring(0, 1).equals("0")) {
                 sbErroItem.append(",").append(ShopSkuConstant.FNSKU_ERRO);
             }
             if (StringUtils.isEmpty(map.get("ASIN"))) {
@@ -310,6 +310,9 @@ public class ShopSkuService implements IShopSkuService {
         if (existOtherFnsku(params.getShopSkuId(), params.getFnsku())) {
             return BaseResponse.failMessage(ShopSkuConstant.FNSKU_EXIST);
         }
+        if (existOtherBarcode(params.getShopSkuId(), params.getBarcode())) {
+            return BaseResponse.failMessage(ShopSkuConstant.BARCODE_EXIST);
+        }
         if (params.getSalesmanUserId() != null) {
             if (!userService.exist(params.getSalesmanUserId())) {
                 return BaseResponse.failMessage(ShopSkuConstant.SALESMAN_USER_ID_NOT_EXIST);
@@ -329,6 +332,18 @@ public class ShopSkuService implements IShopSkuService {
             example.createCriteria().andFnskuEqualTo(fnsku);
         } else {
             example.createCriteria().andFnskuEqualTo(fnsku).andShopSkuIdNotEqualTo(shopSkuId);
+        }
+        return customShopSkuMapper.countByExample(example) > 0;
+    }
+    private boolean existOtherBarcode(Integer shopSkuId, String barcode) {
+        if (StringUtils.isEmpty(barcode)) {
+            return false;
+        }
+        ShopSkuExample example = new ShopSkuExample();
+        if (shopSkuId == null) {
+            example.createCriteria().andBarcodeEqualTo(barcode);
+        } else {
+            example.createCriteria().andBarcodeEqualTo(barcode).andShopSkuIdNotEqualTo(shopSkuId);
         }
         return customShopSkuMapper.countByExample(example) > 0;
     }
@@ -1366,17 +1381,145 @@ public class ShopSkuService implements IShopSkuService {
         List<SalesCountResponse> list = customShopSkuMapper.listSelectSalesCountShopSku(params);
         //获取每日销售数量
         List<SalesCountDayResponse> salesCountDayResponseList = getSalesCountDay(list, params);
-        if(CollectionUtils.isEmpty(list)||CollectionUtils.isEmpty(salesCountDayResponseList)){
+        if (CollectionUtils.isEmpty(list) || CollectionUtils.isEmpty(salesCountDayResponseList)) {
             return BaseResponse.failMessage("销售数据为空");
         }
-        try{
-            BaseResponse baseResponse=ExportSalesInfoHelper.exportSalesInfo(response,list,salesCountDayResponseList,params);
+        try {
+            BaseResponse baseResponse = ExportSalesInfoHelper.exportSalesInfo(response, list, salesCountDayResponseList, params);
             return baseResponse;
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
             return BaseResponse.failMessage(ex.getMessage());
         }
     }
+
+    @Override
+    public BaseResponse importTemuShopSku(MultipartFile file, Integer userId) {
+        if (file == null) {
+            return BaseResponse.failMessage("请选择要上传的文件");
+        }
+        List<Shop> shopList = shopUserService.listUserShop(userId);
+        if (CollectionUtils.isEmpty(shopList)) {
+            return BaseResponse.failMessage("用户只能上传自己管理的店铺sku");
+        }
+        List<Integer> shopIdList = shopList.stream().map(Shop::getShopId).collect(Collectors.toList());
+        //读取excel 转换为list
+        List<Map<String, String>> list = ExcelUtil.getListByExcel(file);
+        if (list == null || list.size() == 0) {
+            return BaseResponse.failMessage("导入的数据内容为空");
+        }
+        //遍历list导入信息
+        StringBuilder sbErro = new StringBuilder();
+        List<String> shopNameList = new ArrayList<>();
+        List<Sku> skuList = new ArrayList<>();
+        BaseResponse repeatShopSku = checkRepeat(list, "店铺sku");
+        if (!repeatShopSku.isSuccess()) {
+            return repeatShopSku;
+        }
+        BaseResponse repeatBarcode = checkRepeat(list, "条码编码");
+        if (!repeatBarcode.isSuccess()) {
+            return repeatBarcode;
+        }
+        for (int i = 0; i < list.size(); i++) {
+            Map<String, String> map = list.get(i);
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            StringBuilder sbErroItem = new StringBuilder();
+            String shopName = map.get("店铺名");
+            if (StringUtils.isEmpty(shopName)) {
+                sbErroItem.append(",").append(ShopSkuConstant.SHOP_NAME_EMPTY);
+            } else {
+                Integer shopId = getShopId(shopList, map.get("店铺名"));
+                if (shopId == null) {
+                    sbErroItem.append(",").append(ShopSkuConstant.SHOP_NAME_NOT_EXIST_OR_NOT_USER_SHOP);
+                } else {
+                    map.put("shopId", shopId.toString());
+                }
+            }
+            if (StringUtils.isEmpty(map.get("产品sku"))) {
+                sbErroItem.append(",").append(ShopSkuConstant.SKU_EMPTY);
+            } else {
+                Sku sku = skuService.getSkuBySku(map.get("产品sku"));
+                if (sku == null) {
+                    sbErroItem.append(",").append(String.format(ShopSkuConstant.SKU_NOT_EXIST, map.get("产品sku")));
+                } else {
+                    map.put("skuId", sku.getSkuId().toString());
+                    skuList.add(sku);
+                }
+            }
+            if (StringUtils.isEmpty(map.get("店铺sku"))) {
+                sbErroItem.append(",").append(ShopSkuConstant.SHOP_SKU_EMPTY);
+            }
+            if (StringUtils.isEmpty(map.get("条码编码"))) {
+                sbErroItem.append(",").append("条码编码不能为空");
+            }
+            if (StringUtils.isEmpty(map.get("商品名称"))) {
+                sbErroItem.append(",").append("商品名称不能为空");
+            }
+            if (sbErroItem.length() > 0) {
+                sbErro.append(",第" + (i + 2) + "行").append(sbErroItem);
+            }
+        }
+        if (sbErro.length() > 0) {
+            return BaseResponse.failMessage(sbErro.substring(1));
+        }
+        for (Map<String, String> map : list) {
+            //忽略空行
+            Boolean isEmpty = true;
+            for (String key : map.keySet()) {
+                if (!StringUtils.isEmpty(map.get(key))) {
+                    isEmpty = false;
+                    break;
+                }
+            }
+            if (isEmpty) {
+                continue;
+            }
+            ShopSku shopSku = getShopSkuByShopSku(map.get("店铺sku"));
+            if (shopSku != null) {
+                if (!shopIdList.contains(shopSku.getShopId())) {
+                    return BaseResponse.failMessage(String.format(ShopSkuConstant.SHOP_SKU_UPDATE_NO_RIGHT, shopSku.getShopSku()));
+                }
+                setTemuShopSkuByMap(map, shopSku);
+                shopSku.setUpdateBy(userId);
+                shopSku.setUpdateTime(new Date());
+                customShopSkuMapper.updateByPrimaryKeySelective(shopSku);
+            } else {
+                shopSku = new ShopSku();
+                setTemuShopSkuByMap(map, shopSku);
+                shopSku.setCreateBy(userId);
+                shopSku.setCreateTime(new Date());
+                BigDecimal headTripCost = getHeadTripCost(shopSku.getSkuId(), skuList);
+                shopSku.setHeadTripCost(headTripCost);
+                customShopSkuMapper.insertSelective(shopSku);
+            }
+        }
+        return BaseResponse.success();
+    }
+    private void setTemuShopSkuByMap(Map<String, String> map, ShopSku shopSku) {
+        shopSku.setShopId(MathUtil.strToInteger(map.get("shopId")));
+        shopSku.setSkuId(MathUtil.strToInteger(map.get("skuId")));
+        shopSku.setShopSku(map.get("店铺sku"));
+        shopSku.settProductName(map.get("商品名称"));
+        shopSku.setBarcode(map.get("条码编码"));
+        shopSku.settSkc(map.get("SKC"));
+        shopSku.settSku(map.get("SKU"));
+        shopSku.settSkcItemNumber(map.get("SKC货号"));
+        shopSku.settSkuItemNumber(map.get("SKU货号"));
+        shopSku.setSalesAttributes1(map.get("主销售属性（英文）"));
+        shopSku.setSalesAttributes2(map.get("次销售属性（英文）"));
+        shopSku.setRemark(map.get("备注"));
+    }
+
 
     private List<SalesCountDayResponse> getSalesCountDay(List<SalesCountResponse> list, SalesCountRequest params) {
         if ("shopParentSku".equals(params.getSearchType())) {
@@ -1870,17 +2013,25 @@ public class ShopSkuService implements IShopSkuService {
             return;
         }
         shopSku.setShopSku(params.getShopSku());
-        shopSku.setFnsku(params.getFnsku());
+        shopSku.setFnsku(StringUtils.isEmpty(params.getFnsku())?null:params.getFnsku());
         shopSku.setSalesmanUserId(params.getSalesmanUserId());
         shopSku.setRemark(params.getRemark());
         shopSku.setTitle(params.getTitle());
         shopSku.setShopParentSku(params.getShopParentSku());
         shopSku.setUpdateBy(params.getUserId());
         shopSku.setUpdateTime(new Date());
-        shopSku.setAsin(params.getAsin());
+        shopSku.setAsin(StringUtils.isEmpty(params.getAsin())?null:params.getAsin());
         shopSku.setStatus(params.getStatus());
         shopSku.setParentAsin(params.getParentAsin());
         shopSku.setStorageLocation(params.getStorageLocation());
+        shopSku.settProductName(params.getTProductName());
+        shopSku.setBarcode(params.getBarcode());
+        shopSku.settSkc(params.getTSkc());
+        shopSku.settSku(params.getTSku());
+        shopSku.setSalesAttributes1(params.getSalesAttributes1());
+        shopSku.setSalesAttributes2(params.getSalesAttributes2());
+        shopSku.settSkuItemNumber(params.getTSkuItemNumber());
+        shopSku.settSkcItemNumber(params.getTSkcItemNumber());
     }
 
     private Integer getShopId(List<Shop> shopList, String shopName) {

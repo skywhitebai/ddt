@@ -271,4 +271,6 @@ public interface IShopSkuService {
     Map<String, ShopSkuInfo> getShopSkuInfoMap(List<String> shopSkuList);
 
     BaseResponse exportSalesInfo(HttpServletResponse response, SalesCountRequest params);
+
+    BaseResponse importTemuShopSku(MultipartFile file, Integer dealUserId);
 }

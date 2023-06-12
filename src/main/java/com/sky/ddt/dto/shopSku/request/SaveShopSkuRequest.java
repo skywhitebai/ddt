@@ -17,13 +17,10 @@ public class SaveShopSkuRequest {
     Integer shopSkuId;
     @NotBlank(message = ShopSkuConstant.SHOP_SKU_EMPTY)
     String shopSku;
-    @NotBlank(message = ShopSkuConstant.FNSKU_EMPTY)
     String fnsku;
     Integer salesmanUserId;
     String remark;
-    @NotBlank(message = ShopSkuConstant.TITLE_EMPTY)
     String title;
-    @NotBlank(message = ShopSkuConstant.SHOP_PARENT_SKU_EMPTY)
     String shopParentSku;
     //@NotBlank(message = ShopSkuConstant.ASIN_EMPTY)
     String asin;
@@ -32,4 +29,12 @@ public class SaveShopSkuRequest {
     String parentAsin;
     Integer userId;
     String storageLocation;
+    String tProductName;
+    String barcode;
+    String tSkc;
+    String tSku;
+    String tSkcItemNumber;
+    String tSkuItemNumber;
+    String salesAttributes1;
+    String salesAttributes2;
 }

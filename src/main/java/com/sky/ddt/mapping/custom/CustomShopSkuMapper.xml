@@ -48,12 +48,16 @@
                     concat('%',#{parentAsin},'%')
                 </if>
                 <if test="sku != null and sku != '' ">and sku.sku like concat('%',#{sku},'%')</if>
-                <if test="productName != null and productName != '' ">and p.product_name like
-                    concat('%',#{productName},'%')
+                <if test="productName != null and productName != '' ">and (p.product_name like
+                    concat('%',#{productName},'%'))
                 </if>
                 <if test="userId != null ">and ss.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
                 <if test="status != null">and ss.status=#{status}</if>
                 <if test="produceStatus != null">and ss.produce_status=#{produceStatus}</if>
+                <if test="tProductName != null and tProductName != '' ">and ss.t_product_name like concat('%',#{tProductName},'%')</if>
+                <if test="barcode != null and barcode != '' ">and ss.barcode like concat('%',#{barcode},'%')</if>
+                <if test="tSkc != null and tSkc != '' ">and ss.t_skc like concat('%',#{tSkc},'%')</if>
+                <if test="tSku != null and tSku != '' ">and ss.t_sku like concat('%',#{tSku},'%')</if>
             </trim>
         </where>
     </sql>

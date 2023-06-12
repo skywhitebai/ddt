@@ -1385,6 +1385,566 @@ public class ShopSkuExample {
             addCriterion("parent_asin not between", value1, value2, "parentAsin");
             return (Criteria) this;
         }
+
+        public Criteria andTProductNameIsNull() {
+            addCriterion("t_product_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTProductNameIsNotNull() {
+            addCriterion("t_product_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTProductNameEqualTo(String value) {
+            addCriterion("t_product_name =", value, "tProductName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTProductNameNotEqualTo(String value) {
+            addCriterion("t_product_name <>", value, "tProductName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTProductNameGreaterThan(String value) {
+            addCriterion("t_product_name >", value, "tProductName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTProductNameGreaterThanOrEqualTo(String value) {
+            addCriterion("t_product_name >=", value, "tProductName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTProductNameLessThan(String value) {
+            addCriterion("t_product_name <", value, "tProductName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTProductNameLessThanOrEqualTo(String value) {
+            addCriterion("t_product_name <=", value, "tProductName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTProductNameLike(String value) {
+            addCriterion("t_product_name like", value, "tProductName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTProductNameNotLike(String value) {
+            addCriterion("t_product_name not like", value, "tProductName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTProductNameIn(List<String> values) {
+            addCriterion("t_product_name in", values, "tProductName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTProductNameNotIn(List<String> values) {
+            addCriterion("t_product_name not in", values, "tProductName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTProductNameBetween(String value1, String value2) {
+            addCriterion("t_product_name between", value1, value2, "tProductName");
+            return (Criteria) this;
+        }
+
+        public Criteria andTProductNameNotBetween(String value1, String value2) {
+            addCriterion("t_product_name not between", value1, value2, "tProductName");
+            return (Criteria) this;
+        }
+
+        public Criteria andBarcodeIsNull() {
+            addCriterion("barcode is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBarcodeIsNotNull() {
+            addCriterion("barcode is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andBarcodeEqualTo(String value) {
+            addCriterion("barcode =", value, "barcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBarcodeNotEqualTo(String value) {
+            addCriterion("barcode <>", value, "barcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBarcodeGreaterThan(String value) {
+            addCriterion("barcode >", value, "barcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBarcodeGreaterThanOrEqualTo(String value) {
+            addCriterion("barcode >=", value, "barcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBarcodeLessThan(String value) {
+            addCriterion("barcode <", value, "barcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBarcodeLessThanOrEqualTo(String value) {
+            addCriterion("barcode <=", value, "barcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBarcodeLike(String value) {
+            addCriterion("barcode like", value, "barcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBarcodeNotLike(String value) {
+            addCriterion("barcode not like", value, "barcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBarcodeIn(List<String> values) {
+            addCriterion("barcode in", values, "barcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBarcodeNotIn(List<String> values) {
+            addCriterion("barcode not in", values, "barcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBarcodeBetween(String value1, String value2) {
+            addCriterion("barcode between", value1, value2, "barcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andBarcodeNotBetween(String value1, String value2) {
+            addCriterion("barcode not between", value1, value2, "barcode");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcIsNull() {
+            addCriterion("t_skc is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcIsNotNull() {
+            addCriterion("t_skc is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcEqualTo(String value) {
+            addCriterion("t_skc =", value, "tSkc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcNotEqualTo(String value) {
+            addCriterion("t_skc <>", value, "tSkc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcGreaterThan(String value) {
+            addCriterion("t_skc >", value, "tSkc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcGreaterThanOrEqualTo(String value) {
+            addCriterion("t_skc >=", value, "tSkc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcLessThan(String value) {
+            addCriterion("t_skc <", value, "tSkc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcLessThanOrEqualTo(String value) {
+            addCriterion("t_skc <=", value, "tSkc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcLike(String value) {
+            addCriterion("t_skc like", value, "tSkc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcNotLike(String value) {
+            addCriterion("t_skc not like", value, "tSkc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcIn(List<String> values) {
+            addCriterion("t_skc in", values, "tSkc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcNotIn(List<String> values) {
+            addCriterion("t_skc not in", values, "tSkc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcBetween(String value1, String value2) {
+            addCriterion("t_skc between", value1, value2, "tSkc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcNotBetween(String value1, String value2) {
+            addCriterion("t_skc not between", value1, value2, "tSkc");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuIsNull() {
+            addCriterion("t_sku is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuIsNotNull() {
+            addCriterion("t_sku is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuEqualTo(String value) {
+            addCriterion("t_sku =", value, "tSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuNotEqualTo(String value) {
+            addCriterion("t_sku <>", value, "tSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuGreaterThan(String value) {
+            addCriterion("t_sku >", value, "tSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuGreaterThanOrEqualTo(String value) {
+            addCriterion("t_sku >=", value, "tSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuLessThan(String value) {
+            addCriterion("t_sku <", value, "tSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuLessThanOrEqualTo(String value) {
+            addCriterion("t_sku <=", value, "tSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuLike(String value) {
+            addCriterion("t_sku like", value, "tSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuNotLike(String value) {
+            addCriterion("t_sku not like", value, "tSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuIn(List<String> values) {
+            addCriterion("t_sku in", values, "tSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuNotIn(List<String> values) {
+            addCriterion("t_sku not in", values, "tSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuBetween(String value1, String value2) {
+            addCriterion("t_sku between", value1, value2, "tSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuNotBetween(String value1, String value2) {
+            addCriterion("t_sku not between", value1, value2, "tSku");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcItemNumberIsNull() {
+            addCriterion("t_skc_item_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcItemNumberIsNotNull() {
+            addCriterion("t_skc_item_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcItemNumberEqualTo(String value) {
+            addCriterion("t_skc_item_number =", value, "tSkcItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcItemNumberNotEqualTo(String value) {
+            addCriterion("t_skc_item_number <>", value, "tSkcItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcItemNumberGreaterThan(String value) {
+            addCriterion("t_skc_item_number >", value, "tSkcItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcItemNumberGreaterThanOrEqualTo(String value) {
+            addCriterion("t_skc_item_number >=", value, "tSkcItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcItemNumberLessThan(String value) {
+            addCriterion("t_skc_item_number <", value, "tSkcItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcItemNumberLessThanOrEqualTo(String value) {
+            addCriterion("t_skc_item_number <=", value, "tSkcItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcItemNumberLike(String value) {
+            addCriterion("t_skc_item_number like", value, "tSkcItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcItemNumberNotLike(String value) {
+            addCriterion("t_skc_item_number not like", value, "tSkcItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcItemNumberIn(List<String> values) {
+            addCriterion("t_skc_item_number in", values, "tSkcItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcItemNumberNotIn(List<String> values) {
+            addCriterion("t_skc_item_number not in", values, "tSkcItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcItemNumberBetween(String value1, String value2) {
+            addCriterion("t_skc_item_number between", value1, value2, "tSkcItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkcItemNumberNotBetween(String value1, String value2) {
+            addCriterion("t_skc_item_number not between", value1, value2, "tSkcItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuItemNumberIsNull() {
+            addCriterion("t_sku_item_number is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuItemNumberIsNotNull() {
+            addCriterion("t_sku_item_number is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuItemNumberEqualTo(String value) {
+            addCriterion("t_sku_item_number =", value, "tSkuItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuItemNumberNotEqualTo(String value) {
+            addCriterion("t_sku_item_number <>", value, "tSkuItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuItemNumberGreaterThan(String value) {
+            addCriterion("t_sku_item_number >", value, "tSkuItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuItemNumberGreaterThanOrEqualTo(String value) {
+            addCriterion("t_sku_item_number >=", value, "tSkuItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuItemNumberLessThan(String value) {
+            addCriterion("t_sku_item_number <", value, "tSkuItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuItemNumberLessThanOrEqualTo(String value) {
+            addCriterion("t_sku_item_number <=", value, "tSkuItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuItemNumberLike(String value) {
+            addCriterion("t_sku_item_number like", value, "tSkuItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuItemNumberNotLike(String value) {
+            addCriterion("t_sku_item_number not like", value, "tSkuItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuItemNumberIn(List<String> values) {
+            addCriterion("t_sku_item_number in", values, "tSkuItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuItemNumberNotIn(List<String> values) {
+            addCriterion("t_sku_item_number not in", values, "tSkuItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuItemNumberBetween(String value1, String value2) {
+            addCriterion("t_sku_item_number between", value1, value2, "tSkuItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andTSkuItemNumberNotBetween(String value1, String value2) {
+            addCriterion("t_sku_item_number not between", value1, value2, "tSkuItemNumber");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes1IsNull() {
+            addCriterion("sales_attributes_1 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes1IsNotNull() {
+            addCriterion("sales_attributes_1 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes1EqualTo(String value) {
+            addCriterion("sales_attributes_1 =", value, "salesAttributes1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes1NotEqualTo(String value) {
+            addCriterion("sales_attributes_1 <>", value, "salesAttributes1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes1GreaterThan(String value) {
+            addCriterion("sales_attributes_1 >", value, "salesAttributes1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes1GreaterThanOrEqualTo(String value) {
+            addCriterion("sales_attributes_1 >=", value, "salesAttributes1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes1LessThan(String value) {
+            addCriterion("sales_attributes_1 <", value, "salesAttributes1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes1LessThanOrEqualTo(String value) {
+            addCriterion("sales_attributes_1 <=", value, "salesAttributes1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes1Like(String value) {
+            addCriterion("sales_attributes_1 like", value, "salesAttributes1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes1NotLike(String value) {
+            addCriterion("sales_attributes_1 not like", value, "salesAttributes1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes1In(List<String> values) {
+            addCriterion("sales_attributes_1 in", values, "salesAttributes1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes1NotIn(List<String> values) {
+            addCriterion("sales_attributes_1 not in", values, "salesAttributes1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes1Between(String value1, String value2) {
+            addCriterion("sales_attributes_1 between", value1, value2, "salesAttributes1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes1NotBetween(String value1, String value2) {
+            addCriterion("sales_attributes_1 not between", value1, value2, "salesAttributes1");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes2IsNull() {
+            addCriterion("sales_attributes_2 is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes2IsNotNull() {
+            addCriterion("sales_attributes_2 is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes2EqualTo(String value) {
+            addCriterion("sales_attributes_2 =", value, "salesAttributes2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes2NotEqualTo(String value) {
+            addCriterion("sales_attributes_2 <>", value, "salesAttributes2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes2GreaterThan(String value) {
+            addCriterion("sales_attributes_2 >", value, "salesAttributes2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes2GreaterThanOrEqualTo(String value) {
+            addCriterion("sales_attributes_2 >=", value, "salesAttributes2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes2LessThan(String value) {
+            addCriterion("sales_attributes_2 <", value, "salesAttributes2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes2LessThanOrEqualTo(String value) {
+            addCriterion("sales_attributes_2 <=", value, "salesAttributes2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes2Like(String value) {
+            addCriterion("sales_attributes_2 like", value, "salesAttributes2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes2NotLike(String value) {
+            addCriterion("sales_attributes_2 not like", value, "salesAttributes2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes2In(List<String> values) {
+            addCriterion("sales_attributes_2 in", values, "salesAttributes2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes2NotIn(List<String> values) {
+            addCriterion("sales_attributes_2 not in", values, "salesAttributes2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes2Between(String value1, String value2) {
+            addCriterion("sales_attributes_2 between", value1, value2, "salesAttributes2");
+            return (Criteria) this;
+        }
+
+        public Criteria andSalesAttributes2NotBetween(String value1, String value2) {
+            addCriterion("sales_attributes_2 not between", value1, value2, "salesAttributes2");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

@@ -46,6 +46,14 @@
     <input class="easyui-validatebox textbox" id="s_sku">
     产品名称：
     <input class="easyui-validatebox textbox" id="s_productName">
+    商品名称：
+    <input class="easyui-validatebox textbox" id="s_tProductName">
+    条码编码：
+    <input class="easyui-validatebox textbox" id="s_barcode">
+    skc：
+    <input class="easyui-validatebox textbox" id="s_tSkc">
+    sku：
+    <input class="easyui-validatebox textbox" id="s_tSku">
     状态：
     <select class="easyui-combobox" id="s_status" style="width:100px;">
         <option value="">全部</option>
@@ -101,6 +109,11 @@
     <a href="javascript:void(0)" onclick="showPrintLabel7040('','')" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">打印7040标签</a>
+
+    <a href="javascript:void(0)" id="a_importTemuShopSku" onclick="showDialogImport('temuShopSku')"
+       class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'"
+       style="">导入temu店铺sku</a>
 </div>
 <table id="dg" style="width: 100%; height: auto">
 
@@ -137,7 +150,7 @@
             <tr>
                 <td>标题：</td>
                 <td colspan="3">
-                    <input class="easyui-textbox" type="text" name="title" data-options="required:true"
+                    <input class="easyui-textbox" type="text" name="title"
                            style="width: 90%">
                 </td>
             </tr>
@@ -176,7 +189,7 @@
 
                 <td>FNSKU：</td>
                 <td>
-                    <input class="easyui-textbox" type="text" name="fnsku" data-options="required:true">
+                    <input class="easyui-textbox" type="text" name="fnsku" >
                 </td>
                 <td>销售人员：</td>
                 <td>
@@ -229,6 +242,48 @@
                 <td>库位：</td>
                 <td>
                     <input class="easyui-textbox" type="text" name="storageLocation">
+                </td>
+            </tr>
+            <tr>
+                <td>产品名称：</td>
+                <td>
+                    <input class="easyui-textbox" type="text" name="tProductName">
+                </td>
+
+                <td>条码编码：</td>
+                <td>
+                    <input class="easyui-textbox" type="text" name="barcode">
+                </td>
+            </tr>
+            <tr>
+                <td>SKC：</td>
+                <td>
+                    <input class="easyui-textbox" type="text" name="tSkc">
+                </td>
+
+                <td>SKU：</td>
+                <td>
+                    <input class="easyui-textbox" type="text" name="tSku">
+                </td>
+            </tr>
+            <tr>
+                <td>SKC货号：</td>
+                <td>
+                    <input class="easyui-textbox" type="text" name="tSkcItemNumber">
+                </td>
+                <td>SKU货号：</td>
+                <td>
+                    <input class="easyui-textbox" type="text" name="tSkuItemNumber">
+                </td>
+            </tr>
+            <tr>
+                <td>主销售属性（英文）：</td>
+                <td>
+                    <input class="easyui-textbox" type="text" name="salesAttributes1">
+                </td>
+                <td>次销售属性（英文）：</td>
+                <td>
+                    <input class="easyui-textbox" type="text" name="salesAttributes2">
                 </td>
             </tr>
             <tr>
@@ -399,7 +454,9 @@
         if (hasRight("shopSku/importShopSkuHeadTripCost")) {
             $("#a_importShopSkuHeadTripCost").show()
         }
-
+        if (hasRight("shopSku/importTemuShopSku")) {
+            $("#a_importTemuShopSku").show()
+        }
     }
 
     function bindShop() {
@@ -493,6 +550,13 @@
                         return "<a href='#' onclick=\"showDlgShopSkuHeadTripCost(" + row.shopSkuId + ")\" title='店铺sku头程费' >" + value + "</a>";
                     }
                 },
+                {title: '条码编码', field: 'barcode', width: 100},
+                {title: 'skc', field: 'tSkc', width: 100},
+                {title: 'sku', field: 'tSku', width: 100},
+                {title: 'skc货号', field: 'tSkcItemNumber', width: 100},
+                {title: 'sku货号', field: 'tSkuItemNumber', width: 100},
+                {title: '主销售属性（英文）', field: 'salesAttributes1', width: 120},
+                {title: '次销售属性（英文）', field: 'salesAttributes1', width: 120},
                 {title: '创建时间', field: 'createTime', width: 180},
                 {title: '修改时间', field: 'updateTime', width: 180},
                 {title: '标题', field: 'title', width: 120},
@@ -600,17 +664,17 @@
 
     function save() {
         //防止重复点击
-        var title = $("div#dlg input[name='title']").val();
+       /* var title = $("div#dlg input[name='title']").val();
         if (title == '') {
             $.messager.alert("提示", '请填写标题');
             return;
-        }
+        }*/
         var shopSku = $("div#dlg input[name='shopSku']").val();
         if (shopSku == '') {
             $.messager.alert("提示", '请填写店铺sku');
             return;
         }
-        var fnsku = $("div#dlg input[name='fnsku']").val();
+        /*var fnsku = $("div#dlg input[name='fnsku']").val();
         if (fnsku == '') {
             $.messager.alert("提示", '请填写FNSKU');
             return;
@@ -619,7 +683,7 @@
         if (shopParentSku == '') {
             $.messager.alert("提示", '请填写店铺父sku');
             return;
-        }
+        }*/
         /* var asin = $("div#dlg input[name='asin']").val();
          if (asin == '') {
              $.messager.alert("提示", '请填写ASIN');
@@ -690,7 +754,10 @@
             asin: $("#s_asin").val(),
             parentAsin: $("#s_parentAsin").val(),
             status: $("#s_status").val(),
-            produceStatus: $("#s_produceStatus").val()
+            tProductName: $("#s_tProductName").val(),
+            barcode: $("#s_barcode").val(),
+            tSkc: $("#s_tSkc").val(),
+            tSku: $("#s_tSku").val()
         };
         return queryParams;
     }
@@ -759,7 +826,11 @@
                 importTemplateUrl = "${pageContext.request.contextPath }/static/template/shopSku/shopSkuHeadTripCostTemplate.xlsx";
                 importUrl = "${pageContext.request.contextPath }/shopSku/importShopSkuHeadTripCost";
                 break;
-
+            case 'temuShopSku':
+                importTitle = "导入TemuSku";
+                importTemplateUrl = "${pageContext.request.contextPath }/static/template/shopSku/shopSkuTemuTemplate.xlsx";
+                importUrl = "${pageContext.request.contextPath }/shopSku/importTemuShopSku";
+                break;
         }
         if (isEmpty(importTitle)) {
             $.messager.alert("提示", "请选择正确的导入类型.");

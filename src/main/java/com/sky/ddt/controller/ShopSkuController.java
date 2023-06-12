@@ -236,4 +236,11 @@ public class ShopSkuController extends SuperController {
         Integer dealUserId = getCurrentUserId();
         return shopSkuService.importShopSkuHeadTripCost(file, dealUserId);
     }
+    @RequestMapping("/importTemuShopSku")
+    @ResponseBody
+    @MenuAnnotation("shopSku/index")
+    public BaseResponse importTemuShopSku(MultipartFile file) {
+        Integer dealUserId = getCurrentUserId();
+        return shopSkuService.importTemuShopSku(file, dealUserId);
+    }
 }

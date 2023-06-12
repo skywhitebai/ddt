@@ -21,4 +21,8 @@ public class ListShopSkuRequest extends DataGridRequest {
     Integer userId;
     Integer status;
     Integer produceStatus;
+    String tProductName;
+    String barcode;
+    String tSkc;
+    String tSku;
 }

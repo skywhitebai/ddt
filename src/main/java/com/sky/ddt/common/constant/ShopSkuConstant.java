@@ -44,6 +44,7 @@ public class ShopSkuConstant {
     public static final String STORAGE_LOCATION_TOO_LONG ="库位长度不能超过200" ;
     public static final String PRODUCE_STATUS_EMPTY ="生产状态不能为空";
     public static final String PRODUCE_STATUS_ERROE ="生产状态错误，必须为正常生产或暂停生产";
+    public static final String BARCODE_EXIST ="条码编码已存在，不允许重复添加";
     public static List<ExcelField> exportShopSkuFieldList=new ArrayList<>();
     static {
         exportShopSkuFieldList.add(new ExcelField("shopName", "店铺名", ExcelField.FieldTypeEnum.STRING));
