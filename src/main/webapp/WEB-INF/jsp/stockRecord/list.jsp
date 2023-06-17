@@ -227,9 +227,14 @@
                 {title: '销售人员', field: 'salesmanRealName', width: 80},
                 {title: '库位', field: 'locationNos', width: 160},
                 {
-                    title: '操作', field: 'shopSkuId', width: 60,
+                    title: '打印标签', field: 'shopSkuId', width: 75,
                     formatter: function (value, row, rowIndex) {
                         return "<a href='${pageContext.request.contextPath }/shopSku/print?shopSku=" + row.shopSku + "&quantity=" + row.stockQuantity + "&stockRecordItemId=" + row.id + "'  title='打印标签'  target='_blank'>打印标签</a>";
+                    }
+                }, {
+                    title: '打印标签', field: 'shopSkuId', width: 75,
+                    formatter: function (value, row, rowIndex) {
+                        return "<a href='${pageContext.request.contextPath }/shopSku/printTemu?shopSku=" + row.shopSku + "&quantity=" + row.stockQuantity + "&stockRecordItemId=" + row.id + "'  title='打印标签'  target='_blank'>打印标签</a>";
                     }
                 },
                 {

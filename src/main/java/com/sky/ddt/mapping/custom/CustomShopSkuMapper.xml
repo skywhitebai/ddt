@@ -20,8 +20,10 @@
         ss.*
         ,p.product_code,p.product_name,p.chinese_product_name,
         p.english_product_name,sku.sku,sku.colour,sku.colour_number,s.shop_name,u.user_name salesmanUserName,
-         concat(format(((ss.head_trip_cost+sku.cost_price)/6+4)/0.66/0.83,2),'-',format(((ss.head_trip_cost+sku.cost_price)/6+5)/0.7/0.83/0.7,2)) suggestedRetailPrice,
-         (select GROUP_CONCAT(sl.location_no SEPARATOR ',') from shop_sku_storage_location sssl,storage_location sl where sssl.shop_sku_id=ss.shop_sku_id and sssl.storage_location_id=sl.id group by ss.shop_sku_id) locationNos
+        concat(format(((ss.head_trip_cost+sku.cost_price)/6+4)/0.66/0.83,2),'-',format(((ss.head_trip_cost+sku.cost_price)/6+5)/0.7/0.83/0.7,2))
+        suggestedRetailPrice,
+        (select GROUP_CONCAT(sl.location_no SEPARATOR ',') from shop_sku_storage_location sssl,storage_location sl where
+        sssl.shop_sku_id=ss.shop_sku_id and sssl.storage_location_id=sl.id group by ss.shop_sku_id) locationNos
         from shop_sku ss
         left join sku on ss.sku_id=sku.sku_id
         left join product p on sku.product_id=p.product_id
@@ -54,7 +56,9 @@
                 <if test="userId != null ">and ss.shop_id in(select shop_id from shop_user where user_id=#{userId})</if>
                 <if test="status != null">and ss.status=#{status}</if>
                 <if test="produceStatus != null">and ss.produce_status=#{produceStatus}</if>
-                <if test="tProductName != null and tProductName != '' ">and ss.t_product_name like concat('%',#{tProductName},'%')</if>
+                <if test="tProductName != null and tProductName != '' ">and ss.t_product_name like
+                    concat('%',#{tProductName},'%')
+                </if>
                 <if test="barcode != null and barcode != '' ">and ss.barcode like concat('%',#{barcode},'%')</if>
                 <if test="tSkc != null and tSkc != '' ">and ss.t_skc like concat('%',#{tSkc},'%')</if>
                 <if test="tSku != null and tSku != '' ">and ss.t_sku like concat('%',#{tSku},'%')</if>
@@ -65,10 +69,13 @@
             resultType="com.sky.ddt.dto.shopSku.response.ExportShopSkuResponse">
         select
         s.shop_name shopName,sku.sku,ss.shop_sku shopSku,ss.shop_parent_sku
-        shopParentSku,ss.head_trip_cost headTripCost,sku.cost_price costPrice,sku.weight,ss.fnsku,ss.asin,ss.parent_asin parentAsin,ss.title
-        ,case ss.status when 1 then '启用' else '停用' end status,case ss.produce_status when 1 then '正常生产' when 2 then '暂停生产' else '' end produceStatus
+        shopParentSku,ss.head_trip_cost headTripCost,sku.cost_price costPrice,sku.weight,ss.fnsku,ss.asin,ss.parent_asin
+        parentAsin,ss.title
+        ,case ss.status when 1 then '启用' else '停用' end status,case ss.produce_status when 1 then '正常生产' when 2 then
+        '暂停生产' else '' end produceStatus
         ,ss.remark,ss.inventory_quantity inventoryQuantity,u.real_name salesmanUserRealName,
-        (select GROUP_CONCAT(sl.location_no SEPARATOR ',') from shop_sku_storage_location sssl,storage_location sl where sssl.shop_sku_id=ss.shop_sku_id and sssl.storage_location_id=sl.id group by ss.shop_sku_id) locationNos
+        (select GROUP_CONCAT(sl.location_no SEPARATOR ',') from shop_sku_storage_location sssl,storage_location sl where
+        sssl.shop_sku_id=ss.shop_sku_id and sssl.storage_location_id=sl.id group by ss.shop_sku_id) locationNos
         from shop_sku ss
         left join sku on ss.sku_id=sku.sku_id
         left join product p on sku.product_id=p.product_id
@@ -95,13 +102,15 @@
             resultType="com.sky.ddt.dto.shopSku.response.GetPrintShopSkuResponse">
         select
         ss.title,s.sku,ss.shop_parent_sku shopParentSku,ss.status,ss.fnsku,(SELECT MAX(img.`img_url`) FROM `sku`,`img`
-        WHERE img.`entity_id`=ss.sku_id AND img.`img_type`='sku.sku_img') imgUrl,s.colour_number colourNumber
+        WHERE img.`entity_id`=ss.sku_id AND img.`img_type`='sku.sku_img') imgUrl,s.colour_number
+        colourNumber,barcode,t_skc_item_number tSkcItemNumber,t_sku tSku,sales_attributes_1 salesAttributes1,sales_attributes_2 salesAttributes2
         from shop_sku ss
         left join sku s on ss.sku_id=s.sku_id
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">
                 <if test="shopSku != null and shopSku != '' ">and ss.shop_sku=#{shopSku}</if>
                 <if test="fnsku != null and fnsku != '' ">and ss.fnsku=#{fnsku}</if>
+                <if test="barcode != null and barcode != '' ">and ss.barcode=#{barcode}</if>
             </trim>
         </where>
     </select>
@@ -109,8 +118,8 @@
             resultType="com.sky.ddt.dto.shopSku.response.SalesCountResponse">
         select
         <if test="searchType == null or searchType != 'shopParentSku' ">
-        ss.shop_sku_id shopSkuId,
-        ss.shop_sku shopSku,
+            ss.shop_sku_id shopSkuId,
+            ss.shop_sku shopSku,
         </if>
         ss.shop_parent_sku shopParentSku,p.product_name
         productName,p.product_code productCode,
@@ -222,7 +231,7 @@ shop  s where s.type=2
         WHERE
         ss.shop_parent_sku=#{shopParentSku} and ss.sku_id=s.sku_id
         and s.size=#{size} and s.colour=#{colour} and ss.shop_id=#{shopId}
-        <if test="colourNumber != null and colourNumber != '' "> and  s.colour_number=#{colourNumber}</if>
+        <if test="colourNumber != null and colourNumber != '' ">and s.colour_number=#{colourNumber}</if>
     </select>
     <select id="listInventoryQuantity" resultType="com.sky.ddt.dto.shopSku.response.ListInventoryQuantityResponse">
         SELECT ss.shop_sku_id shopSkuId,ss.shop_sku shopSku,ss.shop_id shopId,s.shop_name shopName,ss.inventory_quantity inventoryQuantity
@@ -234,7 +243,8 @@ shop  s where s.type=2
     <select id="listOutboundShopSku"
             resultType="com.sky.ddt.dto.shopSku.response.ListOutboundShopSkuResponse">
         select
-        ss.shop_sku_id shopSkuId,ss.shop_sku shopSku,ss2.shop_sku_Id outboundShopSkuId,ss2.shop_sku outboundShopSku,ss2.inventory_quantity inventoryQuantity
+        ss.shop_sku_id shopSkuId,ss.shop_sku shopSku,ss2.shop_sku_Id outboundShopSkuId,ss2.shop_sku
+        outboundShopSku,ss2.inventory_quantity inventoryQuantity
         from shop_sku ss,shop_sku ss2
         <where>
             <trim prefix="(" suffix=")" prefixOverrides="and">

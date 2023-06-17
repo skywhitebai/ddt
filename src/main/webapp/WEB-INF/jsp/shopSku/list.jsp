@@ -109,7 +109,9 @@
     <a href="javascript:void(0)" onclick="showPrintLabel7040('','')" class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
        style="">打印7040标签</a>
-
+    <a href="javascript:void(0)" onclick="showPrintTemu('','')" class="easyui-linkbutton"
+       data-options="iconCls:'icon-search'"
+       style="">打印Temu标签</a>
     <a href="javascript:void(0)" id="a_importTemuShopSku" onclick="showDialogImport('temuShopSku')"
        class="easyui-linkbutton"
        data-options="iconCls:'icon-search'"
@@ -182,7 +184,7 @@
 
                 <td>店铺父sku：</td>
                 <td>
-                    <input class="easyui-textbox" type="text" name="shopParentSku" data-options="required:true">
+                    <input class="easyui-textbox" type="text" name="shopParentSku">
                 </td>
             </tr>
             <tr>
@@ -785,7 +787,13 @@
             window.open("${pageContext.request.contextPath }/shopSku/print7040?shopSku=" + shopSku);
         }
     }
-
+    function showPrintTemu(shopSku) {
+        if (isEmpty(shopSku)) {
+            window.open("${pageContext.request.contextPath }/shopSku/printTemu");
+        } else {
+            window.open("${pageContext.request.contextPath }/shopSku/printTemu?shopSku=" + shopSku);
+        }
+    }
     var importUrl;
 
     function showDialogImport(importType) {

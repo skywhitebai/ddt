@@ -50,6 +50,11 @@ public class ShopSkuController extends SuperController {
         return "shopSku/print7040";
     }
 
+    @RequestMapping("/printTemu")
+    public String printTemu() {
+        return "shopSku/printTemu";
+    }
+
     @RequestMapping("/importShopSku")
     @ResponseBody
     @MenuAnnotation("shopSku/index")

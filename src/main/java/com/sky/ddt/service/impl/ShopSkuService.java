@@ -567,8 +567,8 @@ public class ShopSkuService implements IShopSkuService {
      */
     @Override
     public BaseResponse getPrintShopSku(GetPrintShopSkuRequest params) {
-        if (StringUtils.isEmpty(params.getShopSku()) && StringUtils.isEmpty(params.getFnsku())) {
-            return BaseResponse.failMessage(ShopSkuConstant.SHOP_SKU_FNSKU_EMPTY);
+        if (StringUtils.isEmpty(params.getShopSku()) && StringUtils.isEmpty(params.getFnsku())&& StringUtils.isEmpty(params.getBarcode())) {
+            return BaseResponse.failMessage("请填写查询条件");
         }
         GetPrintShopSkuResponse getPrintShopSkuResponse = customShopSkuMapper.getPrintShopSkuResponse(params);
         if (getPrintShopSkuResponse == null) {

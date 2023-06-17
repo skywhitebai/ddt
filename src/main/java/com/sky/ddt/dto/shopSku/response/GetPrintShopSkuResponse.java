@@ -16,4 +16,10 @@ public class GetPrintShopSkuResponse {
     private String shopParentSku;
     String imgUrl;
     String colourNumber;
+
+    private String barcode;
+    private String tSku;
+    private String tSkcItemNumber;
+    private String salesAttributes1;
+    private String salesAttributes2;
 }

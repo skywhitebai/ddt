@@ -11,4 +11,5 @@ import lombok.Data;
 public class GetPrintShopSkuRequest {
     String shopSku;
     String fnsku;
+    String barcode;
 }
