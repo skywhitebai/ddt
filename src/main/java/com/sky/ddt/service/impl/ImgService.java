@@ -11,18 +11,15 @@ import com.sky.ddt.dto.img.response.OssObjectResponse;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.entity.Img;
 import com.sky.ddt.entity.ImgData;
-import com.sky.ddt.entity.ImgDataExample;
 import com.sky.ddt.entity.ImgExample;
 import com.sky.ddt.service.IImgService;
 import com.sky.ddt.service.IOssService;
 import com.sky.ddt.util.FileCheckUtil;
-import com.sky.ddt.util.StreamUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -175,6 +172,14 @@ public class ImgService implements IImgService {
             return null;
         }
         return imgList.get(0).getImgUrl();
+    }
+
+    @Override
+    public List<Img> listFirstImgUrl(List<Integer> shopSkuIdList) {
+        if(CollectionUtils.isEmpty(shopSkuIdList)){
+            return new ArrayList<>();
+        }
+        return customImgMapper.listFirstImgUrl(shopSkuIdList,ImgConstant.ImgTypeEnum.SKU_IMG.getImgType());
     }
 
     public void deleteImgByEntityId(Integer entityId, ImgConstant.ImgTypeEnum imgTypeEnum) {

@@ -69,4 +69,12 @@ public interface IImgService {
      * @date 2020/3/26 14:28
      */
     String getImgUrlBySkuId(Integer skuId);
+
+    /**
+     * 返回各个sky的一张图片
+     *
+     * @param shopSkuIdList
+     * @return
+     */
+    List<Img> listFirstImgUrl(List<Integer> shopSkuIdList);
 }

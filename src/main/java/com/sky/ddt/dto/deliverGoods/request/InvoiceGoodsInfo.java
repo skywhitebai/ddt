@@ -20,4 +20,5 @@ public class InvoiceGoodsInfo {
     Double weight;
     Double unitPrice;
     Double totalPrice;
+    String imgUrl;
 }

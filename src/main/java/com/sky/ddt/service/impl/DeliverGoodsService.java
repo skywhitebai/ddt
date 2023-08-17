@@ -5,18 +5,13 @@ import com.sky.ddt.common.constant.StockConsatnt;
 import com.sky.ddt.dto.deliverGoods.request.*;
 import com.sky.ddt.dto.response.BaseResponse;
 import com.sky.ddt.dto.shopSku.response.ShopSkuFullProductName;
-import com.sky.ddt.entity.Shop;
-import com.sky.ddt.entity.ShopSenderAddress;
-import com.sky.ddt.entity.ShopSku;
-import com.sky.ddt.entity.Sku;
-import com.sky.ddt.service.IDeliverGoodsService;
-import com.sky.ddt.service.IShopSenderAddressService;
-import com.sky.ddt.service.IShopService;
-import com.sky.ddt.service.IShopSkuService;
+import com.sky.ddt.entity.*;
+import com.sky.ddt.service.*;
 import com.sky.ddt.util.DateUtil;
 import com.sky.ddt.util.ExcelUtil;
 import com.sky.ddt.util.MathUtil;
 import com.sky.ddt.util.RegexUtil;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
@@ -30,10 +25,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -55,6 +49,8 @@ public class DeliverGoodsService implements IDeliverGoodsService {
     final static String material = "混棉/Mixed cotton缎纹80%涤纶，10%氨纶，10%棉";
     final static String chineseMaterial = "混棉";
     final static String englishMaterial = "Mixed cotton";
+    @Autowired
+    IImgService imgService;
 
     /**
      * @param file     @return
@@ -773,7 +769,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         Workbook wb = ExcelUtil.readExcel(path);
         Sheet sheetInovice = wb.getSheetAt(0);
         CellStyle cellStyle = getCellStyle(wb);
-        updateSheetInoviceAmty(sheetInovice, invoiceInfo, cellStyle);
+        updateSheetInoviceAmty(sheetInovice, invoiceInfo, cellStyle,wb);
         //导出
         String fileName = "2254+美国-(美森限时达)+" + invoiceInfo.getFbaNo() + "-" + invoiceInfo.getShipmentId() + "-" + invoiceInfo.getNumberOfBoxes() + "箱";
         return exportExcel(response, wb, fileName);
@@ -791,8 +787,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
         cellStyle.setFont(font);
         return cellStyle;
     }
-
-    private void updateSheetInoviceAmty(Sheet sheetInovice, InvoiceInfo invoiceInfo, CellStyle cellStyle) {
+    private void updateSheetInoviceAmty(Sheet sheetInovice, InvoiceInfo invoiceInfo, CellStyle cellStyle, Workbook wb) {
         //设置总箱数
         Row row11 = sheetInovice.getRow(10);
         row11.getCell(5).setCellValue(invoiceInfo.getNumberOfBoxes());
@@ -849,7 +844,30 @@ public class DeliverGoodsService implements IDeliverGoodsService {
             ExcelUtil.createCell(rowGoodsInfo, 17, invoicePackingInfo.getLength(), cellStyle);
             ExcelUtil.createCell(rowGoodsInfo, 18, invoicePackingInfo.getWidth(), cellStyle);
             ExcelUtil.createCell(rowGoodsInfo, 19, invoicePackingInfo.getHeight(), cellStyle);
-
+            if(!StringUtils.isEmpty(invoicePackingInfo.getImgUrl())){
+                try {
+                    URL imageUrl = new URL(invoicePackingInfo.getImgUrl());
+                    InputStream inputStream = imageUrl.openStream();
+                    byte[] imageBytes = IOUtils.toByteArray(inputStream);
+                    inputStream.close();
+                    // 将图片插入到Excel中
+                    int pictureIdx = wb.addPicture(imageBytes, Workbook.PICTURE_TYPE_JPEG);
+                    CreationHelper helper = wb.getCreationHelper();
+                    Drawing drawing = sheetInovice.createDrawingPatriarch();
+                    ClientAnchor anchor = helper.createClientAnchor();
+                    anchor.setCol1(20); // 图片所在列的起始位置
+                    anchor.setRow1(18 + i); // 图片所在行的起始位置
+                    anchor.setCol2(21); // 图片结束列
+                    anchor.setRow2(19 + i); // 图片结束行
+                    Picture picture = drawing.createPicture(anchor, pictureIdx);
+                    // 设置列宽
+                    sheetInovice.setColumnWidth(20, 4200); // 宽度
+                    // 设置行高
+                    rowGoodsInfo.setHeightInPoints(150); // 高度为20个点
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
 
             ExcelUtil.createCell(rowGoodsInfo, 21, "1", cellStyle);
             ExcelUtil.createCell(rowGoodsInfo, 22, "无", cellStyle);
@@ -1373,6 +1391,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
                 invoiceGoodsInfo.setQuantity(invoicePackingInfo.getQuantity());
                 invoiceGoodsInfo.setUnitPrice(unitPrice);
                 invoiceGoodsInfo.setTotalPrice(invoiceGoodsInfo.getQuantity() * unitPrice);
+                invoiceGoodsInfo.setImgUrl(invoicePackingInfo.getImgUrl());
                 invoiceGoodsInfoList.add(invoiceGoodsInfo);
             } else {
                 invoiceGoodsInfo.setQuantity(invoiceGoodsInfo.getQuantity() + invoicePackingInfo.getQuantity());
@@ -1438,6 +1457,7 @@ public class DeliverGoodsService implements IDeliverGoodsService {
                 //invoicePackingInfo.setCostPrice(invoiceSkuInfo.getCostPrice());
                 invoicePackingInfo.setTotalCostPrice(invoiceSkuInfo.getTotalCostPrice());
                 invoicePackingInfoList.add(invoicePackingInfo);
+                invoicePackingInfo.setImgUrl(invoiceSkuInfo.getImgUrl());
             } else {
                 invoicePackingInfo.setQuantity(invoicePackingInfo.getQuantity() + invoiceSkuInfo.getQuantity());
                 invoicePackingInfo.setTotalPrice(invoicePackingInfo.getQuantity() * unitPrice);
@@ -1511,25 +1531,40 @@ public class DeliverGoodsService implements IDeliverGoodsService {
      * @author baixueping
      * @date 2019/9/17 18:00
      */
-    private BaseResponse updateInvoiceSkuInfoList(List<InvoiceSkuInfo> invoiceSkuInfoList) {
-        List<String> shopSkuList = new ArrayList<>();
+    @Override
+    public BaseResponse updateInvoiceSkuInfoList(List<InvoiceSkuInfo> invoiceSkuInfoList) {
+        List<Integer> shopSkuIdList = new ArrayList<>();
         for (InvoiceSkuInfo invoiceSkuInfo : invoiceSkuInfoList) {
-            if (!shopSkuList.contains(invoiceSkuInfo.getShopSku())) {
-                shopSkuList.add(invoiceSkuInfo.getShopSku());
+            if (!shopSkuIdList.contains(invoiceSkuInfo.getShopSkuId())) {
+                shopSkuIdList.add(invoiceSkuInfo.getShopSkuId());
             }
         }
-        List<ShopSkuFullProductName> shopSkuFullProductNameList = shopSkuService.listShopSkuFullProductName(shopSkuList);
+        List<ShopSkuFullProductName> shopSkuFullProductNameList = shopSkuService.listShopSkuFullProductNameByShopSkuId(shopSkuIdList);
+        //查询商品图片
+        List<Img> imgList=imgService.listFirstImgUrl(shopSkuIdList);
         for (InvoiceSkuInfo invoiceSkuInfo : invoiceSkuInfoList) {
             for (ShopSkuFullProductName shopSkuFullProductName : shopSkuFullProductNameList) {
-                if (shopSkuFullProductName.getShopSku().equals(invoiceSkuInfo.getShopSku())) {
+                if (shopSkuFullProductName.getShopSkuId().equals(invoiceSkuInfo.getShopSkuId())) {
+                    invoiceSkuInfo.setShopSku(shopSkuFullProductName.getShopSku());
                     invoiceSkuInfo.setChineseProductName(shopSkuFullProductName.getChineseProductName());
                     invoiceSkuInfo.setEnglishProductName(shopSkuFullProductName.getEnglishProductName());
+                    invoiceSkuInfo.setHsCode(shopSkuFullProductName.getHsCode());
                     invoiceSkuInfo.setWeight(shopSkuFullProductName.getWeight());
+                    //获取美元 大概的
+                    invoiceSkuInfo.setCostPrice(MathUtil.divide(invoiceSkuInfo.getCostPrice(), 6.5, 2));
+                    break;
+                }
+            }
+            for (Img img : imgList) {
+                if (img.getEntityId().equals(invoiceSkuInfo.getShopSkuId())) {
+                    invoiceSkuInfo.setImgUrl(img.getImgUrl()); break;
                 }
             }
             if (StringUtils.isEmpty(invoiceSkuInfo.getChineseProductName()) || StringUtils.isEmpty(invoiceSkuInfo.getEnglishProductName())) {
                 return BaseResponse.failMessage(invoiceSkuInfo.getShopSku() + "的店铺sku信息不存在，或者对应产品的中英文报关名为空");
             }
+            invoiceSkuInfo.setTotalWeight(MathUtil.multiply2(invoiceSkuInfo.getWeight(), invoiceSkuInfo.getQuantity().doubleValue(), 2));
+            invoiceSkuInfo.setTotalCostPrice(MathUtil.multiply2(invoiceSkuInfo.getCostPrice(), invoiceSkuInfo.getQuantity().doubleValue(), 2));
         }
         return BaseResponse.success();
     }

@@ -31,4 +31,5 @@ public class InvoicePackingInfo {
     Double totalPrice;
     Double costPrice;
     Double totalCostPrice;
+    String imgUrl;
 }

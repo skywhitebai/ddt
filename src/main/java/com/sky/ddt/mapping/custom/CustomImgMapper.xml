@@ -13,5 +13,17 @@
         </where>
         order by create_time desc
     </select>
-
+    <select id="listFirstImgUrl"  resultMap="com.sky.ddt.dao.generate.ImgMapper.BaseResultMap">
+        select
+        entity_id,img_url
+        from img
+        <where>
+            entity_id in
+            <foreach close=")" collection="shopSkuIdList" item="shopSkuId" open="(" separator=",">
+                #{shopSkuId}
+            </foreach>
+            and img_type =#{imgType}
+        </where>
+        group by entity_id
+    </select>
 </mapper>

@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sky.ddt.dao.generate.RefundOrderMapper">
+  <resultMap id="BaseResultMap" type="com.sky.ddt.entity.RefundOrder">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="shop_sku_id" jdbcType="INTEGER" property="shopSkuId" />
+    <result column="return_date" jdbcType="TIMESTAMP" property="returnDate" />
+    <result column="order_id" jdbcType="VARCHAR" property="orderId" />
+    <result column="sku" jdbcType="VARCHAR" property="sku" />
+    <result column="asin" jdbcType="VARCHAR" property="asin" />
+    <result column="fnsku" jdbcType="VARCHAR" property="fnsku" />
+    <result column="product_name" jdbcType="VARCHAR" property="productName" />
+    <result column="fulfillment_center_id" jdbcType="VARCHAR" property="fulfillmentCenterId" />
+    <result column="detailed_disposition" jdbcType="VARCHAR" property="detailedDisposition" />
+    <result column="reason" jdbcType="VARCHAR" property="reason" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="license_plate_number" jdbcType="VARCHAR" property="licensePlateNumber" />
+    <result column="customer_comments" jdbcType="VARCHAR" property="customerComments" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="INTEGER" property="createBy" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, shop_sku_id, return_date, order_id, sku, asin, fnsku, product_name, fulfillment_center_id, 
+    detailed_disposition, reason, status, license_plate_number, customer_comments, create_time, 
+    create_by
+  </sql>
+  <select id="selectByExample" parameterType="com.sky.ddt.entity.RefundOrderExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from refund_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from refund_order
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from refund_order
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sky.ddt.entity.RefundOrderExample">
+    delete from refund_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sky.ddt.entity.RefundOrder">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into refund_order (shop_sku_id, return_date, order_id, 
+      sku, asin, fnsku, product_name, 
+      fulfillment_center_id, detailed_disposition, 
+      reason, status, license_plate_number, 
+      customer_comments, create_time, create_by
+      )
+    values (#{shopSkuId,jdbcType=INTEGER}, #{returnDate,jdbcType=TIMESTAMP}, #{orderId,jdbcType=VARCHAR}, 
+      #{sku,jdbcType=VARCHAR}, #{asin,jdbcType=VARCHAR}, #{fnsku,jdbcType=VARCHAR}, #{productName,jdbcType=VARCHAR}, 
+      #{fulfillmentCenterId,jdbcType=VARCHAR}, #{detailedDisposition,jdbcType=VARCHAR}, 
+      #{reason,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{licensePlateNumber,jdbcType=VARCHAR}, 
+      #{customerComments,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sky.ddt.entity.RefundOrder">
+    <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into refund_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="shopSkuId != null">
+        shop_sku_id,
+      </if>
+      <if test="returnDate != null">
+        return_date,
+      </if>
+      <if test="orderId != null">
+        order_id,
+      </if>
+      <if test="sku != null">
+        sku,
+      </if>
+      <if test="asin != null">
+        asin,
+      </if>
+      <if test="fnsku != null">
+        fnsku,
+      </if>
+      <if test="productName != null">
+        product_name,
+      </if>
+      <if test="fulfillmentCenterId != null">
+        fulfillment_center_id,
+      </if>
+      <if test="detailedDisposition != null">
+        detailed_disposition,
+      </if>
+      <if test="reason != null">
+        reason,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="licensePlateNumber != null">
+        license_plate_number,
+      </if>
+      <if test="customerComments != null">
+        customer_comments,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="shopSkuId != null">
+        #{shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="returnDate != null">
+        #{returnDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderId != null">
+        #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="asin != null">
+        #{asin,jdbcType=VARCHAR},
+      </if>
+      <if test="fnsku != null">
+        #{fnsku,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="fulfillmentCenterId != null">
+        #{fulfillmentCenterId,jdbcType=VARCHAR},
+      </if>
+      <if test="detailedDisposition != null">
+        #{detailedDisposition,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null">
+        #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="licensePlateNumber != null">
+        #{licensePlateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="customerComments != null">
+        #{customerComments,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sky.ddt.entity.RefundOrderExample" resultType="java.lang.Long">
+    select count(*) from refund_order
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update refund_order
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.shopSkuId != null">
+        shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="record.returnDate != null">
+        return_date = #{record.returnDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.orderId != null">
+        order_id = #{record.orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sku != null">
+        sku = #{record.sku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.asin != null">
+        asin = #{record.asin,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fnsku != null">
+        fnsku = #{record.fnsku,jdbcType=VARCHAR},
+      </if>
+      <if test="record.productName != null">
+        product_name = #{record.productName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fulfillmentCenterId != null">
+        fulfillment_center_id = #{record.fulfillmentCenterId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.detailedDisposition != null">
+        detailed_disposition = #{record.detailedDisposition,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reason != null">
+        reason = #{record.reason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null">
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.licensePlateNumber != null">
+        license_plate_number = #{record.licensePlateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.customerComments != null">
+        customer_comments = #{record.customerComments,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null">
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createBy != null">
+        create_by = #{record.createBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update refund_order
+    set id = #{record.id,jdbcType=INTEGER},
+      shop_sku_id = #{record.shopSkuId,jdbcType=INTEGER},
+      return_date = #{record.returnDate,jdbcType=TIMESTAMP},
+      order_id = #{record.orderId,jdbcType=VARCHAR},
+      sku = #{record.sku,jdbcType=VARCHAR},
+      asin = #{record.asin,jdbcType=VARCHAR},
+      fnsku = #{record.fnsku,jdbcType=VARCHAR},
+      product_name = #{record.productName,jdbcType=VARCHAR},
+      fulfillment_center_id = #{record.fulfillmentCenterId,jdbcType=VARCHAR},
+      detailed_disposition = #{record.detailedDisposition,jdbcType=VARCHAR},
+      reason = #{record.reason,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=VARCHAR},
+      license_plate_number = #{record.licensePlateNumber,jdbcType=VARCHAR},
+      customer_comments = #{record.customerComments,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      create_by = #{record.createBy,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sky.ddt.entity.RefundOrder">
+    update refund_order
+    <set>
+      <if test="shopSkuId != null">
+        shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
+      </if>
+      <if test="returnDate != null">
+        return_date = #{returnDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orderId != null">
+        order_id = #{orderId,jdbcType=VARCHAR},
+      </if>
+      <if test="sku != null">
+        sku = #{sku,jdbcType=VARCHAR},
+      </if>
+      <if test="asin != null">
+        asin = #{asin,jdbcType=VARCHAR},
+      </if>
+      <if test="fnsku != null">
+        fnsku = #{fnsku,jdbcType=VARCHAR},
+      </if>
+      <if test="productName != null">
+        product_name = #{productName,jdbcType=VARCHAR},
+      </if>
+      <if test="fulfillmentCenterId != null">
+        fulfillment_center_id = #{fulfillmentCenterId,jdbcType=VARCHAR},
+      </if>
+      <if test="detailedDisposition != null">
+        detailed_disposition = #{detailedDisposition,jdbcType=VARCHAR},
+      </if>
+      <if test="reason != null">
+        reason = #{reason,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="licensePlateNumber != null">
+        license_plate_number = #{licensePlateNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="customerComments != null">
+        customer_comments = #{customerComments,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sky.ddt.entity.RefundOrder">
+    update refund_order
+    set shop_sku_id = #{shopSkuId,jdbcType=INTEGER},
+      return_date = #{returnDate,jdbcType=TIMESTAMP},
+      order_id = #{orderId,jdbcType=VARCHAR},
+      sku = #{sku,jdbcType=VARCHAR},
+      asin = #{asin,jdbcType=VARCHAR},
+      fnsku = #{fnsku,jdbcType=VARCHAR},
+      product_name = #{productName,jdbcType=VARCHAR},
+      fulfillment_center_id = #{fulfillmentCenterId,jdbcType=VARCHAR},
+      detailed_disposition = #{detailedDisposition,jdbcType=VARCHAR},
+      reason = #{reason,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      license_plate_number = #{licensePlateNumber,jdbcType=VARCHAR},
+      customer_comments = #{customerComments,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

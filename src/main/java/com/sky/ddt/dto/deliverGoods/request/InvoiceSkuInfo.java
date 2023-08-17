@@ -22,6 +22,7 @@ public class InvoiceSkuInfo {
     String chineseProductName;
     String englishProductName;
     String hsCode;
+    String imgUrl;
 
     public Double getWeight() {
         if (weight == null || weight <= 0||weight>=1) {

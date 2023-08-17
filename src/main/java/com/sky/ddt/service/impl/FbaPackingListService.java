@@ -345,7 +345,7 @@ public class FbaPackingListService implements IFbaPackingListService {
         invoiceInfo.setFbaNo(orderNumber);
         //根据orderNumber 查询fba装箱单店铺sku数据
         List<InvoiceSkuInfo> invoiceSkuInfoList = customFbaPackingListMapper.listInvoiceSkuInfo(fbaPackingListId, orderNumber);
-        BaseResponse updateInvoiceSkuInfoListResponse = updateInvoiceSkuInfoList(invoiceSkuInfoList);
+        BaseResponse updateInvoiceSkuInfoListResponse = deliverGoodsService.updateInvoiceSkuInfoList(invoiceSkuInfoList);
         if (!updateInvoiceSkuInfoListResponse.isSuccess()) {
             return updateInvoiceSkuInfoListResponse;
         }
@@ -779,39 +779,4 @@ public class FbaPackingListService implements IFbaPackingListService {
         return customOutboundOrderMapper.countByExample(example) > 0;
     }
 
-    /**
-     * @param
-     * @return
-     * @description 更新店铺sku 中英文产品名
-     * @author baixueping
-     * @date 2020/8/12 16:30
-     */
-    private BaseResponse updateInvoiceSkuInfoList(List<InvoiceSkuInfo> invoiceSkuInfoList) {
-        List<Integer> shopSkuIdList = new ArrayList<>();
-        for (InvoiceSkuInfo invoiceSkuInfo : invoiceSkuInfoList) {
-            if (!shopSkuIdList.contains(invoiceSkuInfo.getShopSkuId())) {
-                shopSkuIdList.add(invoiceSkuInfo.getShopSkuId());
-            }
-        }
-        List<ShopSkuFullProductName> shopSkuFullProductNameList = shopSkuService.listShopSkuFullProductNameByShopSkuId(shopSkuIdList);
-        for (InvoiceSkuInfo invoiceSkuInfo : invoiceSkuInfoList) {
-            for (ShopSkuFullProductName shopSkuFullProductName : shopSkuFullProductNameList) {
-                if (shopSkuFullProductName.getShopSkuId().equals(invoiceSkuInfo.getShopSkuId())) {
-                    invoiceSkuInfo.setShopSku(shopSkuFullProductName.getShopSku());
-                    invoiceSkuInfo.setChineseProductName(shopSkuFullProductName.getChineseProductName());
-                    invoiceSkuInfo.setEnglishProductName(shopSkuFullProductName.getEnglishProductName());
-                    invoiceSkuInfo.setHsCode(shopSkuFullProductName.getHsCode());
-                    invoiceSkuInfo.setWeight(shopSkuFullProductName.getWeight());
-                    //获取美元 大概的
-                    invoiceSkuInfo.setCostPrice(MathUtil.divide(invoiceSkuInfo.getCostPrice(), 6.5, 2));
-                }
-            }
-            if (StringUtils.isEmpty(invoiceSkuInfo.getChineseProductName()) || StringUtils.isEmpty(invoiceSkuInfo.getEnglishProductName())) {
-                return BaseResponse.failMessage(invoiceSkuInfo.getShopSku() + "的店铺sku信息不存在，或者对应产品的中英文报关名为空");
-            }
-            invoiceSkuInfo.setTotalWeight(MathUtil.multiply2(invoiceSkuInfo.getWeight(), invoiceSkuInfo.getQuantity().doubleValue(), 2));
-            invoiceSkuInfo.setTotalCostPrice(MathUtil.multiply2(invoiceSkuInfo.getCostPrice(), invoiceSkuInfo.getQuantity().doubleValue(), 2));
-        }
-        return BaseResponse.success();
-    }
 }

@@ -837,7 +837,7 @@
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'hy\')" title="生成海运发票">生成海运发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'hy2\')" title="生成新的海运发票">生成新的海运发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'amhy\')" title="生成阿玛海运发票">生成阿玛海运发票</a>'
-                            + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'amty\')" title="生成阿玛海运发票">生成阿玛统一发票</a>'
+                            + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'amty\')" title="生成阿玛统一发票">生成阿玛统一发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'dl\')" title="生成DL海运发票">生成DL海运发票</a>'
                             + '&nbsp;&nbsp;<a href="javascript:;" onclick="downInvoice(\'' + row.fbaPackingListId + '\',\'' + row.orderNumber + '\',\'dlx\')" title="生成德立讯发票">生成德立讯发票</a>';
                     }

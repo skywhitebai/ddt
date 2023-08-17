@@ -63,4 +63,6 @@ public interface IDeliverGoodsService {
      * @date 2020/8/12 16:59
      */
     BaseResponse generateInvoice(InvoiceInfo invoiceInfo, List<InvoiceSkuInfo> invoiceSkuInfoList, String type, HttpServletResponse response);
+
+    BaseResponse updateInvoiceSkuInfoList(List<InvoiceSkuInfo> invoiceSkuInfoList);
 }
